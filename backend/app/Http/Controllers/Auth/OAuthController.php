@@ -33,6 +33,13 @@ class OAuthController extends Controller
      */
     public function redirectToProvider($provider)
     {
+        if ($provider == 'keycloak')
+        {
+            return [
+                'url' => str_replace('logout', 'auth', Socialite::driver($provider)->getLogoutUrl()),
+            ];
+        }
+
         return [
             'url' => Socialite::driver($provider)->stateless()->redirect()->getTargetUrl(),
         ];
@@ -47,6 +54,7 @@ class OAuthController extends Controller
     public function handleProviderCallback($provider)
     {
         $user = Socialite::driver($provider)->stateless()->user();
+
         $user = $this->findOrCreateUser($provider, $user);
 
         $this->guard()->setToken(
@@ -67,8 +75,12 @@ class OAuthController extends Controller
      */
     protected function findOrCreateUser($provider, $user)
     {
+        $provideUserId = $provider == 'keycloak'
+            ? $user->id
+            : $user->getId();
+
         $oauthProvider = OAuthProvider::where('provider', $provider)
-            ->where('provider_user_id', $user->getId())
+            ->where('provider_user_id', $provideUserId)
             ->first();
 
         if ($oauthProvider) {
@@ -80,7 +92,11 @@ class OAuthController extends Controller
             return $oauthProvider->user;
         }
 
-        if (User::where('email', $user->getEmail())->exists()) {
+        $providerEmail = $provider == 'keycloak'
+            ? $user->email
+            : $user->getEmail();
+
+        if (User::where('email', $providerEmail)->exists()) {
             throw new EmailTakenException;
         }
 
@@ -94,17 +110,29 @@ class OAuthController extends Controller
      */
     protected function createUser($provider, $sUser)
     {
+        $provideUserId = $provider == 'keycloak'
+            ? $sUser->id
+            : $sUser->getId();
+
+        $providerName = $provider == 'keycloak'
+            ? $sUser->name
+            : $usesUserr->getName();
+
+        $providerEmail = $provider == 'keycloak'
+            ? $sUser->email
+            : $usesUserr->getEmail();
+
         $user = User::create([
-            'name' => $sUser->getName(),
-            'email' => $sUser->getEmail(),
+            'name' => $providerName,
+            'email' => $providerEmail,
             'email_verified_at' => now(),
         ]);
 
         $user->oauthProviders()->create([
             'provider' => $provider,
-            'provider_user_id' => $sUser->getId(),
-            'access_token' => $sUser->token,
-            'refresh_token' => $sUser->refreshToken,
+            'provider_user_id' => $provideUserId,
+            'access_token' => $sUser->token ?? null,
+            'refresh_token' => $sUser->refreshToken ?? null,
         ]);
 
         return $user;
