@@ -1,4 +1,4 @@
-# laravel7-api-boilerplate
+# pikobar-app-boilerplate
 
 # Origin
 Original Source: https://github.com/cretueusebiu/laravel-nuxt
