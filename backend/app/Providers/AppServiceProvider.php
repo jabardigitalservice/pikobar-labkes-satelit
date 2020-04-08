@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
+use App\Oauth\CustomKeycloakProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use Avdevs\Keycloak\KeycloakProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
             'keycloak',
             function ($app) use ($socialite) {
                 $config = $app['config']['services.keycloak'];
-                return new KeycloakProvider($config);
+                return new CustomKeycloakProvider($config);
             }
         );
     }

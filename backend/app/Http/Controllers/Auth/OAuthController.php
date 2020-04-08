@@ -37,7 +37,7 @@ class OAuthController extends Controller
         if ($provider == 'keycloak')
         {
             return [
-                'url' => str_replace('logout', 'auth', Socialite::driver($provider)->getLogoutUrl()),
+                'url' => Socialite::driver($provider)->getTargetUrl(),
             ];
         }
 
@@ -56,7 +56,7 @@ class OAuthController extends Controller
     {
         $user = Socialite::driver($provider)->stateless()->user();
         
-        if (!method_exists($user, 'getEmail') && !$user->email)
+        if (!method_exists($user, 'getEmail'))
         {
             throw new EmailInvalidException;
         }
@@ -81,29 +81,21 @@ class OAuthController extends Controller
      */
     protected function findOrCreateUser($provider, $user)
     {
-        $provideUserId = $provider == 'keycloak'
-            ? $user->id
-            : $user->getId();
-
         $oauthProvider = OAuthProvider::where('provider', $provider)
-            ->where('provider_user_id', $provideUserId)
+            ->where('provider_user_id', $user->getId())
             ->first();
 
         if ($oauthProvider)
         {
             $oauthProvider->update([
-                'access_token' => $user->token ?? null,
-                'refresh_token' => $user->refreshToken ?? null,
+                'access_token' => $user->token,
+                'refresh_token' => $user->refreshToken,
             ]);
 
             return $oauthProvider->user;
         }
 
-        $providerEmail = $provider == 'keycloak'
-            ? $user->email
-            : $user->getEmail();
-
-        if (User::where('email', $providerEmail)->exists())
+        if (User::where('email', $user->getEmail())->exists())
         {
             throw new EmailTakenException;
         }
@@ -118,29 +110,18 @@ class OAuthController extends Controller
      */
     protected function createUser($provider, $sUser)
     {
-        $provideUserId = $provider == 'keycloak'
-            ? $sUser->id
-            : $sUser->getId();
-
-        $providerName = $provider == 'keycloak'
-            ? $sUser->name
-            : $sUser->getName();
-
-        $providerEmail = $provider == 'keycloak'
-            ? $sUser->email
-            : $sUser->getEmail();
 
         $user = User::create([
-            'name' => $providerName,
-            'email' => $providerEmail,
+            'name' => $sUser->getName(),
+            'email' => $sUser->getEmail(),
             'email_verified_at' => now(),
         ]);
 
         $user->oauthProviders()->create([
             'provider' => $provider,
-            'provider_user_id' => $provideUserId,
-            'access_token' => $sUser->token ?? null,
-            'refresh_token' => $sUser->refreshToken ?? null,
+            'provider_user_id' => $sUser->getId(),
+            'access_token' => $sUser->token,
+            'refresh_token' => $sUser->refreshToken,
         ]);
 
         return $user;
