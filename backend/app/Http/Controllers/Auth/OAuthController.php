@@ -7,6 +7,7 @@ use App\OAuthProvider;
 use App\Http\Controllers\Controller;
 use App\Exceptions\EmailTakenException;
 use Laravel\Socialite\Facades\Socialite;
+use App\Exceptions\EmailInvalidException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class OAuthController extends Controller
@@ -54,6 +55,11 @@ class OAuthController extends Controller
     public function handleProviderCallback($provider)
     {
         $user = Socialite::driver($provider)->stateless()->user();
+        
+        if (!method_exists($user, 'getEmail') && !$user->email)
+        {
+            throw new EmailInvalidException;
+        }
 
         $user = $this->findOrCreateUser($provider, $user);
 
@@ -83,10 +89,11 @@ class OAuthController extends Controller
             ->where('provider_user_id', $provideUserId)
             ->first();
 
-        if ($oauthProvider) {
+        if ($oauthProvider)
+        {
             $oauthProvider->update([
-                'access_token' => $user->token,
-                'refresh_token' => $user->refreshToken,
+                'access_token' => $user->token ?? null,
+                'refresh_token' => $user->refreshToken ?? null,
             ]);
 
             return $oauthProvider->user;
@@ -96,7 +103,8 @@ class OAuthController extends Controller
             ? $user->email
             : $user->getEmail();
 
-        if (User::where('email', $providerEmail)->exists()) {
+        if (User::where('email', $providerEmail)->exists())
+        {
             throw new EmailTakenException;
         }
 
@@ -116,11 +124,11 @@ class OAuthController extends Controller
 
         $providerName = $provider == 'keycloak'
             ? $sUser->name
-            : $usesUserr->getName();
+            : $sUser->getName();
 
         $providerEmail = $provider == 'keycloak'
             ? $sUser->email
-            : $usesUserr->getEmail();
+            : $sUser->getEmail();
 
         $user = User::create([
             'name' => $providerName,
