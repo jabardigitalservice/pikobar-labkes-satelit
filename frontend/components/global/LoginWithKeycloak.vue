@@ -1,6 +1,6 @@
 <template>
   <button v-if="keycloakAuth" type="button" class="btn btn-dark ml-auto" @click="login">
-    {{ $t('login_with') }} Keyloack
+    {{ $t('login_with') }} Keycloak
     <fa :icon="['fab', 'keycloak']" />
   </button>
 </template>
