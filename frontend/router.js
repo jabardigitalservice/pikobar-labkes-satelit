@@ -23,8 +23,7 @@ const routes = [
       { path: '', redirect: { name: 'settings.profile' } },
       { path: 'profile', name: 'settings.profile', component: page('settings/profile.vue') },
       { path: 'password', name: 'settings.password', component: page('settings/password.vue') }
-    ]},
-  { path: '/test/:id', name: 'test', component: page('test.vue') }
+    ]}
 ]
 
 export function createRouter () {
