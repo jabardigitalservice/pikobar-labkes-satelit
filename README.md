@@ -23,21 +23,27 @@ Original Source: https://github.com/cretueusebiu/laravel-nuxt
 ## Installation Backend
 
 - `composer install`
-- Edit `.env` to set your database connection details and `APP_URL` (the url to your Laravel application)
+- Copy `.env.example` to `.env`, then edit `.env` to set your database connection details
 - `php artisan migrate`
 
 ## Installation Frontend
 
-- `composer install`
-- Edit `.env` to set your database connection details and `APP_URL` (the url to your Laravel application)
+- `npm install -g nuxt`
+- Copy `.env.example` to `.env`, then edit `.env` to set your `APP_URL` (the url to your Laravel application)
 - `npm install`
 
 ## Usage
 
 ### Development
 
+on frontend directory
 ```bash
 npm run dev
+```
+
+on backend directory
+```bash
+php artisan serve
 ```
 
 You can access your application at `http://localhost:3000`.
@@ -63,7 +69,7 @@ For Nginx you can add a proxy using the follwing location block:
 ```
 server {
     location / {
-        proxy_pass http://http://127.0.0.1:3000;
+        proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
