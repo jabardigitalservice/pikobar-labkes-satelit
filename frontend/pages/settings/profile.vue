@@ -1,5 +1,8 @@
 <template>
   <card :title="$t('your_info')">
+    <portal to="title-name">
+      Setting Profil
+    </portal>
     <form
       @submit.prevent="update"
       @keydown="form.onKeydown($event)"

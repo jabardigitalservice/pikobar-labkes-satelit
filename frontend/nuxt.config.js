@@ -76,6 +76,7 @@ module.exports = {
 
   modules: [
     'nuxt-sweetalert2',
+    'portal-vue/nuxt',
     '@nuxtjs/router'
   ],
 

@@ -14,11 +14,11 @@
             </a>
             <ul class="dropdown-menu animated fadeInRight m-t-xs">
               <li>
-                <a class="dropdown-item" href="#">Profile</a>
+                <router-link :to="{name: 'settings.profile'}" class="dropdown-item">Profile</router-link>
               </li>
               <li class="dropdown-divider"></li>
               <li>
-                <a class="dropdown-item" href="#">Logout</a>
+                <a class="dropdown-item" href="#" @click.prevent="logout()">Logout</a>
               </li>
             </ul>
           </div>

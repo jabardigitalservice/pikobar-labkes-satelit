@@ -1,5 +1,8 @@
 <template>
   <card :title="$t('your_password')">
+    <portal to="title-name">
+      Setting Password
+    </portal>
     <form @submit.prevent="update" @keydown="form.onKeydown($event)">
       <alert-success :form="form" :message="$t('password_updated')" />
 

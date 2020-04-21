@@ -1,18 +1,15 @@
 <template>
-    <div>
-      <div class="row wrapper border-bottom white-bg page-heading">
-        <div class="col-sm-4">
-          <h2>Dashboard</h2>
-          <inspinia-breadcrumbs></inspinia-breadcrumbs>
-        </div>
-        <div class="col-sm-8">
+
+      <div class="wrapper wrapper-content">
+        <portal to="title-name">
+          Dashboard
+        </portal>
+        <portal to="title-action">
           <div class="title-action">
             <a href="" class="btn btn-primary">Daftar List Pengguna</a>
           </div>
-        </div>
-      </div>
+        </portal>
 
-      <div class="wrapper wrapper-content">
           <div class="row">
             <div class="col-lg-12">
               <Ibox title="Daftar Pengguna">
@@ -42,7 +39,6 @@
             </div>
         </div>
       </div>
-  </div>
 </template>
  
 <script>

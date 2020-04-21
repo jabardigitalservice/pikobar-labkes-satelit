@@ -1,7 +1,10 @@
 <template>
   <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-      <a href="#" @click="$router.back()"><i class="fa fa-chevron-left"></i></a>
+    <li class="breadcrumb-item" v-if="crumbs.length > 1">
+      <a href="#" @click.prevent="$router.back()"><i class="fa fa-chevron-left"></i></a>
+    </li>
+    <li class="breadcrumb-item" v-if="crumbs.length <= 1">
+      <strong><i class="fa fa-globe"></i></strong>
     </li>
     <li v-for="(item, i) in crumbs" :key="i" :class="item.classes">
       <nuxt-link :to="item.path" v-if="item.path">{{ item.name }}</nuxt-link>

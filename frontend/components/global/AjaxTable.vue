@@ -131,7 +131,7 @@
             </div>
             <div class="dimmed" v-if="isLoading">
                 <div class="loading-indicator">
-                    <img :src="$root.base_asset + 'image/loading.gif'" width="48" height="48">
+                    <img src="~/assets/img/loading.gif" width="48" height="48">
                     Sedang memuat data...
                 </div>
             </div>

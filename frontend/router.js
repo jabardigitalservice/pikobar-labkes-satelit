@@ -18,6 +18,7 @@ const routes = [
 
   { path: '/home', name: 'home', component: page('home.vue') },
   { path: '/settings',
+    name: 'settings.index',
     component: page('settings/index.vue'),
     children: [
       { path: '', redirect: { name: 'settings.profile' } },

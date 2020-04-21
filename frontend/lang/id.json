@@ -1,6 +1,11 @@
 {
   "route": {
-    "home": "Beranda"
+    "home": "Beranda",
+    "settings": {
+      "index": "Setting",
+      "password": "Password",
+      "profile": "Profil"
+    }
   },
   "ok": "Ok",
   "cancel": "Batal",
