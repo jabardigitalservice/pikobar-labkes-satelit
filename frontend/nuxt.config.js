@@ -55,6 +55,7 @@ module.exports = {
   ],
 
   modules: [
+    'nuxt-sweetalert2',
     '@nuxtjs/router'
   ],
 

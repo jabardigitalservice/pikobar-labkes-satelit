@@ -83,6 +83,11 @@ export default {
         const response = await this.form.post('/login')
         data = response.data
       } catch (e) {
+        this.$swal.fire(
+          'Login gagal',
+          'Mohon cek username / password Anda',
+          'error'
+        )
         return
       }
 

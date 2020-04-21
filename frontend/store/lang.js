@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 export const state = () => ({
   locale: process.env.appLocale,
   locales: {
+    'id': 'ID',
     'en': 'EN',
     'zh-CN': '中文',
     'es': 'ES'
