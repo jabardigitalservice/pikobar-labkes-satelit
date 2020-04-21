@@ -7,7 +7,7 @@ Vue.use(Router)
 const page = path => () => import(`~/pages/${path}`).then(m => m.default || m)
 
 const routes = [
-  { path: '/', name: 'welcome', component: page('welcome.vue') },
+  { path: '/', redirect:'home' },
 
   { path: '/login', name: 'login', component: page('auth/login.vue') },
   { path: '/register', name: 'register', component: page('auth/register.vue') },
@@ -17,7 +17,6 @@ const routes = [
   { path: '/email/resend', name: 'verification.resend', component: page('auth/verification/resend.vue') },
 
   { path: '/home', name: 'home', component: page('home.vue') },
-  { path: '/profile', name:'profile', component: page('profile.vue') },
   { path: '/settings',
     component: page('settings/index.vue'),
     children: [
