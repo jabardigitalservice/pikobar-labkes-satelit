@@ -1,4 +1,7 @@
 {
+  "route": {
+    "home": "Beranda"
+  },
   "ok": "Ok",
   "cancel": "Batal",
   "error_alert_title": "Mohon maaf...",
@@ -37,203 +40,164 @@
   "failed_to_verify_email": "Gagal untuk verifikasi email.",
   "verify_email_address": "Email verifikasi telah berhasil dikirim.",
   "aktivitas": {
-      "label": "Aktivitas",
-      "list_of": "Daftar Aktivitas",
-      "create": "Tambah aktivitas baru",
-      "update": "Update aktivitas",
-      "view": "Lihat aktivitas",
-      "add_new": "Tambah Aktivitas"
-    },
-  
-    "review":  {
-      "label": "Ulasan",
-      "list_of": "Daftar Ulasan",
-      "update": "Perbaharui Ulasan",
-      "view": "Lihat Ulasan",
-      "add_new": "Tambah Ulasan",
-      "create": "Tambah Ulasan Baru"
-    },
-  
-    "satuan_kerja": {
-      "label" : "Satuan Kerja",
-      "Create" : "Tambah Aktifitas Baru"
-    },
-  
-    "unit_kerja": {
-      "label" : "Unit Kerja",
-      "Create" : "Tambah Aktifitas Baru"
-    },
-  
-    "daftar_aset": {
-      "label" : "Daftar Aset",
-      "Create" : "Tambah Aktifitas Baru"
-    },
-  
-    "aset_tanah": {
-      "label" : "Aset Tanah",
-      "Create" : "Tambah Aset Tanah"
-    },
-  
-    "aset_bangunan": {
-      "label" : "Aset Bangunan",
-      "Create" : "Tambah Aset Bangunan"
-    },
-  
-    "aset_kendaraan": {
-      "label" : "Aset Kendaraan",
-      "Create" : "Tambah Aset Kendaraan"
-    },
-  
-    "aset_tanah": {
-      "label" : "Aset Tanah",
-      "Create" : "Tambah Aset Tanah"
-    },
-  
-    "title": {
-      "show": "Tampilkan",
-      "nodata_show": "Tidak ada data",
-      "search": "Cari",
-      "number": "No",
-      "actions": "Aksi",
-      "previous": "Sebelumnya",
-      "next": "Selanjutnya",
-      "to": "Sampai"
-    },
-    "common": {
-      "data_saved_successfully": "Data berhasil disimpan",
-      "data_deleted_successfully": "Data berhasil dihapus",
-      "we_are_having_trouble": "Terjadi kesalahan",
-      "are_you_sure": "Apakah Anda yakin?",
-      "cancel": "Batal",
-      "view": "Lihat",
-      "edit": "Ubah",
-      "delete": "Hapus",
-      "from": "dari",
-      "entry": "Entri",
-      "page": "Halaman",
-      "yes": "Ya",
-      "back": "Kembali",
-      "success": "Sukses",
-      "error": "Error",
-      "no": "Tidak"
-    },
-    "generic": {
-      "loading": "Loading",
-      "previous": "Sebelumnya",
-      "next": "Selanjutnya",
-      "calender": "Kalender",
-      "today": "Hari Ini",
-      "week": "Minggu",
-      "add_event": "Add Event",
-      "delete_event": "Delete Event",
-      "select_language": "Pilih bahasa",
-      "event_title": "Judul",
-      "event_color": "Warna",
-      "event_description": "Deskripsi",
-      "cancel": "Batal",
-      "color_grey": "Abu-abu",
-      "color_blue": "Biru",
-      "color_lightblue": "Biru muda",
-      "color_green": "Hijau",
-      "color_orange": "Oranye",
-      "color_red": "Merah"
-    },
-    "faq":{
-      "label": "FAQ",
-      "list_of": "Daftar Pertanyaan",
-      "create": "Jawab Pertanyaan"
-    },
-    "jenis_diklat":{
-      "label": "Jenis Diklat",
-      "add_new": "Tambah Jenis Diklat",
-      "update": "Edit Jenis Diklat"
-    },
-    "review_aktivitas":{
-      "label": "Review Aktivitas",
-      "list_of": "Daftar Aktivitas",
-      "create": "Review"
-    },
-    "diklat_struktural":{
-      "label": "Diklat Struktural",
-      "list_of": "Daftar Diklat",
-      "add_new": "Tambah Diklat",
-      "update": "Ubah Diklat"
-    },
-    "diklat_fungsional":{
-      "label": "Diklat Fungsional",
-      "list_of": "Daftar Diklat",
-      "add_new": "Tambah Diklat",
-      "update": "Ubah Diklat"
-    },
-    "diklat_teknis":{
-      "label": "Diklat Teknis",
-      "list_of": "Daftar Diklat",
-      "add_new": "Tambah Diklat",
-      "update": "Ubah Diklat"
-    },
-    "pegawai":{
-      "label": "Pegawai",
-      "history": "Riwayat Diklat",
-      "header": "Data Pegawai",
-      "list-kompetensi": "Daftar Pegawai Kesenjangan Kompetensi",
-      "compare": "Komparasi Kompetensi"
-    },
-    "jabatan":{
-      "label": "Jabatan",
-      "header": "Data Jabatan"
-    },
-    "kompetensi":{
-      "label": "Kompetensi",
-      "header": "Daftar Kompetensi"
-    },
-    "pengguna":{
-      "label": "Pengguna",
-      "header": "Daftar Pengguna",
-      "add_new": "Tambah Pengguna"
-    },
-    "pengumuman":{
-      "header_index": "Pengumuman",
-      "header_list": "Daftar Pengumuman",
-      "add_pengumuman": "Tambah Pengumuman"
-    },
-    "login_history":{
-      "header_index": "Riwayat Login",
-      "header_list": "Daftar Riwayat Login"
-    },
-    "create": "Tambah",
-    "ok": "Ok",
+    "label": "Aktivitas",
+    "list_of": "Daftar Aktivitas",
+    "create": "Tambah aktivitas baru",
+    "update": "Update aktivitas",
+    "view": "Lihat aktivitas",
+    "add_new": "Tambah Aktivitas"
+  },
+
+  "review": {
+    "label": "Ulasan",
+    "list_of": "Daftar Ulasan",
+    "update": "Perbaharui Ulasan",
+    "view": "Lihat Ulasan",
+    "add_new": "Tambah Ulasan",
+    "create": "Tambah Ulasan Baru"
+  },
+
+  "satuan_kerja": {
+    "label": "Satuan Kerja",
+    "Create": "Tambah Aktifitas Baru"
+  },
+
+  "unit_kerja": {
+    "label": "Unit Kerja",
+    "Create": "Tambah Aktifitas Baru"
+  },
+
+  "daftar_aset": {
+    "label": "Daftar Aset",
+    "Create": "Tambah Aktifitas Baru"
+  },
+
+  "aset_tanah": {
+    "label": "Aset Tanah",
+    "Create": "Tambah Aset Tanah"
+  },
+
+  "aset_bangunan": {
+    "label": "Aset Bangunan",
+    "Create": "Tambah Aset Bangunan"
+  },
+
+  "aset_kendaraan": {
+    "label": "Aset Kendaraan",
+    "Create": "Tambah Aset Kendaraan"
+  },
+
+  "title": {
+    "show": "Tampilkan",
+    "nodata_show": "Tidak ada data",
+    "search": "Cari",
+    "number": "No",
+    "actions": "Aksi",
+    "previous": "Sebelumnya",
+    "next": "Selanjutnya",
+    "to": "Sampai"
+  },
+  "common": {
+    "data_saved_successfully": "Data berhasil disimpan",
+    "data_deleted_successfully": "Data berhasil dihapus",
+    "we_are_having_trouble": "Terjadi kesalahan",
+    "are_you_sure": "Apakah Anda yakin?",
     "cancel": "Batal",
+    "view": "Lihat",
+    "edit": "Ubah",
+    "delete": "Hapus",
+    "from": "dari",
+    "entry": "Entri",
+    "page": "Halaman",
+    "yes": "Ya",
+    "back": "Kembali",
+    "success": "Sukses",
     "error": "Error",
-    "error_fault": "Terjadi kesalahan",
-    "error_alert_title": "Ups ...",
-    "error_alert_text": "Gagal memuat data! Silakan coba lagi.",
-    "token_expired_alert_title": "Sesi Berakhir!",
-    "token_expired_alert_text": "Harap masuk lagi untuk melanjutkan.",
-    "login": "Login",
-    "register": "Daftar",
-    "page_not_found": "Halaman Tidak Ditemukan",
-    "go_home": "Go Home",
-    "logout": "Keluar",
-    "email": "Email",
-    "remember_me": "Ingat Login Saya",
-    "password": "Password",
-    "forgot_password": "Lupa Kata Sandi Anda?",
-    "confirm_password": "Konfirmasi Kata Sandi",
-    "name": "Nama",
-    "toggle_navigation": "Alihkan navigasi",
-    "home": "Home",
-    "username": "Username",
-    "you_are_logged_in": "Anda masuk!",
-    "reset_password": "Setel Ulang Kata Sandi",
-    "send_password_reset_link": "Kirim Tautan Setel Ulang Password",
-    "settings": "Pengaturan",
-    "profile": "Profil",
-    "your_info": "Info Anda",
-    "info_updated": "Info Anda telah diperbarui!",
-    "update": "Ubah",
-    "your_password": "Kata Sandi Anda",
-    "password_updated": "Kata sandi Anda telah diperbarui!",
-    "new_password": "Kata Sandi Baru",
-    "login_with": "Login dengan",
-    "register_with": "Daftar dengan"  
+    "no": "Tidak"
+  },
+  "generic": {
+    "loading": "Loading",
+    "previous": "Sebelumnya",
+    "next": "Selanjutnya",
+    "calender": "Kalender",
+    "today": "Hari Ini",
+    "week": "Minggu",
+    "add_event": "Add Event",
+    "delete_event": "Delete Event",
+    "select_language": "Pilih bahasa",
+    "event_title": "Judul",
+    "event_color": "Warna",
+    "event_description": "Deskripsi",
+    "cancel": "Batal",
+    "color_grey": "Abu-abu",
+    "color_blue": "Biru",
+    "color_lightblue": "Biru muda",
+    "color_green": "Hijau",
+    "color_orange": "Oranye",
+    "color_red": "Merah"
+  },
+  "faq": {
+    "label": "FAQ",
+    "list_of": "Daftar Pertanyaan",
+    "create": "Jawab Pertanyaan"
+  },
+  "jenis_diklat": {
+    "label": "Jenis Diklat",
+    "add_new": "Tambah Jenis Diklat",
+    "update": "Edit Jenis Diklat"
+  },
+  "review_aktivitas": {
+    "label": "Review Aktivitas",
+    "list_of": "Daftar Aktivitas",
+    "create": "Review"
+  },
+  "diklat_struktural": {
+    "label": "Diklat Struktural",
+    "list_of": "Daftar Diklat",
+    "add_new": "Tambah Diklat",
+    "update": "Ubah Diklat"
+  },
+  "diklat_fungsional": {
+    "label": "Diklat Fungsional",
+    "list_of": "Daftar Diklat",
+    "add_new": "Tambah Diklat",
+    "update": "Ubah Diklat"
+  },
+  "diklat_teknis": {
+    "label": "Diklat Teknis",
+    "list_of": "Daftar Diklat",
+    "add_new": "Tambah Diklat",
+    "update": "Ubah Diklat"
+  },
+  "pegawai": {
+    "label": "Pegawai",
+    "history": "Riwayat Diklat",
+    "header": "Data Pegawai",
+    "list-kompetensi": "Daftar Pegawai Kesenjangan Kompetensi",
+    "compare": "Komparasi Kompetensi"
+  },
+  "jabatan": {
+    "label": "Jabatan",
+    "header": "Data Jabatan"
+  },
+  "kompetensi": {
+    "label": "Kompetensi",
+    "header": "Daftar Kompetensi"
+  },
+  "pengguna": {
+    "label": "Pengguna",
+    "header": "Daftar Pengguna",
+    "add_new": "Tambah Pengguna"
+  },
+  "pengumuman": {
+    "header_index": "Pengumuman",
+    "header_list": "Daftar Pengumuman",
+    "add_pengumuman": "Tambah Pengumuman"
+  },
+  "login_history": {
+    "header_index": "Riwayat Login",
+    "header_list": "Daftar Riwayat Login"
+  },
+  "create": "Tambah",
+  "username": "Username"
 }
