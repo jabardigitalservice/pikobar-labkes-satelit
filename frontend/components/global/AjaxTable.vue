@@ -240,7 +240,7 @@
 <script>
 import axios from 'axios'
 import Sorter from './Sorter'
-import eventHub from '~/plugins/event-bus'
+// import eventHub from '~/plugins/event-bus'
 // Load store modules dynamically.
 const requireContext = require.context('./table-row', false, /.*\.vue$/)
 
@@ -383,7 +383,7 @@ export default {
         export() {
             var that = this;
             that.isLoadingExp = true;
-            eventHub.$emit('download-export', 'start', this.oid);
+            this.$bus.$emit('download-export', 'start', this.oid);
             axios({
                 url: that.urlexport,
                 params: {
@@ -414,7 +414,7 @@ export default {
                 link.remove();
                 window.URL.revokeObjectURL(url);
                 that.isLoadingExp = false;
-                eventHub.$emit('download-export', 'end', this.oid);
+                this.$bus.$emit('download-export', 'end', this.oid);
             });
         },
     },
@@ -479,11 +479,13 @@ export default {
     },
     created() {
         var that = this;
-        console.log('Event Hub : ',eventHub);
+        // console.log('Event Hub : ',eventHub);
+        this.$bus.$on('refresh-ajaxtable', this.doRefresh)
         // eventHub.$on('refresh-ajaxtable', this.doRefresh)
     },
     beforeDestroy() {
-        eventHub.$off('refresh-ajaxtable', this.doRefresh)
+        this.$bus.$off('refresh-ajaxtable',this.doRefresh)
+        // eventHub.$off('refresh-ajaxtable', this.doRefresh)
     },
     mounted() {
         var that = this;
