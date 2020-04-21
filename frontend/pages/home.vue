@@ -20,7 +20,6 @@
       </div>
 
       <div class="wrapper wrapper-content">
-        <div class="container">
           <div class="row">
             <div class="col-lg-12">
               <Ibox title="Daftar Pengguna">
@@ -48,7 +47,6 @@
                     }"></ajax-table>
               </Ibox>
             </div>
-        </div>
         </div>
       </div>
   </div>

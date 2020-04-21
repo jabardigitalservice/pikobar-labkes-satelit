@@ -97,7 +97,7 @@ export default {
     }
   },
   mounted() {
-    $(document).ready(function() {
+    this.$nextTick(function() {
       // Fast fix bor position issue with Propper.js
       // Will be fixed in Bootstrap 4.1 - https://github.com/twbs/bootstrap/pull/24092
       Popper.Defaults.modifiers.computeStyle.gpuAcceleration = false;
@@ -110,7 +110,9 @@ export default {
       }
 
       // MetisMenu
-      // var sideMenu = $('#side-menu').metisMenu();
+      if (window && window.$ && window.$('#side-menu').metisMenu) {
+        var sideMenu = window.$('#side-menu').metisMenu();
+      }
 
       // Collapse ibox function
       $(".collapse-link").on("click", function(e) {
