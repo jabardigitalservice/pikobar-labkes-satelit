@@ -1,6 +1,7 @@
 require('dotenv').config()
 const { join } = require('path')
 const { copySync, removeSync } = require('fs-extra')
+const webpack = require("webpack");
 
 module.exports = {
   generate: {
@@ -29,7 +30,14 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'Nuxt.js project' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/metismenu/dist/metisMenu.min.css'}
+    ],
+    script: [
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js' },
+      { src:'https://cdn.jsdelivr.net/npm/jquery'},
+      { src:'https://cdn.jsdelivr.net/npm/metismenu' }
+      // { src:'https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js'}
     ]
   },
 
@@ -41,7 +49,9 @@ module.exports = {
   },
 
   css: [
-    { src: '~assets/sass/app.scss', lang: 'scss' }
+    { src: '~assets/sass/app.scss', lang: 'scss' },
+    "~assets/font-awesome/css/font-awesome.css",
+    "~assets/css/style.css",
   ],
 
   plugins: [
@@ -50,8 +60,14 @@ module.exports = {
     '~plugins/vform',
     '~plugins/axios',
     '~plugins/fontawesome',
+    "~plugins/bootstrap.js",
     '~plugins/nuxt-client-init', // Comment this for SSR
-    { src: '~plugins/bootstrap', mode: 'client' }
+    // { src: '~assets/js/jquery-3.1.1.min.js', mode: 'client' },
+    // { src: '~assets/js/bootstrap.min.js', mode: 'client' },
+    // { src: '~assets/js/plugins/metisMenu/jquery.metisMenu.js', mode: 'client' },
+    // { src: '~assets/js/popper.min.js', mode: 'client' },
+    // { src:'https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js'},
+    { src: '~assets/js/inspinia.js', mode: 'client' },
   ],
 
   modules: [
@@ -60,7 +76,17 @@ module.exports = {
   ],
 
   build: {
-    extractCSS: true
+    extractCSS: true,
+    vendor:["jquery", "bootstrap"],
+    plugins: [
+      new webpack.ProvidePlugin({
+        $: "jquery",
+        Popper: ['popper.js', 'default']
+      })
+    ],
+    // vendor:['~assets/js/jquery-3.1.1.min.js',
+    //         '~assets/js/bootstrap.min.js',
+    //         '~assets/js/inspinia.js']
   },
 
   hooks: {
