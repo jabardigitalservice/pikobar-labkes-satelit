@@ -33,7 +33,7 @@
 import Form from 'vform'
 
 export default {
-  layout: 'simple',
+  layout: 'login',
   head () {
     return { title: this.$t('login') }
   },

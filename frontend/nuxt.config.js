@@ -31,12 +31,13 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/metismenu/dist/metisMenu.min.css'}
+      // { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/metismenu/dist/metisMenu.min.css'}
     ],
     script: [
       { src: 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js' },
       { src:'https://cdn.jsdelivr.net/npm/jquery'},
-      { src:'https://cdn.jsdelivr.net/npm/metismenu' }
+      { src:'/metismenu.js'},
+      // { src:'https://cdn.jsdelivr.net/npm/metismenu' }
       // { src:'https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js'}
     ]
   },
@@ -51,6 +52,7 @@ module.exports = {
   css: [
     { src: '~assets/sass/app.scss', lang: 'scss' },
     "~assets/font-awesome/css/font-awesome.css",
+    "~assets/css/animate.css",
     "~assets/css/style.css",
   ],
 
