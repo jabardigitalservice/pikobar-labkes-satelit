@@ -1,5 +1,5 @@
 <template>
-  <div id="wrapper">
+  <div id="wrapper" style="overflow-y: hidden;">
     <sidebar />
 
      <div id="page-wrapper" class="gray-bg">

@@ -4,7 +4,8 @@
       <ul class="nav metismenu" id="side-menu">
         <li class="nav-header">
           <div class="dropdown profile-element">
-            <img alt="image" class="rounded-circle" src="~/assets/img/profile_small.jpg" />
+            <!-- <img alt="image" class="rounded-circle" src="~/assets/img/profile_small.jpg" /> -->
+            <img alt="image" class="img-fluid" src="~/assets/img/logo-pikobar-jawabarat-text-white.png" />
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
               <span class="block m-t-xs font-bold">{{user.name}}</span>
               <span class="text-muted text-xs block">

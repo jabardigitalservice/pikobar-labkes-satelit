@@ -22,7 +22,7 @@ export default {
       this.$route.matched.map((item, i, { length }) => {
         const crumb = {};
         crumb.path = item.path;
-        crumb.name = this.$i18n.t("route." + (item.name || item.path));
+        crumb.name = this.$i18n.t("route." + (item.name ? (item.name) : ('path'+item.path.replace(/\//,'.'))));
 
         // is last item?
         if (i === length - 1) {

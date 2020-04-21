@@ -1,8 +1,10 @@
 {
   "route": {
+    "path": {
+      "settings": "Setting"
+    },
     "home": "Beranda",
     "settings": {
-      "index": "Setting",
       "password": "Password",
       "profile": "Profil"
     }
