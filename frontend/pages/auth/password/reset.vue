@@ -50,6 +50,7 @@
 import Form from 'vform'
 
 export default {
+  layout: 'login',
   head () {
     return { title: this.$t('reset_password') }
   },

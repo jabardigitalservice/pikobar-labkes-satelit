@@ -29,6 +29,12 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::patch('settings/profile', 'Settings\ProfileController@update');
     Route::patch('settings/password', 'Settings\PasswordController@update');
+    Route::get('/pengguna', 'PenggunaController@listPengguna');
+    Route::post('/pengguna', 'PenggunaController@savePengguna');
+    Route::post('/pengguna/{id}', 'PenggunaController@updatePengguna');
+    Route::delete('/pengguna/{id}','PenggunaController@deletePengguna');
+    Route::get('/pengguna/{id}','PenggunaController@showUpdate');
+    Route::get('roles-option','OptionController@getRoles');
 });
 
 Route::group(['middleware' => 'guest:api'], function () {

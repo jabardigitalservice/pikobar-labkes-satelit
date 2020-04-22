@@ -1,5 +1,8 @@
 <template>
   <card :title="$t('your_password')">
+    <portal to="title-name">
+      Setting Password
+    </portal>
     <form @submit.prevent="update" @keydown="form.onKeydown($event)">
       <alert-success :form="form" :message="$t('password_updated')" />
 
@@ -47,12 +50,20 @@ export default {
     form: new Form({
       password: '',
       password_confirmation: ''
-    })
+    }),
+    error: {}
   }),
 
   methods: {
     async update () {
-      await this.form.patch('/settings/password')
+      this.error = {}
+      try {
+        await this.form.patch('/settings/password')
+      } catch (err) {
+        if (err.response) {
+          this.form.errors.set(err.response.data.error)
+        }
+      }
 
       this.form.reset()
     }
