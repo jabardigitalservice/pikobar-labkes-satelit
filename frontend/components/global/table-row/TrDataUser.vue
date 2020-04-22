@@ -4,7 +4,7 @@
         <td>{{ item.name }}</td>
         <td>{{ item.username }}</td>
         <td>{{ item.email }}</td>
-        <td>{{ item.roles.roles_name }}</td>
+        <td>{{ item.roles ? item.roles.roles_name : '-' }}</td>
         <td>
             <nuxt-link :to="`pengguna/update/${item.id}`" class="btn btn-primary btn-sm">Update</nuxt-link>
             <a href="#" class="btn btn-danger btn-sm" @click="deleteData(item.id)">Delete</a>

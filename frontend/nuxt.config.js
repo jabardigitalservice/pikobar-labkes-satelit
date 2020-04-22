@@ -52,6 +52,7 @@ module.exports = {
   css: [
     { src: '~assets/sass/app.scss', lang: 'scss' },
     "~assets/font-awesome/css/font-awesome.css",
+    "~assets/css/unicons.css",
     "~assets/css/animate.css",
     "~assets/css/style.css",
   ],
@@ -61,7 +62,7 @@ module.exports = {
     '~plugins/i18n',
     '~plugins/vform',
     '~plugins/axios',
-    '~plugins/fontawesome',
+    // '~plugins/fontawesome',
     "~plugins/bootstrap.js",
     "~plugins/event-bus",
     "~plugins/templates",

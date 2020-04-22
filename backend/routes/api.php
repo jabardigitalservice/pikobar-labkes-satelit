@@ -28,6 +28,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::patch('settings/profile', 'Settings\ProfileController@update');
     Route::patch('settings/password', 'Settings\PasswordController@update');
+
+    Route::group(["prefix" => "sample"], function(){
+        Route::get('/get-data', 'SampleController@getData');
+    });
+
     Route::get('/pengguna', 'PenggunaController@listPengguna');
     Route::post('/pengguna', 'PenggunaController@savePengguna');
     Route::post('/pengguna/{id}', 'PenggunaController@updatePengguna');
