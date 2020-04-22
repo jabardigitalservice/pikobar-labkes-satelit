@@ -1,7 +1,7 @@
 <template id="table-template">
     <div v-bind:id="oid">
         <div v-if="config.has_entry_page || config.has_search_input" style="margin-bottom: 15px">
-            <div class="form-inline" style="position: relative;min-height:35px;float: right;">
+            <div class="form-inline d-flex justify-content-between" style="position: relative;min-height:35px;">
                 <div class="pull-left" v-if="config.has_entry_page">
                     {{$t('title.show')}} &nbsp;
                     <select class="form-control-sm form-control input-s-sm inline" v-model="pagination.perpage" v-on:change="changePage()">
@@ -15,18 +15,15 @@
                     Entri &nbsp;
                 </div>
                
-                <div class="pull-right table-search ml-2 pl-2 border-left" v-if="config.has_search_input">
-                    {{$t('title.search')}} &nbsp;
-                     <div class="input-group"><input placeholder="Search"  v-model="search_input" @keyup="doSearchDebounce" type="text" class="form-control form-control-sm"> 
-                     <span class="input-group-append"> <button type="button" @click="doSearchDebounce" class="btn btn-sm btn-primary">Go!
-                    </button> </span></div>
+                <div class="pull-right table-search ml-2 pl-2" v-if="config.has_search_input">
+                    {{$t('title.search')}} &nbsp;<input placeholder="Search"  v-model="search_input" @keyup="doSearchDebounce" type="text" class="form-control form-control-sm">
                 </div>
             </div>
             <div class="clearfix"></div>
         </div>
         <div v-show="!showCustomEmptyPage" style="position:relative">
             <div v-bind:class="config.class.wrapper">
-                <table class="table table-bordered"
+                <table class="table table-bordered table-striped "
                        v-bind:class="config.class.table">
                     <thead v-bind:class="config.class.thead" v-if="!config.disable_header || config.has_search_header">
                     <tr :is="config.custom_header" v-if="!config.disable_header && config.custom_header != ''"

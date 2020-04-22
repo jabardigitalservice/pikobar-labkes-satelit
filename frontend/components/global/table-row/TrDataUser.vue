@@ -2,9 +2,12 @@
     <tr>
         <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
         <td>{{ item.name }}</td>
+        <td>{{ item.username }}</td>
         <td>{{ item.email }}</td>
+        <td>{{ item.roles.roles_name }}</td>
         <td>
-            <a href="#" class="btn btn-primary btn-sm">Show</a>
+            <nuxt-link :to="`pengguna/update/${item.id}`" class="btn btn-primary btn-sm">Update</nuxt-link>
+            <a href="#" class="btn btn-danger btn-sm" @click="deleteData(item.id)">Delete</a>
         </td>
     </tr>
 </template>
@@ -17,6 +20,25 @@ export default {
         }
     },
     methods: {
+        async deleteData(id){
+            await axios.delete('pengguna/'+id)
+                .then((response)=>{
+                     this.$swal.fire(
+                        'Berhasil Menghapus Data',
+                        'Data Pengguna Berhasil dihapus',
+                        'success'
+                    );
+                    this.$bus.$emit('refresh-ajaxtable', 'master-user')
+                })
+                .catch((error)=>{
+                     this.$swal.fire(
+                            'Terjadi Kesalahan',
+                            'Gagal menghapus data, silakan coba kembali',
+                            'error'
+                        );
+                    console.log('error Hapus pengguna : ',error)
+                })
+        }
     }
 }
 </script>
