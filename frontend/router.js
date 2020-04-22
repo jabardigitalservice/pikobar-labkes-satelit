@@ -25,6 +25,9 @@ const routes = [
       { path: 'profile', name: 'settings.profile', component: page('settings/profile.vue') },
       { path: 'password', name: 'settings.password', component: page('settings/password.vue') }
     ]},
+  { path: '/pengguna', name: 'pengguna.index', component: page('pengguna/index.vue') },
+  { path: '/pengguna/tambah', name:'pengguna.tambah', component:page('pengguna/tambah.vue') },
+  { path: '/pengguna/update/:id', name:'pengguna.update', component:page('pengguna/update.vue') },
 ]
 
 export function createRouter () {

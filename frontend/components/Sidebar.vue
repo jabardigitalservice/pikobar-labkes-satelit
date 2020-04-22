@@ -112,6 +112,18 @@
             <span class="nav-label">Pelacakan Sampel</span>
           </router-link>
         </li>
+        <li>
+          <a href="#">
+            <i class="fa fa-bar-chart-o"></i>
+            <span class="nav-label">Data Master</span>
+            <span class="fa arrow"></span>
+          </a>
+          <ul class="nav nav-second-level collapse">
+            <li>
+              <nuxt-link to="/pengguna">Pengguna</nuxt-link>
+            </li>
+          </ul>
+        </li>
       </ul>
     </div>
   </nav>
