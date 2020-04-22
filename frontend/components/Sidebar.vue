@@ -4,7 +4,8 @@
       <ul class="nav metismenu" id="side-menu">
         <li class="nav-header">
           <div class="dropdown profile-element">
-            <img alt="image" class="rounded-circle" src="~/assets/img/profile_small.jpg" />
+            <!-- <img alt="image" class="rounded-circle" src="~/assets/img/profile_small.jpg" /> -->
+            <img alt="image" class="img-fluid" src="~/assets/img/logo-pikobar-jawabarat-text-white.png" />
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
               <span class="block m-t-xs font-bold">{{user.name}}</span>
               <span class="text-muted text-xs block">
@@ -14,11 +15,11 @@
             </a>
             <ul class="dropdown-menu animated fadeInRight m-t-xs">
               <li>
-                <a class="dropdown-item" href="#">Profile</a>
+                <router-link :to="{name: 'settings.profile'}" class="dropdown-item">Profile</router-link>
               </li>
               <li class="dropdown-divider"></li>
               <li>
-                <a class="dropdown-item" href="#">Logout</a>
+                <a class="dropdown-item" href="#" @click.prevent="logout()">Logout</a>
               </li>
             </ul>
           </div>

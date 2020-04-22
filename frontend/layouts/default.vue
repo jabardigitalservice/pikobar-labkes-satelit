@@ -1,10 +1,21 @@
 <template>
-  <div id="wrapper">
+  <div id="wrapper" style="overflow-y: hidden;">
     <sidebar />
 
      <div id="page-wrapper" class="gray-bg">
         <div class="row border-bottom">
             <navbar/>
+        </div>
+        <div>
+          <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-sm-4">
+              <h2><portal-target name="title-name">Loading...</portal-target></h2>
+              <inspinia-breadcrumbs></inspinia-breadcrumbs>
+            </div>
+            <div class="col-sm-8">
+              <portal-target name="title-action"></portal-target>
+            </div>
+          </div>
         </div>
         <nuxt />
         <div class="footer">

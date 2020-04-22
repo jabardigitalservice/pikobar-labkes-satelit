@@ -1,32 +1,21 @@
 <template>
-    <div>
-      <div class="row wrapper border-bottom white-bg page-heading">
-        <div class="col-sm-4">
-          <h2>Dashboard</h2>
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <nuxt-link to="/">Home</nuxt-link>
-            </li>
-            <li class="breadcrumb-item active">
-              <strong>Dashboard</strong>
-            </li>
-          </ol>
-        </div>
-        <div class="col-sm-8">
+
+      <div class="wrapper wrapper-content">
+        <portal to="title-name">
+          Dashboard
+        </portal>
+        <portal to="title-action">
           <div class="title-action">
             <a href="" class="btn btn-primary">Dashboard</a>
           </div>
-        </div>
-      </div>
+        </portal>
 
-      <div class="wrapper wrapper-content">
           <div class="row">
             <div class="col-lg-12">
              
             </div>
         </div>
       </div>
-  </div>
 </template>
  
 <script>

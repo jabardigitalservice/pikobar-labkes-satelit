@@ -64,6 +64,7 @@ module.exports = {
     '~plugins/fontawesome',
     "~plugins/bootstrap.js",
     "~plugins/event-bus",
+    "~plugins/templates",
     '~plugins/nuxt-client-init', // Comment this for SSR
     // { src: '~assets/js/jquery-3.1.1.min.js', mode: 'client' },
     // { src: '~assets/js/bootstrap.min.js', mode: 'client' },
@@ -75,6 +76,7 @@ module.exports = {
 
   modules: [
     'nuxt-sweetalert2',
+    'portal-vue/nuxt',
     '@nuxtjs/router'
   ],
 

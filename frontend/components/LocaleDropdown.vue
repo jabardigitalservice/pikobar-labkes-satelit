@@ -4,6 +4,7 @@
        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
     >
       {{ locales[locale] }}
+      <i class="fa fa-caret-down"></i>
     </a>
     <div class="dropdown-menu">
       <a v-for="(value, key) in locales" :key="key" class="dropdown-item" href="#"
