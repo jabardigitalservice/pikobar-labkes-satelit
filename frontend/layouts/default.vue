@@ -20,7 +20,8 @@
         <nuxt />
         <div class="footer">
             <div>
-                <strong>Copyright</strong> PIKOBAR &copy; 2020
+                <strong>Copyright</strong> &copy; 2020 |
+                Pemerintah Provinsi Jawa Barat | GTPP COVID-19 | PIKOBAR
             </div>
         </div>
         <right-sidebar/>

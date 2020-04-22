@@ -3,6 +3,9 @@
     "path": {
       "settings": "Setting"
     },
+    "sample": {
+      "index": "Penerimaan Sampel"
+    },
     "home": "Beranda",
     "settings": {
       "password": "Password",

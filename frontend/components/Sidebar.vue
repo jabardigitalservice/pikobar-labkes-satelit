@@ -34,35 +34,83 @@
         <li>
           <a href="#">
             <i class="fa fa-bar-chart-o"></i>
-            <span class="nav-label">Graphs</span>
+            <span class="nav-label">Registrasi</span>
             <span class="fa arrow"></span>
           </a>
           <ul class="nav nav-second-level collapse">
             <li>
-              <a href="graph_flot.html">Flot Charts</a>
+              <router-link to="/" tag="a">
+                <span class="nav-label">Registrasi Mandiri (L)</span>
+              </router-link>
             </li>
             <li>
-              <a href="graph_morris.html">Morris.js Charts</a>
-            </li>
-            <li>
-              <a href="graph_rickshaw.html">Rickshaw Charts</a>
-            </li>
-            <li>
-              <a href="graph_chartjs.html">Chart.js</a>
-            </li>
-            <li>
-              <a href="graph_chartist.html">Chartist</a>
-            </li>
-            <li>
-              <a href="c3.html">c3 charts</a>
-            </li>
-            <li>
-              <a href="graph_peity.html">Peity Charts</a>
-            </li>
-            <li>
-              <a href="graph_sparkline.html">Sparkline Charts</a>
+              <router-link to="/" tag="a">
+                <span class="nav-label">Registrasi Rujukan (R)</span>
+              </router-link>
             </li>
           </ul>
+        </li>
+        <li>
+          <router-link to="/sample" tag="a">
+            <i class="fa fa-home"></i>
+            <span class="nav-label">Pengambilan Sample</span>
+          </router-link>
+        </li>
+        <li>
+          <a href="#">
+            <i class="fa fa-bar-chart-o"></i>
+            <span class="nav-label">Ekstraksi</span>
+            <span class="fa arrow"></span>
+          </a>
+          <ul class="nav nav-second-level collapse">
+            <li>
+              <router-link to="/" tag="a">
+                <span class="nav-label">Ekstraksi</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/" tag="a">
+                <span class="nav-label">Sampel yang dikembalikan</span>
+              </router-link>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">
+            <i class="fa fa-bar-chart-o"></i>
+            <span class="nav-label">Pemeriksaan RT-PCR</span>
+            <span class="fa arrow"></span>
+          </a>
+          <ul class="nav nav-second-level collapse">
+            <li>
+              <router-link to="/" tag="a">
+                <span class="nav-label">Pemeriksaan Sampel</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/" tag="a">
+                <span class="nav-label">Sampel yang dikembalikan</span>
+              </router-link>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <router-link to="/" tag="a">
+            <i class="fa fa-home"></i>
+            <span class="nav-label">Verifikasi</span>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/" tag="a">
+            <i class="fa fa-home"></i>
+            <span class="nav-label">Validasi</span>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/" tag="a">
+            <i class="fa fa-home"></i>
+            <span class="nav-label">Pelacakan Sampel</span>
+          </router-link>
         </li>
       </ul>
     </div>
