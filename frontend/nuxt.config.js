@@ -27,17 +27,15 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Nuxt.js project' }
+      { hid: 'description', name: 'description', content: 'PIKOBAR Labs' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      // { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/metismenu/dist/metisMenu.min.css'}
     ],
     script: [
       { src: 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js' },
       { src:'https://cdn.jsdelivr.net/npm/jquery'},
       { src:'/metismenu.js'},
-      // { src:'https://cdn.jsdelivr.net/npm/metismenu' }
       // { src:'https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js'}
     ]
   },
@@ -63,7 +61,7 @@ module.exports = {
     '~plugins/vform',
     '~plugins/axios',
     // '~plugins/fontawesome',
-    "~plugins/bootstrap.js",
+    // "~plugins/bootstrap.js",
     "~plugins/event-bus",
     "~plugins/templates",
     '~plugins/nuxt-client-init', // Comment this for SSR
@@ -78,17 +76,18 @@ module.exports = {
   modules: [
     'nuxt-sweetalert2',
     'portal-vue/nuxt',
+    '@nuxtjs/toast',
     '@nuxtjs/router'
   ],
 
   build: {
     extractCSS: true,
-    vendor:["jquery", "bootstrap"],
+    // vendor:["jquery", "bootstrap"],
     plugins: [
-      new webpack.ProvidePlugin({
-        $: "jquery",
-        Popper: ['popper.js', 'default']
-      })
+      // new webpack.ProvidePlugin({
+      //   $: "jquery",
+      //   Popper: ['popper.js', 'default']
+      // })
     ],
     // vendor:['~assets/js/jquery-3.1.1.min.js',
     //         '~assets/js/bootstrap.min.js',

@@ -3,9 +3,9 @@
     <portal to="title-name">Penerimaan Sampel</portal>
     <portal to="title-action">
       <div class="title-action">
-        <a href class="btn btn-primary">
+        <router-link to="/sample/add" class="btn btn-primary">
           <i class="fa fa-plus"></i> Sampel Baru
-        </a>
+        </router-link>
       </div>
     </portal>
 

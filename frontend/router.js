@@ -18,6 +18,7 @@ const routes = [
 
   { path: '/home', name: 'home', component: page('home.vue') },
   { path: '/sample', name: 'sample.index', component: page('sample/index.vue') },
+  { path: '/sample/add', name: 'sample.add', component: page('sample/add.vue') },
   { path: '/settings',
     component: page('settings/index.vue'),
     children: [

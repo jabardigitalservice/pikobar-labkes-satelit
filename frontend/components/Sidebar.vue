@@ -184,8 +184,6 @@ export default {
         }
       });
 
-      $("[data-toggle=popover]").popover();
-
       // Add slimscroll to element
       // $('.full-height-scroll').slimscroll({
       //     height: '100%'
