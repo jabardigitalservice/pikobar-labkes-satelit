@@ -103,6 +103,67 @@ class StoreRegisterRequest extends FormRequest
             "pemeriksaan_penunjang.status_kesehatan"=> ['required', 'in:pulang,dirawat,meninggal'],
             "pemeriksaan_penunjang.keterangan_lab"=> ['max:255'],
 
+            // Riwayat Kontak
+            "riwayat_kontak.*.nama_lengkap"=> ['max:255'],
+            "riwayat_kontak.*.hubungan"=> [
+                'max:255',
+                Rule::requiredIf(function(){
+                    return $this->input('riwayat_kontak.*.nama_lengkap');
+                }),
+            ],
+            "riwayat_kontak.*.alamat"=> [
+                'max:255',
+                Rule::requiredIf(function(){
+                    return $this->input('riwayat_kontak.*.nama_lengkap');
+                }),
+            ],
+            "riwayat_kontak.*.tanggal_awal"=> [
+                'date',
+                'date_format:Y-m-d',
+                Rule::requiredIf(function(){
+                    return $this->input('riwayat_kontak.*.nama_lengkap');
+                }),
+            ],
+            "riwayat_kontak.*.tanggal_akhir"=> [
+                'date',
+                'date_format:Y-m-d',
+                Rule::requiredIf(function(){
+                    return $this->input('riwayat_kontak.*.nama_lengkap');
+                }),
+            ],
+            "riwayat_kontak.*.positif_covid19" => [
+                'boolean',
+                Rule::requiredIf(function(){
+                    return $this->input('riwayat_kontak.*.nama_lengkap');
+                }),
+            ],
+            "riwayat_kontak.*.keluarga_sakit_sejenis"=> [
+                'boolean',
+                Rule::requiredIf(function(){
+                    return $this->input('riwayat_kontak.*.nama_lengkap');
+                }),
+            ],
+
+            // Riwayat Lawatan
+            "riwayat_lawatan.*.tanggal_lawatan"=> [
+                'date',
+                'date_format:Y-m-d'
+            ],
+            "riwayat_lawatan.*.nama_kota"=> [
+                'max:255',
+                Rule::requiredIf(function(){
+                    return $this->input('riwayat_lawatan.*.tanggal_lawatan');
+                }),
+            ],
+            "riwayat_lawatan.*.nama_negara"=> [
+                'max:255',
+                Rule::requiredIf(function(){
+                    return $this->input('riwayat_lawatan.*.tanggal_lawatan');
+                }),
+            ],
+
+            
+
         ];
     }
 }

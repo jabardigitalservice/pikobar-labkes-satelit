@@ -24,9 +24,6 @@ class CreateRiwayatKontakTable extends Migration
             $table->boolean('positif_covid19');
             $table->boolean('keluarga_sakit_sejenis');
 
-            $table->date('tanggal_lawatan');
-            $table->string('nama_kota');
-            $table->string('nama_negara');
             $table->timestamps();
 
             $table->foreign('register_id')->references('id')->on('register');

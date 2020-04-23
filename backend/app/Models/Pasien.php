@@ -71,5 +71,31 @@ class Pasien extends Model
             ]);
     }
 
+    public function riwayatKontak()
+    {
+        return $this->belongsToMany(Register::class, 'riwayat_kontak', 'pasien_id', 'register_id')
+            ->using(RiwayatKontak::class)
+            ->withPivot(
+                'nama_lengkap',
+                'alamat',
+                'hubungan',
+                'tanggal_awal',
+                'tanggal_akhir',
+                'positif_covid19',
+                'keluarga_sakit_sejenis'
+            );
+    }
+
+    public function riwayatLawatan()
+    {
+        return $this->belongsToMany(Register::class, 'riwayat_lawatan', 'pasien_id', 'register_id')
+            ->using(RiwayatLawatan::class)
+            ->withPivot(
+                'tanggal_lawatan',
+                'nama_kota',
+                'nama_negara'
+            );
+    }
+
 
 }

@@ -67,10 +67,22 @@ class RegisterController extends Controller
 
             $pemeriksaanPenunjang = $this->getRequestPemeriksaanPenunjang($request);
 
+            $riwayatKontak = $this->getRequestRiwayatKontak($request);
+
+            $riwayatLawatan = $this->getRequestRiwayatLawatan($request);
+
             $register->pasiens()->attach($pasien);
             $register->riwayatKunjungan()->save($riwayatKunjungan);
             $register->gejalaPasien()->attach($pasien, $tandaGejala);
             $register->pemeriksaanPenunjang()->attach($pasien, $pemeriksaanPenunjang);
+
+            foreach ($riwayatKontak as $key => $riwayat) {
+                $register->riwayatKontak()->attach($pasien, $riwayat);
+            }
+
+            foreach ($riwayatLawatan as $key => $riwayat) {
+                $register->riwayatLawatan()->attach($pasien, $riwayat);
+            }
             
             DB::commit();
 
@@ -80,6 +92,12 @@ class RegisterController extends Controller
                 'riwayat_kunjungan'=> $register->riwayatKunjungan->getAttribute('riwayat'),
                 'tanda_gejala'=> $register->gejalaPasien()->first()->pivot,
                 'pemeriksaan_penunjang'=> $register->pemeriksaanPenunjang()->first()->pivot,
+                'riwayat_kontak'=> $register->riwayatKontak->map(function($item){
+                    return $item->pivot;
+                }),
+                'riwayat_lawatan'=> $register->riwayatLawatan->map(function($item){
+                    return $item->pivot;
+                })
             ];
 
             return response()->json($response);
@@ -130,7 +148,8 @@ class RegisterController extends Controller
         ];
     }
 
-    private function getRequestPemeriksaanPenunjang(Request $request) : array{
+    private function getRequestPemeriksaanPenunjang(Request $request) : array
+    {
         return [
             "xray_paru"=> $request->input('pemeriksaan_penunjang.xray_paru'),
             "penjelasan_xray"=> $request->input('pemeriksaan_penunjang.penjelasan_xray'),
@@ -141,5 +160,15 @@ class RegisterController extends Controller
             "status_kesehatan"=> $request->input('pemeriksaan_penunjang.status_kesehatan'),
             "keterangan_lab"=> $request->input('pemeriksaan_penunjang.keterangan_lab'),
         ];
+    }
+
+    private function getRequestRiwayatKontak(Request $request) : array 
+    {
+        return $request->input('riwayat_kontak');
+    }
+
+    private function getRequestRiwayatLawatan(Request $request) : array
+    {
+        return $request->input('riwayat_lawatan');
     }
 }

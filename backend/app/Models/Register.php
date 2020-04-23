@@ -63,4 +63,30 @@ class Register extends Model
             ]);
     }
 
+    public function riwayatKontak()
+    {
+        return $this->belongsToMany(Pasien::class, 'riwayat_kontak', 'register_id', 'pasien_id')
+            ->using(RiwayatKontak::class)
+            ->withPivot(
+                'nama_lengkap',
+                'alamat',
+                'hubungan',
+                'tanggal_awal',
+                'tanggal_akhir',
+                'positif_covid19',
+                'keluarga_sakit_sejenis'
+            );
+    }
+
+    public function riwayatLawatan()
+    {
+        return $this->belongsToMany(Pasien::class, 'riwayat_lawatan', 'register_id', 'pasien_id')
+            ->using(RiwayatLawatan::class)
+            ->withPivot(
+                'tanggal_lawatan',
+                'nama_kota',
+                'nama_negara'
+            );
+    }
+
 }
