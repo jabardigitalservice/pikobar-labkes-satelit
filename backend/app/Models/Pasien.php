@@ -33,4 +33,10 @@ class Pasien extends Model
     protected $dates = [
         'tanggal_lahir',
     ];
+
+    public function registers()
+    {
+        return $this->belongsToMany(Register::class, 'pasien_register', 'pasien_id', 'register_id')
+            ->using(PasienRegister::class);
+    }
 }

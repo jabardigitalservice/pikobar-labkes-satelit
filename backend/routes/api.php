@@ -67,5 +67,15 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::get('list-gejala', 'GejalaController@getListMasterGejala');
         
         Route::get('list-penyakit-penyerta', 'PenyakitPenyertaController@getListMaster');
+
+        Route::group(['prefix'=>'register'], function(){
+
+            Route::get('generate-nomor-register', 'RegisterController@generateNomorRegister');
+
+            Route::post('store', 'RegisterController@store');
+
+            
+
+        });
         
 });

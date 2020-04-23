@@ -15,4 +15,15 @@ class Register extends Model
         'nama_dokter',
         'no_telp'
     ];
+
+    public function fasyankes()
+    {
+        return $this->belongsTo(Fasyankes::class);
+    }
+
+    public function pasiens()
+    {
+        return $this->belongsToMany(Pasien::class, 'pasien_register', 'register_id', 'pasien_id')
+            ->using(PasienRegister::class);
+    }
 }

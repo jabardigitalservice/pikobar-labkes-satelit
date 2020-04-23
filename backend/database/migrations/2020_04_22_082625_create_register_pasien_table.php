@@ -13,7 +13,7 @@ class CreateRegisterPasienTable extends Migration
      */
     public function up()
     {
-        Schema::create('register_pasien', function (Blueprint $table) {
+        Schema::create('pasien_register', function (Blueprint $table) {
             $table->unsignedInteger('register_id');
             $table->unsignedBigInteger('pasien_id');
 
