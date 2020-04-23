@@ -172,7 +172,7 @@
                 <tr v-for="(sample, $index) in form.samples" :key="$index">
                   <td>
                     <select class="form-control" v-model="sample.sam_jenis_sampel"
-                    :class="{ 'is-invalid': form.errors.has(`samples.${$index}.sam_namadiluarjenis`) }">
+                    :class="{ 'is-invalid': form.errors.has(`samples.${$index}.sam_jenis_sampel`) }">
                       <option value="1">Usap Nasofaring & Orofaring</option>
                       <option value="2">Sputum</option>
                       <option value="3">Bronchoalveolar Lavage</option>
@@ -186,7 +186,7 @@
                       <option value="11">Fingerprick</option>
                       <option value="12">Jenis Sampel Lainnya (Sebutkan)</option>
                     </select>
-                    <has-error :form="form" :field="`samples.${$index}.sam_namadiluarjenis`"/>
+                    <has-error :form="form" :field="`samples.${$index}.sam_jenis_sampel`"/>
                     <div v-if="sample.sam_jenis_sampel == 12">
                       <small for="specify">Jenis Lainnya (isi apabila tidak tercantum diatas)</small>
                       <input
@@ -194,7 +194,9 @@
                         class="form-control"
                         v-model="sample.sam_namadiluarjenis"
                         placeholder="isi apabila tidak tercantum"
+                        :class="{ 'is-invalid': form.errors.has(`samples.${$index}.sam_namadiluarjenis`) }"
                       />
+                      <has-error :form="form" :field="`samples.${$index}.sam_namadiluarjenis`"/>
                     </div>
                   </td>
                   <td>

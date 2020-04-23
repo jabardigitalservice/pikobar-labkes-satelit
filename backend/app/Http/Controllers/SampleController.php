@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User as Sample;
 use Illuminate\Validation\Rule;
+use Validator;
+
 class SampleController extends Controller
 {
 
@@ -55,10 +57,23 @@ class SampleController extends Controller
 
     public function add(Request $request)
     {
-        $this->validate($request,[
+        $v = Validator::make($request->all(),[
             'pen_sampel_diambil' => 'required',
             'pen_nomor_ekstraksi' => 'required|min:2|max:255',
+            'samples.*.sam_jenis_sampel' => 'required|integer|min:1|max:12',
+            'samples.*.nomorsampel' => 'required',
         ]);
+        foreach($request->samples as $key => $item) {
+            if (isset($item['sam_jenis_sampel']) && $item['sam_jenis_sampel'] == 12) {
+                $v->after(function ($validator) use ($item, $key) {
+                    if (empty($item['sam_namadiluarjenis'])) {
+                        $validator->errors()->add("samples.$key.sam_namadiluarjenis", 'Jenis sampel belum diisi');
+                    }
+                });
+            }
+        }
+
+        $v->validate();
 
         // $model = new Sample;
         // $model->save();
