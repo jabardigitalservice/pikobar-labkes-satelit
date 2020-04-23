@@ -12,4 +12,9 @@ class PenyakitPenyertaController extends Controller
     {
         return response()->json(PenyakitPenyerta::whereIsActive(true)->get());
     }
+
+    public function show(PenyakitPenyerta $penyakitPenyerta)
+    {
+        return response()->json($penyakitPenyerta);
+    }
 }

@@ -17,4 +17,9 @@ class FasyankesController extends Controller
 
         return response()->json($listFaskes);
     }
+
+    public function show(Fasyankes $fasyankes)
+    {
+        return response()->json($fasyankes);
+    }
 }

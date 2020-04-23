@@ -13,4 +13,6 @@ class Gejala extends Model
         'is_active',
     ];
     
+    public $timestamps = false;
+    
 }

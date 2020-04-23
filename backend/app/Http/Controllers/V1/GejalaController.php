@@ -12,4 +12,9 @@ class GejalaController extends Controller
     {
         return response()->json(Gejala::whereIsActive(true)->get());
     }
+
+    public function show(Gejala $gejala)
+    {
+        return response()->json($gejala);
+    }
 }

@@ -17,7 +17,6 @@ class CreateGejalaTable extends Migration
             $table->id();
             $table->string('nama');
             $table->boolean('is_active');
-            $table->timestamps();
         });
     }
 

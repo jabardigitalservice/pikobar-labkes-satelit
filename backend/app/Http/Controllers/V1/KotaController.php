@@ -12,4 +12,9 @@ class KotaController extends Controller
     {
         return response()->json(Kota::whereProvinsiId($provinsi)->get());
     }
+
+    public function show(Kota $kota)
+    {
+        return response()->json($kota);
+    }
 }
