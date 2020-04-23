@@ -3,7 +3,7 @@
     <portal to="title-action">
       <div class="title-action">
         <router-link v-for="tab in tabs" :key="tab.route"
-          :to="{ name: tab.route }" class="btn" active-class="btn-primary">
+          :to="{ name: tab.route }" class="btn" active-class="btn-primary" inactive-class="btn-default">
           <fa :icon="tab.icon" fixed-width />
           {{ tab.name }}
         </router-link>
