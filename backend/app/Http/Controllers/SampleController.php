@@ -58,10 +58,12 @@ class SampleController extends Controller
     public function add(Request $request)
     {
         $v = Validator::make($request->all(),[
-            'pen_sampel_diambil' => 'required',
-            'pen_nomor_ekstraksi' => 'required|min:2|max:255',
             'samples.*.sam_jenis_sampel' => 'required|integer|min:1|max:12',
             'samples.*.nomorsampel' => 'required',
+            'pen_sampel_diambil.required' => 'Keterangan sampel diambil wajib diisi',
+            'pen_nomor_ekstraksi.required' => 'Nomor Ekstraksi wajib diisi',
+            'pen_nomor_ekstraksi.min' => 'Jumlah karakter minimal :min dijit.',
+            'pen_nomor_ekstraksi.max' => 'Jumlah karakter maksimal :max dijit.',
         ]);
         foreach($request->samples as $key => $item) {
             if (isset($item['sam_jenis_sampel']) && $item['sam_jenis_sampel'] == 12) {
@@ -110,6 +112,23 @@ class SampleController extends Controller
             ],
             'role_id' => 'required',
             'password' => 'required|min:6',
+        ], [
+            'name.required' => 'Nama wajib diisi',
+            'name.max' => 'Jumlah karakter nama maksimal :max dijit.',
+
+            'modelname.required' => 'Nama model wajib diisi',
+            'modelname.unique' => 'Nama model harus unik, nama yang sama telah diambil.',
+            'modelname.max' => 'Jumlah karakter nama model maksimal :max dijit.',
+
+            'email.required' => 'Email wajib diisi',
+            'email.unique' => 'Email yang sama telah diambil.',
+            'email.email' => 'Email tidak valid.',
+
+            'role_id.required' => 'ID Role wajib diisi',
+
+            'password.required' => 'Password wajib diisi',
+            'password.min' => 'Jumlah karakter password minimal :min dijit.',
+
         ]);
 
         // dd($id);
