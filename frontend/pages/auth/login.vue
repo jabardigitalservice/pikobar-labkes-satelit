@@ -90,7 +90,7 @@
         }
 
         // Save the token.
-        this.$store.dispatch('auth/saveToken', {
+        this.$store.dispatch('auth/saveToken', { 
           token: data.token,
           remember: this.remember
         })

@@ -39,6 +39,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::delete('/pengguna/{id}','PenggunaController@deletePengguna');
     Route::get('/pengguna/{id}','PenggunaController@showUpdate');
     Route::get('roles-option','OptionController@getRoles');
+
+    Route::group(['prefix'=>'registrasi-mandiri'], function(){
+        Route::get('/','RegistrasiMandiri@getData');
+    });
 });
 
 Route::group(['middleware' => 'guest:api'], function () {

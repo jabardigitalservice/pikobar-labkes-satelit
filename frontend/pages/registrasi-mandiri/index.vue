@@ -1,17 +1,20 @@
 <template>
       <div class="wrapper wrapper-content">
         <portal to="title-name">
-          Daftar Pengguna
+          Registrasi Mandiri
         </portal>
         <portal to="title-action">
           <div class="title-action">
-            <nuxt-link to="/pengguna/tambah" class="btn btn-primary">Tambah Data</nuxt-link>
           </div>
         </portal>
           <div class="row">
             <div class="col-lg-12">
-              <Ibox title="Daftar Pengguna">
-                <ajax-table url="/pengguna" :oid="'master-user'"
+              <Ibox title="Register Pasien">
+                <template v-slot:tools>
+                    <button class="btn btn-xs btn-success"><i class="fa fa-upload"></i> Import Data</button>
+                    <nuxt-link tag="button" to="/registrasi/mandiri/tambah" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Registrasi Baru</nuxt-link>
+                </template>
+                <ajax-table url="/registrasi-mandiri" :oid="'registrasi-mandiri'"
                   :params="params"
                   :config="{
                     autoload: true,
@@ -28,12 +31,11 @@
                         wrapper: ['table-responsive'],
                     }
                     }"
-                    :rowtemplate="'tr-data-user'"
+                    :rowtemplate="'tr-data-regis-mandiri'"
                     :columns="{
-                      name: 'Nama',
-                      username: 'Username',
-                      email: 'Email',
-                      role_id: 'Role',
+                      nama_pasien: 'Informasi Pasien',
+                      dinkes_pengirim: 'Pengirim',
+                      created_at: 'Tanggal Input'
                     }"></ajax-table>
               </Ibox>
             </div>

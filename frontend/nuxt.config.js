@@ -53,6 +53,8 @@ module.exports = {
     "~assets/css/unicons.css",
     "~assets/css/animate.css",
     "~assets/css/style.css",
+    "~assets/css/smart_wizard.min.css",
+    "~assets/css/flatpickr.min.css",
   ],
 
   plugins: [
@@ -71,6 +73,8 @@ module.exports = {
     // { src: '~assets/js/popper.min.js', mode: 'client' },
     // { src:'https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js'},
     { src: '~assets/js/inspinia.js', mode: 'client' },
+    { src: '~assets/js/jquery.smartWizard.min.js', mode: 'client' },
+    { src: '~assets/js/flatpickr.min.js', mode: 'client' },
   ],
 
   modules: [

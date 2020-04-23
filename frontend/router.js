@@ -29,6 +29,9 @@ const routes = [
   { path: '/pengguna', name: 'pengguna.index', component: page('pengguna/index.vue') },
   { path: '/pengguna/tambah', name:'pengguna.tambah', component:page('pengguna/tambah.vue') },
   { path: '/pengguna/update/:id', name:'pengguna.update', component:page('pengguna/update.vue') },
+  { path: '/registrasi/mandiri', name: 'registrasi.mandiri', component: page('registrasi-mandiri/index.vue') },
+  { path: '/registrasi/mandiri/tambah', name: 'registrasi.mandiri.tambah', component: page('registrasi-mandiri/tambah.vue') },
+  { path: '/registrasi/mandiri/detail', name: 'registrasi.mandiri.detail', component: page('registrasi-mandiri/detail.vue') },
 ]
 
 export function createRouter () {
