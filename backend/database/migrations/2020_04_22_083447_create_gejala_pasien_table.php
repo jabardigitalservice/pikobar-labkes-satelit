@@ -25,6 +25,7 @@ class CreateGejalaPasienTable extends Migration
 
             $table->dateTime('tanggal_onset_gejala');
             $table->json('daftar_gejala'); // [{gejala_id, status(ya, tidak, tidak_diisi)}, {}, ]
+            $table->string('gejala_lain')->nullable();
             $table->timestamps();
 
             $table->foreign('register_id')->references('id')->on('register');

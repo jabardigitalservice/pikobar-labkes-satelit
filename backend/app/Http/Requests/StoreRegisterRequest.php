@@ -72,7 +72,27 @@ class StoreRegisterRequest extends FormRequest
                 }),
             ],
 
-            
+            // Tanda dan Gejala Pasien
+            "tanda_gejala.pasien_rdt"=> ['required', 'boolean'],
+            "tanda_gejala.hasil_rdt_positif"=> [
+                'boolean',
+                Rule::requiredIf(function(){
+                    return $this->input('tanda_gejala.pasien_rdt');
+                }),
+            ],
+            "tanda_gejala.tanggal_rdt"=> [
+                'date',
+                'date_format:Y-m-d',
+                Rule::requiredIf(function(){
+                    return $this->input('tanda_gejala.pasien_rdt');
+                }),
+            ],
+            "tanda_gejala.keterangan_rdt"=> ['nullable'],
+            "tanda_gejala.tanggal_onset_gejala"=> ['required', 'date', 'date_format:Y-m-d'],
+            "tanda_gejala.daftar_gejala.*.gejala_id"=> ['exists:gejala,id'],
+            "tanda_gejala.daftar_gejala.*.status"=> ['boolean'],
+            "tanda_gejala.gejala_lain"=> ['nullable'],            
+
         ];
     }
 }

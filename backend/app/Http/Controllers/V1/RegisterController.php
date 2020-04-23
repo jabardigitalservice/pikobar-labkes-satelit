@@ -63,8 +63,19 @@ class RegisterController extends Controller
                 'riwayat'=> $request->input('riwayat_kunjungan')
             ]);
 
+            $tandaGejala = [
+                "pasien_rdt"=> $request->input('tanda_gejala.pasien_rdt'),
+                "hasil_rdt_positif"=> $request->input('tanda_gejala.hasil_rdt_positif'),
+                "tanggal_onset_gejala"=> $request->input('tanda_gejala.tanggal_onset_gejala'),
+                "tanggal_rdt"=> $request->input('tanda_gejala.tanggal_rdt'),
+                "keterangan_rdt"=> $request->input('tanda_gejala.keterangan_rdt'),
+                "daftar_gejala"=> $request->input('tanda_gejala.daftar_gejala'),
+                "gejala_lain"=> $request->input('tanda_gejala.gejala_lain'),   
+            ];
+
             $register->pasiens()->attach($pasien);
             $register->riwayatKunjungan()->save($riwayatKunjungan);
+            $register->gejalaPasien()->attach($pasien, $tandaGejala);
             
             DB::commit();
 
@@ -72,6 +83,7 @@ class RegisterController extends Controller
                 'pasien'=> $pasien,
                 'fasyankes'=> $register->fasyankes,
                 'riwayat_kunjungan'=> $register->riwayatKunjungan->getAttribute('riwayat'),
+                'tanda_gejala'=> $register->gejalaPasien()->first()->pivot,
             ];
 
             return response()->json($response);

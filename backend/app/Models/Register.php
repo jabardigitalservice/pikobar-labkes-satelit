@@ -31,4 +31,20 @@ class Register extends Model
     {
         return $this->hasOne(RiwayatKunjungan::class);
     }
+
+    public function gejalaPasien()
+    {
+        return $this->belongsToMany(Pasien::class, 'gejala_pasien', 'register_id', 'pasien_id')
+            ->using(GejalaPasien::class)
+            ->withPivot([
+                'pasien_rdt',
+                'hasil_rdt_positif',
+                'tanggal_rdt',
+                'keterangan_rdt',
+                'tanggal_onset_gejala',
+                'daftar_gejala',
+                'gejala_lain',
+            ]);
+    }
+
 }

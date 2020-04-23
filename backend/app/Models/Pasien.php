@@ -39,4 +39,19 @@ class Pasien extends Model
         return $this->belongsToMany(Register::class, 'pasien_register', 'pasien_id', 'register_id')
             ->using(PasienRegister::class);
     }
+
+    public function gejalaPasien()
+    {
+        return $this->belongsToMany(Register::class, 'gejala_pasien', 'pasien_id', 'register_id')
+            ->using(GejalaPasien::class)
+            ->withPivot([
+                'pasien_rdt',
+                'hasil_rdt_positif',
+                'tanggal_rdt',
+                'keterangan_rdt',
+                'tanggal_onset_gejala',
+                'daftar_gejala',
+                'gejala_lain',
+            ]);
+    }
 }

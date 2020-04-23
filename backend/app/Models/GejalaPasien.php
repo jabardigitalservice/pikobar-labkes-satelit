@@ -16,10 +16,15 @@ class GejalaPasien extends Pivot
         'tanggal_rdt',
         'tanggal_onset_gejala',
         'daftar_gejala',
+        'gejala_lain'
     ];
 
     protected $dates = [
         'tanggal_rdt',
         'tanggal_onset_gejala',
+    ];
+
+    protected $casts = [
+        'daftar_gejala'=> 'array',
     ];
 }
