@@ -22,8 +22,15 @@ class RegisterListController extends Controller
                    ->orWhereHas('fasyankes', function($query) use ($search){
                         $query->where('nama', 'ilike', '%'.$search.'%')
                             ->orWhereHas('kota', function($query) use ($search){
-                                $query->where('nama', 'ilike','%'.$search.'%' );
+                                $query->where('nama', 'ilike','%'.$search.'%');
                             });
+                    })
+                    ->orWhereHas('pasiens', function($query) use ($search) {
+                        $query->where('nama_depan', 'ilike','%'.$search.'%')
+                            ->orWhere('nama_belakang', 'ilike','%'.$search.'%')
+                            ->orWhere('no_ktp', 'ilike','%'.$search.'%')
+                            ->orWhere('no_sim', 'ilike','%'.$search.'%')
+                            ->orWhere('no_kk', 'ilike','%'.$search.'%');
                     });
             });
         }

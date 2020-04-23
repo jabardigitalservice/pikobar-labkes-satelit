@@ -71,10 +71,12 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::group(['prefix'=>'register'], function(){
 
             Route::get('/', 'RegisterListController@index');
-            
+
             Route::get('generate-nomor-register', 'RegisterController@generateNomorRegister');
 
             Route::post('store', 'RegisterController@store');
+
+            Route::delete('delete/{register}', 'RegisterController@destroy');
 
 
         });

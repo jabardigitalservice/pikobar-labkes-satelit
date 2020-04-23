@@ -189,4 +189,45 @@ class RegisterController extends Controller
             'daftar_penyakit'=> $request->input('penyakit_penyerta.riwayat'),
         ];
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Register  $register
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Register $register)
+    {
+
+        DB::beginTransaction();
+        try {
+
+            $register->pasiens()->detach();
+
+            $register->riwayatKunjungan()->delete();
+
+            $register->gejalaPasien()->detach();
+
+            $register->pemeriksaanPenunjang()->detach();
+
+            $register->riwayatLawatan()->detach();
+
+            $register->riwayatKontak()->detach();
+
+            $register->riwayatPenyakitPenyerta()->delete();
+            
+            $register->delete();
+            
+            DB::commit();
+
+            return response()->json([
+                'status'=> true,
+                'message'=> __("Berhasil menghapus data register")
+            ]);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+    }
 }
