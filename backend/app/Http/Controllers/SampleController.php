@@ -58,10 +58,12 @@ class SampleController extends Controller
     public function add(Request $request)
     {
         $v = Validator::make($request->all(),[
-            'pen_sampel_diambil' => 'required',
-            'pen_nomor_ekstraksi' => 'required|min:2|max:255',
             'samples.*.sam_jenis_sampel' => 'required|integer|min:1|max:12',
             'samples.*.nomorsampel' => 'required',
+            'pen_sampel_diambil.required' => 'Keterangan sampel diambil wajib diisi',
+            'pen_nomor_ekstraksi.required' => 'Nomor Ekstraksi wajib diisi',
+            'pen_nomor_ekstraksi.min' => 'Jumlah karakter minimal :min dijit.',
+            'pen_nomor_ekstraksi.max' => 'Jumlah karakter maksimal :max dijit.',
         ], [
             'pen_sampel_diambil.required' => 'Keterangan sampel diambil wajib diisi',
             'pen_nomor_ekstraksi.required' => 'Nomor Ekstraksi wajib diisi',
