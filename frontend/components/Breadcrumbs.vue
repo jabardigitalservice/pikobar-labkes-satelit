@@ -19,6 +19,22 @@ export default {
   computed: {
     crumbs() {
       const crumbs = [];
+      var parentRoute = this.$route.matched[0]
+      // console.log('matched route',this.$route.matched)
+      do {
+        if (parentRoute.meta && parentRoute.meta.parentName) {
+          parentRoute = this.$router.resolve({name: parentRoute.meta.parentName})
+          const item = parentRoute.route
+          const crumb = {};
+          crumb.path = item.path;
+          crumb.name = this.$i18n.t("route." + (item.name ? (item.name) : ('path'+item.path.replace(/\//,'.'))));
+          crumb.classes = "breadcrumb-item";
+          crumbs.unshift(crumb);
+          parentRoute = item
+        } else {
+          parentRoute = null
+        }
+      } while (parentRoute)
       this.$route.matched.map((item, i, { length }) => {
         const crumb = {};
         crumb.path = item.path;
@@ -29,10 +45,6 @@ export default {
           crumb.path = null
           // is param route? .../.../:id
           if (item.regex.keys.length > 0) {
-            crumbs.push({
-              path: item.path.replace(/\/:[^/:]*$/, ""),
-              name: this.$i18n.t("route." + item.name.replace(/-[^-]*$/, ""))
-            });
             crumb.path = this.$route.path;
             crumb.name = this.$i18n.t("route." + this.$route.name, [
               crumb.path.match(/[^/]*$/)[0]

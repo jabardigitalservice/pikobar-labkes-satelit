@@ -17,16 +17,18 @@ const routes = [
   { path: '/email/resend', name: 'verification.resend', component: page('auth/verification/resend.vue') },
 
   { path: '/home', name: 'home', component: page('home.vue') },
+  { path: '/sample', name: 'sample.index', component: page('sample/index.vue'), meta: {parentName: 'home'} },
+  { path: '/sample/add', name: 'sample.add', component: page('sample/add.vue'), meta: {parentName: 'sample.index'} },
   { path: '/settings',
-  component: page('settings/index.vue'),
-  children: [
-    { path: '', redirect: { name: 'settings.profile' } },
-    { path: 'profile', name: 'settings.profile', component: page('settings/profile.vue') },
-    { path: 'password', name: 'settings.password', component: page('settings/password.vue') }
-  ]},
-  { path: '/pengguna', name: 'pengguna.index', component: page('pengguna/index.vue') },
-  { path: '/pengguna/tambah', name:'pengguna.tambah', component:page('pengguna/tambah.vue') },
-  { path: '/pengguna/update/:id', name:'pengguna.update', component:page('pengguna/update.vue') }
+    component: page('settings/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'settings.profile' } },
+      { path: 'profile', name: 'settings.profile', component: page('settings/profile.vue') },
+      { path: 'password', name: 'settings.password', component: page('settings/password.vue') }
+    ]},
+  { path: '/pengguna', name: 'pengguna.index', component: page('pengguna/index.vue'), meta: {parentName: 'home'} },
+  { path: '/pengguna/tambah', name:'pengguna.tambah', component:page('pengguna/tambah.vue'), meta: {parentName: 'pengguna.index'} },
+  { path: '/pengguna/update/:id', name:'pengguna.update', component:page('pengguna/update.vue'), meta: {parentName: 'pengguna.index'} },
 ]
 
 export function createRouter () {

@@ -8,11 +8,11 @@
         </div>
         <div>
           <div class="row wrapper border-bottom white-bg page-heading">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
               <h2><portal-target name="title-name">Loading...</portal-target></h2>
               <inspinia-breadcrumbs></inspinia-breadcrumbs>
             </div>
-            <div class="col-sm-8">
+            <div class="col-sm-6">
               <portal-target name="title-action"></portal-target>
             </div>
           </div>
@@ -20,7 +20,8 @@
         <nuxt />
         <div class="footer">
             <div>
-                <strong>Copyright</strong> PIKOBAR &copy; 2020
+                <strong>Copyright</strong> &copy; 2020 |
+                Pemerintah Provinsi Jawa Barat | GTPP COVID-19 | PIKOBAR
             </div>
         </div>
         <right-sidebar/>

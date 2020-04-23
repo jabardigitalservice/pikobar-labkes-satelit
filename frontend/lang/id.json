@@ -3,6 +3,10 @@
     "path": {
       "settings": "Setting"
     },
+    "sample": {
+      "index": "Penerimaan Sampel",
+      "add": "Pengambilan / Penerimaan Sampel Baru"
+    },
     "home": "Beranda",
     "settings": {
       "password": "Password",

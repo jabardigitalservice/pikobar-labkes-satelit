@@ -7,7 +7,8 @@
 
 
 $(document).ready(function () {
-
+    if (window.init_ready) return
+    window.init_ready = true
     // Fast fix bor position issue with Propper.js
     // Will be fixed in Bootstrap 4.1 - https://github.com/twbs/bootstrap/pull/24092
     Popper.Defaults.modifiers.computeStyle.gpuAcceleration = false;
@@ -24,7 +25,7 @@ $(document).ready(function () {
     // var sideMenu = $('#side-menu').metisMenu();
 
     // Collapse ibox function
-    $('.collapse-link').on('click', function (e) {
+    $(document).on('click', '.collapse-link', function (e) {
         e.preventDefault();
         var ibox = $(this).closest('div.ibox');
         var button = $(this).find('i');
@@ -39,14 +40,14 @@ $(document).ready(function () {
     });
 
     // Close ibox function
-    $('.close-link').on('click', function (e) {
+    $(document).on('click', '.close-link', function (e) {
         e.preventDefault();
         var content = $(this).closest('div.ibox');
         content.remove();
     });
 
     // Fullscreen ibox function
-    $('.fullscreen-link').on('click', function (e) {
+    $(document).on('click', '.fullscreen-link', function (e) {
         e.preventDefault();
         var ibox = $(this).closest('div.ibox');
         var button = $(this).find('i');
@@ -59,7 +60,7 @@ $(document).ready(function () {
     });
 
     // Close menu in canvas mode
-    $('.close-canvas-menu').on('click', function (e) {
+    $(document).on('click', '.close-canvas-menu', function (e) {
         e.preventDefault();
         $("body").toggleClass("mini-navbar");
         SmoothlyMenu();
@@ -72,7 +73,7 @@ $(document).ready(function () {
     // });
 
     // Open close right sidebar
-    $('.right-sidebar-toggle').on('click', function (e) {
+    $(document).on('click', '.right-sidebar-toggle', function (e) {
         e.preventDefault();
         $('#right-sidebar').toggleClass('sidebar-open');
     });
@@ -85,7 +86,7 @@ $(document).ready(function () {
     // });
 
     // Open close small chat
-    $('.open-small-chat').on('click', function (e) {
+    $(document).on('click', '.open-small-chat', function (e) {
         e.preventDefault();
         $(this).children().toggleClass('fa-comments').toggleClass('fa-times');
         $('.small-chat-box').toggleClass('active');
@@ -98,7 +99,7 @@ $(document).ready(function () {
     // });
 
     // Small todo handler
-    $('.check-link').on('click', function () {
+    $(document).on('click', '.check-link', function () {
         var button = $(this).find('i');
         var label = $(this).next('span');
         button.toggleClass('fa-check-square').toggleClass('fa-square-o');
@@ -114,7 +115,7 @@ $(document).ready(function () {
     //});
 
     // Minimalize menu
-    $('.navbar-minimalize').on('click', function (event) {
+    $(document).on('click', '.navbar-minimalize', function (event) {
         event.preventDefault();
         $("body").toggleClass("mini-navbar");
         SmoothlyMenu();

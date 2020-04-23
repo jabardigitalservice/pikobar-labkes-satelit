@@ -27,13 +27,94 @@
         </li>
         <li>
           <router-link to="/" tag="a">
-            <i class="fa fa-home"></i>
+            <i class="fa fa-home fa-fw"></i>
             <span class="nav-label">Dashboard</span>
           </router-link>
         </li>
         <li>
           <a href="#">
-            <i class="fa fa-bar-chart-o"></i>
+            <i class="uil-user-square fa-fw"></i>
+            <span class="nav-label">Registrasi</span>
+            <span class="fa arrow"></span>
+          </a>
+          <ul class="nav nav-second-level collapse">
+            <li>
+              <router-link to="/" tag="a">
+                <span class="nav-label">Registrasi Mandiri (L)</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/" tag="a">
+                <span class="nav-label">Registrasi Rujukan (R)</span>
+              </router-link>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <router-link to="/sample" tag="a">
+            <i class="uil-flask-potion fa-fw"></i>
+            <span class="nav-label">Pengambilan Sample</span>
+          </router-link>
+        </li>
+        <li>
+          <a href="#">
+            <i class="uil-flask fa-fw"></i>
+            <span class="nav-label">Ekstraksi</span>
+            <span class="fa arrow"></span>
+          </a>
+          <ul class="nav nav-second-level collapse">
+            <li>
+              <router-link to="/" tag="a">
+                <span class="nav-label">Ekstraksi</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/" tag="a">
+                <span class="nav-label">Sampel yang dikembalikan</span>
+              </router-link>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">
+            <i class="uil-atom fa-fw"></i>
+            <span class="nav-label">Pemeriksaan RT-PCR</span>
+            <span class="fa arrow"></span>
+          </a>
+          <ul class="nav nav-second-level collapse">
+            <li>
+              <router-link to="/" tag="a">
+                <span class="nav-label">Pemeriksaan Sampel</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/" tag="a">
+                <span class="nav-label">Sampel yang dikembalikan</span>
+              </router-link>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <router-link to="/" tag="a">
+            <i class="uil-eye fa-fw"></i>
+            <span class="nav-label">Verifikasi</span>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/" tag="a">
+            <i class="uil-check fa-fw"></i>
+            <span class="nav-label">Validasi</span>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/" tag="a">
+            <i class="uil-search-alt fa-fw"></i>
+            <span class="nav-label">Pelacakan Sampel</span>
+          </router-link>
+        </li>
+        <li>
+          <a href="#">
+            <i class="uil-database-alt fa-fw"></i>
             <span class="nav-label">Data Master</span>
             <span class="fa arrow"></span>
           </a>
@@ -94,112 +175,6 @@ export default {
         var sideMenu = window.$('#side-menu').metisMenu();
       }
 
-      // Collapse ibox function
-      $(".collapse-link").on("click", function(e) {
-        e.preventDefault();
-        var ibox = $(this).closest("div.ibox");
-        var button = $(this).find("i");
-        var content = ibox.children(".ibox-content");
-        content.slideToggle(200);
-        button.toggleClass("fa-chevron-up").toggleClass("fa-chevron-down");
-        ibox.toggleClass("").toggleClass("border-bottom");
-        setTimeout(function() {
-          ibox.resize();
-          ibox.find("[id^=map-]").resize();
-        }, 50);
-      });
-
-      // Close ibox function
-      $(".close-link").on("click", function(e) {
-        e.preventDefault();
-        var content = $(this).closest("div.ibox");
-        content.remove();
-      });
-
-      // Fullscreen ibox function
-      $(".fullscreen-link").on("click", function(e) {
-        e.preventDefault();
-        var ibox = $(this).closest("div.ibox");
-        var button = $(this).find("i");
-        $("body").toggleClass("fullscreen-ibox-mode");
-        button.toggleClass("fa-expand").toggleClass("fa-compress");
-        ibox.toggleClass("fullscreen");
-        setTimeout(function() {
-          $(window).trigger("resize");
-        }, 100);
-      });
-
-      // Close menu in canvas mode
-      $(".close-canvas-menu").on("click", function(e) {
-        e.preventDefault();
-        $("body").toggleClass("mini-navbar");
-        SmoothlyMenu();
-      });
-
-      // Run menu of canvas
-      // $('body.canvas-menu .sidebar-collapse').slimScroll({
-      //     height: '100%',
-      //     railOpacity: 0.9
-      // });
-
-      // Open close right sidebar
-      $(".right-sidebar-toggle").on("click", function(e) {
-        e.preventDefault();
-        $("#right-sidebar").toggleClass("sidebar-open");
-      });
-
-      // Initialize slimscroll for right sidebar
-      // $('.sidebar-container').slimScroll({
-      //     height: '100%',
-      //     railOpacity: 0.4,
-      //     wheelStep: 10
-      // });
-
-      // Open close small chat
-      $(".open-small-chat").on("click", function(e) {
-        e.preventDefault();
-        $(this)
-          .children()
-          .toggleClass("fa-comments")
-          .toggleClass("fa-times");
-        $(".small-chat-box").toggleClass("active");
-      });
-
-      // Initialize slimscroll for small chat
-      // $('.small-chat-box .content').slimScroll({
-      //     height: '234px',
-      //     railOpacity: 0.4
-      // });
-
-      // Small todo handler
-      $(".check-link").on("click", function() {
-        var button = $(this).find("i");
-        var label = $(this).next("span");
-        button.toggleClass("fa-check-square").toggleClass("fa-square-o");
-        label.toggleClass("todo-completed");
-        return false;
-      });
-
-      // Append config box / Only for demo purpose
-      // Uncomment on server mode to enable XHR calls
-      //$.get("skin-config.html", function (data) {
-      //    if (!$('body').hasClass('no-skin-config'))
-      //        $('body').append(data);
-      //});
-
-      // Minimalize menu
-      $(".navbar-minimalize").on("click", function(event) {
-        event.preventDefault();
-        $("body").toggleClass("mini-navbar");
-        SmoothlyMenu();
-      });
-
-      // Tooltips demo
-      $(".tooltip-demo").tooltip({
-        selector: "[data-toggle=tooltip]",
-        container: "body"
-      });
-
       // Move right sidebar top after scroll
       $(window).scroll(function() {
         if ($(window).scrollTop() > 0 && !$("body").hasClass("fixed-nav")) {
@@ -208,8 +183,6 @@ export default {
           $("#right-sidebar").removeClass("sidebar-top");
         }
       });
-
-      $("[data-toggle=popover]").popover();
 
       // Add slimscroll to element
       // $('.full-height-scroll').slimscroll({
