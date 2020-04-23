@@ -17,7 +17,8 @@
                 <span style="color:red">*</span>
               </label>
               <div class="col-md-6">
-                <div class="form-check form-check-inline">
+                <div class="form-check form-check-inline"
+                  :class="{ 'is-invalid': form.errors.has('pen_sampel_diambil') }">
                   <label class="form-check-label">
                   <input
                     class="form-check-input"
@@ -47,7 +48,8 @@
                 <span style="color:red">*</span>
               </label>
               <div class="col-md-6">
-                <div class="form-check form-check-inline">
+                <div class="form-check form-check-inline"
+                  :class="{ 'is-invalid': form.errors.has('pen_sampel_diterima') }">
                   <label class="form-check-label">
                   <input
                     class="form-check-input"
@@ -77,7 +79,8 @@
                 <span style="color:red">*</span>
               </label>
               <div class="col-md-6">
-                <div class="form-check form-check-inline">
+                <div class="form-check form-check-inline"
+                  :class="{ 'is-invalid': form.errors.has('pen_sampel_diterima_dari_fas_rujukan') }">
                   <label class="form-check-label">
                   <input
                     class="form-check-input"
@@ -112,6 +115,7 @@
                   type="text"
                   v-model="form.pen_penerima_sampel "
                   placeholder="Nama Petugas Penerima Sampel"
+                  :class="{ 'is-invalid': form.errors.has('pen_penerima_sampel') }"
                 />
                 <has-error :form="form" field="pen_penerima_sampel" />
               </div>
@@ -124,6 +128,7 @@
                   class="form-control"
                   rows="5"
                   v-model="form.pen_catatan"
+                  :class="{ 'is-invalid': form.errors.has('pen_catatan') }"
                   placeholder="Catatan(Catat bila kualitas sampel kurang baik, jumlah material terlalu sedikit, pengepakan atau pengiriman sampel kurang layak, atau pengambilan serum akut/konvalesen tidak sesuai rentang waktu, dll)"
                 ></textarea>
                 <has-error :form="form" field="pen_catatan" />
@@ -166,7 +171,8 @@
               <tbody class="field_wrapper">
                 <tr v-for="(sample, $index) in form.samples" :key="$index">
                   <td>
-                    <select class="form-control" v-model="sample.sam_jenis_sampel">
+                    <select class="form-control" v-model="sample.sam_jenis_sampel"
+                    :class="{ 'is-invalid': form.errors.has(`samples.${$index}.sam_namadiluarjenis`) }">
                       <option value="1">Usap Nasofaring & Orofaring</option>
                       <option value="2">Sputum</option>
                       <option value="3">Bronchoalveolar Lavage</option>
@@ -180,6 +186,7 @@
                       <option value="11">Fingerprick</option>
                       <option value="12">Jenis Sampel Lainnya (Sebutkan)</option>
                     </select>
+                    <has-error :form="form" :field="`samples.${$index}.sam_namadiluarjenis`"/>
                     <div v-if="sample.sam_jenis_sampel == 12">
                       <small for="specify">Jenis Lainnya (isi apabila tidak tercantum diatas)</small>
                       <input
@@ -189,22 +196,25 @@
                         placeholder="isi apabila tidak tercantum"
                       />
                     </div>
-                    <has-error :form="form" :field="`samples.${$index}.sam_namadiluarjenis`"/>
                   </td>
                   <td>
-                    <input class="form-control" type="text" v-model="sample.petugas_pengambil" />
+                    <input class="form-control" type="text" v-model="sample.petugas_pengambil" 
+                      :class="{ 'is-invalid': form.errors.has(`samples.${$index}.petugas_pengambil`) }"/>
                     <has-error :form="form" :field="`samples.${$index}.petugas_pengambil`"/>
                   </td>
                   <td>
-                    <input class="form-control" type="text" v-model="sample.tanggalsampel" />
+                    <input class="form-control" type="text" v-model="sample.tanggalsampel" 
+                      :class="{ 'is-invalid': form.errors.has(`samples.${$index}.tanggalsampel`) }"/>
                     <has-error :form="form" :field="`samples.${$index}.tanggalsampel`"/>
                   </td>
                   <td>
-                    <input class="form-control" type="text" v-model="sample.pukulsampel" />
+                    <input class="form-control" type="text" v-model="sample.pukulsampel" 
+                      :class="{ 'is-invalid': form.errors.has(`samples.${$index}.pukulsampel`) }"/>
                     <has-error :form="form" :field="`samples.${$index}.pukulsampel`"/>
                   </td>
                   <td>
-                    <input class="form-control" type="text" v-model="sample.nomorsampel" />
+                    <input class="form-control" type="text" v-model="sample.nomorsampel" 
+                      :class="{ 'is-invalid': form.errors.has(`samples.${$index}.nomorsampel`) }"/>
                     <has-error :form="form" :field="`samples.${$index}.nomorsampel`"/>
                   </td>
                   <td>

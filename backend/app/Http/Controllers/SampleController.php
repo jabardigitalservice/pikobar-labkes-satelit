@@ -56,6 +56,7 @@ class SampleController extends Controller
     public function add(Request $request)
     {
         $this->validate($request,[
+            'pen_sampel_diambil' => 'required',
             'pen_nomor_ekstraksi' => 'required|min:2|max:255',
         ]);
 
