@@ -37,6 +37,7 @@
                   />
                   Tidak</label>
                 </div>
+                <has-error :form="form" field="pen_sampel_diambil" />
               </div>
             </div>
 
@@ -66,6 +67,7 @@
                   />
                   Tidak</label>
                 </div>
+                <has-error :form="form" field="pen_sampel_diterima" />
               </div>
             </div>
 
@@ -95,6 +97,7 @@
                   />
                   Tidak</label>
                 </div>
+                <has-error :form="form" field="pen_sampel_diterima_dari_fas_rujukan" />
               </div>
             </div>
 
@@ -110,6 +113,7 @@
                   v-model="form.pen_penerima_sampel "
                   placeholder="Nama Petugas Penerima Sampel"
                 />
+                <has-error :form="form" field="pen_penerima_sampel" />
               </div>
             </div>
 
@@ -122,6 +126,7 @@
                   v-model="form.pen_catatan"
                   placeholder="Catatan(Catat bila kualitas sampel kurang baik, jumlah material terlalu sedikit, pengepakan atau pengiriman sampel kurang layak, atau pengambilan serum akut/konvalesen tidak sesuai rentang waktu, dll)"
                 ></textarea>
+                <has-error :form="form" field="pen_catatan" />
               </div>
             </div>
 
@@ -138,6 +143,7 @@
                   placeholder="Nomor Ekstraksi"
                   required
                 />
+                <has-error :form="form" field="pen_nomor_ekstraksi" />
               </div>
             </div>
             <hr />
@@ -183,18 +189,23 @@
                         placeholder="isi apabila tidak tercantum"
                       />
                     </div>
+                    <has-error :form="form" :field="`samples.${$index}.sam_namadiluarjenis`"/>
                   </td>
                   <td>
                     <input class="form-control" type="text" v-model="sample.petugas_pengambil" />
+                    <has-error :form="form" :field="`samples.${$index}.petugas_pengambil`"/>
                   </td>
                   <td>
                     <input class="form-control" type="text" v-model="sample.tanggalsampel" />
+                    <has-error :form="form" :field="`samples.${$index}.tanggalsampel`"/>
                   </td>
                   <td>
                     <input class="form-control" type="text" v-model="sample.pukulsampel" />
+                    <has-error :form="form" :field="`samples.${$index}.pukulsampel`"/>
                   </td>
                   <td>
                     <input class="form-control" type="text" v-model="sample.nomorsampel" />
+                    <has-error :form="form" :field="`samples.${$index}.nomorsampel`"/>
                   </td>
                   <td>
                     <button class="btn btn-sm btn-danger remove_field" @click.prevent="removeSample($index)">
@@ -268,8 +279,15 @@ export default {
       // Submit the form.
       try {
         const response = await this.form.post("/sample/add");
-      } catch (e) {
-        this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
+      } catch (err) {
+        if (err.response && err.response.code == 422) {
+          this.form.errors.set(err.response.data.error)
+          this.$toast.error('Mohon cek kembali formulir Anda', {
+            duration: 5000
+          })
+        } else {
+          this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
+        }
         return;
       }
     }
