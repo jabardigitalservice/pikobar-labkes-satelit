@@ -14,7 +14,7 @@ class CreatePemeriksaanPenunjangTable extends Migration
     public function up()
     {
         Schema::create('pemeriksaan_penunjang', function (Blueprint $table) {
-            $table->id();
+            // $table->id();
             $table->unsignedInteger('register_id');
             $table->unsignedBigInteger('pasien_id');
             $table->boolean('xray_paru');

@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class PemeriksaanPenunjang extends Model
+class PemeriksaanPenunjang extends Pivot
 {
     protected $table = 'pemeriksaan_penunjang';
 
@@ -19,6 +19,4 @@ class PemeriksaanPenunjang extends Model
         'status_kesehatan', // pulang, dirawat, meninggal
         'keterangan_lab' // keterangan lainnya
     ];
-
-    
 }

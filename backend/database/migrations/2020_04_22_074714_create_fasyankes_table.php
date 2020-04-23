@@ -17,7 +17,7 @@ class CreateFasyankesTable extends Migration
             $table->id();
             $table->string('tipe', 150); // Rumah sakit | Dinkes
             $table->string('nama');
-            $table->unsignedInteger('kota_id');
+            $table->unsignedInteger('kota_id')->nullable();
             $table->timestamps();
 
             $table->foreign('kota_id')->references('id')->on('kota');

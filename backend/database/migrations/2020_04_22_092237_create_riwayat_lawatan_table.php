@@ -14,7 +14,7 @@ class CreateRiwayatLawatanTable extends Migration
     public function up()
     {
         Schema::create('riwayat_lawatan', function (Blueprint $table) {
-            $table->id();
+            // $table->id();
             $table->unsignedInteger('register_id');
             $table->unsignedBigInteger('pasien_id');
             $table->date('tanggal_lawatan');

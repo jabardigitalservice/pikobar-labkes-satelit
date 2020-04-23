@@ -14,14 +14,18 @@ class CreateGejalaPasienTable extends Migration
     public function up()
     {
         Schema::create('gejala_pasien', function (Blueprint $table) {
-            $table->id();
+            // $table->id();
             $table->unsignedInteger('register_id');
+            $table->unsignedBigInteger('pasien_id');
+
             $table->boolean('pasien_rdt');
             $table->dateTime('tanggal_onset_gejala');
             $table->json('daftar_gejala'); // [{gejala_id, status(ya, tidak, tidak_diisi)}, {}, ]
             $table->timestamps();
 
             $table->foreign('register_id')->references('id')->on('register');
+            $table->foreign('pasien_id')->references('id')->on('pasien');
+
         });
     }
 
