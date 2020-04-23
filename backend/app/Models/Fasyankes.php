@@ -13,4 +13,9 @@ class Fasyankes extends Model
         'tipe', // Rumah sakit | Dinkes
         'kota_id'
     ];
+
+    public function kota()
+    {
+        return $this->belongsTo(Kota::class);
+    }
 }

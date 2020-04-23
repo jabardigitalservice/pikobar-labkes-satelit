@@ -56,3 +56,16 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
     Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
 });
+
+
+Route::group([
+    'middleware' => 'auth:api', 
+    'namespace'=> 'Api\V1', 
+    'prefix'=> 'v1'], 
+    function () {
+
+        Route::get('list-kota-jabar', 'KotaController@listKota');
+
+        Route::get('list-fasyankes-jabar', 'FasyankesController@listByKota');
+
+});

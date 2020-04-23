@@ -9,5 +9,10 @@ class Provinsi extends Model
     protected $table = 'provinsi';
 
     public $timestamps = false;
+
+    public function kota()
+    {
+        return $this->hasMany(Kota::class);
+    }
     
 }
