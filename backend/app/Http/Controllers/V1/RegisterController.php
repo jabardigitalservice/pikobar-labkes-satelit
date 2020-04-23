@@ -7,6 +7,7 @@ use App\Http\Requests\StoreRegisterRequest;
 use App\Models\Pasien;
 use App\Models\Register;
 use App\Models\RiwayatKunjungan;
+use App\Models\RiwayatPenyakitPenyerta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
@@ -71,10 +72,15 @@ class RegisterController extends Controller
 
             $riwayatLawatan = $this->getRequestRiwayatLawatan($request);
 
+            $penyakitPenyerta = new RiwayatPenyakitPenyerta(
+                $this->getRequestPenyakitPenyerta($request)
+            );
+
             $register->pasiens()->attach($pasien);
             $register->riwayatKunjungan()->save($riwayatKunjungan);
             $register->gejalaPasien()->attach($pasien, $tandaGejala);
             $register->pemeriksaanPenunjang()->attach($pasien, $pemeriksaanPenunjang);
+            $register->riwayatPenyakitPenyerta()->save($penyakitPenyerta);
 
             foreach ($riwayatKontak as $key => $riwayat) {
                 $register->riwayatKontak()->attach($pasien, $riwayat);
@@ -97,7 +103,11 @@ class RegisterController extends Controller
                 }),
                 'riwayat_lawatan'=> $register->riwayatLawatan->map(function($item){
                     return $item->pivot;
-                })
+                }),
+                'penyakit_penyerta'=> $register->riwayatPenyakitPenyerta->only([
+                    'daftar_penyakit', 
+                    'keterangan_lain'
+                ])
             ];
 
             return response()->json($response);
@@ -170,5 +180,13 @@ class RegisterController extends Controller
     private function getRequestRiwayatLawatan(Request $request) : array
     {
         return $request->input('riwayat_lawatan');
+    }
+
+    private function getRequestPenyakitPenyerta(Request $request) : array
+    {
+        return [
+            'keterangan_lain'=> $request->input('penyakit_penyerta.keterangan_lain'),
+            'daftar_penyakit'=> $request->input('penyakit_penyerta.riwayat'),
+        ];
     }
 }

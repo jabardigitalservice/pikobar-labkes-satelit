@@ -162,7 +162,17 @@ class StoreRegisterRequest extends FormRequest
                 }),
             ],
 
-            
+            // Penyakit Penyerta
+            "penyakit_penyerta.keterangan_lain"=> ['max:255'],
+            "penyakit_penyerta.riwayat.*.penyakit_penyerta_id"=> [
+                'exists:penyakit_penyerta,id',
+            ],
+            "penyakit_penyerta.riwayat.*.status"=> [
+                'boolean',
+                Rule::requiredIf(function(){
+                    return $this->input('penyakit_penyerta.riwayat.*.penyakit_penyerta_id');
+                }),
+            ]
 
         ];
     }

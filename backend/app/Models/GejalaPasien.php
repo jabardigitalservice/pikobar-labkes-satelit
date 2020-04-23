@@ -26,5 +26,7 @@ class GejalaPasien extends Pivot
 
     protected $casts = [
         'daftar_gejala'=> 'array',
+        'tanggal_rdt'=> 'date:Y-m-d',
+        'tanggal_onset_gejala'=> 'date:Y-m-d'
     ];
 }

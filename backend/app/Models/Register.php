@@ -89,4 +89,16 @@ class Register extends Model
             );
     }
 
+    public function riwayatPenyakitPenyerta()
+    {
+        return $this->hasOne(RiwayatPenyakitPenyerta::class);
+
+        // Many to Many
+        // return $this->belongsToMany(Pasien::class, 'riwayat_penyakit_penyerta', 'register_id', 'pasien_id')
+        //     ->using(RiwayatPenyakitPenyerta::class)
+        //     ->withPivot(
+        //         'daftar_penyakit'
+        //     );
+    }
+
 }
