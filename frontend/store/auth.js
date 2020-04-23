@@ -46,9 +46,11 @@ export const actions = {
     Cookies.set('token', token, { expires: remember ? 365 : null })
   },
 
-  async fetchUser ({ commit }) {
+  async fetchUser ({ commit }, data = null) {
     try {
-      const { data } = await axios.get('/user')
+      if (!data) {
+        data = await axios.get('/user')
+      }
 
       commit('FETCH_USER_SUCCESS', data)
     } catch (e) {
