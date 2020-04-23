@@ -60,7 +60,7 @@ class SampleController extends Controller
             'pen_nomor_ekstraksi' => 'required|min:2|max:255',
         ], [
             'pen_sampel_diambil.required' => 'Keterangan sampel diambil wajib diisi',
-            'pen_nomor_ekstraksi.required' => 'Keterangan sampel diambil wajib diisi',
+            'pen_nomor_ekstraksi.required' => 'Nomor Ekstraksi wajib diisi',
             'pen_nomor_ekstraksi.min' => 'Jumlah karakter minimal :min dijit.',
             'pen_nomor_ekstraksi.max' => 'Jumlah karakter maksimal :max dijit.',
         ]);
