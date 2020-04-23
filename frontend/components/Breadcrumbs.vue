@@ -20,7 +20,7 @@ export default {
     crumbs() {
       const crumbs = [];
       var parentRoute = this.$route.matched[0]
-      console.log('matched route',this.$route.matched)
+      // console.log('matched route',this.$route.matched)
       do {
         if (parentRoute.meta && parentRoute.meta.parentName) {
           parentRoute = this.$router.resolve({name: parentRoute.meta.parentName})

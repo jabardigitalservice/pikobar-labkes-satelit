@@ -51,17 +51,16 @@ export default {
       password: '',
       password_confirmation: ''
     }),
-    error: {}
   }),
 
   methods: {
     async update () {
-      this.error = {}
       try {
         await this.form.patch('/settings/password')
       } catch (err) {
         if (err.response) {
           this.form.errors.set(err.response.data.error)
+          console.log(this.form.errors)
         }
       }
 

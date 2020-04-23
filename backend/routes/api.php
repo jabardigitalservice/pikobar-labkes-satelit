@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::group(["prefix" => "sample"], function(){
         Route::get('/get-data', 'SampleController@getData');
+        Route::post('/add', 'SampleController@add');
     });
 
     Route::get('/pengguna', 'PenggunaController@listPengguna');

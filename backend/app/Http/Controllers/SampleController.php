@@ -53,20 +53,16 @@ class SampleController extends Controller
         return response()->json($result);
     }
 
-    public function save(Request $request)
+    public function add(Request $request)
     {
         $this->validate($request,[
+            'pen_nomor_ekstraksi' => 'required|min:2|max:255',
         ]);
 
-        $model = new Sample;
-        $model->modelname = $request->get('modelname');
-        $model->password = bcrypt($request->get('password'));
-        $model->email = $request->get('email');
-        $model->name = $request->get('name');
-        $model->role_id = $request->get('role_id');
-        $model->save();
+        // $model = new Sample;
+        // $model->save();
         
-        return response()->json(['status'=>201,'message'=>'Berhasil menambahkan ','result'=>[]]);
+        return response()->json(['status'=>201,'message'=>'Berhasil menambahkan sampel','result'=>[]]);
     }
 
     public function delete(Request $request,$id)

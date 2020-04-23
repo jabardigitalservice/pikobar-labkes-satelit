@@ -141,7 +141,7 @@
                   type="text"
                   v-model="form.pen_nomor_ekstraksi"
                   placeholder="Nomor Ekstraksi"
-                  required
+                  :class="{ 'is-invalid': form.errors.has('pen_nomor_ekstraksi') }"
                 />
                 <has-error :form="form" field="pen_nomor_ekstraksi" />
               </div>
@@ -263,6 +263,24 @@ export default {
     };
   },
   methods: {
+    initForm() {
+      this.form = new Form({
+        pen_noreg: "",
+        pen_nik: "",
+        pen_sampel_diambil: "",
+        pen_sampel_diambil: "",
+        pen_sampel_diterima: "",
+        pen_sampel_diterima: "",
+        pen_sampel_diterima_dari_fas_rujukan: "",
+        pen_sampel_diterima_dari_fas_rujukan: "",
+        pen_penerima_sampel: "",
+        pen_catatan: "",
+        pen_nomor_ekstraksi: "",
+        samples: [{
+
+        }],
+      })
+    },
     addSample() {
       this.form.samples.push({})
     },
@@ -279,10 +297,20 @@ export default {
       // Submit the form.
       try {
         const response = await this.form.post("/sample/add");
+        this.$toast.success(response.data.message, {
+          icon: 'check',
+          iconPack: 'fontawesome',
+          duration: 5000
+        })
+        this.initForm()
       } catch (err) {
-        if (err.response && err.response.code == 422) {
-          this.form.errors.set(err.response.data.error)
+        if (err.response && err.response.data.code == 422) {
+          this.$nextTick(() => {
+            this.form.errors.set(err.response.data.error)
+          })
           this.$toast.error('Mohon cek kembali formulir Anda', {
+            icon: 'times',
+            iconPack: 'fontawesome',
             duration: 5000
           })
         } else {
