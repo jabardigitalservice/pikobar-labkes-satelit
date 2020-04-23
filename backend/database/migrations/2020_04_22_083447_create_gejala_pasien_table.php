@@ -19,6 +19,10 @@ class CreateGejalaPasienTable extends Migration
             $table->unsignedBigInteger('pasien_id');
 
             $table->boolean('pasien_rdt');
+            $table->boolean('hasil_rdt_positif')->nullable(); // Reaktif | Non-reaktif
+            $table->dateTime('tanggal_rdt')->nullable();
+            $table->text('keterangan_rdt')->nullable();
+
             $table->dateTime('tanggal_onset_gejala');
             $table->json('daftar_gejala'); // [{gejala_id, status(ya, tidak, tidak_diisi)}, {}, ]
             $table->timestamps();

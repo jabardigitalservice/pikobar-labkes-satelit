@@ -10,6 +10,7 @@ class PemeriksaanPenunjang extends Pivot
 
     protected $fillable = [
         'register_id',
+        'pasien_id',
         'xray_paru',
         'penjelasan_xray',
         'leukosit',

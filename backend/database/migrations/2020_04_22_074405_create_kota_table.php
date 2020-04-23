@@ -14,8 +14,8 @@ class CreateKotaTable extends Migration
     public function up()
     {
         Schema::create('kota', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('provinsi_id');
+            $table->unsignedInteger('id')->primary();
+            $table->unsignedInteger('provinsi_id')->index();
             $table->string('nama');
 
             $table->foreign('provinsi_id')->references('id')->on('provinsi');
