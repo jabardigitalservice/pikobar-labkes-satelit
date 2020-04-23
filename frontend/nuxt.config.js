@@ -66,7 +66,7 @@ module.exports = {
     "~plugins/templates",
     '~plugins/nuxt-client-init', // Comment this for SSR
     // { src: '~assets/js/jquery-3.1.1.min.js', mode: 'client' },
-    // { src: '~assets/js/bootstrap.min.js', mode: 'client' },
+    { src: '~assets/js/bootstrap.min.js', mode: 'client' },
     // { src: '~assets/js/plugins/metisMenu/jquery.metisMenu.js', mode: 'client' },
     // { src: '~assets/js/popper.min.js', mode: 'client' },
     // { src:'https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js'},
