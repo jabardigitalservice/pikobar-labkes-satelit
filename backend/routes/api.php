@@ -58,14 +58,14 @@ Route::group(['middleware' => 'guest:api'], function () {
 });
 
 
-Route::group([
-    'middleware' => 'auth:api', 
-    'namespace'=> 'Api\V1', 
-    'prefix'=> 'v1'], 
-    function () {
+Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], function () {
 
         Route::get('list-kota-jabar', 'KotaController@listKota');
 
-        Route::get('list-fasyankes-jabar', 'FasyankesController@listByKota');
+        Route::get('list-fasyankes-jabar', 'FasyankesController@listByProvinsi');
 
+        Route::get('list-gejala', 'GejalaController@getListMasterGejala');
+        
+        Route::get('list-penyakit-penyerta', 'PenyakitPenyertaController@getListMaster');
+        
 });

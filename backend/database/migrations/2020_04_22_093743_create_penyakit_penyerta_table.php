@@ -16,6 +16,7 @@ class CreatePenyakitPenyertaTable extends Migration
         Schema::create('penyakit_penyerta', function (Blueprint $table) {
             $table->id();
             $table->string('nama_penyakit');
+            $table->boolean('is_active');
         });
     }
 

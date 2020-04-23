@@ -10,6 +10,7 @@ class Gejala extends Model
 
     protected $fillable = [
         'nama',
+        'is_active',
     ];
     
 }
