@@ -64,7 +64,20 @@ class SampleController extends Controller
             'pen_nomor_ekstraksi.required' => 'Nomor Ekstraksi wajib diisi',
             'pen_nomor_ekstraksi.min' => 'Jumlah karakter minimal :min dijit.',
             'pen_nomor_ekstraksi.max' => 'Jumlah karakter maksimal :max dijit.',
+        ], [
+            'pen_sampel_diambil.required' => 'Keterangan sampel diambil wajib diisi',
+            'pen_nomor_ekstraksi.required' => 'Nomor Ekstraksi wajib diisi',
+            'pen_nomor_ekstraksi.min' => 'Jumlah karakter minimal :min dijit.',
+            'pen_nomor_ekstraksi.max' => 'Jumlah karakter maksimal :max dijit.',
+
+            'samples.*.sam_jenis_sampel.required'=> 'Jenis sampel wajib diisi.',
+            'samples.*.sam_jenis_sampel.integer'=> 'Tipe data tidak valid',
+            'samples.*.sam_jenis_sampel.min'=> 'Jumlah karakter minimal :min dijit.',
+            'samples.*.sam_jenis_sampel.max'=> 'Jumlah karakter maksimal :max dijit.',
+
+            'samples.*.nomorsampel.required' => 'Nomor sampel wajib diisi.',            
         ]);
+
         foreach($request->samples as $key => $item) {
             if (isset($item['sam_jenis_sampel']) && $item['sam_jenis_sampel'] == 12) {
                 $v->after(function ($validator) use ($item, $key) {
