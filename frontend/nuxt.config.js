@@ -71,6 +71,8 @@ module.exports = {
     // { src: '~assets/js/popper.min.js', mode: 'client' },
     // { src:'https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js'},
     { src: '~assets/js/inspinia.js', mode: 'client' },
+    { src: '~/plugins/vue-datepicker', mode: 'client', ssr: false },
+    { src: '~/plugins/vue-mask', mode: 'client', ssr: false },
   ],
 
   modules: [

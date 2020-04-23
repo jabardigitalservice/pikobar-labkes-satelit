@@ -205,12 +205,18 @@
                     <has-error :form="form" :field="`samples.${$index}.petugas_pengambil`"/>
                   </td>
                   <td>
-                    <input class="form-control" type="text" v-model="sample.tanggalsampel" 
-                      :class="{ 'is-invalid': form.errors.has(`samples.${$index}.tanggalsampel`) }"/>
+                    <date-picker
+                      placeholder="Pilih Tanggal"
+                      format="d MMMM yyyy"
+                      input-class="form-control"
+                      :monday-first="true"
+                      :wrapper-class="{ 'is-invalid': form.errors.has(`samples.${$index}.tanggalsampel`) }"
+                      v-model="sample.tanggalsampel" />
                     <has-error :form="form" :field="`samples.${$index}.tanggalsampel`"/>
                   </td>
                   <td>
                     <input class="form-control" type="text" v-model="sample.pukulsampel" 
+                      v-mask="'##\:##'" 
                       :class="{ 'is-invalid': form.errors.has(`samples.${$index}.pukulsampel`) }"/>
                     <has-error :form="form" :field="`samples.${$index}.pukulsampel`"/>
                   </td>
@@ -268,7 +274,9 @@ export default {
         pen_catatan: "",
         pen_nomor_ekstraksi: "",
         samples: [{
-
+          sam_jenis_sampel: 1,
+          tanggalsampel: new Date,
+          pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),
         }],
       }),
       selected_reg: {}
@@ -289,12 +297,16 @@ export default {
         pen_catatan: "",
         pen_nomor_ekstraksi: "",
         samples: [{
-
+          tanggalsampel: new Date,
+          pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),
         }],
       })
     },
     addSample() {
-      this.form.samples.push({})
+      this.form.samples.push({
+        tanggalsampel: new Date,
+        pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),
+      })
     },
     removeSample(index) {
       if (this.form.samples.length <= 1) {
