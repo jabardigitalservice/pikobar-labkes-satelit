@@ -91,7 +91,17 @@ class StoreRegisterRequest extends FormRequest
             "tanda_gejala.tanggal_onset_gejala"=> ['required', 'date', 'date_format:Y-m-d'],
             "tanda_gejala.daftar_gejala.*.gejala_id"=> ['exists:gejala,id'],
             "tanda_gejala.daftar_gejala.*.status"=> ['boolean'],
-            "tanda_gejala.gejala_lain"=> ['nullable'],            
+            "tanda_gejala.gejala_lain"=> ['nullable'], 
+            
+            // Pemeriksaan Penunjang
+            "pemeriksaan_penunjang.xray_paru"=> ['required', 'boolean'],
+            "pemeriksaan_penunjang.penjelasan_xray"=> ['max:255'],
+            "pemeriksaan_penunjang.leukosit"=> ['numeric'],
+            "pemeriksaan_penunjang.limfosit"=> ['numeric'],
+            "pemeriksaan_penunjang.trombosit"=> ['numeric'],
+            "pemeriksaan_penunjang.ventilator"=> ['required', 'boolean'],
+            "pemeriksaan_penunjang.status_kesehatan"=> ['required', 'in:pulang,dirawat,meninggal'],
+            "pemeriksaan_penunjang.keterangan_lab"=> ['max:255'],
 
         ];
     }

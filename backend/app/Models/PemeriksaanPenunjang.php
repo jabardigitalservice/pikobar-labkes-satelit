@@ -20,4 +20,10 @@ class PemeriksaanPenunjang extends Pivot
         'status_kesehatan', // pulang, dirawat, meninggal
         'keterangan_lab' // keterangan lainnya
     ];
+
+    protected $casts = [
+        'leukosit'=> 'decimal:2',
+        'limfosit'=> 'decimal:2',
+        'trombosit'=> 'decimal:2',
+    ];
 }

@@ -63,19 +63,14 @@ class RegisterController extends Controller
                 'riwayat'=> $request->input('riwayat_kunjungan')
             ]);
 
-            $tandaGejala = [
-                "pasien_rdt"=> $request->input('tanda_gejala.pasien_rdt'),
-                "hasil_rdt_positif"=> $request->input('tanda_gejala.hasil_rdt_positif'),
-                "tanggal_onset_gejala"=> $request->input('tanda_gejala.tanggal_onset_gejala'),
-                "tanggal_rdt"=> $request->input('tanda_gejala.tanggal_rdt'),
-                "keterangan_rdt"=> $request->input('tanda_gejala.keterangan_rdt'),
-                "daftar_gejala"=> $request->input('tanda_gejala.daftar_gejala'),
-                "gejala_lain"=> $request->input('tanda_gejala.gejala_lain'),   
-            ];
+            $tandaGejala = $this->getRequestTandaGejala($request);
+
+            $pemeriksaanPenunjang = $this->getRequestPemeriksaanPenunjang($request);
 
             $register->pasiens()->attach($pasien);
             $register->riwayatKunjungan()->save($riwayatKunjungan);
             $register->gejalaPasien()->attach($pasien, $tandaGejala);
+            $register->pemeriksaanPenunjang()->attach($pasien, $pemeriksaanPenunjang);
             
             DB::commit();
 
@@ -84,6 +79,7 @@ class RegisterController extends Controller
                 'fasyankes'=> $register->fasyankes,
                 'riwayat_kunjungan'=> $register->riwayatKunjungan->getAttribute('riwayat'),
                 'tanda_gejala'=> $register->gejalaPasien()->first()->pivot,
+                'pemeriksaan_penunjang'=> $register->pemeriksaanPenunjang()->first()->pivot,
             ];
 
             return response()->json($response);
@@ -118,6 +114,32 @@ class RegisterController extends Controller
             "no_rt"=> $request->input('no_rt'),
             "alamat_lengkap"=> $request->input('alamat_lengkap'),
             "keterangan_lain"=> $request->input('keterangan_lain')
+        ];
+    }
+
+    private function getRequestTandaGejala(Request $request) : array
+    {
+        return [
+            "pasien_rdt"=> $request->input('tanda_gejala.pasien_rdt'),
+            "hasil_rdt_positif"=> $request->input('tanda_gejala.hasil_rdt_positif'),
+            "tanggal_onset_gejala"=> $request->input('tanda_gejala.tanggal_onset_gejala'),
+            "tanggal_rdt"=> $request->input('tanda_gejala.tanggal_rdt'),
+            "keterangan_rdt"=> $request->input('tanda_gejala.keterangan_rdt'),
+            "daftar_gejala"=> $request->input('tanda_gejala.daftar_gejala'),
+            "gejala_lain"=> $request->input('tanda_gejala.gejala_lain'),   
+        ];
+    }
+
+    private function getRequestPemeriksaanPenunjang(Request $request) : array{
+        return [
+            "xray_paru"=> $request->input('pemeriksaan_penunjang.xray_paru'),
+            "penjelasan_xray"=> $request->input('pemeriksaan_penunjang.penjelasan_xray'),
+            "leukosit"=> $request->input('pemeriksaan_penunjang.leukosit'),
+            "limfosit"=> $request->input('pemeriksaan_penunjang.limfosit'),
+            "trombosit"=> $request->input('pemeriksaan_penunjang.trombosit'),
+            "ventilator"=> $request->input('pemeriksaan_penunjang.ventilator'),
+            "status_kesehatan"=> $request->input('pemeriksaan_penunjang.status_kesehatan'),
+            "keterangan_lab"=> $request->input('pemeriksaan_penunjang.keterangan_lab'),
         ];
     }
 }

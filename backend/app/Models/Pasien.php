@@ -54,4 +54,22 @@ class Pasien extends Model
                 'gejala_lain',
             ]);
     }
+
+    public function pemeriksaanPenunjang()
+    {
+        return $this->belongsToMany(Register::class, 'pemeriksaan_penunjang', 'pasien_id', 'register_id')
+            ->using(PemeriksaanPenunjang::class)
+            ->withPivot([
+                'xray_paru',
+                'penjelasan_xray',
+                'leukosit',
+                'limfosit',
+                'trombosit',
+                'ventilator',
+                'status_kesehatan', // pulang, dirawat, meninggal
+                'keterangan_lab'
+            ]);
+    }
+
+
 }
