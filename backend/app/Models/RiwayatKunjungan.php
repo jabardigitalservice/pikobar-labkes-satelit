@@ -12,5 +12,14 @@ class RiwayatKunjungan extends Model
         'register_id',
         'riwayat'
     ];
+
+    public function register()
+    {
+        return $this->belongsTo(Register::class);
+    }
+
+    protected $casts = [
+        'riwayat'=> 'array'
+    ];
     
 }

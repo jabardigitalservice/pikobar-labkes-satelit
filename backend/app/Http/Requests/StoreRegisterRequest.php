@@ -33,10 +33,15 @@ class StoreRegisterRequest extends FormRequest
             'no_telp'=> ['max:30'],
 
             // table: pasien
+            "force_update_pasien"=> ['required', 'boolean'],
             "nama_depan"=> ['required', 'min:3', 'max:255'],
             "nama_belakang"=> ['min:3', 'max:255'],
             "kewarganegaraan"=> ['required', 'in:wni,wna'],
-            "no_ktp"=> ['nullable', 'digits:16', 'unique:pasien,no_ktp'],
+            "no_ktp"=> [
+                'nullable', 
+                'digits:16', 
+                // 'unique:pasien,no_ktp',
+            ],
             "no_sim"=> [
                 Rule::requiredIf(function(){
                     return !$this->input('no_ktp');
@@ -56,9 +61,18 @@ class StoreRegisterRequest extends FormRequest
             "no_rw"=> ['required', 'max:3'],
             "no_rt"=> ['required', 'max:3'],
             "alamat_lengkap"=> ['required'],
-            "keterangan_lain"=> ['nullable']
+            "keterangan_lain"=> ['nullable'],
 
-            // ""
+            // Riwayat Kunjungan
+            "riwayat_kunjungan.*.tanggal_kunjungan"=> ['date', 'date_format:Y-m-d'],
+            "riwayat_kunjungan.*.fasyankes_nama"=> [
+                'max:150', 
+                Rule::requiredIf(function(){
+                    return $this->input('riwayat_kunjungan.*.tanggal_kunjungan');
+                }),
+            ],
+
+            
         ];
     }
 }

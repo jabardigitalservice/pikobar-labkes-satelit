@@ -26,4 +26,9 @@ class Register extends Model
         return $this->belongsToMany(Pasien::class, 'pasien_register', 'register_id', 'pasien_id')
             ->using(PasienRegister::class);
     }
+
+    public function riwayatKunjungan()
+    {
+        return $this->hasOne(RiwayatKunjungan::class);
+    }
 }
