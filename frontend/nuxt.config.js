@@ -68,13 +68,15 @@ module.exports = {
     "~plugins/templates",
     '~plugins/nuxt-client-init', // Comment this for SSR
     // { src: '~assets/js/jquery-3.1.1.min.js', mode: 'client' },
-    // { src: '~assets/js/bootstrap.min.js', mode: 'client' },
+    { src: '~assets/js/bootstrap.min.js', mode: 'client' },
     // { src: '~assets/js/plugins/metisMenu/jquery.metisMenu.js', mode: 'client' },
     // { src: '~assets/js/popper.min.js', mode: 'client' },
     // { src:'https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js'},
     { src: '~assets/js/inspinia.js', mode: 'client' },
     { src: '~assets/js/jquery.smartWizard.min.js', mode: 'client' },
     { src: '~assets/js/flatpickr.min.js', mode: 'client' },
+    { src: '~/plugins/vue-datepicker', mode: 'client', ssr: false },
+    { src: '~/plugins/vue-mask', mode: 'client', ssr: false },
   ],
 
   modules: [

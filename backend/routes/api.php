@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::group(["prefix" => "sample"], function(){
         Route::get('/get-data', 'SampleController@getData');
+        Route::post('/add', 'SampleController@add');
     });
 
     Route::get('/pengguna', 'PenggunaController@listPengguna');
@@ -42,6 +43,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::group(['prefix'=>'registrasi-mandiri'], function(){
         Route::get('/','RegistrasiMandiri@getData');
+    });
+
+    Route::group(['prefix'=>'ekstraksi'], function(){
+        Route::get('/get-data','EkstraksiController@getData');
+        Route::get('/get-kirim','EkstraksiController@getKirim');
     });
 });
 

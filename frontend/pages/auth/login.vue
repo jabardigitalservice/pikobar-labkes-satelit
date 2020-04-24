@@ -4,15 +4,8 @@
     <div class="row" style="padding-top:60px;">
 
       <div class="col-md-6">
-        <h2 class="font-bold">Welcome to Pikobar</h2>
-
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente voluptatem facilis nobis unde? Maiores,
-          pariatur repudiandae! Excepturi vero, hic deserunt facilis voluptas, cum voluptate nisi alias vel, aut quasi.
-          Maxime.</p>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Inventore ullam quo eius cum ducimus quae sunt
-          voluptates enim, consectetur suscipit voluptatem nulla ipsa alias possimus laudantium quod quos, aut omnis?
-        </p>
-      
+        <img alt="image" class="img-fluid" src="~/assets/img/logo-pikobar-jawabarat.png" />
+        <h2 class="font-bold">Laboratorium</h2>
       </div>
       <div class="col-md-6">
         <div class="ibox-content">
@@ -42,10 +35,10 @@
     </div>
     <hr>
     <div class="row">
-      <div class="col-md-6">
-        Copyright Pikobar
+      <div class="col-md-8">
+        Pemerintah Provinsi Jawa Barat | GTPP COVID-19 | PIKOBAR
       </div>
-      <div class="col-md-6 text-right">
+      <div class="col-md-4 text-right">
         <small>© 2020</small>
       </div>
     </div>
@@ -96,7 +89,7 @@
         })
 
         // Fetch the user.
-        await this.$store.dispatch('auth/fetchUser')
+        await this.$store.dispatch('auth/fetchUser', data.user)
 
         // Redirect home.
         this.$router.push({

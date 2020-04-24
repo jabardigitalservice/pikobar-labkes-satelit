@@ -153,6 +153,12 @@ export default {
       // Log out the user.
       await this.$store.dispatch("auth/logout");
 
+      this.$toast.success("Logout sukses", {
+        icon: 'check',
+        iconPack: 'fontawesome',
+        duration: 5000
+      })
+
       // Redirect to login.
       this.$router.push({ name: "login" });
     }

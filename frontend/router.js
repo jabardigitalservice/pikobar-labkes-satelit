@@ -17,8 +17,8 @@ const routes = [
   { path: '/email/resend', name: 'verification.resend', component: page('auth/verification/resend.vue') },
 
   { path: '/home', name: 'home', component: page('home.vue') },
-  { path: '/sample', name: 'sample.index', component: page('sample/index.vue') },
-  { path: '/sample/add', name: 'sample.add', component: page('sample/add.vue') },
+  { path: '/sample', name: 'sample.index', component: page('sample/index.vue'), meta: {parentName: 'home'} },
+  { path: '/sample/add', name: 'sample.add', component: page('sample/add.vue'), meta: {parentName: 'sample.index'} },
   { path: '/settings',
     component: page('settings/index.vue'),
     children: [
@@ -32,6 +32,10 @@ const routes = [
   { path: '/registrasi/mandiri', name: 'registrasi.mandiri', component: page('registrasi-mandiri/index.vue') },
   { path: '/registrasi/mandiri/tambah', name: 'registrasi.mandiri.tambah', component: page('registrasi-mandiri/tambah.vue') },
   { path: '/registrasi/mandiri/detail', name: 'registrasi.mandiri.detail', component: page('registrasi-mandiri/detail.vue') },
+  { path: '/ekstraksi', name:'ekstraksi.index', component: page('ekstraksi/index.vue') },
+  { path: '/ekstraksi/pilih/:id', name:'ekstraksi.pilih', component: page('ekstraksi/pilih.vue') },
+  { path: '/ekstraksi/detail/:id', name:'ekstraksi.detail', component: page('ekstraksi/detail.vue') },
+
 ]
 
 export function createRouter () {

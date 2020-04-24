@@ -1,7 +1,9 @@
 <template>
   <div class="ibox">
     <div v-if="title" class="ibox-title">
-        <h5>{{title}}</h5>
+          <slot name="header"></slot>
+          <br>
+          <h5>{{title}}</h5>
         <div class="ibox-tools">
           <slot name="tools" v-if="hasToolsSlot"></slot>
           <template v-if="!hasToolsSlot">
@@ -32,6 +34,9 @@ export default {
   computed:{
     hasToolsSlot() {
         return this.$slots['tools']
+    },
+    hasTitleSlot() {
+      return this.$slots['title']
     }
   }
 }
