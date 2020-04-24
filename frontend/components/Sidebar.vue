@@ -64,12 +64,12 @@
           </a>
           <ul class="nav nav-second-level collapse">
             <li>
-              <router-link to="/" tag="a">
+              <router-link to="/ekstraksi" tag="a">
                 <span class="nav-label">Ekstraksi</span>
               </router-link>
             </li>
             <li>
-              <router-link to="/" tag="a">
+              <router-link to="/ekstraksi/dikembalikan" tag="a">
                 <span class="nav-label">Sampel yang dikembalikan</span>
               </router-link>
             </li>

@@ -48,6 +48,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['prefix'=>'ekstraksi'], function(){
         Route::get('/get-data','EkstraksiController@getData');
         Route::get('/get-kirim','EkstraksiController@getKirim');
+        Route::get('/get-dikembalikan','EkstraksiController@getDikembalikan');
     });
 });
 
