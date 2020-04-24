@@ -31,7 +31,7 @@
             <span class="nav-label">Dashboard</span>
           </router-link>
         </li>
-        <li>
+        <li v-if="checkPermission('registrasi')">
           <a href="#">
             <i class="uil-user-square fa-fw"></i>
             <span class="nav-label">Registrasi</span>
@@ -50,13 +50,13 @@
             </li>
           </ul>
         </li>
-        <li>
+        <li v-if="checkPermission('sample')">
           <router-link to="/sample" tag="a">
             <i class="uil-flask-potion fa-fw"></i>
             <span class="nav-label">Pengambilan Sample</span>
           </router-link>
         </li>
-        <li>
+        <li v-if="checkPermission('ekstraksi')">
           <a href="#">
             <i class="uil-flask fa-fw"></i>
             <span class="nav-label">Ekstraksi</span>
@@ -75,7 +75,7 @@
             </li>
           </ul>
         </li>
-        <li>
+        <li v-if="checkPermission('pcr')">
           <a href="#">
             <i class="uil-atom fa-fw"></i>
             <span class="nav-label">Pemeriksaan RT-PCR</span>
@@ -94,13 +94,13 @@
             </li>
           </ul>
         </li>
-        <li>
+        <li v-if="checkPermission('verifikasi')">
           <router-link to="/" tag="a">
             <i class="uil-eye fa-fw"></i>
             <span class="nav-label">Verifikasi</span>
           </router-link>
         </li>
-        <li>
+        <li v-if="checkPermission('validasi')">
           <router-link to="/" tag="a">
             <i class="uil-check fa-fw"></i>
             <span class="nav-label">Validasi</span>
@@ -112,7 +112,7 @@
             <span class="nav-label">Pelacakan Sampel</span>
           </router-link>
         </li>
-        <li>
+        <li v-if="checkPermission('master')">
           <a href="#">
             <i class="uil-database-alt fa-fw"></i>
             <span class="nav-label">Data Master</span>
@@ -149,6 +149,33 @@ export default {
   }),
 
   methods: {
+    checkPermission(menu) {
+      var allow_role_id
+      switch (menu) {
+        case 'registrasi':
+          allow_role_id = [1, 6, 7, 2]
+          break;
+        case 'sample':
+          allow_role_id = [1, 6, 7, 3]
+          break;
+        case 'ekstraksi':
+          allow_role_id = [1, 6, 7, 4]
+          break;
+        case 'pcr':
+          allow_role_id = [1, 6, 7, 5]
+          break;
+        case 'verifikasi':
+          allow_role_id = [1, 6, 7]
+          break;
+        case 'validasi':
+          allow_role_id = [1, 7]
+          break;
+        case 'master':
+          allow_role_id = [1]
+          break;
+      }
+      return allow_role_id.indexOf(this.user.role_id) > -1
+    },
     async logout() {
       // Log out the user.
       await this.$store.dispatch("auth/logout");

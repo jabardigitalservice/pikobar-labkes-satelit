@@ -96,7 +96,7 @@ class PenggunaController extends Controller
                 Rule::unique('users')->ignore($id, 'id')
             ],
             'role_id' => 'required',
-            'password' => 'required|min:6',
+            // 'password' => 'required|min:6',
         ]);
 
         // dd($id);
@@ -105,7 +105,9 @@ class PenggunaController extends Controller
         $user->username = $request->get('username');
         $user->email =  $request->get('email');
         $user->role_id = $request->get('role_id');
-        $user->password = bcrypt($request->get('password'));
+        if (!empty($user->password)) {
+            $user->password = bcrypt($request->get('password'));
+        }
         $user->save();
 
         return response()->json(['status'=>200,'message'=>'Berhasil mengubah data pengguna','result'=>[]]);

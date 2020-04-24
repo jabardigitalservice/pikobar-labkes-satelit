@@ -49,7 +49,7 @@ export const actions = {
   async fetchUser ({ commit }, data = null) {
     try {
       if (!data) {
-        data = await axios.get('/user')
+        data = (await axios.get('/user')).data
       }
 
       commit('FETCH_USER_SUCCESS', data)

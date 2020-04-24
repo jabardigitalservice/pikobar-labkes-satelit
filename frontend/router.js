@@ -17,6 +17,7 @@ const routes = [
   { path: '/email/resend', name: 'verification.resend', component: page('auth/verification/resend.vue') },
 
   { path: '/home', name: 'home', component: page('home.vue') },
+  { path: '/error-role', name: 'error-role', component: page('error-role.vue'), meta: {parentName: 'home'} },
   { path: '/sample', name: 'sample.index', component: page('sample/index.vue'), meta: {parentName: 'home'} },
   { path: '/sample/add', name: 'sample.add', component: page('sample/add.vue'), meta: {parentName: 'sample.index'} },
   { path: '/settings',
