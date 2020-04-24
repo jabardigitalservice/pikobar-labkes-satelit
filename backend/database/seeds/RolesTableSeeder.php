@@ -24,7 +24,32 @@ class RolesTableSeeder extends Seeder
     {
         return [
             [
+                "id" => "1",
                 "roles_name"=> "admin",
+            ],
+            [
+                "id" => "2",
+                "roles_name"=> "admin_registrasi",
+            ],
+            [
+                "id" => "3",
+                "roles_name"=> "admin_sample",
+            ],
+            [
+                "id" => "4",
+                "roles_name"=> "admin_ekstraksi",
+            ],
+            [
+                "id" => "5",
+                "roles_name"=> "admin_pcr",
+            ],
+            [
+                "id" => "6",
+                "roles_name"=> "verifikator",
+            ],
+            [
+                "id" => "7",
+                "roles_name"=> "validator",
             ],
         ];
     }

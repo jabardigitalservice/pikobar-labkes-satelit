@@ -8,7 +8,7 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./backend:/var/www/backend
-      - ./frontend/dist:/var/www/frontend
+      - ./frontend:/var/www/frontend
       - ./certbot:/var/www/certbot
       - ./data/certbot/conf:/etc/letsencrypt
     ports:
@@ -45,7 +45,7 @@ services:
     working_dir: /var/www
     volumes:
       - ./backend:/var/www/backend
-      - ./frontend/dist:/var/www/frontend
+      - ./frontend:/var/www/frontend
       - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
 
   #PGSQL Service
