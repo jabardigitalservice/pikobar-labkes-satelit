@@ -2,14 +2,15 @@
     <tr>
         <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
         <td>
-            Sampel yang dikirim : <span class="badge badge-primary">Sampel # {{item.pen_nomor_ekstraksi}}</span>
-        </td>
+            <b>Sampel yang dikembalikan</b>
+            <p class="badge badge-danger">Sampel #{{item.pen_nomor_ekstraksi}}</p>
+            
+            </td>
         <td>
             <p class="badge badge-danger" v-if="item.pen_noreg==null">Identitas Pasien Belum Dimasukan Register</p>
         </td>
         <td width="20%">
-            <nuxt-link tag="button" class="btn btn-success btn-sm" :to="`/ekstraksi/detail/${item.pen_nomor_ekstraksi}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
-            <nuxt-link :to="`/ekstraksi/edit/${item.pen_nomor_ekstraksi}`" class="btn btn-warning btn-sm" tag="button"><i class="fa fa-edit"></i></nuxt-link>
+            <nuxt-link :to="`/ekstraksi/pilihulang/${item.pen_nomor_ekstraksi}`" class="btn btn-primary btn-sm" tag="button"><i class="uil-info-circle"></i> Ubah lalu kirim kembali</nuxt-link>
         </td>
     </tr>
 </template>

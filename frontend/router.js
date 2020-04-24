@@ -32,10 +32,15 @@ const routes = [
   { path: '/registrasi/mandiri', name: 'registrasi.mandiri', component: page('registrasi-mandiri/index.vue') },
   { path: '/registrasi/mandiri/tambah', name: 'registrasi.mandiri.tambah', component: page('registrasi-mandiri/tambah.vue') },
   { path: '/registrasi/mandiri/detail', name: 'registrasi.mandiri.detail', component: page('registrasi-mandiri/detail.vue') },
+  
+  { path: '/registrasi/rujukan', name:'registrasi.rujukan', component: page('registrasi-rujukan/index.vue') },
+
   { path: '/ekstraksi', name:'ekstraksi.index', component: page('ekstraksi/index.vue') },
   { path: '/ekstraksi/pilih/:id', name:'ekstraksi.pilih', component: page('ekstraksi/pilih.vue') },
+  { path: '/ekstraksi/pilihulang/:id', name:'ekstraksi.pilih', component: page('ekstraksi/pilihulang.vue') },
   { path: '/ekstraksi/detail/:id', name:'ekstraksi.detail', component: page('ekstraksi/detail.vue') },
-
+  { path: '/ekstraksi/edit/:id', name:'ekstraksi.edit', component: page('ekstraksi/edit.vue') },
+  { path: '/ekstraksi/dikembalikan', name:'ekstraksi.dikembalikan', component: page('ekstraksi/dikembalikan.vue') },
 ]
 
 export function createRouter () {
