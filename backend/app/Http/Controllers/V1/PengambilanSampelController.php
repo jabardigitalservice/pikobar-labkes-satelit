@@ -65,34 +65,79 @@ class PengambilanSampelController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\PengambilanSampel  $pengambilanSampel
+     * @param  \App\Models\PengambilanSampel  $pengambilan
      * @return \Illuminate\Http\Response
      */
-    public function show(PengambilanSampel $pengambilanSampel)
+    public function show(PengambilanSampel $pengambilan)
     {
-        //
+        return new PengambilanSampelResource($pengambilan);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \EditPengambilanRequest\EditPengambilanRequest  $request
-     * @param  \App\Models\PengambilanSampel  $pengambilanSampel
+     * @param  \App\Models\PengambilanSampel  $pengambilan
      * @return \Illuminate\Http\Response
      */
-    public function update(EditPengambilanRequest $request, PengambilanSampel $pengambilanSampel)
+    public function update(EditPengambilanRequest $request, PengambilanSampel $pengambilan)
     {
-        //
+        $request->validated();
+        
+        DB::beginTransaction();
+        try {
+
+            $pengambilan->update($request->except(['sampel']));
+
+            $sampelRequest = $request->only('sampel');
+
+            // Update related sampel
+            foreach ($sampelRequest['sampel'] as $key => $sampelRequest) {
+                $existingSampel = $pengambilan->sampel()
+                    ->where('id', $sampelRequest['id'])
+                    ->first();
+
+                if ($existingSampel) {
+                    $existingSampel->update($sampelRequest);
+                }
+            }
+            
+            DB::commit();
+
+            return new PengambilanSampelResource($pengambilan);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\PengambilanSampel  $pengambilanSampel
+     * @param  \App\Models\PengambilanSampel  $pengambilan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PengambilanSampel $pengambilanSampel)
+    public function destroy(PengambilanSampel $pengambilan)
     {
-        //
+        DB::beginTransaction();
+        try {
+
+            $pengambilan->sampel()->delete();
+
+            $pengambilan->delete();
+            
+            DB::commit();
+
+            return response()->json([
+                'status'=> true,
+                'message'=> __("Berhasil menghapus data Pengambilan Sampel")
+            ]);
+
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 }

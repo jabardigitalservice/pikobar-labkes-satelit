@@ -103,7 +103,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             
             Route::post('store', 'PengambilanSampelController@store');
 
-            Route::post('update', 'PengambilanSampelController@update');
+            Route::post('update/{pengambilan}', 'PengambilanSampelController@update');
 
             Route::get('detail/{pengambilan}', 'PengambilanSampelController@show');
 

@@ -15,6 +15,7 @@ class PengambilanSampelResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id'=> $this->id,
             'sampel_diambil' => $this->sampel_diambil,
             'sampel_diterima' => $this->sampel_diterima,
             'diterima_dari_faskes' => $this->diterima_dari_faskes,
