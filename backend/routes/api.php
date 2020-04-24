@@ -51,6 +51,11 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/get-kirim','EkstraksiController@getKirim');
         Route::get('/get-dikembalikan','EkstraksiController@getDikembalikan');
     });
+
+    Route::group(['prefix'=>'pemeriksaansampel'], function(){
+        Route::get('/get-data','PemeriksaanSampleController@getData');
+        Route::get('/get-dikirim','PemeriksaanSampleController@getDikirim');
+    });
 });
 
 Route::group(['middleware' => 'guest:api'], function () {

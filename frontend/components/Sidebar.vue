@@ -83,7 +83,7 @@
           </a>
           <ul class="nav nav-second-level collapse">
             <li>
-              <router-link to="/" tag="a">
+              <router-link to="/pemeriksaansampel" tag="a">
                 <span class="nav-label">Pemeriksaan Sampel</span>
               </router-link>
             </li>
