@@ -25,7 +25,7 @@ class RegisterResource extends JsonResource
             'updated_at'=> $this->updated_at->format('Y-m-d H:i:s'),
             'pasien'=> $this->pasiens()->first(),
             'riwayat_kunjungan'=> $this->riwayatKunjungan->getAttribute('riwayat'),
-            'tanda_gejala'=> $this->gejalaPasien()->first()->pivot,
+            'tanda_gejala'=> new GejalaPasienResource($this->gejalaPasien()->first()),
             'pemeriksaan_penunjang'=> $this->pemeriksaanPenunjang()->first()->pivot,
             'riwayat_kontak'=> $this->riwayatKontak->map(function($item){
                 return $item->pivot;
@@ -33,10 +33,7 @@ class RegisterResource extends JsonResource
             'riwayat_lawatan'=> $this->riwayatLawatan->map(function($item){
                 return $item->pivot;
             }),
-            'penyakit_penyerta'=> $this->riwayatPenyakitPenyerta->only([
-                'daftar_penyakit', 
-                'keterangan_lain'
-            ])
+            'penyakit_penyerta'=> new PenyakitPenyertaResource($this->riwayatPenyakitPenyerta)
         ];
     }
 }

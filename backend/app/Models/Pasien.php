@@ -34,6 +34,10 @@ class Pasien extends Model
         'tanggal_lahir',
     ];
 
+    protected $casts = [
+        'tanggal_lahir'=> 'date:Y-m-d',
+    ];
+
     public function registers()
     {
         return $this->belongsToMany(Register::class, 'pasien_register', 'pasien_id', 'register_id')
