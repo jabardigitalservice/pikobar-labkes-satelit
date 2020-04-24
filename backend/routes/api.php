@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,4 +65,38 @@ Route::group(['middleware' => 'guest:api'], function () {
 
     Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
     Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
+});
+
+
+Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], function () {
+
+        Route::get('list-kota-jabar', 'KotaController@listKota');
+        Route::get('kota/detail/{kota}', 'KotaController@show');
+
+        Route::get('list-fasyankes-jabar', 'FasyankesController@listByProvinsi');
+        Route::get('fasyankes/detail/{fasyankes}', 'FasyankesController@show');
+
+        Route::get('list-gejala', 'GejalaController@getListMasterGejala');
+        Route::get('gejala/detail/{gejala}', 'GejalaController@show');
+        
+        Route::get('list-penyakit-penyerta', 'PenyakitPenyertaController@getListMaster');
+        Route::get('penyakit-penyerta/detail/{penyakitPenyerta}', 'PenyakitPenyertaController@show');
+
+        Route::group(['prefix'=>'register'], function(){
+
+            Route::get('/', 'RegisterListController@index');
+
+            Route::get('generate-nomor-register', 'RegisterController@generateNomorRegister');
+
+            Route::post('store', 'RegisterController@store');
+
+            Route::get('detail/{register}', 'RegisterController@show');
+
+            Route::post('update/{register}', 'RegisterController@update');
+
+            Route::delete('delete/{register}', 'RegisterController@destroy');
+
+
+        });
+        
 });

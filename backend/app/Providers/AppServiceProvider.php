@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Oauth\CustomKeycloakProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         $this->bootKeycloakSocialite();
+        JsonResource::withoutWrapping();
     }
 
     /**
