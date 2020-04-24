@@ -39,7 +39,7 @@
           </a>
           <ul class="nav nav-second-level collapse">
             <li>
-              <router-link to="/" tag="a">
+              <router-link to="/registrasi/mandiri" tag="a">
                 <span class="nav-label">Registrasi Mandiri (L)</span>
               </router-link>
             </li>

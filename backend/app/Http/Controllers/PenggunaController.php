@@ -14,7 +14,7 @@ class PenggunaController extends Controller
         $models = User::with('roles');
         $params = $request->get('params',false);
         $search = $request->get('search',false);
-        $order  = $request->get('order' ,'name');
+        $order  = $request->get('order','name');
 
         if ($search != '') {
             $models = $models->where(function($q) use ($search) {

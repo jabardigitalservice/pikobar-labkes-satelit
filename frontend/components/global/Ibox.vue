@@ -1,25 +1,19 @@
 <template>
   <div class="ibox">
     <div v-if="title" class="ibox-title">
-        <h5>{{title}}</h5>
+          <slot name="header"></slot>
+          <br>
+          <h5>{{title}}</h5>
         <div class="ibox-tools">
+          <slot name="tools" v-if="hasToolsSlot"></slot>
+          <template v-if="!hasToolsSlot">
             <a class="collapse-link">
                 <i class="fa fa-chevron-up"></i>
             </a>
-            <!-- 
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="fa fa-wrench"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-user">
-                <li><a href="#" class="dropdown-item">Config option 1</a>
-                </li>
-                <li><a href="#" class="dropdown-item">Config option 2</a>
-                </li>
-            </ul>
-            -->
             <a class="close-link">
                 <i class="fa fa-times"></i>
             </a>
+          </template>
         </div>
     </div>
 
@@ -35,6 +29,15 @@ export default {
 
   props: {
     title: { type: String, default: null }
+  },
+
+  computed:{
+    hasToolsSlot() {
+        return this.$slots['tools']
+    },
+    hasTitleSlot() {
+      return this.$slots['title']
+    }
   }
 }
 </script>

@@ -41,6 +41,15 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::delete('/pengguna/{id}','PenggunaController@deletePengguna');
     Route::get('/pengguna/{id}','PenggunaController@showUpdate');
     Route::get('roles-option','OptionController@getRoles');
+
+    Route::group(['prefix'=>'registrasi-mandiri'], function(){
+        Route::get('/','RegistrasiMandiri@getData');
+    });
+
+    Route::group(['prefix'=>'ekstraksi'], function(){
+        Route::get('/get-data','EkstraksiController@getData');
+        Route::get('/get-kirim','EkstraksiController@getKirim');
+    });
 });
 
 Route::group(['middleware' => 'guest:api'], function () {
