@@ -98,5 +98,17 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
 
         });
+
+        Route::group(['prefix'=>'pengambilan-sampel'], function(){
+            
+            Route::post('store', 'PengambilanSampelController@store');
+
+            Route::post('update', 'PengambilanSampelController@update');
+
+            Route::get('detail/{pengambilan}', 'PengambilanSampelController@show');
+
+            Route::delete('delete/{pengambilan}', 'PengambilanSampelController@destroy');
+
+        });
         
 });
