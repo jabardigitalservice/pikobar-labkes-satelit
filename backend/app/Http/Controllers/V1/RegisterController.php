@@ -4,6 +4,8 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRegisterRequest;
+use App\Http\Requests\UpdateRegisterRequest;
+use App\Http\Resources\RegisterResource;
 use App\Models\Pasien;
 use App\Models\Register;
 use App\Models\RiwayatKunjungan;
@@ -92,32 +94,106 @@ class RegisterController extends Controller
             
             DB::commit();
 
-            $response = $register->toArray() + [
-                'pasien'=> $pasien,
-                'fasyankes'=> $register->fasyankes,
-                'riwayat_kunjungan'=> $register->riwayatKunjungan->getAttribute('riwayat'),
-                'tanda_gejala'=> $register->gejalaPasien()->first()->pivot,
-                'pemeriksaan_penunjang'=> $register->pemeriksaanPenunjang()->first()->pivot,
-                'riwayat_kontak'=> $register->riwayatKontak->map(function($item){
-                    return $item->pivot;
-                }),
-                'riwayat_lawatan'=> $register->riwayatLawatan->map(function($item){
-                    return $item->pivot;
-                }),
-                'penyakit_penyerta'=> $register->riwayatPenyakitPenyerta->only([
-                    'daftar_penyakit', 
-                    'keterangan_lain'
-                ])
-            ];
-
-            return response()->json($response);
-
+            return new RegisterResource($register);
 
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
 
+    }
+
+    /**
+     * Update resource in storage.
+     *
+     * @param  \App\Http\Requests\StoreRegisterRequest  $request
+     * @param \App\Models\Register $register
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdateRegisterRequest $request, Register $register)
+    {
+        $request->validated();
+
+        DB::beginTransaction();
+        try {
+
+            
+            $register->gejalaPasien()->detach();
+            
+            $register->pemeriksaanPenunjang()->detach();
+            
+            $register->riwayatLawatan()->detach();
+            
+            $register->riwayatKontak()->detach();
+            
+            $register->riwayatKunjungan()->delete();
+
+            $register->riwayatPenyakitPenyerta()->delete();
+
+            $register->update([
+                'nomor_register'=> $request->input('nomor_register'),
+                'fasyankes_id'=> $request->input('fasyankes_id'),
+                'nomor_rekam_medis'=> $request->input('nomor_rekam_medis'),
+                'nama_dokter'=> $request->input('nama_dokter'),
+                'no_telp'=> $request->input('no_telp'),
+            ]);
+
+            $pasien = Pasien::find($request->input('pasien_id'));
+
+            if ($pasien) {
+                $dataPasien = $this->getRequestPasien($request);
+                $pasien->update($dataPasien);
+            }
+
+            $riwayatKunjungan = new RiwayatKunjungan([
+                'riwayat'=> $request->input('riwayat_kunjungan')
+            ]);
+
+            $tandaGejala = $this->getRequestTandaGejala($request);
+
+            $pemeriksaanPenunjang = $this->getRequestPemeriksaanPenunjang($request);
+
+            $riwayatKontak = $this->getRequestRiwayatKontak($request);
+
+            $riwayatLawatan = $this->getRequestRiwayatLawatan($request);
+
+            $penyakitPenyerta = new RiwayatPenyakitPenyerta(
+                $this->getRequestPenyakitPenyerta($request)
+            );
+
+            $register->pasiens()->attach($pasien);
+            $register->riwayatKunjungan()->save($riwayatKunjungan);
+            $register->gejalaPasien()->attach($pasien, $tandaGejala);
+            $register->pemeriksaanPenunjang()->attach($pasien, $pemeriksaanPenunjang);
+            $register->riwayatPenyakitPenyerta()->save($penyakitPenyerta);
+
+            foreach ($riwayatKontak as $key => $riwayat) {
+                $register->riwayatKontak()->attach($pasien, $riwayat);
+            }
+
+            foreach ($riwayatLawatan as $key => $riwayat) {
+                $register->riwayatLawatan()->attach($pasien, $riwayat);
+            }
+            
+            DB::commit();
+
+            return new RegisterResource($register);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }        
+    }
+
+    /**
+     * Show detail single resource.
+     *
+     * @param \App\Models\Register $register
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Register $register)
+    {
+        return new RegisterResource($register);
     }
 
     private function getRequestPasien(Request $request) : array
@@ -215,7 +291,7 @@ class RegisterController extends Controller
             $register->riwayatKontak()->detach();
 
             $register->riwayatPenyakitPenyerta()->delete();
-            
+
             $register->delete();
             
             DB::commit();

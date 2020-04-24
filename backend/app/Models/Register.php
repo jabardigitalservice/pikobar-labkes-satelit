@@ -16,6 +16,8 @@ class Register extends Model
         'no_telp'
     ];
 
+    protected $hidden = ['fasyankes_id'];
+
     public function fasyankes()
     {
         return $this->belongsTo(Fasyankes::class);

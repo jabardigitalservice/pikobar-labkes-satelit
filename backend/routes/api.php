@@ -80,6 +80,10 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             Route::post('store', 'RegisterController@store');
 
+            Route::get('detail/{register}', 'RegisterController@show');
+
+            Route::post('update/{register}', 'RegisterController@update');
+
             Route::delete('delete/{register}', 'RegisterController@destroy');
 
 
