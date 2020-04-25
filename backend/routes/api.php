@@ -96,6 +96,16 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             Route::delete('delete/{register}', 'RegisterController@destroy');
 
+            
+            Route::group(['prefix'=>'rujukan'], function(){
+
+                Route::post('store', 'RegisterRujukanController@store');
+
+                Route::get('detail/{register}', 'RegisterRujukanController@show');
+
+
+            });
+
 
         });
 

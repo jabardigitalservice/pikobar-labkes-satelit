@@ -103,4 +103,9 @@ class Register extends Model
         //     );
     }
 
+    public function pengambilanSampel()
+    {
+        return $this->belongsToMany(PengambilanSampel::class, 'pengambilan_sampel_registrasi', 'register_id', 'pengambilan_sampel_id');
+    }
+
 }

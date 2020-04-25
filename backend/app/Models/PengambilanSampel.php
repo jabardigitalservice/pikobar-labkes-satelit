@@ -24,4 +24,9 @@ class PengambilanSampel extends Model
         return $this->hasMany(Sampel::class);
     }
 
+    public function register()
+    {
+        return $this->belongsToMany(Register::class, 'pengambilan_sampel_registrasi', 'pengambilan_sampel_id', 'register_id');
+    }
+
 }
