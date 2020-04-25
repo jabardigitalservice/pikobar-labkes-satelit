@@ -26,7 +26,7 @@ class UpdateRegisterRequest extends FormRequest
     {
         return [
             // table: register
-            'nomor_register'=> ['exists:register,nomor_register'],
+            // 'nomor_register'=> ['exists:register,nomor_register'],
             'fasyankes_id'=> ['required', 'exists:fasyankes,id'],
             'nomor_rekam_medis'=> ['min:3', 'max:255'],
             'nama_dokter'=> ['required', 'max:255'],

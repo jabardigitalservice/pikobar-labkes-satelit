@@ -265,14 +265,14 @@ class RegisterRujukanController extends Controller
             
             $register->riwayatKontak()->detach();
 
-            $register->pengambilanSampel()->detach();
+            // $register->pengambilanSampel()->detach();
             
             $register->riwayatKunjungan()->delete();
 
             $register->riwayatPenyakitPenyerta()->delete();
 
-            $register->update([
-                'nomor_register'=> $request->input('nomor_register'),
+            $updatedRegister = $register->updateOrCreate([
+                // 'nomor_register'=> $request->input('nomor_register'),
                 'fasyankes_id'=> $request->input('fasyankes_id'),
                 'nomor_rekam_medis'=> $request->input('nomor_rekam_medis'),
                 'nama_dokter'=> $request->input('nama_dokter'),
@@ -319,7 +319,7 @@ class RegisterRujukanController extends Controller
             
             DB::commit();
 
-            return new RegisterRujukanResource($register);
+            return new RegisterRujukanResource($updatedRegister);
 
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -340,7 +340,7 @@ class RegisterRujukanController extends Controller
             422, 
             __("Tidak ada data register rujukan.")
         );
-        
+
         DB::beginTransaction();
         try {
 
@@ -357,6 +357,8 @@ class RegisterRujukanController extends Controller
             $register->riwayatKontak()->detach();
 
             $register->riwayatPenyakitPenyerta()->delete();
+
+            $register->pengambilanSampel()->detach();
 
             $register->delete();
             

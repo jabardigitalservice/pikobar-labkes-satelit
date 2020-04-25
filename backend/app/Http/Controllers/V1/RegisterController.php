@@ -130,8 +130,8 @@ class RegisterController extends Controller
 
             $register->riwayatPenyakitPenyerta()->delete();
 
-            $register->update([
-                'nomor_register'=> $request->input('nomor_register'),
+            $updatedRegister = $register->updateOrCreate([
+                // 'nomor_register'=> $request->input('nomor_register'),
                 'fasyankes_id'=> $request->input('fasyankes_id'),
                 'nomor_rekam_medis'=> $request->input('nomor_rekam_medis'),
                 'nama_dokter'=> $request->input('nama_dokter'),
@@ -177,7 +177,7 @@ class RegisterController extends Controller
             
             DB::commit();
 
-            return new RegisterResource($register);
+            return new RegisterResource($updatedRegister);
 
         } catch (\Throwable $th) {
             DB::rollBack();
