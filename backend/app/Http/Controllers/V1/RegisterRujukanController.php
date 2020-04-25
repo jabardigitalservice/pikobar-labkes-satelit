@@ -244,7 +244,87 @@ class RegisterRujukanController extends Controller
     {
         $request->validated();
 
-        
+        abort_if(
+            !$register->pengambilanSampel->count(), 
+            422, 
+            __("Tidak ada data register rujukan.")
+        );
+
+        // $pengambilanSampel = PengambilanSampel::whereHas('sampel', function(Builder $query) use($sampelPayload){
+        //     $query->whereIn('nomor_barcode', collect($sampelPayload['sampel'])->flatten());
+        // })->get();
+
+        DB::beginTransaction();
+        try {
+
+            $register->gejalaPasien()->detach();
+            
+            $register->pemeriksaanPenunjang()->detach();
+            
+            $register->riwayatLawatan()->detach();
+            
+            $register->riwayatKontak()->detach();
+
+            $register->pengambilanSampel()->detach();
+            
+            $register->riwayatKunjungan()->delete();
+
+            $register->riwayatPenyakitPenyerta()->delete();
+
+            $register->update([
+                'nomor_register'=> $request->input('nomor_register'),
+                'fasyankes_id'=> $request->input('fasyankes_id'),
+                'nomor_rekam_medis'=> $request->input('nomor_rekam_medis'),
+                'nama_dokter'=> $request->input('nama_dokter'),
+                'no_telp'=> $request->input('no_telp'),
+            ]);
+
+            $pasien = Pasien::find($request->input('pasien_id'));
+
+            if ($pasien) {
+                $dataPasien = $this->getRequestPasien($request);
+                $pasien->update($dataPasien);
+            }
+
+            $riwayatKunjungan = new RiwayatKunjungan([
+                'riwayat'=> $request->input('riwayat_kunjungan')
+            ]);
+
+            $tandaGejala = $this->getRequestTandaGejala($request);
+
+            $pemeriksaanPenunjang = $this->getRequestPemeriksaanPenunjang($request);
+
+            $riwayatKontak = $this->getRequestRiwayatKontak($request);
+
+            $riwayatLawatan = $this->getRequestRiwayatLawatan($request);
+
+            $penyakitPenyerta = new RiwayatPenyakitPenyerta(
+                $this->getRequestPenyakitPenyerta($request)
+            );
+
+            $register->pasiens()->attach($pasien);
+            $register->riwayatKunjungan()->save($riwayatKunjungan);
+            $register->gejalaPasien()->attach($pasien, $tandaGejala);
+            $register->pemeriksaanPenunjang()->attach($pasien, $pemeriksaanPenunjang);
+            $register->riwayatPenyakitPenyerta()->save($penyakitPenyerta);
+
+            foreach ($riwayatKontak as $key => $riwayat) {
+                $register->riwayatKontak()->attach($pasien, $riwayat);
+            }
+
+            foreach ($riwayatLawatan as $key => $riwayat) {
+                $register->riwayatLawatan()->attach($pasien, $riwayat);
+            }
+            
+            
+            DB::commit();
+
+            return new RegisterRujukanResource($register);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     /**
@@ -255,6 +335,41 @@ class RegisterRujukanController extends Controller
      */
     public function destroy(Register $register)
     {
-        //
+        abort_if(
+            !$register->pengambilanSampel->count(), 
+            422, 
+            __("Tidak ada data register rujukan.")
+        );
+        
+        DB::beginTransaction();
+        try {
+
+            $register->pasiens()->detach();
+
+            $register->riwayatKunjungan()->delete();
+
+            $register->gejalaPasien()->detach();
+
+            $register->pemeriksaanPenunjang()->detach();
+
+            $register->riwayatLawatan()->detach();
+
+            $register->riwayatKontak()->detach();
+
+            $register->riwayatPenyakitPenyerta()->delete();
+
+            $register->delete();
+            
+            DB::commit();
+
+            return response()->json([
+                'status'=> true,
+                'message'=> __("Berhasil menghapus data register")
+            ]);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 }

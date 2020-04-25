@@ -103,6 +103,10 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
                 Route::get('detail/{register}', 'RegisterRujukanController@show');
 
+                Route::post('update/{register}', 'RegisterRujukanController@update');
+
+                Route::delete('delete/{register}', 'RegisterRujukanController@destroy');
+
 
             });
 
