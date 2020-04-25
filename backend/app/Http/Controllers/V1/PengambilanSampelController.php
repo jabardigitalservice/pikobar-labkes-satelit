@@ -14,16 +14,6 @@ use Illuminate\Support\Facades\DB;
 class PengambilanSampelController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\CreatePengambilanRequest  $request
@@ -132,6 +122,34 @@ class PengambilanSampelController extends Controller
             return response()->json([
                 'status'=> true,
                 'message'=> __("Berhasil menghapus data Pengambilan Sampel")
+            ]);
+
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Sampel  $sampel
+     * @return \Illuminate\Http\Response
+     */
+    public function destroySampel(Sampel $sampel)
+    {
+        DB::beginTransaction();
+        try {
+
+            $sampel->delete();
+            
+            DB::commit();
+
+            return response()->json([
+                'status'=> true,
+                'message'=> __("Berhasil menghapus data sampel")
             ]);
 
 

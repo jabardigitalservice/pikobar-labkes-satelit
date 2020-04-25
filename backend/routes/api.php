@@ -100,6 +100,10 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         });
 
         Route::group(['prefix'=>'pengambilan-sampel'], function(){
+
+            Route::get('list-dikirim', 'PengambilanListController@listDikirim');
+
+            Route::get('list-sampel-register', 'PengambilanListController@listSampelRegister');
             
             Route::post('store', 'PengambilanSampelController@store');
 
@@ -108,6 +112,14 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             Route::get('detail/{pengambilan}', 'PengambilanSampelController@show');
 
             Route::delete('delete/{pengambilan}', 'PengambilanSampelController@destroy');
+
+            Route::delete('delete/sampel/{sampel}', 'PengambilanSampelController@destroySampel');
+
+        });
+
+        Route::group(['prefix'=>'sampel'], function(){
+
+            Route::post('store', 'SampelController@store');
 
         });
         
