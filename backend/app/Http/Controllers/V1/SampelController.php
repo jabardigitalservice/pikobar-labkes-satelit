@@ -54,8 +54,6 @@ class SampelController extends Controller
             'status'=> ['required', 'max:50']
         ];
 
-        
-
         return Validator::make($data, $rules);
     }
 
@@ -67,7 +65,20 @@ class SampelController extends Controller
      */
     public function show(Sampel $sampel)
     {
-        //
+        return new SampelResource($sampel);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  string  $barcode
+     * @return \Illuminate\Http\Response
+     */
+    public function showByBarcode(string $barcode)
+    {
+        $sampel = Sampel::whereNomorBarcode($barcode)->firstOrFail();
+        
+        return new SampelResource($sampel);
     }
 
     /**
@@ -79,7 +90,11 @@ class SampelController extends Controller
      */
     public function update(Request $request, Sampel $sampel)
     {
-        //
+        $this->validator($request->all(), $sampel)->validate();
+        
+        $sampel->update($request->all());
+
+        return new SampelResource($sampel);
     }
 
     /**
@@ -90,6 +105,11 @@ class SampelController extends Controller
      */
     public function destroy(Sampel $sampel)
     {
-        //
+        $sampel->delete();
+
+        return response()->json([
+            'status'=> true,
+            'message'=> __("Berhasil menghapus sampel.")
+        ]);
     }
 }

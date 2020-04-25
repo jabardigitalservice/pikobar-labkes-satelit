@@ -121,6 +121,15 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             Route::post('store', 'SampelController@store');
 
+            Route::post('update/{sampel}', 'SampelController@update');
+
+            Route::get('detail/{sampel}', 'SampelController@show');
+
+            Route::get('barcode/{barcode}', 'SampelController@showByBarcode');
+
+            Route::delete('delete/{sampel}', 'SampelController@destroy');
+
+
         });
         
 });
