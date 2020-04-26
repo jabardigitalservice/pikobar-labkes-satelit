@@ -26,7 +26,7 @@
                   </tr>
                   <tr>
                     <td width="30%" align="right">
-                      <b>Barcode Nomor Sampel</b>
+                      <b>Nomor Sampel</b>
                     </td>
                     <td width="60%">
                       <span>{{data.nomor_sampel}}</span>

@@ -38,7 +38,7 @@ class DummySampleSeeder extends Seeder
                     "id" => $id,
                     "fasyankes_id" => rand(1,2),
                     "register_uuid" => (string) Str::uuid(),
-                    "nomor_register"=> "20200425L" . str_pad($idregister,5,"0",STR_PAD_LEFT),
+                    "nomor_register"=> "20200425L" . str_pad($idregister,4,"0",STR_PAD_LEFT),
                     "nomor_sampel"=> $idsampel,
                     "register_status" => $sr->register_status,
                     "lab_pcr_id" => $n,

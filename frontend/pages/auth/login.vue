@@ -4,7 +4,7 @@
     <div class="row" style="padding-top:60px;">
 
       <div class="col-md-6">
-        <img alt="image" class="img-fluid" src="~/assets/img/logo-pikobar-jawabarat.png" />
+        <img alt="image" class="img-fluid" src="~/assets/img/logo-lab-black.png" />
         <h2 class="font-bold">Laboratorium</h2>
       </div>
       <div class="col-md-6">

@@ -5,7 +5,7 @@
         <li class="nav-header">
           <div class="dropdown profile-element">
             <!-- <img alt="image" class="rounded-circle" src="~/assets/img/profile_small.jpg" /> -->
-            <img alt="image" class="img-fluid" src="~/assets/img/logo-pikobar-jawabarat-text-white.png" />
+            <img alt="image" class="img-fluid" src="~/assets/img/logo-lab-white.png" />
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
               <span class="block m-t-xs font-bold">{{user.name}}</span>
               <span class="text-muted text-xs block">
@@ -93,13 +93,23 @@
           </a>
           <ul class="nav nav-second-level collapse">
             <li>
-              <router-link to="/pemeriksaansampel" tag="a">
-                <span class="nav-label">Pemeriksaan Sampel</span>
+              <router-link to="/pcr/list-rna" tag="a">
+                <span class="nav-label">Penerimaan RNA</span>
               </router-link>
             </li>
             <li>
-              <router-link to="/" tag="a">
-                <span class="nav-label">Sampel yang dikembalikan</span>
+              <router-link to="/pcr/list-pcr" tag="a">
+                <span class="nav-label">List PCR</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/pcr/list-hasil-pemeriksaan" tag="a">
+                <span class="nav-label">List Hasil Pemeriksaan</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/pcr/list-sampel-inkonklusif" tag="a">
+                <span class="nav-label">List Sampel Inkonklusif</span>
               </router-link>
             </li>
           </ul>

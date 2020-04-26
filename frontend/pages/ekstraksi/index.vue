@@ -36,7 +36,8 @@
                 :rowtemplate="'tr-ekstraksi-dilakukan'"
                 :columns="{
                       nomor_register: 'Nomor Register',
-                      nomor_sampel : 'Barcode Nomor Sampel',
+                      nomor_sampel : 'Nomor Sampel',
+                      jenis_sampel : 'Jenis Sampel',
                       waktu_extraction_sample_extracted: 'Ekstraksi dilakukan pada',
                     }"
           ></ajax-table>

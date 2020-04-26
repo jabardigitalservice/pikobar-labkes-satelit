@@ -32,7 +32,8 @@
             :rowtemplate="'tr-ekstraksi-kirim'"
             :columns="{
                       nomor_register: 'Nomor Register',
-                      nomor_sampel : 'Barcode Nomor Sampel',
+                      nomor_sampel : 'Nomor Sampel',
+                      jenis_sampel : 'Jenis Sampel',
                       lab_pcr_nama : 'Lab PCR',
                       waktu_extraction_sample_sent: 'Ekstraksi dikirim pada',
                     }"

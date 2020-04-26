@@ -26,13 +26,13 @@ class RegisterController extends Controller
         } else if ($jenis_registrasi == 'rujukan') {
             $kode_registrasi = 'R';
         }
-        $res = DB::select("select max(right(nomor_register, 5))::int8 val from register where nomor_register ilike '{$date}{$kode_registrasi}%'");
+        $res = DB::select("select max(right(nomor_register, 4))::int8 val from register where nomor_register ilike '{$date}{$kode_registrasi}%'");
         if (count($res)) {
             $nextnum = $res[0]->val + 1;
         } else {
             $nextnum = 1;
         }
-        return $date . $kode_registrasi . str_pad($nextnum,5,"0",STR_PAD_LEFT);
+        return $date . $kode_registrasi . str_pad($nextnum,4,"0",STR_PAD_LEFT);
     }
 
     /**

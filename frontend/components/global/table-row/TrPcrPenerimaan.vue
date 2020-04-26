@@ -11,11 +11,10 @@
             {{item.jenis_sampel}}
         </td>
         <td>
-            {{ item.waktu_extraction_sample_extracted | formatDateTime }}
+            {{ item.waktu_extraction_sample_sent | formatDateTime }}
         </td>
         <td width="20%">
-            <nuxt-link tag="a" class="btn btn-success btn-sm" :to="`/ekstraksi/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
-            <nuxt-link :to="`/ekstraksi/edit/${item.id}`" class="btn btn-warning btn-sm" tag="a"><i class="fa fa-edit"></i></nuxt-link>
+            <nuxt-link tag="a" class="btn btn-success btn-sm" :to="`/pcr/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
         </td>
     </tr>
 </template>

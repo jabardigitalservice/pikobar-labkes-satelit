@@ -30,7 +30,8 @@ class CreatePcrTable extends Migration
             $table->jsonb('hasil_deteksi')->nullable();
             $table->string('grafik')->nullable();
             $table->string('kesimpulan_pemeriksaan')->nullable();
-            $table->text('catatan')->nullable();
+            $table->text('catatan_penerimaan')->nullable();
+            $table->text('catatan_pemeriksaan')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

@@ -73,7 +73,6 @@ class EkstraksiController extends Controller
         
         // format data
         foreach ($models as &$model) {
-            $model->sam_barcodenomor_sampel = rand(10000,99999);
         }
 
         $result = [

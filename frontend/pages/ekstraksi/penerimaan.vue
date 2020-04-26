@@ -37,7 +37,8 @@
                 :rowtemplate="'tr-ekstraksi-penerimaan'"
                 :columns="{
                       nomor_register: 'Nomor Register',
-                      nomor_sampel : 'Barcode Nomor Sampel',
+                      nomor_sampel : 'Nomor Sampel',
+                      jenis_sampel : 'Jenis Sampel',
                       waktu_sample_taken: 'Sampel diambil pada',
                     }"
           ></ajax-table>

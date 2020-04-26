@@ -8,6 +8,9 @@
             {{item.nomor_sampel}}
         </td>
         <td>
+            {{item.jenis_sampel}}
+        </td>
+        <td>
             {{item.lab_pcr_nama}}
         </td>
         <td>

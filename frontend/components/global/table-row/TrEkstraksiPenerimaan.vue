@@ -8,6 +8,9 @@
             {{item.nomor_sampel}}
         </td>
         <td>
+            {{item.jenis_sampel}}
+        </td>
+        <td>
             {{ item.waktu_sample_taken | formatDateTime }}
         </td>
         <td width="20%">

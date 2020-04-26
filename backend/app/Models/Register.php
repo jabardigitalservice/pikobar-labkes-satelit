@@ -9,6 +9,7 @@ class Register extends Model
 {
     use SoftDeletes;
     protected $table = 'register';
+    protected $appends = ['jenis_sampel'];
 
     protected $fillable = [
         'nomor_register',
@@ -33,6 +34,11 @@ class Register extends Model
     public function ekstraksi()
     {
         return $this->hasOne(Ekstraksi::class, 'register_id');
+    }
+
+    public function pcr()
+    {
+        return $this->hasOne(PemeriksaanSampel::class, 'register_id');
     }
 
     public function logs()
@@ -118,6 +124,11 @@ class Register extends Model
         //     ->withPivot(
         //         'daftar_penyakit'
         //     );
+    }
+
+    public function getJenisSampelAttribute()
+    {
+        return "Usap Nasofaring & Orofaring";
     }
 
     public function updateState($newstate, $options = [])

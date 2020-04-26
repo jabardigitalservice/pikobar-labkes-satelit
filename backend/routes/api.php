@@ -82,6 +82,12 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::post('/kirim', 'EkstraksiController@kirim');
         Route::post('/kirim-ulang', 'EkstraksiController@kirimUlang');
     });
+    Route::group(['prefix'=>'pcr'], function(){
+        Route::get('/get-data','PCRController@getData');
+        Route::get('/detail/{id}','PCRController@detail');
+        Route::post('/edit/{id}','PCRController@edit');
+        Route::post('/terima', 'PCRController@terima');
+    });
     Route::group(['prefix'=>'sampel'], function(){
         Route::get('/cek-nomor-sampel','SampelController@cekNomorSampel');
     });
