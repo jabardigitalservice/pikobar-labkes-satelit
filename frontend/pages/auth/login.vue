@@ -11,13 +11,11 @@
         <div class="ibox-content">
           <form  class="m-t" @submit.prevent="login" @keydown="form.onKeydown($event)">
             <div class="form-group">
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="email" name="email"
-                class="form-control" placeholder="Email">
+              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="text" name="email"
+                class="form-control" placeholder="Username / Email">
               <has-error :form="form" field="email" />
-              <!-- <input type="email" class="form-control" placeholder="Username" required=""> -->
             </div>
             <div class="form-group">
-              <!-- <input type="password" class="form-control" placeholder="Password" required=""> -->
               <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" type="password"
                 name="password" class="form-control" placeholder="Password">
               <has-error :form="form" field="password" />

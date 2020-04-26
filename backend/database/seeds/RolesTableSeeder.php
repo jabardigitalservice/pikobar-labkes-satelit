@@ -14,7 +14,7 @@ class RolesTableSeeder extends Seeder
     {
         foreach ($this->items() as $item) {
             Role::query()->updateOrCreate(
-                \Illuminate\Support\Arr::only($item, ['roles_name']), 
+                \Illuminate\Support\Arr::only($item, ['id']), 
                 $item
             );
         }
@@ -25,31 +25,31 @@ class RolesTableSeeder extends Seeder
         return [
             [
                 "id" => "1",
-                "roles_name"=> "admin",
+                "roles_name"=> "Admin",
             ],
             [
                 "id" => "2",
-                "roles_name"=> "admin_registrasi",
+                "roles_name"=> "Admin Registrasi",
             ],
             [
                 "id" => "3",
-                "roles_name"=> "admin_sample",
+                "roles_name"=> "Admin Sample",
             ],
             [
                 "id" => "4",
-                "roles_name"=> "admin_ekstraksi",
+                "roles_name"=> "Admin Ekstraksi",
             ],
             [
                 "id" => "5",
-                "roles_name"=> "admin_pcr",
+                "roles_name"=> "Admin PCR",
             ],
             [
                 "id" => "6",
-                "roles_name"=> "verifikator",
+                "roles_name"=> "Verifikator",
             ],
             [
                 "id" => "7",
-                "roles_name"=> "validator",
+                "roles_name"=> "Validator",
             ],
         ];
     }

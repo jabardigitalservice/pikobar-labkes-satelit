@@ -37,11 +37,14 @@ const routes = [
   { path: '/registrasi/rujukan', name:'registrasi.rujukan', component: page('registrasi-rujukan/index.vue'), meta: {parentName: 'home'} },
 
   { path: '/ekstraksi', name:'ekstraksi.index', component: page('ekstraksi/index.vue'), meta: {parentName: 'home'} },
-  { path: '/ekstraksi/pilih/:id', name:'ekstraksi.pilih', component: page('ekstraksi/pilih.vue'), meta: {parentName: 'ekstraksi.index'} },
-  { path: '/ekstraksi/pilihulang/:id', name:'ekstraksi.pilih', component: page('ekstraksi/pilihulang.vue'), meta: {parentName: 'ekstraksi.index'} },
   { path: '/ekstraksi/detail/:id', name:'ekstraksi.detail', component: page('ekstraksi/detail.vue'), meta: {parentName: 'ekstraksi.index'} },
   { path: '/ekstraksi/edit/:id', name:'ekstraksi.edit', component: page('ekstraksi/edit.vue'), meta: {parentName: 'ekstraksi.index'} },
   { path: '/ekstraksi/dikembalikan', name:'ekstraksi.dikembalikan', component: page('ekstraksi/dikembalikan.vue'), meta: {parentName: 'ekstraksi.index'} },
+  { path: '/ekstraksi/penerimaan', name:'ekstraksi.penerimaan', component: page('ekstraksi/penerimaan.vue'), meta: {parentName: 'ekstraksi.index'} },
+  { path: '/ekstraksi/terima', name:'ekstraksi.terima', component: page('ekstraksi/terima.vue'), meta: {parentName: 'ekstraksi.penerimaan'} },
+  { path: '/ekstraksi/terkirim', name:'ekstraksi.terkirim', component: page('ekstraksi/terkirim.vue'), meta: {parentName: 'ekstraksi.index'} },
+  { path: '/ekstraksi/kirim', name:'ekstraksi.kirim', component: page('ekstraksi/kirim.vue'), meta: {parentName: 'ekstraksi.index'} },
+  { path: '/ekstraksi/kirim-ulang', name:'ekstraksi.kirim-ulang', component: page('ekstraksi/kirim-ulang.vue'), meta: {parentName: 'ekstraksi.dikembalikan'} },
 
   { path: '/pemeriksaansampel', name:'pemeriksaansample.index', component: page('pemeriksaan/index.vue'), meta: {parentName: 'home'}},
 ]

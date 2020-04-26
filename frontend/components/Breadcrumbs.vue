@@ -21,7 +21,7 @@ export default {
       const crumbs = [];
       var parentRoute = this.$route.matched[0]
       // console.log('matched route',this.$route.matched)
-      do {
+      if (parentRoute) do {
         if (parentRoute.meta && parentRoute.meta.parentName) {
           parentRoute = this.$router.resolve({name: parentRoute.meta.parentName})
           const item = parentRoute.route

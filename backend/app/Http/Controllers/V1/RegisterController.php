@@ -13,12 +13,26 @@ use App\Models\RiwayatPenyakitPenyerta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
-    public function generateNomorRegister()
+    public function generateNomorRegister($date, $jenis_registrasi = 'mandiri')
     {
-        return response()->json(Uuid::uuid1()->toString());
+        if (empty($jenis_registrasi)) {
+            $kode_registrasi = 'L';
+        } else if ($jenis_registrasi == 'mandiri') {
+            $kode_registrasi = 'L';
+        } else if ($jenis_registrasi == 'rujukan') {
+            $kode_registrasi = 'R';
+        }
+        $res = DB::select("select max(right(nomor_register, 5))::int8 val from register where nomor_register ilike '{$date}{$kode_registrasi}%'");
+        if (count($res)) {
+            $nextnum = $res[0]->val + 1;
+        } else {
+            $nextnum = 1;
+        }
+        return $date . $kode_registrasi . str_pad($nextnum,5,"0",STR_PAD_LEFT);
     }
 
     /**
@@ -35,11 +49,12 @@ class RegisterController extends Controller
         try {
 
             $register = Register::create([
-                'nomor_register'=> $request->input('nomor_register'),
+                'nomor_register'=> $this->generateNomorRegister(date('Ymd'),'mandiri'),
                 'fasyankes_id'=> $request->input('fasyankes_id'),
                 'nomor_rekam_medis'=> $request->input('nomor_rekam_medis'),
                 'nama_dokter'=> $request->input('nama_dokter'),
                 'no_telp'=> $request->input('no_telp'),
+                'register_uuid' => (string) Str::uuid(),
             ]);
 
             // Check existing pasien

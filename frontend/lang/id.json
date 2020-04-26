@@ -7,6 +7,17 @@
       "index": "Penerimaan Sampel",
       "add": "Pengambilan / Penerimaan Sampel Baru"
     },
+    "ekstraksi": {
+      "index": "Ekstraksi",
+      "penerimaan": "Penerimaan",
+      "terkirim": "Sampel Terkirim",
+      "dikembalikan": "Sampel Dikembalikan",
+      "terima": "Terima dan Ekstraksi Sampel",
+      "kirim": "Kirim Sampel",
+      "kirim-ulang": "Kirim Ulang Sampel",
+      "detail": "Detil Ekstraksi Sampel",
+      "edit": "Edit Ekstraksi Sampel"
+    },
     "home": "Beranda",
     "error-role": "Error",
     "settings": {

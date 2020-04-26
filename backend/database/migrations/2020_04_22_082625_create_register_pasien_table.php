@@ -29,6 +29,6 @@ class CreateRegisterPasienTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('register_pasien');
+        Schema::dropIfExists('pasien_register');
     }
 }

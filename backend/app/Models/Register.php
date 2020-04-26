@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Register extends Model
 {
+    use SoftDeletes;
     protected $table = 'register';
 
     protected $fillable = [
@@ -21,6 +23,21 @@ class Register extends Model
     public function fasyankes()
     {
         return $this->belongsTo(Fasyankes::class);
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(StatusRegister::class, 'register_status');
+    }
+
+    public function ekstraksi()
+    {
+        return $this->hasOne(Ekstraksi::class, 'register_id');
+    }
+
+    public function logs()
+    {
+        return $this->hasMany(RegisterLog::class);
     }
 
     public function pasiens()
@@ -101,6 +118,21 @@ class Register extends Model
         //     ->withPivot(
         //         'daftar_penyakit'
         //     );
+    }
+
+    public function updateState($newstate, $options = [])
+    {
+        $arr = array_merge($options, [
+            'register_id' => $this->id,
+            'register_status' => $newstate,
+            'register_status_before' => $this->register_status,
+        ]);
+        $log = RegisterLog::create($arr);
+        if (empty($this->{'waktu_'.$newstate})) {
+            $this->{'waktu_'.$newstate} = date('Y-m-d H:i:s');
+        }
+        $this->register_status = $newstate;
+        $this->save();
     }
 
 }

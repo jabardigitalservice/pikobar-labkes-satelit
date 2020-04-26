@@ -8,10 +8,7 @@
             {{item.nomor_sampel}}
         </td>
         <td>
-            {{item.lab_pcr_nama}}
-        </td>
-        <td>
-            {{ item.waktu_extraction_sample_sent | formatDateTime }}
+            {{ item.waktu_extraction_sample_extracted | formatDateTime }}
         </td>
         <td width="20%">
             <nuxt-link tag="a" class="btn btn-success btn-sm" :to="`/ekstraksi/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>

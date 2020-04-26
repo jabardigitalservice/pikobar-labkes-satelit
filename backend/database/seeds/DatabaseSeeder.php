@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call(FasyankesSeeder::class);
         $this->call(GejalaSeeder::class);
         $this->call(PenyakitPenyertaSeeder::class);
+        $this->call(LabPCRSeeder::class);
+        $this->call(StatusRegisterSeeder::class);
 
     }
 }

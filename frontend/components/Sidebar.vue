@@ -64,8 +64,18 @@
           </a>
           <ul class="nav nav-second-level collapse">
             <li>
+              <router-link to="/ekstraksi/penerimaan" tag="a">
+                <span class="nav-label">Penerimaan Sampel</span>
+              </router-link>
+            </li>
+            <li>
               <router-link to="/ekstraksi" tag="a">
                 <span class="nav-label">Ekstraksi</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/ekstraksi/terkirim" tag="a">
+                <span class="nav-label">Sampel Terkirim</span>
               </router-link>
             </li>
             <li>
