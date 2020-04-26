@@ -1,20 +1,17 @@
 <template>
   <div class="wrapper wrapper-content">
-    <portal to="title-name">Penerimaan Sampel RNA</portal>
+    <portal to="title-name">List Hasil Pemeriksaan PCR</portal>
     <portal to="title-action">
       <div class="title-action">
-        <router-link to="/pcr/terima" class="btn btn-primary">
-          <i class="uil-flask"></i> Terima Sampel RNA
-        </router-link>
       </div>
     </portal>
 
     <div class="row">
       <div class="col-lg-12">
-        <Ibox title="Penerimaan Sampel RNA">
+        <Ibox title="List Hasil Pemeriksaan PCR">
           <p
             class="sub-header"
-          >Berikut ini adalah daftar dari status penerimaan sampel yang dikirim, silahkan terima sampel dan lakukan analisa RT-PCR</p>
+          >Berikut ini adalah daftar analisa RT-PCR terhadap sampel</p>
           <div class="row" v-if="!user.lab_pcr_id">
             <div class="col-md-6">
               <div class="form-group">
@@ -34,7 +31,7 @@
           </div>
           <ajax-table
             url="/v1/pcr/get-data"
-            :oid="'pcr-penerimaan'"
+            :oid="'pcr-hasil-pemeriksaan'"
             :params="params1"
             :config="{
                     autoload: true,
@@ -44,19 +41,21 @@
                     has_action: true,
                     has_search_input: true,
                     custom_header: '',
-                    default_sort: 'waktu_extraction_sample_sent',
+                    default_sort: 'waktu_pcr_sample_analyzed',
+                    default_sort_dir: 'desc',
                     custom_empty_page: true,
                     class: {
                         table: [],
                         wrapper: ['table-responsive'],
                     }
                     }"
-            :rowtemplate="'tr-pcr-penerimaan'"
+            :rowtemplate="'tr-pcr-hasil-pemeriksaan'"
             :columns="{
                       nomor_register: 'Nomor Register',
                       nomor_sampel : 'Nomor Sampel',
-                      jenis_sampel : 'Jenis Sampel',
-                      waktu_extraction_sample_sent:'Waktu Pengiriman',
+                      kesimpulan_pemeriksaan : 'Hasil Pemeriksaan',
+                      waktu_pcr_sample_analyzed:'Waktu Input',
+                      register_status : 'Status',
                     }"
           ></ajax-table>
         </Ibox>
@@ -80,7 +79,8 @@ export default {
       params1: {
         lab_pcr_id: "",
         lab_pcr_nama: "",
-        register_status: "extraction_sample_sent"
+        register_status: "analyzed",
+        filter_inconclusive: false,
       }
     };
   },
@@ -93,16 +93,16 @@ export default {
   },
   methods: {
     refreshDebounce: debounce(function () {
-      this.$bus.$emit('refresh-ajaxtable', 'pcr-penerimaan')
+      this.$bus.$emit('refresh-ajaxtable', 'pcr-hasil-pemeriksaan')
     }, 500),
   },
   watch: {
     'params1.lab_pcr_id': function(newVal, oldVal) {
-      this.$bus.$emit('refresh-ajaxtable', 'pcr-penerimaan')
+      this.$bus.$emit('refresh-ajaxtable', 'pcr-hasil-pemeriksaan')
     },
   },
   head() {
-    return { title: "Penerimaan Sampel RNA" };
+    return { title: "List Hasil Pemeriksaan PCR" };
   }
 };
 </script>

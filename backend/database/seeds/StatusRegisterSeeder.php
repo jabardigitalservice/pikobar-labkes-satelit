@@ -46,17 +46,17 @@ class StatusRegisterSeeder extends Seeder
             [
                 "register_status" => "extraction_sample_sent",
                 "chamber" => "extraction",
-                "deskripsi" => "Hasil Ekstraksi Dikirim",
+                "deskripsi" => "Hasil RNA Dikirim",
             ],
             [
                 "register_status" => "pcr_sample_received",
                 "chamber" => "pcr",
-                "deskripsi" => "Sampel Ekstraksi Diterima di Lab PCR",
+                "deskripsi" => "Sampel RNA Diterima di Lab PCR",
             ],
             [
                 "register_status" => "pcr_sample_analyzed",
                 "chamber" => "pcr",
-                "deskripsi" => "Sampel Ekstraksi Telah Dianalisa di Lab PCR",
+                "deskripsi" => "Sampel Telah Dianalisa di Lab PCR",
             ],
             [
                 "register_status" => "sample_verified",

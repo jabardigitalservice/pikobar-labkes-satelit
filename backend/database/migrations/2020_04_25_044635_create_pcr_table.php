@@ -26,9 +26,11 @@ class CreatePcrTable extends Migration
             $table->string('jam_selesai_pcr')->nullable();
             $table->string('metode_pemeriksaan')->nullable();
             $table->string('nama_kit_pemeriksaan')->nullable();
+            $table->date('tanggal_input_hasil')->nullable();
+            $table->string('jam_input_hasil')->nullable();
             $table->jsonb('target_gen')->nullable();
             $table->jsonb('hasil_deteksi')->nullable();
-            $table->string('grafik')->nullable();
+            $table->jsonb('grafik')->nullable();
             $table->string('kesimpulan_pemeriksaan')->nullable();
             $table->text('catatan_penerimaan')->nullable();
             $table->text('catatan_pemeriksaan')->nullable();

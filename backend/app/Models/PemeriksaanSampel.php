@@ -29,5 +29,6 @@ class PemeriksaanSampel extends Model
     protected $casts = [
         'target_gen' => 'array',
         'hasil_deteksi' => 'array',
+        'grafik' => 'array',
     ];
 }

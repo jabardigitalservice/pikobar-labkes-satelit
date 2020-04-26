@@ -47,10 +47,13 @@ const routes = [
   { path: '/ekstraksi/kirim-ulang', name:'ekstraksi.kirim-ulang', component: page('ekstraksi/kirim-ulang.vue'), meta: {parentName: 'ekstraksi.dikembalikan'} },
 
   { path: '/pcr/list-rna', name:'pcr.list-rna', component: page('pcr/list-rna.vue'), meta: {parentName: 'home'} },
-  // { path: '/pcr/list-pcr', name:'pcr.list-pcr', component: page('pcr/list-pcr.vue'), meta: {parentName: 'home'} },
-  // { path: '/pcr/list-list-hasil-pemeriksaan', name:'pcr.list-list-hasil-pemeriksaan', component: page('pcr/list-list-hasil-pemeriksaan.vue'), meta: {parentName: 'home'} },
-  // { path: '/pcr/list-list-sampel-inkonklusif', name:'pcr.list-list-sampel-inkonklusif', component: page('pcr/list-list-sampel-inkonklusif.vue'), meta: {parentName: 'home'} },
+  { path: '/pcr/list-pcr', name:'pcr.list-pcr', component: page('pcr/list-pcr.vue'), meta: {parentName: 'home'} },
+  { path: '/pcr/list-hasil-pemeriksaan', name:'pcr.list-hasil-pemeriksaan', component: page('pcr/list-hasil-pemeriksaan.vue'), meta: {parentName: 'home'} },
+  { path: '/pcr/list-hasil-inkonklusif', name:'pcr.list-hasil-inkonklusif', component: page('pcr/list-hasil-inkonklusif.vue'), meta: {parentName: 'home'} },
   { path: '/pcr/terima', name:'pcr.terima', component: page('pcr/terima.vue'), meta: {parentName: 'pcr.list-rna'} },
+  { path: '/pcr/detail/:id', name:'pcr.detail', component: page('pcr/detail.vue'), meta: {parentName: 'pcr.list-pcr'} },
+  { path: '/pcr/invalid/:id', name:'pcr.invalid', component: page('pcr/invalid.vue'), meta: {parentName: 'pcr.list-pcr'} },
+  { path: '/pcr/input/:id', name:'pcr.input', component: page('pcr/input.vue'), meta: {parentName: 'pcr.list-pcr'} },
 
   { path: '/pemeriksaansampel', name:'pemeriksaansample.index', component: page('pemeriksaan/index.vue'), meta: {parentName: 'home'}},
 ]

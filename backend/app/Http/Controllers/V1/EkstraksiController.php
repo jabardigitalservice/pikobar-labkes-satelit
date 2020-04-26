@@ -30,6 +30,14 @@ class EkstraksiController extends Controller
             foreach ($params as $key => $val) {
                 if ($val == '' || is_array($val) && count($val) == 0) continue;
                 switch ($key) {
+                    case 'lab_pcr_id':
+                        $models->where('lab_pcr_id', $val);
+                        if ($val == 999999) {
+                            if (isset($params['lab_pcr_nama']) && !empty($params['lab_pcr_nama'])) {
+                                $models->where('lab_pcr_nama', 'ilike', '%'.$params['lab_pcr_nama'].'%');
+                            }
+                        }
+                        break;
                     case 'register_status':
                         if ($val == 'extraction_sent') {
                             $models->whereIn('register_status', [
@@ -41,6 +49,9 @@ class EkstraksiController extends Controller
                             ]);
                         } else {
                             $models->where('register_status', $val);
+                        }
+                        if ($val == 'extraction_sample_reextract') {
+                            $models->with(['pcr']);
                         }
                         break;
                     default:

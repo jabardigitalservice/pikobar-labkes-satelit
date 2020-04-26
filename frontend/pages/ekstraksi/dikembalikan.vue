@@ -41,6 +41,7 @@
                       jenis_sampel : 'Jenis Sampel',
                       lab_pcr_nama : 'Lab PCR',
                       waktu_extraction_sample_reextract: 'Permintaan re-ekstraksi pada',
+                      catatan_pemeriksaan : 'Keterangan Pemeriksaan',
                     }"
           ></ajax-table>
 

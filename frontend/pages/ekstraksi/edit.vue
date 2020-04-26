@@ -405,7 +405,7 @@ export default {
   line-height: 21px;
   margin-bottom: 10px;
 }
-a {
+.error-container a {
   color: #7f828b !important;
   text-decoration: none;
 }

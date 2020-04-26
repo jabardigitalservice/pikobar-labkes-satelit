@@ -14,7 +14,7 @@ class AddRegisterStatus extends Migration
     public function up()
     {
         Schema::create('status_register', function (Blueprint $table) {
-            $table->string('register_status')->unique();
+            $table->string('register_status')->primary();
             $table->string('chamber');
             $table->string('deskripsi');
             $table->timestamps();

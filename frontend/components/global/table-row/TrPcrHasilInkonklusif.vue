@@ -11,16 +11,16 @@
             {{item.jenis_sampel}}
         </td>
         <td>
-            {{item.lab_pcr_nama}}
+            {{item.pcr ? item.pcr.catatan_pemeriksaan : '-'}}
         </td>
         <td>
-            {{ item.waktu_extraction_sample_reextract | formatDateTime }}
-        </td>
-        <td>
-            {{ item.pcr ? item.pcr.catatan_pemeriksaan : '-' }}
+            {{ item.waktu_pcr_sample_analyzed | formatDateTime }}
         </td>
         <td width="20%">
-            <nuxt-link tag="a" class="btn btn-success btn-sm" :to="`/ekstraksi/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
+            <nuxt-link tag="a" class="btn btn-success btn-sm" :to="`/pcr/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
+            <nuxt-link tag="a" class="btn btn-info btn-sm" :to="`/pcr/input/${item.id}`" title="Klik untuk mengisi hasil analisis" v-if="item.register_status != 'sample_valid'">
+                <i class="uil-flask"></i> Proses
+            </nuxt-link>
         </td>
     </tr>
 </template>

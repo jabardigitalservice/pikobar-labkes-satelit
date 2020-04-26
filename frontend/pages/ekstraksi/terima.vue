@@ -196,7 +196,6 @@ export default {
         samples: []
       }),
       loading: false,
-      input_nomor_sampel: ""
     };
   },
   head() {
@@ -225,7 +224,6 @@ export default {
         nama_kit_ekstraksi: "",
         samples: []
       });
-      this.input_nomor_sampel = "";
     },
     async submit() {
       // Submit the form.

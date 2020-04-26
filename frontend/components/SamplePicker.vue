@@ -40,7 +40,8 @@
         style="font-size: 1.1em; cursor: pointer"
         @click="removeSample(idx)"
         v-if="!item.valid"
-      >{{ item.error }}</span>
+        v-html="item.error"
+      ></span>
     </p>
   </Ibox>
 </template>

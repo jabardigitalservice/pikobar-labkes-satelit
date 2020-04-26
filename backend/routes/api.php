@@ -87,6 +87,9 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::get('/detail/{id}','PCRController@detail');
         Route::post('/edit/{id}','PCRController@edit');
         Route::post('/terima', 'PCRController@terima');
+        Route::post('/invalid/{id}','PCRController@invalid');
+        Route::post('/input/{id}','PCRController@input');
+        Route::post('/upload-grafik','PCRController@uploadGrafik');
     });
     Route::group(['prefix'=>'sampel'], function(){
         Route::get('/cek-nomor-sampel','SampelController@cekNomorSampel');

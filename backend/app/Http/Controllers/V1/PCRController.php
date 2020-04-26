@@ -8,7 +8,9 @@ use App\Models\Register;
 use App\Models\PemeriksaanSampel;
 use App\Models\LabPCR;
 use Validator;
+use Storage;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class PCRController extends Controller
 {
@@ -29,17 +31,37 @@ class PCRController extends Controller
         if ($params) {
             $params = json_decode($params, true);
             foreach ($params as $key => $val) {
-                if ($val == '' || is_array($val) && count($val) == 0) continue;
+                if ($val !== false && ($val == '' || is_array($val) && count($val) == 0)) continue;
                 switch ($key) {
+                    case 'filter_inconclusive':
+                        if ($val) {
+                            $models->whereHas('pcr', function($q) {
+                                $q->where('kesimpulan_pemeriksaan', 'inkonklusif');
+                            });
+                        } else {
+                            $models->where(function ($qr) {
+                                $qr->whereHas('pcr', function($q) {
+                                    $q->where('kesimpulan_pemeriksaan', '<>', 'inkonklusif')->orWhereNull('kesimpulan_pemeriksaan');
+                                })->orWhereDoesntHave('pcr');
+                            });
+                        }
+                        break;
+                    case 'lab_pcr_id':
+                        $models->where('lab_pcr_id', $val);
+                        if ($val == 999999) {
+                            if (isset($params['lab_pcr_nama']) && !empty($params['lab_pcr_nama'])) {
+                                $models->where('lab_pcr_nama', 'ilike', '%'.$params['lab_pcr_nama'].'%');
+                            }
+                        }
+                        break;
                     case 'register_status':
-                        if ($val == 'extraction_sent') {
+                        if ($val == 'analyzed') {
                             $models->whereIn('register_status', [
-                                'extraction_sample_sent',
-                                'pcr_sample_received',
                                 'pcr_sample_analyzed',
                                 'sample_verified',
                                 'sample_valid',
                             ]);
+                            $models->with(['pcr','status']);
                         } else {
                             $models->where('register_status', $val);
                         }
@@ -87,9 +109,19 @@ class PCRController extends Controller
         return response()->json($result);
     }
 
+    public function uploadGrafik(Request $request)
+    {
+        $file = $request->file('file');
+        $path = Storage::disk('public')->putFileAs(
+            'grafik/'.date('Y-m-d'), $request->file('file'), Str::random(20).'.'.$file->getClientOriginalExtension()
+        );
+        $url = asset('storage/'.$path);
+        return response()->json(['status'=>200,'message'=>'success','url'=>$url]);
+    }
+
     public function detail(Request $request, $id)
     {
-        $model = Register::with(['pcr','status'])->find($id);
+        $model = Register::with(['pcr','status','ekstraksi'])->find($id);
         $model->log_pcr = $model->logs()
             ->whereIn('register_status', ['pcr_sample_received','pcr_sample_analyzed','extraction_sample_reextract'])
             ->orderByDesc('created_at')
@@ -141,9 +173,9 @@ class PCRController extends Controller
 
         $v->validate();
 
-        $pcr = $register->ekstraksi;
+        $pcr = $register->pcr;
         if (!$pcr) {
-            $pcr = new Ekstraksi;
+            $pcr = new PemeriksaanSampel;
             $pcr->register_id = $register->id;
             $pcr->user_id = $user->id;
         }
@@ -171,18 +203,103 @@ class PCRController extends Controller
         return response()->json(['status'=>201,'message'=>'Perubahan berhasil disimpan']);
     }
 
+    public function invalid(Request $request, $id)
+    {
+        $user = $request->user();
+        $register = Register::with(['pcr'])->find($id);
+        $v = Validator::make($request->all(),[
+            'catatan_pemeriksaan' => 'required',
+        ]);
+
+        $v->validate();
+
+        $pcr = $register->pcr;
+        if (!$pcr) {
+            $pcr = new PemeriksaanSampel;
+            $pcr->register_id = $register->id;
+            $pcr->user_id = $user->id;
+        }
+        $pcr->catatan_pemeriksaan = $request->catatan_pemeriksaan;
+        $pcr->save();
+
+        $register->updateState('extraction_sample_reextract', [
+            'user_id' => $user->id,
+            'metadata' => $pcr,
+            'description' => 'Invalid PCR, need re-extraction',
+        ]);
+        
+        return response()->json(['status'=>201,'message'=>'Perubahan berhasil disimpan']);
+    }
+
+    public function input(Request $request, $id)
+    {
+        $user = $request->user();
+        $register = Register::with(['pcr'])->find($id);
+        $v = Validator::make($request->all(),[
+            'kesimpulan_pemeriksaan' => 'required',
+            'hasil_deteksi.*.target_gen' => 'required',
+            'hasil_deteksi.*.ct_value' => 'required',
+            'grafik' => 'required',
+        ]);
+        if (count($request->grafik) < 1) {
+            $v->after(function ($validator) {
+                $validator->errors()->add("samples", 'Minimal 1 file untuk grafik');
+            });
+        }
+        if (count($request->hasil_deteksi) < 1) {
+            $v->after(function ($validator) {
+                $validator->errors()->add("samples", 'Minimal 1 hasil deteksi CT Value');
+            });
+        }
+
+        $v->validate();
+
+        $pcr = $register->pcr;
+        if (!$pcr) {
+            $pcr = new PemeriksaanSampel;
+            $pcr->register_id = $register->id;
+            $pcr->user_id = $user->id;
+        }
+        $pcr->tanggal_input_hasil = $request->tanggal_input_hasil;
+        $pcr->jam_input_hasil = $request->jam_input_hasil;
+        $pcr->catatan_pemeriksaan = $request->catatan_pemeriksaan;
+        $pcr->grafik = $request->grafik;
+        $pcr->hasil_deteksi = $request->hasil_deteksi;
+        $pcr->kesimpulan_pemeriksaan = $request->kesimpulan_pemeriksaan;
+        $pcr->save();
+
+        if ($register->register_status == 'pcr_sample_received') {
+            $register->updateState('pcr_sample_analyzed', [
+                'user_id' => $user->id,
+                'metadata' => $pcr,
+                'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
+            ]);
+        } else {
+            $register->addLog([
+                'user_id' => $user->id,
+                'metadata' => $pcr,
+                'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
+            ]);
+            $register->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s');
+            $register->save();
+        }
+        
+        return response()->json(['status'=>201,'message'=>'Hasil analisa berhasil disimpan']);
+    }
+
     public function terima(Request $request)
     {
         $user = $request->user();
         $v = Validator::make($request->all(),[
             'tanggal_penerimaan_sampel' => 'required',
             'jam_penerimaan_sampel' => 'required',
-            'petugas_penerima_sampel' => 'required',
-            'operator_ekstraksi' => 'required',
-            'tanggal_mulai_ekstraksi' => 'required',
-            'jam_mulai_ekstraksi' => 'required',
-            'metode_ekstraksi' => 'required',
-            'nama_kit_ekstraksi' => 'required',
+            'petugas_penerima_sampel_rna' => 'required',
+            'operator_real_time_pcr' => 'required',
+            'tanggal_mulai_pemeriksaan' => 'required',
+            'jam_mulai_pcr' => 'required',
+            'jam_selesai_pcr' => 'required',
+            'metode_pemeriksaan' => 'required',
+            'nama_kit_pemeriksaan' => 'required',
         ]);
         $samples = Register::whereIn('nomor_sampel', Arr::pluck($request->samples, 'nomor_sampel'))->get()->keyBy('nomor_sampel');
 
@@ -197,7 +314,7 @@ class PCRController extends Controller
         $v->validate();
 
         foreach($samples as $nomor_sampel => $register) {
-            $pcr = $register->ekstraksi;
+            $pcr = $register->pcr;
             if (!$pcr) {
                 $pcr = new PemeriksaanSampel;
                 $pcr->register_id = $register->id;

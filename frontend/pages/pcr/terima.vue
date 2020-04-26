@@ -13,8 +13,8 @@
         <div class="col-md-6">
           <sample-picker v-model="form.samples"
             ref="sample_picker"
-            register-status="sample_taken"
-            title="Daftar Sampel yang Diterima"
+            register-status="extraction_sample_sent"
+            title="Daftar Sampel RNA yang Diterima"
           ></sample-picker>
         </div>
         <div class="col-md-6">
@@ -205,7 +205,7 @@ export default {
         catatan_penerimaan: "",
         operator_real_time_pcr: "",
         tanggal_mulai_pemeriksaan: new Date(),
-        jam_mulai_PCR: this.getTimeNow(),
+        jam_mulai_pcr: this.getTimeNow(),
         jam_selesai_pcr: this.getTimeNow(),
         metode_pemeriksaan: "",
         nama_kit_pemeriksaan: "",
@@ -236,7 +236,7 @@ export default {
         catatan_penerimaan: "",
         operator_real_time_pcr: "",
         tanggal_mulai_pemeriksaan: new Date(),
-        jam_mulai_PCR: this.getTimeNow(),
+        jam_mulai_pcr: this.getTimeNow(),
         jam_selesai_pcr: this.getTimeNow(),
         metode_pemeriksaan: "",
         nama_kit_pemeriksaan: "",

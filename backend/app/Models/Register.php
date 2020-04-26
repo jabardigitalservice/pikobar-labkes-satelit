@@ -146,4 +146,14 @@ class Register extends Model
         $this->save();
     }
 
+    public function addLog($options = [])
+    {
+        $arr = array_merge($options, [
+            'register_id' => $this->id,
+            'register_status' => $this->register_status,
+            'register_status_before' => $this->register_status,
+        ]);
+        $log = RegisterLog::create($arr);
+    }
+
 }

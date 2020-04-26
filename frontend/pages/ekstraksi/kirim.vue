@@ -147,7 +147,6 @@ export default {
         samples: []
       }),
       loading: false,
-      input_nomor_sampel: ""
     };
   },
   async asyncData() {
@@ -181,7 +180,6 @@ export default {
         lab_pcr_id: this.form.lab_pcr_id,
         samples: []
       });
-      this.input_nomor_sampel = "";
     },
     async submit() {
       // Submit the form.

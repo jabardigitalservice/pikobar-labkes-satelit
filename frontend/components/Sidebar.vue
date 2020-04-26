@@ -108,7 +108,7 @@
               </router-link>
             </li>
             <li>
-              <router-link to="/pcr/list-sampel-inkonklusif" tag="a">
+              <router-link to="/pcr/list-hasil-inkonklusif" tag="a">
                 <span class="nav-label">List Sampel Inkonklusif</span>
               </router-link>
             </li>
