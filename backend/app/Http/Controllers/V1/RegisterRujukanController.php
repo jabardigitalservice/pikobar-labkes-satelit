@@ -40,23 +40,27 @@ class RegisterRujukanController extends Controller
 
         $sampelPayload = $request->only('sampel');
 
-        $pengambilanSampel = PengambilanSampel::whereHas('sampel', function(Builder $query) use($sampelPayload){
-            $query->whereIn('nomor_barcode', collect($sampelPayload['sampel'])->flatten());
-        })->get();
+        // $pengambilanSampel = PengambilanSampel::whereHas('sampel', function(Builder $query) use($sampelPayload){
+        //     $query->whereIn('nomor_barcode', collect($sampelPayload['sampel'])->flatten());
+        // })->get();
+
+        $sampelCollection = Sampel::query()->whereIn('nomor_sampel', $sampelPayload['sampel'])->pluck('id');
+        $pengambilanSampel = PengambilanSampel::whereIn('sampel_id', $sampelCollection->toArray())->get();
 
         if ($pengambilanSampel->count() > 1) {
             abort(422, __("Sampel tidak dalam pengambilan yang sama."));
         }
 
-        $sampelWithoutPengambilan = Sampel::doesntHave('pengambilanSampel')
-            ->whereIn('nomor_barcode', collect($sampelPayload['sampel'])->flatten())
-            ->get();
+        // $sampelWithoutPengambilan = Sampel::doesntHave('pengambilanSampel')
+        //     ->whereIn('nomor_barcode', collect($sampelPayload['sampel'])->flatten())
+        //     ->get();
 
         DB::beginTransaction();
         try {
 
             $register = Register::create([
                 'nomor_register'=> $request->input('nomor_register'),
+                'register_uuid'=> $request->input('register_uuid'),
                 'fasyankes_id'=> $request->input('fasyankes_id'),
                 'nomor_rekam_medis'=> $request->input('nomor_rekam_medis'),
                 'nama_dokter'=> $request->input('nama_dokter'),
@@ -120,13 +124,18 @@ class RegisterRujukanController extends Controller
                     'sampel_rdt'=> false
                 ]);
 
-                $sampelCollection = Sampel::whereIn('nomor_barcode', collect($sampelPayload['sampel'])->flatten())->get();
-                $pengambilan->sampel()->saveMany($sampelCollection);                
+                $sampelCollection = Sampel::whereIn('nomor_sampel', collect($sampelPayload['sampel'])->flatten())->pluck('id');
+                
+                // $pengambilan->sampel()->saveMany($sampelCollection);  
+                
+                $pengambilan->update([
+                    'sampel_id'=> implode(',', $sampelCollection->toArray())
+                ]);              
             }
 
-            if ($sampelWithoutPengambilan->count()) {
-                $pengambilan->sampel()->saveMany($sampelWithoutPengambilan);                
-            }
+            // if ($sampelWithoutPengambilan->count()) {
+            //     $pengambilan->sampel()->saveMany($sampelWithoutPengambilan);                
+            // }
 
             if ($pengambilan->register->count()) {
                 abort(422, __("Sampel sudah terdaftar untuk register pasien."));
@@ -271,8 +280,9 @@ class RegisterRujukanController extends Controller
 
             $register->riwayatPenyakitPenyerta()->delete();
 
-            $updatedRegister = $register->updateOrCreate([
+            $register->update([
                 // 'nomor_register'=> $request->input('nomor_register'),
+                // 'register_uuid'=> $request->input('register_uuid'),
                 'fasyankes_id'=> $request->input('fasyankes_id'),
                 'nomor_rekam_medis'=> $request->input('nomor_rekam_medis'),
                 'nama_dokter'=> $request->input('nama_dokter'),
@@ -319,7 +329,7 @@ class RegisterRujukanController extends Controller
             
             DB::commit();
 
-            return new RegisterRujukanResource($updatedRegister);
+            return new RegisterRujukanResource(Register::find($register->id));
 
         } catch (\Throwable $th) {
             DB::rollBack();

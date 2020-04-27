@@ -31,4 +31,9 @@ class PemeriksaanSampel extends Model
         'hasil_deteksi' => 'array',
         'grafik' => 'array',
     ];
+
+    public function sampel()
+    {
+        return $this->belongsTo(Sampel::class);
+    }
 }
