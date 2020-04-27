@@ -91,7 +91,10 @@
     import axios from 'axios'
 
     export default {
-        middleware: 'auth',
+        middleware: ['auth', 'checkrole'],
+        meta: {
+            allow_role_id: [1]
+        },
         data: () => ({
             roles: [],
             errors: [],

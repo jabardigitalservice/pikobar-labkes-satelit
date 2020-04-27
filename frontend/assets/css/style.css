@@ -9815,3 +9815,9 @@ body.md-skin {
     margin: 0;
   }
 }
+.thumbnail-wrapper img {
+  height: 7em;
+  width: 7em;
+  padding: 0.5em;
+  object-fit: cover;
+}

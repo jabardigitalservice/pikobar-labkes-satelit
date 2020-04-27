@@ -24,7 +24,7 @@
                 Pemerintah Provinsi Jawa Barat | GTPP COVID-19 | PIKOBAR
             </div>
         </div>
-        <right-sidebar/>
+        <!-- <right-sidebar/> -->
     </div>
     
     
@@ -40,14 +40,14 @@
 import Navbar from '~/components/Navbar'
 import Sidebar from '~/components/Sidebar'
 import Footer from '~/components/Footer'
-import RightSidebar from '~/components/RightSidebar'
+// import RightSidebar from '~/components/RightSidebar'
 
 export default {
   components: {
     Navbar,
     Sidebar,
     Footer,
-    RightSidebar
+    // RightSidebar
   }
 }
 </script>

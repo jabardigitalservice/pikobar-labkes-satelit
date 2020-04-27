@@ -135,22 +135,6 @@
               </div>
             </div>
 
-            <div class="form-group row">
-              <label class="col-md-2 col-form-label">
-                Nomor Ekstraksi
-                <span style="color:red">*</span>
-              </label>
-              <div class="col-md-10">
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="form.pen_nomor_ekstraksi"
-                  placeholder="Nomor Ekstraksi"
-                  :class="{ 'is-invalid': form.errors.has('pen_nomor_ekstraksi') }"
-                />
-                <has-error :form="form" field="pen_nomor_ekstraksi" />
-              </div>
-            </div>
             <hr />
             <h4 class="mb-1 mt-0">
               Sampel
@@ -272,7 +256,6 @@ export default {
         pen_sampel_diterima_dari_fas_rujukan: "",
         pen_penerima_sampel: "",
         pen_catatan: "",
-        pen_nomor_ekstraksi: "",
         samples: [{
           sam_jenis_sampel: 1,
           tanggalsampel: new Date,
@@ -295,7 +278,6 @@ export default {
         pen_sampel_diterima_dari_fas_rujukan: "",
         pen_penerima_sampel: "",
         pen_catatan: "",
-        pen_nomor_ekstraksi: "",
         samples: [{
           tanggalsampel: new Date,
           pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),

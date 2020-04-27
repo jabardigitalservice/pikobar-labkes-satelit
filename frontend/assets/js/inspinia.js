@@ -119,13 +119,6 @@ $(document).ready(function () {
 
     });
 
-    // Tooltips demo
-    $('.tooltip-demo').tooltip({
-        selector: "[data-toggle=tooltip]",
-        container: "body"
-    });
-
-
     // Move right sidebar top after scroll
     $(window).scroll(function () {
         if ($(window).scrollTop() > 0 && !$('body').hasClass('fixed-nav')) {
@@ -135,8 +128,7 @@ $(document).ready(function () {
         }
     });
 
-    $("[data-toggle=popover]")
-        .popover();
+    // $("[data-toggle=popover]").popover();
 
     // Add slimscroll to element
     // $('.full-height-scroll').slimscroll({

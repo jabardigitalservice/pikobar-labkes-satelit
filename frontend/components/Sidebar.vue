@@ -5,7 +5,7 @@
         <li class="nav-header">
           <div class="dropdown profile-element">
             <!-- <img alt="image" class="rounded-circle" src="~/assets/img/profile_small.jpg" /> -->
-            <img alt="image" class="img-fluid" src="~/assets/img/logo-pikobar-jawabarat-text-white.png" />
+            <img alt="image" class="img-fluid" src="~/assets/img/logo-lab-white.png" />
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
               <span class="block m-t-xs font-bold">{{user.name}}</span>
               <span class="text-muted text-xs block">
@@ -31,7 +31,7 @@
             <span class="nav-label">Dashboard</span>
           </router-link>
         </li>
-        <li>
+        <li v-if="checkPermission('registrasi')">
           <a href="#">
             <i class="uil-user-square fa-fw"></i>
             <span class="nav-label">Registrasi</span>
@@ -50,13 +50,13 @@
             </li>
           </ul>
         </li>
-        <li>
+        <li v-if="checkPermission('sample')">
           <router-link to="/sample" tag="a">
             <i class="uil-flask-potion fa-fw"></i>
             <span class="nav-label">Pengambilan Sample</span>
           </router-link>
         </li>
-        <li>
+        <li v-if="checkPermission('ekstraksi')">
           <a href="#">
             <i class="uil-flask fa-fw"></i>
             <span class="nav-label">Ekstraksi</span>
@@ -64,8 +64,18 @@
           </a>
           <ul class="nav nav-second-level collapse">
             <li>
+              <router-link to="/ekstraksi/penerimaan" tag="a">
+                <span class="nav-label">Penerimaan Sampel</span>
+              </router-link>
+            </li>
+            <li>
               <router-link to="/ekstraksi" tag="a">
                 <span class="nav-label">Ekstraksi</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/ekstraksi/terkirim" tag="a">
+                <span class="nav-label">Sampel Terkirim</span>
               </router-link>
             </li>
             <li>
@@ -75,7 +85,7 @@
             </li>
           </ul>
         </li>
-        <li>
+        <li v-if="checkPermission('pcr')">
           <a href="#">
             <i class="uil-atom fa-fw"></i>
             <span class="nav-label">Pemeriksaan RT-PCR</span>
@@ -83,24 +93,34 @@
           </a>
           <ul class="nav nav-second-level collapse">
             <li>
-              <router-link to="/" tag="a">
-                <span class="nav-label">Pemeriksaan Sampel</span>
+              <router-link to="/pcr/list-rna" tag="a">
+                <span class="nav-label">Penerimaan RNA</span>
               </router-link>
             </li>
             <li>
-              <router-link to="/" tag="a">
-                <span class="nav-label">Sampel yang dikembalikan</span>
+              <router-link to="/pcr/list-pcr" tag="a">
+                <span class="nav-label">List PCR</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/pcr/list-hasil-pemeriksaan" tag="a">
+                <span class="nav-label">List Hasil Pemeriksaan</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/pcr/list-hasil-inkonklusif" tag="a">
+                <span class="nav-label">List Sampel Inkonklusif</span>
               </router-link>
             </li>
           </ul>
         </li>
-        <li>
+        <li v-if="checkPermission('verifikasi')">
           <router-link to="/" tag="a">
             <i class="uil-eye fa-fw"></i>
             <span class="nav-label">Verifikasi</span>
           </router-link>
         </li>
-        <li>
+        <li v-if="checkPermission('validasi')">
           <router-link to="/" tag="a">
             <i class="uil-check fa-fw"></i>
             <span class="nav-label">Validasi</span>
@@ -112,7 +132,7 @@
             <span class="nav-label">Pelacakan Sampel</span>
           </router-link>
         </li>
-        <li>
+        <li v-if="checkPermission('master')">
           <a href="#">
             <i class="uil-database-alt fa-fw"></i>
             <span class="nav-label">Data Master</span>
@@ -149,6 +169,33 @@ export default {
   }),
 
   methods: {
+    checkPermission(menu) {
+      var allow_role_id
+      switch (menu) {
+        case 'registrasi':
+          allow_role_id = [1, 6, 7, 2]
+          break;
+        case 'sample':
+          allow_role_id = [1, 6, 7, 3]
+          break;
+        case 'ekstraksi':
+          allow_role_id = [1, 6, 7, 4]
+          break;
+        case 'pcr':
+          allow_role_id = [1, 6, 7, 5]
+          break;
+        case 'verifikasi':
+          allow_role_id = [1, 6, 7]
+          break;
+        case 'validasi':
+          allow_role_id = [1, 7]
+          break;
+        case 'master':
+          allow_role_id = [1]
+          break;
+      }
+      return allow_role_id.indexOf(this.user.role_id) > -1
+    },
     async logout() {
       // Log out the user.
       await this.$store.dispatch("auth/logout");

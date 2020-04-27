@@ -1,0 +1,1 @@
+cd frontend && npm install && nuxt build && ln -s /var/www/backend/public dist/backend

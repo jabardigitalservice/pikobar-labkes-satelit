@@ -3,113 +3,40 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\SampelResource;
-use App\Models\Sampel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+use App\Models\Sampel;
 
 class SampelController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function cekNomorSampel(Request $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $this->validator($request->all(), new Sampel)->validate();
-
-        $sampelBaru = Sampel::create($request->all());
-
-        return new SampelResource($sampelBaru);
-    }
-
-    protected function validator(array $data, Sampel $sampel)
-    {
-        $unique = Rule::unique('sampel', 'nomor_barcode');
-
-        if ($sampel->getKey()) {
-            $unique->ignore($sampel->getKey(), 'id');
+        $user = $request->user();
+        $sampel = Sampel::where('nomor_sampel', $request->nomor_sampel)->first();
+        if (!$sampel) {
+            return response()->json([
+                'valid' => false,
+                'error' => 'Nomor Sampel tidak ditemukan',
+            ]);
         }
-
-        $rules = [
-            'jenis_sampel'=> ['max:100'],
-            'petugas_pengambil_sampel'=> ['max:255'],
-            'tanggal_sampel'=> ['nullable', 'date', 'date_format:Y-m-d'],
-            'waktu_sampel'=> ['nullable', 'date_format:H:i'],
-            'nomor_barcode'=> ['required', 'max:255', $unique],
-            'nama_diluar_jenis'=> ['nullable'],
-            'status'=> ['required', 'max:50']
-        ];
-
-        return Validator::make($data, $rules);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Sampel  $sampel
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Sampel $sampel)
-    {
-        return new SampelResource($sampel);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  string  $barcode
-     * @return \Illuminate\Http\Response
-     */
-    public function showByBarcode(string $barcode)
-    {
-        $sampel = Sampel::whereNomorBarcode($barcode)->firstOrFail();
-        
-        return new SampelResource($sampel);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Sampel  $sampel
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Sampel $sampel)
-    {
-        $this->validator($request->all(), $sampel)->validate();
-        
-        $sampel->update($request->all());
-
-        return new SampelResource($sampel);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Sampel  $sampel
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Sampel $sampel)
-    {
-        $sampel->delete();
-
+        if ($sampel->sampel_status != $request->sampel_status) {
+            return response()->json([
+                'valid' => false,
+                'error' => 'Status sampel sudah pada tahap '.($sampel->status ? $sampel->status->deskripsi : $sampel->sampel_status),
+            ]);
+        }
+        if (!empty($user->lab_pcr_id)) {
+            if ($sampel->lab_pcr_id != $user->lab_pcr_id) {
+                return response()->json([
+                    'valid' => false,
+                    'error' => 'Sampel ini tidak diarahkan ke Lab Anda, namun ke Lab PCR di ' . $sampel->lab_pcr_nama. '.<br>Silakan hubungi Admin Ekstraksi (Labkesda Jabar)',
+                ]);
+            }
+        }
         return response()->json([
-            'status'=> true,
-            'message'=> __("Berhasil menghapus sampel.")
+            'valid' => true,
+            'error' => '',
         ]);
     }
+    
 }

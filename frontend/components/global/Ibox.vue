@@ -2,7 +2,6 @@
   <div class="ibox">
     <div v-if="title" class="ibox-title">
           <slot name="header"></slot>
-          <br>
           <h5>{{title}}</h5>
         <div class="ibox-tools">
           <slot name="tools" v-if="hasToolsSlot"></slot>
@@ -10,9 +9,9 @@
             <a class="collapse-link">
                 <i class="fa fa-chevron-up"></i>
             </a>
-            <a class="close-link">
+            <!-- <a class="close-link">
                 <i class="fa fa-times"></i>
-            </a>
+            </a> -->
           </template>
         </div>
     </div>

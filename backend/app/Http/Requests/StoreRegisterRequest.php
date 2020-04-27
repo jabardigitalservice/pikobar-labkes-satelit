@@ -26,7 +26,7 @@ class StoreRegisterRequest extends FormRequest
     {
         return [
             // table: register
-            'nomor_register'=> ['required', 'uuid', 'unique:register,nomor_register'],
+            // 'nomor_register'=> ['required', 'unique:register,nomor_register'],
             'fasyankes_id'=> ['required', 'exists:fasyankes,id'],
             'nomor_rekam_medis'=> ['min:3', 'max:255'],
             'nama_dokter'=> ['required', 'max:255'],

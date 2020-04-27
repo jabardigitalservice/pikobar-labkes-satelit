@@ -41,15 +41,15 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::delete('/pengguna/{id}','PenggunaController@deletePengguna');
     Route::get('/pengguna/{id}','PenggunaController@showUpdate');
     Route::get('roles-option','OptionController@getRoles');
+    Route::get('lab-pcr-option','OptionController@getLabPCR');
 
     Route::group(['prefix'=>'registrasi-mandiri'], function(){
         Route::get('/','RegistrasiMandiri@getData');
     });
 
-    Route::group(['prefix'=>'ekstraksi'], function(){
-        Route::get('/get-data','EkstraksiController@getData');
-        Route::get('/get-kirim','EkstraksiController@getKirim');
-        Route::get('/get-dikembalikan','EkstraksiController@getDikembalikan');
+    Route::group(['prefix'=>'pemeriksaansampel'], function(){
+        Route::get('/get-data','PemeriksaanSampleController@getData');
+        Route::get('/get-dikirim','PemeriksaanSampleController@getDikirim');
     });
 });
 
@@ -70,6 +70,31 @@ Route::group(['middleware' => 'guest:api'], function () {
 
 Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], function () {
 
+    Route::group(['prefix'=>'dashboard'], function(){
+        Route::get('/tracking','DashboardController@tracking');
+        Route::get('/ekstraksi','DashboardController@ekstraksi');
+    });
+    Route::group(['prefix'=>'ekstraksi'], function(){
+        Route::get('/get-data','EkstraksiController@getData');
+        Route::get('/detail/{id}','EkstraksiController@detail');
+        Route::post('/edit/{id}','EkstraksiController@edit');
+        Route::post('/terima', 'EkstraksiController@terima');
+        Route::post('/kirim', 'EkstraksiController@kirim');
+        Route::post('/kirim-ulang', 'EkstraksiController@kirimUlang');
+    });
+    Route::group(['prefix'=>'pcr'], function(){
+        Route::get('/get-data','PCRController@getData');
+        Route::get('/detail/{id}','PCRController@detail');
+        Route::post('/edit/{id}','PCRController@edit');
+        Route::post('/terima', 'PCRController@terima');
+        Route::post('/invalid/{id}','PCRController@invalid');
+        Route::post('/input/{id}','PCRController@input');
+        Route::post('/upload-grafik','PCRController@uploadGrafik');
+    });
+    Route::group(['prefix'=>'sampel'], function(){
+        Route::get('/cek-nomor-sampel','SampelController@cekNomorSampel');
+    });
+
         Route::get('list-kota-jabar', 'KotaController@listKota');
         Route::get('kota/detail/{kota}', 'KotaController@show');
 
@@ -85,8 +110,6 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::group(['prefix'=>'register'], function(){
 
             Route::get('/', 'RegisterListController@index');
-
-            Route::get('generate-nomor-register', 'RegisterController@generateNomorRegister');
 
             Route::post('store', 'RegisterController@store');
 

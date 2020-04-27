@@ -3,9 +3,9 @@
     <portal to="title-name">Pemeriksaan Sampel</portal>
     <portal to="title-action">
       <div class="title-action">
-        <!-- <router-link to="/sample/add" class="btn btn-primary">
-          <i class="fa fa-plus"></i> Sampel Baru
-        </router-link> -->
+        <router-link to="/ekstraksi/kirim-ulang" class="btn btn-primary">
+          <i class="fa fa-paper-plane"></i> Kirim Ulang Sampel
+        </router-link>
       </div>
     </portal>
 
@@ -15,9 +15,9 @@
           <p class="sub-header">
             Berikut ini adalah daftar dari status sampel yang dikembalikan dari Lab Pemeriksaan</p>
            
-           <ajax-table
-            url="/ekstraksi/get-data"
-            :oid="'ekstraksi-data'"
+          <ajax-table
+            url="/v1/ekstraksi/get-data"
+            :oid="'ekstraksi-penerimaan'"
             :params="params1"
             :config="{
                     autoload: true,
@@ -27,19 +27,24 @@
                     has_action: true,
                     has_search_input: true,
                     custom_header: '',
-                    default_sort: 'pen_nomor_ekstraksi',
+                    default_sort: 'waktu_extraction_sample_reextract',
                     custom_empty_page: true,
                     class: {
                         table: [],
                         wrapper: ['table-responsive'],
                     }
                     }"
-                    :rowtemplate="'tr-data-dikembalikan'"
-                    :columns="{
-                      pen_nomor_ekstraksi: 'Keterangan Status',
-                      pen_noreg: 'Status Sampel',
+                :rowtemplate="'tr-ekstraksi-dikembalikan'"
+                :columns="{
+                      nomor_register: 'Nomor Register',
+                      nomor_sampel : 'Nomor Sampel',
+                      jenis_sampel : 'Jenis Sampel',
+                      lab_pcr_nama : 'Lab PCR',
+                      waktu_extraction_sample_reextract: 'Permintaan re-ekstraksi pada',
+                      catatan_pemeriksaan : 'Keterangan Pemeriksaan',
                     }"
           ></ajax-table>
+
         </Ibox>
       </div>
     </div>
@@ -53,11 +58,8 @@ export default {
   data() {
     return {
       params1: {
-        sam_barcodenomor_sampel: null
+        sampel_status: 'extraction_sample_reextract'
       },
-      params2: {
-        sam_barcodenomor_sampel: null
-      }
     };
   },
   head() {
