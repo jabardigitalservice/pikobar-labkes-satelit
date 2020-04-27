@@ -28,7 +28,25 @@ class PengambilanSampelController extends Controller
 
             $pengambilanSampel = PengambilanSampel::create($request->except('sampel'));
 
-            $pengambilanSampel->sampel()->saveMany($this->getSampelToCreate($request));
+            // add pengambilan_sampel_id on sampel
+            // $pengambilanSampel->sampel()->saveMany($this->getSampelToCreate($request));
+
+            // new: sampel store in sampel_id column
+            $arrayRequestSampel = $request->only('sampel');
+            foreach ($arrayRequestSampel['sampel'] as $key => $sampel) {
+                $newSampel = Sampel::create($sampel);
+
+                $arrayIdSampel = [];
+                if ($pengambilanSampel->getAttribute('sampel_id')) {
+                    $arrayIdSampel = explode(',', $pengambilanSampel->getAttribute('sampel_id'));
+                }
+
+                array_push($arrayIdSampel, $newSampel->id);
+
+                $pengambilanSampel->update([
+                    'sampel_id'=> implode(',', $arrayIdSampel)
+                ]);
+            }
             
             DB::commit();
 
@@ -77,7 +95,7 @@ class PengambilanSampelController extends Controller
         DB::beginTransaction();
         try {
 
-            $pengambilan->update($request->except(['sampel']));
+            $pengambilan->update($request->except(['sampel']) + ['sampel_id'=> '']);
 
             $sampelRequest = $request->only('sampel');
 
@@ -90,6 +108,23 @@ class PengambilanSampelController extends Controller
                 if ($existingSampel) {
                     $existingSampel->update($sampelRequest);
                 }
+            }
+
+            // new: sampel store in sampel_id column
+            $arrayRequestSampel = $request->only('sampel');
+            foreach ($arrayRequestSampel['sampel'] as $key => $sampel) {
+                $newSampel = Sampel::create($sampel);
+
+                $arrayIdSampel = [];
+                if ($pengambilan->getAttribute('sampel_id')) {
+                    $arrayIdSampel = explode(',', $pengambilan->getAttribute('sampel_id'));
+                }
+
+                array_push($arrayIdSampel, $newSampel->id);
+
+                $pengambilan->update([
+                    'sampel_id'=> implode(',', $arrayIdSampel)
+                ]);
             }
             
             DB::commit();
@@ -113,7 +148,7 @@ class PengambilanSampelController extends Controller
         DB::beginTransaction();
         try {
 
-            $pengambilan->sampel()->delete();
+            // $pengambilan->sampel()->delete();
 
             $pengambilan->delete();
             

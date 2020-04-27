@@ -16,7 +16,14 @@ class Sampel extends Model
         'fasyankes_id',
         'nomor_rekam_medis',
         'nama_dokter',
-        'no_telp'
+        'no_telp',
+
+        'nomor_sampel',
+        'jenis_sampel_id',
+        'petugas_pengambilan_sampel',
+        'tanggal_pengambilan_sampel',
+        'waktu_pengambilan_sampel',
+        'sampel_status',
     ];
 
     public function fasyankes()

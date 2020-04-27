@@ -13,16 +13,17 @@ class PengambilanSampel extends Model
         'sampel_diterima',
         'diterima_dari_faskes',
         'penerima_sampel',
+        'sampel_id',
         'catatan',
         'status',
         'nomor_ekstraksi',
         'sampel_rdt'
     ];
 
-    public function sampel()
-    {
-        return $this->hasMany(Sampel::class);
-    }
+    // public function sampel()
+    // {
+    //     return $this->hasMany(Sampel::class);
+    // }
 
     public function register()
     {

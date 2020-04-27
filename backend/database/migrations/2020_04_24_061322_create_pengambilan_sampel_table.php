@@ -19,6 +19,7 @@ class CreatePengambilanSampelTable extends Migration
             $table->boolean('sampel_diterima');
             $table->boolean('diterima_dari_faskes');
             $table->string('penerima_sampel', 150)->nullable();
+            $table->string('sampel_id')->nullable();
             $table->text('catatan')->nullable();
             $table->string('status', 50)->nullable();
             $table->string('nomor_ekstraksi')->nullable();

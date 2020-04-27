@@ -33,14 +33,23 @@ class EditPengambilanRequest extends FormRequest
             'nomor_ekstraksi' => ['max:255'],
             'sampel_rdt' => ['required', 'boolean'],
 
+            // 'sampel.*.id'=> ['required', 'exists:sampel,id'],
+            // 'sampel.*.jenis_sampel'=> ['max:100'],
+            // 'sampel.*.petugas_pengambil_sampel'=> ['max:255'],
+            // 'sampel.*.tanggal_sampel'=> ['required', 'date', 'date_format:Y-m-d'],
+            // 'sampel.*.waktu_sampel'=> ['date_format:H:i'],
+            // 'sampel.*.nomor_barcode'=> ['required', 'max:255'],
+            // 'sampel.*.nama_diluar_jenis'=> ['nullable'],
+            // 'sampel.*.status'=> ['required', 'max:50'],
+
             'sampel.*.id'=> ['required', 'exists:sampel,id'],
-            'sampel.*.jenis_sampel'=> ['max:100'],
-            'sampel.*.petugas_pengambil_sampel'=> ['max:255'],
-            'sampel.*.tanggal_sampel'=> ['required', 'date', 'date_format:Y-m-d'],
-            'sampel.*.waktu_sampel'=> ['date_format:H:i'],
-            'sampel.*.nomor_barcode'=> ['required', 'max:255'],
-            'sampel.*.nama_diluar_jenis'=> ['nullable'],
-            'sampel.*.status'=> ['required', 'max:50']
+            'sampel.*.nomor_sampel'=> ['required', 'max:255'],
+            'sampel.*.nomor_register'=> ['required', 'max:255'],
+            'sampel.*.jenis_sampel_id'=> ['required'],
+            'sampel.*.petugas_pengambilan_sampel'=> ['max:255'],
+            'sampel.*.tanggal_pengambilan_sampel'=> ['required', 'date', 'date_format:Y-m-d'],
+            'sampel.*.waktu_pengambilan_sampel'=> ['date_format:H:i'],
+            'sampel.*.sampel_status'=> ['nullable'],
         ];
     }
 }
