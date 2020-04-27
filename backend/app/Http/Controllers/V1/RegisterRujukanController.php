@@ -3,58 +3,64 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreRegisterRequest;
-use App\Http\Requests\UpdateRegisterRequest;
-use App\Http\Resources\RegisterResource;
+use App\Http\Requests\CreateRegisterRujukanRequest;
+use App\Http\Requests\EditRegisterRujukanRequest;
+use App\Http\Resources\RegisterRujukanResource;
 use App\Models\Pasien;
+use App\Models\PengambilanSampel;
 use App\Models\Register;
 use App\Models\RiwayatKunjungan;
 use App\Models\RiwayatPenyakitPenyerta;
+use App\Models\Sampel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Ramsey\Uuid\Uuid;
-use Illuminate\Support\Str;
 
-class RegisterController extends Controller
+class RegisterRujukanController extends Controller
 {
-    public function generateNomorRegister($date, $jenis_registrasi = 'mandiri')
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        if (empty($jenis_registrasi)) {
-            $kode_registrasi = 'L';
-        } else if ($jenis_registrasi == 'mandiri') {
-            $kode_registrasi = 'L';
-        } else if ($jenis_registrasi == 'rujukan') {
-            $kode_registrasi = 'R';
-        }
-        $res = DB::select("select max(right(nomor_register, 4))::int8 val from register where nomor_register ilike '{$date}{$kode_registrasi}%'");
-        if (count($res)) {
-            $nextnum = $res[0]->val + 1;
-        } else {
-            $nextnum = 1;
-        }
-        return $date . $kode_registrasi . str_pad($nextnum,4,"0",STR_PAD_LEFT);
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreRegisterRequest  $request
+     * @param  \App\Http\Requests\CreateRegisterRujukanRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRegisterRequest $request)
+    public function store(CreateRegisterRujukanRequest $request)
     {
         $request->validated();
+
+        $sampelPayload = $request->only('sampel');
+
+        $pengambilanSampel = PengambilanSampel::whereHas('sampel', function(Builder $query) use($sampelPayload){
+            $query->whereIn('nomor_barcode', collect($sampelPayload['sampel'])->flatten());
+        })->get();
+
+        if ($pengambilanSampel->count() > 1) {
+            abort(422, __("Sampel tidak dalam pengambilan yang sama."));
+        }
+
+        $sampelWithoutPengambilan = Sampel::doesntHave('pengambilanSampel')
+            ->whereIn('nomor_barcode', collect($sampelPayload['sampel'])->flatten())
+            ->get();
 
         DB::beginTransaction();
         try {
 
             $register = Register::create([
-                'nomor_register'=> $this->generateNomorRegister(date('Ymd'),'mandiri'),
+                'nomor_register'=> $request->input('nomor_register'),
                 'fasyankes_id'=> $request->input('fasyankes_id'),
                 'nomor_rekam_medis'=> $request->input('nomor_rekam_medis'),
                 'nama_dokter'=> $request->input('nama_dokter'),
                 'no_telp'=> $request->input('no_telp'),
-                'register_uuid' => (string) Str::uuid(),
             ]);
 
             // Check existing pasien
@@ -64,10 +70,7 @@ class RegisterController extends Controller
             if (!$request->input('force_update_pasien') && ($pasienWithKTP || $pasienWithSIM)) {
                 DB::rollBack();
 
-                return response()->json(
-                    __("Gagal menambah data. Pasien dengan nomor identitas tersebut telah tersedia."), 
-                    422
-                );
+                abort(422, __("Gagal menambah data. Pasien dengan nomor identitas tersebut telah tersedia."));
             }
 
             $dataPasien = $this->getRequestPasien($request);
@@ -106,109 +109,45 @@ class RegisterController extends Controller
             foreach ($riwayatLawatan as $key => $riwayat) {
                 $register->riwayatLawatan()->attach($pasien, $riwayat);
             }
+
+            $pengambilan = $pengambilanSampel->count() ? $pengambilanSampel->first() : null;
+
+            if (!$pengambilan && collect($sampelPayload['sampel'])->count()) {
+                $pengambilan = PengambilanSampel::create([
+                    'sampel_diterima'=> true,
+                    'diterima_dari_faskes'=> false,
+                    'status'=> 'active',
+                    'sampel_rdt'=> false
+                ]);
+
+                $sampelCollection = Sampel::whereIn('nomor_barcode', collect($sampelPayload['sampel'])->flatten())->get();
+                $pengambilan->sampel()->saveMany($sampelCollection);                
+            }
+
+            if ($sampelWithoutPengambilan->count()) {
+                $pengambilan->sampel()->saveMany($sampelWithoutPengambilan);                
+            }
+
+            if ($pengambilan->register->count()) {
+                abort(422, __("Sampel sudah terdaftar untuk register pasien."));
+            }
+
+            // Save within register
+            $pengambilan->register()->attach($register);
             
             DB::commit();
 
-            return new RegisterResource($register);
+            return new RegisterRujukanResource($register);
+
 
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
 
-    }
+        
 
-    /**
-     * Update resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreRegisterRequest  $request
-     * @param \App\Models\Register $register
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateRegisterRequest $request, Register $register)
-    {
-        $request->validated();
 
-        DB::beginTransaction();
-        try {
-
-            
-            $register->gejalaPasien()->detach();
-            
-            $register->pemeriksaanPenunjang()->detach();
-            
-            $register->riwayatLawatan()->detach();
-            
-            $register->riwayatKontak()->detach();
-            
-            $register->riwayatKunjungan()->delete();
-
-            $register->riwayatPenyakitPenyerta()->delete();
-
-            $updatedRegister = $register->updateOrCreate([
-                // 'nomor_register'=> $request->input('nomor_register'),
-                'fasyankes_id'=> $request->input('fasyankes_id'),
-                'nomor_rekam_medis'=> $request->input('nomor_rekam_medis'),
-                'nama_dokter'=> $request->input('nama_dokter'),
-                'no_telp'=> $request->input('no_telp'),
-            ]);
-
-            $pasien = Pasien::find($request->input('pasien_id'));
-
-            if ($pasien) {
-                $dataPasien = $this->getRequestPasien($request);
-                $pasien->update($dataPasien);
-            }
-
-            $riwayatKunjungan = new RiwayatKunjungan([
-                'riwayat'=> $request->input('riwayat_kunjungan')
-            ]);
-
-            $tandaGejala = $this->getRequestTandaGejala($request);
-
-            $pemeriksaanPenunjang = $this->getRequestPemeriksaanPenunjang($request);
-
-            $riwayatKontak = $this->getRequestRiwayatKontak($request);
-
-            $riwayatLawatan = $this->getRequestRiwayatLawatan($request);
-
-            $penyakitPenyerta = new RiwayatPenyakitPenyerta(
-                $this->getRequestPenyakitPenyerta($request)
-            );
-
-            $register->pasiens()->attach($pasien);
-            $register->riwayatKunjungan()->save($riwayatKunjungan);
-            $register->gejalaPasien()->attach($pasien, $tandaGejala);
-            $register->pemeriksaanPenunjang()->attach($pasien, $pemeriksaanPenunjang);
-            $register->riwayatPenyakitPenyerta()->save($penyakitPenyerta);
-
-            foreach ($riwayatKontak as $key => $riwayat) {
-                $register->riwayatKontak()->attach($pasien, $riwayat);
-            }
-
-            foreach ($riwayatLawatan as $key => $riwayat) {
-                $register->riwayatLawatan()->attach($pasien, $riwayat);
-            }
-            
-            DB::commit();
-
-            return new RegisterResource($updatedRegister);
-
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            throw $th;
-        }        
-    }
-
-    /**
-     * Show detail single resource.
-     *
-     * @param \App\Models\Register $register
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Register $register)
-    {
-        return new RegisterResource($register);
     }
 
     private function getRequestPasien(Request $request) : array
@@ -282,6 +221,113 @@ class RegisterController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Register  $register
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Register $register)
+    {
+        abort_if(!$register->pengambilanSampel->count(), 422, __("Tidak ada data register rujukan."));
+
+        return new RegisterRujukanResource($register);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\EditRegisterRujukanRequest  $request
+     * @param  \App\Models\Register  $register
+     * @return \Illuminate\Http\Response
+     */
+    public function update(EditRegisterRujukanRequest $request, Register $register)
+    {
+        $request->validated();
+
+        abort_if(
+            !$register->pengambilanSampel->count(), 
+            422, 
+            __("Tidak ada data register rujukan.")
+        );
+
+        // $pengambilanSampel = PengambilanSampel::whereHas('sampel', function(Builder $query) use($sampelPayload){
+        //     $query->whereIn('nomor_barcode', collect($sampelPayload['sampel'])->flatten());
+        // })->get();
+
+        DB::beginTransaction();
+        try {
+
+            $register->gejalaPasien()->detach();
+            
+            $register->pemeriksaanPenunjang()->detach();
+            
+            $register->riwayatLawatan()->detach();
+            
+            $register->riwayatKontak()->detach();
+
+            // $register->pengambilanSampel()->detach();
+            
+            $register->riwayatKunjungan()->delete();
+
+            $register->riwayatPenyakitPenyerta()->delete();
+
+            $updatedRegister = $register->updateOrCreate([
+                // 'nomor_register'=> $request->input('nomor_register'),
+                'fasyankes_id'=> $request->input('fasyankes_id'),
+                'nomor_rekam_medis'=> $request->input('nomor_rekam_medis'),
+                'nama_dokter'=> $request->input('nama_dokter'),
+                'no_telp'=> $request->input('no_telp'),
+            ]);
+
+            $pasien = Pasien::find($request->input('pasien_id'));
+
+            if ($pasien) {
+                $dataPasien = $this->getRequestPasien($request);
+                $pasien->update($dataPasien);
+            }
+
+            $riwayatKunjungan = new RiwayatKunjungan([
+                'riwayat'=> $request->input('riwayat_kunjungan')
+            ]);
+
+            $tandaGejala = $this->getRequestTandaGejala($request);
+
+            $pemeriksaanPenunjang = $this->getRequestPemeriksaanPenunjang($request);
+
+            $riwayatKontak = $this->getRequestRiwayatKontak($request);
+
+            $riwayatLawatan = $this->getRequestRiwayatLawatan($request);
+
+            $penyakitPenyerta = new RiwayatPenyakitPenyerta(
+                $this->getRequestPenyakitPenyerta($request)
+            );
+
+            $register->pasiens()->attach($pasien);
+            $register->riwayatKunjungan()->save($riwayatKunjungan);
+            $register->gejalaPasien()->attach($pasien, $tandaGejala);
+            $register->pemeriksaanPenunjang()->attach($pasien, $pemeriksaanPenunjang);
+            $register->riwayatPenyakitPenyerta()->save($penyakitPenyerta);
+
+            foreach ($riwayatKontak as $key => $riwayat) {
+                $register->riwayatKontak()->attach($pasien, $riwayat);
+            }
+
+            foreach ($riwayatLawatan as $key => $riwayat) {
+                $register->riwayatLawatan()->attach($pasien, $riwayat);
+            }
+            
+            
+            DB::commit();
+
+            return new RegisterRujukanResource($updatedRegister);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Register  $register
@@ -289,6 +335,11 @@ class RegisterController extends Controller
      */
     public function destroy(Register $register)
     {
+        abort_if(
+            !$register->pengambilanSampel->count(), 
+            422, 
+            __("Tidak ada data register rujukan.")
+        );
 
         DB::beginTransaction();
         try {
@@ -306,6 +357,8 @@ class RegisterController extends Controller
             $register->riwayatKontak()->detach();
 
             $register->riwayatPenyakitPenyerta()->delete();
+
+            $register->pengambilanSampel()->detach();
 
             $register->delete();
             

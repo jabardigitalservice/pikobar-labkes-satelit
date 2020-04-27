@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateRegisterRequest extends FormRequest
+class EditRegisterRujukanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -173,7 +173,11 @@ class UpdateRegisterRequest extends FormRequest
                 Rule::requiredIf(function(){
                     return $this->input('penyakit_penyerta.riwayat.*.penyakit_penyerta_id');
                 }),
-            ]
+            ],
+
+            // Barcode Sampel
+            'sampel'=> ['required'],
+            'sampel.*.nomor_barcode'=> ['exists:sampel,nomor_barcode'],
 
         ];
     }

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateRegisterRequest extends FormRequest
+class CreateRegisterRujukanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,15 +26,14 @@ class UpdateRegisterRequest extends FormRequest
     {
         return [
             // table: register
-            // 'nomor_register'=> ['exists:register,nomor_register'],
+            'nomor_register'=> ['required', 'uuid', 'unique:register,nomor_register'],
             'fasyankes_id'=> ['required', 'exists:fasyankes,id'],
             'nomor_rekam_medis'=> ['min:3', 'max:255'],
             'nama_dokter'=> ['required', 'max:255'],
             'no_telp'=> ['max:30'],
 
             // table: pasien
-            // "force_update_pasien"=> ['required', 'boolean'],
-            "pasien_id"=> ['required', 'exists:pasien,id'],
+            "force_update_pasien"=> ['required', 'boolean'],
             "nama_depan"=> ['required', 'min:3', 'max:255'],
             "nama_belakang"=> ['min:3', 'max:255'],
             "kewarganegaraan"=> ['required', 'in:wni,wna'],
@@ -173,7 +172,11 @@ class UpdateRegisterRequest extends FormRequest
                 Rule::requiredIf(function(){
                     return $this->input('penyakit_penyerta.riwayat.*.penyakit_penyerta_id');
                 }),
-            ]
+            ],
+
+            // Barcode Sampel
+            'sampel'=> ['required'],
+            'sampel.*.nomor_barcode'=> ['exists:sampel,nomor_barcode'],
 
         ];
     }

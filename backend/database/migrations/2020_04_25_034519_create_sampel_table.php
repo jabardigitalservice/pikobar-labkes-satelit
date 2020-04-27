@@ -28,7 +28,7 @@ class CreateSampelTable extends Migration
             $table->id();
             $table->string('nomor_sampel')->unique();
             $table->string('nomor_register')->index();
-            $table->unsignedInteger('register_id')->index();
+            $table->unsignedInteger('register_id')->index()->nullable();
             $table->unsignedInteger('jenis_sampel_id')->index();
             $table->string('jenis_sampel_nama')->nullable();
             $table->string('sampel_status')->default('sample_taken')->index();

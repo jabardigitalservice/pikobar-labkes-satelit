@@ -119,6 +119,53 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             Route::delete('delete/{register}', 'RegisterController@destroy');
 
+            
+            Route::group(['prefix'=>'rujukan'], function(){
+
+                Route::post('store', 'RegisterRujukanController@store');
+
+                Route::get('detail/{register}', 'RegisterRujukanController@show');
+
+                Route::post('update/{register}', 'RegisterRujukanController@update');
+
+                Route::delete('delete/{register}', 'RegisterRujukanController@destroy');
+
+
+            });
+
+
+        });
+
+        Route::group(['prefix'=>'pengambilan-sampel'], function(){
+
+            Route::get('list-dikirim', 'PengambilanListController@listDikirim');
+
+            Route::get('list-sampel-register', 'PengambilanListController@listSampelRegister');
+            
+            Route::post('store', 'PengambilanSampelController@store');
+
+            Route::post('update/{pengambilan}', 'PengambilanSampelController@update');
+
+            Route::get('detail/{pengambilan}', 'PengambilanSampelController@show');
+
+            Route::delete('delete/{pengambilan}', 'PengambilanSampelController@destroy');
+
+            Route::delete('delete/sampel/{sampel}', 'PengambilanSampelController@destroySampel');
+
+        });
+
+        Route::group(['prefix'=>'sampel'], function(){
+
+            Route::post('store', 'SampelController@store');
+
+            Route::post('update/{sampel}', 'SampelController@update');
+
+            Route::get('detail/{sampel}', 'SampelController@show');
+
+            Route::get('barcode/{barcode}', 'SampelController@showByBarcode');
+
+            Route::delete('delete/{sampel}', 'SampelController@destroy');
+
 
         });
         
