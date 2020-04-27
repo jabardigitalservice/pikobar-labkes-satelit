@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRegisterLogTable extends Migration
+class CreateSampelLogTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,20 @@ class CreateRegisterLogTable extends Migration
      */
     public function up()
     {
-        Schema::create('register_log', function (Blueprint $table) {
+        Schema::create('sampel_log', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('register_id')->nullable();
-            $table->string('register_status');
-            $table->string('register_status_before');
+            $table->unsignedInteger('sampel_id')->nullable();
+            $table->string('sampel_status');
+            $table->string('sampel_status_before');
             $table->unsignedInteger('user_id')->nullable();
             $table->jsonb('metadata')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
 
-            $table->foreign('register_id')->references('id')->on('register');
+            $table->foreign('sampel_id')->references('id')->on('sampel');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('register_status')->references('register_status')->on('status_register');
-            $table->foreign('register_status_before')->references('register_status')->on('status_register');
+            $table->foreign('sampel_status')->references('sampel_status')->on('status_sampel');
+            $table->foreign('sampel_status_before')->references('sampel_status')->on('status_sampel');
         });
     }
 
@@ -37,6 +37,6 @@ class CreateRegisterLogTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('register_log');
+        Schema::dropIfExists('sampel_log');
     }
 }

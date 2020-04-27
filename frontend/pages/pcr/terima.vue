@@ -13,7 +13,7 @@
         <div class="col-md-6">
           <sample-picker v-model="form.samples"
             ref="sample_picker"
-            register-status="extraction_sample_sent"
+            sampel-status="extraction_sample_sent"
             title="Daftar Sampel RNA yang Diterima"
           ></sample-picker>
         </div>

@@ -72,7 +72,7 @@
                 </td>
                 <td width="60%">
                   <table
-                    class="table table-striped dt-responsive table-bordered"
+                    class="table dt-responsive table-bordered"
                     style="width:100%"
                   >
                     <thead>

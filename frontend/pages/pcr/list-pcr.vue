@@ -70,23 +70,23 @@ var debounce = require('lodash/debounce')
 export default {
   middleware: "auth",
   computed: mapGetters({
-    user: "auth/user"
+    user: "auth/user",
+    lab_pcr: "options/lab_pcr",
   }),
   data() {
     return {
       params1: {
         lab_pcr_id: "",
         lab_pcr_nama: "",
-        register_status: "pcr_sample_received"
+        sampel_status: "pcr_sample_received"
       }
     };
   },
-  async asyncData() {
-    let resp = await axios.get("/lab-pcr-option");
-    let lab_pcr = resp.data;
-    return {
-      lab_pcr
-    };
+  async asyncData({store}) {
+    if (!store.getters['options/lab_pcr'].length) {
+      await store.dispatch('options/fetchLabPCR')
+    }
+    return {}
   },
   methods: {
     refreshDebounce: debounce(function () {

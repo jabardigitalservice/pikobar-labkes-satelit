@@ -13,7 +13,7 @@
         <div class="col-md-6">
           <sample-picker v-model="form.samples"
             ref="sample_picker"
-            register-status="extraction_sample_extracted"
+            sampel-status="extraction_sample_extracted"
             title="Daftar Sampel yang Akan Dikirim"
           ></sample-picker>
         </div>
@@ -129,12 +129,17 @@
 import Form from "vform";
 import axios from "axios";
 import SamplePicker from '~/components/SamplePicker'
+import { mapGetters } from "vuex";
 
 export default {
   middleware: "auth",
   components: {
     SamplePicker,
   },
+  computed: mapGetters({
+    user: "auth/user",
+    lab_pcr: "options/lab_pcr",
+  }),
   data() {
     return {
       form: new Form({
@@ -149,12 +154,11 @@ export default {
       loading: false,
     };
   },
-  async asyncData() {
-    let resp = await axios.get("/lab-pcr-option");
-    let lab_pcr = resp.data
-    return {
-      lab_pcr
+  async asyncData({store}) {
+    if (!store.getters['options/lab_pcr'].length) {
+      await store.dispatch('options/fetchLabPCR')
     }
+    return {}
   },
   head() {
     return {

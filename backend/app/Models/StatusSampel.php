@@ -4,18 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StatusRegister extends Model
+class StatusSampel extends Model
 {
-    protected $table = 'status_register';
+    protected $table = 'status_sampel';
 
     protected $fillable = [
-        'register_status',
+        'sampel_status',
         'chamber',
         'deskripsi',
     ];
-    protected $primaryKey   = 'register_status';
+    protected $primaryKey   = 'sampel_status';
     protected $casts = [
-        'register_status' => 'string',
+        'sampel_status' => 'string',
     ];
     protected $keyType = 'string';
 }

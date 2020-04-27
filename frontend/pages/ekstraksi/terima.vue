@@ -13,7 +13,7 @@
         <div class="col-md-6">
           <sample-picker v-model="form.samples"
             ref="sample_picker"
-            register-status="sample_taken"
+            sampel-status="sample_taken"
             title="Daftar Sampel yang Diterima"
           ></sample-picker>
         </div>

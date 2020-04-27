@@ -9816,7 +9816,8 @@ body.md-skin {
   }
 }
 .thumbnail-wrapper img {
-  height: 6em;
-  width: 6em;
+  height: 7em;
+  width: 7em;
+  padding: 0.5em;
   object-fit: cover;
 }

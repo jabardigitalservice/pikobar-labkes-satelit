@@ -15,7 +15,7 @@ class CreateEkstraksiTable extends Migration
     {
         Schema::create('ekstraksi', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('register_id')->nullable();
+            $table->unsignedInteger('sampel_id')->nullable();
             $table->unsignedInteger('user_id')->nullable();
             $table->date('tanggal_penerimaan_sampel')->nullable();
             $table->string('jam_penerimaan_sampel')->nullable();
@@ -28,12 +28,12 @@ class CreateEkstraksiTable extends Migration
             $table->string('nama_pengirim_rna')->nullable();
             $table->date('tanggal_pengiriman_rna')->nullable();
             $table->string('jam_pengiriman_rna')->nullable();
-            $table->text('catatan_pegiriman')->nullable();
+            $table->text('catatan_pengiriman')->nullable();
             $table->string('jam_mulai_ekstraksi')->nullable();
             $table->timestamps();
             
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('register_id')->references('id')->on('register');
+            $table->foreign('sampel_id')->references('id')->on('sampel');
         });
     }
 

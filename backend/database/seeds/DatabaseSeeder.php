@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
         $this->call(GejalaSeeder::class);
         $this->call(PenyakitPenyertaSeeder::class);
         $this->call(LabPCRSeeder::class);
-        $this->call(StatusRegisterSeeder::class);
+        $this->call(StatusSampelSeeder::class);
+        $this->call(JenisSampelSeeder::class);
 
     }
 }

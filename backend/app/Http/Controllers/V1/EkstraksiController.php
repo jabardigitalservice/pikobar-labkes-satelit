@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Register;
+use App\Models\Sampel;
 use App\Models\Ekstraksi;
 use App\Models\LabPCR;
 use Validator;
@@ -14,7 +14,7 @@ class EkstraksiController extends Controller
 {
     public function getData(Request $request)
     {
-        $models = Register::query();
+        $models = Sampel::query();
         $params = $request->get('params',false);
         $search = $request->get('search',false);
         $order  = $request->get('order' ,'name');
@@ -38,9 +38,9 @@ class EkstraksiController extends Controller
                             }
                         }
                         break;
-                    case 'register_status':
+                    case 'sampel_status':
                         if ($val == 'extraction_sent') {
-                            $models->whereIn('register_status', [
+                            $models->whereIn('sampel_status', [
                                 'extraction_sample_sent',
                                 'pcr_sample_received',
                                 'pcr_sample_analyzed',
@@ -48,7 +48,7 @@ class EkstraksiController extends Controller
                                 'sample_valid',
                             ]);
                         } else {
-                            $models->where('register_status', $val);
+                            $models->where('sampel_status', $val);
                         }
                         if ($val == 'extraction_sample_reextract') {
                             $models->with(['pcr']);
@@ -96,9 +96,9 @@ class EkstraksiController extends Controller
 
     public function detail(Request $request, $id)
     {
-        $model = Register::with(['ekstraksi','status'])->find($id);
+        $model = Sampel::with(['ekstraksi','status'])->find($id);
         $model->log_ekstraksi = $model->logs()
-            ->whereIn('register_status', ['extraction_sample_extracted','extraction_sample_sent','extraction_sample_reextract'])
+            ->whereIn('sampel_status', ['extraction_sample_extracted','extraction_sample_sent','extraction_sample_reextract'])
             ->orderByDesc('created_at')
             ->get();
         return response()->json(['status'=>200,'message'=>'success','data'=>$model]);
@@ -107,8 +107,8 @@ class EkstraksiController extends Controller
     public function edit(Request $request, $id)
     {
         $user = $request->user();
-        $register = Register::with(['ekstraksi'])->find($id);
-        if ($register->register_status == 'extraction_sample_extracted') {
+        $sampel = Sampel::with(['ekstraksi'])->find($id);
+        if ($sampel->sampel_status == 'extraction_sample_extracted') {
             $v = Validator::make($request->all(),[
                 'tanggal_penerimaan_sampel' => 'required',
                 'jam_penerimaan_sampel' => 'required',
@@ -148,10 +148,10 @@ class EkstraksiController extends Controller
 
         $v->validate();
 
-        $ekstraksi = $register->ekstraksi;
+        $ekstraksi = $sampel->ekstraksi;
         if (!$ekstraksi) {
             $ekstraksi = new Ekstraksi;
-            $ekstraksi->register_id = $register->id;
+            $ekstraksi->sampel_id = $sampel->id;
             $ekstraksi->user_id = $user->id;
         }
         $ekstraksi->tanggal_penerimaan_sampel = parseDate($request->tanggal_penerimaan_sampel);
@@ -169,11 +169,11 @@ class EkstraksiController extends Controller
         $ekstraksi->catatan_pengiriman = $request->catatan_pengiriman;
         $ekstraksi->save();
 
-        $register->lab_pcr_id = $request->lab_pcr_id;
-        $register->lab_pcr_nama = $lab_pcr->id == 999999 ? $request->lab_pcr_nama : $lab_pcr->nama;
-        $register->waktu_extraction_sample_extracted = $ekstraksi->tanggal_mulai_ekstraksi ? date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_mulai_ekstraksi . ' ' .$ekstraksi->jam_mulai_ekstraksi)) : null;
-        $register->waktu_extraction_sample_sent = $ekstraksi->tanggal_pengiriman_rna ? date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_pengiriman_rna . ' ' .$ekstraksi->jam_pengiriman_rna)) : null;
-        $register->save();
+        $sampel->lab_pcr_id = $request->lab_pcr_id;
+        $sampel->lab_pcr_nama = $lab_pcr->id == 999999 ? $request->lab_pcr_nama : $lab_pcr->nama;
+        $sampel->waktu_extraction_sample_extracted = $ekstraksi->tanggal_mulai_ekstraksi ? date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_mulai_ekstraksi . ' ' .$ekstraksi->jam_mulai_ekstraksi)) : null;
+        $sampel->waktu_extraction_sample_sent = $ekstraksi->tanggal_pengiriman_rna ? date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_pengiriman_rna . ' ' .$ekstraksi->jam_pengiriman_rna)) : null;
+        $sampel->save();
         
         return response()->json(['status'=>201,'message'=>'Perubahan berhasil disimpan']);
     }
@@ -191,7 +191,7 @@ class EkstraksiController extends Controller
             'metode_ekstraksi' => 'required',
             'nama_kit_ekstraksi' => 'required',
         ]);
-        $samples = Register::whereIn('nomor_sampel', Arr::pluck($request->samples, 'nomor_sampel'))->get()->keyBy('nomor_sampel');
+        $samples = Sampel::whereIn('nomor_sampel', Arr::pluck($request->samples, 'nomor_sampel'))->get()->keyBy('nomor_sampel');
 
         foreach($request->samples as $key => $item) {
             if (!isset($item['nomor_sampel']) || !isset($samples[$item['nomor_sampel']])) {
@@ -203,11 +203,11 @@ class EkstraksiController extends Controller
 
         $v->validate();
 
-        foreach($samples as $nomor_sampel => $register) {
-            $ekstraksi = $register->ekstraksi;
+        foreach($samples as $nomor_sampel => $sampel) {
+            $ekstraksi = $sampel->ekstraksi;
             if (!$ekstraksi) {
                 $ekstraksi = new Ekstraksi;
-                $ekstraksi->register_id = $register->id;
+                $ekstraksi->sampel_id = $sampel->id;
                 $ekstraksi->user_id = $user->id;
             }
             $ekstraksi->tanggal_penerimaan_sampel = parseDate($request->tanggal_penerimaan_sampel);
@@ -221,8 +221,8 @@ class EkstraksiController extends Controller
             $ekstraksi->nama_kit_ekstraksi = $request->nama_kit_ekstraksi;
             $ekstraksi->save();
 
-            $register->waktu_extraction_sample_extracted = date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_mulai_ekstraksi . ' ' .$ekstraksi->jam_mulai_ekstraksi));
-            $register->updateState('extraction_sample_extracted', [
+            $sampel->waktu_extraction_sample_extracted = date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_mulai_ekstraksi . ' ' .$ekstraksi->jam_mulai_ekstraksi));
+            $sampel->updateState('extraction_sample_extracted', [
                 'user_id' => $user->id,
                 'metadata' => $ekstraksi,
                 'description' => 'Receive Extraction',
@@ -242,7 +242,7 @@ class EkstraksiController extends Controller
             'lab_pcr_id' => 'required',
             'lab_pcr_nama' => 'required_if:lab_pcr_id,999999',
         ]);
-        $samples = Register::whereIn('nomor_sampel', Arr::pluck($request->samples, 'nomor_sampel'))->get()->keyBy('nomor_sampel');
+        $samples = Sampel::whereIn('nomor_sampel', Arr::pluck($request->samples, 'nomor_sampel'))->get()->keyBy('nomor_sampel');
         $lab_pcr = LabPCR::find($request->lab_pcr_id);
 
         foreach($request->samples as $key => $item) {
@@ -260,11 +260,11 @@ class EkstraksiController extends Controller
 
         $v->validate();
 
-        foreach($samples as $nomor_sampel => $register) {
-            $ekstraksi = $register->ekstraksi;
+        foreach($samples as $nomor_sampel => $sampel) {
+            $ekstraksi = $sampel->ekstraksi;
             if (!$ekstraksi) {
                 $ekstraksi = new Ekstraksi;
-                $ekstraksi->register_id = $register->id;
+                $ekstraksi->sampel_id = $sampel->id;
                 $ekstraksi->user_id = $user->id;
             }
             $ekstraksi->tanggal_pengiriman_rna = parseDate($request->tanggal_pengiriman_rna);
@@ -273,10 +273,10 @@ class EkstraksiController extends Controller
             $ekstraksi->catatan_pengiriman = $request->catatan_pengiriman;
             $ekstraksi->save();
 
-            $register->lab_pcr_id = $request->lab_pcr_id;
-            $register->lab_pcr_nama = $lab_pcr->id == 999999 ? $request->lab_pcr_nama : $lab_pcr->nama;
-            $register->waktu_extraction_sample_sent = date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_pengiriman_rna . ' ' .$ekstraksi->jam_pengiriman_rna));
-            $register->updateState('extraction_sample_sent', [
+            $sampel->lab_pcr_id = $request->lab_pcr_id;
+            $sampel->lab_pcr_nama = $lab_pcr->id == 999999 ? $request->lab_pcr_nama : $lab_pcr->nama;
+            $sampel->waktu_extraction_sample_sent = date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_pengiriman_rna . ' ' .$ekstraksi->jam_pengiriman_rna));
+            $sampel->updateState('extraction_sample_sent', [
                 'user_id' => $user->id,
                 'metadata' => $ekstraksi,
                 'description' => 'Extraction Sent',
@@ -302,7 +302,7 @@ class EkstraksiController extends Controller
             'catatan_pengiriman' => 'required',
             'lab_pcr_nama' => 'required_if:lab_pcr_id,999999',
         ]);
-        $samples = Register::whereIn('nomor_sampel', Arr::pluck($request->samples, 'nomor_sampel'))->get()->keyBy('nomor_sampel');
+        $samples = Sampel::whereIn('nomor_sampel', Arr::pluck($request->samples, 'nomor_sampel'))->get()->keyBy('nomor_sampel');
         $lab_pcr = LabPCR::find($request->lab_pcr_id);
 
         foreach($request->samples as $key => $item) {
@@ -320,11 +320,11 @@ class EkstraksiController extends Controller
 
         $v->validate();
 
-        foreach($samples as $nomor_sampel => $register) {
-            $ekstraksi = $register->ekstraksi;
+        foreach($samples as $nomor_sampel => $sampel) {
+            $ekstraksi = $sampel->ekstraksi;
             if (!$ekstraksi) {
                 $ekstraksi = new Ekstraksi;
-                $ekstraksi->register_id = $register->id;
+                $ekstraksi->sampel_id = $sampel->id;
                 $ekstraksi->user_id = $user->id;
             }
             $ekstraksi->operator_ekstraksi = $request->operator_ekstraksi;
@@ -338,10 +338,10 @@ class EkstraksiController extends Controller
             $ekstraksi->catatan_pengiriman = $request->catatan_pengiriman;
             $ekstraksi->save();
 
-            $register->lab_pcr_id = $request->lab_pcr_id;
-            $register->lab_pcr_nama = $lab_pcr->id == 999999 ? $request->lab_pcr_nama : $lab_pcr->nama;
-            $register->waktu_extraction_sample_sent = date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_pengiriman_rna . ' ' .$ekstraksi->jam_pengiriman_rna));
-            $register->updateState('extraction_sample_sent', [
+            $sampel->lab_pcr_id = $request->lab_pcr_id;
+            $sampel->lab_pcr_nama = $lab_pcr->id == 999999 ? $request->lab_pcr_nama : $lab_pcr->nama;
+            $sampel->waktu_extraction_sample_sent = date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_pengiriman_rna . ' ' .$ekstraksi->jam_pengiriman_rna));
+            $sampel->updateState('extraction_sample_sent', [
                 'user_id' => $user->id,
                 'metadata' => $ekstraksi,
                 'description' => 'Extraction Sent',

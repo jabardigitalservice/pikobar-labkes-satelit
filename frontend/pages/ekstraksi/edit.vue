@@ -283,10 +283,15 @@
 <script>
 import Form from "vform";
 import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
   middleware: "auth",
-  async asyncData({ route }) {
+  computed: mapGetters({
+    user: "auth/user",
+    lab_pcr: "options/lab_pcr",
+  }),
+  async asyncData({ route, store }) {
     let error = false;
     let can_edit_pengiriman = true;
     let can_edit_pengiriman_tujuan = true;
@@ -295,16 +300,18 @@ export default {
     if (!data.ekstraksi) {
       data.ekstraksi = {};
     }
-    if (["waiting_sample", "sample_taken", "sample_verified", "sample_valid"].indexOf(data.register_status) > -1) {
+    if (["waiting_sample", "sample_taken", "sample_verified", "sample_valid"].indexOf(data.sampel_status) > -1) {
       error = true;
     }
-    if (["waiting_sample", "sample_taken", "extraction_sample_extracted", "sample_verified", "sample_valid"].indexOf(data.register_status) > -1) {
+    if (["waiting_sample", "sample_taken", "extraction_sample_extracted", "sample_verified", "sample_valid"].indexOf(data.sampel_status) > -1) {
       can_edit_pengiriman = false;
     }
-    if (["pcr_sample_received", "pcr_sample_analyzed"].indexOf(data.register_status) > -1) {
+    if (["pcr_sample_received", "pcr_sample_analyzed"].indexOf(data.sampel_status) > -1) {
       can_edit_pengiriman_tujuan = false;
     }
-    resp = await axios.get("/lab-pcr-option");
+    if (!store.getters['options/lab_pcr'].length) {
+      await store.dispatch('options/fetchLabPCR')
+    }
     return {
       error: error,
       data: data,
@@ -327,7 +334,6 @@ export default {
         catatan_penerimaan: data.ekstraksi.catatan_penerimaan,
         catatan_pengiriman: data.ekstraksi.catatan_pengiriman,
       }),
-      lab_pcr: resp.data,
       loading: false
     };
   },

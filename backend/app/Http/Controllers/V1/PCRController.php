@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Register;
+use App\Models\Sampel;
 use App\Models\PemeriksaanSampel;
 use App\Models\LabPCR;
 use Validator;
@@ -17,7 +17,7 @@ class PCRController extends Controller
     public function getData(Request $request)
     {
         $user = $request->user();
-        $models = Register::query();
+        $models = Sampel::query();
         $params = $request->get('params',false);
         $search = $request->get('search',false);
         $order  = $request->get('order' ,'name');
@@ -54,16 +54,16 @@ class PCRController extends Controller
                             }
                         }
                         break;
-                    case 'register_status':
+                    case 'sampel_status':
                         if ($val == 'analyzed') {
-                            $models->whereIn('register_status', [
+                            $models->whereIn('sampel_status', [
                                 'pcr_sample_analyzed',
                                 'sample_verified',
                                 'sample_valid',
                             ]);
                             $models->with(['pcr','status']);
                         } else {
-                            $models->where('register_status', $val);
+                            $models->where('sampel_status', $val);
                         }
                         break;
                     default:
@@ -121,9 +121,9 @@ class PCRController extends Controller
 
     public function detail(Request $request, $id)
     {
-        $model = Register::with(['pcr','status','ekstraksi'])->find($id);
+        $model = Sampel::with(['pcr','status','ekstraksi'])->find($id);
         $model->log_pcr = $model->logs()
-            ->whereIn('register_status', ['pcr_sample_received','pcr_sample_analyzed','extraction_sample_reextract'])
+            ->whereIn('sampel_status', ['pcr_sample_received','pcr_sample_analyzed','extraction_sample_reextract'])
             ->orderByDesc('created_at')
             ->get();
         return response()->json(['status'=>200,'message'=>'success','data'=>$model]);
@@ -132,8 +132,8 @@ class PCRController extends Controller
     public function edit(Request $request, $id)
     {
         $user = $request->user();
-        $register = Register::with(['pcr'])->find($id);
-        if ($register->register_status == 'pcr_sample_received') {
+        $sampel = Sampel::with(['pcr'])->find($id);
+        if ($sampel->sampel_status == 'pcr_sample_received') {
             $v = Validator::make($request->all(),[
                 'tanggal_penerimaan_sampel' => 'required',
                 'jam_penerimaan_sampel' => 'required',
@@ -173,10 +173,10 @@ class PCRController extends Controller
 
         $v->validate();
 
-        $pcr = $register->pcr;
+        $pcr = $sampel->pcr;
         if (!$pcr) {
             $pcr = new PemeriksaanSampel;
-            $pcr->register_id = $register->id;
+            $pcr->sampel_id = $sampel->id;
             $pcr->user_id = $user->id;
         }
         $pcr->tanggal_penerimaan_sampel = parseDate($request->tanggal_penerimaan_sampel);
@@ -194,11 +194,11 @@ class PCRController extends Controller
         $pcr->catatan_pengiriman = $request->catatan_pengiriman;
         $pcr->save();
 
-        $register->lab_pcr_id = $request->lab_pcr_id;
-        $register->lab_pcr_nama = $lab_pcr->id == 999999 ? $request->lab_pcr_nama : $lab_pcr->nama;
-        $register->waktu_pcr_sample_received = $pcr->tanggal_mulai_ekstraksi ? date('Y-m-d H:i:s', strtotime($pcr->tanggal_mulai_ekstraksi . ' ' .$pcr->jam_mulai_ekstraksi)) : null;
-        $register->waktu_extraction_sample_sent = $pcr->tanggal_pengiriman_rna ? date('Y-m-d H:i:s', strtotime($pcr->tanggal_pengiriman_rna . ' ' .$pcr->jam_pengiriman_rna)) : null;
-        $register->save();
+        $sampel->lab_pcr_id = $request->lab_pcr_id;
+        $sampel->lab_pcr_nama = $lab_pcr->id == 999999 ? $request->lab_pcr_nama : $lab_pcr->nama;
+        $sampel->waktu_pcr_sample_received = $pcr->tanggal_mulai_ekstraksi ? date('Y-m-d H:i:s', strtotime($pcr->tanggal_mulai_ekstraksi . ' ' .$pcr->jam_mulai_ekstraksi)) : null;
+        $sampel->waktu_extraction_sample_sent = $pcr->tanggal_pengiriman_rna ? date('Y-m-d H:i:s', strtotime($pcr->tanggal_pengiriman_rna . ' ' .$pcr->jam_pengiriman_rna)) : null;
+        $sampel->save();
         
         return response()->json(['status'=>201,'message'=>'Perubahan berhasil disimpan']);
     }
@@ -206,23 +206,23 @@ class PCRController extends Controller
     public function invalid(Request $request, $id)
     {
         $user = $request->user();
-        $register = Register::with(['pcr'])->find($id);
+        $sampel = Sampel::with(['pcr'])->find($id);
         $v = Validator::make($request->all(),[
             'catatan_pemeriksaan' => 'required',
         ]);
 
         $v->validate();
 
-        $pcr = $register->pcr;
+        $pcr = $sampel->pcr;
         if (!$pcr) {
             $pcr = new PemeriksaanSampel;
-            $pcr->register_id = $register->id;
+            $pcr->sampel_id = $sampel->id;
             $pcr->user_id = $user->id;
         }
         $pcr->catatan_pemeriksaan = $request->catatan_pemeriksaan;
         $pcr->save();
 
-        $register->updateState('extraction_sample_reextract', [
+        $sampel->updateState('extraction_sample_reextract', [
             'user_id' => $user->id,
             'metadata' => $pcr,
             'description' => 'Invalid PCR, need re-extraction',
@@ -234,7 +234,7 @@ class PCRController extends Controller
     public function input(Request $request, $id)
     {
         $user = $request->user();
-        $register = Register::with(['pcr'])->find($id);
+        $sampel = Sampel::with(['pcr'])->find($id);
         $v = Validator::make($request->all(),[
             'kesimpulan_pemeriksaan' => 'required',
             'hasil_deteksi.*.target_gen' => 'required',
@@ -254,10 +254,10 @@ class PCRController extends Controller
 
         $v->validate();
 
-        $pcr = $register->pcr;
+        $pcr = $sampel->pcr;
         if (!$pcr) {
             $pcr = new PemeriksaanSampel;
-            $pcr->register_id = $register->id;
+            $pcr->sampel_id = $sampel->id;
             $pcr->user_id = $user->id;
         }
         $pcr->tanggal_input_hasil = $request->tanggal_input_hasil;
@@ -268,20 +268,20 @@ class PCRController extends Controller
         $pcr->kesimpulan_pemeriksaan = $request->kesimpulan_pemeriksaan;
         $pcr->save();
 
-        if ($register->register_status == 'pcr_sample_received') {
-            $register->updateState('pcr_sample_analyzed', [
+        if ($sampel->sampel_status == 'pcr_sample_received') {
+            $sampel->updateState('pcr_sample_analyzed', [
                 'user_id' => $user->id,
                 'metadata' => $pcr,
                 'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
             ]);
         } else {
-            $register->addLog([
+            $sampel->addLog([
                 'user_id' => $user->id,
                 'metadata' => $pcr,
                 'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
             ]);
-            $register->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s');
-            $register->save();
+            $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s');
+            $sampel->save();
         }
         
         return response()->json(['status'=>201,'message'=>'Hasil analisa berhasil disimpan']);
@@ -301,7 +301,7 @@ class PCRController extends Controller
             'metode_pemeriksaan' => 'required',
             'nama_kit_pemeriksaan' => 'required',
         ]);
-        $samples = Register::whereIn('nomor_sampel', Arr::pluck($request->samples, 'nomor_sampel'))->get()->keyBy('nomor_sampel');
+        $samples = Sampel::whereIn('nomor_sampel', Arr::pluck($request->samples, 'nomor_sampel'))->get()->keyBy('nomor_sampel');
 
         foreach($request->samples as $key => $item) {
             if (!isset($item['nomor_sampel']) || !isset($samples[$item['nomor_sampel']])) {
@@ -313,11 +313,11 @@ class PCRController extends Controller
 
         $v->validate();
 
-        foreach($samples as $nomor_sampel => $register) {
-            $pcr = $register->pcr;
+        foreach($samples as $nomor_sampel => $sampel) {
+            $pcr = $sampel->pcr;
             if (!$pcr) {
                 $pcr = new PemeriksaanSampel;
-                $pcr->register_id = $register->id;
+                $pcr->sampel_id = $sampel->id;
                 $pcr->user_id = $user->id;
             }
             $pcr->tanggal_penerimaan_sampel = parseDate($request->tanggal_penerimaan_sampel);
@@ -332,8 +332,8 @@ class PCRController extends Controller
             $pcr->nama_kit_pemeriksaan = $request->nama_kit_pemeriksaan;
             $pcr->save();
 
-            $register->waktu_pcr_sample_received = date('Y-m-d H:i:s', strtotime($pcr->tanggal_mulai_ekstraksi . ' ' .$pcr->jam_mulai_ekstraksi));
-            $register->updateState('pcr_sample_received', [
+            $sampel->waktu_pcr_sample_received = date('Y-m-d H:i:s', strtotime($pcr->tanggal_mulai_ekstraksi . ' ' .$pcr->jam_mulai_ekstraksi));
+            $sampel->updateState('pcr_sample_received', [
                 'user_id' => $user->id,
                 'metadata' => $pcr,
                 'description' => 'Receive PCR',

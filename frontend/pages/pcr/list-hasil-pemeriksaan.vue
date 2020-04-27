@@ -55,7 +55,7 @@
                       nomor_sampel : 'Nomor Sampel',
                       kesimpulan_pemeriksaan : 'Hasil Pemeriksaan',
                       waktu_pcr_sample_analyzed:'Waktu Input',
-                      register_status : 'Status',
+                      sampel_status : 'Status',
                     }"
           ></ajax-table>
         </Ibox>
@@ -72,24 +72,24 @@ var debounce = require('lodash/debounce')
 export default {
   middleware: "auth",
   computed: mapGetters({
-    user: "auth/user"
+    user: "auth/user",
+    lab_pcr: "options/lab_pcr",
   }),
   data() {
     return {
       params1: {
         lab_pcr_id: "",
         lab_pcr_nama: "",
-        register_status: "analyzed",
+        sampel_status: "analyzed",
         filter_inconclusive: false,
       }
     };
   },
-  async asyncData() {
-    let resp = await axios.get("/lab-pcr-option");
-    let lab_pcr = resp.data;
-    return {
-      lab_pcr
-    };
+  async asyncData({store}) {
+    if (!store.getters['options/lab_pcr'].length) {
+      await store.dispatch('options/fetchLabPCR')
+    }
+    return {}
   },
   methods: {
     refreshDebounce: debounce(function () {

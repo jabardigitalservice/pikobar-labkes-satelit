@@ -50,7 +50,7 @@
 import axios from "axios";
 
 export default {
-  props: ["value", "registerStatus", "title"],
+  props: ["value", "sampelStatus", "title"],
   data() {
     return {
       input_nomor_sampel: ""
@@ -62,7 +62,7 @@ export default {
         await axios.get("v1/sampel/cek-nomor-sampel", {
           params: {
             nomor_sampel: sample.nomor_sampel,
-            register_status: this.registerStatus
+            sampel_status: this.sampelStatus
           }
         })
       ).data;

@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       params1: {
-        register_status: 'sample_taken'
+        sampel_status: 'sample_taken'
       },
     };
   },

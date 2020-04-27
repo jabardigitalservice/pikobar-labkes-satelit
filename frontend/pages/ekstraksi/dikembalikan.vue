@@ -58,7 +58,7 @@ export default {
   data() {
     return {
       params1: {
-        register_status: 'extraction_sample_reextract'
+        sampel_status: 'extraction_sample_reextract'
       },
     };
   },
