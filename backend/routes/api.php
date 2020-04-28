@@ -184,6 +184,9 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             Route::get('get-sampel-status', 'VerifikasiController@sampelStatusList');
 
             Route::post('edit-status-sampel/{sampel}', 'VerifikasiController@updateToVerified');
+
+            Route::get('export-excel', 'VerifikasiExportController@exportExcel');
+
             
         });
 });
