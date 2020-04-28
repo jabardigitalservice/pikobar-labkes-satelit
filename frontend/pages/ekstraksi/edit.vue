@@ -138,14 +138,12 @@
                 Metode ekstraksi
                 <span style="color:red">*</span>
               </label>
-              <input
-                class="form-control"
-                type="text"
-                v-model="form.metode_ekstraksi"
-                placeholder="Metode ekstraksi"
-                :class="{ 'is-invalid': form.errors.has(`metode_ekstraksi`) }"
-              />
-              <has-error :form="form" field="metode_ekstraksi" />
+              <dynamic-input :form="form" field="metode_ekstraksi" 
+                :options="['Manual','Otomatis']" 
+                :hasLainnya="true"
+                ref="alat_ekstraksi_input"
+                placeholder="Masukkan metode ekstraksi">
+              </dynamic-input>
             </div>
 
             <div class="form-group">
@@ -153,14 +151,25 @@
                 Nama kit ekstraksi
                 <span style="color:red">*</span>
               </label>
-              <input
-                class="form-control"
-                type="text"
-                v-model="form.nama_kit_ekstraksi"
-                placeholder="Nama kit ekstraksi"
-                :class="{ 'is-invalid': form.errors.has(`nama_kit_ekstraksi`) }"
-              />
-              <has-error :form="form" field="nama_kit_ekstraksi" />
+              <dynamic-input :form="form" field="nama_kit_ekstraksi" 
+                :options="['Geneaid','Qiagen','Invitrogen','Roche','Addbio']" 
+                :hasLainnya="true"
+                ref="nama_kit_ekstraksi_input"
+                placeholder="Masukkan nama kit ekstraksi">
+              </dynamic-input>
+            </div>
+
+            <div class="form-group" v-show="form.metode_ekstraksi == 'Otomatis'">
+              <label>
+                Alat Ekstraksi
+                <span style="color:red">*</span>
+              </label>
+              <dynamic-input :form="form" field="alat_ekstraksi" 
+                :options="['Kingfisher','Genolution']"
+                :hasLainnya="true"
+                ref="alat_ekstraksi_input"
+                placeholder="Masukkan alat ekstraksi">
+              </dynamic-input>
             </div>
           </Ibox>
         </div>
@@ -326,6 +335,7 @@ export default {
         jam_mulai_ekstraksi: data.ekstraksi.jam_mulai_ekstraksi,
         metode_ekstraksi: data.ekstraksi.metode_ekstraksi,
         nama_kit_ekstraksi: data.ekstraksi.nama_kit_ekstraksi,
+        alat_ekstraksi: data.ekstraksi.alat_ekstraksi,
         lab_pcr_id: data.lab_pcr_id,
         lab_pcr_nama: data.lab_pcr_nama,
         tanggal_pengiriman_rna: data.ekstraksi.tanggal_pengiriman_rna,
@@ -336,6 +346,13 @@ export default {
       }),
       loading: false
     };
+  },
+  watch: {
+    'form.metode_ekstraksi': function(newval, oldval) {
+      if (this.form.metode_ekstraksi != 'Otomatis') {
+        this.form.alat_ekstraksi = ''
+      }
+    },
   },
   head() {
     return {

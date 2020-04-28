@@ -13,5 +13,8 @@ function parseTime($time) {
         return '00:00';
     }
 }
+function cctor($obj) {
+    return clone $obj;
+}
 
 ?>

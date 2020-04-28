@@ -43,6 +43,7 @@ const routes = [
   { path: '/ekstraksi/penerimaan', name:'ekstraksi.penerimaan', component: page('ekstraksi/penerimaan.vue'), meta: {parentName: 'ekstraksi.index'} },
   { path: '/ekstraksi/terima', name:'ekstraksi.terima', component: page('ekstraksi/terima.vue'), meta: {parentName: 'ekstraksi.penerimaan'} },
   { path: '/ekstraksi/terkirim', name:'ekstraksi.terkirim', component: page('ekstraksi/terkirim.vue'), meta: {parentName: 'ekstraksi.index'} },
+  { path: '/ekstraksi/invalid', name:'ekstraksi.invalid', component: page('ekstraksi/invalid.vue'), meta: {parentName: 'ekstraksi.index'} },
   { path: '/ekstraksi/kirim', name:'ekstraksi.kirim', component: page('ekstraksi/kirim.vue'), meta: {parentName: 'ekstraksi.index'} },
   { path: '/ekstraksi/kirim-ulang', name:'ekstraksi.kirim-ulang', component: page('ekstraksi/kirim-ulang.vue'), meta: {parentName: 'ekstraksi.dikembalikan'} },
 

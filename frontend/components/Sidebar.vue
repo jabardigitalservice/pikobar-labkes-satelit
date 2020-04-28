@@ -83,6 +83,11 @@
                 <span class="nav-label">Sampel yang dikembalikan</span>
               </router-link>
             </li>
+            <li>
+              <router-link to="/ekstraksi/invalid" tag="a">
+                <span class="nav-label">Sampel yang invalid</span>
+              </router-link>
+            </li>
           </ul>
         </li>
         <li v-if="checkPermission('pcr')">
