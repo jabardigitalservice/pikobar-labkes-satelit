@@ -52,7 +52,7 @@
           <p class="sub-header">
             Berikut ini adalah daftar sampel dari hasil pemeriksaan</p>
           <ajax-table
-            url="/v1/verifikasi/list?is_verified=1"
+            url="/v1/verifikasi/list-verified"
             :oid="'ekstraksi'"
             :params="params1"
             :config="{

@@ -13,7 +13,14 @@
             {{item.nomor_sampel}}
         </td>
         <td>
-            <!-- {{ parameter_lab }} -->
+            <ol>
+                <li 
+                    v-for="item in item.pemeriksaanSampel.hasil_deteksi" 
+                    :key="item.target_gen"
+                >
+                    {{ item.target_gen }} : {{ item.ct_value }}
+                </li>
+            </ol>
         </td>
         <td>
             {{item.pemeriksaanSampel.kesimpulan_pemeriksaan}}

@@ -24,6 +24,7 @@ class PemeriksaanSampel extends Model
         'hasil_deteksi',
         'grafik',
         'kesimpulan_pemeriksaan',
+        'catatan_pemeriksaan'
     ];
 
     protected $casts = [

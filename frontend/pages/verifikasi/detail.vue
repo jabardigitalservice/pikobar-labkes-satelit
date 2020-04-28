@@ -48,7 +48,6 @@
                     </td>
                     <td
                       width="60%" 
-                      v-if="data.pemeriksaan_sampel && data.pemeriksaan_sampel.tanggal_input_hasil"
                     >{{data.pemeriksaan_sampel.tanggal_input_hasil | formatDate}} pada {{data.pemeriksaan_sampel.jam_input_hasil}}</td>
                   </tr>
                   <tr>
@@ -56,7 +55,6 @@
                       <b>Petugas Penerima Sampel RNA</b>
                     </td>
                     <td
-                      v-if="data.pemeriksaan_sampel"
                       width="60%">{{data.pemeriksaan_sampel.petugas_penerima_sampel_rna}}
                     </td>
                   </tr>
@@ -65,7 +63,6 @@
                       <b>Kesimpulan Hasil</b>
                     </td>
                     <td
-                      v-if="data.pemeriksaan_sampel" 
                       width="60%">{{data.pemeriksaan_sampel.kesimpulan_pemeriksaan}}</td>
                   </tr>
                   <tr>
@@ -73,7 +70,6 @@
                       <b>Catatan penerimaan</b>
                     </td>
                     <td
-                      v-if="data.pemeriksaan_sampel" 
                       width="60%">{{data.pemeriksaan_sampel.catatan_penerimaan}}</td>
                   </tr>
                   <tr>
@@ -81,7 +77,6 @@
                       <b>Catatan pemeriksaan</b>
                     </td>
                     <td
-                      v-if="data.pemeriksaan_sampel" 
                       width="60%">{{data.pemeriksaan_sampel.catatan_pemeriksaan}}</td>
                   </tr>
                   <tr>
@@ -89,7 +84,6 @@
                       <b>Status Sampel</b>
                     </td>
                     <td
-                      v-if="data.status" 
                       width="60%">{{data.status.deskripsi}}</td>
                   </tr>
                 </tbody>
@@ -113,9 +107,11 @@ export default {
   async asyncData({route}) {
     let resp = await axios.get("/v1/verifikasi/detail/" + route.params.id);
     let data = resp.data.data
-    if (!data.ekstraksi) {
-      data.ekstraksi = {}
+
+    if (!data.pasien) {
+      data.pasien = {}
     }
+
     return { data };
   },
   head() {
