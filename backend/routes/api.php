@@ -172,5 +172,18 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
 
         });
-        
+   
+        Route::group(['prefix'=>'verifikasi'], function(){
+
+            Route::get('list', 'VerifikasiController@index');
+
+            Route::get('list-verified', 'VerifikasiController@indexVerified');
+
+            Route::get('detail/{sampel}', 'VerifikasiController@show');
+
+            Route::get('get-sampel-status', 'VerifikasiController@sampelStatusList');
+
+            Route::post('edit-status-sampel/{sampel}', 'VerifikasiController@updateToVerified');
+            
+        });
 });

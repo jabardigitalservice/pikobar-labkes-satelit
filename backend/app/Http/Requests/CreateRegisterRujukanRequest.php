@@ -26,7 +26,8 @@ class CreateRegisterRujukanRequest extends FormRequest
     {
         return [
             // table: register
-            'nomor_register'=> ['required', 'uuid', 'unique:register,nomor_register'],
+            'nomor_register'=> ['required', 'unique:register,nomor_register'],
+            'register_uuid'=> ['required', 'uuid', 'unique:register,nomor_register'],
             'fasyankes_id'=> ['required', 'exists:fasyankes,id'],
             'nomor_rekam_medis'=> ['min:3', 'max:255'],
             'nama_dokter'=> ['required', 'max:255'],
@@ -176,7 +177,7 @@ class CreateRegisterRujukanRequest extends FormRequest
 
             // Barcode Sampel
             'sampel'=> ['required'],
-            'sampel.*.nomor_barcode'=> ['exists:sampel,nomor_barcode'],
+            'sampel.*.nomor_sampel'=> ['exists:sampel,nomor_sampel'],
 
         ];
     }

@@ -57,6 +57,11 @@ const routes = [
   { path: '/pcr/input/:id', name:'pcr.input', component: page('pcr/input.vue'), meta: {parentName: 'pcr.list-pcr'} },
 
   { path: '/pemeriksaansampel', name:'pemeriksaansample.index', component: page('pemeriksaan/index.vue'), meta: {parentName: 'home'}},
+
+  { path: '/verifikasi', name:'verifikasi.index', component: page('verifikasi/index.vue'), meta: {parentName: 'home'} },
+  { path: '/verifikasi/detail/:id', name:'verifikasi.detail', component: page('verifikasi/detail.vue'), meta: {parentName: 'verifikasi.index'} },
+  { path: '/verifikasi/edit/:id', name:'verifikasi.edit', component: page('verifikasi/edit.vue'), meta: {parentName: 'verifikasi.index'} },
+
 ]
 
 export function createRouter () {

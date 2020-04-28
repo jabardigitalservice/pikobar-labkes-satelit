@@ -15,7 +15,9 @@ class Register extends Model
         'fasyankes_id',
         'nomor_rekam_medis',
         'nama_dokter',
-        'no_telp'
+        'no_telp',
+
+        'register_uuid',
     ];
 
     protected $hidden = ['fasyankes_id'];
@@ -108,6 +110,11 @@ class Register extends Model
     public function pengambilanSampel()
     {
         return $this->belongsToMany(PengambilanSampel::class, 'pengambilan_sampel_registrasi', 'register_id', 'pengambilan_sampel_id');
+    }
+
+    public function sampel()
+    {
+        return $this->hasMany(Sampel::class);
     }
 
 }

@@ -81,4 +81,14 @@ class Sampel extends Model
         $log = SampelLog::create($arr);
     }
 
+    public function register()
+    {
+        return $this->belongsTo(Register::class);
+    }
+
+    public function pemeriksaanSampel()
+    {
+        return $this->hasMany(PemeriksaanSampel::class);
+    }
+
 }

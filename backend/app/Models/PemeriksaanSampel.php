@@ -24,6 +24,7 @@ class PemeriksaanSampel extends Model
         'hasil_deteksi',
         'grafik',
         'kesimpulan_pemeriksaan',
+        'catatan_pemeriksaan'
     ];
 
     protected $casts = [
@@ -31,4 +32,9 @@ class PemeriksaanSampel extends Model
         'hasil_deteksi' => 'array',
         'grafik' => 'array',
     ];
+
+    public function sampel()
+    {
+        return $this->belongsTo(Sampel::class);
+    }
 }

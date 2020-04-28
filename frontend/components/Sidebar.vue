@@ -120,7 +120,7 @@
           </ul>
         </li>
         <li v-if="checkPermission('verifikasi')">
-          <router-link to="/" tag="a">
+          <router-link to="/verifikasi" tag="a">
             <i class="uil-eye fa-fw"></i>
             <span class="nav-label">Verifikasi</span>
           </router-link>
