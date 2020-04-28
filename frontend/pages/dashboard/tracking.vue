@@ -4,6 +4,7 @@
       <div class="ibox">
         <div class="ibox-title">
           <div class="ibox-tools">
+            <span class="label label-warning float-right">Sampel Invalid: {{ data.status.invalid }}</span>
             <span class="label label-primary float-right">Selesai: {{ data.status.done }}</span>
           </div>
           <h5>Tracking Progress</h5>
@@ -140,6 +141,7 @@ export default {
         this.data.status.verification = "-";
         this.data.status.validation = "-";
         this.data.status.done = "-";
+        this.data.status.invalid = "-";
       }
       this.loading = false;
     }

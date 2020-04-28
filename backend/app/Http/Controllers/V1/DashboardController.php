@@ -42,6 +42,7 @@ class DashboardController extends Controller
             'verification' => @$count_by_status['pcr_sample_analyzed'],
             'validation' => @$count_by_status['sample_verified'],
             'done' => @$count_by_status['sample_valid'],
+            'invalid' => @$count_by_status['sample_invalid'],
         ];
 
         return response()->json([
