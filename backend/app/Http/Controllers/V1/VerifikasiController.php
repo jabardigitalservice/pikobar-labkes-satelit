@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\PemeriksaanSampel;
 use App\Models\Sampel;
 use App\Models\StatusSampel;
 use Illuminate\Http\Request;
@@ -80,7 +81,7 @@ class VerifikasiController extends Controller
         foreach ($models as &$model) {
             $model->register = $model->register ?? null;
             $model->pasien = optional($model->register)->pasiens()->first();
-            $model->pemeriksaanSampel = $model->pemeriksaanSampel ?? null;
+            $model->pemeriksaanSampel = $model->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first() ?? null;
         }
 
         return response()->json([
@@ -158,7 +159,7 @@ class VerifikasiController extends Controller
         foreach ($models as &$model) {
             $model->register = $model->register ?? null;
             $model->pasien = optional($model->register)->pasiens()->first();
-            $model->pemeriksaanSampel = $model->pemeriksaanSampel ?? null;
+            $model->pemeriksaanSampel = $model->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first() ?? null;
         }
 
         return response()->json([
@@ -192,7 +193,10 @@ class VerifikasiController extends Controller
         return response()->json([
             'status'=>200,
             'message'=>'success',
-            'data'=> $result + ['pasien'=> optional($pasien)->toArray()]
+            'data'=> $result + [
+                'pasien'=> optional($pasien)->toArray(),
+                'last_pemeriksaan_sampel'=> $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first()
+            ]
         ]);
     }
 
@@ -221,17 +225,14 @@ class VerifikasiController extends Controller
     {
         $request->validate([
             'kesimpulan_pemeriksaan'=> 'required|in:positif,negatif,inkonklusif',
-            'catatan_pemeriksaan'=> 'nullable|max:255'
-        ], $request->only(['kesimpulan_pemeriksaan', 'catatan_pemeriksaan']));
+            'catatan_pemeriksaan'=> 'nullable|max:255',
+            'last_pemeriksaan_id'=> 'required|exists:pemeriksaansampel,id'
+        ], $request->only(['kesimpulan_pemeriksaan', 'catatan_pemeriksaan', 'last_pemeriksaan_id']));
 
         DB::beginTransaction();
         try {
 
-            $sampel->update([
-                'sampel_status'=> 'sample_verified'
-            ]);
-
-            $sampel->pemeriksaanSampel->update([
+            PemeriksaanSampel::find($request->input('last_pemeriksaan_id'))->update([
                 'kesimpulan_pemeriksaan'=> $request->input('kesimpulan_pemeriksaan'),
                 'catatan_pemeriksaan'=> $request->input('catatan_pemeriksaan')
             ]);

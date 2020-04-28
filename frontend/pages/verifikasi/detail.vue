@@ -33,6 +33,14 @@
                       <span>{{data.pasien.nama_depan}} {{data.pasien.nama_belakang}}</span>
                     </td>
                   </tr>
+                  <tr>
+                    <td width="30%" align="right">
+                      <b>Tanggal Lahir Pasien</b>
+                    </td>
+                    <td width="60%">
+                      <span>{{data.pasien.tanggal_lahir | formatDate }}</span>
+                    </td>
+                  </tr>
 
                   <tr>
                     <td width="30%" align="right">
@@ -42,54 +50,96 @@
                       <span>{{data.nomor_sampel}}</span>
                     </td>
                   </tr>
-                  <tr>
-                    <td width="30%" align="right">
-                      <b>Tanggal input hasil</b>
-                    </td>
-                    <td
-                      width="60%" 
-                    >{{data.pemeriksaan_sampel.tanggal_input_hasil | formatDate}} pada {{data.pemeriksaan_sampel.jam_input_hasil}}</td>
-                  </tr>
-                  <tr>
-                    <td width="30%" align="right">
-                      <b>Petugas Penerima Sampel RNA</b>
-                    </td>
-                    <td
-                      width="60%">{{data.pemeriksaan_sampel.petugas_penerima_sampel_rna}}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td width="30%" align="right">
-                      <b>Kesimpulan Hasil</b>
-                    </td>
-                    <td
-                      width="60%">{{data.pemeriksaan_sampel.kesimpulan_pemeriksaan}}</td>
-                  </tr>
-                  <tr>
-                    <td width="30%" align="right">
-                      <b>Catatan penerimaan</b>
-                    </td>
-                    <td
-                      width="60%">{{data.pemeriksaan_sampel.catatan_penerimaan}}</td>
-                  </tr>
-                  <tr>
-                    <td width="30%" align="right">
-                      <b>Catatan pemeriksaan</b>
-                    </td>
-                    <td
-                      width="60%">{{data.pemeriksaan_sampel.catatan_pemeriksaan}}</td>
-                  </tr>
-                  <tr>
-                    <td width="30%" align="right">
-                      <b>Status Sampel</b>
-                    </td>
-                    <td
-                      width="60%">{{data.status.deskripsi}}</td>
-                  </tr>
                 </tbody>
               </table>
 
               <hr />
+
+              <div class="row">
+                <div class="col-md-6" 
+                  v-for="hasil in data.pemeriksaan_sampel" 
+                  :key="hasil.id"
+                >
+                  <Ibox title="Pemeriksaan Sampel">
+
+                    <div class="form-group">
+                      <label>Tanggal Input Hasil</label>
+                      <p class="form-control">
+                        <b>
+                          {{ hasil.tanggal_input_hasil | formatDate }}
+                        </b>
+                      </p>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Jam Input Hasil</label>
+                      <p class="form-control">
+                        <b>
+                          {{ hasil.jam_input_hasil }}
+                        </b>
+                      </p>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Tanggal Mulai Pemeriksaan</label>
+                      <p class="form-control">
+                        <b>{{ hasil.tanggal_mulai_pemeriksaan | formatDate }}</b>
+                      </p>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Metode Pemeriksaan</label>
+                      <p class="form-control">
+                        <b>{{ hasil.metode_pemeriksaan }}</b>
+                      </p>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Kesimpulan Pemeriksaan</label>
+                      <p class="form-control">
+                        <b>{{ hasil.kesimpulan_pemeriksaan }}</b>
+                      </p>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Catatan Pemeriksaan</label>
+                      <p class="form-control">
+                        <b>{{ hasil.catatan_pemeriksaan }}</b>
+                      </p>
+                    </div>
+
+                    <table class="table table-striped dt-responsive table-bordered" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th>Target Gen</th>
+                          <th>CT Value</th>
+                        </tr>
+                      </thead>
+                      <tbody class="field_wrapper">
+                        <tr v-for="(hasil, $index) in hasil.hasil_deteksi" :key="$index">
+                          <td>
+                            <p class="form-control">
+                              <b>
+                                {{ hasil.target_gen }}
+                              </b>
+                            </p>
+                          </td>
+                          <td>
+                            <p class="form-control">
+                              <b>
+                                {{ hasil.ct_value }}
+                              </b>
+                            </p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    
+
+                  </Ibox>
+                </div>
+              </div>
               
             </div>
           </div>

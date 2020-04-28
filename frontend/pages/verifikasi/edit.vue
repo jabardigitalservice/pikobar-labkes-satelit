@@ -30,8 +30,8 @@
             <div class="form-group">
               <label>Tanggal Input Hasil</label>
               <p class="form-control">
-                <b v-if="data.pemeriksaan_sampel.tanggal_input_hasil">
-                  {{ data.pemeriksaan_sampel.tanggal_input_hasil }}
+                <b>
+                  {{ data.last_pemeriksaan_sampel.tanggal_input_hasil }}
                 </b>
               </p>
             </div>
@@ -39,8 +39,8 @@
             <div class="form-group">
               <label>Jam Input Hasil</label>
               <p class="form-control">
-                <b v-if="data.pemeriksaan_sampel.jam_input_hasil">
-                  {{ data.pemeriksaan_sampel.jam_input_hasil }}
+                <b>
+                  {{ data.last_pemeriksaan_sampel.jam_input_hasil }}
                 </b>
               </p>
             </div>
@@ -138,6 +138,8 @@
               <has-error :form="form" field="grafik" />
             </div>
 
+            <input type="hidden" v-model="form.last_pemeriksaan_id">
+
             <div class="form-group">
               <label>Catatan Pemeriksaan</label>
               <textarea
@@ -196,10 +198,11 @@ export default {
     let form = new Form({
       tanggal_input_hasil: new Date(),
       jam_input_hasil: ("" + new Date().getHours()).padStart(2, "0")+ ":" + ("" + new Date().getMinutes()).padStart(2, "0"),
-      catatan_pemeriksaan: data.pemeriksaan_sampel.catatan_pemeriksaan,
-      kesimpulan_pemeriksaan: data.pemeriksaan_sampel.kesimpulan_pemeriksaan,
-      hasil_deteksi: data.pemeriksaan_sampel.hasil_deteksi ? data.pemeriksaan_sampel.hasil_deteksi : [{}],
-      grafik: data.pemeriksaan_sampel.grafik ? data.pemeriksaan_sampel.grafik : [],
+      last_pemeriksaan_id: data.last_pemeriksaan_sampel.id,
+      catatan_pemeriksaan: data.last_pemeriksaan_sampel.catatan_pemeriksaan,
+      kesimpulan_pemeriksaan: data.last_pemeriksaan_sampel.kesimpulan_pemeriksaan,
+      hasil_deteksi: data.last_pemeriksaan_sampel.hasil_deteksi ? data.last_pemeriksaan_sampel.hasil_deteksi : [{}],
+      grafik: data.last_pemeriksaan_sampel.grafik ? data.last_pemeriksaan_sampel.grafik : [],
     });
 
     return {

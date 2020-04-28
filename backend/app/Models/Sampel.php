@@ -88,7 +88,7 @@ class Sampel extends Model
 
     public function pemeriksaanSampel()
     {
-        return $this->hasOne(PemeriksaanSampel::class);
+        return $this->hasMany(PemeriksaanSampel::class);
     }
 
 }
