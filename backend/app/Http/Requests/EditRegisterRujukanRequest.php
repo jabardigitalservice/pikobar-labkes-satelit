@@ -26,7 +26,8 @@ class EditRegisterRujukanRequest extends FormRequest
     {
         return [
             // table: register
-            // 'nomor_register'=> ['exists:register,nomor_register'],
+            // 'nomor_register'=> ['required', 'exists:register,nomor_register'],
+            // 'register_uuid'=> ['required', 'exists:register,nomor_register'],
             'fasyankes_id'=> ['required', 'exists:fasyankes,id'],
             'nomor_rekam_medis'=> ['min:3', 'max:255'],
             'nama_dokter'=> ['required', 'max:255'],
@@ -177,7 +178,7 @@ class EditRegisterRujukanRequest extends FormRequest
 
             // Barcode Sampel
             'sampel'=> ['required'],
-            'sampel.*.nomor_barcode'=> ['exists:sampel,nomor_barcode'],
+            'sampel.*.nomor_sampel'=> ['exists:sampel,nomor_sampel'],
 
         ];
     }

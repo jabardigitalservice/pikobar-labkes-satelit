@@ -78,6 +78,12 @@
                     </td>
                     <td width="60%">{{data.ekstraksi.nama_kit_ekstraksi}}</td>
                   </tr>
+                  <tr v-if="data.ekstraksi.metode_ekstraksi == 'Otomatis'">
+                    <td width="30%" align="right">
+                      <b>Alat Ekstraksi</b>
+                    </td>
+                    <td width="60%">{{data.ekstraksi.alat_ekstraksi}}</td>
+                  </tr>
                   <tr>
                     <td width="30%" align="right">
                       <b>Dikirim ke Lab</b>

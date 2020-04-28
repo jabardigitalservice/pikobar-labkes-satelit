@@ -73,11 +73,15 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
     Route::group(['prefix'=>'dashboard'], function(){
         Route::get('/tracking','DashboardController@tracking');
         Route::get('/ekstraksi','DashboardController@ekstraksi');
+        Route::get('/pcr','DashboardController@pcr');
+        Route::get('/notifications','DashboardController@notifications');
     });
     Route::group(['prefix'=>'ekstraksi'], function(){
         Route::get('/get-data','EkstraksiController@getData');
         Route::get('/detail/{id}','EkstraksiController@detail');
         Route::post('/edit/{id}','EkstraksiController@edit');
+        Route::post('/set-invalid/{id}','EkstraksiController@setInvalid');
+        Route::post('/set-proses/{id}','EkstraksiController@setProses');
         Route::post('/terima', 'EkstraksiController@terima');
         Route::post('/kirim', 'EkstraksiController@kirim');
         Route::post('/kirim-ulang', 'EkstraksiController@kirimUlang');
@@ -173,5 +177,18 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
 
         });
-        
+   
+        Route::group(['prefix'=>'verifikasi'], function(){
+
+            Route::get('list', 'VerifikasiController@index');
+
+            Route::get('list-verified', 'VerifikasiController@indexVerified');
+
+            Route::get('detail/{sampel}', 'VerifikasiController@show');
+
+            Route::get('get-sampel-status', 'VerifikasiController@sampelStatusList');
+
+            Route::post('edit-status-sampel/{sampel}', 'VerifikasiController@updateToVerified');
+            
+        });
 });
