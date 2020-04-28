@@ -273,7 +273,7 @@ class EkstraksiController extends Controller
             return response()->json(['success'=>false,'code'=> 422,'message'=>'Sampel tidak ditemukan'],422);
         }
         if ($sampel->sampel_status != 'extraction_sample_reextract') {
-            return response()->json(['success'=>false,'code'=> 422,'message'=>'Status sampel sudah pada tahap '. $sampel->status->deskripsi . ', sehingga tidak dapat ditandai sebagai invalid'],422);
+            return response()->json(['success'=>false,'code'=> 422,'message'=>'Status sampel sudah pada tahap '. $sampel->status->deskripsi . ', sehingga tidak dapat ditandai sebagai proses'],422);
         }
         $ekstraksi = $sampel->ekstraksi;
         if (!$ekstraksi) {
@@ -281,7 +281,7 @@ class EkstraksiController extends Controller
             $ekstraksi->sampel_id = $sampel->id;
             $ekstraksi->user_id = $user->id;
         }
-        $ekstraksi->catatan_pengiriman = $request->alasan;
+        $ekstraksi->catatan_penerimaan = $request->alasan;
         $ekstraksi->save();
 
         $sampel->updateState('extraction_sample_extracted', [
