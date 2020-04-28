@@ -68,6 +68,11 @@ class StatusSampelSeeder extends Seeder
                 "chamber" => "validation",
                 "deskripsi" => "Sampel Valid",
             ],
+            [
+                "sampel_status" => "sample_invalid",
+                "chamber" => "extraction",
+                "deskripsi" => "Sampel Invalid",
+            ],
         ];
     }
 }

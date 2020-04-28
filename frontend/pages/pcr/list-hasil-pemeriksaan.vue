@@ -29,6 +29,30 @@
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Hasil Pemeriksaan</label>
+                <dynamic-input :form="params1" field="kesimpulan_pemeriksaan" 
+                  :options="[{id: 'positif',name: 'POSITIF'},{id: 'negatif',name: 'NEGATIF'}]"
+                  :hasSemua="true">
+                </dynamic-input>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Status Pemeriksaan</label>
+                <dynamic-input :form="params1" field="sampel_status" 
+                  :options="[
+                  {id: 'analyzed',name: 'Semua'},
+                  {id: 'pcr_sample_analyzed',name: 'Telah Dianalisis'},
+                  {id: 'sample_verified',name: 'Telah Diverifikasi'},
+                  {id: 'sample_valid',name: 'Telah Divalidasi'}]"
+                  :hasSemua="false">
+                </dynamic-input>
+              </div>
+            </div>
+          </div>
           <ajax-table
             url="/v1/pcr/get-data"
             :oid="'pcr-hasil-pemeriksaan'"
@@ -82,6 +106,7 @@ export default {
         lab_pcr_nama: "",
         sampel_status: "analyzed",
         filter_inconclusive: false,
+        kesimpulan_pemeriksaan: "",
       }
     };
   },
@@ -98,6 +123,12 @@ export default {
   },
   watch: {
     'params1.lab_pcr_id': function(newVal, oldVal) {
+      this.$bus.$emit('refresh-ajaxtable', 'pcr-hasil-pemeriksaan')
+    },
+    'params1.kesimpulan_pemeriksaan': function(newVal, oldVal) {
+      this.$bus.$emit('refresh-ajaxtable', 'pcr-hasil-pemeriksaan')
+    },
+    'params1.sampel_status': function(newVal, oldVal) {
       this.$bus.$emit('refresh-ajaxtable', 'pcr-hasil-pemeriksaan')
     },
   },

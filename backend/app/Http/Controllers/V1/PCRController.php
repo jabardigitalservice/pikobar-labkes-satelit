@@ -54,6 +54,11 @@ class PCRController extends Controller
                             }
                         }
                         break;
+                    case 'kesimpulan_pemeriksaan':
+                        $models->whereHas('pcr', function($q) use ($val) {
+                            $q->where('kesimpulan_pemeriksaan', $val);
+                        });
+                        break;
                     case 'sampel_status':
                         if ($val == 'analyzed') {
                             $models->whereIn('sampel_status', [

@@ -53,6 +53,9 @@ class EkstraksiController extends Controller
                         if ($val == 'extraction_sample_reextract') {
                             $models->with(['pcr']);
                         }
+                        if ($val == 'sample_invalid') {
+                            $models->with(['ekstraksi','pcr']);
+                        }
                         break;
                     default:
                         break;
@@ -119,6 +122,7 @@ class EkstraksiController extends Controller
                 'jam_mulai_ekstraksi' => 'required',
                 'metode_ekstraksi' => 'required',
                 'nama_kit_ekstraksi' => 'required',
+                'alat_ekstraksi' => 'required_if:metode_ekstraksi,Otomatis',
             ]);
         } else {
             $v = Validator::make($request->all(),[
@@ -190,6 +194,7 @@ class EkstraksiController extends Controller
             'jam_mulai_ekstraksi' => 'required',
             'metode_ekstraksi' => 'required',
             'nama_kit_ekstraksi' => 'required',
+            'alat_ekstraksi' => 'required_if:metode_ekstraksi,Otomatis',
         ]);
         $samples = Sampel::whereIn('nomor_sampel', Arr::pluck($request->samples, 'nomor_sampel'))->get()->keyBy('nomor_sampel');
 
@@ -219,6 +224,7 @@ class EkstraksiController extends Controller
             $ekstraksi->jam_mulai_ekstraksi = parseTime($request->jam_mulai_ekstraksi);
             $ekstraksi->metode_ekstraksi = $request->metode_ekstraksi;
             $ekstraksi->nama_kit_ekstraksi = $request->nama_kit_ekstraksi;
+            $ekstraksi->alat_ekstraksi = $request->alat_ekstraksi;
             $ekstraksi->save();
 
             $sampel->waktu_extraction_sample_extracted = date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_mulai_ekstraksi . ' ' .$ekstraksi->jam_mulai_ekstraksi));
@@ -230,6 +236,60 @@ class EkstraksiController extends Controller
         }
         
         return response()->json(['status'=>201,'message'=>'Penerimaan sampel berhasil dicatat']);
+    }
+
+    public function setInvalid(Request $request, $id)
+    {
+        $user = $request->user();
+        $sampel = Sampel::with(['status'])->find($id);
+        if (!$sampel) {
+            return response()->json(['success'=>false,'code'=> 422,'message'=>'Sampel tidak ditemukan'],422);
+        }
+        if ($sampel->sampel_status != 'extraction_sample_reextract') {
+            return response()->json(['success'=>false,'code'=> 422,'message'=>'Status sampel sudah pada tahap '. $sampel->status->deskripsi . ', sehingga tidak dapat ditandai sebagai invalid'],422);
+        }
+        $ekstraksi = $sampel->ekstraksi;
+        if (!$ekstraksi) {
+            $ekstraksi = new Ekstraksi;
+            $ekstraksi->sampel_id = $sampel->id;
+            $ekstraksi->user_id = $user->id;
+        }
+        $ekstraksi->catatan_pengiriman = $request->alasan;
+        $ekstraksi->save();
+
+        $sampel->updateState('sample_invalid', [
+            'user_id' => $user->id,
+            'metadata' => $ekstraksi,
+            'description' => 'Sample marked as invalid',
+        ]);
+        return response()->json(['success'=>true,'code'=> 201,'message'=>'Sampel berhasil ditandai sebagai invalid']);
+    }
+
+    public function setProses(Request $request, $id)
+    {
+        $user = $request->user();
+        $sampel = Sampel::with(['status'])->find($id);
+        if (!$sampel) {
+            return response()->json(['success'=>false,'code'=> 422,'message'=>'Sampel tidak ditemukan'],422);
+        }
+        if ($sampel->sampel_status != 'extraction_sample_reextract') {
+            return response()->json(['success'=>false,'code'=> 422,'message'=>'Status sampel sudah pada tahap '. $sampel->status->deskripsi . ', sehingga tidak dapat ditandai sebagai invalid'],422);
+        }
+        $ekstraksi = $sampel->ekstraksi;
+        if (!$ekstraksi) {
+            $ekstraksi = new Ekstraksi;
+            $ekstraksi->sampel_id = $sampel->id;
+            $ekstraksi->user_id = $user->id;
+        }
+        $ekstraksi->catatan_pengiriman = $request->alasan;
+        $ekstraksi->save();
+
+        $sampel->updateState('extraction_sample_extracted', [
+            'user_id' => $user->id,
+            'metadata' => $ekstraksi,
+            'description' => 'Sample marked as processed',
+        ]);
+        return response()->json(['success'=>true,'code'=> 201,'message'=>'Sampel berhasil ditandai sebagai sampel proses']);
     }
 
     public function kirim(Request $request)
