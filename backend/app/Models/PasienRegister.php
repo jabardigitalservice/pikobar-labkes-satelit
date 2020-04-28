@@ -12,4 +12,6 @@ class PasienRegister extends Pivot
         'pasien_id',
         'register_id'
     ];
+
+    public $timestamps = false;
 }

@@ -15,7 +15,10 @@ class Register extends Model
         'fasyankes_id',
         'nomor_rekam_medis',
         'nama_dokter',
-        'no_telp'
+        'no_telp',
+        'register_uuid',
+        'creator_user_id',
+        'sumber_pasien'
     ];
 
     protected $hidden = ['fasyankes_id'];

@@ -17,4 +17,14 @@ class KotaController extends Controller
     {
         return response()->json($kota);
     }
+
+    public function listKecamatan($kota)
+    {
+        # code...
+    }
+
+    public function listKelurahan($kec)
+    {
+        # code...
+    }
 }

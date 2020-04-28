@@ -11,14 +11,23 @@ use App\Models\Register;
 use App\Models\RiwayatKunjungan;
 use App\Models\RiwayatPenyakitPenyerta;
 use Illuminate\Http\Request;
+use App\Models\Sampel;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Str;
+use Validator;
+use Illuminate\Validation\Rule;
+use Auth;
+use App\Rules\UniqueSampel;
+use App\Models\PasienRegister;
 
 class RegisterController extends Controller
 {
-    public function generateNomorRegister($date, $jenis_registrasi = 'mandiri')
+    public function generateNomorRegister($date=null, $jenis_registrasi = 'mandiri')
     {
+        if(!$date) {
+            $date = date('Ymd');
+        }
         if (empty($jenis_registrasi)) {
             $kode_registrasi = 'L';
         } else if ($jenis_registrasi == 'mandiri') {
@@ -26,13 +35,110 @@ class RegisterController extends Controller
         } else if ($jenis_registrasi == 'rujukan') {
             $kode_registrasi = 'R';
         }
-        $res = DB::select("select max(right(nomor_register, 4))::int8 val from register where nomor_register ilike '{$date}{$kode_registrasi}%'");
+        $res = DB::select("select max(right(nomor_register, 4))::int8 val from register where nomor_register ilike '{$kode_registrasi}{$date}%'");
         if (count($res)) {
             $nextnum = $res[0]->val + 1;
         } else {
             $nextnum = 1;
         }
-        return $date . $kode_registrasi . str_pad($nextnum,4,"0",STR_PAD_LEFT);
+        return $kode_registrasi . $date . str_pad($nextnum,4,"0",STR_PAD_LEFT);
+    }
+
+    public function storeMandiri(Request $request)
+    {
+        $user = Auth::user();
+        $v = Validator::make($request->all(),[
+            'reg_kewarganegaraan' => 'required',
+            'reg_sumberpasien' => 'required',
+            'reg_nama_pasien' => 'required',
+            'reg_nik'  => 'required|max:16',
+            'reg_tempatlahir' => 'required',
+            'reg_tgllahir' => 'required',
+            'reg_nohp' => 'required|max:15',
+            'reg_kota' => 'required',
+            'reg_kecamatan' => 'required',
+            'reg_kelurahan' => 'required',
+            'reg_alamat' => 'required',
+            'reg_rt' => 'required',
+            'reg_rw' => 'required',
+            'reg_suhu' => 'required',
+            'reg_sampel.*' => [
+                'required',
+                new UniqueSampel(),
+            ],
+        ], [
+            'reg_kewarganegaraan.required' => 'Mohon pilih kewarganegaraan',
+            'reg_sumberpasien' => 'Mohon pilih sumber kedatangan pasien',
+            'peg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
+            'reg_nik.max' => 'NIK maksimal terdiri dari :max karakter',
+            'reg_nik.required' => 'NIK Pasien tidak boleh kosong',
+            'reg_tempatlahir.required' => 'Tempat lahir tidak boleh kosong',
+            'reg_tgllahir' => 'Tanggal lahir tidak boleh kosong',
+            'reg_nohp' => 'No HP tidak boleh kosong',
+            'reg_kota' => 'Mohon pilih salah satu kota/kabupaten',
+            'reg_kecamatan' => 'Kecamatan tidak boleh ksoong',
+            'reg_kelurahan' => 'Kelurahan tidak boleh ksoong',
+            'reg_alamat' => 'Alamat tidak boleh kosong',
+            'reg_rt' => 'RT tidak boleh kosong',
+            'reg_rw' => 'RW tidak boleh kosong',
+            'reg_suhu' => 'Suhu tidak boleh kosong',
+            'reg_sampel.required' => 'Mohon isi minimal satu nomor sampel'
+        ]);
+        $v->validate();
+        // foreach($request->get('reg_sampel') as $rows){
+        //     echo "$rows[nomor]";
+        // }
+        // return Str::uuid();
+        $register = Register::create([
+            'nomor_register'=> $request->input('reg_no'),
+            'fasyankes_id'=> null,
+            'nomor_rekam_medis'=> null,
+            'nama_dokter'=> null,
+            'no_telp'=> null,
+            'register_uuid' => (string) Str::uuid(),
+            'creator_user_id' => $user->id,
+            'sumber_pasien' => $request->get('reg_sumberpasien')
+        ]);
+
+        $pasien = Pasien::where('nik',$request->get('reg_nik'))->first();
+        if(!$pasien) {
+            $pasien = new Pasien;
+        }
+        $pasien->nama_lengkap = $request->get('reg_nama_pasien');
+        $pasien->kewarganegaraan = $request->get('reg_kewarganegaraan');
+        $pasien->nik = $request->get('reg_nik');
+        $pasien->tempat_lahir = $request->get('reg_tempatlahir');
+        $pasien->tanggal_lahir = $request->get('reg_tgllahir');
+        $pasien->no_hp = $request->get('reg_nohp');
+        $pasien->kota_id = $request->get('reg_kota');
+        $pasien->kecamatan = $request->get('reg_kecamatan');
+        $pasien->kelurahan = $request->get('reg_kelurahan');
+        $pasien->alamat_lengkap = $request->get('reg_alamat');
+        $pasien->no_rt = $request->get('reg_rt');
+        $pasien->no_rw = $request->get('reg_rw');
+        $pasien->suhu = $request->get('reg_suhu');
+        // $pasien->keterangan_lain = $request->get('reg_keterangan');
+        $pasien->save();
+
+        // $tandaGejala = $this->getRequestTandaGejala($request);
+
+        $regis = PasienRegister::create([
+            'pasien_id' => $pasien->id,
+            'register_id' => $register->id,
+        ]);
+
+        if($request->get('reg_sampel')) {
+            foreach($request->get('reg_sampel') as $rows) {
+                $sampel = new Sampel;
+                $sampel->nomor_sampel = $rows['nomor'];
+                $sampel->nomor_register = $request->input('reg_no');
+                $sampel->register_id = $register->id;
+                $sampel->save();
+            }
+        }
+
+
+        return response()->json(['status'=>201,'message'=>'Berhasil menambahkan sampel','result'=>[]]);
     }
 
     /**
