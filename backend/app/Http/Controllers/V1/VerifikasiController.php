@@ -21,7 +21,11 @@ class VerifikasiController extends Controller
 
         $params = $request->get('params',false);
         $search = $request->get('search',false);
-        $order  = $request->get('order' ,'name');
+        $order  = $request->get('order' ,'updated_at');
+
+        if ($request->has('is_verified')) {
+            $models->where('sampel_status', 'sample_verified');
+        }
 
         if ($search != '') {
             $models = $models->where(function($q) use ($search) {
