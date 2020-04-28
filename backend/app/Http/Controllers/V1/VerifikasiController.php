@@ -50,8 +50,13 @@ class VerifikasiController extends Controller
         if ($params) {
             $params = json_decode($params, true);
             foreach ($params as $key => $val) {
-                if ($val == '' || is_array($val) && count($val) == 0) continue;
+                if ($val !== false && ($val == '' || is_array($val) && count($val) == 0)) continue;
                 switch ($key) {
+                    case 'kesimpulan_pemeriksaan':
+                        $models->whereHas('pemeriksaanSampel', function($query) use ($val){
+                            $query->where('kesimpulan_pemeriksaan', $val);
+                        });
+                        break;
                     default:
                         break;
                 }
@@ -65,11 +70,24 @@ class VerifikasiController extends Controller
 
         if ($order) {
             $order_direction = $request->get('order_direction','asc');
-            if (empty($order_direction)) $order_direction = 'asc';
+            if (empty($order_direction)) $order_direction = 'desc';
 
             switch ($order) {
                 case 'updated_at':
                     $models = $models->orderBy($order,$order_direction);
+                    break;
+                case 'nomor_register':
+                    $models = $models->orderBy($order,$order_direction);
+                    break;
+                case 'pasien_nama':
+                    $models = $models->leftJoin('register', 'sampel.register_id', '=', 'register.id')
+                        ->leftJoin('pasien_register', 'register.id', '=', 'pasien_register.register_id')
+                        ->leftJoin('pasien', 'pasien_register.pasien_id', '=', 'pasien.id')
+                        ->select('sampel.*')
+                        ->addSelect('pasien.nama_depan')
+                        ->distinct()
+                        ->orderBy('nama_depan', $order_direction);
+                    break;
                 default:
                     break;
             }
@@ -100,7 +118,7 @@ class VerifikasiController extends Controller
     {
         $models = Sampel::query()->whereHas('logs')
             ->whereHas('pemeriksaanSampel')
-            ->where('sampel_status', 'sample_verified'); // 'pcr_sample_analyzed'
+            ->whereIn('sampel_status', ['sample_verified', 'sample_valid']); // 'pcr_sample_analyzed'
 
         $params = $request->get('params',false);
         $search = $request->get('search',false);
@@ -128,8 +146,13 @@ class VerifikasiController extends Controller
         if ($params) {
             $params = json_decode($params, true);
             foreach ($params as $key => $val) {
-                if ($val == '' || is_array($val) && count($val) == 0) continue;
+                if ($val !== false && ($val == '' || is_array($val) && count($val) == 0)) continue;
                 switch ($key) {
+                    case 'kesimpulan_pemeriksaan':
+                        $models->whereHas('pemeriksaanSampel', function($query) use ($val){
+                            $query->where('kesimpulan_pemeriksaan', $val);
+                        });
+                        break;
                     default:
                         break;
                 }
@@ -148,6 +171,27 @@ class VerifikasiController extends Controller
             switch ($order) {
                 case 'updated_at':
                     $models = $models->orderBy($order,$order_direction);
+                    break;
+                case 'nomor_register':
+                    $models = $models->orderBy($order,$order_direction);
+                    break;
+                case 'pasien_nama':
+                    $models = $models->leftJoin('register', 'sampel.register_id', '=', 'register.id')
+                        ->leftJoin('pasien_register', 'register.id', '=', 'pasien_register.register_id')
+                        ->leftJoin('pasien', 'pasien_register.pasien_id', '=', 'pasien.id')
+                        ->select('sampel.*')
+                        ->addSelect('pasien.nama_depan')
+                        ->distinct()
+                        ->orderBy('nama_depan', $order_direction);
+                    break;
+                case 'nomor_sampel':
+                    $models = $models->orderBy($order,$order_direction);
+                    break;
+                case 'kesimpulan_pemeriksaan':
+                    // $models = $models->with(['pemeriksaanSampel'=> function($query){
+                    //     $query->orderBy('kesimpulan_pemeriksaan', 'asc');
+                    // }]);
+                    break;
                 default:
                     break;
             }

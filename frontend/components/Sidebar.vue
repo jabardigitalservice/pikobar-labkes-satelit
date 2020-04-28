@@ -120,10 +120,23 @@
           </ul>
         </li>
         <li v-if="checkPermission('verifikasi')">
-          <router-link to="/verifikasi" tag="a">
+          <a href="#">
             <i class="uil-eye fa-fw"></i>
             <span class="nav-label">Verifikasi</span>
-          </router-link>
+            <span class="fa arrow"></span>
+          </a>
+          <ul class="nav nav-second-level collapse">
+            <li>
+              <router-link to="/verifikasi/list-unverified" tag="a">
+                <span class="nav-label">Menunggu Verifikasi</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/verifikasi/list-verified" tag="a">
+                <span class="nav-label">Terverifikasi</span>
+              </router-link>
+            </li>
+          </ul>
         </li>
         <li v-if="checkPermission('validasi')">
           <router-link to="/" tag="a">
