@@ -3,41 +3,62 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Pasien;
+use App\Models\Register;
+use App\Models\PasienRegister;
+use App\Models\Sampel;
+use DateTime;
 
 class RegistrasiMandiri extends Controller
-{
+{ 
     public function getData(Request $request)
     {
-        $dummy['data'] = array(
-            (object) array(
-                'noreg' => 0271234123,
-                'nik' => 123456789,
-                'nama_pasien' => 'ABCD EFG (20 Tahun 0 Bulan)',
-                'dinkes_pengirim' => 'Kota Cirebon',
-                'fasyankes' => 'Rumah Sakit (RSUD ABCD)',
-                'dokter_pj' => 'Dr. ABCD',
-                'created_at' => '2020-04-21 09:00:29'
-            ),
-            (object) array(
-                'noreg' => 0271234124,
-                'nik' => 123456788,
-                'nama_pasien' => 'Ahmad Husen (20 Tahun 0 Bulan)',
-                'dinkes_pengirim' => 'Kota Cirebon',
-                'fasyankes' => 'Rumah Sakit (RSUD ABCD)',
-                'dokter_pj' => 'Dr. ABCD',
-                'created_at' => '2020-04-21 09:00:29'
-            ),
-            (object) array(
-                'noreg' => 0271234125,
-                'nik' => 123456787,
-                'nama_pasien' => 'Husni Nuryani (20 Tahun 0 Bulan)',
-                'dinkes_pengirim' => 'Kota Bandung',
-                'fasyankes' => 'Rumah Sakit (RSUD ABCD)',
-                'dokter_pj' => 'Dr. ABCD',
-                'created_at' => '2020-04-21 09:00:29'
-            ),
-        );
-        $dummy['count'] = 2;
-        return response()->json($dummy);
+        $models = PasienRegister::leftJoin('register','register.id','pasien_register.register_id')
+                    ->leftJoin('pasien','pasien.id','pasien_register.pasien_id')
+                    ->leftJoin('kota','kota.id','pasien.kota_id');
+        $params = $request->get('params',false);
+        $search = $request->get('search',false);
+        $order  = $request->get('order' ,'name');
+
+        if ($search != '') {
+            $models = $models->where(function($q) use ($search) {
+                $q->where('pasien.nama_lengkap','ilike','%'.$search.'%')
+                   ->orWhere('pasien.nik','ilike','%'.$search.'%');
+            });
+        }
+        $count = $models->count();
+
+        $page = $request->get('page',1);
+        $perpage = $request->get('perpage',999999);
+
+         if ($order) {
+            $order_direction = $request->get('order_direction','asc');
+            if (empty($order_direction)) $order_direction = 'asc';
+
+            switch ($order) {
+                case 'nama_lengkap':
+                    $models = $models->orderBy('pasien.nama_lengkap',$order_direction);
+                default:
+                    break;
+            }
+        }
+        $models = $models->select('register.nomor_register','pasien.*','kota.nama as nama_kota','register.created_at as tgl_input','pasien_register.*','register.sumber_pasien');
+        $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
+
+        foreach($models as &$model) {
+            $model->no_sampel = Sampel::where('register_id',$model->register_id)->pluck('nomor_sampel');
+            $bday = new DateTime($model->tanggal_lahir); 
+            $today = new Datetime(date('Y-m-d'));
+            $diff = $today->diff($bday);
+            $model->usia = $diff->y . ' Tahun ' . $diff->m . ' Bulan '  . $diff->d . ' Hari ';
+        }
+
+        $result = [
+            'data' => $models,
+            'count' => $count
+        ];
+
+        return response()->json($result);
     }
+
 }

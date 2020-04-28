@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Sampel;
 use Illuminate\Http\Request;
 use DB;
+use App\Models\Register;
+use App\Models\Pasien;
 
 class DashboardController extends Controller
 {
@@ -48,6 +50,24 @@ class DashboardController extends Controller
         return response()->json([
             'status' => $tracking,
         ]);
+    }
+
+    public function registrasi(Request $request)
+    {
+        $count_by_jenis = Register::groupBy('jenis_registrasi')->select('jenis_registrasi', DB::raw('count(*) as total'))->pluck('total','jenis_registrasi');
+        $count_by_status = Sampel::groupBy('sampel_status')->select('sampel_status', DB::raw('count(*) as total'))->pluck('total','sampel_status');
+        $belum_lengkap = Pasien::where(function($query){
+            $query->whereNull('nik')
+                ->orWhereNull('no_hp')
+                ->orWhereNull('alamat_lengkap');
+        })->count();
+        $tracking = [
+            'total_registrasi' => @$count_by_jenis['mandiri'] + @$count_by_jenis['rujukan'],
+            'registrasi_mandiri' => @$count_by_jenis['mandiri'],
+            'belum_lengkap' => $belum_lengkap,
+            'done' => @$count_by_status['sample_valid'],
+        ];
+        return response()->json($tracking);
     }
     public function ekstraksi()
     {
