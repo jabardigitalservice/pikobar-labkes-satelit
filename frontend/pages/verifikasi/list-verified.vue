@@ -6,7 +6,8 @@
       <div class="col-lg-12">
         <Ibox title="Sampel Terverifikasi">
           <p class="sub-header">
-            Berikut ini adalah daftar sampel dari hasil pemeriksaan</p>
+            Berikut ini adalah daftar sampel dari hasil pemeriksaan
+          </p>
 
             <div class="row">
             <div class="col-md-3">
@@ -19,6 +20,12 @@
                   <option value="inkonklusif">Inkonklusif</option>
                 </select>
               </div>
+            </div>
+
+            <div class="col-md-9">
+              <router-link :to="'/verifikasi/export-excel'" class="btn btn-primary pull-right">
+                <i class="fa fa-file-excel-o"></i> Export Excel
+              </router-link>
             </div>
           </div>
           <ajax-table

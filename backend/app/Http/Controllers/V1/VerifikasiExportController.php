@@ -11,19 +11,19 @@ class VerifikasiExportController extends Controller
     public function exportExcel(Request $request)
     {
         $request->validate([
-            'start_date'=> 'date|date_format:Y-m-d',
-            'end_date'=> 'date|date_format:Y-m-d',
+            'start_date'=> 'nullable', // 'date|date_format:Y-m-d',
+            'end_date'=> 'nullable', // 'date|date_format:Y-m-d',
             'sampel_status'=> 'nullable'
         ]);
 
         $payload = [];
 
         if ($request->has('start_date')) {
-            $payload['startDate'] = $request->input('start_date');
+            $payload['startDate'] = parseDate($request->input('start_date'));
         }
 
         if ($request->has('end_date')) {
-            $payload['endDate'] = $request->input('end_date');
+            $payload['endDate'] = parseDate($request->input('end_date'));
         }
 
         if ($request->has('sampel_status')) {
