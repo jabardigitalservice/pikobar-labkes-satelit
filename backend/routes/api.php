@@ -73,6 +73,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
     Route::group(['prefix'=>'dashboard'], function(){
         Route::get('/tracking','DashboardController@tracking');
         Route::get('/ekstraksi','DashboardController@ekstraksi');
+        Route::get('/registrasi', 'DashboardController@registrasi');
         Route::get('/pcr','DashboardController@pcr');
         Route::get('/notifications','DashboardController@notifications');
     });
@@ -100,6 +101,9 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
     });
 
         Route::get('list-kota-jabar', 'KotaController@listKota');
+        Route::get('list-kecamatan/{kota}','KotaController@listKecamatan');
+        Route::get('list-kelurahan/{kec}','KotaController@listKelurahan');
+
         Route::get('kota/detail/{kota}', 'KotaController@show');
 
         Route::get('list-fasyankes-jabar', 'FasyankesController@listByProvinsi');
@@ -116,6 +120,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             Route::get('/', 'RegisterListController@index');
 
             Route::post('store', 'RegisterController@store');
+            Route::post('mandiri','RegisterController@storeMandiri');
 
             Route::get('detail/{register}', 'RegisterController@show');
 
@@ -123,6 +128,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             Route::delete('delete/{register}', 'RegisterController@destroy');
 
+            Route::get('noreg','RegisterController@generateNomorRegister');
             
             Route::group(['prefix'=>'rujukan'], function(){
 
