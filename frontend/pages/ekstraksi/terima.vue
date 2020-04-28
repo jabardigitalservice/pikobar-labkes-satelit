@@ -136,7 +136,7 @@
               </dynamic-input>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" v-show="form.metode_ekstraksi != 'Otomatis'">
               <label>
                 Nama kit ekstraksi
                 <span style="color:red">*</span>
@@ -215,6 +215,9 @@ export default {
   },
   watch: {
     'form.metode_ekstraksi': function(newval, oldval) {
+      if (this.form.metode_ekstraksi == 'Otomatis') {
+        this.form.nama_kit_ekstraksi = ''
+      }
       if (this.form.metode_ekstraksi != 'Otomatis') {
         this.form.alat_ekstraksi = ''
       }
