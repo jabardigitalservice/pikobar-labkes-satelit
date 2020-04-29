@@ -39,7 +39,15 @@
         </td>
         <td width="20%">
             <nuxt-link tag="a" class="btn btn-success btn-sm" :to="`/validasi/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
-            <nuxt-link :to="`/validasi/edit/${item.id}`" class="btn btn-warning btn-sm" tag="a"><i class="fa fa-edit"></i></nuxt-link>
+            <button
+                @click="submit()"
+                class="btn btn-sm btn-primary"
+                type="button"
+            >
+                <i class="fa fa-file-excel"></i>
+                {{ 'Print' }}
+            </button>
+            <!-- <nuxt-link :to="`/validasi/edit/${item.id}`" class="btn btn-warning btn-sm" tag="a"><i class="fa fa-edit"></i></nuxt-link> -->
         </td>
     </tr>
 </template>
