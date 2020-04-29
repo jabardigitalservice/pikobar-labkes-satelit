@@ -58,11 +58,19 @@ const routes = [
 
   { path: '/pemeriksaansampel', name:'pemeriksaansample.index', component: page('pemeriksaan/index.vue'), meta: {parentName: 'home'}},
 
+  // Verifikasi
   { path: '/verifikasi/list-unverified', name:'verifikasi.index.unverified', component: page('verifikasi/list-unverified.vue'), meta: {parentName: 'home'} },
   { path: '/verifikasi/list-verified', name:'verifikasi.index.verified', component: page('verifikasi/list-verified.vue'), meta: {parentName: 'home'} },
   { path: '/verifikasi/detail/:id', name:'verifikasi.detail', component: page('verifikasi/detail.vue'), meta: {parentName: 'verifikasi.index.unverified'} },
   { path: '/verifikasi/edit/:id', name:'verifikasi.edit', component: page('verifikasi/edit.vue'), meta: {parentName: 'verifikasi.index.unverified'} },
   { path: '/verifikasi/export-excel', name:'verifikasi.export-excel', component: page('verifikasi/export-excel.vue'), meta: {parentName: 'verifikasi.index.verified'} },
+
+  // Validasi
+  { path: '/validasi/list-unvalidate', name:'validasi.index.unvalidate', component: page('validasi/list-unvalidate.vue'), meta: {parentName: 'home'} },
+  { path: '/validasi/list-validated', name:'validasi.index.validated', component: page('validasi/list-validated.vue'), meta: {parentName: 'home'} },
+  { path: '/validasi/detail/:id', name:'validasi.detail', component: page('validasi/detail.vue'), meta: {parentName: 'validasi.index.unvalidate'} },
+  { path: '/validasi/edit/:id', name:'validasi.edit', component: page('validasi/edit.vue'), meta: {parentName: 'validasi.index.unvalidate'} },
+  { path: '/validasi/export-excel', name:'validasi.export-excel', component: page('validasi/export-excel.vue'), meta: {parentName: 'validasi.index.validated'} },
   
 ]
 

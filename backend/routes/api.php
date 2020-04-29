@@ -195,4 +195,21 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             
         });
+
+        Route::group(['prefix'=>'validasi'], function(){
+
+            Route::get('list', 'ValidasiController@index');
+
+            Route::get('list-validated', 'ValidasiController@indexValidated');
+
+            // Route::get('detail/{sampel}', 'ValidasiController@show');
+
+            // Route::get('get-sampel-status', 'ValidasiController@sampelStatusList');
+
+            // Route::post('edit-status-sampel/{sampel}', 'ValidasiController@updateToVerified');
+
+            // Route::get('export-excel', 'ValidasiExportController@exportExcel');
+
+            
+        });
 });

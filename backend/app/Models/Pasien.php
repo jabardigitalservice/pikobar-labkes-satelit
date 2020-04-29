@@ -101,5 +101,10 @@ class Pasien extends Model
             );
     }
 
+    public function kota()
+    {
+        return $this->belongsTo(Kota::class);
+    }
+
 
 }
