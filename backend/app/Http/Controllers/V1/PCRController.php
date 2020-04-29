@@ -246,11 +246,12 @@ class PCRController extends Controller
             'hasil_deteksi.*.ct_value' => 'required',
             'grafik' => 'required',
         ]);
-        if (count($request->grafik) < 1) {
-            $v->after(function ($validator) {
-                $validator->errors()->add("samples", 'Minimal 1 file untuk grafik');
-            });
-        }
+        // cek minimal file
+        // if (count($request->grafik) < 1) {
+        //     $v->after(function ($validator) {
+        //         $validator->errors()->add("samples", 'Minimal 1 file untuk grafik');
+        //     });
+        // }
         if (count($request->hasil_deteksi) < 1) {
             $v->after(function ($validator) {
                 $validator->errors()->add("samples", 'Minimal 1 hasil deteksi CT Value');

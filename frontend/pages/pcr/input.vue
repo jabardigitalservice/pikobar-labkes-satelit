@@ -144,7 +144,6 @@
             <div class="form-group">
               <label>
                 Grafik
-                <span style="color:red">*</span>
               </label>
               <div :class="{ 'is-invalid': form.errors.has('grafik') }">
                 <a :href="url" target="_blank" v-for="(url, $index) in data.pcr.grafik" :key="$index" class="thumbnail-wrapper">

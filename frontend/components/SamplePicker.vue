@@ -31,6 +31,7 @@
         class="label label-danger pull-right"
         style="font-size: 1.1em; cursor: pointer"
         @click="removeSample(idx)"
+        v-if="!disableInput"
       >
         <i class="fa fa-times"></i>
       </span>
