@@ -139,10 +139,23 @@
           </ul>
         </li>
         <li v-if="checkPermission('validasi')">
-          <router-link to="/" tag="a">
+          <a href="#">
             <i class="uil-check fa-fw"></i>
             <span class="nav-label">Validasi</span>
-          </router-link>
+            <span class="fa arrow"></span>
+          </a>
+          <ul class="nav nav-second-level collapse">
+            <li>
+              <router-link to="/validasi/list-unvalidate" tag="a">
+                <span class="nav-label">Menunggu Validasi</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/validasi/list-validated" tag="a">
+                <span class="nav-label">Tervalidasi</span>
+              </router-link>
+            </li>
+          </ul>
         </li>
         <li>
           <router-link to="/" tag="a">

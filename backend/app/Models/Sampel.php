@@ -24,6 +24,7 @@ class Sampel extends Model
         'tanggal_pengambilan_sampel',
         'waktu_pengambilan_sampel',
         'sampel_status',
+        'validator_id',
     ];
 
     public function fasyankes()
@@ -89,6 +90,11 @@ class Sampel extends Model
     public function pemeriksaanSampel()
     {
         return $this->hasMany(PemeriksaanSampel::class);
+    }
+
+    public function validator()
+    {
+        return $this->belongsTo(Validator::class);
     }
 
 }
