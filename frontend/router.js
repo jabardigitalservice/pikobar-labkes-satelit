@@ -32,7 +32,10 @@ const routes = [
   { path: '/pengguna/update/:id', name:'pengguna.update', component:page('pengguna/update.vue'),  meta: {parentName: 'pengguna.index'} },
   { path: '/registrasi/mandiri', name: 'registrasi.mandiri', component: page('registrasi-mandiri/index.vue'), meta: {parentName: 'home'} },
   { path: '/registrasi/mandiri/tambah', name: 'registrasi.mandiri.tambah', component: page('registrasi-mandiri/tambah.vue'), meta: {parentName: 'registrasi.mandiri'} },
-  { path: '/registrasi/mandiri/detail', name: 'registrasi.mandiri.detail', component: page('registrasi-mandiri/detail.vue'), meta: {parentName: 'registrasi.mandiri'} },
+  { path: '/registrasi/mandiri/detail/:register_id/:pasien_id', name: 'registrasi.mandiri.detail', 
+                    component: page('registrasi-mandiri/detail.vue'), 
+                    meta: {parentName: 'registrasi.mandiri'} },
+  { path: '/registrasi/mandiri/update/:register_id/:pasien_id', name:'registrasi.mandiri.update', meta: {parentName: 'registrasi.mandiri'}, component: page('registrasi-mandiri/update.vue')},
   
   { path: '/registrasi/rujukan', name:'registrasi.rujukan', component: page('registrasi-rujukan/index.vue'), meta: {parentName: 'home'} },
 

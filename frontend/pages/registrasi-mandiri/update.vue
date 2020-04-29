@@ -1,14 +1,13 @@
 <template>
     <div class="wrapper wrapper-content">
         <portal to="title-name">
-            Registrasi Pasien
+            Update Registrasi Pasien
         </portal>
         <portal to="title-action">
             <div class="title-action">
                 <nuxt-link to="/registrasi/mandiri" class="btn btn-primary">Kembali</nuxt-link>
             </div>
         </portal>
-
         <div class="row">
             <div class="col-lg-12">
                 <Ibox title="Penerimaan atau Pengambilan Sampel">
@@ -123,7 +122,7 @@
                             </div>
                         </div>
 
-                         <div class="form-group row mt-4">
+                        <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Jenis Kelamin
                                 <span style="color:red">*</span>
@@ -258,8 +257,9 @@
                         <div class="form-group row" v-for="(item,idx) in form.reg_sampel" :key="idx">
                             <label class="col-md-2 col-form-label" for="sampel">Nomor Sampel {{idx+1}}</label>
                             <div class="col-md-4">
+                                <input type="hidden" name="id_sampel" v-model="item.id" />
                                 <input class="form-control" type="text" name="pen_sampel" v-model="item.nomor"
-                                    :class="{ 'is-invalid':form.errors.has(`reg_sampel.${idx}`) }" required />
+                                    :class="{ 'is-invalid':form.errors.has(`reg_sampel.${idx}`) }" />
                             </div>
                             <div class="col-md-2 mt-2">
                                 <span>
@@ -518,7 +518,7 @@
 
                         <div class="form-group row mt-4 text-center justify-content-center">
                             <v-button :loading="form.busy" class="btn btn-md btn-primary block  m-b">
-                                <i class="fa fa-save"></i> Simpan Data Register
+                                <i class="fa fa-save"></i> Update Data Register
                             </v-button>
                         </div>
                     </form>
@@ -534,28 +534,30 @@
 
     export default {
         middleware: "auth",
-        data() {
+        async asyncData({route, store}) {
+        let error = false;
+        let resp = await axios.get("/v1/register/mandiri/"+route.params.register_id+"/"+route.params.pasien_id);
+        let data = resp.data;
             return {
                 form: new Form({
-                    reg_no: null,
-                    reg_kewarganegaraan: null,
-                    reg_sumberpasien: null,
-                    reg_nama_pasien: null,
-                    reg_nik: null,
-                    reg_tempatlahir: null,
-                    reg_tgllahir: null,
-                    reg_nohp: null,
-                    reg_kota: null,
-                    reg_kecamatan: null,
-                    reg_kelurahan: null,
-                    reg_alamat: null,
-                    reg_rt: null,
-                    reg_rw: null,
-                    reg_suhu: null,
-                    reg_sampel: [{
-                        nomor: null
-                    }],
-                    reg_keterangan: null,
+                    reg_no: data.reg_no,
+                    reg_kewarganegaraan: data.reg_kewarganegaraan,
+                    reg_sumberpasien: data.reg_sumberpasien,
+                    reg_nama_pasien: data.reg_nama_pasien,
+                    reg_nik: data.reg_nik,
+                    reg_tempatlahir: data.reg_tempatlahir,
+                    reg_tgllahir: data.reg_tgllahir,
+                    reg_nohp: data.reg_nohp,
+                    reg_kota: data.reg_kota,
+                    reg_kecamatan: data.reg_kecamatan,
+                    reg_kelurahan: data.reg_kelurahan,
+                    reg_alamat: data.reg_alamat,
+                    reg_rt: data.reg_rt,
+                    reg_rw: data.reg_rw,
+                    reg_suhu: data.reg_suhu,
+                    reg_sampel: data.reg_sampel!=null?data.reg_sampel:[{id:null,nomor:null}],
+                    reg_keterangan: data.reg_keterangan,
+                    reg_jk : data.reg_jk,
                     reg_gejpanas:null,
                     reg_gejpenumonia:null,
                     reg_gejbatuk:null,
@@ -566,8 +568,7 @@
                     reg_gejsakitkepala:null,
                     reg_gejdiare:null,
                     reg_gejmualmuntah:null,
-                    reg_gejlain:null,
-                    reg_jk:null
+                    reg_gejlain:null
 
                 }),
                 selected_reg: {},
@@ -612,17 +613,21 @@
                     reg_gejsakitkepala:null,
                     reg_gejdiare:null,
                     reg_gejmualmuntah:null,
-                    reg_gejlain:null,
-                    reg_jk:null,
+                    reg_gejlain:null
                 })
             },
             addSample() {
                 // console.log(this.form.reg_sampel)
                 this.form.reg_sampel.push({
-                    nomor: ""
+                    nomor: null,
+                    id:null
                 })
             },
-            removeSample(index) {
+            async removeSample(index) {
+                const sample = this.form.reg_sampel[index];
+                if(sample.id!=null) {
+                    await axios.get('/v1/register/delete-sampel/'+sample.id)
+                }
                 this.form.reg_sampel.splice(index, 1)
             },
             async getKota() {
@@ -632,16 +637,19 @@
             async submit() {
                 // Submit the form.
                 try {
-                    const response = await this.form.post("/v1/register/mandiri");
-                    this.$toast.success(response.data.message, {
-                        icon: 'check',
-                        iconPack: 'fontawesome',
-                        duration: 5000
-                    })
+                    const response = await this.form.post("/v1/register/mandiri/update/"+this.$route.params.register_id+'/'+this.$route.params.pasien_id);
+                    // this.$toast.success(response.data.message, {
+                    //     icon: 'check',
+                    //     iconPack: 'fontawesome',
+                    //     duration: 5000
+                    // })
+                    this.$swal.fire("Berhasil Ubah Data", "Data Pasien Register Berhasil Diubah", "success");
                     // console.log('Response : ', response);
-                    this.initForm();
-                    this.getNoreg();
+                    // this.initForm();
+                    // this.getNoreg();
+                    this.$router.push('/registrasi/mandiri');
                 } catch (err) {
+                    console.log(err);
                     if (err.response && err.response.data.code == 422) {
                         this.$nextTick(() => {
                             this.form.errors.set(err.response.data.error)
@@ -656,6 +664,12 @@
                     }
                     return;
                 }
+            },
+            async getUpdate(){
+                const resp = await axios.get(`/v1/register/mandiri/${this.registerId}/${this.pasienId}`)
+                this.data = resp.data;
+                console.log(resp);
+                // this.form = resp.data;
             }
         },
         head() {
@@ -665,13 +679,21 @@
         },
         created() {
             this.getKota()
-            this.getNoreg();
+            this.getUpdate()
+            // this.getNoreg();
         },
         watch: {
             "form.reg_kota": function (newVal, oldVal) {
 
             },
-
+        },
+        computed:{
+            registerId(){
+                return this.$route.params.register_id
+            },
+            pasienId(){
+                return this.$route.params.pasien_id
+            } 
         }
     };
 </script>

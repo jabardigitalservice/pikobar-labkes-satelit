@@ -121,6 +121,10 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             Route::post('store', 'RegisterController@store');
             Route::post('mandiri','RegisterController@storeMandiri');
+            Route::post('mandiri/update/{regis_id}/{pasien_id}','RegisterController@storeUpdate');
+            Route::get('mandiri/{register_id}/{pasien_id}','RegisterController@getById');
+            Route::get('delete-sampel/{id}','RegisterController@deleteSample');
+            Route::delete('mandiri/{id}/{pasien}','RegisterController@delete');
 
             Route::get('detail/{register}', 'RegisterController@show');
 
