@@ -15,11 +15,10 @@ class CreatePasienTable extends Migration
     {
         Schema::create('pasien', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nama_depan');
-            $table->string('nama_belakang')->nullable();
-            $table->string('no_ktp', 16)->unique()->nullable();
-            $table->string('no_sim', 50)->unique()->nullable();
-            $table->string('no_kk', 30)->nullable();
+            // $table->string('nama_depan');
+            // $table->string('nama_belakang')->nullable();
+            $table->string('nama_lengkap');
+            $table->string('nik',16)->nullable();
             $table->date('tanggal_lahir');
             $table->string('tempat_lahir', 100);
             $table->string('kewarganegaraan', 100);
@@ -34,6 +33,8 @@ class CreatePasienTable extends Migration
             $table->char('no_rt', 3)->nullable();
             $table->text('alamat_lengkap')->nullable();
             $table->text('keterangan_lain')->nullable();
+            $table->double('suhu')->nullable();
+            $table->string('sumber_pasien');
             $table->timestamps();
 
             $table->foreign('kota_id')->references('id')->on('kota');

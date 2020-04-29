@@ -16,7 +16,7 @@ class CreateRegisterTable extends Migration
         Schema::create('register', function (Blueprint $table) {
             $table->id();
             $table->uuid('nomor_register')->unique();
-            $table->unsignedInteger('fasyankes_id');
+            $table->unsignedInteger('fasyankes_id')->nullable();
             $table->string('nomor_rekam_medis')->nullable();
             $table->string('nama_dokter')->nullable();
             $table->string('no_telp', 30)->nullable();

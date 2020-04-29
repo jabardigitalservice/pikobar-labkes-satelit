@@ -51,7 +51,7 @@
                     </thead>
                     <tbody v-bind:class="config.class.tbody">
                     <tr v-for="(item,index) in items" :is="rowtemplate" :rowparams.sync="rowparams" :index="index"
-                        :item="item" :pagination="pagination" :key="index"></tr>
+                        :item="item" :pagination="pagination" :key="index" :config="config"></tr>
                     <tr v-if="pagination.count == 0">
                         <td v-bind:colspan="totalColumns">{{ $t('title.nodata_show') }}</td>
                     </tr>

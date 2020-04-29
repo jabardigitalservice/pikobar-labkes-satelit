@@ -33,9 +33,12 @@
                     }"
                     :rowtemplate="'tr-data-regis-mandiri'"
                     :columns="{
-                      nama_pasien: 'Informasi Pasien',
-                      dinkes_pengirim: 'Pengirim',
-                      created_at: 'Tanggal Input'
+                      nomor_register: 'Nomor Registrasi',
+                      nama_pasien: 'Pasien',
+                      nama_kota: 'Domisili',
+                      sumber_pasien: 'Sumber',
+                      no_sampel:'Sampel',
+                      tgl_input:'Tanggal Input'
                     }"></ajax-table>
               </Ibox>
             </div>

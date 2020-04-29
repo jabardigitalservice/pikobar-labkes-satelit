@@ -11,6 +11,7 @@
     <tracking v-if="checkPermission('verifikasi')"></tracking>
     <ekstraksi v-if="checkPermission('ekstraksi')"></ekstraksi>
     <pcr v-if="checkPermission('pcr')"></pcr>
+    <registrasi v-if="checkPermission('registrasi')"></registrasi>
   </div>
 </template>
  
@@ -19,6 +20,7 @@ import { mapGetters } from "vuex";
 import Ekstraksi from './dashboard/ekstraksi'
 import Pcr from './dashboard/pcr'
 import Tracking from './dashboard/tracking'
+import Registrasi from './dashboard/registrasi'
 
 export default {
   middleware: "auth",
@@ -26,6 +28,7 @@ export default {
     Ekstraksi,
     Pcr,
     Tracking,
+    Registrasi
   },
 
   computed: mapGetters({

@@ -62,6 +62,7 @@ class RegisterController extends Controller
             'reg_rt' => 'required',
             'reg_rw' => 'required',
             'reg_suhu' => 'required',
+            'reg_jk'=>'required',
             'reg_sampel.*' => [
                 'required',
                 new UniqueSampel(),
@@ -117,7 +118,8 @@ class RegisterController extends Controller
         $pasien->no_rt = $request->get('reg_rt');
         $pasien->no_rw = $request->get('reg_rw');
         $pasien->suhu = $request->get('reg_suhu');
-        // $pasien->keterangan_lain = $request->get('reg_keterangan');
+        $pasien->jenis_kelamin = $request->get('reg_jk');
+        $pasien->keterangan_lain = $request->get('reg_keterangan');
         $pasien->save();
 
         // $tandaGejala = $this->getRequestTandaGejala($request);
@@ -137,8 +139,148 @@ class RegisterController extends Controller
             }
         }
 
+        return response()->json(['status'=>201,'message'=>'Proses Registrasi Mandiri Berhasil Ditambahkan','result'=>[]]);
+    }
 
-        return response()->json(['status'=>201,'message'=>'Berhasil menambahkan sampel','result'=>[]]);
+    public function storeUpdate(Request $request,$regis_id, $pasien_id)
+    {
+        $register = Register::where('id',$regis_id)->first();
+        $pasien   = Pasien::where('id',$pasien_id)->first();
+        $user = Auth::user();
+        $v = Validator::make($request->all(),[
+            'reg_kewarganegaraan' => 'required',
+            'reg_sumberpasien' => 'required',
+            'reg_nama_pasien' => 'required',
+            'reg_nik'  => 'required|max:16',
+            'reg_tempatlahir' => 'required',
+            'reg_tgllahir' => 'required',
+            'reg_nohp' => 'required|max:15',
+            'reg_kota' => 'required',
+            'reg_kecamatan' => 'required',
+            'reg_kelurahan' => 'required',
+            'reg_alamat' => 'required',
+            'reg_rt' => 'required',
+            'reg_rw' => 'required',
+            'reg_suhu' => 'required',
+            'reg_jk'=>'required',
+            // 'reg_sampel.*' => [
+            //     'required',
+            //     new UniqueSampel(),
+            // ],
+        ], [
+            'reg_kewarganegaraan.required' => 'Mohon pilih kewarganegaraan',
+            'reg_sumberpasien' => 'Mohon pilih sumber kedatangan pasien',
+            'peg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
+            'reg_nik.max' => 'NIK maksimal terdiri dari :max karakter',
+            'reg_nik.required' => 'NIK Pasien tidak boleh kosong',
+            'reg_tempatlahir.required' => 'Tempat lahir tidak boleh kosong',
+            'reg_tgllahir' => 'Tanggal lahir tidak boleh kosong',
+            'reg_nohp' => 'No HP tidak boleh kosong',
+            'reg_kota' => 'Mohon pilih salah satu kota/kabupaten',
+            'reg_kecamatan' => 'Kecamatan tidak boleh ksoong',
+            'reg_kelurahan' => 'Kelurahan tidak boleh ksoong',
+            'reg_alamat' => 'Alamat tidak boleh kosong',
+            'reg_rt' => 'RT tidak boleh kosong',
+            'reg_rw' => 'RW tidak boleh kosong',
+            'reg_suhu' => 'Suhu tidak boleh kosong',
+            'reg_sampel.required' => 'Mohon isi minimal satu nomor sampel'
+        ]);
+        $v->validate();
+        
+        $register->sumber_pasien = $request->get('reg_sumberpasien');
+        $pasien->nama_lengkap = $request->get('reg_nama_pasien');
+        $pasien->kewarganegaraan = $request->get('reg_kewarganegaraan');
+        $pasien->nik = $request->get('reg_nik');
+        $pasien->tempat_lahir = $request->get('reg_tempatlahir');
+        $pasien->tanggal_lahir = $request->get('reg_tgllahir');
+        $pasien->no_hp = $request->get('reg_nohp');
+        $pasien->kota_id = $request->get('reg_kota');
+        $pasien->kecamatan = $request->get('reg_kecamatan');
+        $pasien->kelurahan = $request->get('reg_kelurahan');
+        $pasien->alamat_lengkap = $request->get('reg_alamat');
+        $pasien->no_rt = $request->get('reg_rt');
+        $pasien->no_rw = $request->get('reg_rw');
+        $pasien->suhu = $request->get('reg_suhu');
+        $pasien->jenis_kelamin = $request->get('reg_jk');
+        $pasien->keterangan_lain = $request->get('reg_keterangan');
+        $pasien->save();
+
+        // $tandaGejala = $this->getRequestTandaGejala($request);
+
+        // $regis = PasienRegister::create([
+        //     'pasien_id' => $pasien->id,
+        //     'register_id' => $register->id,
+        // ]);
+
+        if($request->get('reg_sampel')) {
+            foreach($request->get('reg_sampel') as $rows) {
+                if($rows['id']!=null){
+                    $sampel = Sampel::where('id',$rows['id'])->first();
+                }else {
+                    $sampel = new Sampel;
+                }
+                $sampel->nomor_sampel = $rows['nomor'];
+                $sampel->nomor_register = $request->input('reg_no');
+                $sampel->register_id = $register->id;
+                $sampel->save();
+            }
+        }
+
+        return response()->json(['status'=>200,'message'=>'Data Register Berhasil Diubah']);
+    }
+
+    public function deleteSample($id)
+    {
+        $sm = Sampel::where('id',$id)->first()->delete();
+        return response()->json(['status'=>200,'message'=>'Berhasil menghapus data sample']);
+    }
+
+    public function getById(Request $request, $register_id, $pasien_id)
+    {
+        $register = Register::where('id',$register_id)->first();
+        $pasien   = Pasien::where('pasien.id', $pasien_id)->leftJoin('kota','kota.id','pasien.kota_id')->first();
+        $sampel   = Sampel::where('register_id',$register_id)->get();
+        $smp = [];
+        foreach($sampel as $sm) {
+            array_push($smp, array(
+                'nomor'=> $sm->nomor_sampel,
+                'id' => $sm->id
+            ));
+            // $smp['nomor'] = $sm->nomor_sampel;
+            // $smp['id'] = $sm->id;
+        }
+        return response()->json([
+            'reg_no' =>  $register->nomor_register,
+            'reg_kewarganegaraan' =>  $pasien->kewarganegaraan,
+            'reg_sumberpasien' =>  $register->sumber_pasien,
+            'reg_nama_pasien' =>  $pasien->nama_lengkap,
+            'reg_nik' =>  $pasien->nik,
+            'reg_tempatlahir' =>  $pasien->tempat_lahir,
+            'reg_tgllahir' =>  $pasien->tanggal_lahir,
+            'reg_nohp' =>  $pasien->no_hp,
+            'reg_kota' =>  $pasien->kota_id,
+            'reg_kecamatan' =>  $pasien->kecamatan,
+            'reg_kelurahan' =>  $pasien->kelurahan,
+            'reg_alamat' =>  $pasien->alamat_lengkap,
+            'reg_rt' =>  $pasien->no_rt,
+            'reg_rw' =>  $pasien->no_rw,
+            'reg_suhu' =>  $pasien->suhu,
+            'reg_sampel' =>  $smp,
+            'reg_keterangan' =>  $pasien->keterangan_lain,
+            'reg_gejpanas' => null,
+            'reg_gejpenumonia' => null,
+            'reg_gejbatuk' => null,
+            'reg_gejnyeritenggorokan' => null,
+            'reg_gejsesaknafas' => null,
+            'reg_gejpilek' => null,
+            'reg_gejlesu' => null,
+            'reg_gejsakitkepala' => null,
+            'reg_gejdiare' => null,
+            'reg_gejmualmuntah' => null,
+            'reg_gejlain' => null,
+            'reg_jk' => $pasien->jenis_kelamin,
+            'nama_kota'=>$pasien->nama
+         ]);
     }
 
     /**
@@ -385,6 +527,25 @@ class RegisterController extends Controller
             'keterangan_lain'=> $request->input('penyakit_penyerta.keterangan_lain'),
             'daftar_penyakit'=> $request->input('penyakit_penyerta.riwayat'),
         ];
+    }
+
+    public function delete($id, $pasien)
+    {
+        DB::beginTransaction();
+        try{
+            PasienRegister::where('register_id',$id)->where('pasien_id',$pasien)->delete();
+            $register = Register::where('id',$id)->delete();
+            $pasien = Pasien::where('id',$pasien)->delete();
+            $sampel = Sampel::where('register_id',$id)->delete();
+            DB::commit();
+            return response()->json([
+                'status'=> true,
+                'message'=>"Berhasil menghapus data register"
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     /**
