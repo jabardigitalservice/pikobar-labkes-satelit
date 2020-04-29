@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
 use App\Models\PemeriksaanSampel;
 use App\Models\Sampel;
+use App\Models\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -179,8 +180,8 @@ class ValidasiController extends Controller
         $perpage = $request->get('perpage',999999);
 
         if ($order) {
-            $order_direction = $request->get('order_direction','asc');
-            if (empty($order_direction)) $order_direction = 'asc';
+            $order_direction = $request->get('order_direction','desc');
+            if (empty($order_direction)) $order_direction = 'desc';
 
             switch ($order) {
                 case 'updated_at':
@@ -207,6 +208,7 @@ class ValidasiController extends Controller
                     // }]);
                     break;
                 default:
+                    $models = $models->orderBy('updated_at', $order_direction);
                     break;
             }
         }
@@ -245,7 +247,7 @@ class ValidasiController extends Controller
      */
     public function show(Sampel $sampel)
     {
-        $result = $sampel->load(['pemeriksaanSampel', 'status'])->toArray();
+        $result = $sampel->load(['pemeriksaanSampel', 'status', 'validator'])->toArray();
         $pasien = optional($sampel->register->pasiens())->first();
 
         return response()->json([
@@ -255,6 +257,15 @@ class ValidasiController extends Controller
                 'pasien'=> optional($pasien)->toArray(),
                 'last_pemeriksaan_sampel'=> $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first()
             ]
+        ]);
+    }
+
+    public function getValidator()
+    {
+        return response()->json([
+            'status'=> 200,
+            'message'=> 'success',
+            'data'=> Validator::whereIsActive(true)->get()
         ]);
     }
 
@@ -268,9 +279,10 @@ class ValidasiController extends Controller
     public function updateToValidate(Request $request, Sampel $sampel)
     {
         $request->validate([
+            'validator'=> 'required|exists:validator,id',
             'catatan_pemeriksaan'=> 'nullable|max:255',
             'last_pemeriksaan_id'=> 'required|exists:pemeriksaansampel,id'
-        ], $request->only(['catatan_pemeriksaan', 'last_pemeriksaan_id']));
+        ], $request->only(['validator', 'catatan_pemeriksaan', 'last_pemeriksaan_id']));
 
         DB::beginTransaction();
         try {
@@ -280,6 +292,7 @@ class ValidasiController extends Controller
             ]);
 
             $sampel->update([
+                'validator_id'=> $request->input('validator'),
                 'sampel_status'=> 'sample_valid'
             ]);
 

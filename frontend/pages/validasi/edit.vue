@@ -13,58 +13,131 @@
         <div class="col-md-6">
           <Ibox title="Informasi Sampel">
 
-            <div class="form-group">
-              <label>Nomor Sampel</label>
-              <p class="form-control control-disabled">
-                <b>{{ data.nomor_sampel }}</b>
-              </p>
-            </div>
-
-            <div class="form-group">
-              <label>Nomor Registrasi</label>
-              <p class="form-control control-disabled">
-                <b>{{ data.nomor_register }}</b>
-              </p>
-            </div>
-
-            <div class="form-group">
-              <label>Tanggal Input Hasil</label>
-              <p class="form-control control-disabled">
-                <b>
-                  {{ data.last_pemeriksaan_sampel.tanggal_input_hasil }}
-                </b>
-              </p>
-            </div>
-
-            <div class="form-group">
-              <label>Jam Input Hasil</label>
-              <p class="form-control control-disabled">
-                <b>
-                  {{ data.last_pemeriksaan_sampel.jam_input_hasil }}
-                </b>
-              </p>
-            </div>
-
-            <div class="form-group">
-              <label>Nama Pasien</label>
-              <p class="form-control control-disabled">
-                <b>{{ data.pasien.nama_depan }} {{ data.pasien.nama_belakang }}</b>
-              </p>
-            </div>
-
-            <div class="form-group">
-              <label>NIK</label>
-              <p class="form-control control-disabled">
-                <b>{{ data.pasien.no_ktp }}</b>
-              </p>
-            </div>
-
-            <div class="form-group">
-              <label>Tanggal Lahir</label>
-              <p class="form-control control-disabled">
-                <b>{{ data.pasien.tanggal_lahir | formatDate }}</b>
-              </p>
-            </div>
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td align="right">
+                    <b>Nomor Registrasi</b>
+                  </td>
+                  <td>
+                    {{ data.nomor_register }}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right">
+                    <b>Nomor Induk Kependudukan</b>
+                  </td>
+                  <td>
+                    {{ data.pasien.no_ktp }}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right">
+                    <b>Nama Pasien</b>
+                  </td>
+                  <td>
+                    {{ data.pasien.nama_depan }} {{ data.pasien.nama_belakang }}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right">
+                    <b>Tanggal Lahir Pasien</b>
+                  </td>
+                  <td>
+                    {{ data.pasien.tanggal_lahir | formatDate }}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right">
+                    <b>Nomor Sampel</b>
+                  </td>
+                  <td>
+                    {{ data.nomor_sampel }}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right">
+                    <b>Jenis Sampel</b>
+                  </td>
+                  <td>
+                    {{ data.jenis_sampel }}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right">
+                    <b>Tanggal Penerimaan Sampel</b>
+                  </td>
+                  <td>
+                    {{ data.last_pemeriksaan_sampel.tanggal_penerimaan_sampel | formatDate }}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right">
+                    <b>Petugas Penerimaan Sampel RNA</b>
+                  </td>
+                  <td>
+                    {{ data.last_pemeriksaan_sampel.petugas_penerima_sampel_rna }}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right">
+                    <b>Lab Penerima</b>
+                  </td>
+                  <td>
+                    {{ data.lab_pcr_nama }}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right">
+                    <b>Operator Realtime PCR</b>
+                  </td>
+                  <td>
+                    {{ data.last_pemeriksaan_sampel.operator_real_time_pcr }}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right">
+                    <b>Tanggal Mulai Pemeriksaan</b>
+                  </td>
+                  <td>
+                    {{ data.last_pemeriksaan_sampel.tanggal_mulai_pemeriksaan | formatDate }}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right">
+                    <b>Jam Mulai Pemeriksaan</b>
+                  </td>
+                  <td>
+                    {{ data.last_pemeriksaan_sampel.jam_mulai_pcr }}
+                  </td>
+                  
+                </tr>
+                <tr>
+                  <td align="right">
+                    <b>Jam Selesai Pemeriksaan</b>
+                  </td>
+                  <td>
+                    {{ data.last_pemeriksaan_sampel.jam_selesai_pcr }}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right">
+                    <b>Metode Pemeriksaan</b>
+                  </td>
+                  <td>
+                    {{ data.last_pemeriksaan_sampel.metode_pemeriksaan }}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right">
+                    <b>Nama Kit Pemeriksaan</b>
+                  </td>
+                  <td>
+                    {{ data.last_pemeriksaan_sampel.nama_kit_pemeriksaan }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
           </Ibox>
         </div>
@@ -123,6 +196,22 @@
             <input type="hidden" v-model="form.last_pemeriksaan_id">
 
             <div class="form-group">
+              <label>
+                Pejabat yang Menandatangani Hasil Lab yang tercetak
+                <span style="color:red">*</span>
+              </label>
+              <div :class="{ 'is-invalid': form.errors.has('validator') }">
+                <div v-for="item in listValidator" :key="item.id">
+                  <label class="form-check-label">
+                    <input type="radio" v-model="form.validator" :value="item.id" />
+                    <b>{{item.nama}}</b> (NIP. {{ item.nip }})
+                  </label>
+                </div>
+              </div>
+              <has-error :form="form" field="validator" />
+            </div>
+
+            <div class="form-group">
               <label>Catatan Pemeriksaan</label>
               <textarea
                 class="form-control"
@@ -141,7 +230,8 @@
                 type="button"
               >
                 <i class="fa fa-check"></i>
-                {{ form.kesimpulan_pemeriksaan != 'inkonklusif' ? 'Validasi' : 'Periksa Ulang'}}
+                {{ 'Validasi' }}
+                <!-- {{ form.kesimpulan_pemeriksaan != 'inkonklusif' ? 'Validasi' : 'Periksa Ulang'}} -->
               </button>
             </div>
           </Ibox>
@@ -173,11 +263,15 @@ export default {
     let resp = await axios.get("/v1/validasi/detail/" + route.params.id);
     let data = resp.data.data;
 
+    let respListValidator = await axios.get("/v1/validasi/list-validator");
+    let listValidator = respListValidator.data.data;
+
     if (!data.pasien) {
       data.pasien = {};
     }
 
     let form = new Form({
+      validator: data.validator_id,
       tanggal_input_hasil: new Date(),
       jam_input_hasil: ("" + new Date().getHours()).padStart(2, "0")+ ":" + ("" + new Date().getMinutes()).padStart(2, "0"),
       last_pemeriksaan_id: data.last_pemeriksaan_sampel.id,
@@ -190,6 +284,7 @@ export default {
     return {
       data,
       form,
+      listValidator
     };
   },
   head() {

@@ -80,7 +80,7 @@ export default {
   },
   watch: {
     'params1.kesimpulan_pemeriksaan': function(newVal, oldVal) {
-      this.$bus.$emit('refresh-ajaxtable', 'verifikasi')
+      this.$bus.$emit('refresh-ajaxtable', 'validated')
     },
   },
 };

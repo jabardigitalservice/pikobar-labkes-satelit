@@ -3,7 +3,7 @@
     <portal to="title-name">Detail Sampel</portal>
     <portal to="title-action">
       <div class="title-action">
-        <router-link :to="'/verifikasi/edit/' + this.data.id" class="btn btn-warning">
+        <router-link :to="'/validasi/edit/' + this.data.id" class="btn btn-warning">
           <i class="fa fa-edit"></i> Ubah
         </router-link>
       </div>
@@ -17,7 +17,7 @@
               <table class="table">
                 <tbody>
                   <tr>
-                    <td width="30%" align="right">
+                    <td width="47%" align="right">
                       <b>Nomor Registrasi</b>
                     </td>
                     <td width="60%">
@@ -31,6 +31,14 @@
                     </td>
                     <td width="60%">
                       <span>{{data.pasien.nama_depan}} {{data.pasien.nama_belakang}}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="30%" align="right">
+                      <b>Nomor Induk Kependudukan</b>
+                    </td>
+                    <td width="60%">
+                      <span>{{data.pasien.no_ktp }}</span>
                     </td>
                   </tr>
                   <tr>
@@ -50,6 +58,25 @@
                       <span>{{data.nomor_sampel}}</span>
                     </td>
                   </tr>
+
+                  <tr>
+                    <td width="30%" align="right">
+                      <b>Lab Penerima</b>
+                    </td>
+                    <td width="60%">
+                      <span>{{data.lab_pcr_nama}}</span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td width="30%" align="right">
+                      <b>Validator</b>
+                    </td>
+                    <td width="60%">
+                      <span>{{data.validator.nama}} (NIP. {{ data.validator.nip }})</span>
+                    </td>
+                  </tr>
+
                 </tbody>
               </table>
 
@@ -62,53 +89,78 @@
                 >
                   <Ibox title="Pemeriksaan Sampel">
 
-                    <div class="form-group">
-                      <label>Tanggal Input Hasil</label>
-                      <p class="form-control">
-                        <b>
-                          {{ hasil.tanggal_input_hasil | formatDate }}
-                        </b>
-                      </p>
-                    </div>
+                    <table class="table">
+                      <tbody>
+                        <tr>
+                          <td align="right" width="47%">
+                            <b>Tanggal Penerimaan Sampel</b>
+                          </td>
+                          <td>{{ hasil.tanggal_penerimaan_sampel | formatDate }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right">
+                            <b>Petugas Penerimaan Sampel RNA</b>
+                          </td>
+                          <td>{{ hasil.petugas_penerimaan_sampel_rna }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right">
+                            <b>Operator Realtime PCR</b>
+                          </td>
+                          <td>{{ hasil.operator_realtime_pcr }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right">
+                            <b>Tanggal Mulai Pemeriksaan</b>
+                          </td>
+                          <td>{{ hasil.tanggal_mulai_pemeriksaan | formatDate }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right">
+                            <b>Jam Mulai Pemeriksaan</b>
+                          </td>
+                          <td>{{ hasil.jam_mulai_pemeriksaan }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right">
+                            <b>Jam Selesai Pemeriksaan</b>
+                          </td>
+                          <td>{{ hasil.jam_selesai_pemeriksaan }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right">
+                            <b>Metode Pemeriksaan</b>
+                          </td>
+                          <td>{{ hasil.metode_pemeriksaan }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right">
+                            <b>Nama Kit Pemeriksaan</b>
+                          </td>
+                          <td>{{ hasil.nama_kit_pemeriksaan }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right">
+                            <b>Tanggal Input Hasil</b>
+                          </td>
+                          <td>{{ hasil.tanggal_input_hasil | formatDate }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right">
+                            <b>Jam Input Hasil</b>
+                          </td>
+                          <td>{{ hasil.jam_input_hasil }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right">
+                            <b>Kesimpulan Pemeriksaan</b>
+                          </td>
+                          <td>{{ hasil.kesimpulan_pemeriksaan }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
 
-                    <div class="form-group">
-                      <label>Jam Input Hasil</label>
-                      <p class="form-control">
-                        <b>
-                          {{ hasil.jam_input_hasil }}
-                        </b>
-                      </p>
-                    </div>
-
-                    <div class="form-group">
-                      <label>Tanggal Mulai Pemeriksaan</label>
-                      <p class="form-control">
-                        <b>{{ hasil.tanggal_mulai_pemeriksaan | formatDate }}</b>
-                      </p>
-                    </div>
-
-                    <div class="form-group">
-                      <label>Metode Pemeriksaan</label>
-                      <p class="form-control">
-                        <b>{{ hasil.metode_pemeriksaan }}</b>
-                      </p>
-                    </div>
-
-                    <div class="form-group">
-                      <label>Kesimpulan Pemeriksaan</label>
-                      <p class="form-control">
-                        <b>{{ hasil.kesimpulan_pemeriksaan }}</b>
-                      </p>
-                    </div>
-
-                    <div class="form-group">
-                      <label>Catatan Pemeriksaan</label>
-                      <p class="form-control">
-                        <b>{{ hasil.catatan_pemeriksaan }}</b>
-                      </p>
-                    </div>
-
-                    <table class="table table-striped dt-responsive table-bordered" style="width:100%">
+                    <table class="table dt-responsive table-bordered" style="width:100%">
                       <thead>
                         <tr>
                           <th>Target Gen</th>
@@ -155,7 +207,7 @@ import axios from "axios";
 export default {
   middleware: "auth",
   async asyncData({route}) {
-    let resp = await axios.get("/v1/verifikasi/detail/" + route.params.id);
+    let resp = await axios.get("/v1/validasi/detail/" + route.params.id);
     let data = resp.data.data
 
     if (!data.pasien) {
