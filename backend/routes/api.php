@@ -214,4 +214,6 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             
         });
+
+       Route::apiResource('validator', 'ValidatorController');
 });

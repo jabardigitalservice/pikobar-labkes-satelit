@@ -19,6 +19,7 @@ class CreateValidatorTable extends Migration
             $table->string('nip', 30)->unique()->index();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
