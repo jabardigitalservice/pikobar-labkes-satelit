@@ -134,7 +134,7 @@
                 <div>
                   <label class="form-check-label">
                     <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="inkonklusif" />
-                    <b>INKONKLUSIF</b>
+                    <b>INVALID</b>
                   </label>
                 </div>
               </div>
@@ -229,12 +229,15 @@ export default {
       maxFilesize: 16,
       addRemoveLinks: true
     };
+    let default_hasil_deteksi = data.pcr.nama_kit_pemeriksaan == 'Liferiver' ? [{target_gen: 'ORF1AB'}, {target_gen: 'N'}, {target_gen: 'E'}, {target_gen: 'IC'}]
+    : (data.pcr.nama_kit_pemeriksaan == 'Alplex' ? [{target_gen: 'RrDP'}, {target_gen: 'N'}, {target_gen: 'E'}, {target_gen: 'IC'}] 
+    : [{}])
     let form = new Form({
       tanggal_input_hasil: new Date(),
       jam_input_hasil: ("" + new Date().getHours()).padStart(2, "0")+ ":" + ("" + new Date().getMinutes()).padStart(2, "0"),
       catatan_penerimaan: data.pcr.catatan_penerimaan,
       kesimpulan_pemeriksaan: data.pcr.kesimpulan_pemeriksaan,
-      hasil_deteksi: data.pcr.hasil_deteksi ? data.pcr.hasil_deteksi : [{}],
+      hasil_deteksi: data.pcr.hasil_deteksi ? data.pcr.hasil_deteksi : default_hasil_deteksi,
       grafik: data.pcr.grafik ? data.pcr.grafik : [],
     });
     return {

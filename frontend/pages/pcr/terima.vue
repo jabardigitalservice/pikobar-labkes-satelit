@@ -12,6 +12,7 @@
       <div class="row">
         <div class="col-md-6">
           <sample-picker v-model="form.samples"
+            :disable-input="staticInput"
             ref="sample_picker"
             sampel-status="extraction_sample_sent"
             title="Daftar Sampel RNA yang Diterima"
@@ -140,32 +141,15 @@
 
             <div class="form-group">
               <label>
-                Metode pemeriksaan PCR
-                <span style="color:red">*</span>
-              </label>
-              <input
-                class="form-control"
-                type="text"
-                v-model="form.metode_pemeriksaan"
-                placeholder="Metode PCR"
-                :class="{ 'is-invalid': form.errors.has(`metode_pemeriksaan`) }"
-              />
-              <has-error :form="form" field="metode_pemeriksaan" />
-            </div>
-
-            <div class="form-group">
-              <label>
                 Nama kit pemeriksaan PCR
                 <span style="color:red">*</span>
               </label>
-              <input
-                class="form-control"
-                type="text"
-                v-model="form.nama_kit_pemeriksaan"
-                placeholder="Nama kit PCR"
-                :class="{ 'is-invalid': form.errors.has(`nama_kit_pemeriksaan`) }"
-              />
-              <has-error :form="form" field="nama_kit_pemeriksaan" />
+              <dynamic-input :form="form" field="nama_kit_pemeriksaan" 
+                :options="['Liferiver','Alplex']"
+                :hasLainnya="true"
+                ref="nama_kit_pemeriksaan_input"
+                placeholder="Masukkan Nama kit PCR">
+              </dynamic-input>
             </div>
 
             <div class="form-group">
@@ -197,7 +181,21 @@ export default {
     SamplePicker,
   },
   data() {
+    var staticInput = false
+    if (this.$route.params.sample_ids) {
+      sample_ids = this.$route.params.sample_ids.split(',').map((sample_id) => {
+        return {
+          nomor_sampel: sample_id,
+          valid: true,
+          error: ""
+        }
+      })
+      staticInput = true
+    } else {
+      sample_ids = []
+    }
     return {
+      staticInput,
       form: new Form({
         tanggal_penerimaan_sampel: new Date(),
         jam_penerimaan_sampel: this.getTimeNow(),
@@ -209,7 +207,7 @@ export default {
         jam_selesai_pcr: this.getTimeNow(),
         metode_pemeriksaan: "",
         nama_kit_pemeriksaan: "",
-        samples: []
+        samples: sample_ids,
       }),
       loading: false,
       input_nomor_sampel: ""

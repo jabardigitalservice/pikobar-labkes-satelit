@@ -49,6 +49,7 @@
 
   export default {
     layout: 'login',
+    middleware: 'guest',
     head() {
       return {
         title: this.$t('login')

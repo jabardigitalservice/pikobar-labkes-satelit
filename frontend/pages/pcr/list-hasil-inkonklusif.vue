@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper wrapper-content">
-    <portal to="title-name">List Hasil Inkonklusif PCR</portal>
+    <portal to="title-name">List Hasil Invalid PCR</portal>
     <portal to="title-action">
       <div class="title-action">
       </div>
@@ -8,7 +8,7 @@
 
     <div class="row">
       <div class="col-lg-12">
-        <Ibox title="List Hasil Inkonklusif PCR">
+        <Ibox title="List Hasil Invalid PCR">
           <p
             class="sub-header"
           >Berikut ini adalah daftar analisa RT-PCR terhadap sampel</p>
@@ -102,7 +102,7 @@ export default {
     },
   },
   head() {
-    return { title: "List Hasil Inkonklusif PCR" };
+    return { title: "List Hasil Invalid PCR" };
   }
 };
 </script>

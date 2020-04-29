@@ -1,6 +1,6 @@
 <template>
   <Ibox :title="title">
-    <div class="form-group">
+    <div class="form-group" v-if="!disableInput">
       <label>Scan Barcode Nomor Sampel</label>
       <div class="input-group">
         <input
@@ -50,7 +50,7 @@
 import axios from "axios";
 
 export default {
-  props: ["value", "sampelStatus", "title"],
+  props: ["value", "sampelStatus", "title", "disableInput"],
   data() {
     return {
       input_nomor_sampel: ""

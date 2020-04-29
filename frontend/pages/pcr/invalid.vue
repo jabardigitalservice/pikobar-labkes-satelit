@@ -86,12 +86,6 @@
               </tr>
               <tr>
                 <td width="40%" align="right">
-                  <b>Metode PCR</b>
-                </td>
-                <td width="60%">{{data.pcr.metode_pemeriksaan}}</td>
-              </tr>
-              <tr>
-                <td width="40%" align="right">
                   <b>Nama Kit PCR</b>
                 </td>
                 <td width="60%">{{data.pcr.nama_kit_pemeriksaan}}</td>

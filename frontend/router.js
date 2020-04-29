@@ -51,7 +51,7 @@ const routes = [
   { path: '/pcr/list-pcr', name:'pcr.list-pcr', component: page('pcr/list-pcr.vue'), meta: {parentName: 'home'} },
   { path: '/pcr/list-hasil-pemeriksaan', name:'pcr.list-hasil-pemeriksaan', component: page('pcr/list-hasil-pemeriksaan.vue'), meta: {parentName: 'home'} },
   { path: '/pcr/list-hasil-inkonklusif', name:'pcr.list-hasil-inkonklusif', component: page('pcr/list-hasil-inkonklusif.vue'), meta: {parentName: 'home'} },
-  { path: '/pcr/terima', name:'pcr.terima', component: page('pcr/terima.vue'), meta: {parentName: 'pcr.list-rna'} },
+  { path: '/pcr/terima/:sample_ids?', name:'pcr.terima', component: page('pcr/terima.vue'), meta: {parentName: 'pcr.list-rna'} },
   { path: '/pcr/detail/:id', name:'pcr.detail', component: page('pcr/detail.vue'), meta: {parentName: 'pcr.list-pcr'} },
   { path: '/pcr/invalid/:id', name:'pcr.invalid', component: page('pcr/invalid.vue'), meta: {parentName: 'pcr.list-pcr'} },
   { path: '/pcr/input/:id', name:'pcr.input', component: page('pcr/input.vue'), meta: {parentName: 'pcr.list-pcr'} },

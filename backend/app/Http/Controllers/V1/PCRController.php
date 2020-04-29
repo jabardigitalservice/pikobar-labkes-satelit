@@ -303,7 +303,6 @@ class PCRController extends Controller
             'tanggal_mulai_pemeriksaan' => 'required',
             'jam_mulai_pcr' => 'required',
             'jam_selesai_pcr' => 'required',
-            'metode_pemeriksaan' => 'required',
             'nama_kit_pemeriksaan' => 'required',
         ]);
         $samples = Sampel::whereIn('nomor_sampel', Arr::pluck($request->samples, 'nomor_sampel'))->get()->keyBy('nomor_sampel');

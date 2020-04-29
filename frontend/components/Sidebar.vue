@@ -114,7 +114,7 @@
             </li>
             <li>
               <router-link to="/pcr/list-hasil-inkonklusif" tag="a">
-                <span class="nav-label">List Sampel Inkonklusif</span>
+                <span class="nav-label">List Sampel Invalid</span>
               </router-link>
             </li>
           </ul>
