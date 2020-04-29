@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper wrapper-content">
-    <portal to="title-name">Verifikasi Hasil Pemeriksaan</portal>
+    <portal to="title-name">Validasi Hasil Pemeriksaan</portal>
     <portal to="title-action">
       <div class="title-action">
         <a href="#" @click.prevent="$router.back()" class="btn btn-secondary">
@@ -15,21 +15,21 @@
 
             <div class="form-group">
               <label>Nomor Sampel</label>
-              <p class="form-control">
+              <p class="form-control control-disabled">
                 <b>{{ data.nomor_sampel }}</b>
               </p>
             </div>
 
             <div class="form-group">
               <label>Nomor Registrasi</label>
-              <p class="form-control">
+              <p class="form-control control-disabled">
                 <b>{{ data.nomor_register }}</b>
               </p>
             </div>
 
             <div class="form-group">
               <label>Tanggal Input Hasil</label>
-              <p class="form-control">
+              <p class="form-control control-disabled">
                 <b>
                   {{ data.last_pemeriksaan_sampel.tanggal_input_hasil }}
                 </b>
@@ -38,7 +38,7 @@
 
             <div class="form-group">
               <label>Jam Input Hasil</label>
-              <p class="form-control">
+              <p class="form-control control-disabled">
                 <b>
                   {{ data.last_pemeriksaan_sampel.jam_input_hasil }}
                 </b>
@@ -47,21 +47,21 @@
 
             <div class="form-group">
               <label>Nama Pasien</label>
-              <p class="form-control">
+              <p class="form-control control-disabled">
                 <b>{{ data.pasien.nama_depan }} {{ data.pasien.nama_belakang }}</b>
               </p>
             </div>
 
             <div class="form-group">
               <label>NIK</label>
-              <p class="form-control">
+              <p class="form-control control-disabled">
                 <b>{{ data.pasien.no_ktp }}</b>
               </p>
             </div>
 
             <div class="form-group">
               <label>Tanggal Lahir</label>
-              <p class="form-control">
+              <p class="form-control control-disabled">
                 <b>{{ data.pasien.tanggal_lahir | formatDate }}</b>
               </p>
             </div>
@@ -71,7 +71,7 @@
 
         <div class="col-md-6">
           <Ibox title="Hasil Analisa PCR">
-            <table class="table table-striped dt-responsive table-bordered" style="width:100%">
+            <table class="table dt-responsive table-bordered" style="width:100%">
               <thead>
                 <tr>
                   <th>Target Gen</th>
@@ -81,14 +81,14 @@
               <tbody class="field_wrapper">
                 <tr v-for="(hasil, $index) in form.hasil_deteksi" :key="$index">
                   <td>
-                    <p class="form-control">
+                    <p class="form-control control-disabled">
                       <b>
                         {{ hasil.target_gen }}
                       </b>
                     </p>
                   </td>
                   <td>
-                    <p class="form-control">
+                    <p class="form-control control-disabled">
                       <b>
                         {{ hasil.ct_value }}
                       </b>
@@ -101,41 +101,23 @@
             <div class="form-group">
               <label>
                 Kesimpulan Pemeriksaan
-                <span style="color:red">*</span>
               </label>
-              <div :class="{ 'is-invalid': form.errors.has('kesimpulan_pemeriksaan') }">
-                <div>
-                  <label class="form-check-label">
-                    <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="positif" />
-                    <b>POSITIF</b>
-                  </label>
-                </div>
-                <div>
-                  <label class="form-check-label">
-                    <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="negatif" />
-                    <b>NEGATIF</b>
-                  </label>
-                </div>
-                <div>
-                  <label class="form-check-label">
-                    <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="inkonklusif" />
-                    <b>INKONKLUSIF</b>
-                  </label>
-                </div>
+              <div>
+                <p class="form-control control-disabled">
+                    <b>{{ form.kesimpulan_pemeriksaan }}</b>
+                  </p>
               </div>
-              <has-error :form="form" field="kesimpulan_pemeriksaan" />
             </div>
 
             <div class="form-group">
               <label>
                 Grafik
               </label>
-              <div :class="{ 'is-invalid': form.errors.has('grafik') }">
+              <div>
                 <a :href="url" target="_blank" v-for="(url, $index) in data.pemeriksaan_sampel.grafik" :key="$index" class="thumbnail-wrapper">
                   <img :src="url" />
                 </a>
               </div>
-              <has-error :form="form" field="grafik" />
             </div>
 
             <input type="hidden" v-model="form.last_pemeriksaan_id">
@@ -159,7 +141,7 @@
                 type="button"
               >
                 <i class="fa fa-check"></i>
-                {{ form.kesimpulan_pemeriksaan != 'inkonklusif' ? 'Verifikasi' : 'Periksa Ulang'}}
+                {{ form.kesimpulan_pemeriksaan != 'inkonklusif' ? 'Validasi' : 'Periksa Ulang'}}
               </button>
             </div>
           </Ibox>
@@ -188,7 +170,7 @@ export default {
     };
   },
   async asyncData({ route, store }) {
-    let resp = await axios.get("/v1/verifikasi/detail/" + route.params.id);
+    let resp = await axios.get("/v1/validasi/detail/" + route.params.id);
     let data = resp.data.data;
 
     if (!data.pasien) {
@@ -212,7 +194,7 @@ export default {
   },
   head() {
     return {
-      title: "Verifikasi hasil pemeriksaan"
+      title: "Validasi hasil pemeriksaan"
     };
   },
   methods: {
@@ -223,7 +205,7 @@ export default {
       // Submit the form.
       try {
         this.loading = true;
-        const response = await this.form.post("/v1/verifikasi/edit-status-sampel/" + this.$route.params.id);
+        const response = await this.form.post("/v1/validasi/edit-status-sampel/" + this.$route.params.id);
         this.$toast.success(response.data.message, {
           icon: "check",
           iconPack: "fontawesome",
@@ -249,25 +231,14 @@ export default {
         }
       }
       this.loading = false;
-    },
-    addHasilDeteksi() {
-      this.form.hasil_deteksi.push({
-        tanggalsampel: new Date(),
-        pukulsampel: new Date().getHours() * 100 + new Date().getMinutes()
-      });
-    },
-    removeHasilDeteksi(index) {
-      if (this.form.hasil_deteksi.length <= 1) {
-        this.$toast.error("Hasil deteksi minimal satu", {
-          duration: 5000
-        });
-        return;
-      }
-      this.form.hasil_deteksi.splice(index, 1);
-    },
-    onFileSuccess(file, resp) {
-      this.form.grafik.push(resp.url);
     }
   }
 };
 </script>
+
+
+<style scoped>
+  .control-disabled {
+    background-color: #eaeaea;
+  }
+</style>

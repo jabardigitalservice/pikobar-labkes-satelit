@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PemeriksaanSampel;
 use App\Models\Sampel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ValidasiController extends Controller
 {
@@ -239,12 +240,65 @@ class ValidasiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\PemeriksaanSampel  $pemeriksaanSampel
+     * @param  \App\Models\Sampel  $sampel
      * @return \Illuminate\Http\Response
      */
-    public function show(PemeriksaanSampel $pemeriksaanSampel)
+    public function show(Sampel $sampel)
     {
-        //
+        $result = $sampel->load(['pemeriksaanSampel', 'status'])->toArray();
+        $pasien = optional($sampel->register->pasiens())->first();
+
+        return response()->json([
+            'status'=>200,
+            'message'=>'success',
+            'data'=> $result + [
+                'pasien'=> optional($pasien)->toArray(),
+                'last_pemeriksaan_sampel'=> $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first()
+            ]
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Sampel  $sampel
+     * @return \Illuminate\Http\Response
+     */
+    public function updateToValidate(Request $request, Sampel $sampel)
+    {
+        $request->validate([
+            'catatan_pemeriksaan'=> 'nullable|max:255',
+            'last_pemeriksaan_id'=> 'required|exists:pemeriksaansampel,id'
+        ], $request->only(['catatan_pemeriksaan', 'last_pemeriksaan_id']));
+
+        DB::beginTransaction();
+        try {
+
+            PemeriksaanSampel::find($request->input('last_pemeriksaan_id'))->update([
+                'catatan_pemeriksaan'=> $request->input('catatan_pemeriksaan')
+            ]);
+
+            $sampel->update([
+                'sampel_status'=> 'sample_valid'
+            ]);
+
+            DB::commit();
+
+    
+            return response()->json([
+                'status'=>200,
+                'message'=>'success',
+                'data'=> Sampel::find($sampel->id)
+            ]);
+            
+            
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+        
     }
 
     /**

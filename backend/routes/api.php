@@ -202,11 +202,11 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             Route::get('list-validated', 'ValidasiController@indexValidated');
 
-            // Route::get('detail/{sampel}', 'ValidasiController@show');
+            Route::get('detail/{sampel}', 'ValidasiController@show');
 
             // Route::get('get-sampel-status', 'ValidasiController@sampelStatusList');
 
-            // Route::post('edit-status-sampel/{sampel}', 'ValidasiController@updateToVerified');
+            Route::post('edit-status-sampel/{sampel}', 'ValidasiController@updateToValidate');
 
             // Route::get('export-excel', 'ValidasiExportController@exportExcel');
 
