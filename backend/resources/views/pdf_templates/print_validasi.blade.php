@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cetak Validasi</title>
+
+    <style type="text/css">
+        #tabel-ct-scan {
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        table#tabel-ct-scan th {
+            background-color: darkseagreen;
+        }
+    </style>
+
 </head>
 <body marginwidth="0" marginheight="0">
 
@@ -11,12 +23,13 @@
         <img src="{{ $kop_surat }}" width="100%" alt="" srcset="">
     </div>
 
-    <h3>Validasi Pemeriksaan PCR</h3>
+    <center><b>HASIL PEMERIKSAANTES PRO AKTIF COVID-19</b></center>
+    <center><b>No./Lap.COV/IV/2020</b></center>
 
-    <table>
+    <table style="margin-top: 2%">
         <tbody>
             <tr>
-                <td width="47%">
+                <td width="30%">
                   <b>Nomor Registrasi</b>
                 </td>
                 <td width="10%">:</td>
@@ -26,7 +39,7 @@
             </tr>
             <tr>
                 <td width="30%">
-                  <b>Pasien</b>
+                  <b>Nama Pasien</b>
                 </td>
                 <td width="10%">:</td>
                 <td width="60%">
@@ -48,7 +61,21 @@
               </tr>
               <tr>
                 <td width="30%">
-                  <b>Tanggal Lahir Pasien</b>
+                  <b>Jenis Kelamin</b>
+                </td>
+                <td width="10%">:</td>
+                <td width="60%">
+                    @if ($pasien && $pasien['jenis_kelamin'] == 'L')
+                        <span>Laki-laki</span>
+                    @endif
+                    @if ($pasien && $pasien['jenis_kelamin'] == 'P')
+                        <span>Perempuan</span>
+                    @endif
+                </td>
+              </tr>
+              <tr>
+                <td width="30%">
+                  <b>Tanggal Lahir Pasien / Umur</b>
                 </td>
                 <td width="10%">:</td>
                 <td width="60%">
@@ -58,17 +85,64 @@
                 </td>
               </tr>
 
-              <tr>
-                <td width="30%">
-                  <b>Nomor Sampel</b>
-                </td>
-                <td width="10%">:</td>
-                <td width="60%">
-                  <span>{{$sampel['nomor_sampel']}}</span>
-                </td>
-              </tr>
+              @if ($last_pemeriksaan_sampel)
+                <tr>
+                    <td colspan="3" style="padding-top: 20px"></td>
+                </tr>
+                <tr>
+                    <td width="30%">
+                    <b>Nomor Sampel</b>
+                    </td>
+                    <td width="10%">:</td>
+                    <td width="60%">
+                    <span>{{$sampel['nomor_sampel']}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="30%">
+                    <b>Tanggal Penerimaan Sampel</b>
+                    </td>
+                    <td width="10%">:</td>
+                    <td width="60%">
+                        {{ $last_pemeriksaan_sampel['tanggal_penerimaan_sampel'] }}
+                    </td>
+                </tr>
+                <tr>
+                    <td width="30%">
+                    <b>Metode Pemeriksaan</b>
+                    </td>
+                    <td width="10%">:</td>
+                    <td width="60%">
+                        {{ $last_pemeriksaan_sampel['metode_pemeriksaan'] }}
+                    </td>
+                </tr>
+                <tr>
+                    <td width="30%">
+                    <b>Jenis Sampel</b>
+                    </td>
+                    <td width="10%">:</td>
+                    <td width="60%">
+                        {{ $last_pemeriksaan_sampel['jenis_sampel_nama'] }}
+                    </td>
+                </tr>
 
-              <tr>
+                <tr>
+                    <td colspan="3" style="padding-top: 20px"></td>
+                </tr>
+
+                <tr>
+                    <td width="30%">
+                        <b>Hasil Pemeriksaan</b>
+                    </td>
+                    <td width="10%">:</td>
+                    <td width="60%">
+                        <span>{{$last_pemeriksaan_sampel['kesimpulan_pemeriksaan']}}</span>
+                    </td>
+                </tr>
+
+              @endif
+
+              {{-- <tr>
                 <td width="30%">
                   <b>Lab Penerima</b>
                 </td>
@@ -76,20 +150,54 @@
                 <td width="60%">
                   <span>{{$sampel['lab_pcr_nama']}}</span>
                 </td>
-              </tr>
+              </tr> --}}
         </tbody>
     </table>
 
-    @if ($pemeriksaan_sampel && count($pemeriksaan_sampel) > 0)
+    @if ($last_pemeriksaan_sampel)
+        
+        <table id="tabel-ct-scan" style="width:70%; margin-top: 1%">
+            <thead>
+                <tr>
+                    <th width="10%"><b>No.</b></th>
+                    <th width="30%"><b>Target Gen</b></th>
+                    <th width="30%"><b>CT Value</b></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if ($last_pemeriksaan_sampel['hasil_deteksi'] && count($last_pemeriksaan_sampel['hasil_deteksi']) > 0)
+                    @foreach ($last_pemeriksaan_sampel['hasil_deteksi'] as $key=> $item)
+                        <tr>
+                            <td>{{ ($key+1) }}</td>
+                            <td>{{$item['target_gen']}}</td>
+                            <td>{{$item['ct_value']}}</td>
+                        </tr>
+                    @endforeach
+                @endif
+
+                @if (!$last_pemeriksaan_sampel['hasil_deteksi'] || count($last_pemeriksaan_sampel['hasil_deteksi']) < 1)
+                    <tr>
+                        <td colspan="3"><i>Tidak ada hasil CT Scan</i></td>
+                    </tr>
+                @endif
+
+            </tbody>
+        </table>
+    @endif
+
+    
+
+    {{-- @if ($pemeriksaan_sampel && count($pemeriksaan_sampel) > 0)
         @foreach ($pemeriksaan_sampel as $key=> $hasil)
             
             <table style="margin-top: 3%">
                 <tbody>
                     <tr>
-                        <td colspan="3"><b>HASIL PEMERIKSAAN SAMPEL ({{ $key+1 }})</b></td>
+                        <td colspan="3"><b>HASIL PEMERIKSAAN ({{ $key+1 }})</b></td>
                     </tr>
                     <tr>
-                        <td width="47%">
+                        <td width="30%">
                           <b>Tanggal Penerimaan Sampel</b>
                         </td>
                         <td width="10%">:</td>
@@ -206,6 +314,38 @@
             </table>
 
         @endforeach
+    @endif --}}
+
+
+    @if ($validator)
+        <table width="97%" style="margin-top: 12%">
+            <tbody>
+                <tr>
+                    <td width="30%"></td>
+                    <td width="25%"></td>
+                    <td align="center">
+                        Bandung, {{ $tanggal_validasi ?? ' -' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="padding-top: 65px;"></td>
+                </tr>
+                <tr>
+                    <td width="30%"></td>
+                    <td width="25%"></td>
+                    <td align="center">
+                        {{ $validator ? $validator->nama : ' -' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td width="30%"></td>
+                    <td width="25%"></td>
+                    <td align="center">
+                        NIP. {{ $validator ? $validator->nip : ' -' }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     @endif
     
 </body>

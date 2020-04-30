@@ -19,14 +19,15 @@ class ValidasiExportController extends Controller
         $data['validator'] = $sampel->validator;
         $data['last_pemeriksaan_sampel'] = $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first();
         $data['kop_surat'] = $this->getKopSurat();
+        $data['tanggal_validasi'] = $this->formatTanggalValid($sampel);
 
         $pdf = PDF::loadView('pdf_templates.print_validasi', $data);
 
         $pdf->setPaper([0,0,609.4488,935.433]);
 
-        return $pdf->stream('print_validasi.pdf');
+        return $pdf->stream('hasil_validasi_'.time().'.pdf');
 
-        return $pdf->download()->getOriginalContent();
+        // return $pdf->download()->getOriginalContent();
 
         // return (new SampelVerifiedExport())
         //     ->download('sampel-validated-'.time().'.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
@@ -39,5 +40,29 @@ class ValidasiExportController extends Controller
         $image = Storage::get($pathDirectory);
 
         return 'data:image/png;base64, ' . base64_encode($image);
+    }
+
+    private function formatTanggalValid(Sampel $sampel)
+    {
+        if (!$sampel->getAttribute('waktu_sample_valid')) {
+            $tanggal = now();
+            return $tanggal->day . ' ' . 
+                $this->getNamaBulan($tanggal->month) . ' ' . 
+                $tanggal->year;
+        }
+
+        return $sampel->waktu_sample_valid->day . ' ' . 
+                $this->getNamaBulan($sampel->waktu_sample_valid->month) . ' ' . 
+                $sampel->waktu_sample_valid->year;
+    }
+
+    public static function getNamaBulan(int $bulanKe)
+    {
+        $arrayNamaBulan = [
+            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli',
+            'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        ];
+
+        return $arrayNamaBulan[ $bulanKe - 1]; 
     }
 }

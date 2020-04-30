@@ -26,6 +26,13 @@ class Sampel extends Model
         'sampel_status',
         'validator_id',
         'waktu_sample_verified',
+        'waktu_sample_valid'
+    ];
+
+    protected $dates = [
+        'tanggal_pengambilan_sampel',
+        'waktu_sample_verified',
+        'waktu_sample_valid'
     ];
 
     public function fasyankes()
