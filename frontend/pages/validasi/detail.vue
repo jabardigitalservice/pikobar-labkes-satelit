@@ -73,7 +73,7 @@
                       <b>Validator</b>
                     </td>
                     <td width="60%">
-                      <span>{{data.validator.nama}} (NIP. {{ data.validator.nip }})</span>
+                      <span v-if="data.validator.nama">{{data.validator.nama}} (NIP. {{ data.validator.nip }})</span>
                     </td>
                   </tr>
 
@@ -212,6 +212,10 @@ export default {
 
     if (!data.pasien) {
       data.pasien = {}
+    }
+
+    if (!data.validator) {
+      data.validator = {}
     }
 
     return { data };

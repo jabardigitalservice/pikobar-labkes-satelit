@@ -268,7 +268,7 @@ class VerifikasiController extends Controller
     public function updateToVerified(Request $request, Sampel $sampel)
     {
         $request->validate([
-            'kesimpulan_pemeriksaan'=> 'required|in:positif,negatif,inkonklusif',
+            'kesimpulan_pemeriksaan'=> 'required|in:positif,negatif,invalid,sampel kurang',
             'catatan_pemeriksaan'=> 'nullable|max:255',
             'last_pemeriksaan_id'=> 'required|exists:pemeriksaansampel,id'
         ], $request->only(['kesimpulan_pemeriksaan', 'catatan_pemeriksaan', 'last_pemeriksaan_id']));
@@ -282,7 +282,8 @@ class VerifikasiController extends Controller
             ]);
 
             $sampel->update([
-                'sampel_status'=> 'sample_verified'
+                'sampel_status'=> 'sample_verified',
+                'waktu_sample_verified'=> now()
             ]);
 
             DB::commit();
