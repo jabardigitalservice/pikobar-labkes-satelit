@@ -4,65 +4,36 @@ namespace App\Http\Controllers\V1;
 
 use App\Exports\SampelVerifiedExport;
 use App\Http\Controllers\Controller;
+use App\Models\File;
 use App\Models\Sampel;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ValidasiExportController extends Controller
 {
     public function exportPDF(Request $request, Sampel $sampel)
     {
-        $data['sampel'] = $sampel;
-        $data['pasien'] = optional($sampel->register->pasiens())->first();
-        $data['pemeriksaan_sampel'] = $sampel->pemeriksaanSampel;
-        $data['validator'] = $sampel->validator;
-        $data['last_pemeriksaan_sampel'] = $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first();
-        $data['kop_surat'] = $this->getKopSurat();
-        $data['tanggal_validasi'] = $this->formatTanggalValid($sampel);
+        abort_if(!$sampel->validFile, 404, "Belum ada file");
 
-        $pdf = PDF::loadView('pdf_templates.print_validasi', $data);
+        $filePath = 'public/surat_hasil' . DIRECTORY_SEPARATOR . $sampel->validFile->getAttribute('original_name');
 
-        $pdf->setPaper([0,0,609.4488,935.433]);
+        $isExists = Storage::exists($filePath);
 
-        return $pdf->stream('hasil_validasi_'.time().'.pdf');
+        abort_if(!$isExists, 404, "File tidak ditemukan.");
 
-        // return $pdf->download()->getOriginalContent();
+        return Storage::download($filePath);
+
+        // $pdfFile = $this->createPDF($sampel);
+
+        // $fileStored = $this->putToStorage($sampel, $pdfFile);
+
+        // return $fileStored;
 
         // return (new SampelVerifiedExport())
         //     ->download('sampel-validated-'.time().'.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
     }
 
-    public function getKopSurat()
-    {
-        $pathDirectory = 'public/kop_surat/kop-surat-lab-kes.png';
-
-        $image = Storage::get($pathDirectory);
-
-        return 'data:image/png;base64, ' . base64_encode($image);
-    }
-
-    private function formatTanggalValid(Sampel $sampel)
-    {
-        if (!$sampel->getAttribute('waktu_sample_valid')) {
-            $tanggal = now();
-            return $tanggal->day . ' ' . 
-                $this->getNamaBulan($tanggal->month) . ' ' . 
-                $tanggal->year;
-        }
-
-        return $sampel->waktu_sample_valid->day . ' ' . 
-                $this->getNamaBulan($sampel->waktu_sample_valid->month) . ' ' . 
-                $sampel->waktu_sample_valid->year;
-    }
-
-    public static function getNamaBulan(int $bulanKe)
-    {
-        $arrayNamaBulan = [
-            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli',
-            'Agustus', 'September', 'Oktober', 'November', 'Desember'
-        ];
-
-        return $arrayNamaBulan[ $bulanKe - 1]; 
-    }
+    
 }

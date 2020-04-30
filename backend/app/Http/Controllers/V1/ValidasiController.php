@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Events\SampelValidatedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\PemeriksaanSampel;
 use App\Models\Sampel;
@@ -298,7 +299,8 @@ class ValidasiController extends Controller
 
             DB::commit();
 
-    
+            event(new SampelValidatedEvent($sampel));
+            
             return response()->json([
                 'status'=>200,
                 'message'=>'success',

@@ -26,7 +26,8 @@ class Sampel extends Model
         'sampel_status',
         'validator_id',
         'waktu_sample_verified',
-        'waktu_sample_valid'
+        'waktu_sample_valid',
+        'valid_file_id',
     ];
 
     protected $dates = [
@@ -103,6 +104,11 @@ class Sampel extends Model
     public function validator()
     {
         return $this->belongsTo(Validator::class);
+    }
+
+    public function validFile()
+    {
+        return $this->belongsTo(File::class, 'valid_file_id');
     }
 
 }
