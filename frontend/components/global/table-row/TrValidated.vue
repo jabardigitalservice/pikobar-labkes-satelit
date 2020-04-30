@@ -40,7 +40,7 @@
         <td width="20%">
             <nuxt-link tag="a" class="btn btn-success btn-sm" :to="`/validasi/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
             <button
-                @click="submit()"
+                @click="downloadPDF()"
                 class="btn btn-sm btn-primary"
                 type="button"
             >
@@ -52,13 +52,87 @@
     </tr>
 </template>
 <script>
+
+import axios from "axios";
+
 export default {
     props  : ['item', 'pagination', 'rowparams', 'index'],
     data() {
         return {
+            loading: false
         }
     },
     methods: {
+        async downloadPDF(){
+            
+            try {
+                this.loading = true;
+
+                axios({
+                        url: process.env.apiUrl + "/v1/validasi/export-pdf/" + this.item.id,
+                        // params: this.form,
+                        method: 'GET',
+                        responseType: 'blob',
+                    }).then((response) => {
+                        const blob = new Blob([response.data], {type: response.data.type});
+                        const url = window.URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        const contentDisposition = response.headers['content-disposition'];
+
+                        const fileNameHeader = "x-suggested-filename";
+                        const suggestedFileName = response.headers[fileNameHeader];
+                        const effectiveFileName = (suggestedFileName === undefined
+                                    ? "surat-hasil-pemeriksaan-" + this.item.nomor_sampel
+                                    : suggestedFileName);                            
+
+                        let fileName = effectiveFileName + '.pdf';
+
+                        if (contentDisposition) {
+                            const fileNameMatch = contentDisposition.match(/filename=(.+)/);
+                            if (fileNameMatch.length === 2)
+                                fileName = fileNameMatch[1];
+                        }
+                        link.setAttribute('download', fileName);
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+                        window.URL.revokeObjectURL(url);
+                        this.isLoadingExp = false;
+                    });
+
+                // const response = await this.form.post("/v1/verifikasi/export-excel");
+
+                // this.$toast.success(response.data.message, {
+                //   icon: "check",
+                //   iconPack: "fontawesome",
+                //   duration: 5000
+                // });
+
+                // this.$router.back()
+
+            } catch (err) {
+                if (err.response && err.response.data.code == 422) {
+                    this.$nextTick(() => {
+                        this.form.errors.set(err.response.data.error);
+                    });
+                    this.$toast.error("Mohon cek kembali formulir Anda", {
+                        icon: "times",
+                        iconPack: "fontawesome",
+                        duration: 5000
+                    });
+                } else {
+                    console.log(err);
+                    
+                    this.$swal.fire(
+                        "Terjadi kesalahan",
+                        "Silakan hubungi Admin",
+                        "error"
+                    );
+                }
+            }
+            this.loading = false;
+        }
     },
     computed: {
 

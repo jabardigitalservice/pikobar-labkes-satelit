@@ -31,7 +31,11 @@ class CreateSuratHasilListener
      */
     public function handle(SampelValidatedEvent $event)
     {
-        $sampel = $this->sampel;
+        $sampel = $event->sampel;
+
+        $pdfFile = $this->createPDF($sampel);
+
+        $this->putToStorage($sampel, $pdfFile);
     }
 
     public function putToStorage(Sampel $sampel, $file)
