@@ -25,6 +25,7 @@ class Sampel extends Model
         'waktu_pengambilan_sampel',
         'sampel_status',
         'validator_id',
+        'waktu_sample_verified',
     ];
 
     public function fasyankes()
