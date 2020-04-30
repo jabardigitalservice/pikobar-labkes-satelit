@@ -244,7 +244,7 @@ class PCRController extends Controller
             'kesimpulan_pemeriksaan' => 'required',
             'hasil_deteksi.*.target_gen' => 'required',
             'hasil_deteksi.*.ct_value' => 'required',
-            'grafik' => 'required',
+            // 'grafik' => 'required',
         ]);
         // cek minimal file
         // if (count($request->grafik) < 1) {
