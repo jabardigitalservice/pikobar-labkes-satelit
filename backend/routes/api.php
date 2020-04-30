@@ -214,7 +214,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             
             Route::get('list-validator', 'ValidasiController@getValidator');
 
-            // Route::get('export-excel', 'ValidasiExportController@exportExcel');
+            Route::get('export-pdf/{sampel}', 'ValidasiExportController@exportPDF');
 
             
         });

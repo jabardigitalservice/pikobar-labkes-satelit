@@ -2,42 +2,31 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Exports\SampelVerifiedExport;
 use App\Http\Controllers\Controller;
 use App\Models\Sampel;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Storage;
 
 class ValidasiExportController extends Controller
 {
     public function exportPDF(Request $request, Sampel $sampel)
     {
-        $data['sampel'] = $sampel;
-        $data['pasien'] = optional($sampel->register->pasiens())->first();
-        $data['pemeriksaan_sampel'] = $sampel->pemeriksaanSampel;
-        $data['validator'] = $sampel->validator;
-        $data['last_pemeriksaan_sampel'] = $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first();
-        $data['kop_surat'] = $this->getKopSurat();
+        abort_if(!$sampel->validFile, 404, "Belum ada file");
 
-        $pdf = PDF::loadView('pdf_templates.print_validasi', $data);
+        $filePath = 'public/surat_hasil' . DIRECTORY_SEPARATOR . $sampel->validFile->getAttribute('original_name');
 
-        $pdf->setPaper([0,0,609.4488,935.433]);
+        $isExists = Storage::exists($filePath);
 
-        return $pdf->stream('print_validasi.pdf');
+        abort_if(!$isExists, 404, "File tidak ditemukan.");
 
-        return $pdf->download()->getOriginalContent();
+        return Storage::download($filePath, $sampel->validFile->original_name.'.pdf', [
+            // "X-Suggested-Filename"=> $sampel->validFile->original_name.'.pdf',
+            "Content-Type"=> "application/pdf",
+            "Content-Description" => 'File Transfer',
+            "Content-Disposition" => 'attachment;filename='.$sampel->validFile->original_name.'.pdf',
+        ]);
 
-        // return (new SampelVerifiedExport())
-        //     ->download('sampel-validated-'.time().'.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
     }
 
-    public function getKopSurat()
-    {
-        $pathDirectory = 'public/kop_surat/kop-surat-lab-kes.png';
-
-        $image = Storage::get($pathDirectory);
-
-        return 'data:image/png;base64, ' . base64_encode($image);
-    }
+    
 }

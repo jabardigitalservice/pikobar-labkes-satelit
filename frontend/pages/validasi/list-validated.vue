@@ -55,7 +55,8 @@
                       nomor_sampel : 'Nomor Sampel',
                       parameter_lab: 'Parameter Lab',
                       kesimpulan_pemeriksaan: 'Kesimpulan Pemeriksaan',
-                      status_sampel: 'Status'
+                      status_sampel: 'Status',
+                      tanggal_divalidasi: 'Tanggal Validasi'
                     }"
           ></ajax-table>
         </Ibox>

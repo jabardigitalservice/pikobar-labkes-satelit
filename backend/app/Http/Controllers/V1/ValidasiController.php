@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Events\SampelValidatedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\PemeriksaanSampel;
 use App\Models\Sampel;
@@ -21,6 +22,7 @@ class ValidasiController extends Controller
     {
         $models = Sampel::query()->whereHas('logs')
             ->whereHas('pemeriksaanSampel')
+            ->where('sampel_status', '!=', 'sample_invalid')
             ->whereIn('sampel_status', ['sample_verified']); // 'pcr_sample_analyzed'
 
         $params = $request->get('params',false);
@@ -129,6 +131,7 @@ class ValidasiController extends Controller
     {
         $models = Sampel::query()->whereHas('logs')
             ->whereHas('pemeriksaanSampel')
+            ->where('sampel_status', '!=', 'sample_invalid')
             ->whereIn('sampel_status', ['sample_valid']); // 'pcr_sample_analyzed'
 
         $params = $request->get('params',false);
@@ -293,12 +296,14 @@ class ValidasiController extends Controller
 
             $sampel->update([
                 'validator_id'=> $request->input('validator'),
-                'sampel_status'=> 'sample_valid'
+                'sampel_status'=> 'sample_valid',
+                'waktu_sample_valid'=> now()
             ]);
 
             DB::commit();
 
-    
+            event(new SampelValidatedEvent($sampel));
+            
             return response()->json([
                 'status'=>200,
                 'message'=>'success',
