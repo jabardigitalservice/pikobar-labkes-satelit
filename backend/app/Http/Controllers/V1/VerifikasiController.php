@@ -22,7 +22,8 @@ class VerifikasiController extends Controller
         $models = Sampel::query()->whereHas('logs')
             ->whereHas('pemeriksaanSampel')
             ->where('sampel_status', '!=', 'sample_verified')
-            ->where('sampel_status', '!=', 'sample_valid'); // 'pcr_sample_analyzed'
+            ->where('sampel_status', '!=', 'sample_valid')
+            ->where('sampel_status', '!=', 'sample_invalid'); // 'pcr_sample_analyzed'
 
         $params = $request->get('params',false);
         $search = $request->get('search',false);
@@ -118,6 +119,7 @@ class VerifikasiController extends Controller
     {
         $models = Sampel::query()->whereHas('logs')
             ->whereHas('pemeriksaanSampel')
+            ->where('sampel_status', '!=', 'sample_invalid')
             ->whereIn('sampel_status', ['sample_verified', 'sample_valid']); // 'pcr_sample_analyzed'
 
         $params = $request->get('params',false);

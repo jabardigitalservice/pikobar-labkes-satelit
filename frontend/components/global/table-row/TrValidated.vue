@@ -37,6 +37,9 @@
             </span>
 
         </td>
+        <td>
+            {{item.waktu_sample_valid | formatDate}}
+        </td>
         <td width="20%">
             <nuxt-link tag="a" class="btn btn-success btn-sm" :to="`/validasi/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
             <button
