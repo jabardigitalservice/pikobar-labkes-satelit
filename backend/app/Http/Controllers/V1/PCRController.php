@@ -335,6 +335,12 @@ class PCRController extends Controller
             $pcr->jam_selesai_pcr = parseTime($request->jam_selesai_pcr);
             $pcr->metode_pemeriksaan = $request->metode_pemeriksaan;
             $pcr->nama_kit_pemeriksaan = $request->nama_kit_pemeriksaan;
+            $pcr->tanggal_input_hasil = null;
+            $pcr->jam_input_hasil = null;
+            $pcr->catatan_pemeriksaan = null;
+            $pcr->grafik = null;
+            $pcr->hasil_deteksi = null;
+            $pcr->kesimpulan_pemeriksaan = null;
             $pcr->save();
 
             $sampel->waktu_pcr_sample_received = date('Y-m-d H:i:s', strtotime($pcr->tanggal_mulai_ekstraksi . ' ' .$pcr->jam_mulai_ekstraksi));
