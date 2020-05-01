@@ -236,6 +236,8 @@ export default {
       this.form.samples.push({
         tanggalsampel: new Date,
         pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),
+        nomorsampel:null,
+        id_sampel:null,
       })
     },
     async removeSample(index) {
