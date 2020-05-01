@@ -13,6 +13,10 @@ function parseTime($time) {
         return '00:00';
     }
 }
+function parseDecimal($val) {
+    $val = str_replace(',','.', $val);
+    return floatval($val);
+}
 function cctor($obj) {
     return clone $obj;
 }

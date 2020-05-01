@@ -19,7 +19,7 @@ class SampelController extends Controller
                 'error' => 'Nomor Sampel tidak ditemukan',
             ]);
         }
-        if ($sampel->sampel_status != $request->sampel_status) {
+        if ($request->sampel_status && $sampel->sampel_status != $request->sampel_status) {
             return response()->json([
                 'valid' => false,
                 'error' => 'Status sampel sudah pada tahap '.($sampel->status ? $sampel->status->deskripsi : $sampel->sampel_status),

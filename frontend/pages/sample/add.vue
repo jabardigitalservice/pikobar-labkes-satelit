@@ -105,15 +105,10 @@
                   <td>
                     <select class="form-control" v-model="sample.sam_jenis_sampel"
                     :class="{ 'is-invalid': form.errors.has(`samples.${$index}.sam_jenis_sampel`) }">
-                      <option value="1">Usap Nasofaring & Orofaring</option>
-                      <option value="2">Sputum</option>
-                      <option value="3">Bronchoalveolar Lavage</option>
-                      <option value="4">Tracheal Aspirate</option>
-                      <option value="5">Nasal Wash</option>
-                      <option value="6">Jaringan Biopsi/Otopsi</option>
+                      <option :value="js.id" v-for="(js, $index2) in jenis_sampel" :key="$index2">{{ js.text }}</option>
                     </select>
                     <has-error :form="form" :field="`samples.${$index}.sam_jenis_sampel`"/>
-                    <div v-if="sample.sam_jenis_sampel == 12">
+                    <div v-if="sample.sam_jenis_sampel == 999999">
                       <small for="specify">Jenis Lainnya (isi apabila tidak tercantum diatas)</small>
                       <input
                         type="text"
@@ -182,9 +177,19 @@
  
 <script>
 import Form from "vform";
+import { mapGetters } from "vuex";
 
 export default {
   middleware: "auth",
+  computed: mapGetters({
+    jenis_sampel: "options/jenis_sampel",
+  }),
+  async asyncData({store}) {
+    if (!store.getters['options/jenis_sampel'].length) {
+      await store.dispatch('options/fetchJenisSampel')
+    }
+    return {}
+  },
   data() {
     return {
       form: new Form({
@@ -194,15 +199,19 @@ export default {
         pen_penerima_sampel: null,
         pen_catatan: null,
         samples: [{
-          sam_jenis_sampel: 1,
+          sam_jenis_sampel: '1',
           tanggalsampel: new Date,
-          pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),
+          pukulsampel: this.getTimeNow(),
         }],
       }),
       selected_reg: {}
     };
   },
   methods: {
+    getTimeNow() {
+      let h = ('' + new Date().getHours()).padStart(2,'0')
+      return h + ':' + (''+new Date().getMinutes()).padStart(2,'0')
+    },
     initForm() {
       this.form = new Form({
         pen_noreg: null,
@@ -264,6 +273,7 @@ export default {
   created(){
     if(this.$route.params.id!=null) {
       this.form.samples[0].nomorsampel = this.$route.params.id;
+      this.form.samples[0].sam_jenis_sampel = '1';
     }
   }
 };

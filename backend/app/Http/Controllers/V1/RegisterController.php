@@ -91,8 +91,12 @@ class RegisterController extends Controller
         //     echo "$rows[nomor]";
         // }
         // return Str::uuid();
+        $nomor_register = $request->input('reg_no');
+        if (Register::where('nomor_register', $nomor_register)->exists()) {
+            $nomor_register = $this->generateNomorRegister();
+        }
         $register = Register::create([
-            'nomor_register'=> $request->input('reg_no'),
+            'nomor_register'=> $nomor_register,
             'fasyankes_id'=> null,
             'nomor_rekam_medis'=> null,
             'nama_dokter'=> null,
@@ -118,7 +122,7 @@ class RegisterController extends Controller
         $pasien->alamat_lengkap = $request->get('reg_alamat');
         $pasien->no_rt = $request->get('reg_rt');
         $pasien->no_rw = $request->get('reg_rw');
-        $pasien->suhu = $request->get('reg_suhu');
+        $pasien->suhu = parseDecimal($request->get('reg_suhu'));
         $pasien->jenis_kelamin = $request->get('reg_jk');
         $pasien->keterangan_lain = $request->get('reg_keterangan');
         $pasien->save();
@@ -134,8 +138,9 @@ class RegisterController extends Controller
             foreach($request->get('reg_sampel') as $rows) {
                 $sampel = new Sampel;
                 $sampel->nomor_sampel = $rows['nomor'];
-                $sampel->nomor_register = $request->input('reg_no');
+                $sampel->nomor_register = $nomor_register;
                 $sampel->register_id = $register->id;
+                $sampel->updateState('waiting_sample');
                 $sampel->save();
             }
         }
@@ -201,7 +206,7 @@ class RegisterController extends Controller
         $pasien->alamat_lengkap = $request->get('reg_alamat');
         $pasien->no_rt = $request->get('reg_rt');
         $pasien->no_rw = $request->get('reg_rw');
-        $pasien->suhu = $request->get('reg_suhu');
+        $pasien->suhu = parseDecimal($request->get('reg_suhu'));
         $pasien->jenis_kelamin = $request->get('reg_jk');
         $pasien->keterangan_lain = $request->get('reg_keterangan');
         $pasien->save();

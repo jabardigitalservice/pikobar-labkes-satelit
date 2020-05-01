@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Role;
 use App\Models\LabPCR;
+use App\Models\JenisSampel;
 
 class OptionController extends Controller
 {
@@ -16,6 +17,11 @@ class OptionController extends Controller
     public function getLabPCR(Request $request)
     {
         $models = LabPCR::select('id','nama as text')->get();
+        return response()->json($models);
+    }
+    public function getJenisSampel(Request $request)
+    {
+        $models = JenisSampel::select('id','nama as text')->get();
         return response()->json($models);
     }
 }

@@ -37,6 +37,22 @@ class SampleController extends Controller
             foreach (json_decode($params) as $key => $val) {
                 if ($val == '') continue;
                 switch($key) {
+                    case 'sampel_status':
+                        if ($val == 'sample_sent') {
+                            $models->whereIn('sampel_status', [
+                                'sample_taken',
+                                'extraction_sample_extracted',
+                                'extraction_sample_reextract',
+                                'extraction_sample_sent',
+                                'pcr_sample_received',
+                                'pcr_sample_analyzed',
+                                'sample_verified',
+                                'sample_valid',
+                                'sample_invalid',
+                            ]);
+                        } else {
+                            $models->where('sampel_status', $val);
+                        }
                     case 'is_mandiri':
                         if($val=="Ya") {
                             $models = $models->whereNull('pengambilan_sampel_id');
@@ -95,7 +111,7 @@ class SampleController extends Controller
         ]);
 
         foreach($request->samples as $key => $item) {
-            if (isset($item['sam_jenis_sampel']) && $item['sam_jenis_sampel'] == 12) {
+            if (isset($item['sam_jenis_sampel']) && $item['sam_jenis_sampel'] == 999999) {
                 $v->after(function ($validator) use ($item, $key) {
                     if (empty($item['sam_namadiluarjenis'])) {
                         $validator->errors()->add("samples.$key.sam_namadiluarjenis", 'Jenis sampel belum diisi');
@@ -126,6 +142,8 @@ class SampleController extends Controller
             $sm->jam_pengambilan_sampel = $item['pukulsampel'];
             $sm->petugas_pengambilan_sampel = $item['petugas_pengambil'];
             $sm->pengambilan_sampel_id = $model->id;
+            $sm->waktu_waiting_sample = date('Y-m-d H:i:s');
+            $sm->updateState('waiting_sample');
             $sm->save();
         }
         // $model = new Sample;
@@ -199,7 +217,7 @@ class SampleController extends Controller
         ]);
 
         foreach($request->samples as $key => $item) {
-            if (isset($item['sam_jenis_sampel']) && $item['sam_jenis_sampel'] == 12) {
+            if (isset($item['sam_jenis_sampel']) && $item['sam_jenis_sampel'] == 999999) {
                 $v->after(function ($validator) use ($item, $key) {
                     if (empty($item['sam_namadiluarjenis'])) {
                         $validator->errors()->add("samples.$key.sam_namadiluarjenis", 'Jenis sampel belum diisi');
@@ -229,6 +247,9 @@ class SampleController extends Controller
             $sm->jam_pengambilan_sampel = $item['pukulsampel'];
             $sm->petugas_pengambilan_sampel = $item['petugas_pengambil'];
             $sm->pengambilan_sampel_id = $model->id;
+            if ($sm->sampel_status == 'waiting_sample') {
+                $sm->updateState('sample_taken');
+            }
             $sm->save();
         }
     }
