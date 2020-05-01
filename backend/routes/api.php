@@ -51,6 +51,11 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/','RegistrasiMandiri@getData');
         Route::get('/export-excel','RegistrasiMandiri@exportExcel');
     });
+    Route::group(['prefix'=>'registrasi-rujukan'], function(){
+        Route::post('/cek','RegistrasiRujukanController@cekData');
+        Route::post('/store','RegistrasiRujukanController@store');
+        Route::get('/export-excel','RegistrasiMandiri@exportExcel');
+    });
 
     Route::group(['prefix'=>'pemeriksaansampel'], function(){
         Route::get('/get-data','PemeriksaanSampleController@getData');

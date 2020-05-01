@@ -18,7 +18,8 @@ class Register extends Model
         'no_telp',
         'register_uuid',
         'creator_user_id',
-        'sumber_pasien'
+        'sumber_pasien',
+        'jenis_registrasi'
     ];
 
     protected $hidden = ['fasyankes_id'];

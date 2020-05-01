@@ -27,12 +27,25 @@ class RegistrasiMandiri extends Controller
                    ->orWhere('pasien.nik','ilike','%'.$search.'%');
             });
         }
-        $count = $models->count();
+        
 
+        if ($params) {
+            foreach (json_decode($params) as $key => $val) {
+                if ($val == '') continue;
+                switch($key) {
+                    default:
+                        $models = $models->where($key,$val);
+                        break;
+                }
+            }
+        }
+
+        $count = $models->count();
         $page = $request->get('page',1);
         $perpage = $request->get('perpage',999999);
 
-         if ($order) {
+        
+        if ($order) {
             $order_direction = $request->get('order_direction','asc');
             if (empty($order_direction)) $order_direction = 'asc';
 
@@ -43,7 +56,9 @@ class RegistrasiMandiri extends Controller
                     break;
             }
         }
-        $models = $models->select('register.nomor_register','pasien.*','kota.nama as nama_kota','register.created_at as tgl_input','pasien_register.*','register.sumber_pasien');
+        $models = $models->select('register.nomor_register','pasien.*','kota.nama as nama_kota',
+        'register.created_at as tgl_input','pasien_register.*','register.sumber_pasien',
+        'register.jenis_registrasi');
         $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
 
         foreach($models as &$model) {
