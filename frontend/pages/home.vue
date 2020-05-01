@@ -12,6 +12,7 @@
     <ekstraksi v-if="checkPermission('ekstraksi')"></ekstraksi>
     <pcr v-if="checkPermission('pcr')"></pcr>
     <registrasi v-if="checkPermission('registrasi')"></registrasi>
+    <verifikasi-validasi v-if="checkPermission('verifikasi')"></verifikasi-validasi>
   </div>
 </template>
  
@@ -21,6 +22,7 @@ import Ekstraksi from './dashboard/ekstraksi'
 import Pcr from './dashboard/pcr'
 import Tracking from './dashboard/tracking'
 import Registrasi from './dashboard/registrasi'
+import VerifikasiValidasi from './dashboard/verifikasi-validasi'
 
 export default {
   middleware: "auth",
@@ -28,7 +30,8 @@ export default {
     Ekstraksi,
     Pcr,
     Tracking,
-    Registrasi
+    Registrasi,
+    VerifikasiValidasi
   },
 
   computed: mapGetters({

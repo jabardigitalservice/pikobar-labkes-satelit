@@ -84,8 +84,8 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
         Route::get('counter-belum-verifikasi', 'DashboardVerifikasiController@getCountUnverify');
         Route::get('counter-terverifikasi', 'DashboardVerifikasiController@getCountVerified');
-        Route::get('counter-belum-validasi', 'DashboardVerifikasiController@getCountUnvalidate');
-        Route::get('counter-tervalidasi', 'DashboardVerifikasiController@getCountValidated');
+        Route::get('counter-belum-validasi', 'DashboardValidasiController@getCountUnvalidate');
+        Route::get('counter-tervalidasi', 'DashboardValidasiController@getCountValidated');
     });
     Route::group(['prefix'=>'ekstraksi'], function(){
         Route::get('/get-data','EkstraksiController@getData');
