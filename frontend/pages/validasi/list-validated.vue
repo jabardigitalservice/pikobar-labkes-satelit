@@ -23,9 +23,9 @@
             </div>
 
             <div class="col-md-9">
-              <!-- <router-link :to="'/verifikasi/export-excel'" class="btn btn-primary pull-right">
+              <router-link :to="'/validasi/export-excel'" class="btn btn-primary pull-right">
                 <i class="fa fa-file-excel-o"></i> Export Excel
-              </router-link> -->
+              </router-link>
             </div>
           </div>
           <ajax-table

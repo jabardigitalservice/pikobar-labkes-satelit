@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper wrapper-content">
-    <portal to="title-name">Export Hasil Verifikasi (.xlsx)</portal>
+    <portal to="title-name">Export Hasil Validasi (.xlsx)</portal>
     <portal to="title-action">
       <div class="title-action">
         <a href="#" @click.prevent="$router.back()" class="btn btn-secondary">
@@ -91,7 +91,7 @@ export default {
   },
   head() {
     return {
-      title: "Export Excel Hasil Verifikasi"
+      title: "Export Excel Hasil Validasi"
     };
   },
   methods: {
@@ -104,7 +104,7 @@ export default {
         this.loading = true;
 
         axios({
-                url: process.env.apiUrl + "/v1/verifikasi/export-excel",
+                url: process.env.apiUrl + "/v1/validasi/export-excel",
                 params: this.form,
                 method: 'GET',
                 responseType: 'blob',
@@ -114,7 +114,7 @@ export default {
                 const link = document.createElement('a');
                 link.href = url;
                 const contentDisposition = response.headers['content-disposition'];
-                let fileName = 'hasil-verifikasi.xlsx';
+                let fileName = 'hasil-validasi.xlsx';
                 if (contentDisposition) {
                     const fileNameMatch = contentDisposition.match(/filename=(.+)/);
                     if (fileNameMatch.length === 2)
