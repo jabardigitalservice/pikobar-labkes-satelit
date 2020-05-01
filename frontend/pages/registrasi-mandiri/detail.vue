@@ -132,15 +132,17 @@
   import {
     mapActions,
     mapState
-  } from 'vuex'
+  } from 'vuex' 
   import axios from 'axios'
 
   export default {
     middleware: 'auth',
-    data() {
-      return {
-        data:null
-      }
+    async asyncData({route, store}) {
+        let error = false;
+        let resp = await axios.get("/v1/register/mandiri/"+route.params.register_id+"/"+route.params.pasien_id);
+        return {
+          data: resp.data
+        }
     },
     computed: {
       registerId(){
@@ -151,11 +153,6 @@
       }
     },
     methods: {
-      async getData(){
-        const resp = await axios.get('v1/register/mandiri/'+this.registerId+'/'+this.pasienId);
-        this.data = resp.data;
-        // console.log(resp.data);
-      },
       async deleteData(){
         await axios.delete('v1/register/mandiri/'+id+'/'+pasien)
           .then((response)=>{
@@ -183,7 +180,7 @@
       }
     },
     created(){
-      this.getData();
+      // this.getData();
     }
   }
 </script>

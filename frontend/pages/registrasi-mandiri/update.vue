@@ -620,7 +620,7 @@
                 // console.log(this.form.reg_sampel)
                 this.form.reg_sampel.push({
                     nomor: null,
-                    id:null
+                    id:null,
                 })
             },
             async removeSample(index) {

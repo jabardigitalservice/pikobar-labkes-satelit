@@ -38,11 +38,11 @@ class SampleController extends Controller
                 if ($val == '') continue;
                 switch($key) {
                     case 'is_mandiri':
-                        // if($val=="Ya") {
-                        //     $models = $models->whereNull('pengambilan_sampel_id');
-                        // }else {
-                        //     $models = $models->whereNotNull('pengambilan_sampel_id');
-                        // }
+                        if($val=="Ya") {
+                            $models = $models->whereNull('pengambilan_sampel_id');
+                        }else {
+                            $models = $models->whereNotNull('pengambilan_sampel_id');
+                        }
                         break;
                     default:
                         // $models = $models->where($key,$val);
@@ -133,8 +133,6 @@ class SampleController extends Controller
         
         return response()->json(['status'=>201,'message'=>'Berhasil menambahkan sampel','result'=>[]]);
     }
-
-
 
 
     public function getUpdate(Request $request, $id)
