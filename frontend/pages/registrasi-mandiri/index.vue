@@ -53,7 +53,7 @@ export default {
   data(){
     return{
        params: {
-          nama: null
+          jenis_registrasi: "mandiri"
         },
     }
   },

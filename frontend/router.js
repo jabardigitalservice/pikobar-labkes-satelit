@@ -41,6 +41,7 @@ const routes = [
   { path: '/registrasi/mandiri/export-excel', name:'registrasi.mandiri.export-excel', component: page('registrasi-mandiri/export-excel.vue'), meta: {parentName: 'registrasi.mandiri'} },
 
   { path: '/registrasi/rujukan', name:'registrasi.rujukan', component: page('registrasi-rujukan/index.vue'), meta: {parentName: 'home'} },
+  { path: '/registrasi/rujukan/add/:nomor_sampel', name:'registrasi.rujukan.add', component: page('registrasi-rujukan/add.vue'), meta: {parentName: 'home'} },
 
   { path: '/ekstraksi', name:'ekstraksi.index', component: page('ekstraksi/index.vue'), meta: {parentName: 'home'} },
   { path: '/ekstraksi/detail/:id', name:'ekstraksi.detail', component: page('ekstraksi/detail.vue'), meta: {parentName: 'ekstraksi.index'} },
