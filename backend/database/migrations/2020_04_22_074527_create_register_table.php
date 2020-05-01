@@ -21,6 +21,13 @@ class CreateRegisterTable extends Migration
             $table->string('nama_dokter')->nullable();
             $table->string('no_telp', 30)->nullable();
             $table->string('sumber_pasien')->nullable();
+            $table->string('jenis_registrasi')->nullable();
+            $table->string('kunjungan_ke')->nullable();
+            $table->string('dinkes_pengirim')->nullable();
+            $table->string('other_dinas_pengirim')->nullable();
+            $table->string('nama_rs')->nullable();
+            $table->string('other_nama_rs')->nullable();
+            $table->string('fasyankes_pengirim')->nullable();
             $table->timestamps();
         });
     }
