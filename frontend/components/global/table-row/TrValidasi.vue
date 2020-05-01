@@ -2,6 +2,15 @@
     <tr>
         <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
         <td>
+            <input 
+                type="checkbox" class="form-control checkbox-unvalidate" 
+                v-bind:value="item.id" 
+                v-bind:id="'selected-sampel-'+item.id" 
+                v-model="checked" 
+                v-on:change="sampelOnChangeSelect(item.id)"
+            >
+        </td>
+        <td>
             {{item.nomor_register}}
         </td>
         <td>
@@ -39,9 +48,21 @@ export default {
     props  : ['item', 'pagination', 'rowparams', 'index'],
     data() {
         return {
+            checked: false
         }
     },
     methods: {
+        sampelOnChangeSelect(sampelId){
+            if (this.checked) {                
+                this.$store.commit('validasi/add', sampelId)
+                // console.log(this.$store.state.validasi.selectedSampels);
+                
+            }
+
+            if (!this.checked) {
+                this.$store.commit('validasi/remove', sampelId)
+            }
+        }
     },
     computed: {
 

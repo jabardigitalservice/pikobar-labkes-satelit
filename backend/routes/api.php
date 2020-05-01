@@ -213,9 +213,10 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             Route::post('edit-status-sampel/{sampel}', 'ValidasiController@updateToValidate');
             
             Route::get('list-validator', 'ValidasiController@getValidator');
-
+            
             Route::get('export-pdf/{sampel}', 'ValidasiExportController@exportPDF');
-
+            
+            Route::post('bulk-validasi', 'ValidasiController@bulkValidate');
             
         });
 
