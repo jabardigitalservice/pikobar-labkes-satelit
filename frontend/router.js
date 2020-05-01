@@ -20,6 +20,8 @@ const routes = [
   { path: '/error-role', name: 'error-role', component: page('error-role.vue'), meta: {parentName: 'home'} },
   { path: '/sample', name: 'sample.index', component: page('sample/index.vue'), meta: {parentName: 'home'} },
   { path: '/sample/add', name: 'sample.add', component: page('sample/add.vue'), meta: {parentName: 'sample.index'} },
+  { path: '/sample/add/:id', name: 'sample.add', component: page('sample/add.vue'), meta: {parentName: 'sample.index'} },
+  { path: '/sample/edit/:id', name: 'sample.edit', component: page('sample/edit.vue'), meta: {parentName: 'sample.index'} },
   { path: '/settings',
     component: page('settings/index.vue'),
     children: [
@@ -36,7 +38,8 @@ const routes = [
                     component: page('registrasi-mandiri/detail.vue'), 
                     meta: {parentName: 'registrasi.mandiri'} },
   { path: '/registrasi/mandiri/update/:register_id/:pasien_id', name:'registrasi.mandiri.update', meta: {parentName: 'registrasi.mandiri'}, component: page('registrasi-mandiri/update.vue')},
-  
+  { path: '/registrasi/mandiri/export-excel', name:'registrasi.mandiri.export-excel', component: page('registrasi-mandiri/export-excel.vue'), meta: {parentName: 'registrasi.mandiri'} },
+
   { path: '/registrasi/rujukan', name:'registrasi.rujukan', component: page('registrasi-rujukan/index.vue'), meta: {parentName: 'home'} },
 
   { path: '/ekstraksi', name:'ekstraksi.index', component: page('ekstraksi/index.vue'), meta: {parentName: 'home'} },

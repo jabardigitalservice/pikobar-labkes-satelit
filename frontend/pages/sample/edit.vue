@@ -182,11 +182,12 @@
  
 <script>
 import Form from "vform";
-
+import axios from 'axios';
 export default {
   middleware: "auth",
   data() {
     return {
+      data:null,
       form: new Form({
         pen_noreg: null,
         pen_nik: null,
@@ -215,6 +216,10 @@ export default {
           pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),
         }],
       })
+    },
+    async getSample(){
+        let resp = await axios.get('/sample/get/'+this.$route.params.id)
+        this.data = resp.data;
     },
     addSample() {
       this.form.samples.push({
@@ -262,9 +267,7 @@ export default {
     return { title: "Pengambilan / Penerimaan Sampel Baru" };
   },
   created(){
-    if(this.$route.params.id!=null) {
-      this.form.samples[0].nomorsampel = this.$route.params.id;
-    }
+      this.getSample();
   }
 };
 </script>

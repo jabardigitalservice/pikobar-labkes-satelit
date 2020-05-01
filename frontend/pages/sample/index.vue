@@ -41,8 +41,7 @@
       <div class="col-lg-12">
         <Ibox title="Sampel dari Register">
           <p
-            class="sub-header"
-          >Berikut ini adalah daftar dari registrasi yang belum ada status penerimaan atau pengambilan sampel, Silahkan pilih dan lakukan Ambil atau Terima Sampel Pasien</p>
+            class="sub-header">Berikut ini adalah daftar dari registrasi yang belum ada status penerimaan atau pengambilan sampel, Silahkan pilih dan lakukan Ambil atau Terima Sampel Pasien</p>
           <ajax-table
             url="/sample/get-data"
             :oid="'sample-register'"
@@ -55,7 +54,7 @@
                     has_action: true,
                     has_search_input: true,
                     custom_header: '',
-                    default_sort: 'sam_barcodenomor_sampel',
+                    default_sort: 'created_at',
                     custom_empty_page: true,
                     class: {
                         table: [],
@@ -64,7 +63,9 @@
                     }"
             :rowtemplate="'tr-sample-register'"
             :columns="{
-                      sam_barcodenomor_sampel: 'Sampel',
+                      nomor_sampel: 'Sampel',
+                      nomor_register: 'Nomor Registrasi',
+                      jenis_sampel_nama : 'Jenis Sampel',
                     }"
           ></ajax-table>
         </Ibox>
@@ -87,7 +88,7 @@
                     has_action: true,
                     has_search_input: true,
                     custom_header: '',
-                    default_sort: 'sam_barcodenomor_sampel',
+                    default_sort: 'created_at',
                     custom_empty_page: true,
                     class: {
                         table: [],
@@ -96,7 +97,9 @@
                     }"
             :rowtemplate="'tr-sample-register'"
             :columns="{
-                      sam_barcodenomor_sampel: 'Sampel',
+                      nomor_sampel: 'Sampel',
+                      nomor_register: 'Nomor Registrasi',
+                      jenis_sampel_nama : 'Jenis Sampel',
                     }"
           ></ajax-table>
         </Ibox>
@@ -111,10 +114,10 @@ export default {
   data() {
     return {
       params1: {
-        sam_barcodenomor_sampel: null
+        is_mandiri: "Ya"
       },
       params2: {
-        sam_barcodenomor_sampel: null
+        is_mandiri:"Tidak",
       }
     };
   },
