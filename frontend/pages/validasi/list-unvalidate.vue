@@ -22,6 +22,12 @@
                 </select>
               </div>
             </div>
+            <div class="col-md-9">
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBulkValidate">
+                Launch demo modal
+              </button>
+            </div>
           </div>
           <ajax-table
             url="/v1/validasi/list"
@@ -44,6 +50,7 @@
                     }"
                 :rowtemplate="'tr-validasi'"
                 :columns="{
+                      checkbox_input: '#',
                       nomor_register: 'Nomor Register',
                       pasien_nama : 'Nama Pasien',
                       kota_nama : 'Kota Domisili',
@@ -56,12 +63,19 @@
       </div>
     </div>
 
+    <!-- <custom-modal modal-id="modalBulkValidate" title="Validasi Sampel Terpilih" /> -->
+
   </div>
 </template>
  
 <script>
+// import CustomModal from "~/components/CustomModal"
+
 export default {
   middleware: "auth",
+  // components: {
+  //   CustomModal
+  // },
   data() {
     return {
       params1: {
@@ -77,5 +91,11 @@ export default {
       this.$bus.$emit('refresh-ajaxtable', 'validasi')
     },
   },
+  methods: {
+    bulkValidate() {
+      
+      
+    }
+  }
 };
 </script>

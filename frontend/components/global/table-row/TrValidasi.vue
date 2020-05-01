@@ -2,6 +2,13 @@
     <tr>
         <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
         <td>
+            <input 
+                type="checkbox" class="form-control checkbox-unvalidate" 
+                v-bind:value="item.id" 
+                v-bind:id="'selected-sampel-'+item.id"
+            >
+        </td>
+        <td>
             {{item.nomor_register}}
         </td>
         <td>
