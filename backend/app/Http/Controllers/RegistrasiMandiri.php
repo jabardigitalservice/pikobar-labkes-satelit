@@ -8,6 +8,7 @@ use App\Models\Register;
 use App\Models\PasienRegister;
 use App\Models\Sampel;
 use DateTime;
+use App\Exports\RegisMandiriExport;
 
 class RegistrasiMandiri extends Controller
 { 
@@ -59,6 +60,27 @@ class RegistrasiMandiri extends Controller
         ];
 
         return response()->json($result);
+    }
+
+
+    public function exportExcel(Request $request)
+    {
+        $request->validate([
+            'start_date'=> 'nullable', // 'date|date_format:Y-m-d',
+            'end_date'=> 'nullable', // 'date|date_format:Y-m-d',
+        ]);
+
+        $payload = [];
+
+        if ($request->has('start_date')) {
+            $payload['startDate'] = parseDate($request->input('start_date'));
+        }
+
+        if ($request->has('end_date')) {
+            $payload['endDate'] = parseDate($request->input('end_date'));
+        }
+
+        return (new RegisMandiriExport($payload))->download('registrasi-mandiri-'.time().'.xlsx');
     }
 
 }

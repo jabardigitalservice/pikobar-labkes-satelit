@@ -3,25 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User as Sample;
+// use App\User as Sample;
 use Illuminate\Validation\Rule;
+use App\Models\Sampel;
+use App\Models\PemeriksaanSampel;
+use App\Models\Register;
+use App\Models\PasienRegister;
+use App\Models\PengambilanSampel;
+use DB;
 use Validator;
 
 class SampleController extends Controller
 {
-
-
     public function getData(Request $request)
     {
-        $models = Sample::query();
+        $models = Sampel::query();
         $params = $request->get('params',false);
         $search = $request->get('search',false);
         $order  = $request->get('order' ,'name');
 
         if ($search != '') {
             $models = $models->where(function($q) use ($search) {
-                $q->where('name','ilike','%'.$search.'%')
-                   ->orWhere('email','ilike','%'.$search.'%');
+                $q->where('nomor_sampel','ilike','%'.$search.'%');
+                //    ->orWhere('email','ilike','%'.$search.'%');
             });
         }
         $count = $models->count();
@@ -29,13 +33,31 @@ class SampleController extends Controller
         $page = $request->get('page',1);
         $perpage = $request->get('perpage',999999);
 
-         if ($order) {
+        if ($params) {
+            foreach (json_decode($params) as $key => $val) {
+                if ($val == '') continue;
+                switch($key) {
+                    case 'is_mandiri':
+                        if($val=="Ya") {
+                            $models = $models->whereNull('pengambilan_sampel_id');
+                        }else {
+                            $models = $models->whereNotNull('pengambilan_sampel_id');
+                        }
+                        break;
+                    default:
+                        // $models = $models->where($key,$val);
+                        break;
+                }
+            }
+        }
+
+        if ($order) {
             $order_direction = $request->get('order_direction','asc');
             if (empty($order_direction)) $order_direction = 'asc';
 
             switch ($order) {
                 case 'xx':
-                    $models = $models->orderBy($order,$order_direction);
+                    // $models = $models->orderBy($order,$order_direction);
                 default:
                     break;
             }
@@ -60,22 +82,16 @@ class SampleController extends Controller
         $v = Validator::make($request->all(),[
             'samples.*.sam_jenis_sampel' => 'required|integer|min:1|max:12',
             'samples.*.nomorsampel' => 'required',
-            'pen_sampel_diambil.required' => 'Keterangan sampel diambil wajib diisi',
-            'pen_nomor_ekstraksi.required' => 'Nomor Ekstraksi wajib diisi',
-            'pen_nomor_ekstraksi.min' => 'Jumlah karakter minimal :min dijit.',
-            'pen_nomor_ekstraksi.max' => 'Jumlah karakter maksimal :max dijit.',
+            'pen_sampel_sumber.required' => 'Sumber sampel wajib diisi',
+            'samples.*.petugas_pengambil' => 'required'
         ], [
-            'pen_sampel_diambil.required' => 'Keterangan sampel diambil wajib diisi',
-            'pen_nomor_ekstraksi.required' => 'Nomor Ekstraksi wajib diisi',
-            'pen_nomor_ekstraksi.min' => 'Jumlah karakter minimal :min dijit.',
-            'pen_nomor_ekstraksi.max' => 'Jumlah karakter maksimal :max dijit.',
-
+            'pen_sampel_sumber.required' => 'Sumber sampel wajib diisi',
             'samples.*.sam_jenis_sampel.required'=> 'Jenis sampel wajib diisi.',
             'samples.*.sam_jenis_sampel.integer'=> 'Tipe data tidak valid',
             'samples.*.sam_jenis_sampel.min'=> 'Jumlah karakter minimal :min dijit.',
             'samples.*.sam_jenis_sampel.max'=> 'Jumlah karakter maksimal :max dijit.',
-
-            'samples.*.nomorsampel.required' => 'Nomor sampel wajib diisi.',            
+            'samples.*.nomorsampel.required' => 'Nomor sampel wajib diisi.',
+            'samples.*.petugas_pengambil.required' => 'Petugas Pengambil tidak boleh kosong'            
         ]);
 
         foreach($request->samples as $key => $item) {
@@ -89,7 +105,28 @@ class SampleController extends Controller
         }
 
         $v->validate();
+        $model = new PengambilanSampel;
+        $model->sumber_sampel = $request->get('pen_sampel_sumber');
+        $model->penerima_sampel = $request->get('pen_penerima_sampel');
+        $model->catatan = $request->get('pen_catatan');
+        $model->save();
 
+        foreach($request->samples as $key=>$item){
+            $sm = Sampel::where('nomor_sampel',$item['nomorsampel'])->first();
+            if(!$sm) {
+                $sm = new Sampel;
+            }
+            $jenis = DB::table('jenis_sampel')->where('id',$item['sam_jenis_sampel'])->first();
+            $sm->nomor_sampel = $item['nomorsampel'];
+            $sm->jenis_sampel_id = $item['sam_jenis_sampel'];
+            $sm->sampel_status = "sample_taken";
+            $sm->jenis_sampel_nama = $jenis->nama;
+            $sm->tanggal_pengambilan_sampel = $item['tanggalsampel'];
+            $sm->jam_pengambilan_sampel = $item['pukulsampel'];
+            $sm->petugas_pengambilan_sampel = $item['petugas_pengambil'];
+            $sm->pengambilan_sampel_id = $model->id;
+            $sm->save();
+        }
         // $model = new Sample;
         // $model->save();
         
@@ -159,6 +196,12 @@ class SampleController extends Controller
     public function showUpdate(Request $request, $id)
     {
         $model = Sample::where('id',$id)->first();
+        return response()->json(['status'=>200,'message'=>'success','result'=>$model]);
+    }
+
+    public function getById(Request $request, $id)
+    {
+        $model = Sampel::where('nomor_sampel',$id)->first();
         return response()->json(['status'=>200,'message'=>'success','result'=>$model]);
     }
 }

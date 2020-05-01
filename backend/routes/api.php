@@ -31,8 +31,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('settings/password', 'Settings\PasswordController@update');
 
     Route::group(["prefix" => "sample"], function(){
-        Route::get('/get-data', 'SampleController@getData');
+        Route::get('/get-data', 'SampleController@getData'); 
         Route::post('/add', 'SampleController@add');
+        Route::get('/get/{id}','SampleController@getById');
     });
 
     Route::get('/pengguna', 'PenggunaController@listPengguna');
@@ -45,6 +46,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::group(['prefix'=>'registrasi-mandiri'], function(){
         Route::get('/','RegistrasiMandiri@getData');
+        Route::get('/export-excel','RegistrasiMandiri@exportExcel');
     });
 
     Route::group(['prefix'=>'pemeriksaansampel'], function(){

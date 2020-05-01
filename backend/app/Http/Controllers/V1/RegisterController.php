@@ -20,6 +20,7 @@ use Illuminate\Validation\Rule;
 use Auth;
 use App\Rules\UniqueSampel;
 use App\Models\PasienRegister;
+use App\Exports\RegisMandiriExport;
 
 class RegisterController extends Controller
 {
@@ -281,6 +282,26 @@ class RegisterController extends Controller
             'reg_jk' => $pasien->jenis_kelamin,
             'nama_kota'=>$pasien->nama
          ]);
+    }
+
+    public function exportExcelMandiri(Request $request)
+    {
+        $request->validate([
+            'start_date'=> 'nullable', // 'date|date_format:Y-m-d',
+            'end_date'=> 'nullable', // 'date|date_format:Y-m-d',
+        ]);
+
+        $payload = [];
+
+        if ($request->has('start_date')) {
+            $payload['startDate'] = parseDate($request->input('start_date'));
+        }
+
+        if ($request->has('end_date')) {
+            $payload['endDate'] = parseDate($request->input('end_date'));
+        }
+
+        return (new SampelVerifiedExport($payload))->download('registrasi-mandiri-'.time().'.xlsx');
     }
 
     /**
