@@ -48,6 +48,23 @@
                   </td>
                 </tr>
                 <tr>
+                    <td width="30%" align="right">
+                      <b>No. Telp/HP</b>
+                    </td>
+                    <td width="60%">
+                      <span v-if="data.pasien.no_hp">{{data.pasien.no_hp }}</span>
+                      <span v-else-if="data.pasien.no_telp">{{data.pasien.no_telp }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="30%" align="right">
+                      <b>Alamat</b>
+                    </td>
+                    <td width="60%">
+                      <span v-if="data.pasien.alamat">{{data.pasien.alamat }}</span>
+                    </td>
+                  </tr>
+                <tr>
                   <td align="right">
                     <b>Nomor Sampel</b>
                   </td>

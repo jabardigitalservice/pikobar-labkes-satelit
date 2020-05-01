@@ -118,6 +118,7 @@
 <script>
 import Form from "vform";
 import axios from "axios";
+import JQuery from "jquery";
 import CustomModal from "~/components/CustomModal";
 
 export default {
@@ -176,7 +177,14 @@ export default {
           duration: 5000
         });
 
-        this.$router.back()
+        // clear selected checkbox sampel
+        this.$store.commit('validasi/clear');
+
+        this.$bus.$emit('refresh-ajaxtable', 'validasi');
+
+        JQuery('#modalBulkValidate').modal('hide');
+
+        // this.$router.replace({name: 'validasi.index.validated'});
 
       } catch (err) {
 

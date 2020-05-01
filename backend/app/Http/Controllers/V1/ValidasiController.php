@@ -332,6 +332,38 @@ class ValidasiController extends Controller
             'validator'=> 'required|exists:validator,id'
         ], $request->all());
 
+        DB::beginTransaction();
+        try {
+
+            $uniqueSampelIds = collect($request->input('sampels'))->unique();
+
+            Sampel::whereIn('id', $uniqueSampelIds)->get()
+                ->each(function(Sampel $sampel) use ($request){
+                    $sampel->update([
+                        'validator_id'=> $request->input('validator'),
+                        'sampel_status'=> 'sample_valid',
+                        'waktu_sample_valid'=> now()
+                    ]);
+                });
+            
+            DB::commit();
+
+            Sampel::whereIn('id', $uniqueSampelIds)->get()
+                ->each(function(Sampel $sampel) {
+                    event(new SampelValidatedEvent($sampel));
+                });
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+
+        return response()->json([
+            'data'=> null,
+            'status'=> 200,
+            'message'=> 'success'
+        ]);
+
         
     }
 }

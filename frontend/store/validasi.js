@@ -8,5 +8,8 @@ export const mutations = {
     },
     remove (state, sampelId) {
       state.selectedSampels.splice(state.selectedSampels.indexOf(sampelId), 1)
+    },
+    clear (state) {
+        state.selectedSampels = []
     }
 }

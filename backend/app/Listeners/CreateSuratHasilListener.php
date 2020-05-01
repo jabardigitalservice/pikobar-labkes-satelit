@@ -42,11 +42,16 @@ class CreateSuratHasilListener
     {
         $timestamp = now()->timestamp;
 
+        $storagePath = 'public/surat_hasil';
         $fileName = "SURAT_HASIL_{$sampel->nomor_sampel}_{$timestamp}.pdf";
-        $filePath = 'public/surat_hasil' . DIRECTORY_SEPARATOR . $fileName;
+        $filePath = $storagePath . DIRECTORY_SEPARATOR . $fileName;
 
         DB::beginTransaction();
         try {
+
+            if (!Storage::exists($storagePath)) {
+                Storage::makeDirectory($storagePath);
+            }
 
             $fileStored = Storage::put($filePath, $file);
             $newFile = null;
