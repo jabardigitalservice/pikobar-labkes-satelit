@@ -92,7 +92,7 @@
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_nik') }">
                                 <input class="form-control" type="text" name="reg_nik" placeholder="" required
-                                    v-model="form.reg_nik" max="16" />
+                                    v-model="form.reg_nik" maxlength="16" />
                                 <has-error :form="form" field="reg_nik" />
                             </div>
                         </div>
@@ -226,13 +226,13 @@
                                 <span class="input-group-addon bootstrap-touchspin-postfix input-group-append">
                                     <span class="input-group-text">RT </span>
                                 </span>
-                                <input class="form-control" type="text" name="reg_rt" required v-model="form.reg_rt" />
+                                <input class="form-control" type="number" name="reg_rt" required v-model="form.reg_rt" min="1" step="1" max="999">
                             </div>
                             <div class="input-group col-md-2" :class="{ 'is-invalid':form.errors.has('reg_rw') }">
                                 <div class="input-group-addon bootstrap-touchspin-postfix input-group-append">
                                     <span class="input-group-text">RW </span>
                                 </div>
-                                <input class="form-control" type="text" name="reg_domisilirw" required
+                                <input class="form-control" type="number" name="reg_domisilirw" required min="1" step="1" max="999"
                                     v-model="form.reg_rw" />
                             </div>
                             <has-error :form="form" field="reg_rt" />
@@ -241,12 +241,12 @@
 
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
-                                Suhu
+                                Suhu (°C)
                                 <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6">
                                 <input class="form-control" type="text" v-model="form.reg_suhu " placeholder=""
-                                    :class="{ 'is-invalid': form.errors.has('reg_suhu') }" />
+                                    :class="{ 'is-invalid': form.errors.has('reg_suhu') }" v-mask="'##,##'"/>
                                 <has-error :form="form" field="reg_suhu" />
                             </div>
                         </div>
@@ -670,6 +670,24 @@
         watch: {
             "form.reg_kota": function (newVal, oldVal) {
 
+            },
+            "form.reg_nik": function (newVal, oldVal) {
+                if (newVal && newVal.length >= 12) {
+                    let dd = parseInt(newVal.substr(6,2))
+                    if (dd >= 40) {
+                        this.form.reg_jk = 'P'
+                        dd -= 40
+                    } else {
+                        this.form.reg_jk = 'L'
+                    }
+                    let mm = parseInt(newVal.substr(8,2)) - 1
+                    let yy = parseInt(newVal.substr(10,2))
+                    if (yy <= 30) {
+                        this.form.reg_tgllahir = new Date(2000+yy, mm, dd)
+                    } else {
+                        this.form.reg_tgllahir = new Date(1900+yy, mm, dd)
+                    }
+                }
             },
 
         }

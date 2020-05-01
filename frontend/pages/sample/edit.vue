@@ -105,15 +105,10 @@
                   <td>
                     <select class="form-control" v-model="sample.sam_jenis_sampel"
                     :class="{ 'is-invalid': form.errors.has(`samples.${$index}.sam_jenis_sampel`) }">
-                      <option value="1">Usap Nasofaring & Orofaring</option>
-                      <option value="2">Sputum</option>
-                      <option value="3">Bronchoalveolar Lavage</option>
-                      <option value="4">Tracheal Aspirate</option>
-                      <option value="5">Nasal Wash</option>
-                      <option value="6">Jaringan Biopsi/Otopsi</option>
+                      <option :value="js.id" v-for="(js, $index2) in jenis_sampel" :key="$index2">{{ js.text }}</option>
                     </select>
                     <has-error :form="form" :field="`samples.${$index}.sam_jenis_sampel`"/>
-                    <div v-if="sample.sam_jenis_sampel == 12">
+                    <div v-if="sample.sam_jenis_sampel == 999999">
                       <small for="specify">Jenis Lainnya (isi apabila tidak tercantum diatas)</small>
                       <input
                         type="text"
@@ -157,12 +152,12 @@
                     </button>
                   </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                   <td colspan="4"></td>
                   <td colspan="2">
                     <button class="btn btn-sm btn-secondary" @click.prevent="addSample()"><i class="fa fa-plus"></i> Tambah Sampel</button>
                   </td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
 
@@ -183,12 +178,19 @@
 <script>
 import Form from "vform";
 import axios from 'axios';
+import { mapGetters } from "vuex";
 
 export default {
   middleware: "auth",
+  computed: mapGetters({
+    jenis_sampel: "options/jenis_sampel",
+  }),
    async asyncData({route, store}) {
     let error = false;
     let resp = await axios.get("/sample/edit/"+route.params.id);
+    if (!store.getters['options/jenis_sampel'].length) {
+      await store.dispatch('options/fetchJenisSampel')
+    }
     let data = resp.data.result;
     let _sample = []
     // data.sampels.forEach(item => {

@@ -46,6 +46,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/pengguna/{id}','PenggunaController@showUpdate');
     Route::get('roles-option','OptionController@getRoles');
     Route::get('lab-pcr-option','OptionController@getLabPCR');
+    Route::get('jenis-sampel-option','OptionController@getJenisSampel');
 
     Route::group(['prefix'=>'registrasi-mandiri'], function(){
         Route::get('/','RegistrasiMandiri@getData');

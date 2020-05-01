@@ -14,22 +14,27 @@
         <Ibox title="Penerimaan atau Pengambilan Sampel">
           <p
             class="sub-header"
-          >Scan / masukan nomor barcode salah satu sampel untuk register pasien rujukan</p>
-          <form id="scanbarcode row" action method="post">
+          >Scan / masukan nomor barcode salah satu sampel untuk register pasien rujukan atau pengambilan sampel pasien mandiri</p>
+          <form id="scanbarcode row" @submit.prevent="scanBarcode()">
             <center>
               <div class="form-group">
                 <input
                   id="barcodesampel"
+                  v-model="input_nomor_sampel"
                   class="form-control col-md-3"
                   name
                   placeholder="Scan..."
                   type="text"
+                  :readonly="loading"
                   tabindex="1"
                   required
                   autofocus
                 />
                 <br />
-                <button type="submit" class="mt-2 btn btn-md btn-primary">Tambahkan Informasi Sampel</button>
+                <button type="submit" class="mt-2 btn btn-md btn-primary"
+                  :disabled="loading"
+                  :class="{'btn-loading': loading}"
+                >Tambahkan Informasi Sampel</button>
               </div>
             </center>
           </form>
@@ -54,7 +59,7 @@
                     has_action: true,
                     has_search_input: true,
                     custom_header: '',
-                    default_sort: 'created_at',
+                    default_sort: 'waktu_waiting_sample',
                     custom_empty_page: true,
                     class: {
                         table: [],
@@ -88,7 +93,7 @@
                     has_action: true,
                     has_search_input: true,
                     custom_header: '',
-                    default_sort: 'created_at',
+                    default_sort: 'waktu_sample_taken',
                     custom_empty_page: true,
                     class: {
                         table: [],
@@ -109,17 +114,40 @@
 </template>
  
 <script>
+import axios from "axios";
+
 export default {
   middleware: "auth",
   data() {
     return {
       params1: {
-        is_mandiri: "Ya"
+        sampel_status: "waiting_sample"
       },
       params2: {
-        is_mandiri:"Tidak",
-      }
+        sampel_status: "sample_sent",
+      },
+      input_nomor_sampel: '',
+      loading: false,
     };
+  },
+  methods: {
+    async scanBarcode() {
+      let input_nomor_sampel = this.input_nomor_sampel
+      this.loading = true
+      let resp = (
+        await axios.get("v1/sampel/cek-nomor-sampel", {
+          params: {
+            nomor_sampel: this.input_nomor_sampel,
+          }
+        })
+      ).data;
+      this.loading = false
+      if (resp.valid) {
+        this.$router.push('/sample/edit/' + input_nomor_sampel)
+      } else {
+        this.$router.push('/sample/add/' + input_nomor_sampel)
+      }
+    }
   },
   head() {
     return { title: "Penerimaan Sampel" };
