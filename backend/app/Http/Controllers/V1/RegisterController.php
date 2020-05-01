@@ -560,9 +560,9 @@ class RegisterController extends Controller
         DB::beginTransaction();
         try{
             PasienRegister::where('register_id',$id)->where('pasien_id',$pasien)->delete();
+            $sampel = Sampel::where('register_id',$id)->delete();
             $register = Register::where('id',$id)->delete();
             $pasien = Pasien::where('id',$pasien)->delete();
-            $sampel = Sampel::where('register_id',$id)->delete();
             DB::commit();
             return response()->json([
                 'status'=> true,

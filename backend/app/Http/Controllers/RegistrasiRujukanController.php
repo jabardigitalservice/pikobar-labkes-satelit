@@ -128,6 +128,7 @@ class RegistrasiRujukanController extends Controller
         if($sampel) {
             $sampel->register_id = $register->id;
             $sampel->nomor_register = $request->input('reg_no');
+            $sampel->save();
         }
         return response()->json(['status'=>201,'message'=>'Proses Registrasi Rujukan Berhasil Ditambahkan','result'=>[]]);
     }

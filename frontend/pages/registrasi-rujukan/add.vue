@@ -409,7 +409,7 @@
                     // console.log('Response : ', response);
                     this.initForm();
                     this.getNoreg();
-                    this.$router.push('registrasi-rujukan');
+                    this.$router.push('/registrasi-rujukan');
                 } catch (err) {
                     if (err.response && err.response.data.code == 422) {
                         this.$nextTick(() => {
