@@ -34,7 +34,7 @@
               <div class="form-group">
                 <label>Hasil Pemeriksaan</label>
                 <dynamic-input :form="params1" field="kesimpulan_pemeriksaan" 
-                  :options="[{id: 'positif',name: 'POSITIF'},{id: 'negatif',name: 'NEGATIF'}]"
+                  :options="[{id: 'positif',name: 'POSITIF'},{id: 'negatif',name: 'NEGATIF'},{id: 'sampel kurang',name: 'SAMPEL KURANG'}]"
                   :hasSemua="true">
                 </dynamic-input>
               </div>

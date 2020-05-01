@@ -24,6 +24,16 @@ class Sampel extends Model
         'tanggal_pengambilan_sampel',
         'waktu_pengambilan_sampel',
         'sampel_status',
+        'validator_id',
+        'waktu_sample_verified',
+        'waktu_sample_valid',
+        'valid_file_id',
+    ];
+
+    protected $dates = [
+        'tanggal_pengambilan_sampel',
+        'waktu_sample_verified',
+        'waktu_sample_valid'
     ];
 
     public function fasyankes()
@@ -89,6 +99,16 @@ class Sampel extends Model
     public function pemeriksaanSampel()
     {
         return $this->hasMany(PemeriksaanSampel::class);
+    }
+
+    public function validator()
+    {
+        return $this->belongsTo(Validator::class);
+    }
+
+    public function validFile()
+    {
+        return $this->belongsTo(File::class, 'valid_file_id');
     }
 
 }

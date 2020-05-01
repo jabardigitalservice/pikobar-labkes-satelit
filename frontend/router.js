@@ -57,18 +57,26 @@ const routes = [
   { path: '/pcr/list-pcr', name:'pcr.list-pcr', component: page('pcr/list-pcr.vue'), meta: {parentName: 'home'} },
   { path: '/pcr/list-hasil-pemeriksaan', name:'pcr.list-hasil-pemeriksaan', component: page('pcr/list-hasil-pemeriksaan.vue'), meta: {parentName: 'home'} },
   { path: '/pcr/list-hasil-inkonklusif', name:'pcr.list-hasil-inkonklusif', component: page('pcr/list-hasil-inkonklusif.vue'), meta: {parentName: 'home'} },
-  { path: '/pcr/terima/:sample_ids?', name:'pcr.terima', component: page('pcr/terima.vue'), meta: {parentName: 'pcr.list-rna'} },
+  { path: '/pcr/terima/:nomor_sampels?', name:'pcr.terima', component: page('pcr/terima.vue'), meta: {parentName: 'pcr.list-rna'} },
   { path: '/pcr/detail/:id', name:'pcr.detail', component: page('pcr/detail.vue'), meta: {parentName: 'pcr.list-pcr'} },
   { path: '/pcr/invalid/:id', name:'pcr.invalid', component: page('pcr/invalid.vue'), meta: {parentName: 'pcr.list-pcr'} },
   { path: '/pcr/input/:id', name:'pcr.input', component: page('pcr/input.vue'), meta: {parentName: 'pcr.list-pcr'} },
 
   { path: '/pemeriksaansampel', name:'pemeriksaansample.index', component: page('pemeriksaan/index.vue'), meta: {parentName: 'home'}},
 
+  // Verifikasi
   { path: '/verifikasi/list-unverified', name:'verifikasi.index.unverified', component: page('verifikasi/list-unverified.vue'), meta: {parentName: 'home'} },
   { path: '/verifikasi/list-verified', name:'verifikasi.index.verified', component: page('verifikasi/list-verified.vue'), meta: {parentName: 'home'} },
   { path: '/verifikasi/detail/:id', name:'verifikasi.detail', component: page('verifikasi/detail.vue'), meta: {parentName: 'verifikasi.index.unverified'} },
   { path: '/verifikasi/edit/:id', name:'verifikasi.edit', component: page('verifikasi/edit.vue'), meta: {parentName: 'verifikasi.index.unverified'} },
   { path: '/verifikasi/export-excel', name:'verifikasi.export-excel', component: page('verifikasi/export-excel.vue'), meta: {parentName: 'verifikasi.index.verified'} },
+
+  // Validasi
+  { path: '/validasi/list-unvalidate', name:'validasi.index.unvalidate', component: page('validasi/list-unvalidate.vue'), meta: {parentName: 'home'} },
+  { path: '/validasi/list-validated', name:'validasi.index.validated', component: page('validasi/list-validated.vue'), meta: {parentName: 'home'} },
+  { path: '/validasi/detail/:id', name:'validasi.detail', component: page('validasi/detail.vue'), meta: {parentName: 'validasi.index.unvalidate'} },
+  { path: '/validasi/edit/:id', name:'validasi.edit', component: page('validasi/edit.vue'), meta: {parentName: 'validasi.index.unvalidate'} },
+  { path: '/validasi/export-excel', name:'validasi.export-excel', component: page('validasi/export-excel.vue'), meta: {parentName: 'validasi.index.validated'} },
   
 ]
 

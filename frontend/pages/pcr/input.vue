@@ -133,6 +133,12 @@
                 </div>
                 <div>
                   <label class="form-check-label">
+                    <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="sampel kurang" />
+                    <b>SAMPEL KURANG</b>
+                  </label>
+                </div>
+                <div>
+                  <label class="form-check-label">
                     <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="inkonklusif" />
                     <b>INVALID</b>
                   </label>
@@ -144,7 +150,6 @@
             <div class="form-group">
               <label>
                 Grafik
-                <span style="color:red">*</span>
               </label>
               <div :class="{ 'is-invalid': form.errors.has('grafik') }">
                 <a :href="url" target="_blank" v-for="(url, $index) in data.pcr.grafik" :key="$index" class="thumbnail-wrapper">
@@ -175,13 +180,23 @@
             <div class="form-group">
               <button
                 @click="submit()"
-                :disabled="loading"
+                :disabled="loading && form.kesimpulan_pemeriksaan == 'inkonklusif'"
                 :class="{'btn-loading': loading}"
                 class="btn btn-md btn-primary block full-width m-b"
                 type="button"
               >
                 <i class="fa fa-check"></i>
-                {{ form.kesimpulan_pemeriksaan != 'inkonklusif' ? 'Verifikasi Hasil PCR' : 'Periksa Ulang'}}
+                Verifikasi Hasil PCR
+              </button>
+              <button
+                @click="submit()"
+                :disabled="loading && form.kesimpulan_pemeriksaan != 'inkonklusif'"
+                :class="{'btn-loading': loading}"
+                class="btn btn-md btn-warning block full-width m-b"
+                type="button"
+              >
+                <i class="fa fa-check"></i>
+                Periksa Ulang
               </button>
             </div>
           </Ibox>

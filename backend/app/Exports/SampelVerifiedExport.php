@@ -81,7 +81,8 @@ class SampelVerifiedExport implements FromQuery,
                 'kota.nama',
                 'sampel.nomor_sampel',
                 'pemeriksaansampel.kesimpulan_pemeriksaan',
-                'pemeriksaansampel.tanggal_input_hasil'
+                'pemeriksaansampel.tanggal_input_hasil',
+                'sampel.waktu_sample_verified'
             ])
             ->where('sampel.sampel_status', $this->sampelStatus);
 
@@ -133,7 +134,8 @@ class SampelVerifiedExport implements FromQuery,
             'Domisili',
             'No. Sampel',
             'Hasil Pemeriksaan',
-            'Tanggal Input Hasil'
+            'Tanggal Input Hasil',
+            'Tanggal Diverifikasi'
         ];
     }
 

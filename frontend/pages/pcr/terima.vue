@@ -181,21 +181,8 @@ export default {
     SamplePicker,
   },
   data() {
-    var staticInput = false
-    if (this.$route.params.sample_ids) {
-      sample_ids = this.$route.params.sample_ids.split(',').map((sample_id) => {
-        return {
-          nomor_sampel: sample_id,
-          valid: true,
-          error: ""
-        }
-      })
-      staticInput = true
-    } else {
-      sample_ids = []
-    }
     return {
-      staticInput,
+      staticInput: false,
       form: new Form({
         tanggal_penerimaan_sampel: new Date(),
         jam_penerimaan_sampel: this.getTimeNow(),
@@ -207,7 +194,7 @@ export default {
         jam_selesai_pcr: this.getTimeNow(),
         metode_pemeriksaan: "",
         nama_kit_pemeriksaan: "",
-        samples: sample_ids,
+        samples: [],
       }),
       loading: false,
       input_nomor_sampel: ""
@@ -255,7 +242,11 @@ export default {
           iconPack: "fontawesome",
           duration: 5000
         });
-        this.initForm();
+        if (this.staticInput) {
+          this.$router.back();
+        } else {
+          this.initForm();
+        }
       } catch (err) {
         if (err.response && err.response.data.code == 422) {
           this.$nextTick(() => {
@@ -276,6 +267,18 @@ export default {
       }
       this.loading = false
     },
+  },
+  created() {
+    if (this.$route.params && this.$route.params.nomor_sampels) {
+      this.form.samples = this.$route.params.nomor_sampels.split(',').map((nomor_sampel) => {
+        return {
+          nomor_sampel: nomor_sampel,
+          valid: true,
+          error: ""
+        }
+      })
+      this.staticInput = true
+    }
   }
 };
 </script>

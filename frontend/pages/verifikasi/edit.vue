@@ -118,8 +118,8 @@
                 </div>
                 <div>
                   <label class="form-check-label">
-                    <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="inkonklusif" />
-                    <b>INKONKLUSIF</b>
+                    <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="sampel kurang" />
+                    <b>SAMPEL KURANG</b>
                   </label>
                 </div>
               </div>
@@ -159,7 +159,8 @@
                 type="button"
               >
                 <i class="fa fa-check"></i>
-                {{ form.kesimpulan_pemeriksaan != 'inkonklusif' ? 'Verifikasi' : 'Periksa Ulang'}}
+                {{ 'Verifikasi' }}
+                <!-- {{ form.kesimpulan_pemeriksaan != 'inkonklusif' ? 'Verifikasi' : 'Periksa Ulang'}} -->
               </button>
             </div>
           </Ibox>

@@ -2,125 +2,28 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Events\SampelValidatedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\PemeriksaanSampel;
 use App\Models\Sampel;
-use App\Models\StatusSampel;
+use App\Models\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class VerifikasiController extends Controller
+class ValidasiController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param \Illuminate\Http\Request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
         $models = Sampel::query()->whereHas('logs')
             ->whereHas('pemeriksaanSampel')
-            ->where('sampel_status', '!=', 'sample_verified')
-            ->where('sampel_status', '!=', 'sample_valid')
-            ->where('sampel_status', '!=', 'sample_invalid'); // 'pcr_sample_analyzed'
-
-        $params = $request->get('params',false);
-        $search = $request->get('search',false);
-        $order  = $request->get('order' ,'updated_at');
-
-        if ($search != '') {
-            $models = $models->where(function($q) use ($search) {
-                $q->where('nomor_register','ilike','%'.$search.'%')
-                   ->orWhere('nomor_sampel','ilike','%'.$search.'%')
-                   ->orWhereHas('pemeriksaanSampel', function($query) use ($search){
-                       $query->where('kesimpulan_pemeriksaan', 'ilike','%'.$search.'%');
-                   })
-                   ->orWhereHas('register', function($query) use ($search){
-                        $query->whereHas('pasiens', function($query) use ($search) {
-                            $query->where('nama_depan', 'ilike','%'.$search.'%')
-                                ->orWhere('nama_belakang', 'ilike','%'.$search.'%')
-                                ->orWhere('no_ktp', 'ilike','%'.$search.'%')
-                                ->orWhere('no_sim', 'ilike','%'.$search.'%')
-                                ->orWhere('no_kk', 'ilike','%'.$search.'%');
-                        });
-                    });
-            }); 
-        }
-
-        if ($params) {
-            $params = json_decode($params, true);
-            foreach ($params as $key => $val) {
-                if ($val !== false && ($val == '' || is_array($val) && count($val) == 0)) continue;
-                switch ($key) {
-                    case 'kesimpulan_pemeriksaan':
-                        $models->whereHas('pemeriksaanSampel', function($query) use ($val){
-                            $query->where('kesimpulan_pemeriksaan', $val);
-                        });
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-        $count = $models->count();
-
-        $page = $request->get('page',1);
-        $perpage = $request->get('perpage',999999);
-
-        if ($order) {
-            $order_direction = $request->get('order_direction','asc');
-            if (empty($order_direction)) $order_direction = 'desc';
-
-            switch ($order) {
-                case 'updated_at':
-                    $models = $models->orderBy($order,$order_direction);
-                    break;
-                case 'nomor_register':
-                    $models = $models->orderBy($order,$order_direction);
-                    break;
-                case 'pasien_nama':
-                    $models = $models->leftJoin('register', 'sampel.register_id', '=', 'register.id')
-                        ->leftJoin('pasien_register', 'register.id', '=', 'pasien_register.register_id')
-                        ->leftJoin('pasien', 'pasien_register.pasien_id', '=', 'pasien.id')
-                        ->select('sampel.*')
-                        ->addSelect('pasien.nama_depan')
-                        ->distinct()
-                        ->orderBy('nama_depan', $order_direction);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
-
-        // format data
-        foreach ($models as &$model) {
-            $model->register = $model->register ?? null;
-            $model->pasien = optional($model->register)->pasiens()->first();
-            $model->pemeriksaanSampel = $model->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first() ?? null;
-        }
-
-        return response()->json([
-            'data'=> $models,
-            'count'=> $count
-        ]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @param \Illuminate\Http\Request
-     * @return \Illuminate\Http\Response
-     */
-    public function indexVerified(Request $request)
-    {
-        $models = Sampel::query()->whereHas('logs')
-            ->whereHas('pemeriksaanSampel')
             ->where('sampel_status', '!=', 'sample_invalid')
-            ->whereIn('sampel_status', ['sample_verified', 'sample_valid']); // 'pcr_sample_analyzed'
+            ->whereIn('sampel_status', ['sample_verified']); // 'pcr_sample_analyzed'
 
         $params = $request->get('params',false);
         $search = $request->get('search',false);
@@ -139,7 +42,11 @@ class VerifikasiController extends Controller
                                 ->orWhere('nama_belakang', 'ilike','%'.$search.'%')
                                 ->orWhere('no_ktp', 'ilike','%'.$search.'%')
                                 ->orWhere('no_sim', 'ilike','%'.$search.'%')
-                                ->orWhere('no_kk', 'ilike','%'.$search.'%');
+                                ->orWhere('no_kk', 'ilike','%'.$search.'%')
+                                ->orWhereHas('kota', function($query) use ($search){
+                                    $query->where('nama', 'ilike','%'.$search.'%');
+                                });
+                            
                         });
                     });
             });  
@@ -204,7 +111,117 @@ class VerifikasiController extends Controller
         // format data
         foreach ($models as &$model) {
             $model->register = $model->register ?? null;
-            $model->pasien = optional($model->register)->pasiens()->first();
+            $model->pasien = optional($model->register)->pasiens()->with('kota')->first();
+            $model->pemeriksaanSampel = $model->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first() ?? null;
+        }
+
+        return response()->json([
+            'data'=> $models,
+            'count'=> $count
+        ]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function indexValidated(Request $request)
+    {
+        $models = Sampel::query()->whereHas('logs')
+            ->whereHas('pemeriksaanSampel')
+            ->where('sampel_status', '!=', 'sample_invalid')
+            ->whereIn('sampel_status', ['sample_valid']); // 'pcr_sample_analyzed'
+
+        $params = $request->get('params',false);
+        $search = $request->get('search',false);
+        $order  = $request->get('order' ,'updated_at');
+
+        if ($search != '') {
+            $models = $models->where(function($q) use ($search) {
+                $q->where('nomor_register','ilike','%'.$search.'%')
+                   ->orWhere('nomor_sampel','ilike','%'.$search.'%')
+                   ->orWhereHas('pemeriksaanSampel', function($query) use ($search){
+                       $query->where('kesimpulan_pemeriksaan', 'ilike','%'.$search.'%');
+                   })
+                   ->orWhereHas('register', function($query) use ($search){
+                        $query->whereHas('pasiens', function($query) use ($search) {
+                            $query->where('nama_depan', 'ilike','%'.$search.'%')
+                                ->orWhere('nama_belakang', 'ilike','%'.$search.'%')
+                                ->orWhere('no_ktp', 'ilike','%'.$search.'%')
+                                ->orWhere('no_sim', 'ilike','%'.$search.'%')
+                                ->orWhere('no_kk', 'ilike','%'.$search.'%')
+                                ->orWhereHas('kota', function($query) use ($search){
+                                    $query->where('nama', 'ilike','%'.$search.'%');
+                                });
+                            
+                        });
+                    });
+            });  
+        }
+
+        if ($params) {
+            $params = json_decode($params, true);
+            foreach ($params as $key => $val) {
+                if ($val !== false && ($val == '' || is_array($val) && count($val) == 0)) continue;
+                switch ($key) {
+                    case 'kesimpulan_pemeriksaan':
+                        $models->whereHas('pemeriksaanSampel', function($query) use ($val){
+                            $query->where('kesimpulan_pemeriksaan', $val);
+                        });
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        $count = $models->count();
+
+        $page = $request->get('page',1);
+        $perpage = $request->get('perpage',999999);
+
+        if ($order) {
+            $order_direction = $request->get('order_direction','desc');
+            if (empty($order_direction)) $order_direction = 'desc';
+
+            switch ($order) {
+                case 'updated_at':
+                    $models = $models->orderBy($order,$order_direction);
+                    break;
+                case 'nomor_register':
+                    $models = $models->orderBy($order,$order_direction);
+                    break;
+                case 'pasien_nama':
+                    $models = $models->leftJoin('register', 'sampel.register_id', '=', 'register.id')
+                        ->leftJoin('pasien_register', 'register.id', '=', 'pasien_register.register_id')
+                        ->leftJoin('pasien', 'pasien_register.pasien_id', '=', 'pasien.id')
+                        ->select('sampel.*')
+                        ->addSelect('pasien.nama_depan')
+                        ->distinct()
+                        ->orderBy('nama_depan', $order_direction);
+                    break;
+                case 'nomor_sampel':
+                    $models = $models->orderBy($order,$order_direction);
+                    break;
+                case 'kesimpulan_pemeriksaan':
+                    // $models = $models->with(['pemeriksaanSampel'=> function($query){
+                    //     $query->orderBy('kesimpulan_pemeriksaan', 'asc');
+                    // }]);
+                    break;
+                default:
+                    $models = $models->orderBy('updated_at', $order_direction);
+                    break;
+            }
+        }
+
+        $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
+
+        // format data
+        foreach ($models as &$model) {
+            $model->register = $model->register ?? null;
+            $model->pasien = optional($model->register)->pasiens()->with('kota')->first();
             $model->pemeriksaanSampel = $model->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first() ?? null;
         }
 
@@ -233,7 +250,7 @@ class VerifikasiController extends Controller
      */
     public function show(Sampel $sampel)
     {
-        $result = $sampel->load(['pemeriksaanSampel', 'status'])->toArray();
+        $result = $sampel->load(['pemeriksaanSampel', 'status', 'validator'])->toArray();
         $pasien = optional($sampel->register->pasiens())->first();
 
         return response()->json([
@@ -246,17 +263,12 @@ class VerifikasiController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function sampelStatusList()
+    public function getValidator()
     {
         return response()->json([
-            'status'=>200,
-            'message'=>'success',
-            'data'=> StatusSampel::where('sampel_status', '!=', 'sample_verified')->get()
+            'status'=> 200,
+            'message'=> 'success',
+            'data'=> Validator::whereIsActive(true)->get()
         ]);
     }
 
@@ -267,30 +279,31 @@ class VerifikasiController extends Controller
      * @param  \App\Models\Sampel  $sampel
      * @return \Illuminate\Http\Response
      */
-    public function updateToVerified(Request $request, Sampel $sampel)
+    public function updateToValidate(Request $request, Sampel $sampel)
     {
         $request->validate([
-            'kesimpulan_pemeriksaan'=> 'required|in:positif,negatif,invalid,sampel kurang',
+            'validator'=> 'required|exists:validator,id',
             'catatan_pemeriksaan'=> 'nullable|max:255',
             'last_pemeriksaan_id'=> 'required|exists:pemeriksaansampel,id'
-        ], $request->only(['kesimpulan_pemeriksaan', 'catatan_pemeriksaan', 'last_pemeriksaan_id']));
+        ], $request->only(['validator', 'catatan_pemeriksaan', 'last_pemeriksaan_id']));
 
         DB::beginTransaction();
         try {
 
             PemeriksaanSampel::find($request->input('last_pemeriksaan_id'))->update([
-                'kesimpulan_pemeriksaan'=> $request->input('kesimpulan_pemeriksaan'),
                 'catatan_pemeriksaan'=> $request->input('catatan_pemeriksaan')
             ]);
 
             $sampel->update([
-                'sampel_status'=> 'sample_verified',
-                'waktu_sample_verified'=> now()
+                'validator_id'=> $request->input('validator'),
+                'sampel_status'=> 'sample_valid',
+                'waktu_sample_valid'=> now()
             ]);
 
             DB::commit();
 
-    
+            event(new SampelValidatedEvent($sampel));
+            
             return response()->json([
                 'status'=>200,
                 'message'=>'success',
@@ -310,22 +323,47 @@ class VerifikasiController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function bulkValidate(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'sampels'=> 'required|array',
+            'validator'=> 'required|exists:validator,id'
+        ], $request->all());
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        DB::beginTransaction();
+        try {
+
+            $uniqueSampelIds = collect($request->input('sampels'))->unique();
+
+            Sampel::whereIn('id', $uniqueSampelIds)->get()
+                ->each(function(Sampel $sampel) use ($request){
+                    $sampel->update([
+                        'validator_id'=> $request->input('validator'),
+                        'sampel_status'=> 'sample_valid',
+                        'waktu_sample_valid'=> now()
+                    ]);
+                });
+            
+            DB::commit();
+
+            Sampel::whereIn('id', $uniqueSampelIds)->get()
+                ->each(function(Sampel $sampel) {
+                    event(new SampelValidatedEvent($sampel));
+                });
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+
+        return response()->json([
+            'data'=> null,
+            'status'=> 200,
+            'message'=> 'success'
+        ]);
+
+        
     }
 }
