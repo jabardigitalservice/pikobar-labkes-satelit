@@ -18,7 +18,7 @@ class CreatePasienTable extends Migration
             // $table->string('nama_depan');
             // $table->string('nama_belakang')->nullable();
             $table->string('nama_lengkap');
-            $table->string('nik',16)->nullable();
+            $table->string('nik',16)->nullable()->index();
             $table->date('tanggal_lahir');
             $table->string('tempat_lahir', 100);
             $table->string('kewarganegaraan', 100);

@@ -5009,7 +5009,7 @@ table.table-mail tr td {
   padding: 0;
   text-align: right;
 }
-.ibox-tools a {
+.ibox-tools a:not(.btn) {
   cursor: pointer;
   margin-left: 5px;
   color: #c4c4c4 !important;

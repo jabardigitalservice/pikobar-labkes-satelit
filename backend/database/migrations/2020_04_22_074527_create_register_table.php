@@ -20,6 +20,7 @@ class CreateRegisterTable extends Migration
             $table->string('nomor_rekam_medis')->nullable();
             $table->string('nama_dokter')->nullable();
             $table->string('no_telp', 30)->nullable();
+            $table->string('sumber_pasien')->nullable();
             $table->timestamps();
         });
     }

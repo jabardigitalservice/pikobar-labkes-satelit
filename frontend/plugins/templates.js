@@ -22,6 +22,7 @@ Vue.filter('formatDate', function (value) {
   return tanggal + " " +nmBulan[bulan]+" "+value.toString().substring(0,4)
 })
 Vue.filter('formatDateTime', function (value) {
+  if (!value || value == '') return ''
   var nmBulan = ["","Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
   if (value.indexOf('T') > -1) {
     var date = new Date(value)

@@ -38,11 +38,11 @@ class SampleController extends Controller
                 if ($val == '') continue;
                 switch($key) {
                     case 'is_mandiri':
-                        if($val=="Ya") {
-                            $models = $models->whereNull('pengambilan_sampel_id');
-                        }else {
-                            $models = $models->whereNotNull('pengambilan_sampel_id');
-                        }
+                        // if($val=="Ya") {
+                        //     $models = $models->whereNull('pengambilan_sampel_id');
+                        // }else {
+                        //     $models = $models->whereNotNull('pengambilan_sampel_id');
+                        // }
                         break;
                     default:
                         // $models = $models->where($key,$val);
@@ -109,6 +109,7 @@ class SampleController extends Controller
         $model->sumber_sampel = $request->get('pen_sampel_sumber');
         $model->penerima_sampel = $request->get('pen_penerima_sampel');
         $model->catatan = $request->get('pen_catatan');
+        $model->sampel_diterima = true;
         $model->save();
 
         foreach($request->samples as $key=>$item){
@@ -141,12 +142,27 @@ class SampleController extends Controller
         $model = Sampel::where('nomor_sampel',$id)->first();
         // dd($id);
         $models = PengambilanSampel::where('id',$model->pengambilan_sampel_id)->first();
-        $models->sampels = Sampel::where('pengambilan_sampel_id',$models->id)
-                                ->select('id as id_sampel','nomor_sampel as nomorsampel',
-                                'petugas_pengambilan_sampel as petugas_pengambil',
-                                'tanggal_pengambilan_sampel as tanggalsampel',
-                                'jam_pengambilan_sampel as pukulsampel',
-                                'jenis_sampel_id as sam_jenis_sampel')->get();
+        if (!$models) {
+            $models = new PengambilanSampel;
+            $models->diterima_dari_faskes = false;
+            $models->sampel_diterima = false;
+            $models->sampel_rdt = false;
+            $models->save();
+            $model->pengambilan_sampel_id = $models->id;
+            $models->sampels = Sampel::where('nomor_sampel',$id)
+                                    ->select('id as id_sampel','nomor_sampel as nomorsampel',
+                                    'petugas_pengambilan_sampel as petugas_pengambil',
+                                    'tanggal_pengambilan_sampel as tanggalsampel',
+                                    'jam_pengambilan_sampel as pukulsampel',
+                                    'jenis_sampel_id as sam_jenis_sampel')->get();
+        } else {
+            $models->sampels = Sampel::where('pengambilan_sampel_id',$models->id)
+                                    ->select('id as id_sampel','nomor_sampel as nomorsampel',
+                                    'petugas_pengambilan_sampel as petugas_pengambil',
+                                    'tanggal_pengambilan_sampel as tanggalsampel',
+                                    'jam_pengambilan_sampel as pukulsampel',
+                                    'jenis_sampel_id as sam_jenis_sampel')->get();
+        }
         return response()->json(['status'=>200,'message'=>'success','result'=>$models]);
     }
 

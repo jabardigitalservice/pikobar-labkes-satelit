@@ -40,12 +40,12 @@
           <ul class="nav nav-second-level collapse">
             <li>
               <router-link to="/registrasi/mandiri" tag="a">
-                <span class="nav-label">Registrasi Mandiri (L)</span>
+                Registrasi Mandiri (L)
               </router-link>
             </li>
             <li>
               <router-link to="/registrasi/rujukan" tag="a">
-                <span class="nav-label">Registrasi Rujukan (R)</span>
+                Registrasi Rujukan (R)
               </router-link>
             </li>
           </ul>
@@ -65,27 +65,27 @@
           <ul class="nav nav-second-level collapse">
             <li>
               <router-link to="/ekstraksi/penerimaan" tag="a">
-                <span class="nav-label">Penerimaan Sampel</span>
+                Penerimaan Sampel
               </router-link>
             </li>
             <li>
               <router-link to="/ekstraksi" tag="a">
-                <span class="nav-label">Ekstraksi</span>
+                Ekstraksi
               </router-link>
             </li>
             <li>
               <router-link to="/ekstraksi/terkirim" tag="a">
-                <span class="nav-label">Sampel Terkirim</span>
+                Sampel Terkirim
               </router-link>
             </li>
             <li>
               <router-link to="/ekstraksi/dikembalikan" tag="a">
-                <span class="nav-label">Sampel yang dikembalikan</span>
+                Sampel yang dikembalikan
               </router-link>
             </li>
             <li>
               <router-link to="/ekstraksi/invalid" tag="a">
-                <span class="nav-label">Sampel yang invalid</span>
+                Sampel yang invalid
               </router-link>
             </li>
           </ul>
@@ -99,22 +99,22 @@
           <ul class="nav nav-second-level collapse">
             <li>
               <router-link to="/pcr/list-rna" tag="a">
-                <span class="nav-label">Penerimaan RNA</span>
+                Penerimaan RNA
               </router-link>
             </li>
             <li>
               <router-link to="/pcr/list-pcr" tag="a">
-                <span class="nav-label">List PCR</span>
+                List PCR
               </router-link>
             </li>
             <li>
               <router-link to="/pcr/list-hasil-pemeriksaan" tag="a">
-                <span class="nav-label">List Hasil Pemeriksaan</span>
+                List Hasil Pemeriksaan
               </router-link>
             </li>
             <li>
               <router-link to="/pcr/list-hasil-inkonklusif" tag="a">
-                <span class="nav-label">List Sampel Invalid</span>
+                List Sampel Invalid
               </router-link>
             </li>
           </ul>
@@ -128,12 +128,12 @@
           <ul class="nav nav-second-level collapse">
             <li>
               <router-link to="/verifikasi/list-unverified" tag="a">
-                <span class="nav-label">Menunggu Verifikasi</span>
+                Menunggu Verifikasi
               </router-link>
             </li>
             <li>
               <router-link to="/verifikasi/list-verified" tag="a">
-                <span class="nav-label">Terverifikasi</span>
+                Terverifikasi
               </router-link>
             </li>
           </ul>
@@ -147,12 +147,12 @@
           <ul class="nav nav-second-level collapse">
             <li>
               <router-link to="/validasi/list-unvalidate" tag="a">
-                <span class="nav-label">Menunggu Validasi</span>
+                Menunggu Validasi
               </router-link>
             </li>
             <li>
               <router-link to="/validasi/list-validated" tag="a">
-                <span class="nav-label">Tervalidasi</span>
+                Tervalidasi
               </router-link>
             </li>
           </ul>

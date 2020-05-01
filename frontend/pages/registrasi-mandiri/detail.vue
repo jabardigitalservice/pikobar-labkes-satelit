@@ -13,7 +13,7 @@
         <Ibox :title="`Detail Register Pasien #${data?data.reg_no:null}`">
           <template v-slot:tools>
             <button class="btn btn-xs btn-danger" @click="deleteData()"><i class="fa fa-trash"></i> Delete</button>
-            <nuxt-link tag="a" :to="`/registrasi/mandiri/update/${registerId}/${pasienId}`" style="color:white" class="text-white btn btn-xs btn-warning"><i class="fa fa-pencil"></i> Edit</nuxt-link>
+            <nuxt-link tag="a" :to="`/registrasi/mandiri/update/${registerId}/${pasienId}`" class="btn btn-xs btn-warning"><i class="fa fa-pencil"></i> Edit</nuxt-link>
           </template>
           <div class="container">
             <div class="row">

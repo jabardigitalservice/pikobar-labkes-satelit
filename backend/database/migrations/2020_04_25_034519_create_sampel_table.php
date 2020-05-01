@@ -29,7 +29,8 @@ class CreateSampelTable extends Migration
             $table->string('nomor_sampel')->unique();
             $table->string('nomor_register')->index();
             $table->unsignedInteger('register_id')->index()->nullable();
-            $table->unsignedInteger('jenis_sampel_id')->index();
+            $table->unsignedInteger('jenis_sampel_id')->index()->nullable();
+            $table->unsignedInteger('pengambilan_sampel_id')->index()->nullable();
             $table->string('jenis_sampel_nama')->nullable();
             $table->string('sampel_status')->default('sample_taken')->index();
             $table->unsignedInteger('lab_pcr_id')->nullable();
@@ -53,6 +54,7 @@ class CreateSampelTable extends Migration
             $table->foreign('lab_pcr_id')->references('id')->on('lab_pcr');
             $table->foreign('register_id')->references('id')->on('register');
             $table->foreign('sampel_status')->references('sampel_status')->on('status_sampel');
+            $table->foreign('pengambilan_sampel_id')->references('id')->on('pengambilan_sampel');
         });
     }
 
