@@ -34,6 +34,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/get-data', 'SampleController@getData'); 
         Route::post('/add', 'SampleController@add');
         Route::get('/get/{id}','SampleController@getById');
+        Route::get('/edit/{id}','SampleController@getUpdate');
+        Route::get('/delete/{id}','SampleController@delete');
+        Route::post('/update/{id}','SampleController@storeUpdate');
     });
 
     Route::get('/pengguna', 'PenggunaController@listPengguna');
@@ -55,7 +58,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 });
 
-Route::group(['middleware' => 'guest:api'], function () {
+Route::group(['middleware' => ['guest:api','cors']], function () {
     Route::post('login', 'Auth\LoginController@login');
     Route::post('register', 'Auth\RegisterController@register');
 

@@ -133,75 +133,89 @@ class SampleController extends Controller
         return response()->json(['status'=>201,'message'=>'Berhasil menambahkan sampel','result'=>[]]);
     }
 
-    public function delete(Request $request,$id)
+
+
+
+    public function getUpdate(Request $request, $id)
     {
-        try{
-            $model = Sample::where('id',$id)->first();
-            $model->delete();
-            return response()->json(['status'=>200,'message'=>'Berhasil menghapus data ','result'=>[]]);
-        }catch(\Exception $ex) {
-            return response()->json(['status'=>400,'message'=>'Gagal menghapus data, terjadi kesalahan server','result'=>$ex->getMessage()]);
-        }
-        
-    }
-
-    public function update(Request $request, $id)
-    {
-
-        $this->validate($request,[
-            'name' => 'required|max:255',
-            'modelname' => [
-                'required',
-                'max:80',
-                Rule::unique('models')->ignore($id,'id')
-            ],
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('models')->ignore($id, 'id')
-            ],
-            'role_id' => 'required',
-            'password' => 'required|min:6',
-        ], [
-            'name.required' => 'Nama wajib diisi',
-            'name.max' => 'Jumlah karakter nama maksimal :max dijit.',
-
-            'modelname.required' => 'Nama model wajib diisi',
-            'modelname.unique' => 'Nama model harus unik, nama yang sama telah diambil.',
-            'modelname.max' => 'Jumlah karakter nama model maksimal :max dijit.',
-
-            'email.required' => 'Email wajib diisi',
-            'email.unique' => 'Email yang sama telah diambil.',
-            'email.email' => 'Email tidak valid.',
-
-            'role_id.required' => 'ID Role wajib diisi',
-
-            'password.required' => 'Password wajib diisi',
-            'password.min' => 'Jumlah karakter password minimal :min dijit.',
-
-        ]);
-
+        $model = Sampel::where('nomor_sampel',$id)->first();
         // dd($id);
-        $model = Sample::where('id',$id)->first();
-        $model->name = $request->get('name');
-        $model->modelname = $request->get('modelname');
-        $model->email =  $request->get('email');
-        $model->role_id = $request->get('role_id');
-        $model->password = bcrypt($request->get('password'));
-        $model->save();
-
-        return response()->json(['status'=>200,'message'=>'Berhasil mengubah data ','result'=>[]]);
-    }
-
-    public function showUpdate(Request $request, $id)
-    {
-        $model = Sample::where('id',$id)->first();
-        return response()->json(['status'=>200,'message'=>'success','result'=>$model]);
+        $models = PengambilanSampel::where('id',$model->pengambilan_sampel_id)->first();
+        $models->sampels = Sampel::where('pengambilan_sampel_id',$models->id)
+                                ->select('id as id_sampel','nomor_sampel as nomorsampel',
+                                'petugas_pengambilan_sampel as petugas_pengambil',
+                                'tanggal_pengambilan_sampel as tanggalsampel',
+                                'jam_pengambilan_sampel as pukulsampel',
+                                'jenis_sampel_id as sam_jenis_sampel')->get();
+        return response()->json(['status'=>200,'message'=>'success','result'=>$models]);
     }
 
     public function getById(Request $request, $id)
     {
         $model = Sampel::where('nomor_sampel',$id)->first();
         return response()->json(['status'=>200,'message'=>'success','result'=>$model]);
+    }
+
+    public function delete(Request $request, $id)
+    {
+        try{
+            $model = Sampel::where('id',$id)->first();
+            $model->delete();
+            return response()->json(['status'=>200,'message'=>'Berhasil menghapus data ','result'=>[]]);
+        }catch(\Exception $ex) {
+            return response()->json(['status'=>400,'message'=>'Gagal menghapus data, terjadi kesalahan server','result'=>$ex->getMessage()]);
+        }
+    }
+
+    public function storeUpdate(Request $request, $id)
+    {
+        $v = Validator::make($request->all(),[
+            'samples.*.sam_jenis_sampel' => 'required|integer|min:1|max:12',
+            'samples.*.nomorsampel' => 'required',
+            'pen_sampel_sumber.required' => 'Sumber sampel wajib diisi',
+            'samples.*.petugas_pengambil' => 'required'
+        ], [
+            'pen_sampel_sumber.required' => 'Sumber sampel wajib diisi',
+            'samples.*.sam_jenis_sampel.required'=> 'Jenis sampel wajib diisi.',
+            'samples.*.sam_jenis_sampel.integer'=> 'Tipe data tidak valid',
+            'samples.*.sam_jenis_sampel.min'=> 'Jumlah karakter minimal :min dijit.',
+            'samples.*.sam_jenis_sampel.max'=> 'Jumlah karakter maksimal :max dijit.',
+            'samples.*.nomorsampel.required' => 'Nomor sampel wajib diisi.',
+            'samples.*.petugas_pengambil.required' => 'Petugas Pengambil tidak boleh kosong'            
+        ]);
+
+        foreach($request->samples as $key => $item) {
+            if (isset($item['sam_jenis_sampel']) && $item['sam_jenis_sampel'] == 12) {
+                $v->after(function ($validator) use ($item, $key) {
+                    if (empty($item['sam_namadiluarjenis'])) {
+                        $validator->errors()->add("samples.$key.sam_namadiluarjenis", 'Jenis sampel belum diisi');
+                    }
+                });
+            }
+        }
+
+        $v->validate();
+        $model = PengambilanSampel::where('id',$id)->first();
+        $model->sumber_sampel = $request->get('pen_sampel_sumber');
+        $model->penerima_sampel = $request->get('pen_penerima_sampel');
+        $model->catatan = $request->get('pen_catatan');
+        $model->save();
+
+        foreach($request->samples as $key=>$item){
+            $sm = Sampel::where('id',$item['id_sampel'])->first();
+            if(!$sm) {
+                $sm = new Sampel;
+            }
+            $jenis = DB::table('jenis_sampel')->where('id',$item['sam_jenis_sampel'])->first();
+            $sm->nomor_sampel = $item['nomorsampel'];
+            $sm->jenis_sampel_id = $item['sam_jenis_sampel'];
+            $sm->sampel_status = "sample_taken";
+            $sm->jenis_sampel_nama = $jenis->nama;
+            $sm->tanggal_pengambilan_sampel = $item['tanggalsampel'];
+            $sm->jam_pengambilan_sampel = $item['pukulsampel'];
+            $sm->petugas_pengambilan_sampel = $item['petugas_pengambil'];
+            $sm->pengambilan_sampel_id = $model->id;
+            $sm->save();
+        }
     }
 }

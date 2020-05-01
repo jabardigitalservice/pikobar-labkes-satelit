@@ -44,7 +44,7 @@
               </router-link>
             </li>
             <li>
-              <router-link to="/" tag="a">
+              <router-link to="/registrasi/rujukan" tag="a">
                 <span class="nav-label">Registrasi Rujukan (R)</span>
               </router-link>
             </li>

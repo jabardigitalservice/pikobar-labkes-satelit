@@ -183,22 +183,35 @@
 <script>
 import Form from "vform";
 import axios from 'axios';
+
 export default {
   middleware: "auth",
-  data() {
+   async asyncData({route, store}) {
+    let error = false;
+    let resp = await axios.get("/sample/edit/"+route.params.id);
+    let data = resp.data.result;
+    let _sample = []
+    // data.sampels.forEach(item => {
+    //   _sample.push({
+    //     id_sampel : item.id,
+    //     nomor_sampel : item.nomor_sampel,
+    //     sam_jenis_sampel:item.jenis_sampel_id,
+    //     tanggalsampel:item.tanggal_pengambilan_sampel,
+    //     pukulsampel:item.jam_pengambilan_sampel
+    //   })
+    // });
+    // console.log(_sample)
+    // console.log(data)
     return {
-      data:null,
+      // data:null,
       form: new Form({
+        id : data.id,
         pen_noreg: null,
         pen_nik: null,
-        pen_sampel_sumber:null,
-        pen_penerima_sampel: null,
-        pen_catatan: null,
-        samples: [{
-          sam_jenis_sampel: 1,
-          tanggalsampel: new Date,
-          pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),
-        }],
+        pen_sampel_sumber: data.sumber_sampel,
+        pen_penerima_sampel: data.penerima_sampel,
+        pen_catatan: data.catatan,
+        samples: data.sampels
       }),
       selected_reg: {}
     };
@@ -217,35 +230,35 @@ export default {
         }],
       })
     },
-    async getSample(){
-        let resp = await axios.get('/sample/get/'+this.$route.params.id)
-        this.data = resp.data;
-    },
     addSample() {
       this.form.samples.push({
         tanggalsampel: new Date,
         pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),
       })
     },
-    removeSample(index) {
+    async removeSample(index) {
       if (this.form.samples.length <= 1) {
         this.$toast.error('Jumlah sampel minimal satu', {
           duration: 5000
         })
         return
       }
+      var _sam = this.form.samples[index].id_sampel;
+      await axios.get(`sample/delete/${_sam}`)
       this.form.samples.splice(index, 1)
     },
     async submit() {
       // Submit the form.
       try {
-        const response = await this.form.post("/sample/add");
-        this.$toast.success(response.data.message, {
-          icon: 'check',
-          iconPack: 'fontawesome',
-          duration: 5000
-        })
-        this.initForm()
+        const response = await this.form.post("/sample/update/"+this.form.id);
+        // this.$toast.success(response.data.message, {
+        //   icon: 'check',
+        //   iconPack: 'fontawesome',
+        //   duration: 5000
+        // })
+        // this.initForm()
+        this.$swal.fire("Success", "Berhasil update data", "success");
+        this.$router.push('/sample')
       } catch (err) {
         if (err.response && err.response.data.code == 422) {
           this.$nextTick(() => {
@@ -266,8 +279,5 @@ export default {
   head() {
     return { title: "Pengambilan / Penerimaan Sampel Baru" };
   },
-  created(){
-      this.getSample();
-  }
 };
 </script>
