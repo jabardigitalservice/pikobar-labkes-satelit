@@ -5,7 +5,9 @@
             <input 
                 type="checkbox" class="form-control checkbox-unvalidate" 
                 v-bind:value="item.id" 
-                v-bind:id="'selected-sampel-'+item.id"
+                v-bind:id="'selected-sampel-'+item.id" 
+                v-model="checked" 
+                v-on:change="sampelOnChangeSelect(item.id)"
             >
         </td>
         <td>
@@ -46,9 +48,21 @@ export default {
     props  : ['item', 'pagination', 'rowparams', 'index'],
     data() {
         return {
+            checked: false
         }
     },
     methods: {
+        sampelOnChangeSelect(sampelId){
+            if (this.checked) {                
+                this.$store.commit('validasi/add', sampelId)
+                // console.log(this.$store.state.validasi.selectedSampels);
+                
+            }
+
+            if (!this.checked) {
+                this.$store.commit('validasi/remove', sampelId)
+            }
+        }
     },
     computed: {
 

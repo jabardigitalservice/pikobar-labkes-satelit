@@ -24,8 +24,10 @@
             </div>
             <div class="col-md-9">
               <!-- Button trigger modal -->
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBulkValidate">
-                Launch demo modal
+              <button type="button" class="btn btn-primary pull-right" 
+                data-toggle="modal" data-target="#modalBulkValidate"
+              >
+                 Validasi
               </button>
             </div>
           </div>
@@ -63,24 +65,89 @@
       </div>
     </div>
 
-    <!-- <custom-modal modal-id="modalBulkValidate" title="Validasi Sampel Terpilih" /> -->
+    <custom-modal 
+      modal_id="modalBulkValidate" 
+      title="Validasi Sampel"
+    >
+      <div slot="body">
+
+        <div class="alert alert-danger" v-show="sampelIds.length < 1">
+          <strong>
+            Perhatian!
+          </strong>
+            Belum ada sampel yang dipilih. Silahkan centang beberapa pada tabel.
+        </div>
+
+        <form @submit.prevent="dummy">
+          <div class="row">
+            <div class="form-group">
+              <label>
+                Pejabat yang Menandatangani Hasil Lab yang tercetak
+                <span style="color:red">*</span>
+              </label>
+              <div :class="{ 'is-invalid': form.errors.has('validator') }">
+                <div v-for="item in listValidator" :key="item.id">
+                  <label class="form-check-label">
+                    <input type="radio" v-model="form.validator" :value="item.id" />
+                    <b>{{item.nama}}</b> (NIP. {{ item.nip }})
+                  </label>
+                </div>
+              </div>
+              <has-error :form="form" field="validator" />
+            </div>
+          </div>
+          <div class="row">
+            <button
+                @click="submit()"
+                :disabled="loading"
+                :class="{'btn-loading': loading}"
+                class="btn btn-md btn-primary block full-width m-b"
+                type="button"
+              >
+                <i class="fa fa-check"></i>
+                {{ 'Validasi' }}
+              </button>
+          </div>
+        </form>
+      </div>
+    </custom-modal>
 
   </div>
 </template>
  
 <script>
-// import CustomModal from "~/components/CustomModal"
+import Form from "vform";
+import axios from "axios";
+import CustomModal from "~/components/CustomModal";
 
 export default {
   middleware: "auth",
-  // components: {
-  //   CustomModal
-  // },
+  components: {
+    CustomModal
+  },
   data() {
     return {
       params1: {
         kesimpulan_pemeriksaan: ""
       },
+      loading: false
+    };
+  },
+  async asyncData({ route, store }) {
+
+    let respListValidator = await axios.get("/v1/validasi/list-validator");
+    let listValidator = respListValidator.data.data;
+    let sampelIds = store.state.validasi.selectedSampels;
+
+    let form = new Form({
+      validator: null,
+      sampels: sampelIds
+    });
+
+    return {
+      form,
+      listValidator,
+      sampelIds
     };
   },
   head() {
@@ -92,9 +159,50 @@ export default {
     },
   },
   methods: {
-    bulkValidate() {
-      
-      
+    dummy() {
+      return false;
+    },
+    async submit() {
+      // Submit the form.
+      try {
+
+        this.loading = true;
+
+        const response = await this.form.post("/v1/validasi/bulk-validasi");
+
+        this.$toast.success(response.data.message, {
+          icon: "check",
+          iconPack: "fontawesome",
+          duration: 5000
+        });
+
+        this.$router.back()
+
+      } catch (err) {
+
+        if (err.response && err.response.data.code == 422) {
+          
+          this.$nextTick(() => {
+            this.form.errors.set(err.response.data.error);
+          });
+
+          this.$toast.error("Mohon cek kembali formulir Anda", {
+            icon: "times",
+            iconPack: "fontawesome",
+            duration: 5000
+          });
+
+        } else {
+
+          this.$swal.fire(
+            "Terjadi kesalahan",
+            "Silakan hubungi Admin",
+            "error"
+          );
+
+        }
+      }
+      this.loading = false;
     }
   }
 };

@@ -323,22 +323,15 @@ class ValidasiController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\PemeriksaanSampel  $pemeriksaanSampel
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PemeriksaanSampel $pemeriksaanSampel)
+    public function bulkValidate(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'sampels'=> 'required|array',
+            'validator'=> 'required|exists:validator,id'
+        ], $request->all());
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\PemeriksaanSampel  $pemeriksaanSampel
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(PemeriksaanSampel $pemeriksaanSampel)
-    {
-        //
+        
     }
 }
