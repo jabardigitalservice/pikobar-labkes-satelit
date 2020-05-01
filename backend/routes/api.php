@@ -219,6 +219,9 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             Route::get('export-pdf/{sampel}', 'ValidasiExportController@exportPDF');
             
             Route::post('bulk-validasi', 'ValidasiController@bulkValidate');
+
+            Route::get('export-excel', 'ValidasiExportController@exportExcel');
+
             
         });
 
