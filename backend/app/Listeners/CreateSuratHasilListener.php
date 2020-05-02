@@ -107,7 +107,11 @@ class CreateSuratHasilListener
 
         $image = public_path($pathDirectory);
 
-        return 'data:image/png;base64, ' . base64_encode($image);
+        abort_if(!file_exists($image), 500, 'File not exists!');
+
+        $imageContent = file_get_contents($image);
+
+        return 'data:image/png;base64, ' . base64_encode($imageContent);
     }
 
     private function formatTanggalValid(Sampel $sampel)
