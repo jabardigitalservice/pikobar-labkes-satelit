@@ -194,7 +194,7 @@ class EkstraksiController extends Controller
             'tanggal_mulai_ekstraksi' => 'required',
             'jam_mulai_ekstraksi' => 'required',
             'metode_ekstraksi' => 'required',
-            'nama_kit_ekstraksi' => 'required',
+            'nama_kit_ekstraksi' => 'required_if:metode_ekstraksi,Manual',
             'alat_ekstraksi' => 'required_if:metode_ekstraksi,Otomatis',
         ]);
         $samples = Sampel::whereIn('nomor_sampel', Arr::pluck($request->samples, 'nomor_sampel'))->get()->keyBy('nomor_sampel');
