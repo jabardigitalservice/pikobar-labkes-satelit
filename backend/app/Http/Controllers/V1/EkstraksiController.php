@@ -121,7 +121,7 @@ class EkstraksiController extends Controller
                 'tanggal_mulai_ekstraksi' => 'required',
                 'jam_mulai_ekstraksi' => 'required',
                 'metode_ekstraksi' => 'required',
-                'nama_kit_ekstraksi' => 'required',
+                'nama_kit_ekstraksi' => 'required_if:metode_ekstraksi,Manual',
                 'alat_ekstraksi' => 'required_if:metode_ekstraksi,Otomatis',
             ]);
         } else {
@@ -133,7 +133,8 @@ class EkstraksiController extends Controller
                 'tanggal_mulai_ekstraksi' => 'required',
                 'jam_mulai_ekstraksi' => 'required',
                 'metode_ekstraksi' => 'required',
-                'nama_kit_ekstraksi' => 'required',
+                'nama_kit_ekstraksi' => 'required_if:metode_ekstraksi,Manual',
+                'alat_ekstraksi' => 'required_if:metode_ekstraksi,Otomatis',
                 'tanggal_pengiriman_rna' => 'required',
                 'jam_pengiriman_rna' => 'required',
                 'nama_pengirim_rna' => 'required',
