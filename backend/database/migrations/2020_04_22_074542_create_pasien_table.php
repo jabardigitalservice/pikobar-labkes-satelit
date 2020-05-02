@@ -34,7 +34,7 @@ class CreatePasienTable extends Migration
             $table->text('alamat_lengkap')->nullable();
             $table->text('keterangan_lain')->nullable();
             $table->double('suhu')->nullable();
-            $table->string('sumber_pasien');
+            $table->string('sumber_pasien')->nullable();
             $table->timestamps();
 
             $table->foreign('kota_id')->references('id')->on('kota');
