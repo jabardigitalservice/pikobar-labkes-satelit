@@ -29,7 +29,7 @@
                 />
                 <br />
                 <v-button :loading="form.busy" class="mt-2 btn btn-md btn-primary">
-                  <i class="fa fa-save"></i> Tambahkan Informasi Register
+                  <i class="fa fa-plus"></i> Tambahkan Informasi Register
                 </v-button>
               </div>
             </center>
@@ -45,7 +45,7 @@
                 <template v-slot:tools>
                     <button class="btn btn-xs btn-success"><i class="fa fa-upload"></i> Import Data</button>
                     <nuxt-link tag="button" to="/registrasi/mandiri/export-excel" class="btn btn-xs btn-success"><i class="fa fa-dowload"></i> Export Data</nuxt-link>
-                    <nuxt-link tag="button" to="/registrasi/mandiri/tambah" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Registrasi Baru</nuxt-link>
+                    <!-- <nuxt-link tag="button" to="/registrasi/mandiri/tambah" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Registrasi Baru</nuxt-link> -->
                 </template>
                 <ajax-table url="/registrasi-mandiri" :oid="'registrasi-rujukan'"
                   :params="params"
@@ -106,9 +106,9 @@ export default {
   methods:{
     async submit(){
       try{
-        const response = await this.form.post("/registrasi-rujukan/cek");
+        const response = (await this.form.post("/registrasi-rujukan/cek")).data;
         if(response.status == 200) {
-          console.log(response.satus)
+          console.log(response.status)
           // const payload = {
           //       id:response.result.nomor_sampel,
           //       data:response.result

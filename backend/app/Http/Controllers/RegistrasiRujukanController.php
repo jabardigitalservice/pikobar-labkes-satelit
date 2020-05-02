@@ -85,8 +85,12 @@ class RegistrasiRujukanController extends Controller
             'reg_suhu' => 'Suhu tidak boleh kosong',
         ]);
         $v->validate();
+        $nomor_register = $request->input('reg_no');
+        if (Register::where('nomor_register', $nomor_register)->exists()) {
+            $nomor_register = with(new \App\Http\Controllers\V1\RegisterController)->generateNomorRegister(null, 'rujukan');
+        }
         $register = Register::create([
-            'nomor_register'=> $request->input('reg_no'),
+            'nomor_register'=> $nomor_register,
             'fasyankes_id'=> null,
             'nomor_rekam_medis'=> null,
             'nama_dokter'=> null,
@@ -113,7 +117,7 @@ class RegistrasiRujukanController extends Controller
         $pasien->alamat_lengkap = $request->get('reg_alamat');
         $pasien->no_rt = $request->get('reg_rt');
         $pasien->no_rw = $request->get('reg_rw');
-        $pasien->suhu = $request->get('reg_suhu');
+        $pasien->suhu = parseDecimal($request->get('reg_suhu'));
         $pasien->jenis_kelamin = $request->get('reg_jk');
         $pasien->keterangan_lain = $request->get('reg_keterangan');
         $pasien->save();

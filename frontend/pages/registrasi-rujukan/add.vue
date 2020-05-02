@@ -625,7 +625,7 @@
                     // console.log('Response : ', response);
                     this.initForm();
                     this.getNoreg();
-                    this.$router.push('/registrasi-rujukan');
+                    this.$router.push('/registrasi/rujukan');
                 } catch (err) {
                     if (err.response && err.response.data.code == 422) {
                         this.$nextTick(() => {
@@ -657,6 +657,24 @@
         watch: {
             "form.reg_kota": function (newVal, oldVal) {
 
+            },
+            "form.reg_nik": function (newVal, oldVal) {
+                if (newVal && newVal.length >= 12) {
+                    let dd = parseInt(newVal.substr(6,2))
+                    if (dd >= 40) {
+                        this.form.reg_jk = 'P'
+                        dd -= 40
+                    } else {
+                        this.form.reg_jk = 'L'
+                    }
+                    let mm = parseInt(newVal.substr(8,2)) - 1
+                    let yy = parseInt(newVal.substr(10,2))
+                    if (yy <= 30) {
+                        this.form.reg_tgllahir = new Date(2000+yy, mm, dd)
+                    } else {
+                        this.form.reg_tgllahir = new Date(1900+yy, mm, dd)
+                    }
+                }
             },
         }
     };

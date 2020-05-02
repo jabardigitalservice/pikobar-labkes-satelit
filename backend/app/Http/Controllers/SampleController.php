@@ -52,13 +52,13 @@ class SampleController extends Controller
                         } else {
                             $models->where('sampel_status', $val);
                         }
-                    case 'is_mandiri':
-                        if($val=="Ya") {
-                            $models = $models->whereNull('pengambilan_sampel_id');
-                        }else {
-                            $models = $models->whereNotNull('pengambilan_sampel_id');
-                        }
-                        break;
+                    //case 'is_mandiri':
+                    //    if($val=="Ya") {
+                    //        $models = $models->whereNull('pengambilan_sampel_id');
+                    //    }else {
+                    //        $models = $models->whereNotNull('pengambilan_sampel_id');
+                    //    }
+                    //    break;
                     default:
                         // $models = $models->where($key,$val);
                         break;
@@ -136,14 +136,13 @@ class SampleController extends Controller
             $jenis = DB::table('jenis_sampel')->where('id',$item['sam_jenis_sampel'])->first();
             $sm->nomor_sampel = $item['nomorsampel'];
             $sm->jenis_sampel_id = $item['sam_jenis_sampel'];
-            $sm->sampel_status = "sample_taken";
             $sm->jenis_sampel_nama = $jenis->nama;
             $sm->tanggal_pengambilan_sampel = $item['tanggalsampel'];
             $sm->jam_pengambilan_sampel = $item['pukulsampel'];
             $sm->petugas_pengambilan_sampel = $item['petugas_pengambil'];
             $sm->pengambilan_sampel_id = $model->id;
             $sm->waktu_waiting_sample = date('Y-m-d H:i:s');
-            $sm->updateState('waiting_sample');
+            $sm->updateState('sample_taken');
             $sm->save();
         }
         // $model = new Sample;
@@ -241,7 +240,6 @@ class SampleController extends Controller
             $jenis = DB::table('jenis_sampel')->where('id',$item['sam_jenis_sampel'])->first();
             $sm->nomor_sampel = $item['nomorsampel'];
             $sm->jenis_sampel_id = $item['sam_jenis_sampel'];
-            $sm->sampel_status = "sample_taken";
             $sm->jenis_sampel_nama = $jenis->nama;
             $sm->tanggal_pengambilan_sampel = $item['tanggalsampel'];
             $sm->jam_pengambilan_sampel = $item['pukulsampel'];
