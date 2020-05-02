@@ -180,7 +180,7 @@
             <div class="form-group">
               <button
                 @click="submit()"
-                :disabled="loading && form.kesimpulan_pemeriksaan == 'inkonklusif'"
+                :disabled="loading || form.kesimpulan_pemeriksaan == 'inkonklusif'"
                 :class="{'btn-loading': loading}"
                 class="btn btn-md btn-primary block full-width m-b"
                 type="button"
@@ -190,12 +190,12 @@
               </button>
               <button
                 @click="submit()"
-                :disabled="loading && form.kesimpulan_pemeriksaan != 'inkonklusif'"
+                :disabled="loading || form.kesimpulan_pemeriksaan != 'inkonklusif'"
                 :class="{'btn-loading': loading}"
                 class="btn btn-md btn-warning block full-width m-b"
                 type="button"
               >
-                <i class="fa fa-check"></i>
+                <i class="fa fa-refresh"></i>
                 Periksa Ulang
               </button>
             </div>

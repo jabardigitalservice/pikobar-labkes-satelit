@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LabPCRSeeder::class);
         $this->call(StatusSampelSeeder::class);
         $this->call(JenisSampelSeeder::class);
+        $this->call(ValidatorSeeder::class);
 
     }
 }

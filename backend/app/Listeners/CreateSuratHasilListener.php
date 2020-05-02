@@ -103,9 +103,9 @@ class CreateSuratHasilListener
 
     public function getKopSurat()
     {
-        $pathDirectory = 'public/kop_surat/kop-surat-lab-kes.png';
+        $pathDirectory = 'kop_surat/kop-surat-lab-kes.png';
 
-        $image = Storage::get($pathDirectory);
+        $image = public_path($pathDirectory);
 
         return 'data:image/png;base64, ' . base64_encode($image);
     }
