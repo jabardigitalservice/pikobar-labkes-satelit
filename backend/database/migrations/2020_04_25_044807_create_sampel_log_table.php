@@ -17,7 +17,7 @@ class CreateSampelLogTable extends Migration
             $table->id();
             $table->unsignedInteger('sampel_id')->nullable();
             $table->string('sampel_status');
-            $table->string('sampel_status_before');
+            $table->string('sampel_status_before')->default('creation')->nullable();
             $table->unsignedInteger('user_id')->nullable();
             $table->jsonb('metadata')->nullable();
             $table->text('description')->nullable();

@@ -28,7 +28,6 @@ class SampleController extends Controller
                 //    ->orWhere('email','ilike','%'.$search.'%');
             });
         }
-        $count = $models->count();
 
         $page = $request->get('page',1);
         $perpage = $request->get('perpage',999999);
@@ -66,6 +65,7 @@ class SampleController extends Controller
                 }
             }
         }
+        $count = $models->count();
 
         if ($order) {
             $order_direction = $request->get('order_direction','asc');
