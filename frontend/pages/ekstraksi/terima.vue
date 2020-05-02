@@ -273,6 +273,7 @@ export default {
             duration: 5000
           });
         } else {
+          console.log(err)
           this.$swal.fire(
             "Terjadi kesalahan",
             "Silakan hubungi Admin",
