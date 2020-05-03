@@ -71,7 +71,7 @@ export default {
       sample.error = resp.error;
     },
     addSample() {
-      this.input_nomor_sampel = this.input_nomor_sampel.replace(/[^\d]/g, "");
+      this.input_nomor_sampel = this.input_nomor_sampel.replace(/[\W_]+/g, "");
       if (this.input_nomor_sampel == "") return;
       if (this.value.find(s => s.nomor_sampel == this.input_nomor_sampel)) {
         this.$toast.error(
