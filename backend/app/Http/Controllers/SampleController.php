@@ -150,6 +150,7 @@ class SampleController extends Controller
             $sm->petugas_pengambilan_sampel = $item['petugas_pengambil'];
             $sm->pengambilan_sampel_id = $model->id;
             $sm->waktu_waiting_sample = date('Y-m-d H:i:s');
+            $sm->sampel_status = 'sample_taken';
             $sm->updateState('sample_taken');
             $sm->save();
         }

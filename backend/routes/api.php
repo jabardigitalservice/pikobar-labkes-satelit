@@ -151,6 +151,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             Route::delete('delete/{register}', 'RegisterController@destroy');
 
             Route::get('noreg','RegisterController@generateNomorRegister');
+            Route::get('get-noreg','RegisterController@requestNomor');
             
             Route::group(['prefix'=>'rujukan'], function(){
 

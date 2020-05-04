@@ -563,8 +563,8 @@
         },
         methods: {
             async getNoreg() {
-                let resp = await axios.get('/v1/register/noreg')
-                this.form.reg_no = resp.data
+                let resp = await axios.get('/v1/register/get-noreg?tipe=rujukan');
+                this.form.reg_no = resp.data.result
             },
             initForm() {
                 this.form = new Form({

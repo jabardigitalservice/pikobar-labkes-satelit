@@ -24,7 +24,14 @@ use App\Exports\RegisMandiriExport;
 
 class RegisterController extends Controller
 {
-    public function generateNomorRegister($date=null, $jenis_registrasi = 'mandiri')
+    public function requestNomor(Request $request)
+    {
+        $jenis = $request->get('tipe');
+        return response()->json(['status'=>200,
+        'message'=>'success',
+        'result'=>$this->generateNomorRegister(null,$jenis)]);
+    }
+    public function generateNomorRegister($date=null, $jenis_registrasi = null)
     {
         if(!$date) {
             $date = date('Ymd');
