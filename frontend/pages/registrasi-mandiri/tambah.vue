@@ -115,10 +115,17 @@
                                 <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_tgllahir') }">
-                                <date-picker placeholder="Pilih Tanggal" format="d MMMM yyyy" input-class="form-control"
-                                    :monday-first="true"
-                                    :wrapper-class="{ 'is-invalid': form.errors.has('reg_tgllahir') }"
-                                    v-model="form.reg_tgllahir" />
+                                <dropdown-datepicker 
+                                    v-model="form.reg_tgllahir"
+                                    :minYear="1900"
+                                    :daySuffixes="false"
+                                    :maxYear="(new Date).getFullYear()"
+                                    displayFormat="dmy"
+                                    sortYear="asc"
+                                    :default-date="nik_tgl"
+                                    ref="tgl_lahir"
+                                    :wrapper-class="form.errors.has('reg_tgllahir') ? 'is-invalid' : ''"
+                                ></dropdown-datepicker>
                                 <has-error :form="form" field="reg_tgllahir" />
                             </div>
                         </div>
@@ -176,7 +183,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Kecamatan
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_kecamatan') }">
                                 <!-- <select class="form-control" type="text" name="reg_kecamatan" placeholder=""
@@ -184,7 +190,7 @@
                                     <option :value="item.id" :key="idx" v-for="(item,idx) in optionKecamatan">{{item.nama}}</option>
                                 </select> -->
                                 <input v-model="form.reg_kecamatan" class="form-control" type="text"
-                                    name="reg_kecamatan" required />
+                                    name="reg_kecamatan" />
                                 <has-error :form="form" field="reg_kecamatan" />
                             </div>
                         </div>
@@ -192,7 +198,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Kelurahan / Desa
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_kelurahan') }">
                                 <!-- <select class="form-control" type="text" name="reg_kelurahan" placeholder=""
@@ -200,7 +205,7 @@
                                     <option :value="item.id" :key="idx" v-for="(item,idx) in optionKelurahan">{{item.nama}}</option>
                                 </select> -->
                                 <input class="multisteps-form__input form-control" type="text" name="reg_kelurahan"
-                                    required v-model="form.reg_kelurahan" />
+                                     v-model="form.reg_kelurahan" />
                                 <has-error :form="form" field="reg_kelurahan" />
                             </div>
                         </div>
@@ -220,19 +225,18 @@
                         <div class="row mt-2">
                             <label class="col-md-2">
                                 RT / RW
-                                <span style="color:red">*</span>
                             </label>
                             <div class="input-group col-md-2" :class="{ 'is-invalid':form.errors.has('reg_rt') }">
                                 <span class="input-group-addon bootstrap-touchspin-postfix input-group-append">
                                     <span class="input-group-text">RT </span>
                                 </span>
-                                <input class="form-control" type="number" name="reg_rt" required v-model="form.reg_rt" min="1" step="1" max="999">
+                                <input class="form-control" type="number" name="reg_rt" v-model="form.reg_rt" min="1" step="1" max="999">
                             </div>
                             <div class="input-group col-md-2" :class="{ 'is-invalid':form.errors.has('reg_rw') }">
                                 <div class="input-group-addon bootstrap-touchspin-postfix input-group-append">
                                     <span class="input-group-text">RW </span>
                                 </div>
-                                <input class="form-control" type="number" name="reg_domisilirw" required min="1" step="1" max="999"
+                                <input class="form-control" type="number" name="reg_domisilirw" min="1" step="1" max="999"
                                     v-model="form.reg_rw" />
                             </div>
                             <has-error :form="form" field="reg_rt" />
@@ -242,7 +246,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Suhu (°C)
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6">
                                 <input class="form-control" type="text" v-model="form.reg_suhu " placeholder=""
@@ -574,6 +577,7 @@
                 optionKota: [],
                 optionKecamatan: [],
                 optionKelurahan: [],
+                nik_tgl: null,
             };
         },
         methods: {
@@ -680,13 +684,20 @@
                     } else {
                         this.form.reg_jk = 'L'
                     }
-                    let mm = parseInt(newVal.substr(8,2)) - 1
+                    let mm = parseInt(newVal.substr(8,2))
                     let yy = parseInt(newVal.substr(10,2))
                     if (yy <= 30) {
-                        this.form.reg_tgllahir = new Date(2000+yy, mm, dd)
+                        let str = '' + (2000+yy) +'-'+ ('' + mm).padStart(2,'0') +'-'+ ('' + dd).padStart(2,'0')
+                        this.form.reg_tgllahir = str
+                        this.nik_tgl = str
                     } else {
-                        this.form.reg_tgllahir = new Date(1900+yy, mm, dd)
+                        let str = '' + (1900+yy) +'-'+ ('' + mm).padStart(2,'0') +'-'+ ('' + dd).padStart(2,'0')
+                        this.form.reg_tgllahir = str
+                        this.nik_tgl = str
                     }
+                    this.$nextTick(() => {
+                        this.$refs.tgl_lahir.init();
+                    })
                 }
             },
 

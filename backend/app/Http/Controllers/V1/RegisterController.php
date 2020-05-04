@@ -24,7 +24,14 @@ use App\Exports\RegisMandiriExport;
 
 class RegisterController extends Controller
 {
-    public function generateNomorRegister($date=null, $jenis_registrasi = 'mandiri')
+    public function requestNomor(Request $request)
+    {
+        $jenis = $request->get('tipe');
+        return response()->json(['status'=>200,
+        'message'=>'success',
+        'result'=>$this->generateNomorRegister(null,$jenis)]);
+    }
+    public function generateNomorRegister($date=null, $jenis_registrasi = null)
     {
         if(!$date) {
             $date = date('Ymd');
@@ -57,12 +64,7 @@ class RegisterController extends Controller
             'reg_tgllahir' => 'required',
             'reg_nohp' => 'required|max:15',
             'reg_kota' => 'required',
-            'reg_kecamatan' => 'required',
-            'reg_kelurahan' => 'required',
             'reg_alamat' => 'required',
-            'reg_rt' => 'required',
-            'reg_rw' => 'required',
-            'reg_suhu' => 'required',
             'reg_jk'=>'required',
             'reg_sampel.*' => [
                 'required',
@@ -78,12 +80,7 @@ class RegisterController extends Controller
             'reg_tgllahir' => 'Tanggal lahir tidak boleh kosong',
             'reg_nohp' => 'No HP tidak boleh kosong',
             'reg_kota' => 'Mohon pilih salah satu kota/kabupaten',
-            'reg_kecamatan' => 'Kecamatan tidak boleh ksoong',
-            'reg_kelurahan' => 'Kelurahan tidak boleh ksoong',
             'reg_alamat' => 'Alamat tidak boleh kosong',
-            'reg_rt' => 'RT tidak boleh kosong',
-            'reg_rw' => 'RW tidak boleh kosong',
-            'reg_suhu' => 'Suhu tidak boleh kosong',
             'reg_sampel.required' => 'Mohon isi minimal satu nomor sampel'
         ]);
         $v->validate();
@@ -140,6 +137,7 @@ class RegisterController extends Controller
                 $sampel->nomor_sampel = $rows['nomor'];
                 $sampel->nomor_register = $nomor_register;
                 $sampel->register_id = $register->id;
+                $sampel->sampel_status = 'waiting_sample';
                 $sampel->updateState('waiting_sample');
                 $sampel->save();
             }
@@ -162,12 +160,7 @@ class RegisterController extends Controller
             'reg_tgllahir' => 'required',
             'reg_nohp' => 'required|max:15',
             'reg_kota' => 'required',
-            'reg_kecamatan' => 'required',
-            'reg_kelurahan' => 'required',
             'reg_alamat' => 'required',
-            'reg_rt' => 'required',
-            'reg_rw' => 'required',
-            'reg_suhu' => 'required',
             'reg_jk'=>'required',
             // 'reg_sampel.*' => [
             //     'required',

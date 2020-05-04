@@ -58,13 +58,12 @@
                 <small>Isi bila diterima dari fasyankes rujukan</small>
               </label>
               <div class="col-md-6">
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="form.pen_penerima_sampel "
-                  placeholder="Nama Petugas Penerima Sampel"
-                  :class="{ 'is-invalid': form.errors.has('pen_penerima_sampel') }"
-                />
+                <dynamic-input :form="form" field="pen_penerima_sampel" 
+                  :options="['Adit','Firman']" 
+                  :hasLainnya="true"
+                  ref="pen_penerima_sampel"
+                  placeholder="Masukkan petugas penerima sampel">
+                </dynamic-input>
                 <has-error :form="form" field="pen_penerima_sampel" />
               </div>
             </div>
@@ -93,7 +92,7 @@
               <thead>
                 <tr>
                   <th>Jenis Sampel</th>
-                  <th>Petugas pengambil sampel</th>
+                  <th>Kondisi Sampel</th>
                   <th>Tanggal</th>
                   <th>Pukul</th>
                   <th>Nomor sampel</th>
@@ -121,8 +120,11 @@
                     </div>
                   </td>
                   <td>
-                    <input class="form-control" type="text" v-model="sample.petugas_pengambil" 
-                      :class="{ 'is-invalid': form.errors.has(`samples.${$index}.petugas_pengambil`) }"/>
+                    <dynamic-input :form="sample" field="petugas_pengambil" 
+                      :options="['Baik','Sampel Sedikit','Tabung Rusak']" 
+                      :hasLainnya="true"
+                      placeholder="Masukkan kondisi sampel">
+                    </dynamic-input>
                     <has-error :form="form" :field="`samples.${$index}.petugas_pengambil`"/>
                   </td>
                   <td>
@@ -200,6 +202,7 @@ export default {
         pen_catatan: null,
         samples: [{
           sam_jenis_sampel: '1',
+          petugas_pengambil: 'Baik',
           tanggalsampel: new Date,
           pukulsampel: this.getTimeNow(),
         }],
@@ -220,15 +223,18 @@ export default {
         pen_penerima_sampel: null,
         pen_catatan: null,
         samples: [{
+          sam_jenis_sampel: '1',
+          petugas_pengambil: 'Baik',
           tanggalsampel: new Date,
-          pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),
+          pukulsampel: this.getTimeNow(),
         }],
       })
     },
     addSample() {
       this.form.samples.push({
+        petugas_pengambil: 'Baik',
         tanggalsampel: new Date,
-        pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),
+        pukulsampel: this.getTimeNow(),
       })
     },
     removeSample(index) {

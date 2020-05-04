@@ -71,6 +71,13 @@ class PCRController extends Controller
                             $models->where('sampel_status', $val);
                         }
                         break;
+                    case 'waktu_pcr_sample_analyzed':
+                        $tgl = date('Y-m-d', strtotime($val));
+                        $models->whereBetween('waktu_pcr_sample_analyzed', [$tgl.' 00:00:00',$tgl.' 23:59:59']);
+                        break;
+                    case 'is_musnah_pcr':
+                        $models->where('is_musnah_pcr', $val == 'true' ? true : false);
+                        break;
                     default:
                         break;
                 }
@@ -117,11 +124,30 @@ class PCRController extends Controller
     public function uploadGrafik(Request $request)
     {
         $file = $request->file('file');
-        $path = Storage::disk('public')->putFileAs(
-            'grafik/'.date('Y-m-d'), $request->file('file'), Str::random(20).'.'.$file->getClientOriginalExtension()
+        $filename = Str::random(20).'.'.$file->getClientOriginalExtension();
+        $path = Storage::disk('s3')->putFileAs(
+            'grafik/'.date('Y-m-d'), $request->file('file'), $filename
         );
-        $url = asset('storage/'.$path);
+        $url = route('grafik.url', ['path' => date('Y-m-d') . '/' . $filename]);
         return response()->json(['status'=>200,'message'=>'success','url'=>$url]);
+    }
+
+    public function getGrafik($path)
+    {
+        $exists = Storage::disk('public')->exists('grafik/'.$path);
+        if ($exists) {
+            return response()->file(storage_path('app/public/grafik/'.$path));
+        }
+        $exists = Storage::disk('s3')->exists('grafik/'.$path);
+        if ($exists) {
+            $contents = Storage::disk('s3')->get('grafik/'.$path);
+            $ret = Storage::disk('public')->put(
+                'grafik/'.$path, $contents
+            );
+            return response()->file(storage_path('app/public/grafik/'.$path));
+        } else {
+            abort(404);
+        }
     }
 
     public function detail(Request $request, $id)
@@ -352,6 +378,30 @@ class PCRController extends Controller
         }
         
         return response()->json(['status'=>201,'message'=>'Penerimaan sampel berhasil dicatat']);
+    }
+
+    public function musnahkan(Request $request, $id)
+    {
+        $user = $request->user();
+        $sampel = Sampel::with(['status'])->find($id);
+        if (!$sampel) {
+            return response()->json(['success'=>false,'code'=> 422,'message'=>'Sampel tidak ditemukan'],422);
+        }
+        $pcr = $sampel->pcr;
+        if (!$pcr) {
+            $pcr = new PemeriksaanSampel;
+            $pcr->sampel_id = $sampel->id;
+            $pcr->user_id = $user->id;
+        }
+        $sampel->is_musnah_pcr = true;
+        $sampel->save();
+
+        $sampel->addLog([
+            'user_id' => $user->id,
+            'metadata' => $pcr,
+            'description' => 'Sample marked as destroyed at PCR chamber',
+        ]);
+        return response()->json(['success'=>true,'code'=> 201,'message'=>'Sampel berhasil ditandai telah dimusnahkan']);
     }
 
 }

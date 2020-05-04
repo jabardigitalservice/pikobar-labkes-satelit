@@ -5,15 +5,15 @@
 
       <div class="col-md-6">
         <img alt="image" class="img-fluid" src="~/assets/img/logo-lab-black.png" />
-        <h2 class="font-bold">Laboratorium</h2>
+        <h2 class="font-bold">Manajemen Laboratorium COVID-19</h2>
       </div>
       <div class="col-md-6">
         <div class="ibox-content">
           <form  class="m-t" @submit.prevent="login" @keydown="form.onKeydown($event)">
             <div class="form-group">
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="text" name="email"
-                class="form-control" placeholder="Username / Email">
-              <has-error :form="form" field="email" />
+              <input v-model="form.username" :class="{ 'is-invalid': form.errors.has('username') }" type="text" name="username"
+                class="form-control" placeholder="Username">
+              <has-error :form="form" field="username" />
             </div>
             <div class="form-group">
               <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" type="password"
@@ -58,7 +58,7 @@
 
     data: () => ({
       form: new Form({
-        email: '',
+        username: '',
         password: ''
       }),
       remember: false

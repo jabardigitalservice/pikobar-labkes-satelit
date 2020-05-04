@@ -58,13 +58,12 @@
                 <small>Isi bila diterima dari fasyankes rujukan</small>
               </label>
               <div class="col-md-6">
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="form.pen_penerima_sampel "
-                  placeholder="Nama Petugas Penerima Sampel"
-                  :class="{ 'is-invalid': form.errors.has('pen_penerima_sampel') }"
-                />
+                <dynamic-input :form="form" field="pen_penerima_sampel" 
+                  :options="['Adit','Firman']" 
+                  :hasLainnya="true"
+                  ref="pen_penerima_sampel"
+                  placeholder="Nama Petugas Penerima Sampel">
+                </dynamic-input>
                 <has-error :form="form" field="pen_penerima_sampel" />
               </div>
             </div>
@@ -93,7 +92,7 @@
               <thead>
                 <tr>
                   <th>Jenis Sampel</th>
-                  <th>Petugas pengambil sampel</th>
+                  <th>Kondisi Sampel</th>
                   <th>Tanggal</th>
                   <th>Pukul</th>
                   <th>Nomor sampel</th>
@@ -121,8 +120,11 @@
                     </div>
                   </td>
                   <td>
-                    <input class="form-control" type="text" v-model="sample.petugas_pengambil" 
-                      :class="{ 'is-invalid': form.errors.has(`samples.${$index}.petugas_pengambil`) }"/>
+                    <dynamic-input :form="sample" field="petugas_pengambil" 
+                      :options="['Baik','Sampel Sedikit','Tabung Rusak']" 
+                      :hasLainnya="true"
+                      placeholder="Masukkan kondisi sampel">
+                    </dynamic-input>
                     <has-error :form="form" :field="`samples.${$index}.petugas_pengambil`"/>
                   </td>
                   <td>
@@ -185,25 +187,24 @@ export default {
   computed: mapGetters({
     jenis_sampel: "options/jenis_sampel",
   }),
-   async asyncData({route, store}) {
+  async asyncData({route, store}) {
     let error = false;
     let resp = await axios.get("/sample/edit/"+route.params.id);
     if (!store.getters['options/jenis_sampel'].length) {
       await store.dispatch('options/fetchJenisSampel')
     }
     let data = resp.data.result;
-    let _sample = []
-    // data.sampels.forEach(item => {
-    //   _sample.push({
-    //     id_sampel : item.id,
-    //     nomor_sampel : item.nomor_sampel,
-    //     sam_jenis_sampel:item.jenis_sampel_id,
-    //     tanggalsampel:item.tanggal_pengambilan_sampel,
-    //     pukulsampel:item.jam_pengambilan_sampel
-    //   })
-    // });
-    // console.log(_sample)
-    // console.log(data)
+    for (var i = 0; i < data.sampels.length; i++) {
+      if (!data.sampels[i].tanggalsampel) {
+        data.sampels[i].tanggalsampel = new Date
+      }
+      if (!data.sampels[i].pukulsampel) {
+        data.sampels[i].pukulsampel = ("" + new Date().getHours()).padStart(2, "0") + ":" + ("" + new Date().getMinutes()).padStart(2, "0")
+      }
+      if (!data.sampels[i].petugas_pengambil) {
+        data.sampels[i].petugas_pengambil = 'Baik'
+      }
+    }
     return {
       // data:null,
       form: new Form({
@@ -236,6 +237,7 @@ export default {
       this.form.samples.push({
         tanggalsampel: new Date,
         pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),
+        petugas_pengambil: 'Baik',
         nomorsampel:null,
         id_sampel:null,
       })

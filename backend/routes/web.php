@@ -21,3 +21,4 @@ Route::get('/', function() {
 		'App' => 'RESTfulAPI v0.1'
 	];
 });
+Route::get('/grafik/{path}', 'V1\PCRController@getGrafik')->where('path', '(.*)')->name('grafik.url');

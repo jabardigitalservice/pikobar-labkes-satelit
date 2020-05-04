@@ -82,9 +82,16 @@ module.exports = {
   modules: [
     'nuxt-sweetalert2',
     'portal-vue/nuxt',
+    '@nuxtjs/sentry',
+    // ['nuxt-matomo', { matomoUrl: '//kinerja.jabarprov.go.id/4nalytics/', siteId: 4 }],
     '@nuxtjs/toast',
     '@nuxtjs/router'
   ],
+
+  sentry: {
+    dsn: 'http://ef3b82de72e943d78d227a63f7b07b2c@sentry.velotek.co.id/27', // Enter your project's DSN here
+    config: {}, // Additional config
+  },
 
   build: {
     extractCSS: true,
