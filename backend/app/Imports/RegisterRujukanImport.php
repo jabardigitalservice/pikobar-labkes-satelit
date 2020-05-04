@@ -103,6 +103,8 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
 
         }
 
+        abort_if(!$kota, 422, "Kota domisili tidak ditemukan pada pasien dengan NIK {$row->get('nik')}");
+
         return $kota;
     }
 }
