@@ -48,6 +48,49 @@
             </div>
         </div>
 
+        <div class="form-group row" v-if="oid=='registrasi-mandiri'">
+            <div class="col-md-2">
+                <label for="nama_pasien">Sumber Pasien</label>
+            </div>
+            <div class="col-md-4">
+                <select name="sumber_pasien" class="form-control" v-model="params.sumber_pasien">
+                    <option value="" selected>Semua Sumber</option>
+                    <option value="Mandiri">Mandiri</option>
+                    <option value="Dinkes">Dinkes</option>
+                    <option value="RDT">RDT</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row" v-if="oid=='registrasi-rujukan'">
+            <div class="col-md-2">
+                <label for="nama_pasien">Sumber Sampel</label>
+            </div>
+            <div class="col-md-4">
+                <select name="sumber_pasien" class="form-control" v-model="params.sumber_sampel">
+                    <option value="" selected>Semua Tipe</option>
+                    <option value="Mandiri">Mandiri</option>
+                    <option value="Rujukan Dinkes">Rujukan Dinkes</option>
+                    <option value="Rujukan RS">Rujukan RS</option>
+                </select>
+            </div>
+        </div>
+
+        
+
+        <div class="form-group row">
+            <div class="col-md-2">
+                <label for="nama_pasien">Domisili</label>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" type="text" name="reg_kota" placeholder="" required
+                    v-model="params.kota">
+                    <option :value="item.id" :key="idx" v-for="(item,idx) in optionKota">{{item.nama}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
         <div class="form-group row">
             <div class="col-md-12 text-left">
                 <button class="btn btn-primary" style="width:200px;margin-top:20px" @click="doFilter"><i
@@ -59,6 +102,7 @@
     </Ibox>
 </template>
 <script>
+import axios from 'axios'
 export default {
     name: 'FilterRegistrasi',
     props:['oid'],
@@ -70,14 +114,26 @@ export default {
                 nomor_register:null,
                 nomor_sampel:null,
                 start_date:null,
-                end_date:null
-            }
+                end_date:null,
+                sumber_pasien:null,
+                sumber_sampel:null,
+                kota:null
+            },
+            optionKota:[]
         }
     },
     methods:{
         doFilter(){
-            this.$bus.$emit('refresh-ajaxtable',this.oid);
-        }
+            // this.$bus.$emit('refresh-ajaxtable')
+            this.$bus.$emit('refresh-ajaxtable2',this.oid, this.params);
+        },
+        async getKota() {
+            const resp = await axios.get('/v1/list-kota-jabar');
+            this.optionKota = resp.data;
+        },
+    },
+    created(){
+        this.getKota();
     }
 }
 </script>

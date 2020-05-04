@@ -377,6 +377,12 @@ export default {
                 this.changePage();
             }
         },
+        doRefresh2(objid, params) {
+             if (!objid || objid == this.oid) {
+                this.params = params;
+                this.changePage();
+            }
+        },
         export() {
             var that = this;
             that.isLoadingExp = true;
@@ -478,10 +484,13 @@ export default {
         var that = this;
         // console.log('Event Hub : ',eventHub);
         this.$bus.$on('refresh-ajaxtable', this.doRefresh)
+        this.$bus.$on('refresh-ajaxtable2', this.doRefresh2)
+
         // eventHub.$on('refresh-ajaxtable', this.doRefresh)
     },
     beforeDestroy() {
         this.$bus.$off('refresh-ajaxtable',this.doRefresh)
+        this.$bus.$off('refresh-ajaxtable2',this.doRefresh2)
         // eventHub.$off('refresh-ajaxtable', this.doRefresh)
     },
     mounted() {

@@ -48,6 +48,16 @@ class RegistrasiMandiri extends Controller
                     case "end_date":
                         $models = $models->where('register.created_at','<=',$val);
                     break;
+                    case "sumber_pasien":
+                        $models = $models->where('register.sumber_pasien',$val);
+                    break;
+                    case "sumber_sampel":
+                        $sampel = Sampel::where('sumber_sampel',$val)->pluck('register_id');
+                        $models = $models->whereIn('register.id',$sampel);
+                    break;
+                    case "kota":
+                        $models = $models->where('kota.id',$val);
+                    break;
                     default:
                         $models = $models->where($key,$val);
                         break;
@@ -90,7 +100,7 @@ class RegistrasiMandiri extends Controller
         }
         $models = $models->select('register.nomor_register','pasien.*','kota.nama as nama_kota',
         'register.created_at as tgl_input','pasien_register.*','register.sumber_pasien',
-        'register.jenis_registrasi','register.dinkes_pengirim');
+        'register.jenis_registrasi','register.dinkes_pengirim','pasien.sumber_pasien');
         $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
 
         foreach($models as &$model) {
