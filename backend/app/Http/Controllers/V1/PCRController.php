@@ -71,6 +71,13 @@ class PCRController extends Controller
                             $models->where('sampel_status', $val);
                         }
                         break;
+                    case 'waktu_pcr_sample_analyzed':
+                        $tgl = date('Y-m-d', strtotime($val));
+                        $models->whereBetween('waktu_pcr_sample_analyzed', [$tgl.' 00:00:00',$tgl.' 23:59:59']);
+                        break;
+                    case 'is_musnah_pcr':
+                        $models->where('is_musnah_pcr', $val == 'true' ? true : false);
+                        break;
                     default:
                         break;
                 }
@@ -352,6 +359,30 @@ class PCRController extends Controller
         }
         
         return response()->json(['status'=>201,'message'=>'Penerimaan sampel berhasil dicatat']);
+    }
+
+    public function musnahkan(Request $request, $id)
+    {
+        $user = $request->user();
+        $sampel = Sampel::with(['status'])->find($id);
+        if (!$sampel) {
+            return response()->json(['success'=>false,'code'=> 422,'message'=>'Sampel tidak ditemukan'],422);
+        }
+        $pcr = $sampel->pcr;
+        if (!$pcr) {
+            $pcr = new PemeriksaanSampel;
+            $pcr->sampel_id = $sampel->id;
+            $pcr->user_id = $user->id;
+        }
+        $sampel->is_musnah_pcr = true;
+        $sampel->save();
+
+        $sampel->addLog([
+            'user_id' => $user->id,
+            'metadata' => $pcr,
+            'description' => 'Sample marked as destroyed at PCR chamber',
+        ]);
+        return response()->json(['success'=>true,'code'=> 201,'message'=>'Sampel berhasil ditandai telah dimusnahkan']);
     }
 
 }

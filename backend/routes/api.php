@@ -112,6 +112,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::post('/invalid/{id}','PCRController@invalid');
         Route::post('/input/{id}','PCRController@input');
         Route::post('/upload-grafik','PCRController@uploadGrafik');
+        Route::post('/musnahkan/{id}', 'PCRController@musnahkan');
     });
     Route::group(['prefix'=>'sampel'], function(){
         Route::get('/cek-nomor-sampel','SampelController@cekNomorSampel');

@@ -21,16 +21,26 @@
                   <option :value="item.id" :key="item.id" v-for="item in lab_pcr">{{item.text}}</option>
                 </select>
               </div>
-            </div>
-            <div class="col-md-6">
               <div class="form-group" v-if="params1.lab_pcr_id =='999999'">
                 <label>Nama Lab</label>
                 <input class="form-control" type="text" v-model="params1.lab_pcr_nama" @keyup="refreshDebounce"/>
               </div>
             </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Tanggal Analisis PCR</label>
+                <date-picker
+                  placeholder="Pilih Tanggal"
+                  format="d MMMM yyyy"
+                  input-class="form-control"
+                  :monday-first="true"
+                  v-model="params1.waktu_pcr_sample_analyzed"
+                />
+              </div>
+            </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group">
                 <label>Hasil Pemeriksaan</label>
                 <dynamic-input :form="params1" field="kesimpulan_pemeriksaan" 
@@ -39,7 +49,7 @@
                 </dynamic-input>
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group">
                 <label>Status Pemeriksaan</label>
                 <dynamic-input :form="params1" field="sampel_status" 
@@ -49,6 +59,15 @@
                   {id: 'sample_verified',name: 'Telah Diverifikasi'},
                   {id: 'sample_valid',name: 'Telah Divalidasi'}]"
                   :hasSemua="false">
+                </dynamic-input>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Status Pemusnahan</label>
+                <dynamic-input :form="params1" field="is_musnah_pcr" 
+                  :options="[{id: 'true',name: 'Sudah Dimusnahkan'},{id: 'false',name: 'Belum Dimusnahkan'}]"
+                  :hasSemua="true">
                 </dynamic-input>
               </div>
             </div>
@@ -77,9 +96,9 @@
             :columns="{
                       nomor_register: 'Nomor Register',
                       nomor_sampel : 'Nomor Sampel',
-                      kesimpulan_pemeriksaan : 'Hasil Pemeriksaan',
-                      waktu_pcr_sample_analyzed:'Waktu Input',
+                      waktu_pcr_sample_analyzed:'Waktu Analisis',
                       sampel_status : 'Status',
+                      kesimpulan_pemeriksaan : 'Hasil Pemeriksaan',
                     }"
           ></ajax-table>
         </Ibox>
@@ -107,6 +126,8 @@ export default {
         sampel_status: "analyzed",
         filter_inconclusive: false,
         kesimpulan_pemeriksaan: "",
+        waktu_pcr_sample_analyzed: "",
+        is_musnah_pcr: "",
       }
     };
   },
@@ -129,6 +150,12 @@ export default {
       this.$bus.$emit('refresh-ajaxtable', 'pcr-hasil-pemeriksaan')
     },
     'params1.sampel_status': function(newVal, oldVal) {
+      this.$bus.$emit('refresh-ajaxtable', 'pcr-hasil-pemeriksaan')
+    },
+    'params1.waktu_pcr_sample_analyzed': function(newVal, oldVal) {
+      this.$bus.$emit('refresh-ajaxtable', 'pcr-hasil-pemeriksaan')
+    },
+    'params1.is_musnah_pcr': function(newVal, oldVal) {
       this.$bus.$emit('refresh-ajaxtable', 'pcr-hasil-pemeriksaan')
     },
   },
