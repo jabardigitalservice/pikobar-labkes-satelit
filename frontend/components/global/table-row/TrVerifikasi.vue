@@ -7,6 +7,9 @@
       <span class="nik" v-if="item.pasien">NIK. {{item.pasien.no_ktp}}</span>
       <span class="usia" v-if="item.pasien">{{ usiaPasien }}</span>
     </td>
+    <td>
+        <span v-if="item.pasien">{{item.pasien.kota.nama}}</span>
+    </td>
     <td>{{item.nomor_sampel}}</td>
     <td>
       <ol>

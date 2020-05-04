@@ -22,7 +22,13 @@ class SampelValidatedExport implements FromQuery,
 
     protected $endDate;
 
+    protected $kotaId;
+
+    protected $fasyankesId;
+
     protected $sampelStatus;
+
+    protected $kesimpulanPemeriksaan;
 
     function __construct(array $payload = [])
     {
@@ -38,6 +44,18 @@ class SampelValidatedExport implements FromQuery,
 
         if (isset($payload['sampelStatus']) && $payload['sampelStatus']) {
             $this->sampelStatus = $payload['sampelStatus'];
+        }
+
+        if (isset($payload['kota_id']) && $payload['kota_id']) {
+            $this->kotaId = $payload['kota_id'];
+        }
+
+        if (isset($payload['fasyankes_id']) && $payload['fasyankes_id']) {
+            $this->kotaId = $payload['fasyankes_id'];
+        }
+
+        if (isset($payload['kesimpulan_pemeriksaan']) && $payload['kesimpulan_pemeriksaan']) {
+            $this->kesimpulanPemeriksaan = $payload['kesimpulan_pemeriksaan'];
         }
 
     }
@@ -66,8 +84,10 @@ class SampelValidatedExport implements FromQuery,
             ->select([
                 DB::raw('ROW_NUMBER() OVER() AS Row'),
                 'register.nomor_register',
-                DB::raw("CONCAT(pasien.nama_depan,' ',pasien.nama_belakang) AS nama_lengkap"),
-                DB::raw("pasien.no_ktp::varchar"),
+                // DB::raw("CONCAT(pasien.nama_depan,' ',pasien.nama_belakang) AS nama_lengkap"),
+                // DB::raw("pasien.no_ktp::varchar"),
+                'pasien.nama_lengkap',
+                'pasien.nik',
                 'pasien.tanggal_lahir',
                 'pasien.tempat_lahir',
                 'pasien.jenis_kelamin',
@@ -90,6 +110,18 @@ class SampelValidatedExport implements FromQuery,
 
             if ($this->endDate) {
                 $query->where('register.created_at', '<=', $this->endDate);
+            }
+
+            if ($this->kotaId) {
+                $query->where('kota.id', $this->kotaId);
+            }
+    
+            if ($this->fasyankesId) {
+                $query->where('register.fasyankes_id', $this->fasyankesId);
+            }
+    
+            if ($this->kesimpulanPemeriksaan) {
+                $query->where('pemeriksaansampel.kesimpulan_pemeriksaan', $this->kesimpulanPemeriksaan);
             }
         
         return $query;
