@@ -41,6 +41,12 @@
 
      <div class="row">
       <div class="col-lg-12">
+        <filter-registrasi :oid="`registrasi-rujukan`"/>
+      </div>
+    </div>
+
+     <div class="row">
+      <div class="col-lg-12">
         <Ibox title="Register Rujukan">
                 <template v-slot:tools>
                     <nuxt-link tag="button" to="/registrasi/rujukan/import-excel" class="btn btn-xs btn-success"><i class="fa fa-upload"></i> Import Data</nuxt-link>

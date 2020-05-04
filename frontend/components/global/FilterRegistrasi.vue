@@ -103,13 +103,14 @@
 </template>
 <script>
 import axios from 'axios'
+let _this = null;
 export default {
     name: 'FilterRegistrasi',
     props:['oid'],
     data(){
         return {
             params: {
-                jenis_registrasi: "mandiri",
+                jenis_registrasi: null,
                 nama_pasien: null,
                 nomor_register:null,
                 nomor_sampel:null,
@@ -132,7 +133,19 @@ export default {
             this.optionKota = resp.data;
         },
     },
+    mounted(){
+        if(this.oid == 'registrasi-rujukan') {
+            this.params.jenis_registrasi = 'rujukan';
+        }else{
+            this.params.jenis_registrasi = "mandiri";
+        }
+    },
     created(){
+        // alert(this.oid);
+        _this = this;
+        // if(this.oid == 'registrasi-rujukan') {
+        //     this.jenis_registrasi = 'rujukan';
+        // }
         this.getKota();
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Pasien;
 use App\Models\Register;
 use App\Models\PasienRegister;
+use App\Models\PengambilanSampel;
 use App\Models\Sampel;
 use DateTime;
 use App\Exports\RegisMandiriExport;
@@ -52,8 +53,10 @@ class RegistrasiMandiri extends Controller
                         $models = $models->where('register.sumber_pasien',$val);
                     break;
                     case "sumber_sampel":
-                        $sampel = Sampel::where('sumber_sampel',$val)->pluck('register_id');
-                        $models = $models->whereIn('register.id',$sampel);
+                        $sampel = PengambilanSampel::where('sumber_sampel',$val)
+                                ->leftJoin('sampel','sampel.pengambilan_sampel_id','pengambilan_sampel.id')->pluck('sampel.nomor_register');
+                        // $sampel = Sampel::where('sumber_sampel',$val)->pluck('register_id');
+                        $models = $models->whereIn('register.nomor_register',$sampel);
                     break;
                     case "kota":
                         $models = $models->where('kota.id',$val);
