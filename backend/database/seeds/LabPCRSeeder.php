@@ -14,7 +14,7 @@ class LabPCRSeeder extends Seeder
     {
         foreach ($this->items() as $item) {
             LabPCR::query()->updateOrCreate(
-                \Illuminate\Support\Arr::only($item, ['nama']), 
+                \Illuminate\Support\Arr::only($item, ['id']), 
                 $item
             );
         }
@@ -29,7 +29,7 @@ class LabPCRSeeder extends Seeder
             ],
             [
                 "id" => 2,
-                "nama"=> "ITB",
+                "nama"=> "RSHS",
             ],
             [
                 "id" => 3,
