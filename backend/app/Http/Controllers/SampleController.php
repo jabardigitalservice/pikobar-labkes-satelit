@@ -134,7 +134,7 @@ class SampleController extends Controller
         $model->penerima_sampel = $request->get('pen_penerima_sampel');
         $model->catatan = $request->get('pen_catatan');
         $model->sampel_diterima = true;
-        $model->save();
+        // $model->save();
 
         foreach($request->samples as $key=>$item){
             $sm = Sampel::where('nomor_sampel',$item['nomorsampel'])->first();
@@ -145,11 +145,11 @@ class SampleController extends Controller
             $sm->nomor_sampel = $item['nomorsampel'];
             $sm->jenis_sampel_id = $item['sam_jenis_sampel'];
             $sm->jenis_sampel_nama = $jenis->nama;
-            $sm->tanggal_pengambilan_sampel = $item['tanggalsampel'];
-            $sm->jam_pengambilan_sampel = $item['pukulsampel'];
+            $sm->tanggal_pengambilan_sampel = parseDate($item['tanggalsampel']);
+            $sm->jam_pengambilan_sampel = parseTime($item['pukulsampel']);
             $sm->petugas_pengambilan_sampel = $item['petugas_pengambil'];
             $sm->pengambilan_sampel_id = $model->id;
-            $sm->waktu_sample_taken = $item['tanggalsampel'] ? date('Y-m-d H:i:s', strtotime($item['tanggalsampel'] . ' ' .$item['pukulsampel'])) : null;
+            $sm->waktu_sample_taken = $item['tanggalsampel'] ? date('Y-m-d H:i:s', strtotime(parseDate($item['tanggalsampel']) . ' ' .parseTime($item['pukulsampel']))) : null;
             $sm->waktu_waiting_sample = date('Y-m-d H:i:s');
             $sm->sampel_status = 'sample_taken';
             $sm->updateState('sample_taken');
@@ -251,10 +251,10 @@ class SampleController extends Controller
             $sm->nomor_sampel = $item['nomorsampel'];
             $sm->jenis_sampel_id = $item['sam_jenis_sampel'];
             $sm->jenis_sampel_nama = $jenis->nama;
-            $sm->tanggal_pengambilan_sampel = $item['tanggalsampel'];
-            $sm->jam_pengambilan_sampel = $item['pukulsampel'];
+            $sm->tanggal_pengambilan_sampel = parseDate($item['tanggalsampel']);
+            $sm->jam_pengambilan_sampel = parseTime($item['pukulsampel']);
             $sm->petugas_pengambilan_sampel = $item['petugas_pengambil'];
-            $sm->waktu_sample_taken = $item['tanggalsampel'] ? date('Y-m-d H:i:s', strtotime($item['tanggalsampel'] . ' ' .$item['pukulsampel'])) : null;
+            $sm->waktu_sample_taken = $item['tanggalsampel'] ? date('Y-m-d H:i:s', strtotime(parseDate($item['tanggalsampel']) . ' ' .parseTime($item['pukulsampel']))) : null;
             $sm->pengambilan_sampel_id = $model->id;
             if ($sm->sampel_status == 'waiting_sample') {
                 $sm->updateState('sample_taken');
