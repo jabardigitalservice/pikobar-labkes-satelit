@@ -27,8 +27,7 @@ class RegistrasiMandiri extends Controller
                    ->orWhere('pasien.nik','ilike','%'.$search.'%');
             });
         }
-        
-
+    
         if ($params) {
             foreach (json_decode($params) as $key => $val) {
                 if ($val == '') continue;
@@ -47,11 +46,28 @@ class RegistrasiMandiri extends Controller
         
         if ($order) {
             $order_direction = $request->get('order_direction','asc');
-            if (empty($order_direction)) $order_direction = 'asc';
+            if (empty($order_direction)) $order_direction = 'desc';
 
             switch ($order) {
                 case 'nama_lengkap':
+                case 'nama_pasien':
                     $models = $models->orderBy('pasien.nama_lengkap',$order_direction);
+                break;
+                case 'created_at':
+                case 'tgl_input':
+                    $models = $models->orderBy('register.created_at',$order_direction);
+                break;
+                case 'nomor_register':
+                    $models = $models->orderBy('register.nomor_register',$order_direction);
+                break;
+                case 'nama_kota':
+                    $models = $models->orderBy('kota.nama',$order_direction);
+                break;
+                case 'sumber_pasien':
+                    $models = $modesl->orderBy('register.sumber_pasien',$order_direction);
+                break;
+                case 'no_sampel':
+                break;
                 default:
                     break;
             }
