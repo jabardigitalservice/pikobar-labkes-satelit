@@ -124,11 +124,30 @@ class PCRController extends Controller
     public function uploadGrafik(Request $request)
     {
         $file = $request->file('file');
-        $path = Storage::disk('public')->putFileAs(
-            'grafik/'.date('Y-m-d'), $request->file('file'), Str::random(20).'.'.$file->getClientOriginalExtension()
+        $filename = Str::random(20).'.'.$file->getClientOriginalExtension();
+        $path = Storage::disk('s3')->putFileAs(
+            'grafik/'.date('Y-m-d'), $request->file('file'), $filename
         );
-        $url = asset('storage/'.$path);
+        $url = route('grafik.url', ['path' => date('Y-m-d') . '/' . $filename]);
         return response()->json(['status'=>200,'message'=>'success','url'=>$url]);
+    }
+
+    public function getGrafik($path)
+    {
+        $exists = Storage::disk('public')->exists('grafik/'.$path);
+        if ($exists) {
+            return response()->file(storage_path('app/public/grafik/'.$path));
+        }
+        $exists = Storage::disk('s3')->exists('grafik/'.$path);
+        if ($exists) {
+            $contents = Storage::disk('s3')->get('grafik/'.$path);
+            $ret = Storage::disk('public')->put(
+                'grafik/'.$path, $contents
+            );
+            return response()->file(storage_path('app/public/grafik/'.$path));
+        } else {
+            abort(404);
+        }
     }
 
     public function detail(Request $request, $id)

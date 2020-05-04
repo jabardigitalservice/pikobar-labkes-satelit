@@ -98,4 +98,9 @@ class LoginController extends Controller
     {
         $this->guard()->logout();
     }
+    
+    public function username()
+    {
+        return 'username';
+    }
 }

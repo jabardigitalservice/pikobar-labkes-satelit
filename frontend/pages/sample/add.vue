@@ -202,6 +202,7 @@ export default {
         pen_catatan: null,
         samples: [{
           sam_jenis_sampel: '1',
+          petugas_pengambil: 'Baik',
           tanggalsampel: new Date,
           pukulsampel: this.getTimeNow(),
         }],
@@ -222,6 +223,8 @@ export default {
         pen_penerima_sampel: null,
         pen_catatan: null,
         samples: [{
+          sam_jenis_sampel: '1',
+          petugas_pengambil: 'Baik',
           tanggalsampel: new Date,
           pukulsampel: this.getTimeNow(),
         }],
@@ -229,6 +232,7 @@ export default {
     },
     addSample() {
       this.form.samples.push({
+        petugas_pengambil: 'Baik',
         tanggalsampel: new Date,
         pukulsampel: this.getTimeNow(),
       })

@@ -149,6 +149,7 @@ class SampleController extends Controller
             $sm->jam_pengambilan_sampel = $item['pukulsampel'];
             $sm->petugas_pengambilan_sampel = $item['petugas_pengambil'];
             $sm->pengambilan_sampel_id = $model->id;
+            $sm->waktu_sample_taken = $item['tanggalsampel'] ? date('Y-m-d H:i:s', strtotime($item['tanggalsampel'] . ' ' .$item['pukulsampel'])) : null;
             $sm->waktu_waiting_sample = date('Y-m-d H:i:s');
             $sm->sampel_status = 'sample_taken';
             $sm->updateState('sample_taken');
@@ -253,6 +254,7 @@ class SampleController extends Controller
             $sm->tanggal_pengambilan_sampel = $item['tanggalsampel'];
             $sm->jam_pengambilan_sampel = $item['pukulsampel'];
             $sm->petugas_pengambilan_sampel = $item['petugas_pengambil'];
+            $sm->waktu_sample_taken = $item['tanggalsampel'] ? date('Y-m-d H:i:s', strtotime($item['tanggalsampel'] . ' ' .$item['pukulsampel'])) : null;
             $sm->pengambilan_sampel_id = $model->id;
             if ($sm->sampel_status == 'waiting_sample') {
                 $sm->updateState('sample_taken');

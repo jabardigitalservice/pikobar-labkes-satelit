@@ -29,12 +29,17 @@ export default {
   name: 'DynamicInput',
   data() {
     var input = this.form[this.field]
-    if (this.options.find((option) => option.id === this.form[this.field]) === undefined && this.form[this.field] && this.form[this.field] != '') {
+    var is_object = this.options[0] ? (typeof this.options[0] == 'object') : false
+    let option = this.options.find(option => 
+      is_object && option.id == this.form[this.field] || 
+      !is_object && option == this.form[this.field]
+    )
+    if (option === undefined && this.form[this.field] && this.form[this.field] != '') {
       input = 'lainnya'
     }
     return {
       input: input,
-      is_object: this.options[0] ? (typeof this.options[0] == 'object') : false,
+      is_object: is_object,
     }
   },
   props: ['form', 'field', 'options', 'placeholder', 'hasLainnya', 'hasSemua'],
