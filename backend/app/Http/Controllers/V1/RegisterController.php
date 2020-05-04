@@ -70,6 +70,9 @@ class RegisterController extends Controller
                 'required',
                 new UniqueSampel(),
             ],
+            'reg_tanggalkunjungan' => 'required',
+            'reg_kunke' => 'required',
+            'reg_rsfasyankes' => 'required'
         ], [
             'reg_kewarganegaraan.required' => 'Mohon pilih kewarganegaraan',
             'reg_sumberpasien' => 'Mohon pilih sumber kedatangan pasien',
@@ -81,7 +84,10 @@ class RegisterController extends Controller
             'reg_nohp' => 'No HP tidak boleh kosong',
             'reg_kota' => 'Mohon pilih salah satu kota/kabupaten',
             'reg_alamat' => 'Alamat tidak boleh kosong',
-            'reg_sampel.required' => 'Mohon isi minimal satu nomor sampel'
+            'reg_sampel.required' => 'Mohon isi minimal satu nomor sampel',
+            'reg_tanggalkunjungan' => 'Mohon isi form tanggal kunjungan',
+            'reg_kunke' => 'Mohon isi kunjungan keberapa',
+            'reg_rsfasyankes' => 'Mohon isi form'
         ]);
         $v->validate();
         // foreach($request->get('reg_sampel') as $rows){
@@ -100,7 +106,10 @@ class RegisterController extends Controller
             'no_telp'=> null,
             'register_uuid' => (string) Str::uuid(),
             'creator_user_id' => $user->id,
-            'sumber_pasien' => $request->get('reg_sumberpasien')
+            'sumber_pasien' => $request->get('reg_sumberpasien'),
+            'tanggal_kunjungan' => $request->get('reg_tanggalkunjungan'),
+            'kunjungan_ke' => $request->get('reg_kunke'),
+            'rs_kunjungan' => $request->get('reg_rsfasyankes'),
         ]);
 
         $pasien = Pasien::where('nik',$request->get('reg_nik'))->first();
@@ -187,6 +196,9 @@ class RegisterController extends Controller
         $v->validate();
         
         $register->sumber_pasien = $request->get('reg_sumberpasien');
+        $register->tanggal_kunjungan = $request->get('reg_tanggalkunjungan');
+        $register->kunjungan_ke = $request->get('reg_kunke');
+        $register->rs_kunjungan = $request->get('reg_rsfasyankes');
         $pasien->nama_lengkap = $request->get('reg_nama_pasien');
         $pasien->kewarganegaraan = $request->get('reg_kewarganegaraan');
         $pasien->nik = $request->get('reg_nik');
@@ -278,7 +290,10 @@ class RegisterController extends Controller
             'reg_gejmualmuntah' => null,
             'reg_gejlain' => null,
             'reg_jk' => $pasien->jenis_kelamin,
-            'nama_kota'=>$pasien->nama
+            'nama_kota'=>$pasien->nama,
+            'kunjungan_ke' =>$register->kunjungan_ke,
+            'tanggal_kunjungan' => $register->tanggal_kunjungan,
+            'rs_kunjungan' => $register->rs_kunjungan
          ]);
     }
 
