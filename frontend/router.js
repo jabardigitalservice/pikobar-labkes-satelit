@@ -38,6 +38,7 @@ const routes = [
                     meta: {parentName: 'registrasi.mandiri'} },
   { path: '/registrasi/mandiri/update/:register_id/:pasien_id', name:'registrasi.mandiri.update', meta: {parentName: 'registrasi.mandiri'}, component: page('registrasi-mandiri/update.vue')},
   { path: '/registrasi/mandiri/export-excel', name:'registrasi.mandiri.export-excel', component: page('registrasi-mandiri/export-excel.vue'), meta: {parentName: 'registrasi.mandiri'} },
+  { path: '/registrasi/mandiri/import-excel', name:'registrasi.mandiri.import-excel', component: page('registrasi-mandiri/import-excel.vue'), meta: {parentName: 'registrasi.mandiri'} },
 
   { path: '/registrasi/rujukan', name:'registrasi.rujukan', component: page('registrasi-rujukan/index.vue'), meta: {parentName: 'home'} },
   { path: '/registrasi/rujukan/add/:nomor_sampel', name:'registrasi.rujukan.add', component: page('registrasi-rujukan/add.vue'), meta: {parentName: 'home'} },
