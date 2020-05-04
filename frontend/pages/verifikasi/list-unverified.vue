@@ -4,21 +4,18 @@
 
     <div class="row">
       <div class="col-lg-12">
-
         <Ibox title="Sampel Menunggu Verifikasi">
-          <p class="sub-header">
-            Berikut ini adalah daftar sampel dari hasil pemeriksaan</p>
+          <p class="sub-header">Berikut ini adalah daftar sampel dari hasil pemeriksaan</p>
 
           <div class="row">
             <div class="col-md-3">
               <div class="form-group">
                 <label>Filter Kesimpulan Pemeriksaan</label>
                 <select class="form-control">
-                  <option value="">Semua Hasil</option>
+                  <option value>Semua Hasil</option>
                   <option value="positif">Positif</option>
                   <option value="negatif">Negatif</option>
                   <option value="inkonklusif">Inkonklusif</option>
-
                 </select>
               </div>
             </div>
@@ -42,8 +39,8 @@
                         wrapper: ['table-responsive'],
                     }
                     }"
-                :rowtemplate="'tr-verifikasi'"
-                :columns="{
+            :rowtemplate="'tr-verifikasi'"
+            :columns="{
                       nomor_register: 'Nomor Register',
                       pasien_nama : 'Nama Pasien',
                       nomor_sampel : 'Nomor Sampel',
@@ -54,7 +51,6 @@
         </Ibox>
       </div>
     </div>
-
   </div>
 </template>
  
@@ -65,16 +61,19 @@ export default {
     return {
       params1: {
         kesimpulan_pemeriksaan: ""
-      },
+      }
     };
   },
   head() {
     return { title: "Sampel Hasil Pemeriksaan" };
   },
   watch: {
-    'params1.kesimpulan_pemeriksaan': function(newVal, oldVal) {
-      this.$bus.$emit('refresh-ajaxtable', 'validasi')
-    },
+    "params1.kesimpulan_pemeriksaan": function(newVal, oldVal) {
+      this.$bus.$emit("refresh-ajaxtable", "validasi");
+    }
   },
+  methods: {
+    
+  }
 };
 </script>
