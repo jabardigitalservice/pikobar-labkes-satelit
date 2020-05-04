@@ -22,7 +22,13 @@ class Register extends Model
         'jenis_registrasi',
         'tanggal_kunjungan',
         'kunjungan_ke',
-        'rs_kunjungan'
+        'rs_kunjungan',
+        'dinkes_pengirim',
+        'other_dinas_pengirim',
+        'nama_rs',
+        'other_nama_rs',
+        'fasyankes_pengirim',
+        // 'keterangan_lain'
     ];
 
     protected $hidden = ['fasyankes_id'];

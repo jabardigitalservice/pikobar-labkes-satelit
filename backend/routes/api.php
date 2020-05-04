@@ -58,6 +58,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/store','RegistrasiRujukanController@store');
         Route::get('/export-excel','RegistrasiMandiri@exportExcel');
         Route::delete('/delete/{id}/{pasien}','RegistrasiRujukanController@delete');
+
+        Route::post('update/{register_ids}/{pasien_id}','RegistrasiRujukanController@storeUpdate');
+        Route::get('update/{register_id}/{pasien_id}','RegistrasiRujukanController@getById');
     });
 
     Route::group(['prefix'=>'pemeriksaansampel'], function(){

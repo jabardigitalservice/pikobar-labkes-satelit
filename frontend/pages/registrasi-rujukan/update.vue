@@ -266,7 +266,7 @@
                                     :maxYear="(new Date).getFullYear()"
                                     displayFormat="dmy"
                                     sortYear="asc"
-                                    :default-date="nik_tgl"
+                                    :default-date="form.reg_tgllahir"
                                     ref="tgl_lahir"
                                     :wrapper-class="form.errors.has('reg_tgllahir') ? 'is-invalid' : ''"
                                 ></dropdown-datepicker>
@@ -487,7 +487,7 @@
 
                         <div class="form-group row mt-4 text-center justify-content-center">
                             <v-button :loading="form.busy" class="btn btn-md btn-primary block  m-b">
-                                <i class="fa fa-save"></i> Simpan Data Register
+                                <i class="fa fa-save"></i> Ubah Data Register
                             </v-button>
                         </div>
                     </form>
@@ -513,41 +513,40 @@
         async asyncData({
             route,
             store
-        }) {
-            let resp = await axios.get('/sample/get-sample/'+route.params.nomor_sampel);
+        }) { 
+            let resp = await axios.get('/registrasi-rujukan/update/'+route.params.register_id+'/'+route.params.pasien_id);
+            // let resp2 = await axios.get('/sample/get-sample/'+route.params.nomor_sampel);
 
             return {
                 // _this:this,
                 form: new Form({
-                    samples: resp.data,
-                    reg_fasyankes_pengirim:null,
-                    reg_telp_fas_pengirim:null,
-                    reg_nama_dokter:null,
-                    reg_nama_rs_lainnya:null,
-                    daerahlain: null,
-                    reg_dinkes_pengirim: null,
-                    reg_tanggalkunjungan: null,
-                    reg_kunke: null,
-                    reg_rsfasyankes: null,
-                    reg_no: null,
-                    reg_kewarganegaraan: null,
-                    reg_sumberpasien: null,
-                    reg_nama_pasien: null,
-                    reg_nik: null,
-                    reg_tempatlahir: null,
-                    reg_tgllahir: null,
-                    reg_nohp: null,
-                    reg_kota: null,
-                    reg_kecamatan: null,
-                    reg_kelurahan: null,
-                    reg_alamat: null,
-                    reg_rt: null,
-                    reg_rw: null,
-                    reg_suhu: null,
-                    reg_sampel: [{
-                        nomor: null
-                    }],
-                    reg_keterangan: null,
+                    samples: resp.data.samples,
+                    reg_fasyankes_pengirim:resp.data.reg_fasyankes_pengirim,
+                    reg_telp_fas_pengirim:resp.data.reg_telp_fas_pengirim,
+                    reg_nama_dokter:resp.data.reg_nama_dokter,
+                    reg_nama_rs : resp.data.reg_nama_rs,
+                    reg_nama_rs_lainnya:resp.data.reg_nama_rs_lainnya,
+                    daerahlain: resp.data.daerahlain,
+                    reg_dinkes_pengirim: resp.data.reg_dinkes_pengirim,
+                    reg_tanggalkunjungan: resp.data.reg_tanggalkunjungan,
+                    reg_kunke: resp.data.reg_kunke,
+                    reg_rsfasyankes: resp.data.reg_rsfasyankes,
+                    reg_no: resp.data.reg_no,
+                    reg_kewarganegaraan: resp.data.reg_kewarganegaraan,
+                    reg_sumberpasien: resp.data.reg_sumberpasien,
+                    reg_nama_pasien: resp.data.reg_nama_pasien,
+                    reg_nik: resp.data.reg_nik,
+                    reg_tempatlahir: resp.data.reg_tempatlahir,
+                    reg_tgllahir: resp.data.reg_tgllahir,
+                    reg_nohp: resp.data.reg_nohp,
+                    reg_kota: resp.data.reg_kota,
+                    reg_kecamatan: resp.data.reg_kecamatan,
+                    reg_kelurahan: resp.data.reg_kelurahan,
+                    reg_alamat: resp.data.reg_alamat,
+                    reg_rt: resp.data.reg_rt,
+                    reg_rw: resp.data.reg_rw,
+                    reg_suhu: resp.data.reg_suhu,
+                    reg_keterangan: resp.data.reg_keterangan,
                     reg_gejpanas: null,
                     reg_gejpenumonia: null,
                     reg_gejbatuk: null,
@@ -559,7 +558,7 @@
                     reg_gejdiare: null,
                     reg_gejmualmuntah: null,
                     reg_gejlain: null,
-                    reg_jk: null
+                    reg_jk: resp.data.reg_jk,
 
                 }),
                 selected_reg: {},
@@ -624,15 +623,12 @@
             },
             async submit() {
                 try {
-                    const response = await this.form.post("/registrasi-rujukan/store");
+                    const response = await this.form.post("/registrasi-rujukan/update/"+this.$route.params.register_id+"/"+this.$route.params.pasien_id);
                     this.$toast.success(response.data.message, {
                         icon: 'check',
                         iconPack: 'fontawesome',
                         duration: 5000
                     })
-                    // console.log('Response : ', response);
-                    this.initForm();
-                    this.getNoreg();
                     this.$router.push('/registrasi/rujukan');
                 } catch (err) {
                     if (err.response && err.response.data.code == 422) {
@@ -659,7 +655,7 @@
         created() {
             _this = this;
             this.getKota()
-            this.getNoreg();
+            // this.getNoreg();
             console.log('Data : ', this.sampel);
         },
         watch: {
