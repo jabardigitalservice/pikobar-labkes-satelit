@@ -83,7 +83,7 @@ module.exports = {
     'nuxt-sweetalert2',
     'portal-vue/nuxt',
     '@nuxtjs/sentry',
-    ['nuxt-matomo', { matomoUrl: 'https://kinerja.jabarprov.go.id/4nalytics/', siteId: 4 }],
+    // ['nuxt-matomo', { matomoUrl: '//kinerja.jabarprov.go.id/4nalytics/', siteId: 4 }],
     '@nuxtjs/toast',
     '@nuxtjs/router'
   ],
