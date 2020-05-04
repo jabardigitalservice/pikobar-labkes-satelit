@@ -38,11 +38,8 @@ class VerifikasiController extends Controller
                    })
                    ->orWhereHas('register', function($query) use ($search){
                         $query->whereHas('pasiens', function($query) use ($search) {
-                            $query->where('nama_depan', 'ilike','%'.$search.'%')
-                                ->orWhere('nama_belakang', 'ilike','%'.$search.'%')
-                                ->orWhere('no_ktp', 'ilike','%'.$search.'%')
-                                ->orWhere('no_sim', 'ilike','%'.$search.'%')
-                                ->orWhere('no_kk', 'ilike','%'.$search.'%');
+                            $query->where('nama_lengkap', 'ilike','%'.$search.'%')
+                                ->orWhere('nik', 'ilike','%'.$search.'%');
                         });
                     });
             }); 
@@ -135,11 +132,8 @@ class VerifikasiController extends Controller
                    })
                    ->orWhereHas('register', function($query) use ($search){
                         $query->whereHas('pasiens', function($query) use ($search) {
-                            $query->where('nama_depan', 'ilike','%'.$search.'%')
-                                ->orWhere('nama_belakang', 'ilike','%'.$search.'%')
-                                ->orWhere('no_ktp', 'ilike','%'.$search.'%')
-                                ->orWhere('no_sim', 'ilike','%'.$search.'%')
-                                ->orWhere('no_kk', 'ilike','%'.$search.'%');
+                            $query->where('nama_lengkap', 'ilike','%'.$search.'%')
+                            ->orWhere('nik', 'ilike','%'.$search.'%');
                         });
                     });
             });  

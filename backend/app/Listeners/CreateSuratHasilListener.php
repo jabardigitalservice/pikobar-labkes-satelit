@@ -4,12 +4,14 @@ namespace App\Listeners;
 
 use App\Events\SampelValidatedEvent;
 use App\Models\File;
+use App\Models\Pasien;
 use App\Models\Sampel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Carbon;
 
 class CreateSuratHasilListener
 {
@@ -91,6 +93,8 @@ class CreateSuratHasilListener
         $data['last_pemeriksaan_sampel'] = $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first();
         $data['kop_surat'] = $this->getKopSurat();
         $data['tanggal_validasi'] = $this->formatTanggalValid($sampel);
+        $data['tanggal_lahir_pasien'] = $this->getTanggalLahir($data['pasien']);
+        $data['umur_pasien'] = Carbon::parse($data['pasien']->tanggal_lahir)->age;
 
         $pdf = PDF::loadView('pdf_templates.print_validasi', $data);
 
@@ -126,6 +130,13 @@ class CreateSuratHasilListener
         return $sampel->waktu_sample_valid->day . ' ' . 
                 $this->getNamaBulan($sampel->waktu_sample_valid->month) . ' ' . 
                 $sampel->waktu_sample_valid->year;
+    }
+
+    private function getTanggalLahir(Pasien $pasien)
+    {
+        return $pasien->tanggal_lahir->day . ' ' . 
+                $this->getNamaBulan($pasien->tanggal_lahir->month) . ' ' . 
+                $pasien->tanggal_lahir->year;
     }
 
     public static function getNamaBulan(int $bulanKe)

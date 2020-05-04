@@ -80,7 +80,7 @@
                 <td width="10%">:</td>
                 <td width="60%">
                     @if ($pasien)
-                        <span>{{$pasien['tanggal_lahir'] }}</span>
+                        <span>{{ $tanggal_lahir_pasien }}, {{ $umur_pasien }} tahun</span>
                     @endif
                 </td>
               </tr>

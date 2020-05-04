@@ -30,7 +30,7 @@
                       <b>Pasien</b>
                     </td>
                     <td width="60%">
-                      <span>{{data.pasien.nama_depan}} {{data.pasien.nama_belakang}}</span>
+                      <span>{{data.pasien.nama_lengkap}}</span>
                     </td>
                   </tr>
                   <tr>
@@ -38,7 +38,7 @@
                       <b>Nomor Induk Kependudukan</b>
                     </td>
                     <td width="60%">
-                      <span>{{data.pasien.no_ktp }}</span>
+                      <span>{{data.pasien.nik }}</span>
                     </td>
                   </tr>
                   <tr>

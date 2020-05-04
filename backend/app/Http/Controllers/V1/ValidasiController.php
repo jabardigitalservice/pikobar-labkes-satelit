@@ -38,11 +38,8 @@ class ValidasiController extends Controller
                    })
                    ->orWhereHas('register', function($query) use ($search){
                         $query->whereHas('pasiens', function($query) use ($search) {
-                            $query->where('nama_depan', 'ilike','%'.$search.'%')
-                                ->orWhere('nama_belakang', 'ilike','%'.$search.'%')
-                                ->orWhere('no_ktp', 'ilike','%'.$search.'%')
-                                ->orWhere('no_sim', 'ilike','%'.$search.'%')
-                                ->orWhere('no_kk', 'ilike','%'.$search.'%')
+                            $query->where('nama_lengkap', 'ilike','%'.$search.'%')
+                            ->orWhere('nik', 'ilike','%'.$search.'%')
                                 ->orWhereHas('kota', function($query) use ($search){
                                     $query->where('nama', 'ilike','%'.$search.'%');
                                 });
@@ -89,9 +86,9 @@ class ValidasiController extends Controller
                         ->leftJoin('pasien_register', 'register.id', '=', 'pasien_register.register_id')
                         ->leftJoin('pasien', 'pasien_register.pasien_id', '=', 'pasien.id')
                         ->select('sampel.*')
-                        ->addSelect('pasien.nama_depan')
+                        ->addSelect('pasien.nama_lengkap')
                         ->distinct()
-                        ->orderBy('nama_depan', $order_direction);
+                        ->orderBy('nama_lengkap', $order_direction);
                     break;
                 case 'nomor_sampel':
                     $models = $models->orderBy($order,$order_direction);
@@ -147,11 +144,8 @@ class ValidasiController extends Controller
                    })
                    ->orWhereHas('register', function($query) use ($search){
                         $query->whereHas('pasiens', function($query) use ($search) {
-                            $query->where('nama_depan', 'ilike','%'.$search.'%')
-                                ->orWhere('nama_belakang', 'ilike','%'.$search.'%')
-                                ->orWhere('no_ktp', 'ilike','%'.$search.'%')
-                                ->orWhere('no_sim', 'ilike','%'.$search.'%')
-                                ->orWhere('no_kk', 'ilike','%'.$search.'%')
+                            $query->where('nama_lengkap', 'ilike','%'.$search.'%')
+                            ->orWhere('nik', 'ilike','%'.$search.'%')
                                 ->orWhereHas('kota', function($query) use ($search){
                                     $query->where('nama', 'ilike','%'.$search.'%');
                                 });
@@ -198,9 +192,9 @@ class ValidasiController extends Controller
                         ->leftJoin('pasien_register', 'register.id', '=', 'pasien_register.register_id')
                         ->leftJoin('pasien', 'pasien_register.pasien_id', '=', 'pasien.id')
                         ->select('sampel.*')
-                        ->addSelect('pasien.nama_depan')
+                        ->addSelect('pasien.nama_lengkap')
                         ->distinct()
-                        ->orderBy('nama_depan', $order_direction);
+                        ->orderBy('nama_lengkap', $order_direction);
                     break;
                 case 'nomor_sampel':
                     $models = $models->orderBy($order,$order_direction);
