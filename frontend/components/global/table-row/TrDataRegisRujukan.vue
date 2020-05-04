@@ -11,18 +11,20 @@
             {{item.nama_kota}}
         </td>
         <td>
-            {{item.sumber_pasien}}
+            {{item.dinkes_pengirim}}
         </td>
-        <td>
-            <span class="badge badge-success mr-2" v-for="s in item.no_sampel" :key="s"># {{s}}</span>
+        <td width="10%">
+            <div class="badge badge-success mr-2" style="text-align:left;margin-bottom:10px" v-for="s in item.samples" :key="s"># {{s.nomor_sampel}} <br>
+            Status : {{s.sampel_status}}
+            </div>
         </td>
         <td>
             {{item.tgl_input}}
         </td>
         <td v-if="config.has_action">
-            <nuxt-link :to="`/registrasi/rujukan/detail/${item.register_id}/${item.pasien_id}`" class="btn btn-success btn-sm">Detail</nuxt-link>
-            <nuxt-link :to="`/registrasi/rujukan/update/${item.register_id}/${item.pasien_id}`" class="btn btn-primary btn-sm">Update</nuxt-link>
-            <a href="#" class="btn btn-danger btn-sm" @click="deleteData(item.register_id, item.pasien_id)">Delete</a>
+            <nuxt-link :to="`/registrasi/rujukan/detail/${item.register_id}/${item.pasien_id}`" class="btn btn-success btn-sm" title="Klik untuk melihat detail"><i class="fa fa-eye"></i></nuxt-link>
+            <nuxt-link :to="`/registrasi/rujukan/update/${item.register_id}/${item.pasien_id}`" class="btn btn-primary btn-sm" title="Klik untuk mengubah data"><i class="fa fa-edit"></i> </nuxt-link>
+            <a href="#" class="btn btn-danger btn-sm" @click="deleteData(item.register_id, item.pasien_id)" title="klik untuk menghapus data"><i class="fa fa-trash"></i> </a>
         </td>
     </tr>
 </template>

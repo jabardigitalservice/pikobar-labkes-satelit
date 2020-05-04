@@ -32,6 +32,22 @@ class RegistrasiMandiri extends Controller
             foreach (json_decode($params) as $key => $val) {
                 if ($val == '') continue;
                 switch($key) {
+                    case "nama_pasien": 
+                        $models = $models->where('pasien.nama_lengkap','ilike','%'.$val.'%');
+                    break;
+                    case "nomor_register":
+                        $models = $models->where('register.nomor_register','ilike','%'.$val.'%');
+                    break;
+                    case "nomor_sampel":
+                        $sampel = Sampel::where('nomor_sampel',$val)->pluck('register_id');
+                        $models = $models->whereIn('register.id',$sampel);
+                    break;
+                    case "start_date":
+                        $models = $models->where('register.created_at','>=',$val);
+                    break;
+                    case "end_date":
+                        $models = $models->where('register.created_at','<=',$val);
+                    break;
                     default:
                         $models = $models->where($key,$val);
                         break;
@@ -64,7 +80,7 @@ class RegistrasiMandiri extends Controller
                     $models = $models->orderBy('kota.nama',$order_direction);
                 break;
                 case 'sumber_pasien':
-                    $models = $modesl->orderBy('register.sumber_pasien',$order_direction);
+                    $models = $models->orderBy('register.sumber_pasien',$order_direction);
                 break;
                 case 'no_sampel':
                 break;
@@ -74,11 +90,11 @@ class RegistrasiMandiri extends Controller
         }
         $models = $models->select('register.nomor_register','pasien.*','kota.nama as nama_kota',
         'register.created_at as tgl_input','pasien_register.*','register.sumber_pasien',
-        'register.jenis_registrasi');
+        'register.jenis_registrasi','register.dinkes_pengirim');
         $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
 
         foreach($models as &$model) {
-            $model->no_sampel = Sampel::where('register_id',$model->register_id)->pluck('nomor_sampel');
+            $model->samples = Sampel::where('register_id',$model->register_id)->get();
             $bday = new DateTime($model->tanggal_lahir); 
             $today = new Datetime(date('Y-m-d'));
             $diff = $today->diff($bday);
@@ -101,14 +117,15 @@ class RegistrasiMandiri extends Controller
             'end_date'=> 'nullable', // 'date|date_format:Y-m-d',
         ]);
 
-        $payload = [];
+        $payload = []; 
 
         if ($request->has('start_date')) {
             $payload['startDate'] = parseDate($request->input('start_date'));
         }
 
         if ($request->has('end_date')) {
-            $payload['endDate'] = parseDate($request->input('end_date'));
+            // $payload['endDate'] = parseDate($request->input('end_date'));
+            $payload['endDate'] = date('Y-m-d',strtotime($request->input('end_date') . "+1 days"));
         }
 
         return (new RegisMandiriExport($payload))->download('registrasi-mandiri-'.time().'.xlsx');
