@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/edit/{id}','SampleController@getUpdate');
         Route::get('/delete/{id}','SampleController@delete');
         Route::post('/update/{id}','SampleController@storeUpdate');
+        Route::get('/get-sample/{nomor}','SampleController@getSamples');
     });
 
     Route::get('/pengguna', 'PenggunaController@listPengguna');
@@ -56,6 +57,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/cek','RegistrasiRujukanController@cekData');
         Route::post('/store','RegistrasiRujukanController@store');
         Route::get('/export-excel','RegistrasiMandiri@exportExcel');
+        Route::delete('/delete/{id}/{pasien}','RegistrasiRujukanController@delete');
     });
 
     Route::group(['prefix'=>'pemeriksaansampel'], function(){
@@ -135,6 +137,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
         Route::group(['prefix'=>'register'], function(){
 
+            
             Route::get('/', 'RegisterListController@index');
 
             Route::post('store', 'RegisterController@store');
@@ -157,11 +160,12 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
                 Route::post('store', 'RegisterRujukanController@store');
 
-                Route::get('detail/{register}', 'RegisterRujukanController@show');
+                Route::get('detail/{register}', 'RegisterRujukanController@show'); 
 
                 Route::post('update/{register}', 'RegisterRujukanController@update');
 
-                Route::delete('delete/{register}', 'RegisterRujukanController@destroy');
+                // Route::delete('delete/{register}', 'RegisterRujukanController@destroy');
+                Route::delete('delete/{id}/{pasien}','RegistrasiRujukanController@delete');
 
 
             });

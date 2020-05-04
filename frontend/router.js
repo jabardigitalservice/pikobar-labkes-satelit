@@ -41,6 +41,7 @@ const routes = [
 
   { path: '/registrasi/rujukan', name:'registrasi.rujukan', component: page('registrasi-rujukan/index.vue'), meta: {parentName: 'home'} },
   { path: '/registrasi/rujukan/add/:nomor_sampel', name:'registrasi.rujukan.add', component: page('registrasi-rujukan/add.vue'), meta: {parentName: 'home'} },
+  { path: '/registrasi/rujukan/update/:register_id/:pasien_id', name:'registrasi.rujukan.update', component: page('registrasi-rujukan/update.vue'), meta: {parentName: 'home'} },
 
   { path: '/ekstraksi', name:'ekstraksi.index', component: page('ekstraksi/index.vue'), meta: {parentName: 'home'} },
   { path: '/ekstraksi/detail/:id', name:'ekstraksi.detail', component: page('ekstraksi/detail.vue'), meta: {parentName: 'ekstraksi.index'} },
