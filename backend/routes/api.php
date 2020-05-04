@@ -61,6 +61,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::post('update/{register_ids}/{pasien_id}','RegistrasiRujukanController@storeUpdate');
         Route::get('update/{register_id}/{pasien_id}','RegistrasiRujukanController@getById');
+        Route::get('/export-excel','RegistrasiRujukanController@exportExcel');
     });
 
     Route::group(['prefix'=>'pemeriksaansampel'], function(){

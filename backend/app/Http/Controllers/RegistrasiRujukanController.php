@@ -18,6 +18,7 @@ use Validator;
 use Illuminate\Validation\Rule;
 use Auth;
 use DateTime;
+use App\Exports\RegisRujukanExport;
 
 
 class RegistrasiRujukanController extends Controller
@@ -345,5 +346,26 @@ class RegistrasiRujukanController extends Controller
         $pasien->save();
 
         return response()->json(['status'=>200,'message'=>'Proses Registrasi Rujukan Berhasil Diubah','result'=>[]]);
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $request->validate([
+            'start_date'=> 'nullable', // 'date|date_format:Y-m-d',
+            'end_date'=> 'nullable', // 'date|date_format:Y-m-d',
+        ]);
+
+        $payload = []; 
+
+        if ($request->has('start_date')) {
+            $payload['startDate'] = parseDate($request->input('start_date'));
+        }
+
+        if ($request->has('end_date')) {
+            // $payload['endDate'] = parseDate($request->input('end_date'));
+            $payload['endDate'] = date('Y-m-d',strtotime($request->input('end_date') . "+1 days"));
+        }
+
+        return (new RegisRujukanExport($payload))->download('registrasi-rujukan-'.time().'.xlsx');
     }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper wrapper-content">
-    <portal to="title-name">Export Registrasi Mandiri (.xlsx)</portal>
+    <portal to="title-name">Export Registrasi Rujukan (.xlsx)</portal>
     <portal to="title-action">
       <div class="title-action">
         <a href="#" @click.prevent="$router.back()" class="btn btn-secondary">
@@ -91,7 +91,7 @@ export default {
   },
   head() {
     return {
-      title: "Export Excel Hasil Registrasi Mandiri"
+      title: "Export Excel Hasil Registrasi Rujukan"
     };
   },
   methods: {
@@ -104,7 +104,7 @@ export default {
         this.loading = true;
         // let _this = this;
         axios({
-                url: process.env.apiUrl + "/registrasi-mandiri/export-excel",
+                url: process.env.apiUrl + "/registrasi-rujukan/export-excel",
                 params: this.form,
                 method: 'GET',
                 responseType: 'blob',
@@ -114,7 +114,7 @@ export default {
                 const link = document.createElement('a');
                 link.href = url;
                 const contentDisposition = response.headers['content-disposition'];
-                let fileName = 'registrasi-mandiri'+this.form.start_date+'_'+this.form.end_date+'.xlsx';
+                let fileName = 'registrasi-rujukan'+this.form.start_date+'_'+this.form.end_date+'.xlsx';
                 if (contentDisposition) {
                     const fileNameMatch = contentDisposition.match(/filename=(.+)/);
                     if (fileNameMatch.length === 2)
