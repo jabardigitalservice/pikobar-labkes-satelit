@@ -17,7 +17,7 @@
                   <option value="">Semua Hasil</option>
                   <option value="positif">Positif</option>
                   <option value="negatif">Negatif</option>
-                  <option value="inkonklusif">Inkonklusif</option>
+                  <option value="sampel kurang">Sampel Kurang</option>
                 </select>
               </div>
             </div>

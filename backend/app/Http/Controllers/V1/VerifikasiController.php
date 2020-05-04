@@ -310,6 +310,27 @@ class VerifikasiController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Sampel  $sampel
+     * @return \Illuminate\Http\Response
+     */
+    public function verifiedSingleSampel(Request $request, Sampel $sampel)
+    {
+        $sampel->update([
+            'sampel_status'=> 'sample_verified',
+            'waktu_sample_verified'=> now()
+        ]);
+
+        return response()->json([
+            'status'=>200,
+            'message'=>'success',
+            'data'=> Sampel::find($sampel->id)
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
