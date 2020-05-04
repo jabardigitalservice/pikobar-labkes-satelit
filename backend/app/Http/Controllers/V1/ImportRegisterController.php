@@ -15,8 +15,12 @@ class ImportRegisterController extends Controller
             'register_file'=> 'required|file|mimes:xls,xlsx|max:2048'
         ],$request->only('register_file'));
 
-        $import = Excel::import(new RegisterMandiriImport, $request->file('register_file'));
+        Excel::import(new RegisterMandiriImport, $request->file('register_file'));
 
-        dd($import);
+        return response()->json([
+            'status'=> 200,
+            'message'=> 'Sukses import data.',
+            'data'=> null
+        ]);
     }
 }

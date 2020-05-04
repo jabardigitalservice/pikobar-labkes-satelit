@@ -5,31 +5,36 @@ namespace App\Imports;
 use App\Models\Kota;
 use App\Models\Pasien;
 use App\Models\Register;
+use App\Models\Sampel;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class RegisterMandiriImport implements ToCollection
+class RegisterMandiriImport implements ToCollection, WithHeadingRow
 {
 
     public function collection(Collection $rows)
     {
-        
+
+        $lastRegister = Register::query()->orderBy('id', 'desc')->first();
+        $lengthNumber = $lastRegister ? (strlen($lastRegister->nomor_register) - 9 ): null;
+        $counterNomorRegister = $lastRegister ? ((int) substr($lastRegister->nomor_register, 9, $lengthNumber) + 1) : 1;
+
+        $omgRegisterId = $lastRegister ? (++$lastRegister->id) : 1;
 
         DB::beginTransaction();
         try {
+            
+            foreach ($rows as $key => $row) {
 
-            $lastRegister = Register::query()->orderBy('id', 'desc')->first();
-            $lengthNumber = $lastRegister ? (strlen($lastRegister->nomor_register) - 9 ): null;
-            $counterNomorRegister = $lastRegister ? ((int) substr($lastRegister->nomor_register, 9, $lengthNumber) + 1) : 1;
-
-            foreach ($rows as $key=> $row) 
-            {
-                if ($key == 0) continue;                
+                if (!$row->get('no')) {
+                    continue;
+                }
 
                 $register = Register::create([
-                    // 'fasyankes_id',
-                    'sumber_pasien'=> $row[2],
+                    'id'=> $omgRegisterId,
+                    'sumber_pasien'=> $row->get('sumber_pasien'),
                     'register_uuid'=> (string) \Illuminate\Support\Str::uuid(),
                     'jenis_registrasi'=> 'mandiri',
                     'nomor_register'=> "20200425L" . str_pad($counterNomorRegister, 4, "0", STR_PAD_LEFT),
@@ -38,13 +43,13 @@ class RegisterMandiriImport implements ToCollection
                 ]);
 
                 $pasienData = [
-                    'nik'=> $row[4],
-                    'nama_lengkap'=> $row[3],
-                    'kewarganegaraan'=> strtolower($row[2]),
-                    'jenis_kelamin'=> $row[7],
-                    'tanggal_lahir'=> $row[6],
-                    'tempat_lahir'=> $row[5],
-                    'kota_id'=> optional($this->getKota($row->toArray()))->id,
+                    'nik'=> $row->get('nik'),
+                    'nama_lengkap'=> $row->get('nama_pasien'),
+                    'kewarganegaraan'=> $row->get('kewarganegaraan'),
+                    'jenis_kelamin'=> $row->get('jenis_kelamin'),
+                    'tanggal_lahir'=> $row->get('tanggal_lahir'),
+                    'tempat_lahir'=> $row->get('tempat_lahir'),
+                    'kota_id'=> optional($this->getKota($row))->id,
                 ];
 
                 $pasien = Pasien::query()->updateOrCreate(
@@ -52,15 +57,30 @@ class RegisterMandiriImport implements ToCollection
                     $pasienData
                 );
 
-
                 $register->pasiens()->attach($pasien);
 
-                // $sampels 
+                $nomorSampels = explode(';', $row->get('nomor_sampel'));
+                
+                foreach ($nomorSampels as $key => $nomor) {
+                    $sampelData = [
+                        'nomor_sampel'=> $nomor,
+                        'sampel_status'=> 'waiting_sample',
+                        'creator_user_id'=>auth()->user()->id
+                    ];
+
+                    $sampel = Sampel::query()->updateOrCreate(
+                        \Illuminate\Support\Arr::only($sampelData, ['nomor_sampel']),
+                        $sampelData
+                    );
+
+                    $register->sampel()->save($sampel);
+                }
 
                 $counterNomorRegister++;
-
+                $omgRegisterId++;
             }
-            
+
+
             DB::commit();
 
 
@@ -69,16 +89,15 @@ class RegisterMandiriImport implements ToCollection
             throw $th;
         }
 
-
     }
 
 
-    private function getKota(array $row)
+    private function getKota(Collection $row)
     {
-        $kota = Kota::find($row[8]);
+        $kota = Kota::find($row->get('kota_id'));
 
         if (!$kota) {
-            $kotaId = substr($row[4], 0, 4);
+            $kotaId = (int) substr(($row->get('nik')), 0, 4);
             $kota = Kota::find($kotaId);
 
         }
