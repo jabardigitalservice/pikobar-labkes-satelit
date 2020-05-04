@@ -116,7 +116,7 @@ class RegistrasiRujukanController extends Controller
         $pasien->kelurahan = $request->get('reg_kelurahan');
         $pasien->alamat_lengkap = $request->get('reg_alamat');
         $pasien->no_rt = $request->get('reg_rt');
-        $pasien->no_rw = $request->get('reg_rw');
+        $pasien->no_rw = $request->get('reg_rw'); 
         $pasien->suhu = parseDecimal($request->get('reg_suhu'));
         $pasien->jenis_kelamin = $request->get('reg_jk');
         $pasien->keterangan_lain = $request->get('reg_keterangan');
@@ -132,6 +132,7 @@ class RegistrasiRujukanController extends Controller
         if($sampel) {
             $sampel->register_id = $register->id;
             $sampel->nomor_register = $request->input('reg_no');
+            $sampel->sampel_status = 'waiting_sample';
             $sampel->save();
         }
         return response()->json(['status'=>201,'message'=>'Proses Registrasi Rujukan Berhasil Ditambahkan','result'=>[]]);

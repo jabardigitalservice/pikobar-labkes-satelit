@@ -175,7 +175,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Kecamatan
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_kecamatan') }">
                                 <!-- <select class="form-control" type="text" name="reg_kecamatan" placeholder=""
@@ -191,7 +190,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Kelurahan / Desa
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_kelurahan') }">
                                 <!-- <select class="form-control" type="text" name="reg_kelurahan" placeholder=""
@@ -219,7 +217,6 @@
                         <div class="row mt-2">
                             <label class="col-md-2">
                                 RT / RW
-                                <span style="color:red">*</span>
                             </label>
                             <div class="input-group col-md-2" :class="{ 'is-invalid':form.errors.has('reg_rt') }">
                                 <span class="input-group-addon bootstrap-touchspin-postfix input-group-append">
@@ -241,7 +238,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Suhu
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6">
                                 <input class="form-control" type="text" v-model="form.reg_suhu " placeholder=""
