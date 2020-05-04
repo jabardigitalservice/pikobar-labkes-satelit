@@ -151,6 +151,7 @@ class SampleController extends Controller
             $sm->pengambilan_sampel_id = $model->id;
             $sm->waktu_sample_taken = $item['tanggalsampel'] ? date('Y-m-d H:i:s', strtotime($item['tanggalsampel'] . ' ' .$item['pukulsampel'])) : null;
             $sm->waktu_waiting_sample = date('Y-m-d H:i:s');
+            $sm->sampel_status = 'sample_taken';
             $sm->updateState('sample_taken');
             $sm->save();
         }
