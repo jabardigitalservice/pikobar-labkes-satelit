@@ -28,7 +28,7 @@
                     <b>Nomor Induk Kependudukan</b>
                   </td>
                   <td>
-                    {{ data.pasien.no_ktp }}
+                    {{ data.pasien.nik }}
                   </td>
                 </tr>
                 <tr>
@@ -36,7 +36,7 @@
                     <b>Nama Pasien</b>
                   </td>
                   <td>
-                    {{ data.pasien.nama_depan }} {{ data.pasien.nama_belakang }}
+                    {{ data.pasien.nama_lengkap }}
                   </td>
                 </tr>
                 <tr>

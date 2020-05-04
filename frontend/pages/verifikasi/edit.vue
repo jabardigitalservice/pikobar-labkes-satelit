@@ -48,14 +48,14 @@
             <div class="form-group">
               <label>Nama Pasien</label>
               <p class="form-control">
-                <b>{{ data.pasien.nama_depan }} {{ data.pasien.nama_belakang }}</b>
+                <b>{{ data.pasien.nama_lengkap }}</b>
               </p>
             </div>
 
             <div class="form-group">
               <label>NIK</label>
               <p class="form-control">
-                <b>{{ data.pasien.no_ktp }}</b>
+                <b>{{ data.pasien.nik }}</b>
               </p>
             </div>
 
