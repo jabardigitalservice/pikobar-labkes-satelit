@@ -26,7 +26,13 @@ class SampelVerifiedExport implements FromQuery,
 
     protected $endDate;
 
+    protected $kotaId;
+
+    protected $fasyankesId;
+
     protected $sampelStatus;
+
+    protected $kesimpulanPemeriksaan;
 
     function __construct(array $payload = [])
     {
@@ -44,12 +50,67 @@ class SampelVerifiedExport implements FromQuery,
             $this->sampelStatus = $payload['sampelStatus'];
         }
 
+        if (isset($payload['kota_id']) && $payload['kota_id']) {
+            $this->kotaId = $payload['kota_id'];
+        }
+
+        if (isset($payload['fasyankes_id']) && $payload['fasyankes_id']) {
+            $this->kotaId = $payload['fasyankes_id'];
+        }
+
+        if (isset($payload['kesimpulan_pemeriksaan']) && $payload['kesimpulan_pemeriksaan']) {
+            $this->kesimpulanPemeriksaan = $payload['kesimpulan_pemeriksaan'];
+        }
+
     }
 
     /**
     * @return \Illuminate\Support\Collection
     */
     public function query()
+    {
+        
+        $query = $this->queryFromPemeriksaan();
+        
+        $query->where('sampel.sampel_status', $this->sampelStatus);
+
+        // $query = $this->queryFromSampel()->where('sampel_status', $this->sampelStatus)
+
+        if ($this->startDate) {
+            $query->where('register.created_at', '>=', $this->startDate);
+        }
+
+        if ($this->endDate) {
+            $query->where('register.created_at', '<=', $this->endDate);
+        }
+
+        if ($this->kotaId) {
+            $query->where('kota.id', $this->kotaId);
+        }
+
+        if ($this->fasyankesId) {
+            $query->where('register.fasyankes_id', $this->fasyankesId);
+        }
+
+        if ($this->kesimpulanPemeriksaan) {
+            $query->where('pemeriksaansampel.kesimpulan_pemeriksaan', $this->kesimpulanPemeriksaan);
+        }
+
+        
+        return $query;
+
+    }
+
+    private function queryFromSampel()
+    {
+        $query = Sampel::query()->whereHas('logs')
+            ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
+            ->join('register', 'sampel.register_id', 'register.id')
+            ->where('sampel_status', '!=', 'sample_valid')
+            ->where('sampel_status', '!=', 'sample_invalid');
+    }
+
+    private function queryFromPemeriksaan()
     {
         $pasienRegisterSubQuery = DB::table('pasien_register')
             ->select(['register_id', 'pasien_id'])
@@ -70,8 +131,10 @@ class SampelVerifiedExport implements FromQuery,
             ->select([
                 DB::raw('ROW_NUMBER() OVER() AS Row'),
                 'register.nomor_register',
-                DB::raw("CONCAT(pasien.nama_depan,' ',pasien.nama_belakang) AS nama_lengkap"),
-                DB::raw("pasien.no_ktp::varchar"),
+                'pasien.nama_lengkap',
+                'pasien.nik',
+                // DB::raw("CONCAT(pasien.nama_depan,' ',pasien.nama_belakang) AS nama_lengkap"),
+                // DB::raw("pasien.no_ktp::varchar"),
                 'pasien.tanggal_lahir',
                 'pasien.tempat_lahir',
                 'pasien.jenis_kelamin',
@@ -84,38 +147,10 @@ class SampelVerifiedExport implements FromQuery,
                 'pemeriksaansampel.tanggal_input_hasil',
                 'sampel.waktu_sample_verified',
                 'register.sumber_pasien',
-            ])
-            ->where('sampel.sampel_status', $this->sampelStatus);
+            ]);
 
-            if ($this->startDate) {
-                $query->where('register.created_at', '>=', $this->startDate);
-            }
 
-            if ($this->endDate) {
-                $query->where('register.created_at', '<=', $this->endDate);
-            }
-        
-        return $query;
-
-        // $pemeriksaanTerbaru = PemeriksaanSampel::query()->select([
-        //         'sampel_id',
-        //         DB::raw("MAX(tanggal_input_hasil) last_tanggal_input_hasil")
-        //     ])
-        //     ->groupBy('sampel_id');
-
-        // $sampelQuery = Sampel::query()
-        //     ->joinSub($pemeriksaanTerbaru, 'periksa', function($join){
-        //         $join->on('sampel.id', '=', 'periksa.sampel_id');
-        //     })
-        //     ->join('register', 'sampel.register_id','register.id')
-        //     ->select([
-        //         'sampel.id AS sampel_id',
-        //         'sampel.nomor_sampel',
-        //         'sampel.register_id',
-        //         'periksa.last_tanggal_input_hasil',
-        //         'register.nomor_register'
-        //     ]);
-
+            return $query;
     }
 
     public function headings(): array
@@ -139,6 +174,25 @@ class SampelVerifiedExport implements FromQuery,
             'Sumber Pasien',
         ];
     }
+
+    // $pemeriksaanTerbaru = PemeriksaanSampel::query()->select([
+    //         'sampel_id',
+    //         DB::raw("MAX(tanggal_input_hasil) last_tanggal_input_hasil")
+    //     ])
+    //     ->groupBy('sampel_id');
+
+    // $sampelQuery = Sampel::query()
+    //     ->joinSub($pemeriksaanTerbaru, 'periksa', function($join){
+    //         $join->on('sampel.id', '=', 'periksa.sampel_id');
+    //     })
+    //     ->join('register', 'sampel.register_id','register.id')
+    //     ->select([
+    //         'sampel.id AS sampel_id',
+    //         'sampel.nomor_sampel',
+    //         'sampel.register_id',
+    //         'periksa.last_tanggal_input_hasil',
+    //         'register.nomor_register'
+    //     ]);
 
 
 }
