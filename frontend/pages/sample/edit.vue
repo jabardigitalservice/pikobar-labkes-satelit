@@ -206,6 +206,14 @@ export default {
     // });
     // console.log(_sample)
     // console.log(data)
+    for (var i = 0; i < data.sampels.length; i++) {
+      if (!data.sampels[i].tanggalsampel) {
+        data.sampels[i].tanggalsampel = new Date
+      }
+      if (!data.sampels[i].pukulsampel) {
+        data.sampels[i].pukulsampel = ("" + new Date().getHours()).padStart(2, "0") + ":" + ("" + new Date().getMinutes()).padStart(2, "0")
+      }
+    }
     return {
       // data:null,
       form: new Form({

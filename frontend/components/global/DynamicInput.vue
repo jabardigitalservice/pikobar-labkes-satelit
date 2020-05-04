@@ -29,7 +29,7 @@ export default {
   name: 'DynamicInput',
   data() {
     var input = this.form[this.field]
-    if (this.options.find((option) => option.id === this.form[this.field]) === undefined && this.form[this.field] != '') {
+    if (this.options.find((option) => option.id === this.form[this.field]) === undefined && this.form[this.field] && this.form[this.field] != '') {
       input = 'lainnya'
     }
     return {

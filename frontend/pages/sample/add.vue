@@ -223,14 +223,14 @@ export default {
         pen_catatan: null,
         samples: [{
           tanggalsampel: new Date,
-          pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),
+          pukulsampel: this.getTimeNow(),
         }],
       })
     },
     addSample() {
       this.form.samples.push({
         tanggalsampel: new Date,
-        pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),
+        pukulsampel: this.getTimeNow(),
       })
     },
     removeSample(index) {
