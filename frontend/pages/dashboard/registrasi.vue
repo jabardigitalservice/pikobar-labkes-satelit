@@ -85,7 +85,7 @@
     <div class="col-lg-12">
        <Ibox title="Registrasi Mandiri">
                 <template v-slot:tools>
-                    <button class="btn btn-xs btn-success"><i class="fa fa-upload"></i> Import Data</button>
+                    <nuxt-link tag="button" to="/registrasi/mandiri/import-excel" class="btn btn-xs btn-success"><i class="fa fa-upload"></i> Import Data</nuxt-link>
                     <nuxt-link tag="button" to="/registrasi/mandiri/export-excel" class="btn btn-xs btn-success"><i class="fa fa-dowload"></i> Export Data</nuxt-link>
                     <nuxt-link tag="button" to="/registrasi/mandiri/tambah" class="btn btn-xs btn-primary"><i class="fa fa-plus"></i> Registrasi Baru</nuxt-link>
                 </template>
