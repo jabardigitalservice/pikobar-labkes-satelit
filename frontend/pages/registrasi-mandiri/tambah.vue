@@ -176,7 +176,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Kecamatan
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_kecamatan') }">
                                 <!-- <select class="form-control" type="text" name="reg_kecamatan" placeholder=""
@@ -184,7 +183,7 @@
                                     <option :value="item.id" :key="idx" v-for="(item,idx) in optionKecamatan">{{item.nama}}</option>
                                 </select> -->
                                 <input v-model="form.reg_kecamatan" class="form-control" type="text"
-                                    name="reg_kecamatan" required />
+                                    name="reg_kecamatan" />
                                 <has-error :form="form" field="reg_kecamatan" />
                             </div>
                         </div>
@@ -192,7 +191,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Kelurahan / Desa
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_kelurahan') }">
                                 <!-- <select class="form-control" type="text" name="reg_kelurahan" placeholder=""
@@ -200,7 +198,7 @@
                                     <option :value="item.id" :key="idx" v-for="(item,idx) in optionKelurahan">{{item.nama}}</option>
                                 </select> -->
                                 <input class="multisteps-form__input form-control" type="text" name="reg_kelurahan"
-                                    required v-model="form.reg_kelurahan" />
+                                     v-model="form.reg_kelurahan" />
                                 <has-error :form="form" field="reg_kelurahan" />
                             </div>
                         </div>
@@ -220,19 +218,18 @@
                         <div class="row mt-2">
                             <label class="col-md-2">
                                 RT / RW
-                                <span style="color:red">*</span>
                             </label>
                             <div class="input-group col-md-2" :class="{ 'is-invalid':form.errors.has('reg_rt') }">
                                 <span class="input-group-addon bootstrap-touchspin-postfix input-group-append">
                                     <span class="input-group-text">RT </span>
                                 </span>
-                                <input class="form-control" type="number" name="reg_rt" required v-model="form.reg_rt" min="1" step="1" max="999">
+                                <input class="form-control" type="number" name="reg_rt" v-model="form.reg_rt" min="1" step="1" max="999">
                             </div>
                             <div class="input-group col-md-2" :class="{ 'is-invalid':form.errors.has('reg_rw') }">
                                 <div class="input-group-addon bootstrap-touchspin-postfix input-group-append">
                                     <span class="input-group-text">RW </span>
                                 </div>
-                                <input class="form-control" type="number" name="reg_domisilirw" required min="1" step="1" max="999"
+                                <input class="form-control" type="number" name="reg_domisilirw" min="1" step="1" max="999"
                                     v-model="form.reg_rw" />
                             </div>
                             <has-error :form="form" field="reg_rt" />
@@ -242,7 +239,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Suhu (°C)
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6">
                                 <input class="form-control" type="text" v-model="form.reg_suhu " placeholder=""
