@@ -131,7 +131,7 @@
               <dynamic-input :form="form" field="metode_ekstraksi" 
                 :options="['Manual','Otomatis']" 
                 :hasLainnya="true"
-                ref="alat_ekstraksi_input"
+                ref="metode_ekstraksi_input"
                 placeholder="Masukkan metode ekstraksi">
               </dynamic-input>
             </div>

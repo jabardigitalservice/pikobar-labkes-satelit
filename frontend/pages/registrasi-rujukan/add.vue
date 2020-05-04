@@ -270,10 +270,17 @@
                                 <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_tgllahir') }">
-                                <date-picker placeholder="Pilih Tanggal" format="d MMMM yyyy" input-class="form-control"
-                                    :monday-first="true"
-                                    :wrapper-class="{ 'is-invalid': form.errors.has('reg_tgllahir') }"
-                                    v-model="form.reg_tgllahir" />
+                                <dropdown-datepicker 
+                                    v-model="form.reg_tgllahir"
+                                    :minYear="1900"
+                                    :daySuffixes="false"
+                                    :maxYear="(new Date).getFullYear()"
+                                    displayFormat="dmy"
+                                    sortYear="asc"
+                                    :default-date="nik_tgl"
+                                    ref="tgl_lahir"
+                                    :wrapper-class="form.errors.has('reg_tgllahir') ? 'is-invalid' : ''"
+                                ></dropdown-datepicker>
                                 <has-error :form="form" field="reg_tgllahir" />
                             </div>
                         </div>
@@ -559,6 +566,7 @@
                 optionKota: [],
                 optionKecamatan: [],
                 optionKelurahan: [],
+                nik_tgl: null,
             };
         },
         methods: {
@@ -667,13 +675,20 @@
                     } else {
                         this.form.reg_jk = 'L'
                     }
-                    let mm = parseInt(newVal.substr(8,2)) - 1
+                    let mm = parseInt(newVal.substr(8,2))
                     let yy = parseInt(newVal.substr(10,2))
                     if (yy <= 30) {
-                        this.form.reg_tgllahir = new Date(2000+yy, mm, dd)
+                        let str = '' + (2000+yy) +'-'+ ('' + mm).padStart(2,'0') +'-'+ ('' + dd).padStart(2,'0')
+                        this.form.reg_tgllahir = str
+                        this.nik_tgl = str
                     } else {
-                        this.form.reg_tgllahir = new Date(1900+yy, mm, dd)
+                        let str = '' + (1900+yy) +'-'+ ('' + mm).padStart(2,'0') +'-'+ ('' + dd).padStart(2,'0')
+                        this.form.reg_tgllahir = str
+                        this.nik_tgl = str
                     }
+                    this.$nextTick(() => {
+                        this.$refs.tgl_lahir.init();
+                    })
                 }
             },
         }
