@@ -194,24 +194,15 @@ export default {
       await store.dispatch('options/fetchJenisSampel')
     }
     let data = resp.data.result;
-    let _sample = []
-    // data.sampels.forEach(item => {
-    //   _sample.push({
-    //     id_sampel : item.id,
-    //     nomor_sampel : item.nomor_sampel,
-    //     sam_jenis_sampel:item.jenis_sampel_id,
-    //     tanggalsampel:item.tanggal_pengambilan_sampel,
-    //     pukulsampel:item.jam_pengambilan_sampel
-    //   })
-    // });
-    // console.log(_sample)
-    // console.log(data)
     for (var i = 0; i < data.sampels.length; i++) {
       if (!data.sampels[i].tanggalsampel) {
         data.sampels[i].tanggalsampel = new Date
       }
       if (!data.sampels[i].pukulsampel) {
         data.sampels[i].pukulsampel = ("" + new Date().getHours()).padStart(2, "0") + ":" + ("" + new Date().getMinutes()).padStart(2, "0")
+      }
+      if (!data.sampels[i].petugas_pengambil) {
+        data.sampels[i].petugas_pengambil = 'Baik'
       }
     }
     return {
@@ -246,6 +237,7 @@ export default {
       this.form.samples.push({
         tanggalsampel: new Date,
         pukulsampel: (new Date).getHours()*100 + (new Date).getMinutes(),
+        petugas_pengambil: 'Baik',
         nomorsampel:null,
         id_sampel:null,
       })
