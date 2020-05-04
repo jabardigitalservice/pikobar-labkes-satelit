@@ -52,6 +52,14 @@ class SampleController extends Controller
                         } else {
                             $models->where('sampel_status', $val);
                         }
+                        break;
+                    case 'waktu_sample_taken':
+                        $tgl = date('Y-m-d', strtotime($val));
+                        $models->whereBetween('waktu_sample_taken', [$tgl.' 00:00:00',$tgl.' 23:59:59']);
+                        break;
+                    case 'petugas_pengambil':
+                        $models->where('petugas_pengambilan_sampel', $val);
+                        break;
                     //case 'is_mandiri':
                     //    if($val=="Ya") {
                     //        $models = $models->whereNull('pengambilan_sampel_id');

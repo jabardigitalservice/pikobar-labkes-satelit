@@ -58,13 +58,12 @@
                 <small>Isi bila diterima dari fasyankes rujukan</small>
               </label>
               <div class="col-md-6">
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="form.pen_penerima_sampel "
-                  placeholder="Nama Petugas Penerima Sampel"
-                  :class="{ 'is-invalid': form.errors.has('pen_penerima_sampel') }"
-                />
+                <dynamic-input :form="form" field="pen_penerima_sampel" 
+                  :options="['Adit','Firman']" 
+                  :hasLainnya="true"
+                  ref="pen_penerima_sampel"
+                  placeholder="Nama Petugas Penerima Sampel">
+                </dynamic-input>
                 <has-error :form="form" field="pen_penerima_sampel" />
               </div>
             </div>
@@ -93,7 +92,7 @@
               <thead>
                 <tr>
                   <th>Jenis Sampel</th>
-                  <th>Petugas pengambil sampel</th>
+                  <th>Kondisi Sampel</th>
                   <th>Tanggal</th>
                   <th>Pukul</th>
                   <th>Nomor sampel</th>
@@ -121,8 +120,11 @@
                     </div>
                   </td>
                   <td>
-                    <input class="form-control" type="text" v-model="sample.petugas_pengambil" 
-                      :class="{ 'is-invalid': form.errors.has(`samples.${$index}.petugas_pengambil`) }"/>
+                    <dynamic-input :form="sample" field="petugas_pengambil" 
+                      :options="['Baik','Sampel Sedikit','Tabung Rusak']" 
+                      :hasLainnya="true"
+                      placeholder="Masukkan kondisi sampel">
+                    </dynamic-input>
                     <has-error :form="form" :field="`samples.${$index}.petugas_pengambil`"/>
                   </td>
                   <td>
@@ -185,7 +187,7 @@ export default {
   computed: mapGetters({
     jenis_sampel: "options/jenis_sampel",
   }),
-   async asyncData({route, store}) {
+  async asyncData({route, store}) {
     let error = false;
     let resp = await axios.get("/sample/edit/"+route.params.id);
     if (!store.getters['options/jenis_sampel'].length) {
