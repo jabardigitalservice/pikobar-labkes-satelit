@@ -9,7 +9,6 @@ use App\Models\Sampel;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class RegisterRujukanImport implements ToCollection, WithHeadingRow
@@ -50,6 +49,14 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
                     'tanggal_lahir'=> $row->get('tanggal_lahir'),
                     'tempat_lahir'=> $row->get('tempat_lahir'),
                     'kota_id'=> optional($this->getKota($row))->id,
+                    'kecamatan'=> $row->get('kecamatan'),
+                    'kelurahan'=> $row->get('kelurahan'),
+                    'no_rw'=> $row->get('rw'),
+                    'no_rt'=> $row->get('rt'),
+                    'alamat_lengkap'=> $row->get('alamat'),
+                    'keterangan_lain'=> $row->get('keterangan'),
+                    'suhu'=> $row->get('suhu'),
+                    'sumber_pasien'=> $row->get('sumber_pasien')
                 ];
 
                 $pasien = Pasien::query()->updateOrCreate(
@@ -62,16 +69,10 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
                 $nomorSampels = explode(';', $row->get('nomor_sampel'));
                 
                 foreach ($nomorSampels as $key => $nomor) {
-                    $sampelData = [
-                        'nomor_sampel'=> $nomor,
-                        'sampel_status'=> 'waiting_sample',
-                        'creator_user_id'=>auth()->user()->id
-                    ];
+                    
+                    $sampel = Sampel::query()->whereNomorSampel($nomor)->first();
 
-                    $sampel = Sampel::query()->updateOrCreate(
-                        \Illuminate\Support\Arr::only($sampelData, ['nomor_sampel']),
-                        $sampelData
-                    );
+                    abort_if(!$sampel, 422, "Gagal import. Sampel dengan nomor {$nomor} tidak ditemukan");
 
                     $register->sampel()->save($sampel);
                 }

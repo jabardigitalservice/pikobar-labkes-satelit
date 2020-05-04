@@ -29,7 +29,9 @@ class Pasien extends Model
         'no_rw',
         'no_rt',
         'alamat_lengkap',
-        'keterangan_lain'
+        'keterangan_lain',
+        'suhu',
+        'sumber_pasien'
     ];
 
     protected $dates = [

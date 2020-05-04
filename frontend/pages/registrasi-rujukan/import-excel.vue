@@ -95,7 +95,7 @@ export default {
         
         // this.$toast.show('Importing in...')
 
-        await axios.post(process.env.apiUrl + "/v1/register/import-mandiri", formData, {
+        await axios.post(process.env.apiUrl + "/v1/register/import-rujukan", formData, {
           headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -117,7 +117,7 @@ export default {
               this.form.errors.set(err.response.data.error);
             });
 
-            this.$toast.error("Mohon cek kembali formulir Anda", {
+            this.$toast.error(err.response.data.error, {
               icon: "times",
               iconPack: "fontawesome",
               duration: 5000

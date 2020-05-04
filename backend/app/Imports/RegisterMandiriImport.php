@@ -50,6 +50,14 @@ class RegisterMandiriImport implements ToCollection, WithHeadingRow
                     'tanggal_lahir'=> $row->get('tanggal_lahir'),
                     'tempat_lahir'=> $row->get('tempat_lahir'),
                     'kota_id'=> optional($this->getKota($row))->id,
+                    'kecamatan'=> $row->get('kecamatan'),
+                    'kelurahan'=> $row->get('kelurahan'),
+                    'no_rw'=> $row->get('rw'),
+                    'no_rt'=> $row->get('rt'),
+                    'alamat_lengkap'=> $row->get('alamat'),
+                    'keterangan_lain'=> $row->get('keterangan'),
+                    'suhu'=> $row->get('suhu'),
+                    'sumber_pasien'=> $row->get('sumber_pasien')
                 ];
 
                 $pasien = Pasien::query()->updateOrCreate(
