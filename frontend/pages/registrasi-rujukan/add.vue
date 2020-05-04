@@ -26,17 +26,6 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
-                                Nomor Sampel
-                                <span style="color:red">*</span>
-                            </label>
-                            <div class="col-md-6">
-                                <input class="form-control" type="text" name="nomor_sampel" placeholder="Nomor Sampel"
-                                    required v-model="form.nomor_sampel" disabled />
-                            </div>
-                        </div>
-
-                        <div class="form-group row mt-4">
                             <label class="col-md-2">Kewarganegaraan <span style="color:red;">*</span></label>
                             <div class="col-md-6">
                                 <select v-model="form.reg_kewarganegaraan"
@@ -152,7 +141,7 @@
                             <label class="col-md-2">Nama Rumah Sakit / Fasyankes </label>
                             <div class="col-md-6">
                                 <select class=" form-control col-md-6" id="rsfasyankes"
-                                    name="reg_nama_rs" :class="{'is-invalid':form.errors.has('reg_fasyankes_pengirim')}" v-model="form.reg_fasyankes_pengirim">
+                                    name="reg_nama_rs" :class="{'is-invalid':form.errors.has('reg_nama_rs')}" v-model="form.reg_nama_rs">
                                     <option value="RSUP Dr. Hasan Sadikin">RSUP Dr. Hasan Sadikin</option>
                                     <option value="RSP Dr. H.A. Rotinsulu">RSP Dr. H.A. Rotinsulu</option>
                                     <option value="RSP Dr. Goenawan P"> RSP Dr. Goenawan P</option>
@@ -336,7 +325,7 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Kecamatan
-                                <span style="color:red">*</span>
+
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_kecamatan') }">
                                 <!-- <select class="form-control" type="text" name="reg_kecamatan" placeholder=""
@@ -344,7 +333,7 @@
                                     <option :value="item.id" :key="idx" v-for="(item,idx) in optionKecamatan">{{item.nama}}</option>
                                 </select> -->
                                 <input v-model="form.reg_kecamatan" class="form-control" type="text"
-                                    name="reg_kecamatan" required />
+                                    name="reg_kecamatan" />
                                 <has-error :form="form" field="reg_kecamatan" />
                             </div>
                         </div>
@@ -352,7 +341,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Kelurahan / Desa
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_kelurahan') }">
                                 <!-- <select class="form-control" type="text" name="reg_kelurahan" placeholder=""
@@ -360,7 +348,7 @@
                                     <option :value="item.id" :key="idx" v-for="(item,idx) in optionKelurahan">{{item.nama}}</option>
                                 </select> -->
                                 <input class=" form-control" type="text" name="reg_kelurahan"
-                                    required v-model="form.reg_kelurahan" />
+                                     v-model="form.reg_kelurahan" />
                                 <has-error :form="form" field="reg_kelurahan" />
                             </div>
                         </div>
@@ -380,19 +368,18 @@
                         <div class="row mt-2">
                             <label class="col-md-2">
                                 RT / RW
-                                <span style="color:red">*</span>
                             </label>
                             <div class="input-group col-md-2" :class="{ 'is-invalid':form.errors.has('reg_rt') }">
                                 <span class="input-group-addon bootstrap-touchspin-postfix input-group-append">
                                     <span class="input-group-text">RT </span>
                                 </span>
-                                <input class="form-control" type="text" name="reg_rt" required v-model="form.reg_rt" />
+                                <input class="form-control" type="text" name="reg_rt"  v-model="form.reg_rt" />
                             </div>
                             <div class="input-group col-md-2" :class="{ 'is-invalid':form.errors.has('reg_rw') }">
                                 <div class="input-group-addon bootstrap-touchspin-postfix input-group-append">
                                     <span class="input-group-text">RW </span>
                                 </div>
-                                <input class="form-control" type="text" name="reg_domisilirw" required
+                                <input class="form-control" type="text" name="reg_domisilirw" 
                                     v-model="form.reg_rw" />
                             </div>
                             <has-error :form="form" field="reg_rt" />
@@ -402,7 +389,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Suhu
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6">
                                 <input class="form-control" type="text" v-model="form.reg_suhu " placeholder=""
@@ -410,22 +396,7 @@
                                 <has-error :form="form" field="reg_suhu" />
                             </div>
                         </div>
-                        <hr>
-                        <h4 class="mb-1 mt-0">
-                            Identitas Sampel
-                        </h4>
-
-                        <div class="form-group row mt-4">
-                            <label class="col-md-2">
-                                Keterangan Lainnya
-                            </label>
-                            <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_keterangan') }">
-                                <textarea class="form-control" type="text" name="reg_keterangan"
-                                    v-model="form.reg_keterangan" rows="6"></textarea>
-                                <has-error :form="form" field="reg_keterangan" />
-                            </div>
-                        </div>
- 
+                        
                         <hr />
                         <h4 class="mb-1 mt-0">Riwayat Kunjungan</h4>
                         <p>Isi pada baris yang merupakan kali kunjungan saat ini.</p>
@@ -485,6 +456,33 @@
                                     placeholder="Nama RS/Fasyankes" v-model="form.reg_rsfasyankes" />
                                 <has-error :form="form" field="reg_rsfasyankes" />
                             </div>
+                        </div> 
+
+                        <hr>
+                        <h4 class="mb-1 mt-0">
+                            Identitas Sampel
+                        </h4>
+
+                        <div class="form-group row mt-4" v-for="(item,idx) in form.samples" :key="idx">
+                            <label class="col-md-2">
+                                Nomor Sampel {{idx+1}}
+                                <span style="color:red">*</span>
+                            </label>
+                            <div class="col-md-6">
+                                <input class="form-control" type="text" name="nomor_sampel" placeholder="Nomor Sampel"
+                                    required v-model="item.nomor_sampel" disabled />
+                            </div>
+                        </div>
+
+                        <div class="form-group row mt-4">
+                            <label class="col-md-2">
+                                Keterangan Lainnya
+                            </label>
+                            <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_keterangan') }">
+                                <textarea class="form-control" type="text" name="reg_keterangan"
+                                    v-model="form.reg_keterangan" rows="6"></textarea>
+                                <has-error :form="form" field="reg_keterangan" />
+                            </div>
                         </div>
 
                         <div class="form-group row mt-4 text-center justify-content-center">
@@ -516,10 +514,12 @@
             route,
             store
         }) {
+            let resp = await axios.get('/sample/get-sample/'+route.params.nomor_sampel);
+
             return {
                 // _this:this,
                 form: new Form({
-                    nomor_sampel: route.params.nomor_sampel,
+                    samples: resp.data,
                     reg_fasyankes_pengirim:null,
                     reg_telp_fas_pengirim:null,
                     reg_nama_dokter:null,

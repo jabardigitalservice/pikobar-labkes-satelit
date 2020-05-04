@@ -134,7 +134,7 @@ class SampleController extends Controller
         $model->penerima_sampel = $request->get('pen_penerima_sampel');
         $model->catatan = $request->get('pen_catatan');
         $model->sampel_diterima = true;
-        // $model->save();
+        $model->save();
 
         foreach($request->samples as $key=>$item){
             $sm = Sampel::where('nomor_sampel',$item['nomorsampel'])->first();
@@ -261,5 +261,12 @@ class SampleController extends Controller
             }
             $sm->save();
         }
+    }
+
+    public function getSamples(Request $request, $nomor)
+    {
+        $sm = Sampel::where('nomor_sampel',$nomor)->first();
+        $sms = Sampel::where('pengambilan_sampel_id',$sm->pengambilan_sampel_id)->select('nomor_sampel','sampel.id')->get();
+        return response()->json($sms);
     }
 }

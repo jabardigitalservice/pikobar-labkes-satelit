@@ -131,12 +131,12 @@
                     <b>NEGATIF</b>
                   </label>
                 </div>
-                <div>
+                <!-- <div>
                   <label class="form-check-label">
                     <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="sampel kurang" />
                     <b>SAMPEL KURANG</b>
                   </label>
-                </div>
+                </div> -->
                 <div>
                   <label class="form-check-label">
                     <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="inkonklusif" />

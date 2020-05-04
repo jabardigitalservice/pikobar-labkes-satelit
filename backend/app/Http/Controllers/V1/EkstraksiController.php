@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Sampel;
 use App\Models\Ekstraksi;
+use App\Models\PemeriksaanSampel;
 use App\Models\LabPCR;
 use Validator;
 use Illuminate\Support\Arr;
@@ -441,6 +442,33 @@ class EkstraksiController extends Controller
             'description' => 'Sample marked as destroyed at extraction chamber',
         ]);
         return response()->json(['success'=>true,'code'=> 201,'message'=>'Sampel berhasil ditandai telah dimusnahkan']);
+    }
+
+    public function setKurang(Request $request, $id)
+    {
+        $user = $request->user();
+        $sampel = Sampel::with(['status'])->find($id);
+        if (!$sampel) {
+            return response()->json(['success'=>false,'code'=> 422,'message'=>'Sampel tidak ditemukan'],422);
+        }
+        if ($sampel->sampel_status != 'sample_invalid') {
+            return response()->json(['success'=>false,'code'=> 422,'message'=>'Status sampel sudah pada tahap '. $sampel->status->deskripsi . ', sehingga tidak dapat ditandai sebagai sampel kurang'],422);
+        }
+        $pcr = $sampel->pcr;
+        if (!$pcr) {
+            $pcr = new PemeriksaanSampel;
+            $pcr->sampel_id = $sampel->id;
+            $pcr->user_id = $user->id;
+        }
+        $pcr->kesimpulan_pemeriksaan = 'sampel kurang';
+        $pcr->save();
+
+        $sampel->updateState('pcr_sample_received', [
+            'user_id' => $user->id,
+            'metadata' => $pcr,
+            'description' => 'Sample marked as insufficient',
+        ]);
+        return response()->json(['success'=>true,'code'=> 201,'message'=>'Sampel berhasil ditandai sebagai sampel kurang']);
     }
 
 }

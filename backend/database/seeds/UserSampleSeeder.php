@@ -60,12 +60,12 @@ class UserSampleSeeder extends Seeder
                 "username" => "admin_pcr_labkesda",
             ],
             [
-                "email" => "admin_pcr_itb",
-                "name" => "Admin PCR ITB",
-                "password" => bcrypt('admin_pcr_itb'),
+                "email" => "admin_pcr_rshs",
+                "name" => "Admin PCR RSHS",
+                "password" => bcrypt('admin_pcr_rshs'),
                 "role_id" => 5,
                 "lab_pcr_id" => 2,
-                "username" => "admin_pcr_itb",
+                "username" => "admin_pcr_rshs",
             ],
             [
                 "email" => "admin_pcr_unpad",

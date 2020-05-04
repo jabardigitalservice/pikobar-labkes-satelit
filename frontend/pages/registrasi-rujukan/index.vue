@@ -64,7 +64,7 @@
                         wrapper: ['table-responsive'],
                     }
                     }"
-                    :rowtemplate="'tr-data-regis-mandiri'"
+                    :rowtemplate="'tr-data-regis-rujukan'"
                     :columns="{
                       nomor_register: 'Nomor Registrasi',
                       nama_pasien: 'Pasien',

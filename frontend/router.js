@@ -42,7 +42,10 @@ const routes = [
   
   { path: '/registrasi/rujukan', name:'registrasi.rujukan', component: page('registrasi-rujukan/index.vue'), meta: {parentName: 'home'} },
   { path: '/registrasi/rujukan/add/:nomor_sampel', name:'registrasi.rujukan.add', component: page('registrasi-rujukan/add.vue'), meta: {parentName: 'home'} },
+  { path: '/registrasi/rujukan/update/:register_id/:pasien_id', name:'registrasi.rujukan.update', component: page('registrasi-rujukan/update.vue'), meta: {parentName: 'home'} },
+  { path: '/registrasi/rujukan/detail/:register_id/:pasien_id', name:'registrasi.rujukan.detail', component: page('registrasi-rujukan/detail.vue'), meta: {parentName: 'home'} },
   { path: '/registrasi/rujukan/import-excel', name:'registrasi.rujukan.import-excel', component: page('registrasi-rujukan/import-excel.vue'), meta: {parentName: 'registrasi.rujukan'} },
+
 
   { path: '/ekstraksi', name:'ekstraksi.index', component: page('ekstraksi/index.vue'), meta: {parentName: 'home'} },
   { path: '/ekstraksi/detail/:id', name:'ekstraksi.detail', component: page('ekstraksi/detail.vue'), meta: {parentName: 'ekstraksi.index'} },
