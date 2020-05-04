@@ -5,7 +5,7 @@
         </portal>
         <portal to="title-action">
             <div class="title-action">
-                <nuxt-link to="/registrasi/mandiri" class="btn btn-primary">Kembali</nuxt-link>
+                <nuxt-link to="/registrasi/rujukan" class="btn btn-primary">Kembali</nuxt-link>
             </div>
         </portal>
 
@@ -425,7 +425,7 @@
                                 <has-error :form="form" field="reg_keterangan" />
                             </div>
                         </div>
-
+ 
                         <hr />
                         <h4 class="mb-1 mt-0">Riwayat Kunjungan</h4>
                         <p>Isi pada baris yang merupakan kali kunjungan saat ini.</p>

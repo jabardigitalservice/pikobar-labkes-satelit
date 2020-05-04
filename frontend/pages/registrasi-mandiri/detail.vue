@@ -119,6 +119,29 @@
                 </table>
 
               </div>
+
+              <div class="col-md-6">
+                <h3 class="header-title mt-2 mb-2">Riwayat Kunjungan</h3>
+                <table class="table">
+                  <tbody>
+                     <tr>
+                      <td width="40%"><b>Kunjungan Ke</b></td>
+                      <td width="60%">
+                        Ke-{{data?data.kunjungan_ke:null}}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="40%"><b>Tanggal Kunjungan</b></td>
+                      <td width="60%">{{data?data.tanggal_kunjungan:null}}</td>
+                    </tr>
+                     <tr>
+                      <td width="40%"><b>Rumah Sakit / Fasyankes</b></td>
+                      <td width="60%">{{data?data.rs_kunjungan:null}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
             </div>
             </div>
 

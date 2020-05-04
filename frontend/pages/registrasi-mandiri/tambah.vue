@@ -288,236 +288,66 @@
                             </div>
                         </div>
 
+                        <hr />
+                        <h4 class="mb-1 mt-0">Riwayat Kunjungan</h4>
+                        <p>Isi pada baris yang merupakan kali kunjungan saat ini.</p>
+                        <div class="form-group row mt-4" :class="{ 'is-invalid':form.errors.has('reg_kunke') }">
+                            <label class="col-md-2">Kunjungan Ke <span style="color:red;">*</span></label>
+                            <div class="col-md-6">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="kunke1" name="reg_kunke" value="1"
+                                        required v-model="form.reg_kunke">
+                                    <label class="form-check-label" for="kunke1">Ke-1</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="kunke2" name="reg_kunke" value="2"
+                                        v-model="form.reg_kunke">
+                                    <label class="form-check-label" for="kunke2">Ke-2</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="kunke3" name="reg_kunke" value="3"
+                                        v-model="form.reg_kunke">
+                                    <label class="form-check-label" for="kunke3">Ke-3</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="kunke4" name="reg_kunke" value="4"
+                                        v-model="form.reg_kunke">
+                                    <label class="form-check-label" for="kunke4">Ke-4</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="kunke5" name="reg_kunke" value="5"
+                                        v-model="form.reg_kunke">
+                                    <label class="form-check-label" for="kunke5">Ke-5</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="kunke6" name="reg_kunke" value="6"
+                                        v-model="form.reg_kunke">
+                                    <label class="form-check-label" for="kunke6">Ke-6</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="kunke7" name="reg_kunke" value="7"
+                                        v-model="form.reg_kunke">
+                                    <label class="form-check-label" for="kunke7">Ke-7</label>
+                                </div>
+                            </div>
+                        </div>
 
-                        <!-- Bagian Gejala
-                        <hr>
-                        <h4 class="mb-1 mt-0">Gejala</h4>
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">Tanggal onset gejala (panas)</label>
-                            <div class="col-md-6">
-                                <date-picker placeholder="Tanggal Onset Panas" format="d MMMM yyyy"
+                            <div class="col-md-4" :class="{ 'is-invalid':form.errors.has('reg_tanggalkunjungan') }">
+                                <label>Tanggal Kunjungan</label>
+                                <date-picker placeholder="Tanggal Kunjungan" format="d MMMM yyyy"
                                     input-class="form-control" :monday-first="true"
-                                    :wrapper-class="{ 'is-invalid': form.errors.has('reg_onset_panas') }"
-                                    v-model="form.reg_onset_panas" />
+                                    :wrapper-class="{ 'is-invalid': form.errors.has('reg_tanggalkunjungan') }"
+                                    v-model="form.reg_tanggalkunjungan" />
+                                <has-error :form="form" field="reg_tanggalkunjungan" />
+                            </div>
+                            <div class="col-md-6" :class="{ 'is-invalid':form.errors.has('reg_rsfasyankes') }">
+                                <label>Rumah Sakit / Fasyankes</label>
+                                <input class="form-control" type="text" name="reg_rsfasyankes"
+                                    placeholder="Nama RS/Fasyankes" v-model="form.reg_rsfasyankes" />
+                                <has-error :form="form" field="reg_rsfasyankes" />
                             </div>
                         </div>
-                        <div class="form-group row mt-4">
-                            <label class="col-md-2">Panas</label>
-                            <div class="col-md-6">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejpanasya" name="reg_gejpanas"
-                                        value="Ya" v-model="form.reg_gejpanas">
-                                    <label class="form-check-label" for="gejpanasya">Ya</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejpanasno" name="reg_gejpanas"
-                                        value="Tidak" v-model="form.reg_gejpanas">
-                                    <label class="form-check-label" for="gejpanasno">Tidak</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejpanasnull" name="reg_gejpanas"
-                                        value="Tidak Diisi" v-model="form.reg_gejpanas">
-                                    <label class="form-check-label" for="gejpanasnull">Tidak
-                                        Diisi</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row mt-4">
-                            <label class="col-md-2">Tanda Pneumonia</label>
-                            <div class="col-md-6">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejpneumoniaya"
-                                        name="reg_gejpenumonia" value="Ya" v-model="form.reg_gejpenumonia">
-                                    <label class="form-check-label" for="gejpneumoniaya">Ya</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejpneumoniano"
-                                        name="reg_gejpenumonia" value="Tidak" v-model="form.reg_gejpenumonia">
-                                    <label class="form-check-label" for="gejpneumoniano">Tidak</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejpneumonianull"
-                                        name="reg_gejpenumonia" value="Tidak Diisi" v-model="form.reg_gejpenumonia">
-                                    <label class="form-check-label" for="gejpneumonianull">Tidak
-                                        Diisi</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row mt-4">
-                            <label class="col-md-2">Batuk</label>
-                            <div class="col-md-6">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejbatukya" name="reg_gejbatuk"
-                                        value="Ya" v-model="form.reg_gejbatuk">
-                                    <label class="form-check-label" for="gejbatukya">Ya</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejbatukno" name="reg_gejbatuk"
-                                        value="Tidak" v-model="form.reg_gejbatuk">
-                                    <label class="form-check-label" for="gejbatukno">Tidak</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejbatuknull" name="reg_gejbatuk"
-                                        value="Tidak Diisi" v-model="form.reg_gejbatuk">
-                                    <label class="form-check-label" for="gejbatuknull">Tidak
-                                        Diisi</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row mt-4">
-                            <label class="col-md-2">Nyeri Tenggorokan</label>
-                            <div class="col-md-6">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejnyeritenggorokanya"
-                                        name="reg_gejnyeritenggorokan" value="Ya" v-model="form.reg_gejnyeritenggorokan">
-                                    <label class="form-check-label" for="gejnyeritenggorokanya">Ya</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejnyeritenggorokanno"
-                                        name="reg_gejnyeritenggorokan" value="Tidak" v-model="form.reg_gejnyeritenggorokan">
-                                    <label class="form-check-label" for="gejnyeritenggorokanno">Tidak</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejnyeritenggorokannull"
-                                        name="reg_gejnyeritenggorokan" value="Tidak Diisi" v-model="form.reg_gejnyeritenggorokan">
-                                    <label class="form-check-label" for="gejnyeritenggorokannull">Tidak
-                                        Diisi</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row mt-4">
-                            <label class="col-md-2">Sesak Nafas</label>
-                            <div class="col-md-6">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejsesaknafasya"
-                                        name="reg_gejsesaknafas" value="Ya" v-model="form.reg_gejsesaknafas">
-                                    <label class="form-check-label" for="gejsesaknafasya">Ya</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejsesaknafasno"
-                                        name="reg_gejsesaknafas" value="Tidak" v-model="form.reg_gejsesaknafas">
-                                    <label class="form-check-label" for="gejsesaknafasno">Tidak</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejsesaknafasnull"
-                                        name="reg_gejsesaknafas" value="Tidak Diisi" v-model="form.reg_gejsesaknafas">
-                                    <label class="form-check-label" for="gejsesaknafasnull">Tidak
-                                        Diisi</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row mt-4">
-                            <label class="col-md-2">Pilek</label>
-                            <div class="col-md-6">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejpilekya" name="reg_gejpilek"
-                                        value="Ya" v-model="form.reg_gejpilek">
-                                    <label class="form-check-label" for="gejpilekya">Ya</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejpilekno" name="reg_gejpilek"
-                                        value="Tidak" v-model="form.reg_gejpilek">
-                                    <label class="form-check-label" for="gejpilekno">Tidak</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejpileknull" name="reg_gejpilek"
-                                        value="Tidak Disii" v-model="form.reg_gejpilek">
-                                    <label class="form-check-label" for="gejpileknull">Tidak
-                                        Diisi</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row mt-4">
-                            <label class="col-md-2">Lesu</label>
-                            <div class="col-md-6">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejlesuya" name="reg_gejlesu"
-                                        value="Ya" v-model="form.reg_gejlesu">
-                                    <label class="form-check-label" for="gejlesuya">Ya</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejlesuno" name="reg_gejlesu"
-                                        value="Tidak" v-model="form.reg_gejlesu">
-                                    <label class="form-check-label" for="gejlesuno">Tidak</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejlesunull" name="reg_gejlesu"
-                                        value="Tidak Diisi" v-model="form.reg_gejlesu">
-                                    <label class="form-check-label" for="gejlesunull">Tidak
-                                        Diisi</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row mt-4">
-                            <label class="col-md-2">Sakit Kepala</label>
-                            <div class="col-md-6">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejsakitkepalaya"
-                                        name="reg_gejsakitkepala" value="Ya" v-model="form.reg_gejsakitkepala">
-                                    <label class="form-check-label" for="gejsakitkepalaya">Ya</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejsakitkepalano"
-                                        name="reg_gejsakitkepala" value="Tidak" v-model="form.reg_gejsakitkepala">
-                                    <label class="form-check-label" for="gejsakitkepalano">Tidak</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejsakitkepalanull"
-                                        name="reg_gejsakitkepala" value="Tidak Diisi" v-model="form.reg_gejsakitkepala">
-                                    <label class="form-check-label" for="gejsakitkepalanull">Tidak
-                                        Diisi</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row mt-4">
-                            <label class="col-md-2">Diare</label>
-                            <div class="col-md-6">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejdiareya" name="reg_gejdiare"
-                                        value="Ya" v-model="form.reg_gejdiare">
-                                    <label class="form-check-label" for="gejdiareya">Ya</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejdiareno" name="reg_gejdiare"
-                                        value="Tidak" v-model="form.reg_gejdiare">
-                                    <label class="form-check-label" for="gejdiareno">Tidak</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejdiarenull" name="reg_gejdiare"
-                                        value="Tidak Diisi" v-model="form.reg_gejdiare">
-                                    <label class="form-check-label" for="gejdiarenull">Tidak
-                                        Diisi</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row mt-4">
-                            <label class="col-md-2">Mual/Muntah</label>
-                            <div class="col-md-6">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejmualmuntahya"
-                                        name="reg_gejmualmuntah" value="Ya" v-model="form.reg_gejmualmuntah">
-                                    <label class="form-check-label" for="gejmualmuntahya">Ya</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejmualmuntahno"
-                                        name="reg_gejmualmuntah" value="Tidak" v-model="form.reg_gejmualmuntah">
-                                    <label class="form-check-label" for="gejmualmuntahno">Tidak</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="gejmualmuntahnull"
-                                        name="reg_gejmualmuntah" value="Tidak" v-model="form.reg_gejmualmuntah">
-                                    <label class="form-check-label" for="gejmualmuntahnull">Tidak
-                                        Diisi</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label" for="gejlain">Gejala Lainnya
-                                (jelaskan)</label>
-                            <div class="col-md-10">
-                                <textarea class="form-control" rows="3" name="reg_gejlain" id="gejlain" v-model="form.reg_gejlain"></textarea>
-                            </div>
-                        </div> -->
 
                         <div class="form-group row mt-4 text-center justify-content-center">
                             <v-button :loading="form.busy" class="btn btn-md btn-primary block  m-b">
@@ -570,7 +400,10 @@
                     reg_gejdiare:null,
                     reg_gejmualmuntah:null,
                     reg_gejlain:null,
-                    reg_jk:null
+                    reg_jk:null,
+                    reg_tanggalkunjungan: null,
+                    reg_kunke: null,
+                    reg_rsfasyankes: null,
 
                 }),
                 selected_reg: {},
@@ -618,6 +451,10 @@
                     reg_gejmualmuntah:null,
                     reg_gejlain:null,
                     reg_jk:null,
+                    
+                    reg_tanggalkunjungan: null,
+                    reg_kunke: null,
+                    reg_rsfasyankes: null,
                 })
             },
             addSample() {
