@@ -13,7 +13,7 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label>Hasil Pemeriksaan</label>
-                <dynamic-input :form="params1" field="kesimpulan_pemeriksaan" 
+                <dynamic-input :form="params1" field="kesimpulan_pemeriksaan" v-model="params1.kesimpulan_pemeriksaan"
                   :options="[{id: 'positif',name: 'POSITIF'},{id: 'negatif',name: 'NEGATIF'},{id: 'sampel kurang',name: 'SAMPEL KURANG'}]"
                   :hasSemua="true">
                 </dynamic-input>
@@ -22,7 +22,7 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label>Fasyankes</label>
-                <dynamic-input :form="params1" field="fasyankes" 
+                <dynamic-input :form="params1" field="fasyankes" v-model="params1.fasyankes" 
                   :options="listFasyankes"
                   :hasSemua="true">
                 </dynamic-input>
@@ -57,7 +57,7 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label>Kota Domisili</label>
-                <dynamic-input :form="params1" field="kota_domisili" 
+                <dynamic-input :form="params1" field="kota_domisili" v-model="params1.kota_domilisi"
                   :options="listKota"
                   :hasSemua="true">
                 </dynamic-input>
@@ -65,7 +65,7 @@
             </div>
             <div class="col-md-9">
               <button id="btn-export" class="btn btn-primary pull-right mt-4" 
-                @click="onExport('verifikasi')"
+                @click="onExport('verified')"
               >
                 <i class="fa fa-file-excel-o"></i> Export Excel
               </button>
@@ -112,6 +112,8 @@
  
 <script>
 import axios from "axios";
+import Form from "vform";
+
 
 export default {
   middleware: "auth",
@@ -176,5 +178,58 @@ export default {
       this.$bus.$emit("refresh-ajaxtable", "verifikasi");
     },
   },
+  methods: {
+    async onExport(type){
+      try {
+        this.loading = true;
+
+        let form = new Form({...this.params1, type: type})
+
+        axios({
+                url: process.env.apiUrl + "/v1/verifikasi/export-excel",
+                params: form,
+                method: 'GET',
+                responseType: 'blob',
+            }).then((response) => {
+                const blob = new Blob([response.data], {type: response.data.type});
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                const contentDisposition = response.headers['content-disposition'];
+                let fileName = 'hasil-verifikasi.xlsx';
+                if (contentDisposition) {
+                    const fileNameMatch = contentDisposition.match(/filename=(.+)/);
+                    if (fileNameMatch.length === 2)
+                        fileName = fileNameMatch[1];
+                }
+                link.setAttribute('download', fileName);
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                window.URL.revokeObjectURL(url);
+                this.isLoadingExp = false;
+            });
+
+      } catch (err) {
+        if (err.response && err.response.data.code == 422) {
+          this.$nextTick(() => {
+            this.form.errors.set(err.response.data.error);
+          });
+          this.$toast.error("Mohon cek kembali formulir Anda", {
+            icon: "times",
+            iconPack: "fontawesome",
+            duration: 5000
+          });
+        } else {
+          this.$swal.fire(
+            "Terjadi kesalahan",
+            "Silakan hubungi Admin",
+            "error"
+          );
+        }
+      }
+      this.loading = false;
+    }
+  }
 };
 </script>
