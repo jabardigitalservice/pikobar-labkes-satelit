@@ -159,6 +159,11 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             Route::get('noreg','RegisterController@generateNomorRegister');
             Route::get('get-noreg','RegisterController@requestNomor');
+
+            Route::post('import-mandiri', 'ImportRegisterController@importRegisterMandiri');
+
+            Route::post('import-rujukan', 'ImportRegisterController@importRegisterRujukan');
+
             
             Route::group(['prefix'=>'rujukan'], function(){
 
