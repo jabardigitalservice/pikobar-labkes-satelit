@@ -81,6 +81,9 @@
       </div>
     </div>
 
+    <div class="col-lg-12">
+      <filter-registrasi :oid="`registrasi-mandiri`"/>
+    </div>
 
     <div class="col-lg-12">
        <Ibox title="Registrasi Mandiri">
