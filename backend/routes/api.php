@@ -102,6 +102,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::post('/terima', 'EkstraksiController@terima');
         Route::post('/kirim', 'EkstraksiController@kirim');
         Route::post('/kirim-ulang', 'EkstraksiController@kirimUlang');
+        Route::post('/musnahkan/{id}', 'EkstraksiController@musnahkan');
     });
     Route::group(['prefix'=>'pcr'], function(){
         Route::get('/get-data','PCRController@getData');

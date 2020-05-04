@@ -36,6 +36,11 @@ class Sampel extends Model
         'waktu_sample_valid'
     ];
 
+    protected $casts = [
+        'is_musnah_ekstraksi' => 'boolean',
+        'is_musnah_pcr' => 'boolean',
+    ];
+
     public function fasyankes()
     {
         return $this->belongsTo(Fasyankes::class);
@@ -109,6 +114,20 @@ class Sampel extends Model
     public function validFile()
     {
         return $this->belongsTo(File::class, 'valid_file_id');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function($model) {
+            if (empty($model->is_musnah_ekstraksi)) {
+                $model->is_musnah_ekstraksi = false;
+            }
+            if (empty($model->is_musnah_pcr)) {
+                $model->is_musnah_pcr = false;
+            }
+        });
     }
 
 }

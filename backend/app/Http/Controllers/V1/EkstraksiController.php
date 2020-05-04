@@ -50,12 +50,19 @@ class EkstraksiController extends Controller
                         } else {
                             $models->where('sampel_status', $val);
                         }
-                        if ($val == 'extraction_sample_reextract') {
-                            $models->with(['pcr']);
-                        }
-                        if ($val == 'sample_invalid') {
-                            $models->with(['ekstraksi','pcr']);
-                        }
+                        $models->with(['ekstraksi','pcr','status']);
+                        break;
+                    case 'is_musnah_ekstraksi':
+                        $models->where('is_musnah_ekstraksi', $val == 'true' ? true : false);
+                        break;
+                    case 'waktu_extraction_sample_sent':
+                        $tgl = date('Y-m-d', strtotime($val));
+                        $models->whereBetween('waktu_extraction_sample_sent', [$tgl.' 00:00:00',$tgl.' 23:59:59']);
+                        break;
+                    case 'kesimpulan_pemeriksaan':
+                        $models->whereHas('pcr', function($q) use ($val) {
+                            $q->where('kesimpulan_pemeriksaan', $val);
+                        });
                         break;
                     default:
                         break;
@@ -410,6 +417,30 @@ class EkstraksiController extends Controller
         }
         
         return response()->json(['status'=>201,'message'=>'Pengiriman ulang sampel berhasil dicatat']);
+    }
+
+    public function musnahkan(Request $request, $id)
+    {
+        $user = $request->user();
+        $sampel = Sampel::with(['status'])->find($id);
+        if (!$sampel) {
+            return response()->json(['success'=>false,'code'=> 422,'message'=>'Sampel tidak ditemukan'],422);
+        }
+        $ekstraksi = $sampel->ekstraksi;
+        if (!$ekstraksi) {
+            $ekstraksi = new Ekstraksi;
+            $ekstraksi->sampel_id = $sampel->id;
+            $ekstraksi->user_id = $user->id;
+        }
+        $sampel->is_musnah_ekstraksi = true;
+        $sampel->save();
+
+        $sampel->addLog([
+            'user_id' => $user->id,
+            'metadata' => $ekstraksi,
+            'description' => 'Sample marked as destroyed at extraction chamber',
+        ]);
+        return response()->json(['success'=>true,'code'=> 201,'message'=>'Sampel berhasil ditandai telah dimusnahkan']);
     }
 
 }
