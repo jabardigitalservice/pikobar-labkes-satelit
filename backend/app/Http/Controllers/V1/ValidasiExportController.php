@@ -32,23 +32,47 @@ class ValidasiExportController extends Controller
     public function exportExcel(Request $request)
     {
         $request->validate([
-            'start_date'=> 'nullable', // 'date|date_format:Y-m-d',
-            'end_date'=> 'nullable', // 'date|date_format:Y-m-d',
-            'sampel_status'=> 'nullable'
+            'tanggal_registrasi_start'=> 'nullable', // 'date|date_format:Y-m-d',
+            'tanggal_registrasi_end'=> 'nullable', // 'date|date_format:Y-m-d',
+            'kesimpulan_pemeriksaan'=> 'nullable',
+            'fasyankes'=> 'nullable|exists:fasyankes,id',
+            'kota_domisili'=> 'nullable|exists:kota,id',
         ]);
 
         $payload = [];
 
-        if ($request->has('start_date')) {
-            $payload['startDate'] = parseDate($request->input('start_date'));
+        if ($request->has('tanggal_registrasi_start') && $request->input('tanggal_registrasi_start')) {
+            $payload['startDate'] = parseDate($request->input('tanggal_registrasi_start'));
         }
 
-        if ($request->has('end_date')) {
-            $payload['endDate'] = parseDate($request->input('end_date'));
+        if ($request->has('tanggal_registrasi_end') && $request->input('tanggal_registrasi_end')) {
+            $payload['endDate'] = parseDate($request->input('tanggal_registrasi_end'));
         }
 
-        if ($request->has('sampel_status')) {
-            $payload['sampelStatus'] = $request->input('sampel_status');
+        if ($request->has('kesimpulan_pemeriksaan')) {
+            $payload['kesimpulanHasil'] = $request->input('kesimpulan_pemeriksaan');
+        }
+
+        if ($request->has('fasyankes')) {
+            $payload['fasyankes_id'] = $request->input('fasyankes');
+        }
+
+        if ($request->has('kota_domisili')) {
+            $payload['kota_id'] = $request->input('kota_domisili');
+        }
+
+        if ($request->has('kesimpulan_pemeriksaan')) {
+            $payload['kesimpulan_pemeriksaan'] = $request->input('kesimpulan_pemeriksaan');
+        }
+
+        switch ($request->input('type')) {
+            case 'validated':
+                $payload['sampelStatus'] = 'sample_valid';
+                break;
+            
+            default:
+                $payload['sampelStatus'] = 'sample_verified';
+                break;
         }
 
         return (new SampelValidatedExport($payload))->download('sampel-valid-'.time().'.xlsx');
