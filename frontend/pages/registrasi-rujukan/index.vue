@@ -63,7 +63,8 @@
                     has_action: true,
                     has_search_input: true,
                     custom_header: '',
-                    default_sort: 'name',
+                    default_sort: 'created_at',
+                    default_sort_dir:'desc',
                     custom_empty_page: true,
                     class: {
                         table: [],
@@ -75,7 +76,7 @@
                       nomor_register: 'Nomor Registrasi',
                       nama_pasien: 'Pasien',
                       nama_kota: 'Domisili',
-                      dinkes_pengirim: 'Pengirim',
+                      nama_rs: 'Sumber Sampel',
                       no_sampel:'Sampel',
                       tgl_input:'Tanggal Input'
                     }"></ajax-table>

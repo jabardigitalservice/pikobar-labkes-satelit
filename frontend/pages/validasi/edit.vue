@@ -77,7 +77,7 @@
                     <b>Jenis Sampel</b>
                   </td>
                   <td>
-                    {{ data.jenis_sampel }}
+                    {{ data.jenis_sampel_nama }}
                   </td>
                 </tr>
                 <tr>

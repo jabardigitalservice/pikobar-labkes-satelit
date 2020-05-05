@@ -11,7 +11,7 @@
             {{item.nama_kota}}
         </td>
         <td>
-            {{item.dinkes_pengirim}}
+            {{item.nama_rs=="Other"?item.other_nama_rs:item.nama_rs}}
         </td>
         <td width="10%">
             <div class="badge badge-success mr-2" style="text-align:left;margin-bottom:10px" v-for="s in item.samples" :key="s"># {{s.nomor_sampel}} <br>

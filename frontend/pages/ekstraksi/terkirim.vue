@@ -95,7 +95,7 @@
             :columns="{
                       nomor_register: 'Nomor Register',
                       nomor_sampel : 'Nomor Sampel',
-                      jenis_sampel : 'Jenis Sampel',
+                      jenis_sampel_nama : 'Jenis Sampel',
                       lab_pcr_nama : 'Lab PCR',
                       waktu_extraction_sample_sent: 'Ekstraksi dikirim pada',
                       sampel_status : 'Status',

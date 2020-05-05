@@ -53,10 +53,14 @@ class RegistrasiMandiri extends Controller
                         $models = $models->where('register.sumber_pasien',$val);
                     break;
                     case "sumber_sampel":
-                        $sampel = PengambilanSampel::where('sumber_sampel',$val)
-                                ->leftJoin('sampel','sampel.pengambilan_sampel_id','pengambilan_sampel.id')->pluck('sampel.nomor_register');
-                        // $sampel = Sampel::where('sumber_sampel',$val)->pluck('register_id');
-                        $models = $models->whereIn('register.nomor_register',$sampel);
+                        $models = $models->where('register.nama_rs',$val);
+                        // $sampel = PengambilanSampel::where('sumber_sampel',$val)
+                        //         ->leftJoin('sampel','sampel.pengambilan_sampel_id','pengambilan_sampel.id')->pluck('sampel.nomor_register');
+                        // // $sampel = Sampel::where('sumber_sampel',$val)->pluck('register_id');
+                        // $models = $models->whereIn('register.nomor_register',$sampel);
+                    break;
+                    case "other_nama_rs":
+                        $models = $models->where('register.other_nama_rs','ilike','%'.$val.'%');
                     break;
                     case "kota":
                         $models = $models->where('kota.id',$val);
@@ -95,6 +99,9 @@ class RegistrasiMandiri extends Controller
                 case 'sumber_pasien':
                     $models = $models->orderBy('register.sumber_pasien',$order_direction);
                 break;
+                case 'nama_rs':
+                    $models = $modelss->orderBy('register.nama_rs',$order_direction);
+                break;
                 case 'no_sampel':
                 break;
                 default:
@@ -103,7 +110,8 @@ class RegistrasiMandiri extends Controller
         }
         $models = $models->select('register.nomor_register','pasien.*','kota.nama as nama_kota',
         'register.created_at as tgl_input','pasien_register.*','register.sumber_pasien',
-        'register.jenis_registrasi','register.dinkes_pengirim','pasien.sumber_pasien');
+        'register.jenis_registrasi','register.dinkes_pengirim','pasien.sumber_pasien','register.nama_rs',
+        'register.other_nama_rs');
         $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
 
         foreach($models as &$model) {

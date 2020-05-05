@@ -159,7 +159,7 @@ export default {
   }),
   data() {
     return {
-      params1: {
+      params1: { 
         sampel_status: "waiting_sample"
       },
       params2: {

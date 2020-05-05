@@ -32,7 +32,8 @@
                     has_action: true,
                     has_search_input: true,
                     custom_header: '',
-                    default_sort: 'name',
+                    default_sort: 'created_at',
+                    default_sort_dir:'desc',
                     custom_empty_page: true,
                     class: {
                         table: [],
