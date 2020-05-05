@@ -11,14 +11,19 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
-class SampelVerifiedExport implements FromQuery, 
+class SampelVerifiedExport extends DefaultValueBinder implements FromQuery, 
     WithStrictNullComparison, 
     ShouldAutoSize,
-    WithHeadings
+    WithHeadings,
+    WithCustomValueBinder
 {
     use Exportable;
 
@@ -127,9 +132,10 @@ class SampelVerifiedExport implements FromQuery,
             })
             ->leftJoin('pasien', 'tabel_pasien_register.pasien_id', 'pasien.id')
             ->leftJoin('kota', 'pasien.kota_id', 'kota.id')
-            ->orderBy('pemeriksaansampel.tanggal_input_hasil', 'desc')
+            ->orderBy('sampel.id')
+            // ->orderBy('pemeriksaansampel.tanggal_input_hasil', 'desc')
             ->select([
-                DB::raw('ROW_NUMBER() OVER() AS Row'),
+                DB::raw('ROW_NUMBER() OVER(ORDER BY sampel.id) AS Row'),
                 'register.nomor_register',
                 'pasien.nama_lengkap',
                 'pasien.nik',
@@ -173,6 +179,18 @@ class SampelVerifiedExport implements FromQuery,
             'Tanggal Diverifikasi',
             'Sumber Pasien',
         ];
+    }
+
+    public function bindValue(Cell $cell, $value)
+    {
+        if (is_numeric($value) && (strlen($value) > 7)) {
+            $cell->setValueExplicit($value, DataType::TYPE_STRING);
+
+            return true;
+        }
+
+        // else return default behavior
+        return parent::bindValue($cell, $value);
     }
 
     // $pemeriksaanTerbaru = PemeriksaanSampel::query()->select([

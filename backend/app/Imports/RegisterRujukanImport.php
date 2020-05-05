@@ -6,6 +6,7 @@ use App\Models\Kota;
 use App\Models\Pasien;
 use App\Models\Register;
 use App\Models\Sampel;
+use App\Traits\RegisterTrait;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -13,14 +14,16 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class RegisterRujukanImport implements ToCollection, WithHeadingRow
 {
+    use RegisterTrait;
+
     public function collection(Collection $rows)
     {
 
-        $lastRegister = Register::query()->orderBy('id', 'desc')->first();
-        $lengthNumber = $lastRegister ? (strlen($lastRegister->nomor_register) - 9 ): null;
-        $counterNomorRegister = $lastRegister ? ((int) substr($lastRegister->nomor_register, 9, $lengthNumber) + 1) : 1;
+        // $lastRegister = Register::query()->orderBy('id', 'desc')->first();
+        // $lengthNumber = $lastRegister ? (strlen($lastRegister->nomor_register) - 9 ): null;
+        // $counterNomorRegister = $lastRegister ? ((int) substr($lastRegister->nomor_register, 9, $lengthNumber) + 1) : 1;
 
-        $omgRegisterId = $lastRegister ? (++$lastRegister->id) : 1;
+        // $omgRegisterId = $lastRegister ? (++$lastRegister->id) : 1;
 
         DB::beginTransaction();
         try {
@@ -32,11 +35,12 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
                 }
 
                 $register = Register::create([
-                    'id'=> $omgRegisterId,
+                    // 'id'=> $omgRegisterId,
                     'sumber_pasien'=> $row->get('sumber_pasien'),
                     'register_uuid'=> (string) \Illuminate\Support\Str::uuid(),
                     'jenis_registrasi'=> 'rujukan',
-                    'nomor_register'=> "20200425L" . str_pad($counterNomorRegister, 4, "0", STR_PAD_LEFT),
+                    'nomor_register'=> $this->generateNomorRegister(null, 'rujukan'),
+                    // 'nomor_register'=> "20200425L" . str_pad($counterNomorRegister, 4, "0", STR_PAD_LEFT),
                     'creator_user_id' => auth()->user()->id,
 
                 ]);
@@ -74,11 +78,13 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
 
                     abort_if(!$sampel, 422, "Gagal import. Sampel dengan nomor {$nomor} tidak ditemukan");
 
+                    abort_if($sampel->register_id, 422, "Gagal import. Sampel dengan nomor {$nomor} sudah memiliki data pasien.");
+
                     $register->sampel()->save($sampel);
                 }
 
-                $counterNomorRegister++;
-                $omgRegisterId++;
+                // $counterNomorRegister++;
+                // $omgRegisterId++;
             }
 
 

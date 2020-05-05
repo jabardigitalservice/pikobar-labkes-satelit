@@ -6,6 +6,7 @@ use App\Models\Kota;
 use App\Models\Pasien;
 use App\Models\Register;
 use App\Models\Sampel;
+use App\Traits\RegisterTrait;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -13,15 +14,16 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class RegisterMandiriImport implements ToCollection, WithHeadingRow
 {
+    use RegisterTrait;
 
     public function collection(Collection $rows)
     {
 
-        $lastRegister = Register::query()->orderBy('id', 'desc')->first();
-        $lengthNumber = $lastRegister ? (strlen($lastRegister->nomor_register) - 9 ): null;
-        $counterNomorRegister = $lastRegister ? ((int) substr($lastRegister->nomor_register, 9, $lengthNumber) + 1) : 1;
+        // $lastRegister = Register::query()->orderBy('id', 'desc')->first();
+        // $lengthNumber = $lastRegister ? (strlen($lastRegister->nomor_register) - 9 ): null;
+        // $counterNomorRegister = $lastRegister ? ((int) substr($lastRegister->nomor_register, 9, $lengthNumber) + 1) : 1;
 
-        $omgRegisterId = $lastRegister ? (++$lastRegister->id) : 1;
+        // $omgRegisterId = $lastRegister ? (++$lastRegister->id) : 1;
 
         DB::beginTransaction();
         try {
@@ -33,11 +35,12 @@ class RegisterMandiriImport implements ToCollection, WithHeadingRow
                 }
 
                 $register = Register::create([
-                    'id'=> $omgRegisterId,
+                    // 'id'=> $omgRegisterId,
                     'sumber_pasien'=> $row->get('sumber_pasien'),
                     'register_uuid'=> (string) \Illuminate\Support\Str::uuid(),
                     'jenis_registrasi'=> 'mandiri',
-                    'nomor_register'=> "20200425L" . str_pad($counterNomorRegister, 4, "0", STR_PAD_LEFT),
+                    'nomor_register'=> $this->generateNomorRegister(),
+                    // 'nomor_register'=> "20200425L" . str_pad($counterNomorRegister, 4, "0", STR_PAD_LEFT),
                     'creator_user_id' => auth()->user()->id,
 
                 ]);
@@ -72,8 +75,12 @@ class RegisterMandiriImport implements ToCollection, WithHeadingRow
                 foreach ($nomorSampels as $key => $nomor) {
                     $sampelData = [
                         'nomor_sampel'=> $nomor,
+                        'nomor_register'=> $register->getAttribute('nomor_register'),
+                        // 'register_id'=> $register->getAttribute('id'),
+                        'jenis_sampel_id',
                         'sampel_status'=> 'waiting_sample',
-                        'creator_user_id'=>auth()->user()->id
+                        'creator_user_id'=> auth()->user()->id,
+                        'waktu_waiting_sample'=> now()
                     ];
 
                     $sampel = Sampel::query()->updateOrCreate(
@@ -84,8 +91,8 @@ class RegisterMandiriImport implements ToCollection, WithHeadingRow
                     $register->sampel()->save($sampel);
                 }
 
-                $counterNomorRegister++;
-                $omgRegisterId++;
+                // $counterNomorRegister++;
+                // $omgRegisterId++;
             }
 
 

@@ -11,7 +11,6 @@ class Register extends Model
     protected $table = 'register';
 
     protected $fillable = [
-        'id',
         'nomor_register',
         'fasyankes_id',
         'nomor_rekam_medis',
