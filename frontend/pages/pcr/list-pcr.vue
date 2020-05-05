@@ -52,7 +52,7 @@
             :columns="{
                       nomor_register: 'Nomor Register',
                       nomor_sampel : 'Nomor Sampel',
-                      jenis_sampel : 'Jenis Sampel',
+                      jenis_sampel_nama : 'Jenis Sampel',
                       waktu_pcr_sample_received:'Waktu Diterima',
                     }"
           ></ajax-table>

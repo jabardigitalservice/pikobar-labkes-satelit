@@ -3,7 +3,7 @@
     <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
     <td>{{item.nomor_register}}</td>
     <td>{{item.nomor_sampel}}</td>
-    <td>{{item.jenis_sampel}}</td>
+    <td>{{item.jenis_sampel_nama}}</td>
     <td>{{item.lab_pcr_nama}}</td>
     <td>{{ item.waktu_extraction_sample_sent | formatDateTime }}</td>
     <td>

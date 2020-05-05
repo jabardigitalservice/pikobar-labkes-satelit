@@ -8,7 +8,7 @@
             {{item.nomor_sampel}}
         </td>
         <td>
-            {{item.jenis_sampel}}
+            {{item.jenis_sampel_nama}}
         </td>
         <td>
             {{ item.waktu_pcr_sample_received | formatDateTime }}
