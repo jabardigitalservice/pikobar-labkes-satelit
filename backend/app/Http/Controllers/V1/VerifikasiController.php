@@ -228,15 +228,17 @@ class VerifikasiController extends Controller
      */
     public function show(Sampel $sampel)
     {
-        $result = $sampel->load(['pemeriksaanSampel', 'status'])->toArray();
-        $pasien = optional($sampel->register->pasiens())->first();
+        $result = $sampel->load(['pemeriksaanSampel', 'status', 'register'])->toArray();
+        $pasien = optional($sampel->register->pasiens()->with(['kota']))->first();
+        $fasyankes = $sampel->register->fasyankes;
 
         return response()->json([
             'status'=>200,
             'message'=>'success',
             'data'=> $result + [
                 'pasien'=> optional($pasien)->toArray(),
-                'last_pemeriksaan_sampel'=> $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first()
+                'last_pemeriksaan_sampel'=> $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first(),
+                'fasyankes'=> $fasyankes
             ]
         ]);
     }

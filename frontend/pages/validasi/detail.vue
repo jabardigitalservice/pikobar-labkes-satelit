@@ -27,6 +27,33 @@
 
                   <tr>
                     <td width="30%" align="right">
+                      <b>Nomor Sampel</b>
+                    </td>
+                    <td width="60%">
+                      <span>{{data.nomor_sampel}}</span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td width="30%" align="right">
+                      <b>Sumber Pasien</b>
+                    </td>
+                    <td width="60%">
+                      <span>{{data.register.sumber_pasien}}</span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td width="30%" align="right">
+                      <b>Fasyankes</b>
+                    </td>
+                    <td width="60%">
+                      <span v-if="data.fasyankes">{{data.fasyankes.nama}}</span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td width="30%" align="right">
                       <b>Pasien</b>
                     </td>
                     <td width="60%">
@@ -43,10 +70,35 @@
                   </tr>
                   <tr>
                     <td width="30%" align="right">
-                      <b>Tanggal Lahir Pasien</b>
+                      <b>Tempat, Tanggal Lahir Pasien</b>
                     </td>
                     <td width="60%">
-                      <span>{{data.pasien.tanggal_lahir | formatDate }}</span>
+                      <span>{{ data.pasien.tempat_lahir }} {{data.pasien.tanggal_lahir | formatDate }} - {{ umurPasien }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="30%" align="right">
+                      <b>Jenis Kelamin</b>
+                    </td>
+                    <td width="60%">
+                      <span v-if="data.pasien.jenis_kelamin === 'L'">Laki - laki</span>
+                      <span v-if="data.pasien.jenis_kelamin === 'P'">Perempuan</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="30%" align="right">
+                      <b>Asal</b>
+                    </td>
+                    <td width="60%">
+                      <span v-if="data.pasien.kota">{{ data.pasien.kota.nama }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="30%" align="right">
+                      <b>Alamat</b>
+                    </td>
+                    <td width="60%">
+                      <span>{{ data.pasien.alamat_lengkap }}</span>
                     </td>
                   </tr>
                   <tr>
@@ -60,19 +112,26 @@
                   </tr>
                   <tr>
                     <td width="30%" align="right">
-                      <b>Alamat</b>
+                      <b>Tipe Sampel</b>
                     </td>
                     <td width="60%">
-                      <span v-if="data.pasien.alamat">{{data.pasien.alamat }}</span>
+                      <span>{{ data.jenis_sampel }}</span>
                     </td>
                   </tr>
-
                   <tr>
                     <td width="30%" align="right">
-                      <b>Nomor Sampel</b>
+                      <b>Tanggal Registrasi</b>
                     </td>
                     <td width="60%">
-                      <span>{{data.nomor_sampel}}</span>
+                      <span>{{ data.register.created_at | formatDate }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="30%" align="right">
+                      <b>Tanggal Periksa / Lapor</b>
+                    </td>
+                    <td width="60%">
+                      <span>{{ data.register.tanggal_kunjungan | formatDate }}</span>
                     </td>
                   </tr>
 
@@ -236,6 +295,28 @@ export default {
     }
 
     return { data };
+  },
+  computed: {
+    umurPasien(){
+      if (this.data.pasien) {
+        let tglLahir = new Date(this.data.pasien.tanggal_lahir);
+            let today_date = new Date();
+            let today_year = today_date.getFullYear();
+            let today_month = today_date.getMonth();
+            let today_day = today_date.getDate();
+
+            var age = today_date.getFullYear() - tglLahir.getFullYear();
+            var m = today_date.getMonth() - tglLahir.getMonth();
+            if (m < 0 || (m === 0 && today_date.getDate() < tglLahir.getDate())) 
+            {
+                age--;
+            }
+
+            return `Usia: ${age} tahun`
+      }
+
+      return '';
+    }
   },
   head() {
     return {
