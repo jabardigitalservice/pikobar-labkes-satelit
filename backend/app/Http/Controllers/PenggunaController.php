@@ -11,7 +11,7 @@ class PenggunaController extends Controller
 
     public function listPengguna(Request $request)
     {
-        $models = User::with('roles');
+        $models = User::with(['roles','lab_pcr','validator']);
         $params = $request->get('params',false);
         $search = $request->get('search',false);
         $order  = $request->get('order','name');
@@ -63,6 +63,8 @@ class PenggunaController extends Controller
         $user->email = $request->get('email');
         $user->name = $request->get('name');
         $user->role_id = $request->get('role_id');
+        $user->lab_pcr_id = $request->get('lab_pcr_id');
+        $user->validator_id = $request->get('validator_id');
         $user->save();
         
         return response()->json(['status'=>201,'message'=>'Berhasil menambahkan pengguna','result'=>[]]);
@@ -105,6 +107,8 @@ class PenggunaController extends Controller
         $user->username = $request->get('username');
         $user->email =  $request->get('email');
         $user->role_id = $request->get('role_id');
+        $user->lab_pcr_id = $request->get('lab_pcr_id');
+        $user->validator_id = $request->get('validator_id');
         if (!empty($user->password)) {
             $user->password = bcrypt($request->get('password'));
         }

@@ -3,12 +3,14 @@ import axios from 'axios'
 // state
 export const state = () => ({
   lab_pcr: [],
+  validator: [],
   jenis_sampel: [],
 })
 
 // getters
 export const getters = {
   lab_pcr: state => state.lab_pcr,
+  validator: state => state.validator,
   jenis_sampel: state => state.jenis_sampel,
 }
 
@@ -20,6 +22,13 @@ export const mutations = {
   },
 
   FETCH_LAB_PCR_FAILURE (state) {
+  },
+
+  FETCH_VALIDATOR_SUCCESS (state, validator) {
+    state.validator = validator
+  },
+
+  FETCH_VALIDATOR_FAILURE (state) {
   },
 
   FETCH_JENIS_SAMPEL_SUCCESS (state, jenis_sampel) {
@@ -45,6 +54,20 @@ export const actions = {
         duration: 5000
       });
       commit('FETCH_LAB_PCR_FAILURE')
+    }
+  },
+  async fetchValidator ({ commit }) {
+    try {
+      let resp = await axios.get('/validator-option')
+
+      commit('FETCH_VALIDATOR_SUCCESS', resp.data)
+    } catch (e) {
+      this.$toast.error("Gagal memuat data opsi validator", {
+        icon: "times",
+        iconPack: "fontawesome",
+        duration: 5000
+      });
+      commit('FETCH_VALIDATOR_FAILURE')
     }
   },
   async fetchJenisSampel ({ commit }) {

@@ -66,6 +66,30 @@
                             </div>
                         </div>
 
+                        <div class="form-group row" v-if="form.role_id == 5">
+                            <label class="col-md-3 col-form-label text-md-right">Lab PCR</label>
+                            <div class="col-md-7">
+                                <select class="form-control" v-model="form.lab_pcr_id"
+                                    :class="{ 'is-invalid': errors.lab_pcr_id!=null }">
+                                    <option :value="item.id" :key="item.id" v-for="item in lab_pcr">{{item.text}}
+                                    </option>
+                                </select>
+                                <p class="text-danger" v-if="errors.lab_pcr_id">{{errors.lab_pcr_id[0]}}</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row" v-if="form.role_id == 7">
+                            <label class="col-md-3 col-form-label text-md-right">Sebagai Validator</label>
+                            <div class="col-md-7">
+                                <select class="form-control" v-model="form.validator_id"
+                                    :class="{ 'is-invalid': errors.validator_id!=null }">
+                                    <option :value="item.id" :key="item.id" v-for="item in validator">{{item.text}}
+                                    </option>
+                                </select>
+                                <p class="text-danger" v-if="errors.validator_id">{{errors.validator_id[0]}}</p>
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <div class="col-md-7 offset-md-3 d-flex">
                                 <!-- Submit Button -->
@@ -89,11 +113,25 @@
     // Vue.component(HasError.name, HasError)
     // Vue.component(AlertError.name, AlertError)
     import axios from 'axios'
+    import { mapGetters } from "vuex";
 
     export default {
         middleware: ['auth', 'checkrole'],
         meta: {
             allow_role_id: [1]
+        },
+        computed: mapGetters({
+            validator: "options/validator",
+            lab_pcr: "options/lab_pcr",
+        }),
+        async asyncData({store}) {
+            if (!store.getters['options/lab_pcr'].length) {
+                await store.dispatch('options/fetchLabPCR')
+            }
+            if (!store.getters['options/validator'].length) {
+                await store.dispatch('options/fetchValidator')
+            }
+            return {}
         },
         data: () => ({
             roles: [],
@@ -103,6 +141,8 @@
                 email: '',
                 username: '',
                 role_id: '',
+                lab_pcr_id: '',
+                validator_id: '',
                 password: '',
                 password_confirmation: ''
             }),

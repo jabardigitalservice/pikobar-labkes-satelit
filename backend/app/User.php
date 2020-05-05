@@ -110,4 +110,14 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     {
         return $this->belongsTo('App\Role','role_id','id');
     }
+
+    public function lab_pcr()
+    {
+        return $this->belongsTo('App\Models\LabPCR','lab_pcr_id','id');
+    }
+
+    public function validator()
+    {
+        return $this->belongsTo('App\Models\Validator','validator_id','id');
+    }
 }

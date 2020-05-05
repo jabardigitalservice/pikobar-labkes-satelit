@@ -66,6 +66,30 @@
                             </div>
                         </div>
 
+                        <div class="form-group row" v-if="form.role_id == 5">
+                            <label class="col-md-3 col-form-label text-md-right">Lab PCR</label>
+                            <div class="col-md-7">
+                                <select class="form-control" v-model="form.lab_pcr_id"
+                                    :class="{ 'is-invalid': errors.lab_pcr_id!=null }">
+                                    <option :value="item.id" :key="item.id" v-for="item in lab_pcr">{{item.text}}
+                                    </option>
+                                </select>
+                                <p class="text-danger" v-if="errors.lab_pcr_id">{{errors.lab_pcr_id[0]}}</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row" v-if="form.role_id == 7">
+                            <label class="col-md-3 col-form-label text-md-right">Sebagai Validator</label>
+                            <div class="col-md-7">
+                                <select class="form-control" v-model="form.validator_id"
+                                    :class="{ 'is-invalid': errors.validator_id!=null }">
+                                    <option :value="item.id" :key="item.id" v-for="item in validator">{{item.text}}
+                                    </option>
+                                </select>
+                                <p class="text-danger" v-if="errors.validator_id">{{errors.validator_id[0]}}</p>
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <div class="col-md-7 offset-md-3 d-flex">
                                 <!-- Submit Button -->
@@ -91,47 +115,58 @@
     // Vue.component(HasError.name, HasError)
     // Vue.component(AlertError.name, AlertError)
     import axios from 'axios'
+    import { mapGetters } from "vuex";
 
     export default {
         middleware: ['auth', 'checkrole'],
         meta: {
             allow_role_id: [1]
         },
+        computed: {
+            ...mapGetters({
+                validator: "options/validator",
+                lab_pcr: "options/lab_pcr",
+            }),
+            id_user() {
+                return this.$route.params.id;
+            },
+        },
+        async asyncData({store, route}) {
+            var f1, f2, f3, f4
+            if (!store.getters['options/lab_pcr'].length) {
+                f1 = store.dispatch('options/fetchLabPCR')
+            }
+            console.log(store.getters['options/validator'])
+            if (!store.getters['options/validator'].length) {
+                f2 = store.dispatch('options/fetchValidator')
+            }
+            f3 = axios.get('/roles-option')
+            f4 = axios.get('/pengguna/' + route.params.id)
+            await f1
+            await f2
+            let data = (await f4).data.result
+            return {
+                roles: (await f3).data,
+                form: new Form({
+                    name: data.name,
+                    email: data.email,
+                    username: data.username,
+                    role_id: data.role_id,
+                    lab_pcr_id: data.lab_pcr_id,
+                    validator_id: data.validator_id,
+                    password: '',
+                }),
+            }
+        },
         data: () => ({
             roles: [],
             errors: [],
-            form: new Form({
-                name: '',
-                email: '',
-                username: '',
-                role_id: '',
-                password: '',
-            }),
         }),
 
-        computed: {
-            id_user() {
-                return this.$route.params.id;
-            }
-        },
-
         created() {
-            this.getRoles();
-            this.getData();
-            console.log(this.id_user);
         },
 
         methods: {
-            async getRoles() {
-                let resp = await axios.get('/roles-option')
-                this.roles = resp.data
-            },
-
-            async getData() {
-                let resp = await axios.get('/pengguna/' + this.id_user)
-                this.form = resp.data.result;
-            },
-
             async submitForm() {
                 // Tambah User
                 await axios.post('/pengguna/' + this.id_user, this.form)
