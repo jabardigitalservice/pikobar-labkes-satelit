@@ -44,7 +44,7 @@
                 <td width="10%">:</td>
                 <td width="60%">
                     @if ($pasien)
-                        <span>{{$pasien['nama_depan']}} {{$pasien['nama_belakang']}}</span>
+                        <span>{{$pasien['nama_lengkap']}}</span>
                     @endif
                 </td>
               </tr>

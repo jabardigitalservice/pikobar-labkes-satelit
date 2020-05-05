@@ -28,7 +28,7 @@ class ValidatorSeeder extends Seeder
                 "nip"=> "198205072009021004",
                 "is_active"=> true,
             ],[
-                "nama" => "dr. CUT NU CINTHIA ALAMANDA, Sp.PK., M.Kes",
+                "nama" => "dr. CUT NUR CINTHIA ALAMANDA, Sp.PK., M.Kes",
                 "nip"=> "197409062014122001",
                 "is_active"=> true,
             ]
