@@ -23,9 +23,8 @@ class SampelValidatedExport extends DefaultValueBinder implements FromQuery,
     WithStrictNullComparison, 
     ShouldAutoSize,
     WithHeadings,
-    WithCustomValueBinder
-    // WithColumnFormatting,
-    // WithMapping
+    WithCustomValueBinder,
+    WithMapping
 {
     use Exportable;
 
@@ -76,45 +75,8 @@ class SampelValidatedExport extends DefaultValueBinder implements FromQuery,
     */
     public function query()
     {
-        $pasienRegisterSubQuery = DB::table('pasien_register')
-            ->select(['register_id', 'pasien_id'])
-            ->groupBy(['register_id', 'pasien_id']);
-
-        $query = PemeriksaanSampel::query()
-            ->join('sampel', 'pemeriksaansampel.sampel_id', 'sampel.id')
-            ->join('register', 'sampel.register_id', 'register.id')
-            ->leftJoinSub(
-                $pasienRegisterSubQuery,
-                'tabel_pasien_register',
-                function($join){
-                    $join->on('register.id', 'tabel_pasien_register.register_id');
-            })
-            ->leftJoin('pasien', 'tabel_pasien_register.pasien_id', 'pasien.id')
-            ->leftJoin('kota', 'pasien.kota_id', 'kota.id')
-            ->orderBy('sampel.id')
-            // ->orderBy('pemeriksaansampel.tanggal_input_hasil', 'desc')
-            ->select([
-                DB::raw('ROW_NUMBER() OVER(ORDER BY sampel.id) AS Row'),
-                'register.nomor_register',
-                // DB::raw("CONCAT(pasien.nama_depan,' ',pasien.nama_belakang) AS nama_lengkap"),
-                // DB::raw("pasien.no_ktp::varchar"),
-                'pasien.nama_lengkap',
-                DB::raw("pasien.nik::varchar"), // DB::raw('CONCAT("\'",pasien.nik) AS nik'),
-                'pasien.tanggal_lahir',
-                'pasien.tempat_lahir',
-                'pasien.jenis_kelamin',
-                'pasien.alamat_lengkap',
-                'pasien.no_telp',
-                'pasien.no_hp',
-                DB::raw('kota.nama AS nama_kota'),
-                'sampel.nomor_sampel',
-                'pemeriksaansampel.kesimpulan_pemeriksaan',
-                'pemeriksaansampel.tanggal_input_hasil',
-                'sampel.waktu_sample_verified',
-                'register.sumber_pasien',
-
-            ])
-            ->where('sampel.sampel_status', $this->sampelStatus);
+        
+        $query = $this->queryFromPemeriksaan()->where('sampel.sampel_status', $this->sampelStatus);
 
             if ($this->startDate) {
                 $query->where('register.created_at', '>=', $this->startDate);
@@ -140,25 +102,75 @@ class SampelValidatedExport extends DefaultValueBinder implements FromQuery,
 
     }
 
+    public function queryFromPemeriksaan()
+    {
+        $pasienRegisterSubQuery = DB::table('pasien_register')
+            ->select(['register_id', 'pasien_id'])
+            ->groupBy(['register_id', 'pasien_id']);
+
+        return PemeriksaanSampel::query()
+            ->join('sampel', 'pemeriksaansampel.sampel_id', 'sampel.id')
+            ->join('register', 'sampel.register_id', 'register.id')
+            ->leftJoinSub(
+                $pasienRegisterSubQuery,
+                'tabel_pasien_register',
+                function($join){
+                    $join->on('register.id', 'tabel_pasien_register.register_id');
+            })
+            ->leftJoin('pasien', 'tabel_pasien_register.pasien_id', 'pasien.id')
+            ->leftJoin('kota', 'pasien.kota_id', 'kota.id')
+            ->leftJoin('fasyankes', 'register.fasyankes_id', 'fasyankes.id')
+            ->orderBy('sampel.id')
+            // ->orderBy('pemeriksaansampel.tanggal_input_hasil', 'desc')
+            ->select([
+                DB::raw('ROW_NUMBER() OVER(ORDER BY sampel.id) AS nomor_urut'),
+                'register.nomor_register',
+                'pasien.nama_lengkap',
+                DB::raw("pasien.nik::varchar"),
+                'pasien.tanggal_lahir',
+                'pasien.tempat_lahir',
+                'pasien.jenis_kelamin',
+                'pasien.alamat_lengkap',
+                'pasien.no_telp',
+                'pasien.no_hp',
+                DB::raw('kota.nama AS nama_kota'),
+                'sampel.nomor_sampel',
+                'pemeriksaansampel.kesimpulan_pemeriksaan',
+                'pemeriksaansampel.tanggal_input_hasil',
+                'sampel.waktu_sample_verified',
+                'register.sumber_pasien',
+                DB::raw('fasyankes.nama AS nama_fasyankes'),
+                DB::raw("DATE_PART('year', age(pasien.tanggal_lahir)) as umur_pasien"),
+                'sampel.jenis_sampel_nama',
+                DB::raw('register.created_at as tanggal_registrasi'),
+                'sampel.lab_pcr_nama',
+                'register.tanggal_kunjungan'
+            ]);
+    }
+
     public function headings(): array
     {
         return [
             'No.',
+            // 'Hari, Tanggal', ????
             'Nomor Registrasi',
+            'No. Sampel',
+            'Sumber Pasien',
+            'Nama Fasyankes',
             'Nama Pasien',
             'NIK',
+            'Umur',
             'Tanggal Lahir',
             'Tempat Lahir',
             'Jenis Kelamin',
+            'Asal',
+            'No. Telp / HP',
             'Alamat',
-            'No. Telp',
-            'No. HP',
-            'Domisili',
-            'No. Sampel',
+            'Tipe Sampel',
             'Hasil Pemeriksaan',
-            'Tanggal Input Hasil',
-            'Tanggal Diverifikasi',
-            'Sumber Pasien'
+            'Lab PCR',
+            'Tanggal Registrasi',
+            'Tanggal Periksa/Lapor',
         ];
     }
 
@@ -174,34 +186,33 @@ class SampelValidatedExport extends DefaultValueBinder implements FromQuery,
         return parent::bindValue($cell, $value);
     }
 
-    // public function columnFormats(): array
-    // {
-    //     return [
-    //         'D' => NumberFormat::FORMAT_TEXT,
-    //     ];
-    // }
+    public function map($register): array
+    {
+        // Date::dateTimeToExcel($register->tanggal_lahir)
+        return [
+            $register->nomor_urut,
+            $register->nomor_register,
+            $register->nomor_sampel, // ? "'" . $register->nomor_sampel : "",
+            $register->sumber_pasien,
+            $register->nama_fasyankes,
+            $register->nama_lengkap,
+            $register->nik, // ? "'" . $register->nik : "",
+            $register->umur_pasien,
+            $register->tanggal_lahir,
+            $register->tempat_lahir,
+            $register->jenis_kelamin,
+            $register->nama_kota,
+            ($register->no_telp || $register->no_hp) ? $register->no_telp .' HP. '.$register->no_hp : '',
+            $register->alamat_lengkap,
+            $register->jenis_sampel_nama,
+            $register->kesimpulan_pemeriksaan,
+            $register->lab_pcr_nama,
+            $register->tanggal_registrasi,
+            $register->tanggal_kunjungan,
+            // $register->waktu_sample_verified,
+        ];
+    }
 
-    // public function map($register): array
-    // {
-    //     // Date::dateTimeToExcel($register->tanggal_lahir)
-    //     return [
-    //         $register->nomor_urut,
-    //         $register->nomor_register,
-    //         $register->nama_lengkap,
-    //         $register->nik ? "'" . $register->nik : "",
-    //         $register->tanggal_lahir,
-    //         $register->tempat_lahir,
-    //         $register->jenis_kelamin,
-    //         $register->alamat_lengkap,
-    //         $register->no_telp,
-    //         $register->no_hp,
-    //         $register->nama_kota,
-    //         $register->nomor_sampel ? "'" . $register->nomor_sampel : "",
-    //         $register->kesimpulan_pemeriksaan,
-    //         $register->tanggal_input_hasil,
-    //         $register->waktu_sample_verified,
-    //         $register->sumber_pasien,
-    //     ];
-    // }
+    
 
 }
