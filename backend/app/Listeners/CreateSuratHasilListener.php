@@ -93,8 +93,8 @@ class CreateSuratHasilListener
         $data['last_pemeriksaan_sampel'] = $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first();
         $data['kop_surat'] = $this->getKopSurat();
         $data['tanggal_validasi'] = $this->formatTanggalValid($sampel);
-        $data['tanggal_lahir_pasien'] = $this->getTanggalLahir($data['pasien']);
-        $data['umur_pasien'] = Carbon::parse($data['pasien']->tanggal_lahir)->age;
+        $data['tanggal_lahir_pasien'] = $data['pasien'] ? $this->getTanggalLahir($data['pasien']) : null;
+        $data['umur_pasien'] = $data['pasien'] ? Carbon::parse($data['pasien']->tanggal_lahir)->age : null;
 
         $pdf = PDF::loadView('pdf_templates.print_validasi', $data);
 
