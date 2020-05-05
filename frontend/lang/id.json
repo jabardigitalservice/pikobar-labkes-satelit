@@ -23,7 +23,32 @@
     "settings": {
       "password": "Password",
       "profile": "Profil"
+    },
+    "verifikasi": {
+      "index": {
+        "unverified": "Menunggu Verifikasi",
+        "verified": "Terverifikasi"
+      },
+      "detail": "Detail Sampel",
+      "edit": "Verifikasi Hasil"
+    },
+    "validasi": {
+      "index": {
+        "unvalidate": "Menunggu Validasi",
+        "validated": "Tervalidasi"
+      },
+      "detail": "Detail Sampel",
+      "edit": "Validasi Hasil"
+    },
+    "pcr": {
+      "list-rna": "Daftar Penerimaan Sampel RNA",
+      "list-pcr": "Daftar PCR",
+      "detail": "Detail PCR",
+      "input": "Input Analisa",
+      "list-hasil-pemeriksaan": "Hasil Pemeriksaan",
+      "list-hasil-inkonklusif": "Hasil Sampel Invalid"
     }
+
   },
   "ok": "Ok",
   "cancel": "Batal",
