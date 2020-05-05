@@ -67,16 +67,55 @@
                 <label for="nama_pasien">Sumber Sampel</label>
             </div>
             <div class="col-md-4">
-                <select name="sumber_pasien" class="form-control" v-model="params.sumber_sampel">
-                    <option value="" selected>Semua Tipe</option>
-                    <option value="Mandiri">Mandiri</option>
-                    <option value="Rujukan Dinkes">Rujukan Dinkes</option>
-                    <option value="Rujukan RS">Rujukan RS</option>
+                 <select class="form-control" id="rsfasyankes" v-model="params.sumber_sampel">
+                     <option value="">Semua Fasyankes</option>
+                    <option value="RSUP Dr. Hasan Sadikin">RSUP Dr. Hasan Sadikin</option>
+                    <option value="RSP Dr. H.A. Rotinsulu">RSP Dr. H.A. Rotinsulu</option>
+                    <option value="RSP Dr. Goenawan P"> RSP Dr. Goenawan P</option>
+                    <option value="RSUD Dr. Slamet">RSUD Dr. Slamet</option>
+                    <option value="RSUD R. Syamsudin, SH">RSUD R. Syamsudin, SH</option>
+                    <option value="RSUD Indramayu">RSUD Indramayu</option>
+                    <option value="RSUD Gunungjati">RSUD Gunungjati</option>
+                    <option value="Rumkit Tk. ll Dustira">Rumkit Tk. ll Dustira</option>
+                    <option value="RSUD Cibinong">RSUD Cibinong</option>
+                    <option value="RSUD Ciawi">RSUD Ciawi</option>
+                    <option value="RSUD Cibabat">RSUD Cibabat</option>
+                    <option value="RSUD Kota Bogor">RSUD Kota Bogor</option>
+                    <option value="RSUD Al Ihsan">RSUD Al Ihsan</option>
+                    <option value="RS Bhayangkara Sartika Asih">RS Bhayangkara Sartika Asih</option>
+                    <option value="RSUD dr. Soekardjo">RSUD dr. Soekardjo</option>
+                    <option value="RSUD SMC Kab. Tasik">RSUD SMC Kab. Tasik</option>
+                    <option value="RS Paru Prov. Jabar Sidawangi">RS Paru Prov. Jabar Sidawangi</option>
+                    <option value="RSUD Bayu Asih">RSUD Bayu Asih</option>
+                    <option value="RSUD Karawang">RSUD Karawang</option>
+                    <option value="RSUD Sekarwangi">RSUD Sekarwangi</option>
+                    <option value="RSUD Subang">RSUD Subang</option>
+                    <option value="RSUD Waled">RSUD Waled</option>
+                    <option value="RSUD Arjawinangun">RSUD Arjawinangun</option>
+                    <option value="RSUD 45 Kuningan">RSUD 45 Kuningan</option>
+                    <option value="RSUD Kab Bekasi">RSUD Kab Bekasi</option>
+                    <option value="RSUD Sumedang">RSUD Sumedang</option>
+                    <option value="RSUD Banjar">RSUD Banjar</option>
+                    <option value="RSUD Ciamis">RSUD Ciamis</option>
+                    <option value="RSUD Cideres">RSUD Cideres</option>
+                    <option value="RSUD Majalaya">RSUD Majalaya</option>
+                    <option value="RS Lanud dr. M. Salamun">RS Lanud dr. M. Salamun</option>
+                    <option value="RSUD Kota Depok">RSUD Kota Depok</option>
+                    <option value="RSUD Sayang">RSUD Sayang</option>
+                    <option value="RSUD dr. Chasbullah A">RSUD dr. Chasbullah A</option>
+                    <option value="Other">RS Lainnya, Sebutkan</option>
                 </select>
             </div>
         </div>
 
-        
+        <div class="form-group row" v-if="params.sumber_sampel=='Other'">
+            <div class="col-md-2">
+                <label for="">Fasyankes Lainnya</label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="" id="" class="form-control" v-model="params.other_nama_rs">
+            </div>
+        </div>
 
         <div class="form-group row">
             <div class="col-md-2">
@@ -118,7 +157,8 @@ export default {
                 end_date:null,
                 sumber_pasien:null,
                 sumber_sampel:null,
-                kota:null
+                kota:null,
+                other_nama_rs:null
             },
             optionKota:[]
         }

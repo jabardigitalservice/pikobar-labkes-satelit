@@ -76,7 +76,7 @@
                       nomor_register: 'Nomor Registrasi',
                       nama_pasien: 'Pasien',
                       nama_kota: 'Domisili',
-                      dinkes_pengirim: 'Pengirim',
+                      nama_rs: 'Sumber Sampel',
                       no_sampel:'Sampel',
                       tgl_input:'Tanggal Input'
                     }"></ajax-table>
