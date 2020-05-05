@@ -463,7 +463,7 @@ class EkstraksiController extends Controller
         $pcr->kesimpulan_pemeriksaan = 'sampel kurang';
         $pcr->save();
 
-        $sampel->updateState('pcr_sample_received', [
+        $sampel->updateState('pcr_sample_analyzed', [
             'user_id' => $user->id,
             'metadata' => $pcr,
             'description' => 'Sample marked as insufficient',
