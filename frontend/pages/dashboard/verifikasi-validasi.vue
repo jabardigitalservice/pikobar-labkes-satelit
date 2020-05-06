@@ -110,10 +110,7 @@
               :columns="{
                 nomor_register: 'Nomor Registrasi',
                 nama_pasien: 'Pasien',
-                nama_kota: 'Domisili',
-                sumber_pasien: 'Sumber',
-                no_sampel:'Sampel',
-                tgl_input:'Tanggal Input'
+                action: ''
               }"></ajax-table>
         </Ibox>
     </div>
@@ -146,7 +143,8 @@
               :columns="{
                 no_sampel:'Sampel',
                 nama_pasien: 'Pasien',
-                tgl_input:'Tanggal Input'
+                tgl_input:'Tanggal Input',
+                action: ''
               }"></ajax-table>
         </Ibox>
     </div>
@@ -179,6 +177,7 @@
               :columns="{
                 nomor_sampel : 'Nomor Sampel',
                 pasien_nama : 'Nama Pasien',
+                action: ''
               }"></ajax-table>
         </Ibox>
     </div>
@@ -212,6 +211,7 @@
                 nomor_sampel : 'Nomor Sampel',
                 pasien_nama : 'Nama Pasien',
                 tanggal_validasi : 'Tanggal Validasi',
+                action: ''
               }"></ajax-table>
         </Ibox>
     </div>
@@ -238,16 +238,16 @@ export default {
       try {
 
         let respUnverify = await axios.get("/v1/dashboard/counter-belum-verifikasi");
-        this.unverifyCounter = respUnverify.data;
+        this.unverifyCounter = respUnverify.data.data;
 
         let respVerified = await axios.get("/v1/dashboard/counter-terverifikasi");
-        this.unverifyCounter = respVerified.data;
+        this.verifiedCounter = respVerified.data.data;
 
         let respUnvalidate = await axios.get("/v1/dashboard/counter-belum-validasi");
-        this.unvalidateCounter = respUnvalidate.data;
+        this.unvalidateCounter = respUnvalidate.data.data;
 
         let respValidated = await axios.get("/v1/dashboard/counter-tervalidasi");
-        this.validatedCounter = respValidated.data;
+        this.validatedCounter = respValidated.data.data;
 
       } catch (e) {
         this.unverifyCounter = '-';

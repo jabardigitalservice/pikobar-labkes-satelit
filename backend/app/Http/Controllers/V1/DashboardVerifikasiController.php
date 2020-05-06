@@ -15,11 +15,8 @@ class DashboardVerifikasiController extends Controller
     public function getCountUnverify()
     {
         $unverifySampel = $this->counterQuery()
-            ->whereHas('pemeriksaanSampel')
-            ->whereNotIn('sampel_status', [
-                'sample_verified', 
-                'sample_valid', 
-                'sample_invalid'
+            ->whereIn('sampel_status', [
+                'pcr_sample_analyzed'
             ])->count();
 
         return response()->json([
