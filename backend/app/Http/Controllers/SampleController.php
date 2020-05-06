@@ -48,7 +48,6 @@ class SampleController extends Controller
                                 'sample_verified',
                                 'sample_valid',
                                 'sample_invalid',
-                                'waiting_sample'
                             ]);
                         } else {
                             $models->where('sampel_status', $val);

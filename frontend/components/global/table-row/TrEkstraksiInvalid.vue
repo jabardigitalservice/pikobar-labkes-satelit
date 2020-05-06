@@ -31,6 +31,17 @@
             >
                 <i class="uil-flask-potion"></i> Sampel Kurang
             </button>
+            <button
+                type="button"
+                class="btn btn-info btn-sm"
+                title="Klik untuk menandai sampel sebagai sampel yang perlu swab ulang"
+                @click="promptSwabUlang()"
+                :disabled="loading"
+                :class="{'btn-loading': loading}"
+                style="margin-top: 4px"
+            >
+                <i class="uil-raindrops-alt"></i> Swab Ulang
+            </button>
         </td>
     </tr>
 </template>
@@ -40,6 +51,7 @@ export default {
     props  : ['item', 'pagination', 'rowparams', 'index'],
     data() {
         return {
+            loading: false,
         }
     },
     methods: {
@@ -68,6 +80,58 @@ export default {
                         swalWithBootstrapButtons.fire(
                             'Selesai!',
                             'Sampel berhasil ditandai sebagai sampel kurang',
+                            'success'
+                        )
+                        this.$bus.$emit('refresh-ajaxtable', 'ekstraksi-invalid')
+                    } catch (err) {
+                        console.log(err)
+                        if (err.response && err.response.data.code == 422) {
+                            swalWithBootstrapButtons.fire(
+                                'Gagal',
+                                err.response.data.message,
+                                'error'
+                            )
+                        } else {
+                            swalWithBootstrapButtons.fire(
+                                'Gagal',
+                                'Gagal menandai sampel kurang',
+                                'error'
+                            )
+                        }
+                    }
+                    this.loading = false
+                } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === this.$swal.DismissReason.cancel
+                ) {
+                }
+            })
+        },
+        promptSwabUlang() {
+            const swalWithBootstrapButtons = this.$swal.mixin({
+                customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+            swalWithBootstrapButtons.fire({
+                title: 'Apakah Anda Yakin Mendandai Sampel perlu swab ulang?',
+                text: "Sampel yang kurang akan diberitahukan kepada verifikator untuk melakukan swab ulang",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Tandai Swab Ulang',
+                cancelButtonText: 'Batalkan',
+                reverseButtons: true
+            }).then(async (result) => {
+                console.log(result)
+                if (result.value) {
+                    try {
+                        this.loading = true
+                        let resp = await axios.post("/v1/ekstraksi/set-swab-ulang/" + this.item.id);
+                        swalWithBootstrapButtons.fire(
+                            'Selesai!',
+                            'Sampel berhasil ditandai sebagai sampel yang perlu swab ulang',
                             'success'
                         )
                         this.$bus.$emit('refresh-ajaxtable', 'ekstraksi-invalid')

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Request; 
 use App\Models\Pasien;
 use App\Models\Register;
 use App\Models\PasienRegister;
@@ -110,7 +110,7 @@ class RegistrasiMandiri extends Controller
         }
         $models = $models->select('register.nomor_register','pasien.*','kota.nama as nama_kota',
         'register.created_at as tgl_input','pasien_register.*','register.sumber_pasien',
-        'register.jenis_registrasi','register.dinkes_pengirim','pasien.sumber_pasien','register.nama_rs',
+        'register.jenis_registrasi','register.dinkes_pengirim','register.sumber_pasien','register.nama_rs',
         'register.other_nama_rs');
         $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
 

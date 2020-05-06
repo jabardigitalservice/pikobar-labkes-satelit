@@ -39,16 +39,13 @@
                 <date-picker placeholder="Tanggal Mulai Input" format="d MMMM yyyy" input-class="form-control"
                     :monday-first="true" v-model="params.start_date" />
             </div>
-            <div class="col-md-1">
-                S.d
-            </div>
             <div class="col-md-4">
                 <date-picker placeholder="Tanggal Akhir Input" format="d MMMM yyyy" input-class="form-control"
                     :monday-first="true" v-model="params.end_date" />
             </div>
         </div>
 
-        <div class="form-group row" v-if="oid=='registrasi-mandiri'">
+        <!-- <div class="form-group row" v-if="oid=='registrasi-mandiri'">
             <div class="col-md-2">
                 <label for="nama_pasien">Sumber Pasien</label>
             </div>
@@ -60,70 +57,54 @@
                     <option value="RDT">RDT</option>
                 </select>
             </div>
-        </div>
+        </div> -->
+        
+        <!-- <template v-if="oid=='registrasi-rujukan'">
+        <div class="form-group row mt-4">
+            <label class="col-md-2">Instansi Pengirim
+            </label>
 
-        <div class="form-group row" v-if="oid=='registrasi-rujukan'">
-            <div class="col-md-2">
-                <label for="nama_pasien">Sumber Sampel</label>
-            </div>
-            <div class="col-md-4">
-                 <select class="form-control" id="rsfasyankes" v-model="params.sumber_sampel">
-                     <option value="">Semua Fasyankes</option>
-                    <option value="RSUP Dr. Hasan Sadikin">RSUP Dr. Hasan Sadikin</option>
-                    <option value="RSP Dr. H.A. Rotinsulu">RSP Dr. H.A. Rotinsulu</option>
-                    <option value="RSP Dr. Goenawan P"> RSP Dr. Goenawan P</option>
-                    <option value="RSUD Dr. Slamet">RSUD Dr. Slamet</option>
-                    <option value="RSUD R. Syamsudin, SH">RSUD R. Syamsudin, SH</option>
-                    <option value="RSUD Indramayu">RSUD Indramayu</option>
-                    <option value="RSUD Gunungjati">RSUD Gunungjati</option>
-                    <option value="Rumkit Tk. ll Dustira">Rumkit Tk. ll Dustira</option>
-                    <option value="RSUD Cibinong">RSUD Cibinong</option>
-                    <option value="RSUD Ciawi">RSUD Ciawi</option>
-                    <option value="RSUD Cibabat">RSUD Cibabat</option>
-                    <option value="RSUD Kota Bogor">RSUD Kota Bogor</option>
-                    <option value="RSUD Al Ihsan">RSUD Al Ihsan</option>
-                    <option value="RS Bhayangkara Sartika Asih">RS Bhayangkara Sartika Asih</option>
-                    <option value="RSUD dr. Soekardjo">RSUD dr. Soekardjo</option>
-                    <option value="RSUD SMC Kab. Tasik">RSUD SMC Kab. Tasik</option>
-                    <option value="RS Paru Prov. Jabar Sidawangi">RS Paru Prov. Jabar Sidawangi</option>
-                    <option value="RSUD Bayu Asih">RSUD Bayu Asih</option>
-                    <option value="RSUD Karawang">RSUD Karawang</option>
-                    <option value="RSUD Sekarwangi">RSUD Sekarwangi</option>
-                    <option value="RSUD Subang">RSUD Subang</option>
-                    <option value="RSUD Waled">RSUD Waled</option>
-                    <option value="RSUD Arjawinangun">RSUD Arjawinangun</option>
-                    <option value="RSUD 45 Kuningan">RSUD 45 Kuningan</option>
-                    <option value="RSUD Kab Bekasi">RSUD Kab Bekasi</option>
-                    <option value="RSUD Sumedang">RSUD Sumedang</option>
-                    <option value="RSUD Banjar">RSUD Banjar</option>
-                    <option value="RSUD Ciamis">RSUD Ciamis</option>
-                    <option value="RSUD Cideres">RSUD Cideres</option>
-                    <option value="RSUD Majalaya">RSUD Majalaya</option>
-                    <option value="RS Lanud dr. M. Salamun">RS Lanud dr. M. Salamun</option>
-                    <option value="RSUD Kota Depok">RSUD Kota Depok</option>
-                    <option value="RSUD Sayang">RSUD Sayang</option>
-                    <option value="RSUD dr. Chasbullah A">RSUD dr. Chasbullah A</option>
-                    <option value="Other">RS Lainnya, Sebutkan</option>
-                </select>
+            <div class="col-md-6">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" id="fasyanrs"
+                        value="Rumah Sakit" v-model="params.reg_fasyankes_pengirim">
+                    <label class="form-check-label" for="fasyanrs">Rumah Sakit</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" id="fasyandinkes"
+                        value="Dinkes" v-model="params.reg_fasyankes_pengirim">
+                    <label class="form-check-label" for="fasyandinkes">Dinkes</label>
+                </div>
             </div>
         </div>
 
-        <div class="form-group row" v-if="params.sumber_sampel=='Other'">
-            <div class="col-md-2">
-                <label for="">Fasyankes Lainnya</label>
-            </div>
-            <div class="col-md-4">
-                <input type="text" name="" id="" class="form-control" v-model="params.other_nama_rs">
+        <div class="form-group row mt-4">
+            <label class="col-md-2">Nama Rumah Sakit / Fasyankes
+            <div class="col-md-6">
+                <v-select :options="optFasyankes" label="nama" :value="params.reg_fasyankes_id"
+                    v-model="params.reg_nama_rs"></v-select>
             </div>
         </div>
+
+        <div class="mt-4" id="inputrslain" v-if="params.reg_fasyankes_id && params.reg_fasyankes_id.id==9999">
+            <div class="form-group row">
+                <label class="col-md-2"></label>
+                <div class="col-md-6">
+                    <input class=" form-control" type="text" v-model="params.reg_nama_rs_lainnya"
+                        name="reg_nama_rs_lainnya" placeholder="Nama Rumah Sakit / Fasyankes" />
+                </div>
+            </div>
+        </div>
+
+
+        </template> -->
 
         <div class="form-group row">
             <div class="col-md-2">
                 <label for="nama_pasien">Domisili</label>
             </div>
             <div class="col-md-4">
-                <select class="form-control" type="text" name="reg_kota" placeholder="" required
-                    v-model="params.kota">
+                <select class="form-control" type="text" name="reg_kota" placeholder="" required v-model="params.kota">
                     <option :value="item.id" :key="idx" v-for="(item,idx) in optionKota">{{item.nama}}
                     </option>
                 </select>
@@ -141,52 +122,71 @@
     </Ibox>
 </template>
 <script>
-import axios from 'axios'
-let _this = null;
-export default {
-    name: 'FilterRegistrasi',
-    props:['oid'],
-    data(){
-        return {
-            params: {
-                jenis_registrasi: null,
-                nama_pasien: null,
-                nomor_register:null,
-                nomor_sampel:null,
-                start_date:null,
-                end_date:null,
-                sumber_pasien:null,
-                sumber_sampel:null,
-                kota:null,
-                other_nama_rs:null
+    import axios from 'axios'
+    let _this = null;
+    export default {
+        name: 'FilterRegistrasi',
+        props: ['oid'],
+        data() {
+            return {
+                optFasyankes:[],
+                params: {
+                    jenis_registrasi: null,
+                    nama_pasien: null,
+                    nomor_register: null,
+                    nomor_sampel: null,
+                    start_date: null,
+                    end_date: null,
+                    sumber_pasien: null,
+                    sumber_sampel: null,
+                    kota: null,
+                    other_nama_rs: null,
+                    reg_fasyankes_pengirim:null,
+                    reg_fasyankes_id:null,
+                    nama_rs_lainnya:null
+                },
+                optionKota: []
+            }
+        },
+        methods: {
+            doFilter() {
+                // this.$bus.$emit('refresh-ajaxtable')
+                this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
             },
-            optionKota:[]
-        }
-    },
-    methods:{
-        doFilter(){
-            // this.$bus.$emit('refresh-ajaxtable')
-            this.$bus.$emit('refresh-ajaxtable2',this.oid, this.params);
+            async getKota() {
+                const resp = await axios.get('/v1/list-kota-jabar');
+                this.optionKota = resp.data;
+            },
+            async changeFasyankes(tipe) {
+                // this.form.reg_nama_rs = null;
+                let tp = tipe=="Dinkes"?"dinkes":"rumah_sakit";
+                let resp = await axios.get('/v1/list-fasyankes-jabar?tipe='+tp)
+                this.optFasyankes = resp.data;
+                this.optFasyankes.push({
+                    id:9999,
+                    nama:'Fasyankes Lainnya'
+                })
+            },
         },
-        async getKota() {
-            const resp = await axios.get('/v1/list-kota-jabar');
-            this.optionKota = resp.data;
+        mounted() {
+            if (this.oid == 'registrasi-rujukan') {
+                this.params.jenis_registrasi = 'rujukan';
+            } else {
+                this.params.jenis_registrasi = "mandiri";
+            }
         },
-    },
-    mounted(){
-        if(this.oid == 'registrasi-rujukan') {
-            this.params.jenis_registrasi = 'rujukan';
-        }else{
-            this.params.jenis_registrasi = "mandiri";
+        created() {
+            // alert(this.oid);
+            _this = this;
+            // if(this.oid == 'registrasi-rujukan') {
+            //     this.jenis_registrasi = 'rujukan';
+            // }
+            this.getKota();
+        },
+        watch:{
+            "params.reg_fasyankes_pengirim":function(newVal, oldVal){
+                this.changeFasyankes(this.params.reg_fasyankes_pengirim)
+            },
         }
-    },
-    created(){
-        // alert(this.oid);
-        _this = this;
-        // if(this.oid == 'registrasi-rujukan') {
-        //     this.jenis_registrasi = 'rujukan';
-        // }
-        this.getKota();
     }
-}
 </script>
