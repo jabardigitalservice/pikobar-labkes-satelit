@@ -2,7 +2,7 @@
     <div class="wrapper wrapper-content">
         <portal to="title-name">
             Update Registrasi Pasien
-        </portal>
+        </portal> 
         <portal to="title-action">
             <div class="title-action">
                 <nuxt-link to="/registrasi/mandiri" class="btn btn-primary">Kembali</nuxt-link>
@@ -39,7 +39,7 @@
 
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
-                                Sumber Pasien
+                                Kategori
                                 <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6">
@@ -47,22 +47,37 @@
                                     :class="{ 'is-invalid': form.errors.has('reg_sumberpasien') }">
                                     <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_sumberpasien"
-                                            value="Mandiri" />
-                                        Mandiri</label>
+                                            value="Umum" />
+                                        Umum</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_sumberpasien"
-                                            value="Dinkes" />
-                                        Dinkes</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" v-model="form.reg_sumberpasien"
-                                            value="RDT" />
-                                        RDT</label>
+                                            value="Other" />
+                                        Isian</label>
                                 </div>
                                 <has-error :form="form" field="reg_sumberpasien" />
+                            </div>
+                        </div>
+                        <div class="form-group row mt-4" v-if="form.reg_sumberpasien=='Other'">
+                            <label for="" class="col-md-2"></label>
+                            <div class="col-md-6">
+                                <input type="text" name="reg_sumberpasien_isian" 
+                                    placeholder="Ketikkan Kategori" id="" class="form-control" 
+                                    v-model="form.reg_sumberpasien_isian" required>
+                            </div>
+                        </div>
+
+                         <div class="form-group row mt-4">
+                            <div class="col-md-2">
+                                <label for="">Hasil RDT</label>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="hasil_rdt" class="form-control" v-model="form.reg_hasil_rdt">
+                                    <option value="Reaktif">Reaktif</option>
+                                    <option value="Non Reaktif">Non Reaktif</option>
+                                    <option value="Belum Test">Belum Test</option>
+                                </select>
                             </div>
                         </div>
 
@@ -87,10 +102,9 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 NIK
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_nik') }">
-                                <input class="form-control" type="text" name="reg_nik" placeholder="" required
+                                <input class="form-control" type="text" name="reg_nik" placeholder=""
                                     v-model="form.reg_nik" max="16" />
                                 <has-error :form="form" field="reg_nik" />
                             </div>
@@ -99,7 +113,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Tempat Lahir
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_tempatlahir') }">
                                 <input class="form-control" type="text" name="reg_tempatlahir" placeholder="" required
@@ -111,13 +124,19 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Tanggal Lahir
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_tgllahir') }">
-                                <date-picker placeholder="Pilih Tanggal" format="d MMMM yyyy" input-class="form-control"
-                                    :monday-first="true"
-                                    :wrapper-class="{ 'is-invalid': form.errors.has('reg_tgllahir') }"
-                                    v-model="form.reg_tgllahir" />
+                                 <dropdown-datepicker 
+                                    v-model="form.reg_tgllahir"
+                                    :minYear="1900"
+                                    :daySuffixes="false"
+                                    :maxYear="(new Date).getFullYear()"
+                                    displayFormat="dmy"
+                                    sortYear="asc"
+                                    :default-date="form.reg_tgllahir"
+                                    ref="tgl_lahir"
+                                    :wrapper-class="form.errors.has('reg_tgllahir') ? 'is-invalid' : ''"
+                                ></dropdown-datepicker>
                                 <has-error :form="form" field="reg_tgllahir" />
                             </div>
                         </div>
@@ -182,7 +201,7 @@
                                     <option :value="item.id" :key="idx" v-for="(item,idx) in optionKecamatan">{{item.nama}}</option>
                                 </select> -->
                                 <input v-model="form.reg_kecamatan" class="form-control" type="text"
-                                    name="reg_kecamatan" required />
+                                    name="reg_kecamatan" />
                                 <has-error :form="form" field="reg_kecamatan" />
                             </div>
                         </div>
@@ -197,7 +216,7 @@
                                     <option :value="item.id" :key="idx" v-for="(item,idx) in optionKelurahan">{{item.nama}}</option>
                                 </select> -->
                                 <input class="multisteps-form__input form-control" type="text" name="reg_kelurahan"
-                                    required v-model="form.reg_kelurahan" />
+                                 v-model="form.reg_kelurahan" />
                                 <has-error :form="form" field="reg_kelurahan" />
                             </div>
                         </div>
@@ -222,13 +241,13 @@
                                 <span class="input-group-addon bootstrap-touchspin-postfix input-group-append">
                                     <span class="input-group-text">RT </span>
                                 </span>
-                                <input class="form-control" type="text" name="reg_rt" required v-model="form.reg_rt" />
+                                <input class="form-control" type="text" name="reg_rt" v-model="form.reg_rt" />
                             </div>
                             <div class="input-group col-md-2" :class="{ 'is-invalid':form.errors.has('reg_rw') }">
                                 <div class="input-group-addon bootstrap-touchspin-postfix input-group-append">
                                     <span class="input-group-text">RW </span>
                                 </div>
-                                <input class="form-control" type="text" name="reg_domisilirw" required
+                                <input class="form-control" type="text" name="reg_domisilirw"
                                     v-model="form.reg_rw" />
                             </div>
                             <has-error :form="form" field="reg_rt" />
@@ -564,7 +583,11 @@
                     reg_gejsakitkepala:null,
                     reg_gejdiare:null,
                     reg_gejmualmuntah:null,
-                    reg_gejlain:null
+                    reg_gejlain:null,
+                    reg_hasil_rdt:data.reg_hasil_rdt,
+                    reg_usia_tahun:data.reg_usia_tahun,
+                    reg_usia_bulan:data.reg_usia_bulan,
+                    reg_sumberpasien_isian:data.reg_sumberpasien_isian
 
                 }),
                 selected_reg: {},

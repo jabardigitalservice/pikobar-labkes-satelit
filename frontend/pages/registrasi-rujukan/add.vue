@@ -60,6 +60,7 @@
                                 <has-error :form="form" field="reg_sumberpasien" />
                             </div>
                         </div>
+
                         <div class="form-group row mt-4" v-if="form.reg_sumberpasien=='Other'">
                             <label for="" class="col-md-2"></label>
                             <div class="col-md-6">
@@ -68,7 +69,19 @@
                                     v-model="form.reg_sumberpasien_isian" required>
                             </div>
                         </div>
-
+                        
+                         <div class="form-group row mt-4">
+                            <div class="col-md-2">
+                                <label for="">Hasil RDT</label>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="hasil_rdt" class="form-control" v-model="form.reg_hasil_rdt">
+                                    <option value="Reaktif">Reaktif</option>
+                                    <option value="Non Reaktif">Non Reaktif</option>
+                                    <option value="Belum Test">Belum Test</option>
+                                </select>
+                            </div>
+                        </div>
                         <hr>
                         <h4 class="mb-1 mt-0">
                             Identitas Pengirim
@@ -144,7 +157,7 @@
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_nama_pasien') }">
                                 <input class="form-control" type="text" name="reg_nama_pasien" placeholder=""
-                                    v-model="form.reg_nama_pasien" />
+                                    v-model="form.reg_nama_pasien" required />
                                 <has-error :form="form" field="reg_nama_pasien" />
                             </div>
                         </div>
@@ -415,19 +428,6 @@
                                 <textarea class="form-control" type="text" name="reg_keterangan"
                                     v-model="form.reg_keterangan" rows="6"></textarea>
                                 <has-error :form="form" field="reg_keterangan" />
-                            </div>
-                        </div>
-
-                        <div class="form-group row mt-4">
-                            <div class="col-md-2">
-                                <label for="">Hasil RDT</label>
-                            </div>
-                            <div class="col-md-3">
-                                <select name="hasil_rdt" class="form-control" v-model="form.reg_hasil_rdt">
-                                    <option value="Reaktif">Reaktif</option>
-                                    <option value="Non Reaktif">Non Reaktif</option>
-                                    <option value="Belum Test">Belum Test</option>
-                                </select>
                             </div>
                         </div>
 

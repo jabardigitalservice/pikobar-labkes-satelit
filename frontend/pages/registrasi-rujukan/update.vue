@@ -69,6 +69,19 @@
                             </div>
                         </div>
 
+                         <div class="form-group row mt-4">
+                            <div class="col-md-2">
+                                <label for="">Hasil RDT</label>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="hasil_rdt" class="form-control" v-model="form.reg_hasil_rdt">
+                                    <option value="Reaktif">Reaktif</option>
+                                    <option value="Non Reaktif">Non Reaktif</option>
+                                    <option value="Belum Test">Belum Test</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <hr>
                         <h4 class="mb-1 mt-0">
                             Identitas Pengirim
@@ -418,18 +431,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group row mt-4">
-                            <div class="col-md-2">
-                                <label for="">Hasil RDT</label>
-                            </div>
-                            <div class="col-md-3">
-                                <select name="hasil_rdt" class="form-control" v-model="form.reg_hasil_rdt">
-                                    <option value="Reaktif">Reaktif</option>
-                                    <option value="Non Reaktif">Non Reaktif</option>
-                                    <option value="Belum Test">Belum Test</option>
-                                </select>
-                            </div>
-                        </div>
+                       
 
                         <div class="form-group row mt-4 text-center justify-content-center">
                             <v-button :loading="form.busy" class="btn btn-md btn-primary block  m-b">
