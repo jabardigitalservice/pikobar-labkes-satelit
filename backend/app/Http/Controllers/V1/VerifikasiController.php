@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\PemeriksaanSampel;
+use App\Models\PengambilanSampel;
 use App\Models\Sampel;
 use App\Models\StatusSampel;
 use Illuminate\Http\Request;
@@ -228,9 +229,10 @@ class VerifikasiController extends Controller
      */
     public function show(Sampel $sampel)
     {
-        $result = $sampel->load(['pemeriksaanSampel', 'status', 'register'])->toArray();
+        $result = $sampel->load(['pemeriksaanSampel', 'status', 'register', 'ekstraksi', 'logs'])->toArray();
         $pasien = optional($sampel->register->pasiens()->with(['kota']))->first();
         $fasyankes = $sampel->register->fasyankes;
+        $pengambilanSampel = PengambilanSampel::find($sampel->getAttribute('pengambilan_sampel_id'));
 
         return response()->json([
             'status'=>200,
@@ -238,7 +240,8 @@ class VerifikasiController extends Controller
             'data'=> $result + [
                 'pasien'=> optional($pasien)->toArray(),
                 'last_pemeriksaan_sampel'=> $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first(),
-                'fasyankes'=> $fasyankes
+                'fasyankes'=> $fasyankes,
+                'pengambilanSampel'=> $pengambilanSampel
             ]
         ]);
     }
