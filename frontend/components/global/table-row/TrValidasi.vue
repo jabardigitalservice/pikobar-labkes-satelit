@@ -35,6 +35,9 @@
             </ol>
         </td>
         <td>
+            {{item.kondisi_sampel}}
+        </td>
+        <td>
             {{item.pemeriksaanSampel.kesimpulan_pemeriksaan}}
         </td>
         <td width="20%">

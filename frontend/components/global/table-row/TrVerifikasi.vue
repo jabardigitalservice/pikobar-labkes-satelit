@@ -19,6 +19,7 @@
         >{{ item.target_gen }} : {{ item.ct_value }}</li>
       </ol>
     </td>
+    <td>{{item.kondisi_sampel}}</td>
     <td>{{item.pemeriksaanSampel.kesimpulan_pemeriksaan}}</td>
     <td width="20%">
       <nuxt-link
