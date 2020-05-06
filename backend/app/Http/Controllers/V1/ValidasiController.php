@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1;
 use App\Events\SampelValidatedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\PemeriksaanSampel;
+use App\Models\PengambilanSampel;
 use App\Models\Sampel;
 use App\Models\Validator;
 use Illuminate\Http\Request;
@@ -244,9 +245,10 @@ class ValidasiController extends Controller
      */
     public function show(Sampel $sampel)
     {
-        $result = $sampel->load(['pemeriksaanSampel', 'status', 'register', 'validator'])->toArray();
+        $result = $sampel->load(['pemeriksaanSampel', 'status', 'register', 'validator', 'ekstraksi', 'logs'])->toArray();
         $pasien = optional($sampel->register->pasiens()->with(['kota']))->first();
         $fasyankes = $sampel->register->fasyankes;
+        $pengambilanSampel = PengambilanSampel::find($sampel->getAttribute('pengambilan_sampel_id'));
 
         return response()->json([
             'status'=>200,
@@ -254,7 +256,8 @@ class ValidasiController extends Controller
             'data'=> $result + [
                 'pasien'=> optional($pasien)->toArray(),
                 'last_pemeriksaan_sampel'=> $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first(),
-                'fasyankes'=> $fasyankes
+                'fasyankes'=> $fasyankes,
+                'pengambilanSampel'=> $pengambilanSampel
             ]
         ]);
     }
