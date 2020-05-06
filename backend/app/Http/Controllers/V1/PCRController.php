@@ -11,6 +11,8 @@ use Validator;
 use Storage;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use App\Imports\HasilPemeriksaanImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PCRController extends Controller
 {
@@ -403,5 +405,69 @@ class PCRController extends Controller
         ]);
         return response()->json(['success'=>true,'code'=> 201,'message'=>'Sampel berhasil ditandai telah dimusnahkan']);
     }
+
+    public function importHasilPemeriksaan(Request $request)
+    {        
+        $request->validate([
+            'register_file'=> 'required|file|mimes:xls,xlsx|max:2048'
+        ],$request->only('register_file'));
+
+        $importer = new HasilPemeriksaanImport;
+        Excel::import($importer, $request->file('register_file'));
+
+        return response()->json([
+            'status'=> 200,
+            'message'=> 'Sukses membaca file import excel',
+            'data'=> $importer->data,
+            'errors'=> $importer->errors,
+            'errors_count'=> $importer->errors_count,
+        ]);
+    }
+
+    public function importDataHasilPemeriksaan(Request $request)
+    {
+        $user = $request->user();
+        $data = $request->data;
+        foreach ($data as $row) {
+            $sampel = Sampel::find($row['sampel_id']);
+            if ($sampel) {
+                $pcr = $sampel->pcr;
+                if (!$pcr) {
+                    $pcr = new PemeriksaanSampel;
+                    $pcr->sampel_id = $sampel->id;
+                    $pcr->user_id = $user->id;
+                }
+                $pcr->tanggal_input_hasil = $row['tanggal_input_hasil'];
+                $pcr->jam_input_hasil = '12:00';
+                $pcr->catatan_pemeriksaan = '';
+                $pcr->grafik = [];
+                $pcr->hasil_deteksi = $row['target_gen'];
+                $pcr->kesimpulan_pemeriksaan = $row['kesimpulan_pemeriksaan'];
+                $pcr->save();
+
+                if ($sampel->sampel_status == 'pcr_sample_received' || $sampel->sampel_status == 'extraction_sample_sent') {
+                    $sampel->updateState('pcr_sample_analyzed', [
+                        'user_id' => $user->id,
+                        'metadata' => $pcr,
+                        'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
+                    ]);
+                } else {
+                    $sampel->addLog([
+                        'user_id' => $user->id,
+                        'metadata' => $pcr,
+                        'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
+                    ]);
+                    $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s');
+                    $sampel->save();
+                }
+            }
+        }
+
+        return response()->json([
+            'status'=> 200,
+            'message'=> 'Sukses import data.',
+        ]);
+    }
+
 
 }

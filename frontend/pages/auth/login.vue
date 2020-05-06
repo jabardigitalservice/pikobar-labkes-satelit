@@ -37,7 +37,10 @@
         Pemerintah Provinsi Jawa Barat | GTPP COVID-19 | PIKOBAR
       </div>
       <div class="col-md-4 text-right">
-        <small>© 2020</small>
+        <small>
+          <a style="color: rgba(255,255,255,0);" href="https://kamil.web.id/" target="_blank">@kamilersz</a>
+          © 2020
+        </small>
       </div>
     </div>
   </div>
