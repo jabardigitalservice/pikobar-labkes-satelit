@@ -12,13 +12,14 @@
     </td>
     <td>{{item.nomor_sampel}}</td>
     <td>
-      <ol>
-        <li
-          v-for="item in item.pemeriksaanSampel.hasil_deteksi"
+      <div
+          v-for="item in item.pemeriksaanSampel.hasil_deteksi" 
           :key="item.target_gen"
-        >{{ item.target_gen }} : {{ item.ct_value }}</li>
-      </ol>
+      >
+          - {{ item.target_gen }} : {{ item.ct_value }}
+      </div>
     </td>
+    <td>{{item.kondisi_sampel}}</td>
     <td>{{item.pemeriksaanSampel.kesimpulan_pemeriksaan}}</td>
     <td width="20%">
       <nuxt-link

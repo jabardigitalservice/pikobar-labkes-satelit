@@ -39,6 +39,7 @@
                       nomor_register: 'Nomor Register',
                       nomor_sampel : 'Nomor Sampel',
                       jenis_sampel_nama : 'Jenis Sampel',
+                      petugas_pengambil : 'Kondisi Sampel',
                       waktu_sample_taken: 'Sampel diambil pada',
                     }"
           ></ajax-table>

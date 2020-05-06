@@ -8,6 +8,7 @@
       "add": "Pengambilan / Penerimaan Sampel Baru"
     },
     "ekstraksi": {
+      "invalid": "Invalid",
       "index": "Ekstraksi",
       "penerimaan": "Penerimaan",
       "terkirim": "Sampel Terkirim",
