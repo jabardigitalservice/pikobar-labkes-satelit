@@ -512,7 +512,6 @@
                     reg_usia_bulan:null,
                     reg_hasil_rdt:null,
                     reg_fasyankes_id: null,
-
                 }),
                 selected_reg: {},
                 optionKota: [],
