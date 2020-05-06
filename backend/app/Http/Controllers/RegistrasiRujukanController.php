@@ -10,6 +10,7 @@ use App\Models\RiwayatKunjungan;
 use App\Models\RiwayatPenyakitPenyerta;
 use App\Models\PasienRegister;
 use App\Models\Sampel;
+use App\Models\Fasyankes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
@@ -56,15 +57,14 @@ class RegistrasiRujukanController extends Controller
         $v = Validator::make($request->all(),[
             'reg_kewarganegaraan' => 'required',
             'reg_sumberpasien' => 'required',
-            'reg_nama_pasien' => 'required',
-            'reg_nik'  => 'required|max:16',
-            'reg_tempatlahir' => 'required',
-            'reg_tgllahir' => 'required',
+            // 'reg_nama_pasien' => 'required',
+            'reg_nik'  => 'max:16',
+            // 'reg_tempatlahir' => 'required',
+            // 'reg_tgllahir' => 'required',
             'reg_nohp' => 'required|max:15',
             'reg_kota' => 'required',
             'reg_alamat' => 'required',
             'reg_jk'=>'required',
-            'reg_dinkes_pengirim' => 'required',
             'reg_fasyankes_pengirim' => 'required',
             'reg_nama_rs' => 'required',
             'reg_nama_dokter' => 'required',
@@ -77,7 +77,6 @@ class RegistrasiRujukanController extends Controller
             'reg_sumberpasien' => 'Mohon pilih sumber kedatangan pasien',
             'peg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
             'reg_nik.max' => 'NIK maksimal terdiri dari :max karakter',
-            'reg_nik.required' => 'NIK Pasien tidak boleh kosong',
             'reg_tempatlahir.required' => 'Tempat lahir tidak boleh kosong',
             'reg_tgllahir' => 'Tanggal lahir tidak boleh kosong',
             'reg_nohp' => 'No HP tidak boleh kosong',
@@ -102,27 +101,27 @@ class RegistrasiRujukanController extends Controller
         if (Register::where('nomor_register', $nomor_register)->exists()) {
             $nomor_register = with(new \App\Http\Controllers\V1\RegisterController)->generateNomorRegister(null, 'rujukan');
         }
+        $rs = Fasyankes::where('id',$request->get('reg_nama_rs'))->first();
         // return response($request->all());
         $register = Register::create([
             'nomor_register'=> $nomor_register,
-            'fasyankes_id'=> null,
             'nomor_rekam_medis'=> null,
-            'nama_dokter'=> null,
-            'no_telp'=> null,
             'register_uuid' => (string) Str::uuid(),
             'creator_user_id' => $user->id,
-            'sumber_pasien' => $request->get('reg_sumberpasien'),
+            'sumber_pasien' => $request->get('reg_sumberpasien')=="Umum"?"Umum":$request->get('reg_sumberpasien_isian'),
             'jenis_registrasi' => 'rujukan',
-            'dinkes_pengirim' => $request->get('reg_dinkes_pengirim'),
-            'other_dinas_pengirim' => $request->get('daerahlain'),
+            'dinkes_pengirim' => null,
+            'other_dinas_pengirim' => null,
+            'fasyankes_id' => $request->get('reg_nama_rs'),
             'fasyankes_pengirim' => $request->get('reg_fasyankes_pengirim'),
-            'nama_rs' => $request->get('reg_nama_rs'),
+            'nama_rs' => $rs->nama,
             'other_nama_rs' => $request->get('reg_nama_rs_lainnya'),
             'nama_dokter' => $request->get('reg_nama_dokter'),
             'no_telp' => $request->get('reg_telp_fas_pengirim'),
             'tanggal_kunjungan' => $request->get('reg_tanggalkunjungan'),
             'kunjungan_ke' => $request->get('reg_kunke'),
             'rs_kunjungan' => $request->get('reg_rsfasyankes'),
+            'hasil_rdt' => $request->get('reg_hasil_rdt')
         ]);
 
         $pasien = Pasien::where('nik',$request->get('reg_nik'))->first();
@@ -144,6 +143,8 @@ class RegistrasiRujukanController extends Controller
         $pasien->suhu = parseDecimal($request->get('reg_suhu'));
         $pasien->jenis_kelamin = $request->get('reg_jk');
         $pasien->keterangan_lain = $request->get('reg_keterangan');
+        $pasien->usia_tahun = $request->get('reg_usia_tahun');
+        $pasien->usia_bulan = $request->get('reg_usia_bulan');
 
         
         $pasien->save();

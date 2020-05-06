@@ -40,7 +40,7 @@
 
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
-                                Sumber Pasien
+                                Kategori
                                 <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6">
@@ -48,22 +48,24 @@
                                     :class="{ 'is-invalid': form.errors.has('reg_sumberpasien') }">
                                     <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_sumberpasien"
-                                            value="Mandiri" />
-                                        Mandiri</label>
+                                            value="Umum" />
+                                        Umum</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_sumberpasien"
-                                            value="Dinkes" />
-                                        Dinkes</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" v-model="form.reg_sumberpasien"
-                                            value="RDT" />
-                                        RDT</label>
+                                            value="Other" />
+                                        Isian</label>
                                 </div>
                                 <has-error :form="form" field="reg_sumberpasien" />
+                            </div>
+                        </div>
+                        <div class="form-group row mt-4" v-if="form.reg_sumberpasien=='Other'">
+                            <label for="" class="col-md-2"></label>
+                            <div class="col-md-6">
+                                <input type="text" name="reg_sumberpasien_isian" 
+                                    placeholder="Ketikkan Kategori" id="" class="form-control" 
+                                    v-model="form.reg_sumberpasien_isian" required>
                             </div>
                         </div>
 
@@ -73,55 +75,10 @@
                         </h4>
                         <p>Lengkapi Form dengan Identitas Pengirim</p>
                         <div class="form-group row mt-4">
-                            <label class="col-md-2" for="dinkespengirim">Dinkes Pengirim</label>
-                            <div class="col-md-6">
-                                <select class="form-control"
-                                    :class="{ 'is-invalid':form.errors.has('reg_dinkes_pengirim') }" id="dinkespengirim"
-                                    name="reg_dinkes_pengirim" v-model="form.reg_dinkes_pengirim">
-                                    <option value="Kota Bandung">Kota Bandung</option>
-                                    <option value="Kabupaten Bandung">Kabupaten Bandung</option>
-                                    <option value="Kabupaten Bandung Barat">Kabupaten Bandung Barat</option>
-                                    <option value="Kota Banjar">Kota Banjar</option>
-                                    <option value="Kota Cimahi">Kota Cimahi</option>
-                                    <option value="Kabupaten Bekasi">Kabupaten Bekasi</option>
-                                    <option value="Kota Bekasi">Kota Bekasi</option>
-                                    <option value="Kabupaten Bogor">Kabupaten Bogor</option>
-                                    <option value="Kota Bogor">Kota Bogor</option>
-                                    <option value="Kabupaten Ciamis">Kabupaten Ciamis</option>
-                                    <option value="Kabupaten Cianjur">Kabupaten Cianjur</option>
-                                    <option value="Kabupaten Cirebon">Kabupaten Cirebon</option>
-                                    <option value="Kota Cirebon">Kota Cirebon</option>
-                                    <option value="Kota Depok">Kota Depok</option>
-                                    <option value="Kabupaten Garut">Kabupaten Garut</option>
-                                    <option value="Kabupaten Indramayu">Kabupaten Indramayu</option>
-                                    <option value="Kabupaten Karawang">Kabupaten Karawang</option>
-                                    <option value="Kabupaten Kuningan">Kabupaten Kuningan</option>
-                                    <option value="Kabupaten Majalengka">Kabupaten Majalengka</option>
-                                    <option value="Kabupaten Pangandaran">Kabupaten Pangandaran</option>
-                                    <option value="Kabupaten Purwakarta">Kabupaten Purwakarta</option>
-                                    <option value="Kabupaten Subang">Kabupaten Subang</option>
-                                    <option value="Kabupaten Sukabumi">Kabupaten Sukabumi</option>
-                                    <option value="Kota Sukabumi">Kota Sukabumi</option>
-                                    <option value="Kabupaten Sumedang">Kabupaten Sumedang</option>
-                                    <option value="Kota Tasikmalaya">Kota Tasikmalaya</option>
-                                    <option value="Kabupaten Tasikmalaya">Kabupaten Tasikmalaya</option>
-                                    <option value="Other">Luar Provinsi Jawa Barat, Sebutkan</option>
-                                </select>
-                                <has-error :form="form" field="reg_dinkes_pengirim" />
-                            </div>
-                        </div>
-                        <div class="mt-4" id="inputdaerahlain" v-if="form.reg_dinkes_pengirim=='Other'">
-                            <div class="form-group row">
-                                <label class="col-md-2"></label>
-                                <div class="col-md-6">
-                                    <input class="form-control" type="text" id="daerahlain" name="daerahlain"
-                                        placeholder="Masukan Dinkes Terkait" v-model="form.daerahlain" required />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mt-4">
-                            <label class="col-md-2">Fasyankes Pengirim</label>
+                            <label class="col-md-2">Instansi Pengirim
+                                <span style="color:red">*</span>
+                            </label>
+                            
                             <div class="col-md-6" :class="{'is-invalid':form.errors.has('reg_fasyankes_pengirim')}">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim"
@@ -138,50 +95,14 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">Nama Rumah Sakit / Fasyankes </label>
-                            <div class="col-md-6">
-                                <select class=" form-control col-md-6" id="rsfasyankes"
-                                    name="reg_nama_rs" :class="{'is-invalid':form.errors.has('reg_nama_rs')}" v-model="form.reg_nama_rs">
-                                    <option value="RSUP Dr. Hasan Sadikin">RSUP Dr. Hasan Sadikin</option>
-                                    <option value="RSP Dr. H.A. Rotinsulu">RSP Dr. H.A. Rotinsulu</option>
-                                    <option value="RSP Dr. Goenawan P"> RSP Dr. Goenawan P</option>
-                                    <option value="RSUD Dr. Slamet">RSUD Dr. Slamet</option>
-                                    <option value="RSUD R. Syamsudin, SH">RSUD R. Syamsudin, SH</option>
-                                    <option value="RSUD Indramayu">RSUD Indramayu</option>
-                                    <option value="RSUD Gunungjati">RSUD Gunungjati</option>
-                                    <option value="Rumkit Tk. ll Dustira">Rumkit Tk. ll Dustira</option>
-                                    <option value="RSUD Cibinong">RSUD Cibinong</option>
-                                    <option value="RSUD Ciawi">RSUD Ciawi</option>
-                                    <option value="RSUD Cibabat">RSUD Cibabat</option>
-                                    <option value="RSUD Kota Bogor">RSUD Kota Bogor</option>
-                                    <option value="RSUD Al Ihsan">RSUD Al Ihsan</option>
-                                    <option value="RS Bhayangkara Sartika Asih">RS Bhayangkara Sartika Asih</option>
-                                    <option value="RSUD dr. Soekardjo">RSUD dr. Soekardjo</option>
-                                    <option value="RSUD SMC Kab. Tasik">RSUD SMC Kab. Tasik</option>
-                                    <option value="RS Paru Prov. Jabar Sidawangi">RS Paru Prov. Jabar Sidawangi</option>
-                                    <option value="RSUD Bayu Asih">RSUD Bayu Asih</option>
-                                    <option value="RSUD Karawang">RSUD Karawang</option>
-                                    <option value="RSUD Sekarwangi">RSUD Sekarwangi</option>
-                                    <option value="RSUD Subang">RSUD Subang</option>
-                                    <option value="RSUD Waled">RSUD Waled</option>
-                                    <option value="RSUD Arjawinangun">RSUD Arjawinangun</option>
-                                    <option value="RSUD 45 Kuningan">RSUD 45 Kuningan</option>
-                                    <option value="RSUD Kab Bekasi">RSUD Kab Bekasi</option>
-                                    <option value="RSUD Sumedang">RSUD Sumedang</option>
-                                    <option value="RSUD Banjar">RSUD Banjar</option>
-                                    <option value="RSUD Ciamis">RSUD Ciamis</option>
-                                    <option value="RSUD Cideres">RSUD Cideres</option>
-                                    <option value="RSUD Majalaya">RSUD Majalaya</option>
-                                    <option value="RS Lanud dr. M. Salamun">RS Lanud dr. M. Salamun</option>
-                                    <option value="RSUD Kota Depok">RSUD Kota Depok</option>
-                                    <option value="RSUD Sayang">RSUD Sayang</option>
-                                    <option value="RSUD dr. Chasbullah A">RSUD dr. Chasbullah A</option>
-                                    <option value="Other">RS Lainnya, Sebutkan</option>
-                                </select>
+                            <label class="col-md-2">Nama Rumah Sakit / Fasyankes
+                                <span style="color:red">*</span> </label>
+                            <div class="col-md-6" :class="{'is-invalid':form.errors.has('reg_nama_rs')}">
+                                <v-select :options="optFasyankes" label="nama" value="id" v-model="form.reg_nama_rs"></v-select>
                             </div>
                         </div>
 
-                        <div class="mt-4" id="inputrslain" v-if="form.reg_fasyankes_pengirim=='Other'">
+                        <div class="mt-4" id="inputrslain" v-if="form.reg_nama_rs && form.reg_nama_rs.id==9999">
                             <div class="form-group row">
                                 <label class="col-md-2"></label>
                                 <div class="col-md-6">
@@ -194,11 +115,11 @@
 
                         <div class="form-group row mt-4">
                         <label class="col-md-2" >Dokter Penanggung Jawab</label>
-                        <div class="col-md-6">
-                        <input :class="{ 'is-invalid':form.errors.has('reg_nama_dokter') }" class="form-control" type="text" name="reg_nama_dokter" 
-                               v-model="form.reg_nama_dokter" placeholder="Dokter Penanggung Jawab"/>
-                        <has-error :form="form" field="reg_nama_dokter"/>
-                        </div>
+                            <div class="col-md-6">
+                                <input :class="{ 'is-invalid':form.errors.has('reg_nama_dokter') }" class="form-control" type="text" name="reg_nama_dokter" 
+                                    v-model="form.reg_nama_dokter" placeholder="Dokter Penanggung Jawab"/>
+                                <has-error :form="form" field="reg_nama_dokter"/>
+                            </div>
                         </div>
                             
                         <div class="form-group row mt-4">
@@ -220,10 +141,9 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Nama Pasien
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_nama_pasien') }">
-                                <input class="form-control" type="text" name="reg_nama_pasien" placeholder="" required
+                                <input class="form-control" type="text" name="reg_nama_pasien" placeholder=""
                                     v-model="form.reg_nama_pasien" />
                                 <has-error :form="form" field="reg_nama_pasien" />
                             </div>
@@ -232,10 +152,9 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 NIK
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_nik') }">
-                                <input class="form-control" type="text" name="reg_nik" placeholder="" required
+                                <input class="form-control" type="text" name="reg_nik" placeholder="" 
                                     v-model="form.reg_nik" max="16" />
                                 <has-error :form="form" field="reg_nik" />
                             </div>
@@ -244,10 +163,9 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Tempat Lahir
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_tempatlahir') }">
-                                <input class="form-control" type="text" name="reg_tempatlahir" placeholder="" required
+                                <input class="form-control" type="text" name="reg_tempatlahir" placeholder=""
                                     v-model="form.reg_tempatlahir" />
                                 <has-error :form="form" field="reg_tempatlahir" />
                             </div>
@@ -256,7 +174,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-2">
                                 Tanggal Lahir
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_tgllahir') }">
                                 <dropdown-datepicker 
@@ -271,6 +188,22 @@
                                     :wrapper-class="form.errors.has('reg_tgllahir') ? 'is-invalid' : ''"
                                 ></dropdown-datepicker>
                                 <has-error :form="form" field="reg_tgllahir" />
+                            </div>
+                        </div>
+
+                         <div class="form-group row mt-4">
+                            <label class="col-md-2">
+                                Usia
+                            </label>
+                            <div class="col-md-2" :class="{ 'is-invalid': form.errors.has('reg_usia_tahun') }">
+                                <input class="form-control" type="number" name="reg_usia_tahun" placeholder="Tahun"
+                                    v-model="form.reg_usia_tahun" required />
+                                <has-error :form="form" field="reg_usia_tahun" />
+                            </div>
+                            <div class="col-md-2" :class="{ 'is-invalid': form.errors.has('reg_usia_bulan') }">
+                                <input class="form-control" type="number" name="reg_usia_bulan" placeholder="Bulan"
+                                    v-model="form.reg_usia_bulan" required />
+                                <has-error :form="form" field="reg_usia_bulan" />
                             </div>
                         </div>
 
@@ -485,6 +418,19 @@
                             </div>
                         </div>
 
+                        <div class="form-group row mt-4">
+                            <div class="col-md-2">
+                                <label for="">Hasil RDT</label>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="hasil_rdt" class="form-control" v-model="form.reg_hasil_rdt">
+                                    <option value="Reaktif">Reaktif</option>
+                                    <option value="Non Reaktif">Non Reaktif</option>
+                                    <option value="Belum Test">Belum Test</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="form-group row mt-4 text-center justify-content-center">
                             <v-button :loading="form.busy" class="btn btn-md btn-primary block  m-b">
                                 <i class="fa fa-save"></i> Simpan Data Register
@@ -518,6 +464,7 @@
 
             return {
                 // _this:this,
+                optFasyankes:[],
                 form: new Form({
                     samples: resp.data,
                     reg_fasyankes_pengirim:null,
@@ -559,7 +506,10 @@
                     reg_gejdiare: null,
                     reg_gejmualmuntah: null,
                     reg_gejlain: null,
-                    reg_jk: null
+                    reg_jk: null,
+                    reg_usia_tahun:null,
+                    reg_usia_bulan:null,
+                    reg_hasil_rdt:null,
 
                 }),
                 selected_reg: {},
@@ -622,8 +572,19 @@
                 const resp = await axios.get('/v1/list-kota-jabar');
                 this.optionKota = resp.data;
             },
+            async changeFasyankes(tipe) {
+                // this.form.reg_nama_rs = null;
+                let tp = tipe=="Dinkes"?"dinkes":"rumah_sakit";
+                let resp = await axios.get('/v1/list-fasyankes-jabar?tipe='+tp)
+                this.optFasyankes = resp.data;
+                this.optFasyankes.push({
+                    id:9999,
+                    nama:'Fasyankes Lainnya'
+                })
+            },
             async submit() {
                 try {
+                    this.form.reg_nama_rs = this.form.reg_nama_rs.id
                     const response = await this.form.post("/registrasi-rujukan/store");
                     this.$toast.success(response.data.message, {
                         icon: 'check',
@@ -649,7 +610,7 @@
                     }
                     return;
                 }
-            }
+            },
         },
         head() {
             return {
@@ -660,7 +621,6 @@
             _this = this;
             this.getKota()
             this.getNoreg();
-            console.log('Data : ', this.sampel);
         },
         watch: {
             "form.reg_kota": function (newVal, oldVal) {
@@ -691,6 +651,12 @@
                     })
                 }
             },
+            "form.reg_fasyankes_pengirim":function(newVal, oldVal){
+                this.changeFasyankes(this.form.reg_fasyankes_pengirim)
+            },
+            "form.reg_nama_rs":function(newVal, oldVal){
+                // console.log(newVal);
+            }
         }
     };
 </script>
