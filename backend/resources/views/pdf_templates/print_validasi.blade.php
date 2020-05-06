@@ -55,7 +55,7 @@
                 <td width="10%">:</td>
                 <td width="60%">
                     @if ($pasien)
-                        <span>{{$pasien['no_ktp'] }}</span>
+                        <span>{{$pasien['nik'] }}</span>
                     @endif
                 </td>
               </tr>

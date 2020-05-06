@@ -365,4 +365,19 @@ class ValidasiController extends Controller
 
         
     }
+
+    /**
+     * Regenerate PDF Hasil Pemeriksaan after Validation
+     * 
+     */
+    public function regeneratePdfHasil(Sampel $sampel)
+    {
+        event(new SampelValidatedEvent($sampel));
+        
+        return response()->json([
+            'data'=> null,
+            'status'=> 200,
+            'message'=> 'success'
+        ]);
+    }
 }

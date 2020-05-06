@@ -100,7 +100,7 @@ export default {
             } else if (result.value) {
                 try {
                     this.loading = true
-                    let resp = await await this.form.post("/v1/verifikasi/verifikasi-single-sampel/" + this.item.id);
+                    let resp = await this.form.post("/v1/verifikasi/verifikasi-single-sampel/" + this.item.id);
                     swalWithBootstrapButtons.fire(
                         'Selesai!',
                         'Sampel berhasil ditandai sebagai invalid',

@@ -258,6 +258,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             Route::get('export-excel', 'ValidasiExportController@exportExcel');
 
+            Route::post('regenerate-pdf/{sampel}', 'ValidasiController@regeneratePdfHasil');
             
         });
 
