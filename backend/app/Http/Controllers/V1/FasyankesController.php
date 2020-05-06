@@ -13,7 +13,7 @@ class FasyankesController extends Controller
         $tipe = $request->get('tipe','rumah_sakit');
         $provinsi = $request->get('provinsi',null);
         $listFaskes = Fasyankes::where('tipe',$tipe);
-        if(!$provinsi) {
+        if($provinsi) {
             $listFaskes = $listFaskes->whereHas('kota', function($query) use ($provinsi){
                 $query->where('provinsi_id', $provinsi);
             });
