@@ -22,6 +22,9 @@
     <td>
       <span v-if="item.sampel_status === 'sample_verified'">Verifikasi</span>
       <span v-if="item.sampel_status === 'sample_valid'">Valid</span>
+      <span v-if="item.counter_print_hasil" class="counter-print">
+        <i>Diprint {{ item.counter_print_hasil }} kali</i>
+      </span>
     </td>
     <td>{{item.waktu_sample_valid | formatDate}}</td>
     <td width="20%">
@@ -53,9 +56,8 @@ import axios from "axios";
 export default {
   props: ["item", "pagination", "rowparams", "index"],
   data() {
-
     let form = new Form({
-        sampel_id: this.item.id
+      sampel_id: this.item.id
     });
 
     return {
@@ -98,7 +100,10 @@ export default {
           link.click();
           link.remove();
           window.URL.revokeObjectURL(url);
-          this.isLoadingExp = false;
+
+          this.$bus.$emit("refresh-ajaxtable", "validated");
+
+          this.loading = false;
         });
 
         // const response = await this.form.post("/v1/verifikasi/export-excel");
@@ -175,7 +180,6 @@ export default {
               );
               // this.$bus.$emit('refresh-ajaxtable', 'verifikasi')
             } catch (err) {
-                
               if (err.response && err.response.data.code == 422) {
                 swalWithBootstrapButtons.fire(
                   "Gagal",
@@ -195,7 +199,8 @@ export default {
           } else if (
             /* Read more about handling dismissals below */
             result.dismiss === this.$swal.DismissReason.cancel
-          ) {}
+          ) {
+          }
         });
     }
   },
@@ -220,7 +225,8 @@ export default {
 </script>
 
 <style scoped>
-.nik {
+.nik,
+.counter-print {
   display: block;
   color: rgb(140, 143, 135);
 }

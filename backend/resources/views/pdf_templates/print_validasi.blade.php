@@ -24,7 +24,7 @@
     </div>
 
     <center><b>HASIL PEMERIKSAANTES PRO AKTIF COVID-19</b></center>
-    <center><b>No./Lap.COV/IV/2020</b></center>
+    {{-- <center><b>No./Lap.COV/IV/2020</b></center> --}}
 
     <table style="margin-top: 2%">
         <tbody>
@@ -34,7 +34,7 @@
                 </td>
                 <td width="10%">:</td>
                 <td width="60%">
-                  <span>{{$sampel['nomor_register']}}</span>
+                  <span><b>{{$sampel['nomor_register']}}</b></span>
                 </td>
             </tr>
             <tr>
@@ -44,7 +44,7 @@
                 <td width="10%">:</td>
                 <td width="60%">
                     @if ($pasien)
-                        <span>{{$pasien['nama_lengkap']}}</span>
+                        <span><b>{{$pasien['nama_lengkap']}}</b></span>
                     @endif
                 </td>
               </tr>
@@ -113,7 +113,7 @@
                     </td>
                     <td width="10%">:</td>
                     <td width="60%">
-                        {{ $last_pemeriksaan_sampel['metode_pemeriksaan'] }}
+                        rRT-PCR-{{ $last_pemeriksaan_sampel['nama_kit_pemeriksaan'] }}
                     </td>
                 </tr>
                 <tr>
@@ -122,7 +122,7 @@
                     </td>
                     <td width="10%">:</td>
                     <td width="60%">
-                        {{ $last_pemeriksaan_sampel['jenis_sampel_nama'] }}
+                        {{ $sampel['jenis_sampel_nama'] }}
                     </td>
                 </tr>
 
@@ -136,7 +136,7 @@
                     </td>
                     <td width="10%">:</td>
                     <td width="60%">
-                        <span>{{$last_pemeriksaan_sampel['kesimpulan_pemeriksaan']}}</span>
+                        <span><b>{{$last_pemeriksaan_sampel['kesimpulan_pemeriksaan']}}</b></span>
                     </td>
                 </tr>
 
@@ -166,7 +166,7 @@
             </thead>
             <tbody>
 
-                @if ($last_pemeriksaan_sampel['hasil_deteksi'] && count($last_pemeriksaan_sampel['hasil_deteksi']) > 0)
+                {{-- @if ($last_pemeriksaan_sampel['hasil_deteksi'] && count($last_pemeriksaan_sampel['hasil_deteksi']) > 0)
                     @foreach ($last_pemeriksaan_sampel['hasil_deteksi'] as $key=> $item)
                         <tr>
                             <td>{{ ($key+1) }}</td>
@@ -174,6 +174,14 @@
                             <td>{{$item['ct_value']}}</td>
                         </tr>
                     @endforeach
+                @endif --}}
+
+                @if ($last_pemeriksaan_sampel['hasil_deteksi_terkecil'] && count($last_pemeriksaan_sampel['hasil_deteksi_terkecil']) > 0)
+                    <tr>
+                        <td>1</td>
+                        <td>{{$last_pemeriksaan_sampel['hasil_deteksi_terkecil']['target_gen']}}</td>
+                        <td>{{$last_pemeriksaan_sampel['hasil_deteksi_terkecil']['ct_value']}}</td>
+                    </tr>
                 @endif
 
                 @if (!$last_pemeriksaan_sampel['hasil_deteksi'] || count($last_pemeriksaan_sampel['hasil_deteksi']) < 1)

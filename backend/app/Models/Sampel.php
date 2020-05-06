@@ -32,6 +32,7 @@ class Sampel extends Model
         'waktu_sample_verified',
         'waktu_sample_valid',
         'valid_file_id',
+        'counter_print_hasil'
     ];
 
     protected $dates = [

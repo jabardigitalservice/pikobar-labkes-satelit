@@ -20,6 +20,10 @@ class ValidasiExportController extends Controller
 
         abort_if(!$isExists, 404, "File tidak ditemukan.");
 
+        $sampel->update([
+            'counter_print_hasil'=> ($sampel->getAttribute('counter_print_hasil') + 1)
+        ]);
+
         return Storage::download($filePath, $sampel->validFile->original_name.'.pdf', [
             // "X-Suggested-Filename"=> $sampel->validFile->original_name.'.pdf',
             "Content-Type"=> "application/pdf",
