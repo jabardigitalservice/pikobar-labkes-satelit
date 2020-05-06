@@ -180,10 +180,17 @@
                       </p>
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                       <label>Metode Pemeriksaan</label>
                       <p class="form-control">
                         <b>{{ hasil.metode_pemeriksaan }}</b>
+                      </p>
+                    </div> -->
+
+                    <div class="form-group">
+                      <label>Metode Pemeriksaan</label>
+                      <p class="form-control">
+                        <b v-if="hasil.nama_kit_pemeriksaan">PCR - {{ hasil.nama_kit_pemeriksaan }}</b>
                       </p>
                     </div>
 

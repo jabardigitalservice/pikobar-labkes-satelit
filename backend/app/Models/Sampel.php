@@ -9,7 +9,11 @@ class Sampel extends Model
 {
     use SoftDeletes;
     protected $table = 'sampel';
-    protected $appends = ['jenis_sampel'];
+
+    protected $appends = [
+        'jenis_sampel',
+        'kondisi_sampel'
+    ];
 
     protected $fillable = [
         'nomor_register',
@@ -20,7 +24,7 @@ class Sampel extends Model
 
         'nomor_sampel',
         'jenis_sampel_id',
-        'petugas_pengambilan_sampel',
+        'petugas_pengambilan_sampel', // Isinya adalah kondisi sampel, di aliaskan 'kondisi_sampel' 
         'tanggal_pengambilan_sampel',
         'waktu_pengambilan_sampel',
         'sampel_status',
@@ -128,6 +132,11 @@ class Sampel extends Model
                 $model->is_musnah_pcr = false;
             }
         });
+    }
+
+    public function getKondisiSampelAttribute()
+    {
+        return $this->getAttribute('petugas_pengambilan_sampel');
     }
 
 }
