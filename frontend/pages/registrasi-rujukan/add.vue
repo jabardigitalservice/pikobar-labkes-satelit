@@ -98,7 +98,7 @@
                             <label class="col-md-2">Nama Rumah Sakit / Fasyankes
                                 <span style="color:red">*</span> </label>
                             <div class="col-md-6" :class="{'is-invalid':form.errors.has('reg_nama_rs')}">
-                                <v-select :options="optFasyankes" label="nama" value="id" v-model="form.reg_nama_rs"></v-select>
+                                <v-select :options="optFasyankes" label="nama" :value="form.reg_fasyankes_id" v-model="form.reg_nama_rs"></v-select>
                             </div>
                         </div>
 
@@ -197,12 +197,12 @@
                             </label>
                             <div class="col-md-2" :class="{ 'is-invalid': form.errors.has('reg_usia_tahun') }">
                                 <input class="form-control" type="number" name="reg_usia_tahun" placeholder="Tahun"
-                                    v-model="form.reg_usia_tahun" required />
+                                    v-model="form.reg_usia_tahun" />
                                 <has-error :form="form" field="reg_usia_tahun" />
                             </div>
                             <div class="col-md-2" :class="{ 'is-invalid': form.errors.has('reg_usia_bulan') }">
                                 <input class="form-control" type="number" name="reg_usia_bulan" placeholder="Bulan"
-                                    v-model="form.reg_usia_bulan" required />
+                                    v-model="form.reg_usia_bulan" />
                                 <has-error :form="form" field="reg_usia_bulan" />
                             </div>
                         </div>
@@ -466,6 +466,7 @@
                 // _this:this,
                 optFasyankes:[],
                 form: new Form({
+                    reg_sumberpasien_isian:null,
                     samples: resp.data,
                     reg_fasyankes_pengirim:null,
                     reg_telp_fas_pengirim:null,
@@ -510,6 +511,7 @@
                     reg_usia_tahun:null,
                     reg_usia_bulan:null,
                     reg_hasil_rdt:null,
+                    reg_fasyankes_id: null,
 
                 }),
                 selected_reg: {},
@@ -557,6 +559,7 @@
                     reg_gejmualmuntah: null,
                     reg_gejlain: null,
                     reg_jk: null,
+                    reg_fasyankes_id: null,
                 })
             },
             addSample() {
@@ -584,7 +587,7 @@
             },
             async submit() {
                 try {
-                    this.form.reg_nama_rs = this.form.reg_nama_rs.id
+                    this.form.reg_fasyankes_id = this.form.reg_nama_rs.id
                     const response = await this.form.post("/registrasi-rujukan/store");
                     this.$toast.success(response.data.message, {
                         icon: 'check',
@@ -619,6 +622,7 @@
         },
         created() {
             _this = this;
+            this.changeFasyankes(this.form.reg_fasyankes_pengirim)
             this.getKota()
             this.getNoreg();
         },
