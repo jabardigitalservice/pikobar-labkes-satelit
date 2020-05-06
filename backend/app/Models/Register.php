@@ -28,6 +28,7 @@ class Register extends Model
         'nama_rs',
         'other_nama_rs',
         'fasyankes_pengirim',
+        'hasil_rdt'
         // 'keterangan_lain'
     ];
 
