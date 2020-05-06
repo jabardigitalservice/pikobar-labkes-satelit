@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Request; 
 use App\Models\Pasien;
 use App\Models\Register;
 use App\Models\PasienRegister;

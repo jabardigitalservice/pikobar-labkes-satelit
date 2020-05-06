@@ -506,7 +506,7 @@
                     reg_gejsakitkepala: null,
                     reg_gejdiare: null,
                     reg_gejmualmuntah: null,
-                    reg_gejlain: null,
+                    reg_gejlain: null, 
                     reg_jk: null,
                     reg_usia_tahun:null,
                     reg_usia_bulan:null,
