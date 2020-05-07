@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Fasyankes;
 use App\Models\Kota;
 use App\Models\Pasien;
 use App\Models\Register;
@@ -41,7 +42,16 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
                     'jenis_registrasi'=> 'rujukan',
                     'nomor_register'=> $this->generateNomorRegister(null, 'rujukan'),
                     // 'nomor_register'=> "20200425L" . str_pad($counterNomorRegister, 4, "0", STR_PAD_LEFT),
-                    'creator_user_id' => auth()->user()->id,
+                    'hasil_rdt'=> $row->get('hasil_rdt'),
+                    'kunjungan_ke'=> $row->get('kunjungan'),
+                    'tanggal_kunjungan'=> $row->get('tanggal_kunjungan'),
+                    'rs_kunjungan'=> $row->get('rs_kunjungan'),
+                    'dinkes_pengirim'=> $row->get('instansi_pengirim'),
+                    'fasyankes_id'=> $this->getFasyankes($row),
+                    'fasyankes_pengirim'=> $row->get('fasyankesdinkes'),
+                    'nama_dokter'=> $row->get('dokter'),
+                    'no_telp'=> $row->get('telp_fasyankes'),
+                    'other_dinas_pengirim'=> $row->get('fasyankes_other') 
 
                 ]);
 
@@ -60,7 +70,11 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
                     'alamat_lengkap'=> $row->get('alamat'),
                     'keterangan_lain'=> $row->get('keterangan'),
                     'suhu'=> $row->get('suhu'),
-                    'sumber_pasien'=> $row->get('sumber_pasien')
+                    'sumber_pasien'=> $row->get('sumber_pasien'),
+                    'suhu'=> $row->get('suhu'),
+                    'sumber_pasien'=> $row->get('sumber_pasien'),
+                    'usia_tahun'=> $row->get('usia_tahun'),
+                    'usia_bulan'=> $row->get('usia_bulan')
                 ];
 
                 $pasien = Pasien::query()->updateOrCreate(
@@ -79,6 +93,10 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
                     abort_if(!$sampel, 422, "Gagal import. Sampel dengan nomor {$nomor} tidak ditemukan");
 
                     abort_if($sampel->register_id, 422, "Gagal import. Sampel dengan nomor {$nomor} sudah memiliki data pasien.");
+
+                    $sampel->update([
+                        'nomor_register'=> $register->getAttribute('nomor_register')
+                    ]);
 
                     $register->sampel()->save($sampel);
                 }
@@ -112,5 +130,10 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
         abort_if(!$kota, 422, "Kota domisili tidak ditemukan pada pasien dengan NIK {$row->get('nik')}");
 
         return $kota;
+    }
+
+    private function getFasyankes(Collection $row)
+    {
+        return Fasyankes::find($row->get('id_fasyankes'));
     }
 }
