@@ -70,9 +70,9 @@ class RegisterController extends Controller
                 'required',
                 new UniqueSampel(),
             ],
-            'reg_tanggalkunjungan' => 'required',
+            // 'reg_tanggalkunjungan' => 'required',
             'reg_kunke' => 'required',
-            'reg_rsfasyankes' => 'required',
+            // 'reg_rsfasyankes' => 'required',
         ], [
             'reg_kewarganegaraan.required' => 'Mohon pilih kewarganegaraan',
             'reg_sumberpasien' => 'Mohon pilih sumber kedatangan pasien',
