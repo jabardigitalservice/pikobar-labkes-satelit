@@ -378,8 +378,6 @@
                             </div>
                         </div>
 
-                        
-
                         <div class="form-group row mt-4 text-center justify-content-center">
                             <v-button :loading="form.busy" class="btn btn-md btn-primary block  m-b">
                                 <i class="fa fa-save"></i> Simpan Data Register
