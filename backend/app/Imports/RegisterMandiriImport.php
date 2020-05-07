@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Fasyankes;
 use App\Models\Kota;
 use App\Models\Pasien;
 use App\Models\Register;
@@ -36,13 +37,16 @@ class RegisterMandiriImport implements ToCollection, WithHeadingRow
 
                 $register = Register::create([
                     // 'id'=> $omgRegisterId,
-                    'sumber_pasien'=> $row->get('sumber_pasien'),
+                    'sumber_pasien'=> $row->get('kategori'),
                     'register_uuid'=> (string) \Illuminate\Support\Str::uuid(),
                     'jenis_registrasi'=> 'mandiri',
                     'nomor_register'=> $this->generateNomorRegister(),
                     // 'nomor_register'=> "20200425L" . str_pad($counterNomorRegister, 4, "0", STR_PAD_LEFT),
                     'creator_user_id' => auth()->user()->id,
-
+                    'hasil_rdt'=> $row->get('hasil_rdt'),
+                    'kunjungan_ke'=> $row->get('kunjungan'),
+                    'tanggal_kunjungan'=> $row->get('tanggal_kunjungan'),
+                    'rs_kunjungan'=> $row->get('rs_kunjungan')
                 ]);
 
                 $pasienData = [
@@ -60,7 +64,9 @@ class RegisterMandiriImport implements ToCollection, WithHeadingRow
                     'alamat_lengkap'=> $row->get('alamat'),
                     'keterangan_lain'=> $row->get('keterangan'),
                     'suhu'=> $row->get('suhu'),
-                    'sumber_pasien'=> $row->get('sumber_pasien')
+                    'sumber_pasien'=> $row->get('sumber_pasien'),
+                    'usia_tahun'=> $row->get('usia_tahun'),
+                    'usia_bulan'=> $row->get('usia_bulan')
                 ];
 
                 $pasien = Pasien::query()->updateOrCreate(
@@ -122,7 +128,6 @@ class RegisterMandiriImport implements ToCollection, WithHeadingRow
 
         return $kota;
     }
-
     
 
 }

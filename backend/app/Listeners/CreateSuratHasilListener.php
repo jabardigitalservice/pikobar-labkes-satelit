@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\SampelValidatedEvent;
 use App\Models\File;
 use App\Models\Pasien;
+use App\Models\PemeriksaanSampel;
 use App\Models\Sampel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -95,6 +96,7 @@ class CreateSuratHasilListener
         $data['tanggal_validasi'] = $this->formatTanggalValid($sampel);
         $data['tanggal_lahir_pasien'] = $data['pasien'] ? $this->getTanggalLahir($data['pasien']) : null;
         $data['umur_pasien'] = $data['pasien'] ? Carbon::parse($data['pasien']->tanggal_lahir)->age : null;
+        $data['last_pemeriksaan_sampel']['hasil_deteksi_terkecil'] = $this->getHasilDeteksiTerkecil($data['last_pemeriksaan_sampel']);
 
         $pdf = PDF::loadView('pdf_templates.print_validasi', $data);
 
@@ -163,5 +165,10 @@ class CreateSuratHasilListener
             'valid_file_id'=> null
         ]);
         
+    }
+
+    private function getHasilDeteksiTerkecil(PemeriksaanSampel $hasil)
+    {
+        return collect($hasil['hasil_deteksi'])->sortBy('ct_value')->first();
     }
 }
