@@ -176,7 +176,7 @@ class RegistrasiRujukanController extends Controller
             $sampel = Sampel::where('register_id',$id)->get();
             foreach($sampel as $sm) {
                 $sm->register_id = null;
-                $sm->nomor_sampel = null;
+                $sm->nomor_register = null;
                 $sm->sampel_status = 'waiting_sample';
                 $sm->save();
             }
