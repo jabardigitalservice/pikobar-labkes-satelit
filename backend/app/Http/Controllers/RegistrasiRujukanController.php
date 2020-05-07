@@ -161,7 +161,7 @@ class RegistrasiRujukanController extends Controller
             if($sampel) {
                 $sampel->register_id = $register->id;
                 $sampel->nomor_register = $request->input('reg_no');
-                $sampel->sampel_status = 'waiting_sample';
+                // $sampel->sampel_status = 'waiting_sample';
                 $sampel->save();
             }
         }
@@ -364,15 +364,15 @@ class RegistrasiRujukanController extends Controller
         $pasien->usia_bulan = $request->get('reg_usia_bulan');      
         $pasien->save();
 
-        foreach($request->get('samples') as $sm) {
-            $sampel = Sampel::where('nomor_sampel',$sm['nomor_sampel'])->first();
-            if($sampel) {
-                // $sampel->register_id = $register->id;
-                // $sampel->nomor_register = $request->input('reg_no');
-                $sampel->sampel_status = 'sample_taken';
-                $sampel->save();
-            }
-        }
+        // foreach($request->get('samples') as $sm) {
+        //     $sampel = Sampel::where('nomor_sampel',$sm['nomor_sampel'])->first();
+        //     if($sampel) {
+        //         // $sampel->register_id = $register->id;
+        //         // $sampel->nomor_register = $request->input('reg_no');
+        //         // $sampel->sampel_status = 'sample_taken';
+        //         $sampel->save();
+        //     }
+        // }
 
         return response()->json(['status'=>200,'message'=>'Proses Registrasi Rujukan Berhasil Diubah','result'=>[]]);
     }
