@@ -452,6 +452,7 @@
         mapGetters
     } from "vuex";
     let _this = null;
+    // let error = false;
     export default {
         middleware: "auth",
         computed: mapGetters({
@@ -463,39 +464,47 @@
             store
         }) { 
             let resp = await axios.get('/registrasi-rujukan/update/'+route.params.register_id+'/'+route.params.pasien_id);
+            let error = false;
+            if(resp.data.status==400) {
+                error({ statusCode: 404, message: resp.message})
+                // console.log(router);
+                // console.log(ctx);
+                // error = true;
+            }
+            const data = resp.data.result
             // let resp2 = await axios.get('/sample/get-sample/'+route.params.nomor_sampel);
             return {
                 optFasyankes:[],
                 // _this:this,
                 form: new Form({
-                    samples: resp.data.samples,
-                    reg_fasyankes_pengirim:resp.data.reg_fasyankes_pengirim,
-                    reg_telp_fas_pengirim:resp.data.reg_telp_fas_pengirim,
-                    reg_nama_dokter:resp.data.reg_nama_dokter,
-                    reg_nama_rs : resp.data.reg_nama_rs,
-                    reg_nama_rs_lainnya:resp.data.reg_nama_rs_lainnya,
-                    daerahlain: resp.data.daerahlain,
-                    reg_dinkes_pengirim: resp.data.reg_dinkes_pengirim,
-                    reg_tanggalkunjungan: resp.data.reg_tanggalkunjungan,
-                    reg_kunke: resp.data.reg_kunke,
-                    reg_rsfasyankes: resp.data.reg_rsfasyankes,
-                    reg_no: resp.data.reg_no,
-                    reg_kewarganegaraan: resp.data.reg_kewarganegaraan,
-                    reg_sumberpasien: resp.data.reg_sumberpasien,
-                    reg_sumberpasien_isian: resp.data.reg_sumberpasien_isian,
-                    reg_nama_pasien: resp.data.reg_nama_pasien,
-                    reg_nik: resp.data.reg_nik,
-                    reg_tempatlahir: resp.data.reg_tempatlahir,
-                    reg_tgllahir: resp.data.reg_tgllahir,
-                    reg_nohp: resp.data.reg_nohp,
-                    reg_kota: resp.data.reg_kota,
-                    reg_kecamatan: resp.data.reg_kecamatan,
-                    reg_kelurahan: resp.data.reg_kelurahan,
-                    reg_alamat: resp.data.reg_alamat,
-                    reg_rt: resp.data.reg_rt,
-                    reg_rw: resp.data.reg_rw,
-                    reg_suhu: resp.data.reg_suhu,
-                    reg_keterangan: resp.data.reg_keterangan,
+                    samples: data.samples,
+                    reg_fasyankes_pengirim:data.reg_fasyankes_pengirim,
+                    reg_telp_fas_pengirim:data.reg_telp_fas_pengirim,
+                    reg_nama_dokter:data.reg_nama_dokter,
+                    reg_nama_rs : data.reg_nama_rs,
+                    reg_nama_rs_lainnya:data.reg_nama_rs_lainnya,
+                    daerahlain: data.daerahlain,
+                    reg_dinkes_pengirim: data.reg_dinkes_pengirim,
+                    reg_tanggalkunjungan: data.reg_tanggalkunjungan,
+                    reg_kunke: data.reg_kunke,
+                    reg_rsfasyankes: data.reg_rsfasyankes,
+                    reg_no: data.reg_no,
+                    reg_kewarganegaraan: data.reg_kewarganegaraan,
+                    reg_sumberpasien: data.reg_sumberpasien,
+                    reg_sumberpasien_isian: data.reg_sumberpasien_isian,
+                    reg_nama_pasien: data.reg_nama_pasien,
+                    reg_nik: data.reg_nik,
+                    reg_tempatlahir: data.reg_tempatlahir,
+                    reg_tgllahir: data.reg_tgllahir,
+                    reg_nohp: data.reg_nohp,
+                    reg_kota: data.reg_kota,
+                    reg_kecamatan: data.reg_kecamatan,
+                    reg_kelurahan: data.reg_kelurahan,
+                    reg_alamat: data.reg_alamat,
+                    reg_rt: data.reg_rt,
+                    reg_rw: data.reg_rw,
+                    reg_suhu: data.reg_suhu,
+                    reg_keterangan: data.reg_keterangan,
                     reg_gejpanas: null,
                     reg_gejpenumonia: null,
                     reg_gejbatuk: null,
@@ -507,11 +516,11 @@
                     reg_gejdiare: null,
                     reg_gejmualmuntah: null,
                     reg_gejlain: null,
-                    reg_jk: resp.data.reg_jk,
-                    reg_usia_tahun:resp.data.reg_usia_tahun,
-                    reg_usia_bulan:resp.data.reg_usia_bulan,
-                    reg_hasil_rdt:resp.data.reg_hasil_rdt,
-                    reg_fasyankes_id: resp.data.reg_fasyankes_id,
+                    reg_jk: data.reg_jk,
+                    reg_usia_tahun:data.reg_usia_tahun,
+                    reg_usia_bulan:data.reg_usia_bulan,
+                    reg_hasil_rdt:data.reg_hasil_rdt,
+                    reg_fasyankes_id: data.reg_fasyankes_id,
 
                 }),
                 selected_reg: {},
@@ -618,6 +627,10 @@
         created() {
             _this = this;
             this.getKota()
+            // alert(error);
+            // if(this.error){
+            //     this.$router.push("/");
+            // }
             // this.getNoreg();
             console.log('Data : ', this.sampel);
         },

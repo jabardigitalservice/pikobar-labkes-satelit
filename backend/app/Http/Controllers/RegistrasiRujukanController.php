@@ -196,8 +196,15 @@ class RegistrasiRujukanController extends Controller
     public function getById(Request $request, $register_id, $pasien_id)
     {
         $register = Register::where('id',$register_id)->first();
-        $pasien   = Pasien::where('pasien.id', $pasien_id)->leftJoin('kota','kota.id','pasien.kota_id')->first();
+        $pasien   = Pasien::where('pasien.id', $pasien_id)
+                        ->leftJoin('kota','kota.id','pasien.kota_id')->first();
         $sampel   = Sampel::where('register_id',$register_id)->get();
+        if(!$pasien) {
+            return response()->json(['status'=>400,
+            'message'=>'Data Pasien Tidak Ditemukan',
+            'result' =>[ 'sampels'=>$sampel ]
+            ]);
+        }
         $smp = [];
         foreach($sampel as $sm) {
             array_push($smp, array(
@@ -209,53 +216,57 @@ class RegistrasiRujukanController extends Controller
         // dd($pasien->tanggal_lahir->format('Y-m-d'));
         // dd($register->nama_dokter);
         return response()->json([
-            'reg_no' =>  $register->nomor_register,
-            'reg_kewarganegaraan' =>  $pasien->kewarganegaraan,
-            'reg_sumberpasien' =>  $register->sumber_pasien=="Umum"?"Umum":"Other",
-            "reg_sumberpasien_isian" => $register->sumber_pasien=="Umum"?null:$register->sumber_pasien,
-            'reg_nama_pasien' =>  $pasien->nama_lengkap,
-            'reg_nik' =>  $pasien->nik,
-            'reg_tempatlahir' =>  $pasien->tempat_lahir,
-            'reg_tgllahir' =>  $pasien->tanggal_lahir->format('Y-m-d'),
-            'reg_nohp' =>  $pasien->no_hp,
-            'reg_kota' =>  $pasien->kota_id,
-            'reg_kecamatan' =>  $pasien->kecamatan,
-            'reg_kelurahan' =>  $pasien->kelurahan,
-            'reg_alamat' =>  $pasien->alamat_lengkap,
-            'reg_rt' =>  $pasien->no_rt,
-            'reg_rw' =>  $pasien->no_rw,
-            'reg_suhu' =>  $pasien->suhu,
-            'samples' =>  $smp,
-            'reg_keterangan' =>  $pasien->keterangan_lain,
-            'reg_gejpanas' => null,
-            'reg_gejpenumonia' => null,
-            'reg_gejbatuk' => null,
-            'reg_gejnyeritenggorokan' => null,
-            'reg_gejsesaknafas' => null,
-            'reg_gejpilek' => null,
-            'reg_gejlesu' => null,
-            'reg_gejsakitkepala' => null,
-            'reg_gejdiare' => null,
-            'reg_gejmualmuntah' => null,
-            'reg_gejlain' => null,
-            'reg_jk' => $pasien->jenis_kelamin,
-            'nama_kota'=>$pasien->nama,
-            'reg_kunke' =>$register->kunjungan_ke,
-            'reg_tanggalkunjungan' => $register->tanggal_kunjungan,
-            'reg_rs_kunjungan' => $register->rs_kunjungan,
-            'reg_fasyankes_pengirim' => $register->fasyankes_pengirim,
-            'reg_telp_fas_pengirim' => $register->no_telp,
-            'reg_nama_dokter' => $register->nama_dokter,
-            'reg_nama_rs' => $register->nama_rs,
-            'reg_nama_rs_lainnya' => $register->other_nama_rs,
-            'daerahlain' =>  $register->other_dinas_pengirim,
-            'reg_dinkes_pengirim' =>  $register->dinkes_pengirim,
-            'reg_no' => $register->nomor_register,
-            'reg_rsfasyankes' => $register->rs_kunjungan,
-            'reg_usia_tahun' =>  $pasien->usia_tahun,
-            'reg_usia_bulan' => $pasien->usia_bulan,
-            'reg_hasil_rdt' => $register->hasil_rdt,
-            'reg_fasyankes_id' => $register->fasyankes_id,
+            'status' => 200,
+            'message' => 'success',
+            'result' => [
+                'reg_no' =>  $register->nomor_register,
+                'reg_kewarganegaraan' =>  $pasien->kewarganegaraan,
+                'reg_sumberpasien' =>  $register->sumber_pasien=="Umum"?"Umum":"Other",
+                "reg_sumberpasien_isian" => $register->sumber_pasien=="Umum"?null:$register->sumber_pasien,
+                'reg_nama_pasien' =>  $pasien->nama_lengkap,
+                'reg_nik' =>  $pasien->nik,
+                'reg_tempatlahir' =>  $pasien->tempat_lahir,
+                'reg_tgllahir' =>  $pasien->tanggal_lahir->format('Y-m-d'),
+                'reg_nohp' =>  $pasien->no_hp,
+                'reg_kota' =>  $pasien->kota_id,
+                'reg_kecamatan' =>  $pasien->kecamatan,
+                'reg_kelurahan' =>  $pasien->kelurahan,
+                'reg_alamat' =>  $pasien->alamat_lengkap,
+                'reg_rt' =>  $pasien->no_rt,
+                'reg_rw' =>  $pasien->no_rw,
+                'reg_suhu' =>  $pasien->suhu,
+                'samples' =>  $smp,
+                'reg_keterangan' =>  $pasien->keterangan_lain,
+                'reg_gejpanas' => null,
+                'reg_gejpenumonia' => null,
+                'reg_gejbatuk' => null,
+                'reg_gejnyeritenggorokan' => null,
+                'reg_gejsesaknafas' => null,
+                'reg_gejpilek' => null,
+                'reg_gejlesu' => null,
+                'reg_gejsakitkepala' => null,
+                'reg_gejdiare' => null,
+                'reg_gejmualmuntah' => null,
+                'reg_gejlain' => null,
+                'reg_jk' => $pasien->jenis_kelamin,
+                'nama_kota'=>$pasien->nama,
+                'reg_kunke' =>$register->kunjungan_ke,
+                'reg_tanggalkunjungan' => $register->tanggal_kunjungan,
+                'reg_rs_kunjungan' => $register->rs_kunjungan,
+                'reg_fasyankes_pengirim' => $register->fasyankes_pengirim,
+                'reg_telp_fas_pengirim' => $register->no_telp,
+                'reg_nama_dokter' => $register->nama_dokter,
+                'reg_nama_rs' => $register->nama_rs,
+                'reg_nama_rs_lainnya' => $register->other_nama_rs,
+                'daerahlain' =>  $register->other_dinas_pengirim,
+                'reg_dinkes_pengirim' =>  $register->dinkes_pengirim,
+                'reg_no' => $register->nomor_register,
+                'reg_rsfasyankes' => $register->rs_kunjungan,
+                'reg_usia_tahun' =>  $pasien->usia_tahun,
+                'reg_usia_bulan' => $pasien->usia_bulan,
+                'reg_hasil_rdt' => $register->hasil_rdt,
+                'reg_fasyankes_id' => $register->fasyankes_id,   
+            ]
          ]);
     }
 
