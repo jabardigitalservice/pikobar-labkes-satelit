@@ -435,6 +435,11 @@
                     </td>
                 </tr>
                 <tr>
+                    <td width="30%"></td>
+                    <td width="25%"></td>
+                    <td>PENANGGUNG JAWAB LAB COVID-19</td>
+                </tr>
+                <tr>
                     <td colspan="3" style="padding-top: 65px;"></td>
                 </tr>
                 <tr>
