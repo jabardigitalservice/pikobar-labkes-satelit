@@ -48,7 +48,7 @@
     {{-- <center><b>HASIL PEMERIKSAANTES PRO AKTIF COVID-19</b></center> --}}
     {{-- <center><b>No./Lap.COV/IV/2020</b></center> --}}
 
-    <table style="margin-top: 2%">
+    <table style="margin-top: 2%" width="100%">
         <tbody>
             <tr>
                 <td width="20%">
@@ -58,9 +58,12 @@
                 <td width="28%">
                   <span><b>{{$sampel['nomor_register']}}</b></span>
                 </td>
+
+                <td style="min-width:500px"></td>
                 <td></td>
                 <td></td>
                 <td></td>
+
             </tr>
             <tr>
                 <td width="20%">
@@ -72,6 +75,8 @@
                         <span><b>{{$pasien['nama_lengkap']}}</b></span>
                     @endif
                 </td>
+
+                <td style="min-width:500px"></td>
                 <td width=20%>
                     <b>Tanggal Periksa</b>
                 </td>
@@ -115,6 +120,7 @@
                     @endif
                 </td>
 
+                <td style="min-width:500px"></td>
                 <td width=20%>
                     <b>Dokter Pengirim</b>
                 </td>
@@ -143,6 +149,7 @@
                     @endif
                 </td>
 
+                <td style="min-width:500px"></td>
                 <td width=20%>
                     <b>Instansi</b>
                 </td>
@@ -166,6 +173,12 @@
                         <span>{{ $pasien['alamat_lengkap'] }}</span>
                     @endif
                 </td>
+
+                <td style="min-width:500px"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
               </tr>
 
               {{-- @if ($last_pemeriksaan_sampel)
