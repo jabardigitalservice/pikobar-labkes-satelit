@@ -20,6 +20,7 @@
               </label>
               <input class="form-control" 
                 type="file" 
+                id="register_file"
                 ref="myFile"  
                 @change="previewFile"
               >
@@ -49,6 +50,7 @@
 <script>
 import Form from "vform";
 import axios from "axios";
+import $ from "jquery";
 
 export default {
   middleware: "auth",
@@ -108,121 +110,45 @@ export default {
           });
         
       } catch (err) {
-
-          console.log('ERRRR', err);
           
           if (err.response && err.response.data.code == 422) {
 
-            this.$nextTick(() => {
-              this.form.errors.set(err.response.data.error);
-            });
+            for (const property in err.response.data.error) {
+              // const element = array[property];
+              this.$toast.error(err.response.data.error[property][0], {
+                icon: "times",
+                iconPack: "fontawesome",
+                duration: 5000
+              });
+              
+            }
 
-            this.$toast.error(err.response.data.error, {
-              icon: "times",
-              iconPack: "fontawesome",
-              duration: 5000
-            });
+          }
+          
+          if (err.response && err.response.data.code == 403) {
+              this.$toast.error(err.response.data.error, {
+                icon: "times",
+                iconPack: "fontawesome",
+                duration: 5000
+              });
+          }
 
-          } else {
-
-            this.$swal.fire(
-              "Terjadi kesalahan",
-              "Silakan hubungi Admin",
-              "error"
-            );
-
+          if (err.response && err.response.data.code == 500) {
+              this.$swal.fire(
+                "Terjadi kesalahan",
+                "Silakan hubungi Admin",
+                "error"
+              );
           }
       }
 
+      $('#register_file').val('');
+      this.form.reset();
+
       this.loading = false;
-
-      
-      
-
-      // try {
-      //   this.loading = true;
-
-      //   axios({
-      //           url: process.env.apiUrl + "/v1/register/import-mandiri",
-      //           params: this.form,
-      //           method: 'POST',
-      //           responseType: 'json',
-      //       }).then((response) => {
-                
-      //       });
-
-      // } catch (err) {
-      //   if (err.response && err.response.data.code == 422) {
-
-      //     this.$nextTick(() => {
-      //       this.form.errors.set(err.response.data.error);
-      //     });
-
-      //     this.$toast.error("Mohon cek kembali formulir Anda", {
-      //       icon: "times",
-      //       iconPack: "fontawesome",
-      //       duration: 5000
-      //     });
-
-      //   } else {
-
-      //     this.$swal.fire(
-      //       "Terjadi kesalahan",
-      //       "Silakan hubungi Admin",
-      //       "error"
-      //     );
-
-      //   }
-      // }
-      // this.loading = false;
-
-
-
-
-
-      // try {
-      //   this.loading = true;
-
-      //   const response = await this.form.post("/v1/register/import-mandiri");
-
-      //   this.$toast.success(response.data.message, {
-      //     icon: "check",
-      //     iconPack: "fontawesome",
-      //     duration: 5000
-      //   });
-
-      // } catch (err) {
-
-      //   console.log(err)
-
-      //   if (err.response && err.response.data.code == 422) {
-
-      //     this.$nextTick(() => {
-      //       this.form.errors.set(err.response.data.error);
-      //     });
-
-      //     this.$toast.error("Mohon cek kembali formulir Anda", {
-      //       icon: "times",
-      //       iconPack: "fontawesome",
-      //       duration: 5000
-      //     });
-
-      //   } else {
-
-      //     this.$swal.fire(
-      //       "Terjadi kesalahan",
-      //       "Silakan hubungi Admin",
-      //       "error"
-      //     );
-
-      //   }
-      // }
-      // this.loading = false;
-
     },
     previewFile(){
-      this.form.register_file = this.$refs.myFile.files[0]
-      
+        this.form.register_file = this.$refs.myFile.files[0]      
     }
   }
 };
