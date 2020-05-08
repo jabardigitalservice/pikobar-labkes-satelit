@@ -6,6 +6,7 @@ use App\Events\SampelValidatedEvent;
 use App\Models\File;
 use App\Models\Pasien;
 use App\Models\PemeriksaanSampel;
+use App\Models\Register;
 use App\Models\Sampel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -95,8 +96,11 @@ class CreateSuratHasilListener
         $data['kop_surat'] = $this->getKopSurat();
         $data['tanggal_validasi'] = $this->formatTanggalValid($sampel);
         $data['tanggal_lahir_pasien'] = $data['pasien'] ? $this->getTanggalLahir($data['pasien']) : null;
-        $data['umur_pasien'] = $data['pasien'] ? Carbon::parse($data['pasien']->tanggal_lahir)->age : null;
+        $data['umur_pasien'] = $data['pasien'] ? $this->getUmurPasien($data['pasien']->tanggal_lahir) : null;
+        // $data['umur_pasien'] = $data['pasien'] ? Carbon::parse($data['pasien']->tanggal_lahir)->age : null;
         $data['last_pemeriksaan_sampel']['hasil_deteksi_terkecil'] = $this->getHasilDeteksiTerkecil($data['last_pemeriksaan_sampel']);
+        $data['register'] = $sampel->register ?? null;
+        $data['tanggal_periksa'] =  $sampel->register ? $this->formatTanggalKunjungan($sampel->register) : '-';
 
         $pdf = PDF::loadView('pdf_templates.print_validasi', $data);
 
@@ -109,7 +113,7 @@ class CreateSuratHasilListener
 
     public function getKopSurat()
     {
-        $pathDirectory = 'kop_surat/kop-surat-lab-kes.png';
+        $pathDirectory = 'kop_surat/kop-surat-labkesda.png';
 
         $image = public_path($pathDirectory);
 
@@ -170,5 +174,22 @@ class CreateSuratHasilListener
     private function getHasilDeteksiTerkecil(PemeriksaanSampel $hasil)
     {
         return collect($hasil['hasil_deteksi'])->sortBy('ct_value')->first();
+    }
+
+    private function getUmurPasien(Carbon $tanggalLahir)
+    {
+        return $tanggalLahir->diff(Carbon::now())->format('%y Thn %m Bln %d Hari');
+    }
+
+    private function formatTanggalKunjungan(Register $register)
+    {
+        if (!$register->getAttribute('tanggal_kunjungan')) {
+            $tanggal = now();
+            return '-';
+        }
+
+        return $register->tanggal_kunjungan->day . ' ' . 
+                $this->getNamaBulan($register->tanggal_kunjungan->month) . ' ' . 
+                $register->tanggal_kunjungan->year;
     }
 }
