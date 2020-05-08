@@ -226,7 +226,7 @@ class RegistrasiRujukanController extends Controller
                 'reg_nama_pasien' =>  $pasien->nama_lengkap,
                 'reg_nik' =>  $pasien->nik,
                 'reg_tempatlahir' =>  $pasien->tempat_lahir,
-                'reg_tgllahir' =>  $pasien->tanggal_lahir->format('Y-m-d'),
+                'reg_tgllahir' =>  $pasien->tanggal_lahir?$pasien->tanggal_lahir->format('Y-m-d'):null,
                 'reg_nohp' =>  $pasien->no_hp,
                 'reg_kota' =>  $pasien->kota_id,
                 'reg_kecamatan' =>  $pasien->kecamatan,
