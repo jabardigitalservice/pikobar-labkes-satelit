@@ -34,6 +34,10 @@ class Register extends Model
 
     protected $hidden = ['fasyankes_id'];
 
+    protected $dates = [
+        'tanggal_kunjungan'
+    ];
+
     public function fasyankes()
     {
         return $this->belongsTo(Fasyankes::class);
