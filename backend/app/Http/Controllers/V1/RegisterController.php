@@ -87,7 +87,8 @@ class RegisterController extends Controller
             'reg_sampel.required' => 'Mohon isi minimal satu nomor sampel',
             'reg_tanggalkunjungan' => 'Mohon isi form tanggal kunjungan',
             'reg_kunke' => 'Mohon isi kunjungan keberapa',
-            'reg_rsfasyankes' => 'Mohon isi form'
+            'reg_rsfasyankes' => 'Mohon isi form',
+            'reg_jk' => 'Mohon pIlih Jenis Kelamin',
         ]);
         $v->validate();
         // foreach($request->get('reg_sampel') as $rows){
@@ -168,7 +169,7 @@ class RegisterController extends Controller
             'reg_kewarganegaraan' => 'required',
             'reg_sumberpasien' => 'required',
             'reg_nama_pasien' => 'required',
-            // 'reg_nik'  => 'max:16',
+            'reg_nik'  => 'max:16',
             'reg_nohp' => 'required|max:15',
             'reg_kota' => 'required',
             'reg_alamat' => 'required',
@@ -285,6 +286,7 @@ class RegisterController extends Controller
             'reg_suhu' =>  $pasien->suhu,
             'reg_sampel' =>  $smp,
             'reg_keterangan' =>  $pasien->keterangan_lain,
+            'reg_nik'=> $pasien->nik,
             'reg_gejpanas' => null,
             'reg_gejpenumonia' => null,
             'reg_gejbatuk' => null,
