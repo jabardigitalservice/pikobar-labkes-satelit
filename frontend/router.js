@@ -87,6 +87,7 @@ const routes = [
 
   // Pelacakan Sampel
   { path: '/pelacakan-sampel', name:'pelacakan-sampel.index', component: page('pelacakan-sampel/index.vue'), meta: {parentName: 'home'} },
+  { path: '/pelacakan-sampel/detail/:id', name:'pelacakan-sampel.detail', component: page('pelacakan-sampel/detail.vue'), meta: {parentName: 'pelacakan-sampel.index'} },
 
   
 ]

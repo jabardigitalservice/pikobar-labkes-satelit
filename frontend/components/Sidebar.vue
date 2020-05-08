@@ -158,7 +158,7 @@
           </ul>
         </li>
         <li>
-          <router-link to="pelacakan-sampel/" tag="a">
+          <router-link to="/pelacakan-sampel" tag="a">
             <i class="uil-search-alt fa-fw"></i>
             <span class="nav-label">Pelacakan Sampel</span>
           </router-link>

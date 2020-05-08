@@ -8,44 +8,42 @@
       <span class="usia" v-if="item.pasien">{{ usiaPasien }}</span>
     </td>
     <td>
+      <span v-if="item.register">{{item.register.sumber_pasien}}</span>
+    </td>
+    <td>
       <span v-if="item.pasien && item.pasien.kota">{{item.pasien.kota.nama}}</span>
     </td>
-    <td>{{item.nomor_sampel}}</td>
     <td>
-      <div
-        v-for="item in item.pemeriksaanSampel.hasil_deteksi"
-        :key="item.target_gen"
-      >- {{ item.target_gen }} : {{ item.ct_value }}</div>
+      <span><b>{{item.nomor_sampel}}</b></span>
+      <span style="display: block;">Kondisi: {{ item.kondisi_sampel }}</span>
     </td>
-    <td>{{item.kondisi_sampel}}</td>
-    <td>{{item.pemeriksaanSampel.kesimpulan_pemeriksaan}}</td>
+    <td>
+      <span v-if="item.pemeriksaanSampel">{{item.pemeriksaanSampel.kesimpulan_pemeriksaan}}</span>
+    </td>
     <td>
       <span v-if="item.sampel_status === 'sample_verified'">Verifikasi</span>
       <span v-if="item.sampel_status === 'sample_valid'">Valid</span>
-      <span v-if="item.counter_print_hasil" class="counter-print">
-        <i>Diprint {{ item.counter_print_hasil }} kali</i>
-      </span>
+      <span v-if="item.sampel_status === 'waiting_sample'">Registrasi Mandiri Masuk</span>
+      <span v-if="item.sampel_status === 'sample_taken'">Sampel Diambil</span>
+      <span v-if="item.sampel_status === 'extraction_sample_extracted'">Ekstraksi Selesai</span>
+      <span v-if="item.sampel_status === 'extraction_sample_reextract'">Sampel butuh di-ekstraksi ulang</span>
+      <span v-if="item.sampel_status === 'extraction_sample_sent'">Hasil RNA Dikirim</span>
+      <span v-if="item.sampel_status === 'pcr_sample_received'">Sampel RNA Diterima di Lab PCR</span>
+      <span v-if="item.sampel_status === 'pcr_sample_analyzed'">Sampel Telah Dianalisa di Lab PCR</span>
+      <span v-if="item.sampel_status === 'sample_invalid'">Sampel Invalid</span>
     </td>
-    <td>{{item.waktu_sample_valid | formatDate}}</td>
+    <td>
+      <span v-if="item.validator">{{ item.validator.nama }}</span>
+    </td>
     <td width="20%">
       <nuxt-link
         tag="a"
         class="btn btn-success btn-sm"
-        :to="`/validasi/detail/${item.id}`"
+        :to="`/pelacakan-sampel/detail/${item.id}`"
         title="Klik untuk melihat detail"
       >
         <i class="uil-info-circle"></i>
       </nuxt-link>
-      <button @click="downloadPDF()" class="btn btn-sm btn-primary" type="button">
-        <!-- <i class="fa fa-file-excel"></i> -->
-        {{ 'Print' }}
-      </button>
-      <button
-        @click="regeneratePDF()"
-        class="btn btn-sm btn-primary"
-        type="button"
-      >{{ 'Regenerate Print' }}</button>
-      <!-- <nuxt-link :to="`/validasi/edit/${item.id}`" class="btn btn-warning btn-sm" tag="a"><i class="fa fa-edit"></i></nuxt-link> -->
     </td>
   </tr>
 </template>

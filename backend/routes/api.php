@@ -263,4 +263,12 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         });
 
        Route::apiResource('validator', 'ValidatorController');
+
+       Route::group(['prefix'=>'pelacakan-sampel'], function(){
+
+            Route::get('list', 'PelacakanSampelController@index');
+
+            Route::get('detail/{sampel}', 'PelacakanSampelController@show');
+
+       });
 });
