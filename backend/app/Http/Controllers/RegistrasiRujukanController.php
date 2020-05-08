@@ -58,7 +58,7 @@ class RegistrasiRujukanController extends Controller
             'reg_kewarganegaraan' => 'required',
             'reg_sumberpasien' => 'required',
             // 'reg_nama_pasien' => 'required',
-            // 'reg_nik'  => 'max:16',
+            'reg_nik'  => 'max:16',
             // 'reg_tempatlahir' => 'required',
             // 'reg_tgllahir' => 'required',
             'reg_nohp' => 'required|max:15',
@@ -226,7 +226,7 @@ class RegistrasiRujukanController extends Controller
                 'reg_nama_pasien' =>  $pasien->nama_lengkap,
                 'reg_nik' =>  $pasien->nik,
                 'reg_tempatlahir' =>  $pasien->tempat_lahir,
-                'reg_tgllahir' =>  $pasien->tanggal_lahir->format('Y-m-d'),
+                'reg_tgllahir' =>  $pasien->tanggal_lahir?$pasien->tanggal_lahir->format('Y-m-d'):null,
                 'reg_nohp' =>  $pasien->no_hp,
                 'reg_kota' =>  $pasien->kota_id,
                 'reg_kecamatan' =>  $pasien->kecamatan,
@@ -277,7 +277,7 @@ class RegistrasiRujukanController extends Controller
             'reg_kewarganegaraan' => 'required',
             'reg_sumberpasien' => 'required',
             // 'reg_nama_pasien' => 'required',
-            // 'reg_nik'  => 'max:16',
+            'reg_nik'  => 'required|digits:16',
             // 'reg_tempatlahir' => 'required',
             // 'reg_tgllahir' => 'required',
             'reg_nohp' => 'required|max:15',
@@ -295,7 +295,7 @@ class RegistrasiRujukanController extends Controller
             'reg_kewarganegaraan.required' => 'Mohon pilih kewarganegaraan',
             'reg_sumberpasien' => 'Mohon pilih sumber kedatangan pasien',
             'peg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
-            'reg_nik.max' => 'NIK maksimal terdiri dari :max karakter',
+            'reg_nik.digits' => 'NIK terdiri dari :digits karakter',
             'reg_tempatlahir.required' => 'Tempat lahir tidak boleh kosong',
             'reg_tgllahir' => 'Tanggal lahir tidak boleh kosong',
             'reg_nohp' => 'No HP tidak boleh kosong',
@@ -335,7 +335,7 @@ class RegistrasiRujukanController extends Controller
         $register->dinkes_pengirim =  $request->get('reg_dinkes_pengirim');
         $register->other_dinas_pengirim =  $request->get('daerahlain');
         $register->fasyankes_pengirim =  $request->get('reg_fasyankes_pengirim');
-        $register->nama_rs =  $rs->nama;
+        $register->nama_rs =  optional($rs)->nama;
         $register->other_nama_rs =  $request->get('reg_nama_rs_lainnya');
         $register->tanggal_kunjungan =  $request->get('reg_tanggalkunjungan');
         $register->kunjungan_ke =  $request->get('reg_kunke');

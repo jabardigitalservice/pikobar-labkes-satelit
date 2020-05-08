@@ -109,7 +109,7 @@ class ValidasiController extends Controller
         // format data
         foreach ($models as &$model) {
             $model->register = $model->register ?? null;
-            $model->pasien = optional($model->register)->pasiens()->with('kota')->first();
+            $model->pasien = $model->register ? optional($model->register)->pasiens()->with('kota')->first() : null;
             $model->pemeriksaanSampel = $model->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first() ?? null;
         }
 
@@ -216,7 +216,7 @@ class ValidasiController extends Controller
         // format data
         foreach ($models as &$model) {
             $model->register = $model->register ?? null;
-            $model->pasien = optional($model->register)->pasiens()->with('kota')->first();
+            $model->pasien = $model->register ? optional($model->register)->pasiens()->with(['kota'])->first() : null;
             $model->pemeriksaanSampel = $model->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first() ?? null;
         }
 

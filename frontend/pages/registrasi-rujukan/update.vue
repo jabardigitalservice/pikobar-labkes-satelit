@@ -168,7 +168,7 @@
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_nik') }">
                                 <input class="form-control" type="text" name="reg_nik" placeholder="" 
-                                    v-model="form.reg_nik" max="16" />
+                                    v-model="form.reg_nik" maxlength="16"/>
                                 <has-error :form="form" field="reg_nik" />
                             </div>
                         </div>

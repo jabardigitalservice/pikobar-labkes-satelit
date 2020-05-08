@@ -105,7 +105,7 @@
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_nik') }">
                                 <input class="form-control" type="text" name="reg_nik" placeholder=""
-                                    v-model="form.reg_nik" max="16" />
+                                    v-model="form.reg_nik" maxlength="16"/>
                                 <has-error :form="form" field="reg_nik" />
                             </div>
                         </div>
@@ -115,7 +115,7 @@
                                 Tempat Lahir
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_tempatlahir') }">
-                                <input class="form-control" type="text" name="reg_tempatlahir" placeholder="" required
+                                <input class="form-control" type="text" name="reg_tempatlahir" placeholder=""
                                     v-model="form.reg_tempatlahir" />
                                 <has-error :form="form" field="reg_tempatlahir" />
                             </div>
@@ -170,7 +170,7 @@
                                 <span style="color:red">*</span>
                             </label>
                             <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_nohp') }">
-                                <input class="form-control" type="text" name="reg_nohp" placeholder="" required
+                                <input class="form-control" type="text" name="reg_nohp" placeholder=""
                                     v-model="form.reg_nohp" />
                                 <has-error :form="form" field="reg_nohp" />
                             </div>
@@ -655,7 +655,7 @@
             },
             async submit() {
                 // Submit the form.
-                try {
+                try { 
                     const response = await this.form.post("/v1/register/mandiri/update/"+this.$route.params.register_id+'/'+this.$route.params.pasien_id);
                     // this.$toast.success(response.data.message, {
                     //     icon: 'check',
@@ -671,6 +671,7 @@
                     console.log(err);
                     if (err.response && err.response.data.code == 422) {
                         this.$nextTick(() => {
+                            console.log(err.response.data.error)
                             this.form.errors.set(err.response.data.error)
                         })
                         this.$toast.error('Mohon cek kembali formulir Anda', {
@@ -704,6 +705,31 @@
         watch: {
             "form.reg_kota": function (newVal, oldVal) {
 
+            },
+             "form.reg_nik": function (newVal, oldVal) {
+                if (newVal && newVal.length >= 12) {
+                    let dd = parseInt(newVal.substr(6,2))
+                    if (dd >= 40) {
+                        this.form.reg_jk = 'P'
+                        dd -= 40
+                    } else {
+                        this.form.reg_jk = 'L'
+                    }
+                    let mm = parseInt(newVal.substr(8,2))
+                    let yy = parseInt(newVal.substr(10,2))
+                    if (yy <= 30) {
+                        let str = '' + (2000+yy) +'-'+ ('' + mm).padStart(2,'0') +'-'+ ('' + dd).padStart(2,'0')
+                        this.form.reg_tgllahir = str
+                        this.nik_tgl = str
+                    } else {
+                        let str = '' + (1900+yy) +'-'+ ('' + mm).padStart(2,'0') +'-'+ ('' + dd).padStart(2,'0')
+                        this.form.reg_tgllahir = str
+                        this.nik_tgl = str
+                    }
+                    this.$nextTick(() => {
+                        this.$refs.tgl_lahir.init();
+                    })
+                }
             },
         },
         computed:{
