@@ -609,6 +609,7 @@
                         })
                     } else {
                         this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
+                        console.log(err);
                     }
                     return;
                 }

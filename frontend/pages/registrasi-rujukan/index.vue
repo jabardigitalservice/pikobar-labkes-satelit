@@ -78,7 +78,8 @@
                       nama_kota: 'Domisili',
                       nama_rs: 'Instansi Pengirim',
                       no_sampel:'Sampel',
-                      tgl_input:'Tanggal Input'
+                      tgl_input:'Tanggal Input',
+                      keterangan: 'Keterangan'
                     }"></ajax-table>
               </Ibox>
       </div>

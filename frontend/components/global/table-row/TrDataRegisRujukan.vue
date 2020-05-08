@@ -21,6 +21,10 @@
         <td>
             {{item.tgl_input}}
         </td>
+         <td>
+            <p class="badge badge-danger" v-if="(item.nik==null || item.nik=='') || (item.nama_lengkap==null || item.nama_lengkap=='')">data_belum_lengkap</p>
+            <p class="badge badge-primary" v-if="(item.nik!=null && item.nik!='') && (item.nama_lengkap!=null && item.nama_lengkap!='')">data_lengkap</p>
+        </td>
         <td v-if="config.has_action">
             <nuxt-link :to="`/registrasi/rujukan/detail/${item.register_id}/${item.pasien_id}`" class="btn btn-success btn-sm" title="Klik untuk melihat detail"><i class="fa fa-eye"></i></nuxt-link>
             <nuxt-link :to="`/registrasi/rujukan/update/${item.register_id}/${item.pasien_id}`" class="btn btn-primary btn-sm" title="Klik untuk mengubah data"><i class="fa fa-edit"></i> </nuxt-link>
