@@ -13,7 +13,7 @@
         <td>
             {{item.nomor_register}}
         </td>
-        <td>
+        <td nowrap>
             <span v-if="item.pasien">{{item.pasien.nama_lengkap}}</span>
             <span class="nik" v-if="item.pasien">NIK. {{item.pasien.nik}}</span>
             <span class="usia" v-if="item.pasien">{{ usiaPasien }}</span>
