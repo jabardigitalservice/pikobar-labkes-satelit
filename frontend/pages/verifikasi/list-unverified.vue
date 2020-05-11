@@ -105,6 +105,7 @@
             :columns="{
                       nomor_register: 'Nomor Register',
                       pasien_nama : 'Nama Pasien',
+                      kategori: 'Kategori',
                       kota_domilisi: 'Kota Domisili',
                       nomor_sampel : 'Nomor Sampel',
                       parameter_lab: 'Parameter Lab',
