@@ -11,7 +11,9 @@
             {{item.jenis_sampel_nama}}
         </td>
         <td>
-            {{item.petugas_pengambil}}
+            <!-- Kondisi Sampel == petugas_pengambilan_sampel -->
+            {{item.kondisi_sampel}}
+            <span v-if="!item.kondisi_sampel">-</span>
         </td>
         <td>
             {{ item.waktu_sample_taken | formatDateTime }}
