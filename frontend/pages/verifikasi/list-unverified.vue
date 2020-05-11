@@ -26,30 +26,30 @@
                 </dynamic-input>
               </div>
             </div>
-            <div class="col-md-3">
+            <!-- <div class="col-md-3">
               <div class="form-group">
-                <label>Tanggal Registrasi (Awal)</label>
+                <label>Tanggal Verifikasi (Awal)</label>
                 <date-picker
                   placeholder="Pilih Tanggal"
                   format="d MMMM yyyy"
                   input-class="form-control"
                   :monday-first="true"
-                  v-model="params1.tanggal_registrasi_start"
+                  v-model="params1.tanggal_verifikasi_start"
                 />
               </div>
             </div>
             <div class="col-md-3">
               <div class="form-group">
-                <label>Tanggal Registrasi (Akhir)</label>
+                <label>Tanggal Verifikasi (Akhir)</label>
                 <date-picker
                   placeholder="Pilih Tanggal"
                   format="d MMMM yyyy"
                   input-class="form-control"
                   :monday-first="true"
-                  v-model="params1.tanggal_registrasi_end"
+                  v-model="params1.tanggal_verifikasi_end"
                 />
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="row">
             <div class="col-md-3">
@@ -61,7 +61,16 @@
                 </dynamic-input>
               </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Kategori</label>
+                <dynamic-input :form="params1" field="kategori" v-model="params1.kategori"
+                  :options="listKategori"
+                  :hasSemua="true">
+                </dynamic-input>
+              </div>
+            </div>
+            <div class="col-md-6">
               <button id="btn-export" class="btn btn-primary pull-right mt-4" 
                 @click="onExport('verifikasi')"
               >
@@ -117,16 +126,18 @@ export default {
     return {
       params1: {
         fasyankes: "",
-        kota_domilisi: "",
-        tanggal_registrasi_start: "",
-        tanggal_registrasi_end: "",
-        kesimpulan_pemeriksaan: ""
+        kota_domisili: "",
+        tanggal_verifikasi_start: "",
+        tanggal_verifikasi_end: "",
+        kesimpulan_pemeriksaan: "",
+        kategori: ""
       }
     };
   },
   async asyncData({route, store}){
     let listKota = await axios.get("/v1/list-kota-jabar");
     let listFasyankes = await axios.get("v1/list-fasyankes-jabar");
+    let listKategori = await axios.get("v1/verifikasi/list-kategori");
 
     if (listKota.data) {
       listKota = listKota.data.map(function(kota, index){
@@ -146,9 +157,20 @@ export default {
       })
     }
 
+    if (listKategori.data.data) {
+      listKategori = listKategori.data.data.map(function(kategori, index){
+        let newKategori = kategori;
+        newKategori.name = kategori.sumber_pasien;
+        newKategori.id = kategori.sumber_pasien;
+
+        return newKategori;
+      })
+    }
+
     return {
       listKota,
-      listFasyankes
+      listFasyankes,
+      listKategori
     }
   },
   head() {
@@ -158,16 +180,19 @@ export default {
     "params1.fasyankes": function(newVal, oldVal) {
       this.$bus.$emit("refresh-ajaxtable", "verifikasi");
     },
-    "params1.kota_domisili": function(newVal, oldVal) {
+    "params1.kota_domisili": function(newVal, oldVal) {      
       this.$bus.$emit("refresh-ajaxtable", "verifikasi");
     },
-    "params1.tanggal_registrasi_start": function(newVal, oldVal) {
+    "params1.tanggal_verifikasi_start": function(newVal, oldVal) {
       this.$bus.$emit("refresh-ajaxtable", "verifikasi");
     },
-    "params1.tanggal_registrasi_end": function(newVal, oldVal) {
+    "params1.tanggal_verifikasi_end": function(newVal, oldVal) {
       this.$bus.$emit("refresh-ajaxtable", "verifikasi");
     },
     "params1.kesimpulan_pemeriksaan": function(newVal, oldVal) {
+      this.$bus.$emit("refresh-ajaxtable", "verifikasi");
+    },
+    "params1.kategori": function(newVal, oldVal) {
       this.$bus.$emit("refresh-ajaxtable", "verifikasi");
     },
   },
