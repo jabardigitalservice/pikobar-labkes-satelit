@@ -408,9 +408,7 @@ class PCRController extends Controller
 
     public function importHasilPemeriksaan(Request $request)
     {        
-        $request->validate([
-            'register_file'=> 'required|file|mimes:xls,xlsx|max:2048'
-        ],$request->only('register_file'));
+        $this->importValidator($request)->validate();
 
         $importer = new HasilPemeriksaanImport;
         Excel::import($importer, $request->file('register_file'));
@@ -423,6 +421,23 @@ class PCRController extends Controller
             'errors_count'=> $importer->errors_count,
         ]);
     }
+
+    private function importValidator(Request $request)
+    {
+        $extension = '';
+
+        if ($request->hasFile('register_file')) {
+            $extension = strtolower($request->file('register_file')->getClientOriginalExtension());
+        }
+
+        return Validator::make([
+            'register_file'=> $request->file('register_file'),
+            'extension'=> $extension
+        ],[
+            'register_file'=> 'required|file|max:2048',
+            'extension'=> 'required|in:csv,xlsx,xls'
+        ]);
+    } 
 
     public function importDataHasilPemeriksaan(Request $request)
     {
