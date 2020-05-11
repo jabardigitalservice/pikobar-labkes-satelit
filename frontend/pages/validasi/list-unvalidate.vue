@@ -28,7 +28,7 @@
                   </dynamic-input>
                 </div>
               </div>
-              <div class="col-md-3">
+              <!-- <div class="col-md-3">
                 <div class="form-group">
                   <label>Tanggal Validasi (Awal)</label>
                   <date-picker
@@ -51,7 +51,7 @@
                     v-model="params1.tanggal_validasi_end"
                   />
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="row">
               <div class="col-md-3">
