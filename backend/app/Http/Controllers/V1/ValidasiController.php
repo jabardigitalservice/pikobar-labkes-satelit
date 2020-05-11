@@ -292,7 +292,7 @@ class ValidasiController extends Controller
     public function show(Sampel $sampel)
     {
         $result = $sampel->load(['pemeriksaanSampel', 'status', 'register', 'validator', 'ekstraksi', 'logs'])->toArray();
-        $pasien = optional($sampel->register->pasiens()->with(['kota']))->first();
+        $pasien = $sampel->register ? optional($sampel->register->pasiens()->with(['kota']))->first() : null;
         $fasyankes = $sampel->register->fasyankes;
         $pengambilanSampel = PengambilanSampel::find($sampel->getAttribute('pengambilan_sampel_id'));
 
