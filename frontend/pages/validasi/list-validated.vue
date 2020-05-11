@@ -12,13 +12,11 @@
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Hasil Pemeriksaan</label>
-                  <dynamic-input :form="params1" field="kesimpulan_pemeriksaan" v-model="params1.kesimpulan_pemeriksaan"
-                    :options="[{id: 'positif',name: 'POSITIF'},{id: 'negatif',name: 'NEGATIF'},{id: 'sampel kurang',name: 'SAMPEL KURANG'}]"
-                    :hasSemua="true">
-                  </dynamic-input>
+                  <label>Kategori</label>
+                  <input class="form-control" type="text" v-model="params1.kategori" @keyup="refreshDebounce"/>
                 </div>
               </div>
+              
               <div class="col-md-3">
                 <div class="form-group">
                   <label>Fasyankes</label>
@@ -65,13 +63,14 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Kategori</label>
-                  <dynamic-input :form="params1" field="kategori" v-model="params1.kategori"
-                    :options="listKategori"
+                  <label>Hasil Pemeriksaan</label>
+                  <dynamic-input :form="params1" field="kesimpulan_pemeriksaan" v-model="params1.kesimpulan_pemeriksaan"
+                    :options="[{id: 'positif',name: 'POSITIF'},{id: 'negatif',name: 'NEGATIF'},{id: 'sampel kurang',name: 'SAMPEL KURANG'}]"
                     :hasSemua="true">
                   </dynamic-input>
                 </div>
               </div>
+              
               <div class="col-md-6">
                 
                 <button id="btn-export" class="btn btn-primary pull-right mt-4" 
@@ -126,6 +125,7 @@
 <script>
 import Form from "vform";
 import axios from "axios";
+var debounce = require('lodash/debounce')
 
 export default {
   middleware: "auth",
@@ -200,9 +200,9 @@ export default {
     "params1.kesimpulan_pemeriksaan": function(newVal, oldVal) {
       this.$bus.$emit("refresh-ajaxtable", "validated");
     },
-    "params1.kategori": function(newVal, oldVal) {
-      this.$bus.$emit("refresh-ajaxtable", "validated");
-    },
+    // "params1.kategori": function(newVal, oldVal) {
+    //   this.$bus.$emit("refresh-ajaxtable", "validated");
+    // },
   },
   methods: {
     async onExport(type){
@@ -255,7 +255,10 @@ export default {
         }
       }
       this.loading = false;
-    }
+    },
+    refreshDebounce: debounce(function () {
+      this.$bus.$emit('refresh-ajaxtable', 'validated')
+    }, 500),
   }
 };
 </script>
