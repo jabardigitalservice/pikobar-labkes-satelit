@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\SampelValidatedEvent;
+use App\Models\Ekstraksi;
 use App\Models\File;
 use App\Models\Pasien;
 use App\Models\PemeriksaanSampel;
@@ -100,7 +101,7 @@ class CreateSuratHasilListener
         // $data['umur_pasien'] = $data['pasien'] ? Carbon::parse($data['pasien']->tanggal_lahir)->age : null;
         $data['last_pemeriksaan_sampel']['hasil_deteksi_terkecil'] = $this->getHasilDeteksiTerkecil($data['last_pemeriksaan_sampel']);
         $data['register'] = $sampel->register ?? null;
-        $data['tanggal_periksa'] =  $sampel->register ? $this->formatTanggalKunjungan($sampel->register) : '-';
+        $data['tanggal_periksa'] =  $sampel->ekstraksi ? $this->formatTanggalKunjungan($sampel->ekstraksi) : '-';
 
         $pdf = PDF::loadView('pdf_templates.print_validasi', $data);
 
@@ -181,15 +182,15 @@ class CreateSuratHasilListener
         return $tanggalLahir->diff(Carbon::now())->format('%y Thn %m Bln %d Hari');
     }
 
-    private function formatTanggalKunjungan(Register $register)
+    private function formatTanggalKunjungan(Ekstraksi $ekstraksi)
     {
-        if (!$register->getAttribute('tanggal_kunjungan')) {
+        if (!$ekstraksi->getAttribute('tanggal_mulai_ekstraksi')) {
             $tanggal = now();
             return '-';
         }
 
-        return $register->tanggal_kunjungan->day . ' ' . 
-                $this->getNamaBulan($register->tanggal_kunjungan->month) . ' ' . 
-                $register->tanggal_kunjungan->year;
+        return $ekstraksi->tanggal_mulai_ekstraksi->day . ' ' . 
+                $this->getNamaBulan($ekstraksi->tanggal_mulai_ekstraksi->month) . ' ' . 
+                $ekstraksi->tanggal_mulai_ekstraksi->year;
     }
 }
