@@ -154,7 +154,7 @@
                     />
                   </td>
                   <td>
-                    <button type="button" class="btn btn-sm btn-danger remove_field" @click.prevent="removeSample($index)">
+                    <button type="button" class="btn btn-sm btn-danger" @click.prevent="removeSample($index)">
                       <i class="uil-trash"></i>
                     </button>
                   </td>
@@ -240,6 +240,7 @@ export default {
     },
     addSample() {
       this.form.samples.push({
+        sam_jenis_sampel: '1',
         petugas_pengambil: 'Baik',
         tanggalsampel: new Date,
         pukulsampel: this.getTimeNow(),
@@ -250,9 +251,10 @@ export default {
         this.$toast.error('Jumlah sampel minimal satu', {
           duration: 5000
         })
-        return
+        return false
+      }else {
+        this.form.samples.splice(index, 1)
       }
-      this.form.samples.splice(index, 1)
     },
     async submit() {
       // Submit the form.

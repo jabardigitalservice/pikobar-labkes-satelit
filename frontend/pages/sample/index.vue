@@ -127,8 +127,9 @@
                     has_search_input: true,
                     custom_header: '',
                     default_sort: 'waktu_sample_taken',
+                    default_sort_dir:'desc',
                     custom_empty_page: true,
-                    class: {
+                    class: { 
                         table: [],
                         wrapper: ['table-responsive'],
                     }

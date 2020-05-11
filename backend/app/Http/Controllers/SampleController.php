@@ -80,9 +80,11 @@ class SampleController extends Controller
             if (empty($order_direction)) $order_direction = 'asc';
 
             switch ($order) {
-                case 'xx':
-                    // $models = $models->orderBy($order,$order_direction);
+                case 'waktu_sample_taken':
+                    $models = $models->orderBy('waktu_sample_taken',$order_direction);
+                break;
                 default:
+                    $models = $models->orderBy($order, $order_direction);
                     break;
             }
         }
