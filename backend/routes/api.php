@@ -235,6 +235,8 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             Route::get('export-excel', 'VerifikasiExportController@exportExcel');
 
             Route::post('verifikasi-single-sampel/{sampel}', 'VerifikasiController@verifiedSingleSampel');
+
+            Route::get('list-kategori', 'VerifikasiController@listKategori');
                         
         });
 

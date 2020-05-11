@@ -76,7 +76,8 @@
 						nomor_sampel : 'Nomor Sampel',
 						kesimpulan_pemeriksaan: 'Kesimpulan Pemeriksaan',
 						status_sampel: 'Status',
-						validator: 'Validator'
+						validator: 'Validator',
+						kunjungan_ke: 'Riwayat Kunjungan'
 					}"
 		  ></ajax-table>
 		</Ibox>
