@@ -731,6 +731,27 @@
                     })
                 }
             },
+            "form.reg_tgllahir": function(newVal, oldVal) {
+                var birthday = new Date(this.form.reg_tgllahir)
+                var now = new Date();
+                var yearNow = now.getYear();
+                var monthNow = now.getMonth() + 1;
+                var dayNow = now.getDate();
+
+                var yearDob = birthday.getYear();
+                var monthDob = birthday.getMonth() + 1;
+                var dayDob = birthday.getDate();
+                var second = 1000;
+                var minute = second*60;
+                var hour = minute*60;
+                var day = hour*24;
+                var month = day*30; 
+                var year = day*365;
+                var ms = now - birthday;
+                var msb = Math.round(ms % year)
+                this.form.reg_usia_tahun = Math.round(ms / year)
+                this.form.reg_usia_bulan = Math.round(msb / month)
+            }
         },
         computed:{
             registerId(){
