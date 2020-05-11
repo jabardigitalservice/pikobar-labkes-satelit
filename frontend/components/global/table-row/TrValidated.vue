@@ -8,6 +8,9 @@
       <span class="usia" v-if="item.pasien">{{ usiaPasien }}</span>
     </td>
     <td>
+        <span v-if="item.register">{{ item.register.sumber_pasien }}</span>
+    </td>
+    <td>
       <span v-if="item.pasien && item.pasien.kota">{{item.pasien.kota.nama}}</span>
     </td>
     <td>{{item.nomor_sampel}}</td>
