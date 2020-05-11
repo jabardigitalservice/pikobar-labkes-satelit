@@ -12,13 +12,11 @@
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Hasil Pemeriksaan</label>
-                  <dynamic-input :form="params1" field="kesimpulan_pemeriksaan" v-model="params1.kesimpulan_pemeriksaan"
-                    :options="[{id: 'positif',name: 'POSITIF'},{id: 'negatif',name: 'NEGATIF'},{id: 'sampel kurang',name: 'SAMPEL KURANG'}]"
-                    :hasSemua="true">
-                  </dynamic-input>
+                  <label>Kategori</label>
+                  <input class="form-control" type="text" v-model="params1.kategori" @keyup="refreshDebounce"/>
                 </div>
               </div>
+              
               <div class="col-md-3">
                 <div class="form-group">
                   <label>Fasyankes</label>
@@ -65,9 +63,9 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Kategori</label>
-                  <dynamic-input :form="params1" field="kategori" v-model="params1.kategori"
-                    :options="listKategori"
+                  <label>Hasil Pemeriksaan</label>
+                  <dynamic-input :form="params1" field="kesimpulan_pemeriksaan" v-model="params1.kesimpulan_pemeriksaan"
+                    :options="[{id: 'positif',name: 'POSITIF'},{id: 'negatif',name: 'NEGATIF'},{id: 'sampel kurang',name: 'SAMPEL KURANG'}]"
                     :hasSemua="true">
                   </dynamic-input>
                 </div>
@@ -182,6 +180,7 @@ import Form from "vform";
 import axios from "axios";
 import JQuery from "jquery";
 import CustomModal from "~/components/CustomModal";
+var debounce = require('lodash/debounce')
 
 export default {
   middleware: "auth",
@@ -273,9 +272,9 @@ export default {
     "params1.kesimpulan_pemeriksaan": function(newVal, oldVal) {
       this.$bus.$emit("refresh-ajaxtable", "validasi");
     },
-    "params1.kategori": function(newVal, oldVal) {
-      this.$bus.$emit("refresh-ajaxtable", "validasi");
-    },
+    // "params1.kategori": function(newVal, oldVal) {
+    //   this.$bus.$emit("refresh-ajaxtable", "validasi");
+    // },
   },
   methods: {
     dummy() {
@@ -380,7 +379,10 @@ export default {
         }
       }
       this.loading = false;
-    }
+    },
+    refreshDebounce: debounce(function () {
+      this.$bus.$emit('refresh-ajaxtable', 'validasi')
+    }, 500),
   }
 };
 </script>
