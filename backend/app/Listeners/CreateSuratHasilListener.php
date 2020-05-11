@@ -89,7 +89,7 @@ class CreateSuratHasilListener
     public function createPDF(Sampel $sampel)
     {
         $data['sampel'] = $sampel;
-        $data['pasien'] = optional($sampel->register->pasiens())->first();
+        $data['pasien'] = $sampel->register ? optional($sampel->register->pasiens())->first() : null;
         $data['pemeriksaan_sampel'] = $sampel->pemeriksaanSampel;
         $data['validator'] = $sampel->validator;
         $data['last_pemeriksaan_sampel'] = $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first();
