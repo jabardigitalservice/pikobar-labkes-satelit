@@ -60,6 +60,29 @@ class ValidasiController extends Controller
                             $query->where('kesimpulan_pemeriksaan', $val);
                         });
                         break;
+                    case 'kota_domisili':
+                        $models->whereHas('register', function($query) use ($val){
+                            $query->join('pasien_register', 'register.id', 'pasien_register.register_id')
+                                ->join('pasien', 'pasien_register.pasien_id', 'pasien.id')
+                                ->where('pasien.kota_id', $val);
+                        });
+                        break;
+                    case 'fasyankes': 
+                        $models->whereHas('register', function ($query) use ($val){
+                            $query->where('fasyankes_id', $val);
+                        });
+                        break;
+                    case 'kategori': 
+                        $models->whereHas('register', function ($query) use ($val){
+                            $query->where('sumber_pasien', 'ilike', '%'. $val .'%');
+                        });
+                        break;
+                    case 'tanggal_validasi_start':
+                        $models->where('waktu_sample_valid', '>=', $val);
+                        break;
+                    case 'tanggal_validasi_end':
+                        $models->where('waktu_sample_valid', '<=', $val);
+                        break;
                     default:
                         break;
                 }
@@ -165,6 +188,29 @@ class ValidasiController extends Controller
                         $models->whereHas('pemeriksaanSampel', function($query) use ($val){
                             $query->where('kesimpulan_pemeriksaan', $val);
                         });
+                        break;
+                    case 'kota_domisili':
+                        $models->whereHas('register', function($query) use ($val){
+                            $query->join('pasien_register', 'register.id', 'pasien_register.register_id')
+                                ->join('pasien', 'pasien_register.pasien_id', 'pasien.id')
+                                ->where('pasien.kota_id', $val);
+                        });
+                        break;
+                    case 'fasyankes': 
+                        $models->whereHas('register', function ($query) use ($val){
+                            $query->where('fasyankes_id', $val);
+                        });
+                        break;
+                    case 'kategori': 
+                        $models->whereHas('register', function ($query) use ($val){
+                            $query->where('sumber_pasien', 'ilike', '%'. $val .'%');
+                        });
+                        break;
+                    case 'tanggal_validasi_start':
+                        $models->where('waktu_sample_valid', '>=', $val);
+                        break;
+                    case 'tanggal_validasi_end':
+                        $models->where('waktu_sample_valid', '<=', $val);
                         break;
                     default:
                         break;

@@ -35,6 +35,11 @@
     <td>
       <span v-if="item.validator">{{ item.validator.nama }}</span>
     </td>
+    <td nowrap>
+      <span v-if="item.register && item.register.kunjungan_ke">
+        Kunjungan ke-{{ item.register.kunjungan_ke }}
+      </span>
+    </td>
     <td width="20%">
       <nuxt-link
         tag="a"
