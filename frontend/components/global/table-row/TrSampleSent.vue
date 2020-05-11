@@ -15,10 +15,12 @@
                 <i class="fa fa-edit"></i>
                 Ubah Keterangan Sampel
             </nuxt-link>
+            <button class="btn btn-danger btn-sm" @click="deleteData(item.id)"> <i class="fa fa-trash"></i> Hapus</button>
         </td>
     </tr>
 </template>
 <script>
+import axios from 'axios'
 export default {
     props  : ['item', 'pagination', 'rowparams', 'index'],
     data() {
@@ -26,6 +28,20 @@ export default {
         }
     },
     methods: {
+        async deleteData(id){
+            try {
+                let resp = await axios.get('/sample/delete/'+id);
+                this.$toast.success('Berhasil menghapus data', {
+                    icon: 'check',
+                    iconPack: 'fontawesome',
+                    duration: 5000
+                })
+                this.$bus.$emit('refresh-ajaxtable', 'sample-sent');
+            }catch(e){
+                this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
+                console.log(e);
+            }
+        }
     }
 }
 </script>
