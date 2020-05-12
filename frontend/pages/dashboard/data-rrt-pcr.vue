@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="align-items-center d-flex mb-3">
                     <h2 class="font-weight-bold w-25 m-0 text-nowrap">
-                        <i class="fa fa-users"></i>
+                        <i class="uil-atom"></i>
                         rRT-PCR
                     </h2>
                     <div class="w-100 ml-3">
