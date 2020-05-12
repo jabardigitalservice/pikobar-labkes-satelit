@@ -2,3 +2,5 @@
 /certbot
 /data
 .nuxt
+backend/public/fonts/*
+!backend/public/fonts/arial

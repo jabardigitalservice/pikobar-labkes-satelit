@@ -12,13 +12,11 @@
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Hasil Pemeriksaan</label>
-                  <dynamic-input :form="params1" field="kesimpulan_pemeriksaan" v-model="params1.kesimpulan_pemeriksaan"
-                    :options="[{id: 'positif',name: 'POSITIF'},{id: 'negatif',name: 'NEGATIF'},{id: 'sampel kurang',name: 'SAMPEL KURANG'}]"
-                    :hasSemua="true">
-                  </dynamic-input>
+                  <label>Kategori</label>
+                  <input class="form-control" type="text" v-model="params1.kategori" @keyup="refreshDebounce"/>
                 </div>
               </div>
+              
               <div class="col-md-3">
                 <div class="form-group">
                   <label>Fasyankes</label>
@@ -28,30 +26,30 @@
                   </dynamic-input>
                 </div>
               </div>
-              <div class="col-md-3">
+              <!-- <div class="col-md-3">
                 <div class="form-group">
-                  <label>Tanggal Registrasi (Awal)</label>
+                  <label>Tanggal Validasi (Awal)</label>
                   <date-picker
                     placeholder="Pilih Tanggal"
                     format="d MMMM yyyy"
                     input-class="form-control"
                     :monday-first="true"
-                    v-model="params1.tanggal_registrasi_start"
+                    v-model="params1.tanggal_validasi_start"
                   />
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Tanggal Registrasi (Akhir)</label>
+                  <label>Tanggal Validasi (Akhir)</label>
                   <date-picker
                     placeholder="Pilih Tanggal"
                     format="d MMMM yyyy"
                     input-class="form-control"
                     :monday-first="true"
-                    v-model="params1.tanggal_registrasi_end"
+                    v-model="params1.tanggal_validasi_end"
                   />
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="row">
               <div class="col-md-3">
@@ -63,7 +61,16 @@
                   </dynamic-input>
                 </div>
               </div>
-              <div class="col-md-9">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Hasil Pemeriksaan</label>
+                  <dynamic-input :form="params1" field="kesimpulan_pemeriksaan" v-model="params1.kesimpulan_pemeriksaan"
+                    :options="[{id: 'positif',name: 'POSITIF'},{id: 'negatif',name: 'NEGATIF'},{id: 'sampel kurang',name: 'SAMPEL KURANG'}]"
+                    :hasSemua="true">
+                  </dynamic-input>
+                </div>
+              </div>
+              <div class="col-md-6">
                 
                 <button id="btn-export" class="btn btn-primary pull-right mt-4" 
                   @click="onExport('validasi')"
@@ -107,9 +114,11 @@
                       checkbox_input: '#',
                       nomor_register: 'Nomor Register',
                       pasien_nama : 'Nama Pasien',
+                      kategori: 'Kategori',
                       kota_nama : 'Kota Domisili',
                       nomor_sampel : 'Nomor Sampel',
                       parameter_lab: 'Parameter Lab',
+                      kondisi_sampel: 'Kondisi Sampel',
                       kesimpulan_pemeriksaan: 'Kesimpulan Pemeriksaan',
                     }"
           ></ajax-table>
@@ -172,6 +181,7 @@ import Form from "vform";
 import axios from "axios";
 import JQuery from "jquery";
 import CustomModal from "~/components/CustomModal";
+var debounce = require('lodash/debounce')
 
 export default {
   middleware: "auth",
@@ -182,10 +192,11 @@ export default {
     return {
       params1: {
         fasyankes: "",
-        kota_domilisi: "",
-        tanggal_registrasi_start: "",
-        tanggal_registrasi_end: "",
-        kesimpulan_pemeriksaan: ""
+        kota_domisili: "",
+        tanggal_validasi_start: "",
+        tanggal_validasi_end: "",
+        kesimpulan_pemeriksaan: "",
+        kategori: ""
       },
       loading: false
     };
@@ -195,6 +206,8 @@ export default {
     let respListValidator = await axios.get("/v1/validasi/list-validator");
     let listValidator = respListValidator.data.data;
     let sampelIds = store.state.validasi.selectedSampels;
+    let listKategori = await axios.get("v1/verifikasi/list-kategori");
+
 
     let form = new Form({
       validator: null,
@@ -222,21 +235,47 @@ export default {
       })
     }
 
+    if (listKategori.data.data) {
+      listKategori = listKategori.data.data.map(function(kategori, index){
+        let newKategori = kategori;
+        newKategori.name = kategori.sumber_pasien;
+        newKategori.id = kategori.sumber_pasien;
+
+        return newKategori;
+      })
+    }
+
     return {
       form,
       listValidator,
       sampelIds,
       listKota,
-      listFasyankes
+      listFasyankes,
+      listKategori
     };
   },
   head() {
     return { title: "Sampel Hasil Pemeriksaan" };
   },
   watch: {
-    'params1.kesimpulan_pemeriksaan': function(newVal, oldVal) {
-      this.$bus.$emit('refresh-ajaxtable', 'validasi')
+    "params1.fasyankes": function(newVal, oldVal) {
+      this.$bus.$emit("refresh-ajaxtable", "validasi");
     },
+    "params1.kota_domisili": function(newVal, oldVal) {      
+      this.$bus.$emit("refresh-ajaxtable", "validasi");
+    },
+    "params1.tanggal_validasi_start": function(newVal, oldVal) {
+      this.$bus.$emit("refresh-ajaxtable", "validasi");
+    },
+    "params1.tanggal_validasi_end": function(newVal, oldVal) {
+      this.$bus.$emit("refresh-ajaxtable", "validasi");
+    },
+    "params1.kesimpulan_pemeriksaan": function(newVal, oldVal) {
+      this.$bus.$emit("refresh-ajaxtable", "validasi");
+    },
+    // "params1.kategori": function(newVal, oldVal) {
+    //   this.$bus.$emit("refresh-ajaxtable", "validasi");
+    // },
   },
   methods: {
     dummy() {
@@ -341,7 +380,10 @@ export default {
         }
       }
       this.loading = false;
-    }
+    },
+    refreshDebounce: debounce(function () {
+      this.$bus.$emit('refresh-ajaxtable', 'validasi')
+    }, 500),
   }
 };
 </script>

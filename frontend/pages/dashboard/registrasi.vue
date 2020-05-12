@@ -80,7 +80,7 @@
         </div>
       </div>
     </div>
-
+ 
     <div class="col-lg-12">
       <filter-registrasi :oid="`registrasi-mandiri`"/>
     </div>
@@ -110,7 +110,8 @@
                     has_action: false,
                     has_search_input: true,
                     custom_header: '',
-                    default_sort: 'name',
+                    default_sort: 'created_at',
+                    default_sort_dir:'desc',
                     custom_empty_page: true,
                     class: {
                         table: [],
@@ -122,9 +123,10 @@
                       nomor_register: 'Nomor Registrasi',
                       nama_pasien: 'Pasien',
                       nama_kota: 'Domisili',
-                      sumber_pasien: 'Sumber',
+                      sumber_pasien: 'Kategori',
                       no_sampel:'Sampel',
-                      tgl_input:'Tanggal Input'
+                      tgl_input:'Tanggal Input',
+                      keterangan:'Keterangan'
                     }"></ajax-table>
               </Ibox>
     </div>
@@ -138,7 +140,18 @@ export default {
   data() {
     return {
       loading: true,
-      data:[]
+      data:[],
+      params: {
+          jenis_registrasi: "mandiri",
+          nama_pasien: null,
+          nomor_register:null,
+          nomor_sampel:null,
+          start_date:null,
+          end_date:null
+        },
+        params2: {
+          jenis_registrasi: "rujukan",
+        },
     };
   },
   methods: {

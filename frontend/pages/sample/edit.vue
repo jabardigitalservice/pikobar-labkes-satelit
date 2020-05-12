@@ -150,7 +150,7 @@
                     <has-error :form="form" :field="`samples.${$index}.nomorsampel`"/>
                   </td>
                   <td>
-                    <button class="btn btn-sm btn-danger remove_field" @click.prevent="removeSample($index)">
+                    <button class="btn btn-sm btn-danger" @click.prevent="removeSample($index)">
                       <i class="uil-trash"></i>
                     </button>
                   </td>
@@ -242,6 +242,7 @@ export default {
         petugas_pengambil: 'Baik',
         nomorsampel:null,
         id_sampel:null,
+        sam_jenis_sampel: '1',
       })
     },
     async removeSample(index) {

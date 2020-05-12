@@ -3,8 +3,11 @@
 namespace App\Listeners;
 
 use App\Events\SampelValidatedEvent;
+use App\Models\Ekstraksi;
 use App\Models\File;
 use App\Models\Pasien;
+use App\Models\PemeriksaanSampel;
+use App\Models\Register;
 use App\Models\Sampel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -87,14 +90,18 @@ class CreateSuratHasilListener
     public function createPDF(Sampel $sampel)
     {
         $data['sampel'] = $sampel;
-        $data['pasien'] = optional($sampel->register->pasiens())->first();
+        $data['pasien'] = $sampel->register ? optional($sampel->register->pasiens())->first() : null;
         $data['pemeriksaan_sampel'] = $sampel->pemeriksaanSampel;
         $data['validator'] = $sampel->validator;
         $data['last_pemeriksaan_sampel'] = $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first();
         $data['kop_surat'] = $this->getKopSurat();
         $data['tanggal_validasi'] = $this->formatTanggalValid($sampel);
         $data['tanggal_lahir_pasien'] = $data['pasien'] ? $this->getTanggalLahir($data['pasien']) : null;
-        $data['umur_pasien'] = $data['pasien'] ? Carbon::parse($data['pasien']->tanggal_lahir)->age : null;
+        $data['umur_pasien'] = $data['pasien'] ? $this->getUmurPasien($data['pasien']->tanggal_lahir) : null;
+        // $data['umur_pasien'] = $data['pasien'] ? Carbon::parse($data['pasien']->tanggal_lahir)->age : null;
+        $data['last_pemeriksaan_sampel']['hasil_deteksi_terkecil'] = $this->getHasilDeteksiTerkecil($data['last_pemeriksaan_sampel']);
+        $data['register'] = $sampel->register ?? null;
+        $data['tanggal_periksa'] =  $sampel->ekstraksi ? $this->formatTanggalKunjungan($sampel->ekstraksi) : '-';
 
         $pdf = PDF::loadView('pdf_templates.print_validasi', $data);
 
@@ -107,7 +114,7 @@ class CreateSuratHasilListener
 
     public function getKopSurat()
     {
-        $pathDirectory = 'kop_surat/kop-surat-lab-kes.png';
+        $pathDirectory = 'kop_surat/kop-surat-labkesda.png';
 
         $image = public_path($pathDirectory);
 
@@ -163,5 +170,27 @@ class CreateSuratHasilListener
             'valid_file_id'=> null
         ]);
         
+    }
+
+    private function getHasilDeteksiTerkecil(PemeriksaanSampel $hasil)
+    {
+        return collect($hasil['hasil_deteksi'])->sortBy('ct_value')->first();
+    }
+
+    private function getUmurPasien(Carbon $tanggalLahir)
+    {
+        return $tanggalLahir->diff(Carbon::now())->format('%y Thn %m Bln %d Hari');
+    }
+
+    private function formatTanggalKunjungan(Ekstraksi $ekstraksi)
+    {
+        if (!$ekstraksi->getAttribute('tanggal_mulai_ekstraksi')) {
+            $tanggal = now();
+            return '-';
+        }
+
+        return $ekstraksi->tanggal_mulai_ekstraksi->day . ' ' . 
+                $this->getNamaBulan($ekstraksi->tanggal_mulai_ekstraksi->month) . ' ' . 
+                $ekstraksi->tanggal_mulai_ekstraksi->year;
     }
 }

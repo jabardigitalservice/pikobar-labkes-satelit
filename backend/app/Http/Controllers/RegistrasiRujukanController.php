@@ -10,6 +10,7 @@ use App\Models\RiwayatKunjungan;
 use App\Models\RiwayatPenyakitPenyerta;
 use App\Models\PasienRegister;
 use App\Models\Sampel;
+use App\Models\Fasyankes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
@@ -56,28 +57,26 @@ class RegistrasiRujukanController extends Controller
         $v = Validator::make($request->all(),[
             'reg_kewarganegaraan' => 'required',
             'reg_sumberpasien' => 'required',
-            'reg_nama_pasien' => 'required',
-            'reg_nik'  => 'required|max:16',
-            'reg_tempatlahir' => 'required',
-            'reg_tgllahir' => 'required',
+            // 'reg_nama_pasien' => 'required',
+            'reg_nik'  => 'max:16',
+            // 'reg_tempatlahir' => 'required',
+            // 'reg_tgllahir' => 'required',
             'reg_nohp' => 'required|max:15',
             'reg_kota' => 'required',
             'reg_alamat' => 'required',
             'reg_jk'=>'required',
-            'reg_dinkes_pengirim' => 'required',
             'reg_fasyankes_pengirim' => 'required',
             'reg_nama_rs' => 'required',
-            'reg_nama_dokter' => 'required',
-            'reg_telp_fas_pengirim' => 'required|max:15',
-            'reg_tanggalkunjungan' => 'required',
+            // 'reg_nama_dokter' => 'required',
+            // 'reg_telp_fas_pengirim' => 'required|max:15',
+            // 'reg_tanggalkunjungan' => 'required',
             'reg_kunke' => 'required',
-            'reg_rsfasyankes' => 'required',
+            // 'reg_rsfasyankes' => 'required',
         ], [
             'reg_kewarganegaraan.required' => 'Mohon pilih kewarganegaraan',
             'reg_sumberpasien' => 'Mohon pilih sumber kedatangan pasien',
             'peg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
             'reg_nik.max' => 'NIK maksimal terdiri dari :max karakter',
-            'reg_nik.required' => 'NIK Pasien tidak boleh kosong',
             'reg_tempatlahir.required' => 'Tempat lahir tidak boleh kosong',
             'reg_tgllahir' => 'Tanggal lahir tidak boleh kosong',
             'reg_nohp' => 'No HP tidak boleh kosong',
@@ -102,27 +101,27 @@ class RegistrasiRujukanController extends Controller
         if (Register::where('nomor_register', $nomor_register)->exists()) {
             $nomor_register = with(new \App\Http\Controllers\V1\RegisterController)->generateNomorRegister(null, 'rujukan');
         }
+        $rs = Fasyankes::where('id',$request->get('reg_fasyankes_id'))->first();
         // return response($request->all());
         $register = Register::create([
             'nomor_register'=> $nomor_register,
-            'fasyankes_id'=> null,
             'nomor_rekam_medis'=> null,
-            'nama_dokter'=> null,
-            'no_telp'=> null,
             'register_uuid' => (string) Str::uuid(),
             'creator_user_id' => $user->id,
-            'sumber_pasien' => $request->get('reg_sumberpasien'),
+            'sumber_pasien' => $request->get('reg_sumberpasien')=="Umum"?"Umum":$request->get('reg_sumberpasien_isian'),
             'jenis_registrasi' => 'rujukan',
-            'dinkes_pengirim' => $request->get('reg_dinkes_pengirim'),
-            'other_dinas_pengirim' => $request->get('daerahlain'),
+            'dinkes_pengirim' => null,
+            'other_dinas_pengirim' => null,
+            'fasyankes_id' => $request->get('reg_fasyankes_id'),
             'fasyankes_pengirim' => $request->get('reg_fasyankes_pengirim'),
-            'nama_rs' => $request->get('reg_nama_rs'),
+            'nama_rs' => $rs->nama,
             'other_nama_rs' => $request->get('reg_nama_rs_lainnya'),
             'nama_dokter' => $request->get('reg_nama_dokter'),
             'no_telp' => $request->get('reg_telp_fas_pengirim'),
             'tanggal_kunjungan' => $request->get('reg_tanggalkunjungan'),
             'kunjungan_ke' => $request->get('reg_kunke'),
             'rs_kunjungan' => $request->get('reg_rsfasyankes'),
+            'hasil_rdt' => $request->get('reg_hasil_rdt')
         ]);
 
         $pasien = Pasien::where('nik',$request->get('reg_nik'))->first();
@@ -144,6 +143,8 @@ class RegistrasiRujukanController extends Controller
         $pasien->suhu = parseDecimal($request->get('reg_suhu'));
         $pasien->jenis_kelamin = $request->get('reg_jk');
         $pasien->keterangan_lain = $request->get('reg_keterangan');
+        $pasien->usia_tahun = $request->get('reg_usia_tahun');
+        $pasien->usia_bulan = $request->get('reg_usia_bulan');
 
         
         $pasien->save();
@@ -160,7 +161,7 @@ class RegistrasiRujukanController extends Controller
             if($sampel) {
                 $sampel->register_id = $register->id;
                 $sampel->nomor_register = $request->input('reg_no');
-                $sampel->sampel_status = 'waiting_sample';
+                // $sampel->sampel_status = 'waiting_sample';
                 $sampel->save();
             }
         }
@@ -175,6 +176,7 @@ class RegistrasiRujukanController extends Controller
             $sampel = Sampel::where('register_id',$id)->get();
             foreach($sampel as $sm) {
                 $sm->register_id = null;
+                $sm->nomor_register = null;
                 $sm->sampel_status = 'waiting_sample';
                 $sm->save();
             }
@@ -194,8 +196,15 @@ class RegistrasiRujukanController extends Controller
     public function getById(Request $request, $register_id, $pasien_id)
     {
         $register = Register::where('id',$register_id)->first();
-        $pasien   = Pasien::where('pasien.id', $pasien_id)->leftJoin('kota','kota.id','pasien.kota_id')->first();
+        $pasien   = Pasien::where('pasien.id', $pasien_id)
+                        ->leftJoin('kota','kota.id','pasien.kota_id')->first();
         $sampel   = Sampel::where('register_id',$register_id)->get();
+        if(!$pasien) {
+            return response()->json(['status'=>400,
+            'message'=>'Data Pasien Tidak Ditemukan',
+            'result' =>[ 'sampels'=>$sampel ]
+            ]);
+        }
         $smp = [];
         foreach($sampel as $sm) {
             array_push($smp, array(
@@ -207,49 +216,57 @@ class RegistrasiRujukanController extends Controller
         // dd($pasien->tanggal_lahir->format('Y-m-d'));
         // dd($register->nama_dokter);
         return response()->json([
-            'reg_no' =>  $register->nomor_register,
-            'reg_kewarganegaraan' =>  $pasien->kewarganegaraan,
-            'reg_sumberpasien' =>  $register->sumber_pasien,
-            'reg_nama_pasien' =>  $pasien->nama_lengkap,
-            'reg_nik' =>  $pasien->nik,
-            'reg_tempatlahir' =>  $pasien->tempat_lahir,
-            'reg_tgllahir' =>  $pasien->tanggal_lahir->format('Y-m-d'),
-            'reg_nohp' =>  $pasien->no_hp,
-            'reg_kota' =>  $pasien->kota_id,
-            'reg_kecamatan' =>  $pasien->kecamatan,
-            'reg_kelurahan' =>  $pasien->kelurahan,
-            'reg_alamat' =>  $pasien->alamat_lengkap,
-            'reg_rt' =>  $pasien->no_rt,
-            'reg_rw' =>  $pasien->no_rw,
-            'reg_suhu' =>  $pasien->suhu,
-            'samples' =>  $smp,
-            'reg_keterangan' =>  $pasien->keterangan_lain,
-            'reg_gejpanas' => null,
-            'reg_gejpenumonia' => null,
-            'reg_gejbatuk' => null,
-            'reg_gejnyeritenggorokan' => null,
-            'reg_gejsesaknafas' => null,
-            'reg_gejpilek' => null,
-            'reg_gejlesu' => null,
-            'reg_gejsakitkepala' => null,
-            'reg_gejdiare' => null,
-            'reg_gejmualmuntah' => null,
-            'reg_gejlain' => null,
-            'reg_jk' => $pasien->jenis_kelamin,
-            'nama_kota'=>$pasien->nama,
-            'reg_kunke' =>$register->kunjungan_ke,
-            'reg_tanggalkunjungan' => $register->tanggal_kunjungan,
-            'reg_rs_kunjungan' => $register->rs_kunjungan,
-            'reg_fasyankes_pengirim' => $register->fasyankes_pengirim,
-            'reg_telp_fas_pengirim' => $register->no_telp,
-            'reg_nama_dokter' => $register->nama_dokter,
-            'reg_nama_rs' => $register->nama_rs,
-            'reg_nama_rs_lainnya' => $register->other_nama_rs,
-            'daerahlain' =>  $register->other_dinas_pengirim,
-            'reg_dinkes_pengirim' =>  $register->dinkes_pengirim,
-            'reg_no' => $register->nomor_register,
-            'reg_rsfasyankes' => $register->rs_kunjungan
-        
+            'status' => 200,
+            'message' => 'success',
+            'result' => [
+                'reg_no' =>  $register->nomor_register,
+                'reg_kewarganegaraan' =>  $pasien->kewarganegaraan,
+                'reg_sumberpasien' =>  $register->sumber_pasien=="Umum"?"Umum":"Other",
+                "reg_sumberpasien_isian" => $register->sumber_pasien=="Umum"?null:$register->sumber_pasien,
+                'reg_nama_pasien' =>  $pasien->nama_lengkap,
+                'reg_nik' =>  $pasien->nik,
+                'reg_tempatlahir' =>  $pasien->tempat_lahir,
+                'reg_tgllahir' =>  $pasien->tanggal_lahir?$pasien->tanggal_lahir->format('Y-m-d'):null,
+                'reg_nohp' =>  $pasien->no_hp,
+                'reg_kota' =>  $pasien->kota_id,
+                'reg_kecamatan' =>  $pasien->kecamatan,
+                'reg_kelurahan' =>  $pasien->kelurahan,
+                'reg_alamat' =>  $pasien->alamat_lengkap,
+                'reg_rt' =>  $pasien->no_rt,
+                'reg_rw' =>  $pasien->no_rw,
+                'reg_suhu' =>  $pasien->suhu,
+                'samples' =>  $smp,
+                'reg_keterangan' =>  $pasien->keterangan_lain,
+                'reg_gejpanas' => null,
+                'reg_gejpenumonia' => null,
+                'reg_gejbatuk' => null,
+                'reg_gejnyeritenggorokan' => null,
+                'reg_gejsesaknafas' => null,
+                'reg_gejpilek' => null,
+                'reg_gejlesu' => null,
+                'reg_gejsakitkepala' => null,
+                'reg_gejdiare' => null,
+                'reg_gejmualmuntah' => null,
+                'reg_gejlain' => null,
+                'reg_jk' => $pasien->jenis_kelamin,
+                'nama_kota'=>$pasien->nama,
+                'reg_kunke' =>$register->kunjungan_ke,
+                'reg_tanggalkunjungan' => $register->tanggal_kunjungan,
+                'reg_rs_kunjungan' => $register->rs_kunjungan,
+                'reg_fasyankes_pengirim' => $register->fasyankes_pengirim,
+                'reg_telp_fas_pengirim' => $register->no_telp,
+                'reg_nama_dokter' => $register->nama_dokter,
+                'reg_nama_rs' => $register->nama_rs,
+                'reg_nama_rs_lainnya' => $register->other_nama_rs,
+                'daerahlain' =>  $register->other_dinas_pengirim,
+                'reg_dinkes_pengirim' =>  $register->dinkes_pengirim,
+                'reg_no' => $register->nomor_register,
+                'reg_rsfasyankes' => $register->rs_kunjungan,
+                'reg_usia_tahun' =>  $pasien->usia_tahun,
+                'reg_usia_bulan' => $pasien->usia_bulan,
+                'reg_hasil_rdt' => $register->hasil_rdt,
+                'reg_fasyankes_id' => $register->fasyankes_id,   
+            ]
          ]);
     }
 
@@ -259,28 +276,26 @@ class RegistrasiRujukanController extends Controller
         $v = Validator::make($request->all(),[
             'reg_kewarganegaraan' => 'required',
             'reg_sumberpasien' => 'required',
-            'reg_nama_pasien' => 'required',
-            'reg_nik'  => 'required|max:16',
-            'reg_tempatlahir' => 'required',
-            'reg_tgllahir' => 'required',
+            // 'reg_nama_pasien' => 'required',
+            'reg_nik'  => 'required|digits:16',
+            // 'reg_tempatlahir' => 'required',
+            // 'reg_tgllahir' => 'required',
             'reg_nohp' => 'required|max:15',
             'reg_kota' => 'required',
             'reg_alamat' => 'required',
             'reg_jk'=>'required',
-            'reg_dinkes_pengirim' => 'required',
             'reg_fasyankes_pengirim' => 'required',
             'reg_nama_rs' => 'required',
-            'reg_nama_dokter' => 'required',
-            'reg_telp_fas_pengirim' => 'required|max:15',
-            'reg_tanggalkunjungan' => 'required',
+            // 'reg_nama_dokter' => 'required',
+            // 'reg_telp_fas_pengirim' => 'required|max:15',
+            // 'reg_tanggalkunjungan' => 'required',
             'reg_kunke' => 'required',
-            'reg_rsfasyankes' => 'required',
+            // 'reg_rsfasyankes' => 'required',
         ], [
             'reg_kewarganegaraan.required' => 'Mohon pilih kewarganegaraan',
             'reg_sumberpasien' => 'Mohon pilih sumber kedatangan pasien',
             'peg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
-            'reg_nik.max' => 'NIK maksimal terdiri dari :max karakter',
-            'reg_nik.required' => 'NIK Pasien tidak boleh kosong',
+            'reg_nik.digits' => 'NIK terdiri dari :digits karakter',
             'reg_tempatlahir.required' => 'Tempat lahir tidak boleh kosong',
             'reg_tgllahir' => 'Tanggal lahir tidak boleh kosong',
             'reg_nohp' => 'No HP tidak boleh kosong',
@@ -305,25 +320,27 @@ class RegistrasiRujukanController extends Controller
         // if (Register::where('nomor_register', $nomor_register)->exists()) {
         //     $nomor_register = with(new \App\Http\Controllers\V1\RegisterController)->generateNomorRegister(null, 'rujukan');
         // }
+        $rs = Fasyankes::where('id',$request->get('reg_fasyankes_id'))->first();
         $register = Register::where('id',$register_id)->first();
         // return response()->json($request->all());
         $register->nomor_register =  $nomor_register;
-        $register->fasyankes_id =  null;
+        $register->fasyankes_id =  $request->get('reg_fasyankes_id');
         $register->nomor_rekam_medis =  null;
         $register->nama_dokter =  $request->get('reg_nama_dokter');
         $register->no_telp =  $request->get('reg_telp_fas_pengirim');
         $register->register_uuid =  (string) Str::uuid();
         $register->creator_user_id =  $user->id;
-        $register->sumber_pasien =  $request->get('reg_sumberpasien');
+        $register->sumber_pasien =  $request->get('reg_sumberpasien')=="Umum"?"Umum":$request->get('reg_sumberpasien_isian');
         $register->jenis_registrasi =  'rujukan';
         $register->dinkes_pengirim =  $request->get('reg_dinkes_pengirim');
         $register->other_dinas_pengirim =  $request->get('daerahlain');
         $register->fasyankes_pengirim =  $request->get('reg_fasyankes_pengirim');
-        $register->nama_rs =  $request->get('reg_nama_rs');
+        $register->nama_rs =  optional($rs)->nama;
         $register->other_nama_rs =  $request->get('reg_nama_rs_lainnya');
         $register->tanggal_kunjungan =  $request->get('reg_tanggalkunjungan');
         $register->kunjungan_ke =  $request->get('reg_kunke');
         $register->rs_kunjungan =  $request->get('reg_rsfasyankes');
+        $register->hasil_rdt = $request->get('reg_hasil_rdt');
         $register->save();
 
         $pasien = Pasien::where('id',$pasien_id)->first();
@@ -342,8 +359,20 @@ class RegistrasiRujukanController extends Controller
         $pasien->no_rw = $request->get('reg_rw'); 
         $pasien->suhu = parseDecimal($request->get('reg_suhu'));
         $pasien->jenis_kelamin = $request->get('reg_jk');
-        $pasien->keterangan_lain = $request->get('reg_keterangan');        
+        $pasien->keterangan_lain = $request->get('reg_keterangan');
+        $pasien->usia_tahun = $request->get('reg_usia_tahun');
+        $pasien->usia_bulan = $request->get('reg_usia_bulan');      
         $pasien->save();
+
+        // foreach($request->get('samples') as $sm) {
+        //     $sampel = Sampel::where('nomor_sampel',$sm['nomor_sampel'])->first();
+        //     if($sampel) {
+        //         // $sampel->register_id = $register->id;
+        //         // $sampel->nomor_register = $request->input('reg_no');
+        //         // $sampel->sampel_status = 'sample_taken';
+        //         $sampel->save();
+        //     }
+        // }
 
         return response()->json(['status'=>200,'message'=>'Proses Registrasi Rujukan Berhasil Diubah','result'=>[]]);
     }

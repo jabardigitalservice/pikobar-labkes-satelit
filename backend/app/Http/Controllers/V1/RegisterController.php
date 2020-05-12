@@ -59,9 +59,9 @@ class RegisterController extends Controller
             'reg_kewarganegaraan' => 'required',
             'reg_sumberpasien' => 'required',
             'reg_nama_pasien' => 'required',
-            'reg_nik'  => 'required|max:16',
-            'reg_tempatlahir' => 'required',
-            'reg_tgllahir' => 'required',
+            'reg_nik'  => 'max:16',
+            // 'reg_tempatlahir' => 'required',
+            // 'reg_tgllahir' => 'required',
             'reg_nohp' => 'required|max:15',
             'reg_kota' => 'required',
             'reg_alamat' => 'required',
@@ -70,9 +70,9 @@ class RegisterController extends Controller
                 'required',
                 new UniqueSampel(),
             ],
-            'reg_tanggalkunjungan' => 'required',
+            // 'reg_tanggalkunjungan' => 'required',
             'reg_kunke' => 'required',
-            'reg_rsfasyankes' => 'required'
+            // 'reg_rsfasyankes' => 'required',
         ], [
             'reg_kewarganegaraan.required' => 'Mohon pilih kewarganegaraan',
             'reg_sumberpasien' => 'Mohon pilih sumber kedatangan pasien',
@@ -87,7 +87,8 @@ class RegisterController extends Controller
             'reg_sampel.required' => 'Mohon isi minimal satu nomor sampel',
             'reg_tanggalkunjungan' => 'Mohon isi form tanggal kunjungan',
             'reg_kunke' => 'Mohon isi kunjungan keberapa',
-            'reg_rsfasyankes' => 'Mohon isi form'
+            'reg_rsfasyankes' => 'Mohon isi form',
+            'reg_jk' => 'Mohon pIlih Jenis Kelamin',
         ]);
         $v->validate();
         // foreach($request->get('reg_sampel') as $rows){
@@ -110,6 +111,8 @@ class RegisterController extends Controller
             'tanggal_kunjungan' => $request->get('reg_tanggalkunjungan'),
             'kunjungan_ke' => $request->get('reg_kunke'),
             'rs_kunjungan' => $request->get('reg_rsfasyankes'),
+            'hasil_rdt' => $request->get('reg_hasil_rdt'),
+            'sumber_pasien' => $request->get('reg_sumberpasien')=="Umum"?"Umum":$request->get('reg_sumberpasien_isian'),
         ]);
 
         $pasien = Pasien::where('nik',$request->get('reg_nik'))->first();
@@ -131,6 +134,8 @@ class RegisterController extends Controller
         $pasien->suhu = parseDecimal($request->get('reg_suhu'));
         $pasien->jenis_kelamin = $request->get('reg_jk');
         $pasien->keterangan_lain = $request->get('reg_keterangan');
+        $pasien->usia_tahun = $request->get('reg_usia_tahun');
+        $pasien->usia_bulan = $request->get('reg_usia_bulan');
         $pasien->save();
 
         // $tandaGejala = $this->getRequestTandaGejala($request);
@@ -164,9 +169,7 @@ class RegisterController extends Controller
             'reg_kewarganegaraan' => 'required',
             'reg_sumberpasien' => 'required',
             'reg_nama_pasien' => 'required',
-            'reg_nik'  => 'required|max:16',
-            'reg_tempatlahir' => 'required',
-            'reg_tgllahir' => 'required',
+            'reg_nik'  => 'max:16',
             'reg_nohp' => 'required|max:15',
             'reg_kota' => 'required',
             'reg_alamat' => 'required',
@@ -199,6 +202,10 @@ class RegisterController extends Controller
         $register->tanggal_kunjungan = $request->get('reg_tanggalkunjungan');
         $register->kunjungan_ke = $request->get('reg_kunke');
         $register->rs_kunjungan = $request->get('reg_rsfasyankes');
+        $register->hasil_rdt = $request->get('reg_hasil_rdt');
+        $register->sumber_pasien = $request->get('reg_sumberpasien')=="Umum"?"Umum":$request->get('reg_sumberpasien_isian');
+        $register->save();
+
         $pasien->nama_lengkap = $request->get('reg_nama_pasien');
         $pasien->kewarganegaraan = $request->get('reg_kewarganegaraan');
         $pasien->nik = $request->get('reg_nik');
@@ -214,6 +221,8 @@ class RegisterController extends Controller
         $pasien->suhu = parseDecimal($request->get('reg_suhu'));
         $pasien->jenis_kelamin = $request->get('reg_jk');
         $pasien->keterangan_lain = $request->get('reg_keterangan');
+        $pasien->usia_tahun = $request->get('reg_usia_tahun');
+        $pasien->usia_bulan = $request->get('reg_usia_bulan');
         $pasien->save();
 
         // $tandaGejala = $this->getRequestTandaGejala($request);
@@ -263,9 +272,8 @@ class RegisterController extends Controller
         return response()->json([
             'reg_no' =>  $register->nomor_register,
             'reg_kewarganegaraan' =>  $pasien->kewarganegaraan,
-            'reg_sumberpasien' =>  $register->sumber_pasien,
             'reg_nama_pasien' =>  $pasien->nama_lengkap,
-            'reg_nik' =>  $pasien->nik,
+            // 'reg_nik' =>  $pasien->nik,
             'reg_tempatlahir' =>  $pasien->tempat_lahir,
             'reg_tgllahir' =>  $pasien->tanggal_lahir,
             'reg_nohp' =>  $pasien->no_hp,
@@ -278,6 +286,7 @@ class RegisterController extends Controller
             'reg_suhu' =>  $pasien->suhu,
             'reg_sampel' =>  $smp,
             'reg_keterangan' =>  $pasien->keterangan_lain,
+            'reg_nik'=> $pasien->nik,
             'reg_gejpanas' => null,
             'reg_gejpenumonia' => null,
             'reg_gejbatuk' => null,
@@ -293,7 +302,12 @@ class RegisterController extends Controller
             'nama_kota'=>$pasien->nama,
             'kunjungan_ke' =>$register->kunjungan_ke,
             'tanggal_kunjungan' => $register->tanggal_kunjungan,
-            'rs_kunjungan' => $register->rs_kunjungan
+            'rs_kunjungan' => $register->rs_kunjungan,
+            'reg_hasil_rdt' => $register->hasil_rdt,
+            'reg_usia_tahun' => $pasien->usia_tahun,
+            'reg_usia_bulan' => $pasien->usia_bulan,
+            'reg_sumberpasien' =>  $register->sumber_pasien=="Umum"?"Umum":"Other",
+            "reg_sumberpasien_isian" => $register->sumber_pasien=="Umum"?null:$register->sumber_pasien,
          ]);
     }
 

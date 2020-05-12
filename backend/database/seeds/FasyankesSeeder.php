@@ -155,12 +155,147 @@ class FasyankesSeeder extends Seeder
                 "nama"=> "RSUD Sayang",
                 "tipe"=> "rumah_sakit",
                 "kota_id"=> null
-            ],[
-                "nama"=> "RSUD dr. Chasbullah A",
-                "tipe"=> "rumah_sakit",
+            ],
+            [
+                "nama"=> "Kota Bandung",
+                "tipe"=> "dinkes",
                 "kota_id"=> null
             ],
-            
+            [
+                "nama"=> "Kabupaten Bandung",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Bandung Barat",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kota Banjar",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kota Cimahi",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Bekasi",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kota Bekasi",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Bogor",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kota Bogor",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Ciamis",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Cianjur",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Cirebon",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kota Cirebon",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kota Depok",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Garut",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Indramayu",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Karawang",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Kuningan",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Majalengka",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Pangandaran",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Purwakarta",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Subang",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Sukabumi",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kota Sukabumi",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten SUmedang",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kota Tasikmalaya",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Tasikmalaya",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
+            [
+                "nama"=> "Kabupaten Tasikmalaya",
+                "tipe"=> "dinkes",
+                "kota_id"=> null
+            ],
         ];
     }
 }

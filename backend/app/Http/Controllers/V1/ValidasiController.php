@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1;
 use App\Events\SampelValidatedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\PemeriksaanSampel;
+use App\Models\PengambilanSampel;
 use App\Models\Sampel;
 use App\Models\Validator;
 use Illuminate\Http\Request;
@@ -59,6 +60,29 @@ class ValidasiController extends Controller
                             $query->where('kesimpulan_pemeriksaan', $val);
                         });
                         break;
+                    case 'kota_domisili':
+                        $models->whereHas('register', function($query) use ($val){
+                            $query->join('pasien_register', 'register.id', 'pasien_register.register_id')
+                                ->join('pasien', 'pasien_register.pasien_id', 'pasien.id')
+                                ->where('pasien.kota_id', $val);
+                        });
+                        break;
+                    case 'fasyankes': 
+                        $models->whereHas('register', function ($query) use ($val){
+                            $query->where('fasyankes_id', $val);
+                        });
+                        break;
+                    case 'kategori': 
+                        $models->whereHas('register', function ($query) use ($val){
+                            $query->where('sumber_pasien', 'ilike', '%'. $val .'%');
+                        });
+                        break;
+                    case 'tanggal_validasi_start':
+                        $models->where('waktu_sample_valid', '>=', $val);
+                        break;
+                    case 'tanggal_validasi_end':
+                        $models->where('waktu_sample_valid', '<=', $val);
+                        break;
                     default:
                         break;
                 }
@@ -108,7 +132,7 @@ class ValidasiController extends Controller
         // format data
         foreach ($models as &$model) {
             $model->register = $model->register ?? null;
-            $model->pasien = optional($model->register)->pasiens()->with('kota')->first();
+            $model->pasien = $model->register ? optional($model->register)->pasiens()->with('kota')->first() : null;
             $model->pemeriksaanSampel = $model->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first() ?? null;
         }
 
@@ -165,6 +189,29 @@ class ValidasiController extends Controller
                             $query->where('kesimpulan_pemeriksaan', $val);
                         });
                         break;
+                    case 'kota_domisili':
+                        $models->whereHas('register', function($query) use ($val){
+                            $query->join('pasien_register', 'register.id', 'pasien_register.register_id')
+                                ->join('pasien', 'pasien_register.pasien_id', 'pasien.id')
+                                ->where('pasien.kota_id', $val);
+                        });
+                        break;
+                    case 'fasyankes': 
+                        $models->whereHas('register', function ($query) use ($val){
+                            $query->where('fasyankes_id', $val);
+                        });
+                        break;
+                    case 'kategori': 
+                        $models->whereHas('register', function ($query) use ($val){
+                            $query->where('sumber_pasien', 'ilike', '%'. $val .'%');
+                        });
+                        break;
+                    case 'tanggal_validasi_start':
+                        $models->where('waktu_sample_valid', '>=', $val);
+                        break;
+                    case 'tanggal_validasi_end':
+                        $models->where('waktu_sample_valid', '<=', $val);
+                        break;
                     default:
                         break;
                 }
@@ -215,7 +262,7 @@ class ValidasiController extends Controller
         // format data
         foreach ($models as &$model) {
             $model->register = $model->register ?? null;
-            $model->pasien = optional($model->register)->pasiens()->with('kota')->first();
+            $model->pasien = $model->register ? optional($model->register)->pasiens()->with(['kota'])->first() : null;
             $model->pemeriksaanSampel = $model->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first() ?? null;
         }
 
@@ -244,9 +291,10 @@ class ValidasiController extends Controller
      */
     public function show(Sampel $sampel)
     {
-        $result = $sampel->load(['pemeriksaanSampel', 'status', 'register', 'validator'])->toArray();
-        $pasien = optional($sampel->register->pasiens()->with(['kota']))->first();
+        $result = $sampel->load(['pemeriksaanSampel', 'status', 'register', 'validator', 'ekstraksi', 'logs'])->toArray();
+        $pasien = $sampel->register ? optional($sampel->register->pasiens()->with(['kota']))->first() : null;
         $fasyankes = $sampel->register->fasyankes;
+        $pengambilanSampel = PengambilanSampel::find($sampel->getAttribute('pengambilan_sampel_id'));
 
         return response()->json([
             'status'=>200,
@@ -254,7 +302,8 @@ class ValidasiController extends Controller
             'data'=> $result + [
                 'pasien'=> optional($pasien)->toArray(),
                 'last_pemeriksaan_sampel'=> $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first(),
-                'fasyankes'=> $fasyankes
+                'fasyankes'=> $fasyankes,
+                'pengambilanSampel'=> $pengambilanSampel
             ]
         ]);
     }
@@ -361,5 +410,20 @@ class ValidasiController extends Controller
         ]);
 
         
+    }
+
+    /**
+     * Regenerate PDF Hasil Pemeriksaan after Validation
+     * 
+     */
+    public function regeneratePdfHasil(Sampel $sampel)
+    {
+        event(new SampelValidatedEvent($sampel));
+        
+        return response()->json([
+            'data'=> null,
+            'status'=> 200,
+            'message'=> 'success'
+        ]);
     }
 }

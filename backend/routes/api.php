@@ -111,6 +111,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::post('/kirim-ulang', 'EkstraksiController@kirimUlang');
         Route::post('/musnahkan/{id}', 'EkstraksiController@musnahkan');
         Route::post('/set-kurang/{id}', 'EkstraksiController@setKurang');
+        Route::post('/set-swab-ulang/{id}', 'EkstraksiController@setSwabUlang');
     });
     Route::group(['prefix'=>'pcr'], function(){
         Route::get('/get-data','PCRController@getData');
@@ -121,6 +122,8 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::post('/input/{id}','PCRController@input');
         Route::post('/upload-grafik','PCRController@uploadGrafik');
         Route::post('/musnahkan/{id}', 'PCRController@musnahkan');
+        Route::post('/import-hasil-pemeriksaan','PCRController@importHasilPemeriksaan');
+        Route::post('/import-data-hasil-pemeriksaan','PCRController@importDataHasilPemeriksaan');
     });
     Route::group(['prefix'=>'sampel'], function(){
         Route::get('/cek-nomor-sampel','SampelController@cekNomorSampel');
@@ -232,6 +235,8 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             Route::get('export-excel', 'VerifikasiExportController@exportExcel');
 
             Route::post('verifikasi-single-sampel/{sampel}', 'VerifikasiController@verifiedSingleSampel');
+
+            Route::get('list-kategori', 'VerifikasiController@listKategori');
                         
         });
 
@@ -255,8 +260,17 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             Route::get('export-excel', 'ValidasiExportController@exportExcel');
 
+            Route::post('regenerate-pdf/{sampel}', 'ValidasiController@regeneratePdfHasil');
             
         });
 
        Route::apiResource('validator', 'ValidatorController');
+
+       Route::group(['prefix'=>'pelacakan-sampel'], function(){
+
+            Route::get('list', 'PelacakanSampelController@index');
+
+            Route::get('detail/{sampel}', 'PelacakanSampelController@show');
+
+       });
 });

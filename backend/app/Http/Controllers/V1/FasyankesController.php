@@ -8,12 +8,17 @@ use Illuminate\Http\Request;
 
 class FasyankesController extends Controller
 {
-    public function listByProvinsi($provinsi = 32)
+    public function listByProvinsi(Request $request)
     {
-        $listFaskes = Fasyankes::whereHas('kota', function($query) use ($provinsi){
-            $query->where('provinsi_id', $provinsi);
-        })
-        ->get();
+        $tipe = $request->get('tipe','rumah_sakit');
+        $provinsi = $request->get('provinsi',null);
+        $listFaskes = Fasyankes::where('tipe',$tipe);
+        if($provinsi) {
+            $listFaskes = $listFaskes->whereHas('kota', function($query) use ($provinsi){
+                $query->where('provinsi_id', $provinsi);
+            });
+        }
+        $listFaskes = $listFaskes->get();
 
         return response()->json($listFaskes);
     }

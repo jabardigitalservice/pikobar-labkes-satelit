@@ -67,6 +67,7 @@ const routes = [
   { path: '/pcr/detail/:id', name:'pcr.detail', component: page('pcr/detail.vue'), meta: {parentName: 'pcr.list-pcr'} },
   { path: '/pcr/invalid/:id', name:'pcr.invalid', component: page('pcr/invalid.vue'), meta: {parentName: 'pcr.list-pcr'} },
   { path: '/pcr/input/:id', name:'pcr.input', component: page('pcr/input.vue'), meta: {parentName: 'pcr.list-pcr'} },
+  { path: '/pcr/import-excel-hasil', name:'pcr.import-excel-hasil', component: page('pcr/import-excel-hasil.vue'), meta: {parentName: 'pcr.list-pcr'} },
 
   { path: '/pemeriksaansampel', name:'pemeriksaansample.index', component: page('pemeriksaan/index.vue'), meta: {parentName: 'home'}},
 
@@ -83,6 +84,11 @@ const routes = [
   { path: '/validasi/detail/:id', name:'validasi.detail', component: page('validasi/detail.vue'), meta: {parentName: 'validasi.index.unvalidate'} },
   { path: '/validasi/edit/:id', name:'validasi.edit', component: page('validasi/edit.vue'), meta: {parentName: 'validasi.index.unvalidate'} },
   { path: '/validasi/export-excel', name:'validasi.export-excel', component: page('validasi/export-excel.vue'), meta: {parentName: 'validasi.index.validated'} },
+
+  // Pelacakan Sampel
+  { path: '/pelacakan-sampel', name:'pelacakan-sampel.index', component: page('pelacakan-sampel/index.vue'), meta: {parentName: 'home'} },
+  { path: '/pelacakan-sampel/detail/:id', name:'pelacakan-sampel.detail', component: page('pelacakan-sampel/detail.vue'), meta: {parentName: 'pelacakan-sampel.index'} },
+
   
 ]
 

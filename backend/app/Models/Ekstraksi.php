@@ -12,4 +12,10 @@ class Ekstraksi extends Model
         'nama',
     ];
 
+    protected $dates = [
+        'tanggal_penerimaan_sampel',
+        'tanggal_mulai_ekstraksi',
+        'tanggal_pengiriman_rna',
+    ];
+
 }

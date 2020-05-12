@@ -7,7 +7,7 @@
         <Ibox title="Penerimaan atau Pengambilan Sampel">
           <h4 class="header-title mt-0 mb-1" v-if="selected_reg.reg_no!=null">No. Registrasi : #{{selected_reg.reg_no}}</h4>
           <h4 class="header-title mt-0 mb-1" v-if="selected_reg.reg_nik!=null">No. Induk Kependudukan : {{selected_reg.reg_nik}}</h4>
-          <form @submit.prevent="submit" @keydown="form.onKeydown($event)">
+          <form @submit.prevent="submit" @keydown="form.onKeydown($event)" @keydown.enter.prevent="">
             <input type="hidden" v-model="form.pen_noreg" />
             <input type="hidden" v-model="form.pen_nik" />
 
@@ -116,6 +116,7 @@
                           v-model="sample.sam_namadiluarjenis"
                           placeholder="isi apabila tidak tercantum"
                           :class="{ 'is-invalid': form.errors.has(`samples.${$index}.sam_namadiluarjenis`) }"
+                        preventForm
                         />
                         <has-error :form="form" :field="`samples.${$index}.sam_namadiluarjenis`"/>
                       </div>
@@ -124,7 +125,9 @@
                       <dynamic-input :form="sample" field="petugas_pengambil" 
                         :options="['Baik','Sampel Sedikit','Tabung Rusak']" 
                         :hasLainnya="true"
-                        placeholder="Masukkan kondisi sampel">
+                      placeholder="Masukkan kondisi sampel"
+                      preventForm
+                      >
                       </dynamic-input>
                       <has-error :form="form" :field="`samples.${$index}.petugas_pengambil`"/>
                     </td>
@@ -141,16 +144,18 @@
                     <td>
                       <input class="form-control" type="text" v-model="sample.pukulsampel" 
                         v-mask="'##\:##'" 
-                        :class="{ 'is-invalid': form.errors.has(`samples.${$index}.pukulsampel`) }"/>
+                      :class="{ 'is-invalid': form.errors.has(`samples.${$index}.pukulsampel`) }"
+                      />
                       <has-error :form="form" :field="`samples.${$index}.pukulsampel`"/>
                     </td>
                     <td>
                       <input class="form-control" type="text" v-model="sample.nomorsampel" 
                         :class="{ 'is-invalid': form.errors.has(`samples.${$index}.nomorsampel`) }"/>
-                      <has-error :form="form" :field="`samples.${$index}.nomorsampel`"/>
+                    <has-error :form="form" :field="`samples.${$index}.nomorsampel`"
+                    />
                     </td>
                     <td>
-                      <button class="btn btn-sm btn-danger remove_field" @click.prevent="removeSample($index)">
+                      <button type="button" class="btn btn-sm btn-danger remove_field" @click.prevent="removeSample($index)">
                         <i class="uil-trash"></i>
                       </button>
                     </td>
@@ -158,7 +163,7 @@
                   <tr>
                     <td colspan="4"></td>
                     <td colspan="2">
-                      <button class="btn btn-sm btn-secondary" @click.prevent="addSample()"><i class="fa fa-plus"></i> Tambah Sampel</button>
+                      <button type="button" class="btn btn-sm btn-secondary" @click.prevent="addSample()"><i class="fa fa-plus"></i> Tambah Sampel</button>
                     </td>
                   </tr>
                 </tbody>
@@ -216,6 +221,9 @@ export default {
       let h = ('' + new Date().getHours()).padStart(2,'0')
       return h + ':' + (''+new Date().getMinutes()).padStart(2,'0')
     },
+    preventForm(){
+      return false;
+    },
     initForm() {
       this.form = new Form({
         pen_noreg: null,
@@ -233,6 +241,7 @@ export default {
     },
     addSample() {
       this.form.samples.push({
+        sam_jenis_sampel: '1',
         petugas_pengambil: 'Baik',
         tanggalsampel: new Date,
         pukulsampel: this.getTimeNow(),
@@ -243,9 +252,10 @@ export default {
         this.$toast.error('Jumlah sampel minimal satu', {
           duration: 5000
         })
-        return
+        return false
+      }else {
+        this.form.samples.splice(index, 1)
       }
-      this.form.samples.splice(index, 1)
     },
     async submit() {
       // Submit the form.
@@ -260,6 +270,7 @@ export default {
       } catch (err) {
         if (err.response && err.response.data.code == 422) {
           this.$nextTick(() => {
+            console.log(err.response.data.error)
             this.form.errors.set(err.response.data.error)
           })
           this.$toast.error('Mohon cek kembali formulir Anda', {

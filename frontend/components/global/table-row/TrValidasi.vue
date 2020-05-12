@@ -13,10 +13,13 @@
         <td>
             {{item.nomor_register}}
         </td>
-        <td>
+        <td nowrap>
             <span v-if="item.pasien">{{item.pasien.nama_lengkap}}</span>
             <span class="nik" v-if="item.pasien">NIK. {{item.pasien.nik}}</span>
             <span class="usia" v-if="item.pasien">{{ usiaPasien }}</span>
+        </td>
+        <td>
+            <span v-if="item.register">{{ item.register.sumber_pasien }}</span>
         </td>
         <td>
             <span v-if="item.pasien && item.pasien.kota">{{item.pasien.kota.nama}}</span>
@@ -25,14 +28,15 @@
             {{item.nomor_sampel}}
         </td>
         <td>
-            <ol>
-                <li 
-                    v-for="item in item.pemeriksaanSampel.hasil_deteksi" 
-                    :key="item.target_gen"
-                >
-                    {{ item.target_gen }} : {{ item.ct_value }}
-                </li>
-            </ol>
+            <div
+                v-for="item in item.pemeriksaanSampel.hasil_deteksi" 
+                :key="item.target_gen"
+            >
+                - {{ item.target_gen }} : {{ item.ct_value }}
+            </div>
+        </td>
+        <td>
+            {{item.kondisi_sampel}}
         </td>
         <td>
             {{item.pemeriksaanSampel.kesimpulan_pemeriksaan}}

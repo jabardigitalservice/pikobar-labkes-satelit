@@ -2,23 +2,27 @@
   <tr>
     <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
     <td>{{item.nomor_register}}</td>
-    <td>
+    <td nowrap>
       <span v-if="item.pasien">{{item.pasien.nama_lengkap}}</span>
       <span class="nik" v-if="item.pasien">NIK. {{item.pasien.nik}}</span>
       <span class="usia" v-if="item.pasien">{{ usiaPasien }}</span>
+    </td>
+    <td>
+      <span v-if="item.register">{{ item.register.sumber_pasien }}</span>
     </td>
     <td>
         <span v-if="item.pasien && item.pasien.kota">{{item.pasien.kota.nama}}</span>
     </td>
     <td>{{item.nomor_sampel}}</td>
     <td>
-      <ol>
-        <li
-          v-for="item in item.pemeriksaanSampel.hasil_deteksi"
+      <div
+          v-for="item in item.pemeriksaanSampel.hasil_deteksi" 
           :key="item.target_gen"
-        >{{ item.target_gen }} : {{ item.ct_value }}</li>
-      </ol>
+      >
+          - {{ item.target_gen }} : {{ item.ct_value }}
+      </div>
     </td>
+    <td>{{item.kondisi_sampel}}</td>
     <td>{{item.pemeriksaanSampel.kesimpulan_pemeriksaan}}</td>
     <td width="20%">
       <nuxt-link
@@ -99,7 +103,7 @@ export default {
             } else if (result.value) {
                 try {
                     this.loading = true
-                    let resp = await await this.form.post("/v1/verifikasi/verifikasi-single-sampel/" + this.item.id);
+                    let resp = await this.form.post("/v1/verifikasi/verifikasi-single-sampel/" + this.item.id);
                     swalWithBootstrapButtons.fire(
                         'Selesai!',
                         'Sampel berhasil ditandai sebagai invalid',

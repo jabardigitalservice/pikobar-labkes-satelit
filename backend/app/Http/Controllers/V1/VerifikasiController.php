@@ -4,6 +4,8 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\PemeriksaanSampel;
+use App\Models\PengambilanSampel;
+use App\Models\Register;
 use App\Models\Sampel;
 use App\Models\StatusSampel;
 use Illuminate\Http\Request;
@@ -56,10 +58,37 @@ class VerifikasiController extends Controller
                             $query->where('kesimpulan_pemeriksaan', $val);
                         });
                         break;
+                    case 'kota_domisili':
+                        $models->whereHas('register', function($query) use ($val){
+                            $query->join('pasien_register', 'register.id', 'pasien_register.register_id')
+                                ->join('pasien', 'pasien_register.pasien_id', 'pasien.id')
+                                ->where('pasien.kota_id', $val);
+                        });
+                        break;
+                    case 'fasyankes': 
+                        $models->whereHas('register', function ($query) use ($val){
+                            $query->where('fasyankes_id', $val);
+                        });
+                        break;
+                    case 'kategori': 
+                        $models->whereHas('register', function ($query) use ($val){
+                            $query->where('sumber_pasien', 'ilike', '%'. $val .'%');
+                        });
+                        break;
+                    case 'tanggal_verifikasi_start':
+                        $models->where('waktu_sample_verified', '>=', $val);
+                        break;
+                    case 'tanggal_verifikasi_end':
+                        $models->where('waktu_sample_verified', '<=', $val);
+                        break;
                     default:
                         break;
                 }
             }
+
+            // 
+                        // kategori --> sumber_pasien
+                        // tanggal ver-val
         }
 
         $count = $models->count();
@@ -97,7 +126,7 @@ class VerifikasiController extends Controller
         // format data
         foreach ($models as &$model) {
             $model->register = $model->register ?? null;
-            $model->pasien = optional($model->register)->pasiens()->first();
+            $model->pasien = $model->register ? optional($model->register)->pasiens()->with(['kota'])->first() : null;
             $model->pemeriksaanSampel = $model->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first() ?? null;
         }
 
@@ -150,8 +179,32 @@ class VerifikasiController extends Controller
                             $query->where('kesimpulan_pemeriksaan', $val);
                         });
                         break;
+                    case 'kota_domisili':
+                        $models->whereHas('register', function($query) use ($val){
+                            $query->join('pasien_register', 'register.id', 'pasien_register.register_id')
+                                ->join('pasien', 'pasien_register.pasien_id', 'pasien.id')
+                                ->where('pasien.kota_id', $val);
+                        });
+                        break;
+                    case 'fasyankes': 
+                        $models->whereHas('register', function ($query) use ($val){
+                            $query->where('fasyankes_id', $val);
+                        });
+                        break;
+                    case 'kategori': 
+                        $models->whereHas('register', function ($query) use ($val){
+                            $query->where('sumber_pasien', 'ilike', '%'. $val .'%');
+                        });
+                        break;
+                    case 'tanggal_verifikasi_start':
+                        $models->where('waktu_sample_verified', '>=', $val);
+                        break;
+                    case 'tanggal_verifikasi_end':
+                        $models->where('waktu_sample_verified', '<=', $val);
+                        break;
                     default:
                         break;
+                        
                 }
             }
         }
@@ -199,7 +252,7 @@ class VerifikasiController extends Controller
         // format data
         foreach ($models as &$model) {
             $model->register = $model->register ?? null;
-            $model->pasien = optional($model->register)->pasiens()->first();
+            $model->pasien = $model->register ? optional($model->register)->pasiens()->with(['kota'])->first() : null;
             $model->pemeriksaanSampel = $model->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first() ?? null;
         }
 
@@ -228,9 +281,10 @@ class VerifikasiController extends Controller
      */
     public function show(Sampel $sampel)
     {
-        $result = $sampel->load(['pemeriksaanSampel', 'status', 'register'])->toArray();
-        $pasien = optional($sampel->register->pasiens()->with(['kota']))->first();
+        $result = $sampel->load(['pemeriksaanSampel', 'status', 'register', 'ekstraksi', 'logs'])->toArray();
+        $pasien = $sampel->register ? optional($sampel->register->pasiens()->with(['kota']))->first() : null;
         $fasyankes = $sampel->register->fasyankes;
+        $pengambilanSampel = PengambilanSampel::find($sampel->getAttribute('pengambilan_sampel_id'));
 
         return response()->json([
             'status'=>200,
@@ -238,7 +292,8 @@ class VerifikasiController extends Controller
             'data'=> $result + [
                 'pasien'=> optional($pasien)->toArray(),
                 'last_pemeriksaan_sampel'=> $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first(),
-                'fasyankes'=> $fasyankes
+                'fasyankes'=> $fasyankes,
+                'pengambilanSampel'=> $pengambilanSampel
             ]
         ]);
     }
@@ -321,6 +376,17 @@ class VerifikasiController extends Controller
             'status'=>200,
             'message'=>'success',
             'data'=> Sampel::find($sampel->id)
+        ]);
+    }
+
+    public function listKategori()
+    {
+        return response()->json([
+            'status'=>200,
+            'message'=>'success',
+            'data'=> Register::select('sumber_pasien')
+                ->whereNotNull('sumber_pasien')
+                ->groupBy('sumber_pasien')->get()
         ]);
     }
 
