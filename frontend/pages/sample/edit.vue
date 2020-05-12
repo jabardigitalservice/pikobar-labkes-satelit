@@ -88,6 +88,7 @@
               <span style="color:red">*</span>
             </h4>
             <p>Dibawah ini adalah sampel yang diambil atau diterima, klik tambahkan sesuai dengan banyaknya sampel</p>
+            <div class="table-responsive">
             <table class="table table-striped dt-responsive table-bordered" style="width:100%">
               <thead>
                 <tr>
@@ -162,6 +163,7 @@
                 </tr> -->
               </tbody>
             </table>
+            </div>
 
             <div class="form-group row mt-4">
               <div class="col-md-4">

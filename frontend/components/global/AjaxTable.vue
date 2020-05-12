@@ -2,9 +2,9 @@
     <div v-bind:id="oid">
         <div v-if="config.has_entry_page || config.has_search_input" style="margin-bottom: 15px">
             <div class="form-inline d-flex justify-content-between" style="position: relative;min-height:35px;">
-                <div class="pull-left" v-if="config.has_entry_page">
+                <div class="text-center text-sm-left mb-2 table-search" v-if="config.has_entry_page">
                     {{$t('title.show')}} &nbsp;
-                    <select class="form-control-sm form-control input-s-sm inline" v-model="pagination.perpage" v-on:change="changePage()">
+                    <select class="form-control-sm form-control w-auto input-s-sm inline" v-model="pagination.perpage" v-on:change="changePage()">
                         <option value="10">10</option>
                         <option value="20">20</option>
                         <option value="50">50</option>
@@ -15,7 +15,7 @@
                     Entri &nbsp;
                 </div>
                
-                <div class="pull-right table-search ml-2 pl-2" v-if="config.has_search_input">
+                <div class="text-center text-sm-right table-search ml-md-2 mb-2 pl-2" v-if="config.has_search_input">
                     {{$t('title.search')}} &nbsp;<input placeholder="Search"  v-model="search_input" @keyup="doSearchDebounce" type="text" class="form-control form-control-sm">
                 </div>
             </div>

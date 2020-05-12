@@ -22,9 +22,9 @@
             {{item.tgl_input}}
         </td>
         <td v-if="config.has_action">
-            <nuxt-link :to="`/registrasi/mandiri/detail/${item.register_id}/${item.pasien_id}`" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></nuxt-link>
-            <nuxt-link :to="`/registrasi/mandiri/update/${item.register_id}/${item.pasien_id}`" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></nuxt-link>
-            <a href="#" class="btn btn-danger btn-sm" @click="deleteData(item.register_id, item.pasien_id)"><i class="fa fa-trash"></i></a>
+            <nuxt-link :to="`/registrasi/mandiri/detail/${item.register_id}/${item.pasien_id}`" class="mb-1 btn btn-success btn-sm"><i class="fa fa-eye"></i></nuxt-link>
+            <nuxt-link :to="`/registrasi/mandiri/update/${item.register_id}/${item.pasien_id}`" class="mb-1 btn btn-primary btn-sm"><i class="fa fa-edit"></i></nuxt-link>
+            <a href="#" class="mb-1 btn btn-danger btn-sm" @click="deleteData(item.register_id, item.pasien_id)"><i class="fa fa-trash"></i></a>
         </td>
     </tr>
 </template>
