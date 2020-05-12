@@ -2,14 +2,11 @@
     <div>
         <div class="row">
             <div class="col-md-12">
-                <div class="align-items-center d-flex mb-3">
-                    <h2 class="font-weight-bold w-25 m-0 text-nowrap">
+                <div class="mb-3">
+                    <h2 class="heading-title font-weight-bold text-nowrap mr-3">
                         <i class="uil-check"></i>
                         Validasi
                     </h2>
-                    <div class="w-100 ml-3">
-                        <hr>
-                    </div>
                 </div>
             </div>
             <div class="col-md-6">

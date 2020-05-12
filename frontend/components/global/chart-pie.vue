@@ -1,6 +1,6 @@
 <template>
   <div>
-    <chartjs-doughnut
+    <chartjs-pie
         :bind="true"
         :datasets="datasets"
         :labels="labels"

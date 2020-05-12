@@ -9821,3 +9821,20 @@ body.md-skin {
   padding: 0.5em;
   object-fit: cover;
 }
+
+/* custom */
+.heading-title {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+.heading-title:after {
+  position: absolute;
+  top: 51%;
+  overflow: hidden;
+  width: 100%;
+  height: 1px;
+  content: '\a0';
+  margin-left: 15px;
+  background-color:#BDBDBD;
+}

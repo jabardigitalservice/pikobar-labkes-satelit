@@ -46,15 +46,14 @@
                             <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline"
                                     :class="{ 'is-invalid': form.errors.has('reg_sumberpasien') }">
-                                    <div class="i-checks">
-                                        <label class="" @click="form.reg_sumberpasien = 'Mandiri'"> 
-                                            <div class="iradio_square-green" :class="form.reg_sumberpasien == 'Mandiri' ? 'checked' : ''" style="position: relative;" >
-                                                <input type="radio" v-model="form.reg_sumberpasien"  value="Mandiri" style="position: absolute; opacity: 0;">
-                                                <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
-                                            </div> 
-                                            <i></i> Mandiri 
-                                        </label>
-                                    </div>
+                                     <label class="form-check-label">
+                                        <input class="form-check-input" type="radio" v-model="form.reg_sumberpasien"
+                                            value="Mandiri" />
+                                        Mandiri
+                                     </label>
+                                </div>
+                                <div class="form-check form-check-inline"
+                                    :class="{ 'is-invalid': form.errors.has('reg_sumberpasien') }">
                                     <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_sumberpasien"
                                             value="Umum" />
@@ -551,12 +550,6 @@
         created() {
             this.getKota()
             this.getNoreg();
-            $(document).ready(function () {
-                $('.i-checks').iCheck({
-                    checkboxClass: 'icheckbox_square-green',
-                    radioClass: 'iradio_square-green',
-                });
-            });
         
         },
         watch: {
