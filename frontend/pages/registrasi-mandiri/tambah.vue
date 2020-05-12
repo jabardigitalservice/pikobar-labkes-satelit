@@ -52,8 +52,7 @@
                                         Mandiri
                                      </label>
                                 </div>
-                                <div class="form-check form-check-inline"
-                                    :class="{ 'is-invalid': form.errors.has('reg_sumberpasien') }">
+                                <div class="form-check form-check-inline">
                                     <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_sumberpasien"
                                             value="Umum" />
