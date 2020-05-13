@@ -294,7 +294,9 @@
                         <td>{{$sampel['nomor_sampel']}}</td>
                         <td>
                             {{-- {{$last_pemeriksaan_sampel['hasil_deteksi_terkecil']['target_gen']}}  --}}
-                            {{$last_pemeriksaan_sampel['hasil_deteksi_terkecil']['ct_value']}}
+                            {{-- {{$last_pemeriksaan_sampel['hasil_deteksi_terkecil']['ct_value']}}  --}}
+                            {{ round($last_pemeriksaan_sampel['hasil_deteksi_terkecil']['ct_value'], 2) }}
+                            {{-- {{ number_format((float)$last_pemeriksaan_sampel['hasil_deteksi_terkecil']['ct_value'], 2, ',','.') }} --}}
                         </td>
                         <td>
                             <span>negatif CT >= 40</span>
