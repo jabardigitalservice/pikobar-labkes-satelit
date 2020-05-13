@@ -56,11 +56,16 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
                     'other_dinas_pengirim'=> $row->get('fasyankes_other') 
                 ];
 
+                if (!$registerData['fasyankes_id']) {
+                    $registerData['nama_rs'] = $row->get('fasyankes_other');
+                    $registerData['other_nama_rs'] = $row->get('fasyankes_other');
+                }
+
                 Validator::make($registerData, [
-                   'fasyankes_id'=> 'exists:fasyankes,id',
+                   // 'fasyankes_id'=> 'exists:fasyankes,id',
                    'tanggal_kunjungan'=> 'date|date_format:Y-m-d'
                 ],[
-                    'fasyankes_id.exists'=> 'Fasyankes tidak di database dengan ID yang diinput.', 
+                    // 'fasyankes_id.exists'=> 'Fasyankes tidak di database dengan ID yang diinput.', 
                     // 'fasyankes_id.required'=> 'Fasyankes ' 
                 ])->validate();
 
