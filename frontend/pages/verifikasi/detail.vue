@@ -222,7 +222,7 @@
                   <b>Jenis Registrasi</b>
                 </td>
                 <td width="60%">
-                  <span>{{data.register.janis_registrasi}}</span>
+                  <span>{{data.register.jenis_registrasi}}</span>
                 </td>
               </tr>
 
@@ -518,6 +518,14 @@ export default {
 
     if (!data.ekstraksi) {
       data.ekstraksi = {};
+    }
+
+    if (!data.pemeriksaan_sampel) {
+      data.pemeriksaan_sampel = {};
+    }
+
+    if (!data.register) {
+      data.register = {};
     }
 
     return { data };

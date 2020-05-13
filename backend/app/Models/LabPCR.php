@@ -12,4 +12,9 @@ class LabPCR extends Model
         'nama',
     ];
 
+    public function sampel()
+    {
+        return $this->hasMany(Sampel::class);
+    }
+
 }

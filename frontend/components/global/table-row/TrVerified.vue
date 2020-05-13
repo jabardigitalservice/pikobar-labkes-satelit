@@ -18,16 +18,16 @@
         <td>
             {{item.nomor_sampel}}
         </td>
-        <td>
+        <td nowrap>
             <div
-                v-for="item in item.pemeriksaanSampel.hasil_deteksi" 
+                v-for="item in item.pemeriksaanSampel.hasil_deteksi_parsed" 
                 :key="item.target_gen"
             >
-                - {{ item.target_gen }} : {{ item.ct_value }}
+                - {{ item.target_gen }} : {{ parseFloat(item.ct_value).toFixed(2).replace('.', ',') }}
             </div>
         </td>
         <td>{{item.kondisi_sampel}}</td>
-        <td>
+        <td style="text-transform: capitalize;">
             {{item.pemeriksaanSampel.kesimpulan_pemeriksaan}}
         </td>
         <td>

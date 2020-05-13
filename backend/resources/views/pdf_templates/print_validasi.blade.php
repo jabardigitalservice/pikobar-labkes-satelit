@@ -155,11 +155,24 @@
                 </td>
                 <td width="2%">:</td>
                 <td width="28%">
-                    @if ($register && $register['rs_kunjungan'])
+
+                    @if ($register && $register['jenis_registrasi'] === 'mandiri')
+                        {{ $sampel->labPCR ? $sampel->labPCR['nama'] : '-' }}
+                    @endif
+
+                    @if ($register && $register['jenis_registrasi'] === 'rujukan' && $register->fasyankes)
+                        {{ $register->fasyankes ? $register->fasyankes['nama'] : '' }}
+                    @endif
+
+                    @if ($register && $register['jenis_registrasi'] === 'rujukan' && !$register->fasyankes)
+                        {{ $register['fasyankes_pengirim'] }}
+                    @endif
+
+                    {{-- @if ($register && $register['rs_kunjungan'])
                         {{ $register['rs_kunjungan'] }}
                     @else
                         {{ '-' }}
-                    @endif
+                    @endif --}}
                 </td>
 
               </tr>
@@ -257,7 +270,7 @@
                 <tr>
                     <th width="30%"><b>PEMERIKSAAN</b></th>
                     <th width="30%"><b>NOMOR SAMPEL</b></th>
-                    <th width="30%"><b>CT VALLUE</b></th>
+                    <th width="30%"><b>CT VALUE</b></th>
                     <th width="30%"><b>NILAI RUJUKAN</b></th>
                     <th width="30%"><b>HASIL</b></th>
                     <th width="30%"><b>METODE</b></th>
@@ -281,14 +294,18 @@
                         <td>{{$sampel['nomor_sampel']}}</td>
                         <td>
                             {{-- {{$last_pemeriksaan_sampel['hasil_deteksi_terkecil']['target_gen']}}  --}}
-                            {{$last_pemeriksaan_sampel['hasil_deteksi_terkecil']['ct_value']}}
+                            {{-- {{$last_pemeriksaan_sampel['hasil_deteksi_terkecil']['ct_value']}}  --}}
+                            {{ round($last_pemeriksaan_sampel['hasil_deteksi_terkecil']['ct_value'], 2) }}
+                            {{-- {{ number_format((float)$last_pemeriksaan_sampel['hasil_deteksi_terkecil']['ct_value'], 2, ',','.') }} --}}
                         </td>
                         <td>
                             <span>negatif CT >= 40</span>
                             <span>positif CT < 40</span>
                         </td>
                         <td>
-                            <b>{{$last_pemeriksaan_sampel['kesimpulan_pemeriksaan']}}</b>
+                            @if ($last_pemeriksaan_sampel['kesimpulan_pemeriksaan'])
+                                <b>{{ ucfirst($last_pemeriksaan_sampel['kesimpulan_pemeriksaan']) }}</b>
+                            @endif
                         </td>
                         <td>
                             rRT-PCR-{{ $last_pemeriksaan_sampel['nama_kit_pemeriksaan'] }}
