@@ -83,28 +83,38 @@ export default {
         }).then(response => {
           const blob = new Blob([response.data], { type: response.data.type });
           const url = window.URL.createObjectURL(blob);
+
           const link = document.createElement("a");
           link.href = url;
-          const contentDisposition = response.headers["content-disposition"];
 
-          const fileNameHeader = "x-suggested-filename";
-          const suggestedFileName = response.headers[fileNameHeader];
-          const effectiveFileName =
-            suggestedFileName === undefined
-              ? "surat-hasil-pemeriksaan-" + this.item.nomor_sampel
-              : suggestedFileName;
 
-          let fileName = effectiveFileName + ".pdf";
+          // link.download = "test.pdf";
+          // link.click();
+          setTimeout(function(){
+            window.open(url);
+          }, 100);
 
-          if (contentDisposition) {
-            const fileNameMatch = contentDisposition.match(/filename=(.+)/);
-            if (fileNameMatch.length === 2) fileName = fileNameMatch[1];
-          }
-          link.setAttribute("download", fileName);
-          document.body.appendChild(link);
-          link.click();
-          link.remove();
-          window.URL.revokeObjectURL(url);
+
+          // const contentDisposition = response.headers["content-disposition"];
+
+          // const fileNameHeader = "x-suggested-filename";
+          // const suggestedFileName = response.headers[fileNameHeader];
+          // const effectiveFileName =
+          //   suggestedFileName === undefined
+          //     ? "surat-hasil-pemeriksaan-" + this.item.nomor_sampel
+          //     : suggestedFileName;
+
+          // let fileName = effectiveFileName + ".pdf";
+
+          // if (contentDisposition) {
+          //   const fileNameMatch = contentDisposition.match(/filename=(.+)/);
+          //   if (fileNameMatch.length === 2) fileName = fileNameMatch[1];
+          // }
+          // link.setAttribute("download", fileName);
+          // document.body.appendChild(link);
+          // link.click();
+          // link.remove();
+          // window.URL.revokeObjectURL(url);
 
           this.$bus.$emit("refresh-ajaxtable", "validated");
 
