@@ -174,7 +174,7 @@ class CreateSuratHasilListener
 
     private function getHasilDeteksiTerkecil(PemeriksaanSampel $hasil)
     {
-        return collect($hasil['hasil_deteksi'])->sortBy('ct_value')->first();
+        return collect($hasil['hasil_deteksi'])->whereNotNull('ct_value')->sortBy('ct_value')->first();
     }
 
     private function getUmurPasien(Carbon $tanggalLahir)

@@ -12,10 +12,13 @@ use Storage;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Imports\HasilPemeriksaanImport;
+use App\Traits\PemeriksaanTrait;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PCRController extends Controller
 {
+    use PemeriksaanTrait;
+
     public function getData(Request $request)
     {
         $user = $request->user();
@@ -298,7 +301,7 @@ class PCRController extends Controller
         $pcr->jam_input_hasil = $request->jam_input_hasil;
         $pcr->catatan_pemeriksaan = $request->catatan_pemeriksaan;
         $pcr->grafik = $request->grafik;
-        $pcr->hasil_deteksi = $request->hasil_deteksi;
+        $pcr->hasil_deteksi = $this->parseHasilDeteksi($request->hasil_deteksi);
         $pcr->kesimpulan_pemeriksaan = $request->kesimpulan_pemeriksaan;
         $pcr->save();
 
@@ -483,6 +486,5 @@ class PCRController extends Controller
             'message'=> 'Sukses import data.',
         ]);
     }
-
 
 }

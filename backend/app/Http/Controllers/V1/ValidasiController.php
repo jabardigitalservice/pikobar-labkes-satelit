@@ -293,7 +293,7 @@ class ValidasiController extends Controller
     {
         $result = $sampel->load(['pemeriksaanSampel', 'status', 'register', 'validator', 'ekstraksi', 'logs'])->toArray();
         $pasien = $sampel->register ? optional($sampel->register->pasiens()->with(['kota']))->first() : null;
-        $fasyankes = $sampel->register->fasyankes;
+        $fasyankes = $sampel->register ? $sampel->register->fasyankes : null;
         $pengambilanSampel = PengambilanSampel::find($sampel->getAttribute('pengambilan_sampel_id'));
 
         return response()->json([
