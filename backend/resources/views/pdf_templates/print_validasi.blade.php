@@ -257,7 +257,7 @@
                 <tr>
                     <th width="30%"><b>PEMERIKSAAN</b></th>
                     <th width="30%"><b>NOMOR SAMPEL</b></th>
-                    <th width="30%"><b>CT VALLUE</b></th>
+                    <th width="30%"><b>CT VALUE</b></th>
                     <th width="30%"><b>NILAI RUJUKAN</b></th>
                     <th width="30%"><b>HASIL</b></th>
                     <th width="30%"><b>METODE</b></th>
@@ -288,7 +288,9 @@
                             <span>positif CT < 40</span>
                         </td>
                         <td>
-                            <b>{{$last_pemeriksaan_sampel['kesimpulan_pemeriksaan']}}</b>
+                            @if ($last_pemeriksaan_sampel['kesimpulan_pemeriksaan'])
+                                <b>{{ ucfirst($last_pemeriksaan_sampel['kesimpulan_pemeriksaan']) }}</b>
+                            @endif
                         </td>
                         <td>
                             rRT-PCR-{{ $last_pemeriksaan_sampel['nama_kit_pemeriksaan'] }}

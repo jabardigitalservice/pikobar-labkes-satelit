@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\PemeriksaanTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class PemeriksaanSampel extends Model
 {
+    use PemeriksaanTrait;
+
     protected $table = 'pemeriksaansampel';
 
     protected $fillable = [
@@ -33,8 +36,17 @@ class PemeriksaanSampel extends Model
         'grafik' => 'array',
     ];
 
+    protected $appends = [
+        'hasil_deteksi_parsed',
+    ];
+
     public function sampel()
     {
         return $this->belongsTo(Sampel::class);
+    }
+
+    public function getHasilDeteksiParsedAttribute()
+    {
+        return $this->parseHasilDeteksi($this->getAttribute('hasil_deteksi'));
     }
 }
