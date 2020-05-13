@@ -33,22 +33,22 @@
     <td width="20%">
       <nuxt-link
         tag="a"
-        class="btn btn-success btn-sm"
+        class="mb-1 text-nowrap btn btn-success btn-sm"
         :to="`/validasi/detail/${item.id}`"
         title="Klik untuk melihat detail"
       >
         <i class="uil-info-circle"></i>
       </nuxt-link>
-      <button @click="downloadPDF()" class="btn btn-sm btn-primary" type="button">
+      <button @click="downloadPDF()" class="mb-1 text-nowrap btn btn-sm btn-primary" type="button">
         <!-- <i class="fa fa-file-excel"></i> -->
         {{ 'Print' }}
       </button>
       <button
         @click="regeneratePDF()"
-        class="btn btn-sm btn-primary"
+        class="mb-1 text-nowrap btn btn-sm btn-primary"
         type="button"
       >{{ 'Regenerate Print' }}</button>
-      <!-- <nuxt-link :to="`/validasi/edit/${item.id}`" class="btn btn-warning btn-sm" tag="a"><i class="fa fa-edit"></i></nuxt-link> -->
+      <!-- <nuxt-link :to="`/validasi/edit/${item.id}`" class="mb-1 text-nowrap btn btn-warning btn-sm" tag="a"><i class="fa fa-edit"></i></nuxt-link> -->
     </td>
   </tr>
 </template>
@@ -144,8 +144,8 @@ export default {
     regeneratePDF() {
       const swalWithBootstrapButtons = this.$swal.mixin({
         customClass: {
-          confirmButton: "btn btn-success",
-          cancelButton: "btn btn-danger"
+          confirmButton: "mb-1 text-nowrap btn btn-success",
+          cancelButton: "mb-1 text-nowrap btn btn-danger"
         },
         buttonsStyling: false
       });

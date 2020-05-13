@@ -21,19 +21,19 @@
     <td width="20%">
       <nuxt-link
         tag="a"
-        class="btn btn-success btn-sm"
+        class="mb-1 btn btn-success btn-sm"
         :to="`/ekstraksi/detail/${item.id}`"
         title="Klik untuk melihat detail"
       >
         <i class="uil-info-circle"></i>
       </nuxt-link>
-      <nuxt-link :to="`/ekstraksi/edit/${item.id}`" class="btn btn-warning btn-sm" tag="a">
+      <nuxt-link :to="`/ekstraksi/edit/${item.id}`" class="mb-1 btn btn-warning btn-sm" tag="a">
         <i class="fa fa-edit"></i>
       </nuxt-link>
       <button
         v-if="!item.is_musnah_ekstraksi"
         type="button"
-        class="btn btn-sm"
+        class="mb-1 btn btn-sm text-nowrap"
         style="background-color: #9f23c8; color: #fff"
         title="Klik untuk menandai sampel telah dimunakan"
         @click="doMusnahkan()"

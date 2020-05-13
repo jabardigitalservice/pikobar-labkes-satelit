@@ -46,30 +46,43 @@
                             <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline"
                                     :class="{ 'is-invalid': form.errors.has('reg_sumberpasien') }">
-                                     <label class="form-check-label">
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input  v-model="form.reg_sumberpasien" value="Mandiri" type="radio">
+                                        <span><i></i>Mandiri</span>
+                                    </label>
+
+                                     <!-- <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_sumberpasien"
                                             value="Mandiri" />
                                         Mandiri
-                                     </label>
+                                     </label> -->
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <label class="form-check-label">
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input v-model="form.reg_sumberpasien" value="Umum" type="radio">
+                                        <span><i></i>Umum</span>
+                                    </label>
+                                    <!-- <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_sumberpasien"
                                             value="Umum" />
-                                        Umum</label>
+                                        Umum</label> -->
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <label class="form-check-label">
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input  v-model="form.reg_sumberpasien" value="Other" type="radio">
+                                        <span><i></i>Isian</span>
+                                    </label>
+                                    <!-- <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_sumberpasien"
                                             value="Other" />
-                                        Isian</label>
+                                        Isian</label> -->
                                 </div>
                                 <has-error :form="form" field="reg_sumberpasien" />
                             </div>
                         </div>
                         <div class="form-group row mt-4" v-if="form.reg_sumberpasien=='Other'">
-                            <label for="" class="col-md-2"></label>
-                            <div class="col-md-6">
+                            <label for="" class="col-md-3 col-lg-2"></label>
+                            <div class="col-md-8 col-lg-6">
                                 <input type="text" name="reg_sumberpasien_isian" 
                                     placeholder="Ketikkan Kategori" id="" class="form-control" 
                                     v-model="form.reg_sumberpasien_isian" required>
@@ -77,7 +90,7 @@
                         </div>
 
                          <div class="form-group row mt-4">
-                            <div class="col-md-2">
+                            <div class="col-md-3 col-lg-2">
                                 <label for="">Hasil RDT</label>
                             </div>
                             <div class="col-md-3">
@@ -150,15 +163,15 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 Usia
                             </label>
-                            <div class="col-md-2" :class="{ 'is-invalid': form.errors.has('reg_usia_tahun') }">
+                            <div class="col-md-3 col-lg-2" :class="{ 'is-invalid': form.errors.has('reg_usia_tahun') }">
                                 <input class="form-control" type="number" name="reg_usia_tahun" placeholder="Tahun"
                                     v-model="form.reg_usia_tahun" />
                                 <has-error :form="form" field="reg_usia_tahun" />
                             </div>
-                            <div class="col-md-2" :class="{ 'is-invalid': form.errors.has('reg_usia_bulan') }">
+                            <div class="col-md-3 col-lg-2" :class="{ 'is-invalid': form.errors.has('reg_usia_bulan') }">
                                 <input class="form-control" type="number" name="reg_usia_bulan" placeholder="Bulan"
                                     v-model="form.reg_usia_bulan" />
                                 <has-error :form="form" field="reg_usia_bulan" />
@@ -173,16 +186,24 @@
                             <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline"
                                     :class="{ 'is-invalid': form.errors.has('reg_jk') }">
-                                    <label class="form-check-label">
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input v-model="form.reg_jk" value="L" type="radio">
+                                        <span><i></i>Laki-laki</span>
+                                    </label>
+                                    <!-- <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_jk"
                                             value="L" />
-                                        Laki-laki</label>
+                                        Laki-laki</label> -->
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <label class="form-check-label">
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input  v-model="form.reg_jk" value="P" type="radio">
+                                        <span><i></i>Perempuan</span>
+                                    </label>
+                                    <!-- <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_jk"
                                             value="P" />
-                                        Perempuan</label>
+                                        Perempuan</label> -->
                                 </div>
                                 <has-error :form="form" field="reg_jk" />
                             </div>
@@ -296,39 +317,74 @@
                             <label class="col-md-3 col-lg-2">Kunjungan Ke <span style="color:red;">*</span></label>
                             <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="kunke1" name="reg_kunke" value="1"
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input  name="reg_kunke" value="1"
+                                        required v-model="form.reg_kunke" type="radio">
+                                        <span><i></i>Ke-1</span>
+                                    </label>
+                                    <!-- <input class="form-check-input" type="radio" id="kunke1" name="reg_kunke" value="1"
                                         required v-model="form.reg_kunke">
-                                    <label class="form-check-label" for="kunke1">Ke-1</label>
+                                    <label class="form-check-label" for="kunke1">Ke-1</label> -->
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="kunke2" name="reg_kunke" value="2"
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input  name="reg_kunke" value="2"
+                                        required v-model="form.reg_kunke" type="radio">
+                                        <span><i></i>Ke-2</span>
+                                    </label>
+                                    <!-- <input class="form-check-input" type="radio" id="kunke2" name="reg_kunke" value="2"
                                         v-model="form.reg_kunke">
-                                    <label class="form-check-label" for="kunke2">Ke-2</label>
+                                    <label class="form-check-label" for="kunke2">Ke-2</label> -->
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="kunke3" name="reg_kunke" value="3"
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input  name="reg_kunke" value="3"
+                                        required v-model="form.reg_kunke" type="radio">
+                                        <span><i></i>Ke-3</span>
+                                    </label>
+                                    <!-- <input class="form-check-input" type="radio" id="kunke3" name="reg_kunke" value="3"
                                         v-model="form.reg_kunke">
-                                    <label class="form-check-label" for="kunke3">Ke-3</label>
+                                    <label class="form-check-label" for="kunke3">Ke-3</label> -->
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="kunke4" name="reg_kunke" value="4"
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input  name="reg_kunke" value="4"
+                                        required v-model="form.reg_kunke" type="radio">
+                                        <span><i></i>Ke-4</span>
+                                    </label>
+                                    <!-- <input class="form-check-input" type="radio" id="kunke4" name="reg_kunke" value="4"
                                         v-model="form.reg_kunke">
-                                    <label class="form-check-label" for="kunke4">Ke-4</label>
+                                    <label class="form-check-label" for="kunke4">Ke-4</label> -->
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="kunke5" name="reg_kunke" value="5"
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input  name="reg_kunke" value="5"
+                                        required v-model="form.reg_kunke" type="radio">
+                                        <span><i></i>Ke-5</span>
+                                    </label>
+                                    <!-- <input class="form-check-input" type="radio" id="kunke5" name="reg_kunke" value="5"
                                         v-model="form.reg_kunke">
-                                    <label class="form-check-label" for="kunke5">Ke-5</label>
+                                    <label class="form-check-label" for="kunke5">Ke-5</label> -->
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="kunke6" name="reg_kunke" value="6"
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input  name="reg_kunke" value="6"
+                                        required v-model="form.reg_kunke" type="radio">
+                                        <span><i></i>Ke-6</span>
+                                    </label>
+                                    <!-- <input class="form-check-input" type="radio" id="kunke6" name="reg_kunke" value="6"
                                         v-model="form.reg_kunke">
-                                    <label class="form-check-label" for="kunke6">Ke-6</label>
+                                    <label class="form-check-label" for="kunke6">Ke-6</label> -->
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="kunke7" name="reg_kunke" value="7"
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input  name="reg_kunke" value="7"
+                                        required v-model="form.reg_kunke" type="radio">
+                                        <span><i></i>Ke-7</span>
+                                    </label>
+                                    <!-- <input class="form-check-input" type="radio" id="kunke7" name="reg_kunke" value="7"
                                         v-model="form.reg_kunke">
-                                    <label class="form-check-label" for="kunke7">Ke-7</label>
+                                    <label class="form-check-label" for="kunke7">Ke-7</label> -->
                                 </div>
                             </div>
                         </div>

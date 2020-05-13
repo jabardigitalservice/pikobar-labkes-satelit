@@ -12,52 +12,64 @@
             <input type="hidden" v-model="form.pen_nik" />
 
             <div class="form-group row mt-4">
-              <label class="col-md-2">
+              <label class="col-lg-2 col-md-3">
                 Sumber Sampel
                 <span style="color:red">*</span>
               </label>
-              <div class="col-md-6">
+              <div class="col-md-8 col-lg-6">
                 <div class="form-check form-check-inline"
                   :class="{ 'is-invalid': form.errors.has('pen_sampel_sumber') }">
-                  <label class="form-check-label">
+                  <label class="fancy-radio custom-color-green m-0 w-100">
+                      <input type="radio" v-model="form.pen_sampel_sumber" value="Mandiri">
+                      <span><i></i>Mandiri</span>
+                  </label>
+                  <!-- <label class="form-check-label">
                   <input
                     class="form-check-input"
                     type="radio"
                     v-model="form.pen_sampel_sumber"
                     value="Mandiri"
                   />
-                  Mandiri</label>
+                  Mandiri</label> -->
                 </div>
                 <div class="form-check form-check-inline">
-                  <label class="form-check-label">
+                  <label class="fancy-radio custom-color-green m-0 w-100">
+                      <input type="radio" v-model="form.pen_sampel_sumber" value="Rujukan Dinkes">
+                      <span><i></i>Rujukan Dinkes</span>
+                  </label>
+                  <!-- <label class="form-check-label">
                   <input
                     class="form-check-input"
                     type="radio"
                     v-model="form.pen_sampel_sumber"
                     value="Rujukan Dinkes"
                   />
-                  Rujukan Dinkes</label>
+                  Rujukan Dinkes</label> -->
                 </div>
                 <div class="form-check form-check-inline">
-                  <label class="form-check-label">
+                  <label class="fancy-radio custom-color-green m-0 w-100">
+                      <input type="radio" v-model="form.pen_sampel_sumber" value="Rujukan RS">
+                      <span><i></i>Rujukan RS</span>
+                  </label>
+                  <!-- <label class="form-check-label">
                   <input
                     class="form-check-input"
                     type="radio"
                     v-model="form.pen_sampel_sumber"
                     value="Rujukan RS"
                   />
-                  Rujukan RS</label>
+                  Rujukan RS</label> -->
                 </div>
                 <has-error :form="form" field="pen_sampel_sumber" />
               </div>
             </div>
 
             <div class="form-group row mt-4">
-              <label class="col-md-2">
+              <label class="col-lg-2 col-md-3">
                 Petugas Penerima Sampel
                 <small>Isi bila diterima dari fasyankes rujukan</small>
               </label>
-              <div class="col-md-6">
+              <div class="col-md-8 col-lg-6">
                 <dynamic-input :form="form" field="pen_penerima_sampel" 
                   :options="['Adit','Firman']" 
                   :hasLainnya="true"
@@ -69,7 +81,7 @@
             </div>
 
             <div class="form-group row">
-              <label class="col-md-2 col-form-label" for="gejlain">Catatan Lain</label>
+              <label class="col-lg-2 col-md-3 col-form-label" for="gejlain">Catatan Lain</label>
               <div class="col-md-10">
                 <textarea
                   class="form-control"

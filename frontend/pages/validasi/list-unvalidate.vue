@@ -70,16 +70,16 @@
                   </dynamic-input>
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-6 mb-2">
                 
-                <button id="btn-export" class="btn btn-primary pull-right mt-4" 
+                <button id="btn-export" class="mb-1 btn btn-primary pull-right mt-4" 
                   @click="onExport('validasi')"
                 >
                   <i class="fa fa-file-excel-o"></i> Export Excel
                 </button>
 
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary pull-right mt-4 mr-2" 
+                <button type="button" class="mb-1 btn btn-primary pull-right mt-4 mr-2" 
                   data-toggle="modal" data-target="#modalBulkValidate"
                 >
                   <i class="fa fa-check"></i>

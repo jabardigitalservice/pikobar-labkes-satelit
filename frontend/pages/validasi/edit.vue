@@ -219,10 +219,14 @@
               </label>
               <div :class="{ 'is-invalid': form.errors.has('validator') }">
                 <div v-for="item in listValidator" :key="item.id">
-                  <label class="form-check-label">
+                  <label class="fancy-radio custom-color-green m-0 w-100">
+                      <input type="radio" v-model="form.validator" :value="item.id"  >
+                      <span><i></i><b>{{item.nama}}</b> (NIP. {{ item.nip }})</span>
+                  </label>
+                  <!-- <label class="form-check-label">
                     <input type="radio" v-model="form.validator" :value="item.id" />
                     <b>{{item.nama}}</b> (NIP. {{ item.nip }})
-                  </label>
+                  </label> -->
                 </div>
               </div>
               <has-error :form="form" field="validator" />

@@ -9838,3 +9838,66 @@ body.md-skin {
   margin-left: 15px;
   background-color:#BDBDBD;
 }
+
+
+.fancy-radio {
+	margin-right: 10px
+}
+
+.fancy-radio, .fancy-radio label {
+	font-weight: normal
+}
+
+.fancy-radio input[type="radio"] {
+	display: none
+}
+
+.fancy-radio input[type="radio"]+span {
+	display: block;
+	cursor: pointer;
+	position: relative
+}
+
+.fancy-radio input[type="radio"]+span i {
+	display: inline-block;
+	vertical-align: middle;
+	*vertical-align: auto;
+	*zoom: 1;
+	*display: inline;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	position: relative;
+	bottom: 1px;
+	content: "";
+	border: 1px solid #ccc;
+	width: 18px;
+	height: 18px;
+	margin-right: 5px
+}
+
+.fancy-radio input[type="radio"]:checked+span i:after {
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	display: block;
+	position: relative;
+	top: 3px;
+	left: 3px;
+	content: '';
+	width: 10px;
+	height: 10px;
+	background-color: #7b848c
+}
+
+.fancy-radio.custom-color-green input[type="radio"]:checked+span i:after {
+	background-color: #1ab394
+}
+
+.fancy-radio.custom-bgcolor-green input[type="radio"]:checked+span i {
+	background-color: #1ab394
+}
+
+.fancy-radio.custom-bgcolor-green input[type="radio"]:checked+span i:after {
+	background-color: #fff
+}
