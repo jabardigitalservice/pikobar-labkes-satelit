@@ -155,11 +155,24 @@
                 </td>
                 <td width="2%">:</td>
                 <td width="28%">
-                    @if ($register && $register['rs_kunjungan'])
+
+                    @if ($register && $register['jenis_registrasi'] === 'mandiri')
+                        {{ $sampel->labPCR ? $sampel->labPCR['nama'] : '-' }}
+                    @endif
+
+                    @if ($register && $register['jenis_registrasi'] === 'rujukan' && $register->fasyankes)
+                        {{ $register->fasyankes ? $register->fasyankes['nama'] : '' }}
+                    @endif
+
+                    @if ($register && $register['jenis_registrasi'] === 'rujukan' && !$register->fasyankes)
+                        {{ $register['fasyankes_pengirim'] }}
+                    @endif
+
+                    {{-- @if ($register && $register['rs_kunjungan'])
                         {{ $register['rs_kunjungan'] }}
                     @else
                         {{ '-' }}
-                    @endif
+                    @endif --}}
                 </td>
 
               </tr>

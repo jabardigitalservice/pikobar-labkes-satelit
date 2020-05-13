@@ -140,4 +140,9 @@ class Sampel extends Model
         return $this->getAttribute('petugas_pengambilan_sampel');
     }
 
+    public function labPCR()
+    {
+        return $this->belongsTo(LabPCR::class, 'lab_pcr_id');
+    }
+
 }
