@@ -157,7 +157,8 @@
                 <td width="28%">
 
                     @if ($register && $register['jenis_registrasi'] === 'mandiri')
-                        {{ $sampel->labPCR ? $sampel->labPCR['nama'] : '-' }}
+                        {{ 'Labkesda Jawa Barat' }}
+                        {{-- {{ $sampel->labPCR ? $sampel->labPCR['nama'] : '-' }} --}}
                     @endif
 
                     @if ($register && $register['jenis_registrasi'] === 'rujukan' && $register->fasyankes)

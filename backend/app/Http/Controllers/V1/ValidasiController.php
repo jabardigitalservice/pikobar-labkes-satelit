@@ -28,7 +28,7 @@ class ValidasiController extends Controller
 
         $params = $request->get('params',false);
         $search = $request->get('search',false);
-        $order  = $request->get('order' ,'updated_at');
+        $order  = $request->get('order' ,'created_at');
 
         if ($search != '') {
             $models = $models->where(function($q) use ($search) {
@@ -99,7 +99,7 @@ class ValidasiController extends Controller
             if (empty($order_direction)) $order_direction = 'asc';
 
             switch ($order) {
-                case 'updated_at':
+                case 'created_at':
                     $models = $models->orderBy($order,$order_direction);
                     break;
                 case 'nomor_register':
@@ -157,7 +157,7 @@ class ValidasiController extends Controller
 
         $params = $request->get('params',false);
         $search = $request->get('search',false);
-        $order  = $request->get('order' ,'updated_at');
+        $order  = $request->get('order' ,'created_at');
 
         if ($search != '') {
             $models = $models->where(function($q) use ($search) {
@@ -228,7 +228,7 @@ class ValidasiController extends Controller
             if (empty($order_direction)) $order_direction = 'desc';
 
             switch ($order) {
-                case 'updated_at':
+                case 'created_at':
                     $models = $models->orderBy($order,$order_direction);
                     break;
                 case 'nomor_register':

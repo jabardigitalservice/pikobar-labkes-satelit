@@ -18,7 +18,8 @@
       <div
         v-for="item in item.pemeriksaanSampel.hasil_deteksi_parsed"
         :key="item.target_gen"
-      >- {{ item.target_gen }} : {{ parseFloat(item.ct_value).toFixed(2).replace('.', ',') }}</div>
+      >- {{ item.target_gen }} : <span v-if="item.ct_value">{{ parseFloat(item.ct_value).toFixed(2).replace('.', ',') }}</span>
+      </div>
     </td>
     <td>{{item.kondisi_sampel}}</td>
     <td style="text-transform: capitalize;">
@@ -41,9 +42,10 @@
       >
         <i class="uil-info-circle"></i>
       </nuxt-link>
-      <button @click="downloadPDF()" class="btn btn-sm btn-primary" type="button">
+      <button @click="downloadPDF()" class="btn btn-sm btn-primary" type="button" :disabled="loading == true">
         <!-- <i class="fa fa-file-excel"></i> -->
-        {{ 'Print' }}
+        <span v-if="loading == true"><i class="fa fa-spinner"></i></span>
+        <span v-if="loading == false">{{'Print'}}</span>
       </button>
       <button
         @click="regeneratePDF()"
@@ -92,7 +94,7 @@ export default {
           // link.click();
           setTimeout(function(){
             window.open(url);
-          }, 100);
+          }, 500);
 
 
           // const contentDisposition = response.headers["content-disposition"];
@@ -149,8 +151,9 @@ export default {
             "error"
           );
         }
+
+        this.loading = false;
       }
-      this.loading = false;
     },
 
     regeneratePDF() {
