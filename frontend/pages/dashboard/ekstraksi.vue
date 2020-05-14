@@ -10,7 +10,7 @@
         </div>
         <div class="ibox-content">
           <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3 col-6">
               <h1 class="no-margins" v-if="!loading">{{ data.status.sample_taken | formatCurrency}}</h1>
               <img
                 v-if="loading"
@@ -25,7 +25,7 @@
                 </router-link>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-6">
               <h1
                 class="no-margins"
                 v-if="!loading"
@@ -43,7 +43,7 @@
                 </router-link>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-6">
               <h1
                 class="no-margins"
                 v-if="!loading"
@@ -61,7 +61,7 @@
                 </router-link>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-6">
               <h1 class="no-margins" v-if="!loading">{{ data.status.extraction_sent | formatCurrency}}</h1>
               <img
                 v-if="loading"
@@ -89,7 +89,7 @@
           <ul class="list-group clear-list">
             <li class="list-group-item fist-item" v-for="(item,idx) in data.labs" :key="idx">
               <span class="float-right">{{ item.total }}</span>
-              <span class="label label-success">{{ idx+1 }}</span> {{item.lab_pcr_nama}}
+              <span class="label label-success mr-1">{{ idx+1 }}</span> {{item.lab_pcr_nama}}
             </li>
           </ul>
         </div>

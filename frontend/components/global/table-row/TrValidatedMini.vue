@@ -14,10 +14,10 @@
             {{item.waktu_sample_valid | formatDate}}
         </td>
         <td width="20%">
-            <nuxt-link tag="a" class="btn btn-success btn-sm" :to="`/validasi/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
+            <nuxt-link tag="a" class="btn btn-success btn-sm mb-2" :to="`/validasi/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
             <button
                 @click="downloadPDF()"
-                class="btn btn-sm btn-primary"
+                class="btn btn-sm mb-2 btn-primary"
                 type="button"
             >
                 <i class="fa fa-file-excel"></i>

@@ -26,9 +26,9 @@
             <p class="badge badge-primary" v-if="(item.nik!=null && item.nik!='') && (item.nama_lengkap!=null && item.nama_lengkap!='')">data_lengkap</p>
         </td>
         <td v-if="config.has_action">
-            <nuxt-link :to="`/registrasi/rujukan/detail/${item.register_id}/${item.pasien_id}`" class="btn btn-success btn-sm" title="Klik untuk melihat detail"><i class="fa fa-eye"></i></nuxt-link>
-            <nuxt-link :to="`/registrasi/rujukan/update/${item.register_id}/${item.pasien_id}`" class="btn btn-primary btn-sm" title="Klik untuk mengubah data"><i class="fa fa-edit"></i> </nuxt-link>
-            <a href="#" class="btn btn-danger btn-sm" @click="deleteData(item.register_id, item.pasien_id)" title="klik untuk menghapus data"><i class="fa fa-trash"></i> </a>
+            <nuxt-link :to="`/registrasi/rujukan/detail/${item.register_id}/${item.pasien_id}`" class="mb-1 btn btn-success btn-sm" title="Klik untuk melihat detail"><i class="fa fa-eye"></i></nuxt-link>
+            <nuxt-link :to="`/registrasi/rujukan/update/${item.register_id}/${item.pasien_id}`" class="mb-1 btn btn-primary btn-sm" title="Klik untuk mengubah data"><i class="fa fa-edit"></i> </nuxt-link>
+            <a href="#" class="mb-1 btn btn-danger btn-sm" @click="deleteData(item.register_id, item.pasien_id)" title="klik untuk menghapus data"><i class="fa fa-trash"></i> </a>
         </td>
     </tr>
 </template>

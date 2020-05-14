@@ -49,10 +49,18 @@
       <div class="col-lg-12">
         <Ibox title="Register Rujukan">
                 <template v-slot:tools>
+                  <div class="d-sm-block d-none">
                     <nuxt-link tag="button" to="/registrasi/rujukan/import-excel" class="btn btn-xs btn-success"><i class="fa fa-upload"></i> Import Data</nuxt-link>
                     <nuxt-link tag="button" to="/registrasi/rujukan/export-excel" class="btn btn-xs btn-success"><i class="fa fa-dowload"></i> Export Data</nuxt-link>
                     <!-- <nuxt-link tag="button" to="/registrasi/mandiri/tambah" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Registrasi Baru</nuxt-link> -->
+                  </div>
                 </template>
+                <div class="d-sm-none mb-2">
+                  <nuxt-link tag="button" to="/registrasi/rujukan/import-excel" class="mb-1 btn btn-xs btn-success"><i class="fa fa-upload"></i> Import Data</nuxt-link>
+                    <nuxt-link tag="button" to="/registrasi/rujukan/export-excel" class="mb-1 btn btn-xs btn-success"><i class="fa fa-dowload"></i> Export Data</nuxt-link>
+                    <!-- <nuxt-link tag="button" to="/registrasi/mandiri/tambah" class="mb-1 btn btn-xs btn-success"><i class="fa fa-plus"></i> Registrasi Baru</nuxt-link> -->
+                </div>
+                <hr>
                 <ajax-table url="/registrasi-mandiri" :oid="'registrasi-rujukan'"
                   :params="params"
                   :config="{

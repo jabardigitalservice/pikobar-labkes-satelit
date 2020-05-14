@@ -18,6 +18,7 @@
     </div>
     <p>Jumlah Sampel: {{ value.length }}</p>
     <p v-for="(item,idx) in value" :key="idx">
+      <span class="clearfix">
       <span
         class="label"
         :class="{
@@ -34,6 +35,7 @@
         v-if="!disableInput"
       >
         <i class="fa fa-times"></i>
+      </span>
       </span>
       <br v-if="!item.valid" />
       <span
