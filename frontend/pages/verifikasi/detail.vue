@@ -227,22 +227,32 @@
               </tr>
 
               <tr>
-                <td width="30%">
-                  <b>Sumber Pasien</b>
-                </td>
-                <td width="60%">
-                  <span>{{data.register.sumber_pasien}}</span>
-                </td>
-              </tr>
+								<td width="30%">
+									<b>Kategori</b>
+								</td>
+								<td width="60%">
+									<span>{{data.register.sumber_pasien}}</span>
+								</td>
+							</tr>
 
-              <tr>
-                <td width="30%">
-                  <b>Fasyankes</b>
-                </td>
-                <td width="60%">
-                  <span v-if="data.fasyankes">{{data.fasyankes.nama}}</span>
-                </td>
-              </tr>
+							<tr>
+								<td width="30%">
+									<b>Fasyankes/Dinkes</b>
+								</td>
+								<td width="60%">
+									<span v-if="data.fasyankes">{{data.fasyankes.nama}}</span>
+									<span v-if="!data.fasyankes && data.register.nama_rs">{{data.register.nama_rs}}</span>
+									<span v-if="!data.fasyankes && !data.register.nama_rs && data.register.other_nama_rs">
+                    {{data.register.other_nama_rs}}
+                  </span>
+                  <span v-if="!data.fasyankes && !data.register.nama_rs && !data.register.other_nama_rs && data.register.dinkes_pengirim">
+                    {{data.register.dinkes_pengirim}}
+                  </span>
+                  <span v-if="!data.fasyankes && !data.register.nama_rs && !data.register.other_nama_rs && !data.register.dinkes_pengirim && data.register.other_dinas_pengirim">
+                    {{data.register.other_dinas_pengirim}}
+                  </span>
+								</td>
+							</tr>
 
               <tr>
                 <td width="30%">
