@@ -22,6 +22,12 @@
             <span v-if="item.register">{{ item.register.sumber_pasien }}</span>
         </td>
         <td>
+            <span v-if="item.register && item.register.jenis_registrasi == 'mandiri'">{{ '-' }}</span>
+            <span v-if="item.register && item.register.jenis_registrasi == 'rujukan'">
+                {{ item.register.nama_rs }}
+            </span>
+        </td>
+        <td>
             <span v-if="item.pasien && item.pasien.kota">{{item.pasien.kota.nama}}</span>
         </td>
         <td>
