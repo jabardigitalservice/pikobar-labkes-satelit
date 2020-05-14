@@ -3,11 +3,11 @@
         <div class="row">
             <div class="col-md-6">
                 <Ibox title="Registrasi Masuk Mandiri">
-                    <template v-slot:tools >
-                        <select class="form-control h-auto mb-1 p-0 w-auto">
-                            <option value="">Daily</option>
-                            <option value="">Monthly</option>
-                            <option value="">Yearly</option>
+                    <template v-slot:tools>
+                        <select class="form-control h-auto mb-1 p-0 w-auto" v-model="params.mandiri">
+                            <option value="Daily">Daily</option>
+                            <option value="Monthly">Monthly</option>
+                            <option value="Yearly">Yearly</option>
                         </select>
                     </template>
                     <chart-mandiri :barId="'RegistrasiMasukMandiri'"></chart-mandiri>
@@ -16,11 +16,11 @@
             </div>
             <div class="col-md-6">
                 <Ibox title="Registrasi Masuk Rujukan">
-                    <template v-slot:tools >
-                        <select class="form-control h-auto mb-1 p-0 w-auto">
-                            <option value="">Daily</option>
-                            <option value="">Monthly</option>
-                            <option value="">Yearly</option>
+                    <template v-slot:tools>
+                        <select class="form-control h-auto mb-1 p-0 w-auto" v-model="params.rujukan">
+                            <option value="Daily">Daily</option>
+                            <option value="Monthly">Monthly</option>
+                            <option value="Yearly">Yearly</option>
                         </select>
                     </template>
                     <!-- <chart-bar :barId="'RegistrasiMasukRujukan'"></chart-bar> -->
@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-6">
                 <Ibox title="Sampel Ekstraksi">
-                    <template v-slot:tools >
+                    <template v-slot:tools>
                         <select class="form-control h-auto mb-1 p-0 w-auto">
                             <option value="">Daily</option>
                             <option value="">Monthly</option>
@@ -41,7 +41,7 @@
             </div>
             <div class="col-md-6">
                 <Ibox title="Sampel PCR">
-                    <template v-slot:tools >
+                    <template v-slot:tools>
                         <select class="form-control h-auto mb-1 p-0 w-auto">
                             <option value="">Daily</option>
                             <option value="">Monthly</option>
@@ -55,8 +55,8 @@
         <div class="row">
             <div class="col-md-4">
                 <Ibox title="Hasil Positif">
-                    
-                    <template v-slot:tools >
+
+                    <template v-slot:tools>
                         <select class="form-control h-auto mb-1 p-0 w-auto">
                             <option value="">Daily</option>
                             <option value="">Monthly</option>
@@ -68,8 +68,8 @@
             </div>
             <div class="col-md-4">
                 <Ibox title="Hasil Negatif">
-                    
-                    <template v-slot:tools >
+
+                    <template v-slot:tools>
                         <select class="form-control h-auto mb-1 p-0 w-auto">
                             <option value="">Daily</option>
                             <option value="">Monthly</option>
@@ -81,8 +81,8 @@
             </div>
             <div class="col-md-4">
                 <Ibox title="Belum Keluar Hasil">
-                    
-                    <template v-slot:tools >
+
+                    <template v-slot:tools>
                         <select class="form-control h-auto mb-1 p-0 w-auto">
                             <option value="">Daily</option>
                             <option value="">Monthly</option>
@@ -95,10 +95,10 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                
+
                 <Ibox title="Jumlah sampel yang diperiksa menggunakan metode PCR">
-                    
-                    <template v-slot:tools >
+
+                    <template v-slot:tools>
                         <select class="form-control h-auto mb-1 p-0 w-auto">
                             <option value="">Daily</option>
                             <option value="">Monthly</option>
@@ -113,28 +113,41 @@
 </template>
 
 <script>
-import ChartBar from "../../components/global/chart-bar";
-import ChartPie from "../../components/global/chart-pie";
-import ChartStackedBar from "../../components/global/chart-stacked-bar";
-import ChartMandiri from "./chart/ChartMandiri";
-import ChartRujukan from "./chart/ChartRujukan";
-export default {
-    name: "charts",
-    components: {
-        ChartBar,
-        ChartPie,
-        ChartStackedBar,
-        ChartRujukan,
-        ChartMandiri
-    },
-    data() {
-        return {
-        //   loading: true,
-        data: {
-            status: {},
-            labs: [],
+    import ChartBar from "../../components/global/chart-bar";
+    import ChartPie from "../../components/global/chart-pie";
+    import ChartStackedBar from "../../components/global/chart-stacked-bar";
+    import ChartMandiri from "./chart/ChartMandiri";
+    import ChartRujukan from "./chart/ChartRujukan";
+    export default {
+        name: "charts",
+        components: {
+            ChartBar,
+            ChartPie,
+            ChartStackedBar,
+            ChartRujukan,
+            ChartMandiri
         },
-        };
-    },
-}
+        data() {
+            return {
+                //   loading: true,
+                data: {
+                    status: {},
+                    labs: [],
+                    
+                },
+                params: {
+                    mandiri: 'Daily',
+                    rujukan: 'Daily'
+                }
+            };
+        },
+        watch:{
+            "params.mandiri":function(newVal, oldVal){
+                this.$bus.$emit('refresh-chart-mandiri', this.params.mandiri)
+            },
+            "params.rujukan":function(newVal, oldVal){
+                this.$bus.$emit('refresh-chart-rujukan', this.params.rujukan)
+            }
+        }
+    }
 </script>

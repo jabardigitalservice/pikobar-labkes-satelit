@@ -209,6 +209,7 @@ class DashboardController extends Controller
         ]);
         // SELECT CAST(created_at AS DATE) AS DATE, COUNT(*) as total
         // FROM register 
+        // WHERE created_at > date ('Y-m-d')
         // GROUP BY CAST(created_at AS DATE)
         // ORDER BY CAST(created_at AS DATE)
 
@@ -216,19 +217,34 @@ class DashboardController extends Controller
 
     public function chartRujukan(Request $request)
     {
+        $tipe = $request->get('tipe','Daily');
         $now = Carbon::now();
         $weekStartDate = $now->startOfWeek()->format('Y-m-d H:i');
         $weekEndDate = $now->endOfWeek()->format('Y-m-d H:i');
         $period = CarbonPeriod::create($weekStartDate, $weekEndDate);
         $label = [];
         $value = [];
-        foreach ($period as $date) {
-            $count = Register::where('jenis_registrasi','rujukan')
-                ->whereRaw("CAST(created_at AS DATE) = '".$date->format('Y-m-d')."'")
-                ->count();
-            array_push($label, $date->format('D'));
-            array_push($value, $count);
+        switch($tipe) {
+            case "Daily":
+                foreach ($period as $date) {
+                    $count = Register::where('jenis_registrasi','rujukan')
+                        ->whereRaw("CAST(created_at AS DATE) = '".$date->format('Y-m-d')."'")
+                        ->count();
+                    array_push($label, $date->format('D'));
+                    array_push($value, $count);
+                }
+            break;
+            case "Monthly":
+                // foreach ($period as $date) {
+                //     $count = Register::where('jenis_registrasi','rujukan')
+                //         ->whereRaw("CAST(created_at AS DATE) = '".$date->format('Y-m-d')."'")
+                //         ->count();
+                //     array_push($label, $date->format('D'));
+                //     array_push($value, $count);
+                // }
+            break;
         }
+        
         return response()->json([
             'label' => $label,
             'value' => $value

@@ -44,8 +44,8 @@ export default {
     };
   },
   methods:{
-      async loadData(){
-          let resp = await axios.get('v1/chart/regis-rujukan')
+      async loadData(tipe){
+          let resp = await axios.get('v1/chart/regis-rujukan?tipe='+tipe)
           this.labels = resp.data.label;
           this.types[0].data = resp.data.value
           console.log(resp)
@@ -53,6 +53,12 @@ export default {
   },
   created(){
     this.loadData();
+  },
+  mounted(){
+    this.$bus.$on('refresh-chart-rujukan', (tipe)=>{
+      // alert(tipe)
+      this.loadData(tipe)
+    })
   }
 };
 </script,>
