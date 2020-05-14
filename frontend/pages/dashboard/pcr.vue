@@ -63,7 +63,7 @@
             </div>
             <div class="col-md-3 col-6">
               <h1 class="no-margins" v-if="!loading">{{ data.status.sample_inconclusive | formatCurrency}}</h1>
-              <img
+              <img 
                 v-if="loading"
                 src="~/assets/css/plugins/blueimp/img/loading.gif"
                 width="36"

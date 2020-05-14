@@ -9,7 +9,7 @@
                         </div>
                         <div>
                             <small class="font-weight-bold">Positif</small>
-                            <h2 class="text-danger font-weight-bold">220</h2>
+                            <h2 class="text-danger font-weight-bold">{{positif | formatCurrency}}</h2>
                             <small class="text-muted">Orang</small>
                         </div>
                     </div>
@@ -25,7 +25,7 @@
                         </div>
                         <div>
                             <small class="font-weight-bold">Negatif</small>
-                            <h2 class="text-success font-weight-bold">220</h2>
+                            <h2 class="text-success font-weight-bold">{{negatif | formatCurrency}}</h2>
                             <small class="text-muted">Orang</small>
                         </div>
                     </div>
@@ -36,16 +36,31 @@
 </template>
 
 <script>
-export default {
-    name: "data-positif-negatif",
-  data() {
-    return {
-    //   loading: true,
-      data: {
-        status: {},
-        labs: [],
-      }
-    };
-  },
-}
+    import axios from 'axios'
+    export default {
+        name: "data-positif-negatif",
+        data() {
+            return {
+                //   loading: true,
+                negatif:0,
+                positif:0,
+            };
+        },
+        methods: {
+            async loadData() {
+                this.loading = true;
+                try {
+                    let resp = await axios.get("/v1/dashboard/positif-negatif");
+                    this.negatif = resp.data.negatif;
+                    this.positif = resp.data.positif
+                } catch (e) {
+                   console.log(e);
+                }
+                this.loading = false;
+            },
+        },
+        created() {
+            this.loadData();
+        }
+    }
 </script>

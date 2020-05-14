@@ -15,7 +15,7 @@
                         <div>
                             <div>
                                 <small class="font-weight-bold">Total Sampel Baru</small>
-                                <h2 class="text-success font-weight-bold">220</h2>
+                                <h2 class="text-success font-weight-bold">{{data.status.pcr_sample_received | formatCurrency}}</h2>
                                 <small class="text-muted">Pcs</small>
                             </div>
                         </div>
@@ -28,7 +28,7 @@
                         <div>
                             <div>
                                 <small class="font-weight-bold">Total Sampel Yang Telah Di PCR </small>
-                                <h2 class="text-warning font-weight-bold">220</h2>
+                                <h2 class="text-warning font-weight-bold">{{data.status.sample_valid | formatCurrency}}</h2>
                                 <small class="text-muted">Pcs</small>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
                         <div>
                             <div>
                                 <small class="font-weight-bold">Total Sampel re-PCR</small>
-                                <h2 class="text-navy font-weight-bold">220</h2>
+                                <h2 class="text-navy font-weight-bold">{{data.status.sample_inconclusive | formatCurrency}}</h2>
                                 <small class="text-muted">Pcs</small>
                             </div>
                         </div>
@@ -53,16 +53,36 @@
 </template>
 
 <script>
-export default {
-    name: "data-rrt-pcr",
-  data() {
-    return {
-    //   loading: true,
-      data: {
-        status: {},
-        labs: [],
-      }
-    };
-  },
-}
+    import axios from 'axios';
+    export default {
+        name: "data-rrt-pcr",
+        data() {
+            return {
+                loading: true,
+                data: {
+                    status: {},
+                    labs: [],
+                }
+            };
+        },
+        methods: {
+            async loadData() {
+                this.loading = true;
+                try {
+                    let resp = await axios.get("/v1/dashboard/pcr");
+                    this.data = resp.data;
+                } catch (e) {
+                    this.data.status.extraction_sample_sent = "-";
+                    this.data.status.pcr_sample_received = "-";
+                    this.data.status.sample_valid = "-";
+                    this.data.status.sample_inconclusive = "-";
+                }
+                this.loading = false;
+            }
+        },
+        created() {
+            this.loadData();
+        }
+
+    }
 </script>

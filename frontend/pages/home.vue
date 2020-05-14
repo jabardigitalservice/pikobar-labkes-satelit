@@ -16,16 +16,17 @@
     <tracking v-if="checkPermission('verifikasi')"></tracking>
     <data-positif-negatif />
     <charts />
-    <data-registrasi />
+    <data-registrasi /> 
     <data-pengambilan-sampel />
     <data-ekstraksi />
     <data-rrt-pcr />
     <data-verifikasi />
-    <data-validasi />
-    <ekstraksi v-if="checkPermission('ekstraksi')"></ekstraksi>
+    <!-- <pcr v-if="checkPermission('pcr')"></pcr> -->
+    <!-- <data-validasi /> -->
+    <!-- <ekstraksi v-if="checkPermission('ekstraksi')"></ekstraksi>
     <pcr v-if="checkPermission('pcr')"></pcr>
-    <registrasi v-if="checkPermission('registrasi')"></registrasi>
-    <verifikasi-validasi v-if="checkPermission('verifikasi')"></verifikasi-validasi>
+    registrasi v-if="checkPermission('registrasi')"></registrasi> -->
+    <!-- <verifikasi-validasi v-if="checkPermission('verifikasi')"></verifikasi-validasi>  -->
   </div>
 </template>
  
