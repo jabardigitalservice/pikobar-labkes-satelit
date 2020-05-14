@@ -474,7 +474,8 @@
 										</td>
 										<td>
 											<p class="form-control">
-												<b>{{ hasil.ct_value }}</b>
+												<b v-if="!!hasil.ct_value">{{ hasil.ct_value }}</b>
+												<b v-if="hasil.ct_value == null">{{ '-' }}</b>
 											</p>
 										</td>
 									</tr>

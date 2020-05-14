@@ -176,7 +176,7 @@ class CreateSuratHasilListener
     {
         return collect($hasil['hasil_deteksi_parsed'])
             ->whereNotNull('ct_value')
-            ->where('target_gen', '!=', 'IC')
+            // ->where('target_gen', '!=', 'IC')
             ->sortBy('ct_value')->first();
     }
 
