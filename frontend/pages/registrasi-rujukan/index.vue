@@ -76,7 +76,7 @@
                       nomor_register: 'Nomor Registrasi',
                       nama_pasien: 'Pasien',
                       nama_kota: 'Domisili',
-                      nama_rs: 'Instansi Pengirim',
+                      nama: 'Instansi Pengirim',
                       no_sampel:'Sampel',
                       tgl_input:'Tanggal Input',
                       keterangan: 'Keterangan'

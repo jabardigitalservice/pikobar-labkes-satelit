@@ -84,7 +84,7 @@
                     </tr>
                     <tr>
                       <td width="40%"><b>Tanggal Lahir</b></td>
-                      <td width="60%">{{data?data.reg_tgllahir.substr(0,10):null}}</td>
+                      <td width="60%">{{data.reg_tgllahir?data.reg_tgllahir.substr(0,10):''}}</td>
                     </tr>
                     <tr>
                       <td width="40%"><b>Suhu</b></td>
@@ -112,11 +112,11 @@
                     </tr>
                     <tr>
                       <td width="40%"><b>Rt / Rw</b></td>
-                      <td width="60%">{{data?'Rt.'+data.reg_rt+' / Rw.'+data.reg_rw:null}}</td>
+                      <td width="60%">{{data?('Rt.'+data.reg_rt?data.reg_rt:''+' / Rw.'+data.reg_rw?data.reg_rw:''):null}}</td>
                     </tr>
                     <tr>
                       <td width="40%"><b>Alamat Lengkap</b></td>
-                      <td width="60%">{{data?data.reg_alamat.substr(0,10):null}}</td>
+                      <td width="60%">{{data.reg_alamat}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -188,7 +188,7 @@
         let error = false;
         let resp = await axios.get("registrasi-rujukan/update/"+route.params.register_id+"/"+route.params.pasien_id);
         return {
-          data: resp.data
+          data: resp.data.result
         }
     },
     computed: {

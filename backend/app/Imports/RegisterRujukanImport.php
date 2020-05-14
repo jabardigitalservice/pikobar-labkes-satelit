@@ -38,7 +38,7 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
 
                 $registerData = [
                     // 'id'=> $omgRegisterId,
-                    'sumber_pasien'=> $row->get('sumber_pasien'),
+                    'sumber_pasien'=> $row->get('kategori'),
                     'register_uuid'=> (string) \Illuminate\Support\Str::uuid(),
                     'jenis_registrasi'=> 'rujukan',
                     'nomor_register'=> $this->generateNomorRegister(null, 'rujukan'),
@@ -47,10 +47,9 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
                     'kunjungan_ke'=> $row->get('kunjungan'),
                     'tanggal_kunjungan'=> $row->get('tanggal_kunjungan'),
                     'rs_kunjungan'=> $row->get('rs_kunjungan'),
-                    'dinkes_pengirim'=> $row->get('instansi_pengirim'),
                     'fasyankes_id'=> optional($this->getFasyankes($row))->id,
-                    'reg_nama_rs'=> optional($this->getFasyankes($row))->nama,
-                    'fasyankes_pengirim'=> $row->get('fasyankesdinkes'),
+                    'nama_rs'=> optional($this->getFasyankes($row))->nama,
+                    'fasyankes_pengirim'=> $row->get('instansi_pengirim'),
                     'nama_dokter'=> $row->get('dokter'),
                     'no_telp'=> $row->get('telp_fasyankes'),
                     'other_dinas_pengirim'=> $row->get('fasyankes_other') 
@@ -81,7 +80,7 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
                     'kota_id'=> optional($this->getKota($row))->id,
                     'kecamatan'=> $row->get('kecamatan'),
                     'kelurahan'=> $row->get('kelurahan'),
-                    'no_rw'=> $row->get('rw'),
+                    'no_rw'=> $row->get('rw'), 
                     'no_rt'=> $row->get('rt'),
                     'alamat_lengkap'=> $row->get('alamat'),
                     'keterangan_lain'=> $row->get('keterangan'),
@@ -94,9 +93,9 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
                 ];
 
                 Validator::make($pasienData, [
-                    'nik'=> 'required|digits:16',
+                    'nik'=> 'nullable|digits:16',
                     'nama_lengkap'=> 'required|min:3',
-                    'tanggal_lahir'=> 'required|date|date_format:Y-m-d',
+                    'tanggal_lahir'=> 'nullable|date|date_format:Y-m-d',
                     'kota_id'=> 'required|exists:kota,id',
                     'kewarganegaraan'=> 'required',
                     'jenis_kelamin'=> 'required|in:L,P',

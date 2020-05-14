@@ -17,6 +17,7 @@ class RegistrasiMandiri extends Controller
     {
         $models = PasienRegister::leftJoin('register','register.id','pasien_register.register_id')
                     ->leftJoin('pasien','pasien.id','pasien_register.pasien_id')
+                    ->leftJoin('fasyankes','fasyankes.id','register.fasyankes_id')
                     ->leftJoin('kota','kota.id','pasien.kota_id');
         $params = $request->get('params',false);
         $search = $request->get('search',false);
