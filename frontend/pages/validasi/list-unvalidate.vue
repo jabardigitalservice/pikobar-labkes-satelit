@@ -115,6 +115,7 @@
                       nomor_register: 'Nomor Register',
                       pasien_nama : 'Nama Pasien',
                       kategori: 'Kategori',
+                      instansi_pengirim: 'Inst. Pengirim',
                       kota_nama : 'Kota Domisili',
                       nomor_sampel : 'Nomor Sampel',
                       parameter_lab: 'Parameter Lab',
