@@ -89,6 +89,17 @@
                                 <p class="text-danger" v-if="errors.validator_id">{{errors.validator_id[0]}}</p>
                             </div>
                         </div>
+                        <div class="form-group row" v-if="form.role_id == 8">
+                            <label class="col-md-3 col-form-label text-md-right">Sebagai Lab Satelit</label>
+                            <div class="col-md-7">
+                                <select class="form-control" v-model="form.lab_satelit_id"
+                                    :class="{ 'is-invalid': errors.lab_satelit_id!=null }">
+                                    <option :value="item.id" :key="item.id" v-for="item in lab_satelit">{{item.text}}
+                                    </option>
+                                </select>
+                                <p class="text-danger" v-if="errors.lab_satelit_id">{{errors.lab_satelit_id[0]}}</p>
+                            </div>
+                        </div>
 
                         <div class="form-group row">
                             <div class="col-md-7 offset-md-3 d-flex">
@@ -130,6 +141,9 @@
             }
             if (!store.getters['options/validator'].length) {
                 await store.dispatch('options/fetchValidator')
+            }
+            if (!store.getters['options/lab_satelit'].length) {
+                await store.dispatch('options/fetchLabSatelit')
             }
             return {}
         },

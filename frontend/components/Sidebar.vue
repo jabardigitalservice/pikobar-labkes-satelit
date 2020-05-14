@@ -173,6 +173,9 @@
             <li>
               <nuxt-link to="/pengguna">Pengguna</nuxt-link>
             </li>
+            <li>
+              <nuxt-link to="/lab-satelit">Lab Satelit</nuxt-link>
+            </li>
           </ul>
         </li>
       </ul>
