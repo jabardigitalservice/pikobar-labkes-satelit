@@ -11,6 +11,7 @@ use App\Models\Pasien;
 use App\Models\PasienRegister;
 use App\Models\PemeriksaanSampel;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 class DashboardController extends Controller
 {
@@ -186,4 +187,52 @@ class DashboardController extends Controller
             'positif' => @$count_by_status['positif']
         ]);
     }
+
+    public function chartMandiri(Request $request)
+    {
+        $now = Carbon::now();
+        $weekStartDate = $now->startOfWeek()->format('Y-m-d H:i');
+        $weekEndDate = $now->endOfWeek()->format('Y-m-d H:i');
+        $period = CarbonPeriod::create($weekStartDate, $weekEndDate);
+        $label = [];
+        $value = [];
+        foreach ($period as $date) {
+            $count = Register::where('jenis_registrasi','mandiri')
+                ->whereRaw("CAST(created_at AS DATE) = '".$date->format('Y-m-d')."'")
+                ->count();
+            array_push($label, $date->format('D'));
+            array_push($value, $count);
+        }
+        return response()->json([
+            'label' => $label,
+            'value' => $value
+        ]);
+        // SELECT CAST(created_at AS DATE) AS DATE, COUNT(*) as total
+        // FROM register 
+        // GROUP BY CAST(created_at AS DATE)
+        // ORDER BY CAST(created_at AS DATE)
+
+    }
+
+    public function chartRujukan(Request $request)
+    {
+        $now = Carbon::now();
+        $weekStartDate = $now->startOfWeek()->format('Y-m-d H:i');
+        $weekEndDate = $now->endOfWeek()->format('Y-m-d H:i');
+        $period = CarbonPeriod::create($weekStartDate, $weekEndDate);
+        $label = [];
+        $value = [];
+        foreach ($period as $date) {
+            $count = Register::where('jenis_registrasi','rujukan')
+                ->whereRaw("CAST(created_at AS DATE) = '".$date->format('Y-m-d')."'")
+                ->count();
+            array_push($label, $date->format('D'));
+            array_push($value, $count);
+        }
+        return response()->json([
+            'label' => $label,
+            'value' => $value
+        ]);
+    }
 }
+

@@ -101,6 +101,11 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::get('counter-belum-validasi', 'DashboardValidasiController@getCountUnvalidate');
         Route::get('counter-tervalidasi', 'DashboardValidasiController@getCountValidated');
     });
+
+    Route::group(['prefix'=>'chart'], function(){
+        Route::get('/regis-mandiri','DashboardController@chartMandiri');
+        Route::get('/regis-rujukan','DashboardController@chartRujukan');
+    });
     Route::group(['prefix'=>'ekstraksi'], function(){
         Route::get('/get-data','EkstraksiController@getData');
         Route::get('/detail/{id}','EkstraksiController@detail');

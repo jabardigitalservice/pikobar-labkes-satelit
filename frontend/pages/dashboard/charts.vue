@@ -10,7 +10,8 @@
                             <option value="">Yearly</option>
                         </select>
                     </template>
-                    <chart-bar :barId="'RegistrasiMasukMandiri'"></chart-bar>
+                    <chart-mandiri :barId="'RegistrasiMasukMandiri'"></chart-mandiri>
+                    <!-- <chart-bar :barId="'RegistrasiMasukMandiri'" :labels="labels"></chart-bar> -->
                 </Ibox>
             </div>
             <div class="col-md-6">
@@ -22,7 +23,8 @@
                             <option value="">Yearly</option>
                         </select>
                     </template>
-                    <chart-bar :barId="'RegistrasiMasukRujukan'"></chart-bar>
+                    <!-- <chart-bar :barId="'RegistrasiMasukRujukan'"></chart-bar> -->
+                    <chart-rujukan :barId="'RegistrasiMasukRujukan'"></chart-rujukan>
                 </Ibox>
             </div>
             <div class="col-md-6">
@@ -114,13 +116,16 @@
 import ChartBar from "../../components/global/chart-bar";
 import ChartPie from "../../components/global/chart-pie";
 import ChartStackedBar from "../../components/global/chart-stacked-bar";
-
+import ChartMandiri from "./chart/ChartMandiri";
+import ChartRujukan from "./chart/ChartRujukan";
 export default {
     name: "charts",
     components: {
         ChartBar,
         ChartPie,
-        ChartStackedBar
+        ChartStackedBar,
+        ChartRujukan,
+        ChartMandiri
     },
     data() {
         return {
@@ -128,7 +133,7 @@ export default {
         data: {
             status: {},
             labs: [],
-        }
+        },
         };
     },
 }
