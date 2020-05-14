@@ -39,6 +39,9 @@
                 <date-picker placeholder="Tanggal Mulai Input" format="d MMMM yyyy" input-class="form-control"
                     :monday-first="true" v-model="params.start_date" />
             </div>
+            <div class="col-md-1 my-1">
+                S.d
+            </div>
             <div class="col-md-4">
                 <date-picker placeholder="Tanggal Akhir Input" format="d MMMM yyyy" input-class="form-control"
                     :monday-first="true" v-model="params.end_date" />

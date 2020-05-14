@@ -5,7 +5,7 @@
         </portal>
         <portal to="title-action">
           <div class="title-action">
-            <nuxt-link to="/pengguna/tambah" class="btn btn-primary">Tambah Data</nuxt-link>
+            <nuxt-link to="/pengguna/tambah" class="btn btn-primary"><i class="uil-plus"></i> Tambah Data</nuxt-link>
           </div>
         </portal>
           <div class="row">

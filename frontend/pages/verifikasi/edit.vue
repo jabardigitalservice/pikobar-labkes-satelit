@@ -105,22 +105,34 @@
               </label>
               <div :class="{ 'is-invalid': form.errors.has('kesimpulan_pemeriksaan') }">
                 <div>
-                  <label class="form-check-label">
+                  <label class="fancy-radio custom-color-green m-0 w-100">
+                      <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="positif" >
+                      <span><i></i>POSITIF</span>
+                  </label>
+                  <!-- <label class="form-check-label">
                     <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="positif" />
                     <b>POSITIF</b>
-                  </label>
+                  </label> -->
                 </div>
                 <div>
-                  <label class="form-check-label">
+                  <label class="fancy-radio custom-color-green m-0 w-100">
+                      <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="negatif"  >
+                      <span><i></i>NEGATIF</span>
+                  </label>
+                  <!-- <label class="form-check-label">
                     <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="negatif" />
                     <b>NEGATIF</b>
-                  </label>
+                  </label> -->
                 </div>
                 <div>
-                  <label class="form-check-label">
+                  <label class="fancy-radio custom-color-green m-0 w-100">
+                      <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="sampel kurang" >
+                      <span><i></i>SAMPEL KURANG</span>
+                  </label>
+                  <!-- <label class="form-check-label">
                     <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="sampel kurang" />
                     <b>SAMPEL KURANG</b>
-                  </label>
+                  </label> -->
                 </div>
               </div>
               <has-error :form="form" field="kesimpulan_pemeriksaan" />

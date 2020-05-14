@@ -25,14 +25,14 @@
             {{item.pcr ? item.pcr.kesimpulan_pemeriksaan : '-'}}
         </td>
         <td width="20%">
-            <nuxt-link tag="a" class="btn btn-success btn-sm" :to="`/pcr/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
-            <nuxt-link tag="a" class="btn btn-info btn-sm" :to="`/pcr/input/${item.id}`" title="Klik untuk mengisi hasil analisis" v-if="item.sampel_status != 'sample_valid'">
+            <nuxt-link tag="a" class="mb-1 text-nowrap btn btn-success btn-sm" :to="`/pcr/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
+            <nuxt-link tag="a" class="mb-1 text-nowrap btn btn-info btn-sm" :to="`/pcr/input/${item.id}`" title="Klik untuk mengisi hasil analisis" v-if="item.sampel_status != 'sample_valid'">
                 <i class="uil-edit"></i> Revisi
             </nuxt-link>
             <button
                 v-if="!item.is_musnah_pcr"
                 type="button"
-                class="btn btn-sm"
+                class="mb-1 text-nowrap btn btn-sm"
                 style="background-color: #9f23c8; color: #fff"
                 title="Klik untuk menandai sampel telah dimunakan"
                 @click="doMusnahkan()"
