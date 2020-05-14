@@ -26,10 +26,14 @@
               </label>
               <div :class="{ 'is-invalid': form.errors.has('lab_pcr_id') }">
                 <div v-for="item in lab_pcr" :key="item.id">
-                  <label class="form-check-label">
+                  <label class="fancy-radio custom-color-green m-0 w-100">
+                      <input v-model="form.lab_pcr_id" :value="item.id" type="radio">
+                      <span><i></i>{{item.text}}</span>
+                  </label>
+                  <!-- <label class="form-check-label">
                     <input type="radio" v-model="form.lab_pcr_id" :value="item.id" />
                     {{item.text}}
-                  </label>
+                  </label> -->
                 </div>
               </div>
               <has-error :form="form" field="lab_pcr_id" />

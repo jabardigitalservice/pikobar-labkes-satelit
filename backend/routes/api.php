@@ -94,11 +94,17 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::get('/registrasi', 'DashboardController@registrasi');
         Route::get('/pcr','DashboardController@pcr');
         Route::get('/notifications','DashboardController@notifications');
+        Route::get('/positif-negatif','DashboardController@positifNegatif');
 
         Route::get('counter-belum-verifikasi', 'DashboardVerifikasiController@getCountUnverify');
         Route::get('counter-terverifikasi', 'DashboardVerifikasiController@getCountVerified');
         Route::get('counter-belum-validasi', 'DashboardValidasiController@getCountUnvalidate');
         Route::get('counter-tervalidasi', 'DashboardValidasiController@getCountValidated');
+    });
+
+    Route::group(['prefix'=>'chart'], function(){
+        Route::get('/regis-mandiri','DashboardController@chartMandiri');
+        Route::get('/regis-rujukan','DashboardController@chartRujukan');
     });
     Route::group(['prefix'=>'ekstraksi'], function(){
         Route::get('/get-data','EkstraksiController@getData');

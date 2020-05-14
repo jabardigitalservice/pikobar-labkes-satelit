@@ -11,8 +11,8 @@
         </td>
         
         <td width="20%">
-            <nuxt-link tag="a" class="btn btn-success btn-sm" :to="`/verifikasi/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
-            <nuxt-link :to="`/verifikasi/edit/${item.id}`" class="btn btn-warning btn-sm" tag="a"><i class="fa fa-edit"></i></nuxt-link>
+            <nuxt-link tag="a" class="btn btn-success btn-sm mb-2" :to="`/verifikasi/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
+            <nuxt-link :to="`/verifikasi/edit/${item.id}`" class="btn btn-warning btn-sm mb-2" tag="a"><i class="fa fa-edit"></i></nuxt-link>
         </td>
     </tr>
 </template>
