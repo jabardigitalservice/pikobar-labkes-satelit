@@ -10,7 +10,7 @@
         </portal>
           <div class="row">
             <div class="col-lg-12">
-              <Ibox title="Daftar Pengguna">
+              <Ibox title="Daftar Lab Satelit">
                 <ajax-table url="/lab-satelit" :oid="'lab-satelit'"
                   :params="params"
                   :config="{

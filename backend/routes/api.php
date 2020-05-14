@@ -44,7 +44,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/pengguna', 'PenggunaController@savePengguna');
     Route::post('/pengguna/{id}', 'PenggunaController@updatePengguna');
     Route::delete('/pengguna/{id}','PenggunaController@deletePengguna');
-    Route::get('/pengguna/{id}','LabSatelitController@showUpdate');
+    Route::get('/pengguna/{id}','PenggunaController@showUpdate');
     Route::get('/lab-satelit', 'LabSatelitController@listLabSatelit');
     Route::post('/lab-satelit', 'LabSatelitController@saveLabSatelit');
     Route::post('/lab-satelit/{id}', 'LabSatelitController@updateLabSatelit');

@@ -53,6 +53,14 @@
                             </div>
                         </div>
 
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-md-right">Ulangi {{ $t('password') }}</label>
+                            <div class="col-md-7">
+                                <input v-model="form.password_confirmation" :class="{ 'is-invalid': errors.password_confirmation !=null }"
+                                    type="password" name="password_confirmation " class="form-control">
+                            </div>
+                        </div>
+
                         <!-- Roles -->
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label text-md-right">Role</label>
@@ -134,6 +142,7 @@
         computed: mapGetters({
             validator: "options/validator",
             lab_pcr: "options/lab_pcr",
+            lab_satelit: "options/lab_satelit",
         }),
         async asyncData({store}) {
             if (!store.getters['options/lab_pcr'].length) {

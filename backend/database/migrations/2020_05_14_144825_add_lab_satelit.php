@@ -16,7 +16,7 @@ class AddLabSatelit extends Migration
         Schema::table('sampel', function (Blueprint $table) {
             $table->unsignedInteger('lab_satelit_id')->nullable();
         });
-        Schema::table('register', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->unsignedInteger('lab_satelit_id')->nullable();
         });
     }
@@ -31,7 +31,7 @@ class AddLabSatelit extends Migration
         Schema::table('sampel', function (Blueprint $table) {
             $table->dropColumn(['lab_satelit_id']);
         });
-        Schema::table('register', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->dropColumn(['lab_satelit_id']);
         });
     }

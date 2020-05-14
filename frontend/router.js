@@ -31,6 +31,7 @@ const routes = [
   { path: '/pengguna', name: 'pengguna.index', component: page('pengguna/index.vue'), meta: {parentName: 'home'} },
   { path: '/pengguna/tambah', name:'pengguna.tambah', component:page('pengguna/tambah.vue'), meta: {parentName: 'pengguna.index'} },
   { path: '/pengguna/update/:id', name:'pengguna.update', component:page('pengguna/update.vue'),  meta: {parentName: 'pengguna.index'} },
+  { path: '/pengguna/detail/:id', name:'pengguna.detail', component:page('pengguna/detail.vue'),  meta: {parentName: 'pengguna.index'} },
   { path: '/lab-satelit', name: 'lab-satelit.index', component: page('lab-satelit/index.vue'), meta: {parentName: 'home'} },
   { path: '/lab-satelit/tambah', name:'lab-satelit.tambah', component:page('lab-satelit/tambah.vue'), meta: {parentName: 'lab-satelit.index'} },
   { path: '/lab-satelit/update/:id', name:'lab-satelit.update', component:page('lab-satelit/update.vue'),  meta: {parentName: 'lab-satelit.index'} },

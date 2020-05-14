@@ -11,7 +11,7 @@ class PenggunaController extends Controller
 
     public function listPengguna(Request $request)
     {
-        $models = User::with(['roles','lab_pcr','validator']);
+        $models = User::with(['roles','lab_pcr','validator','lab_satelit']);
         $params = $request->get('params',false);
         $search = $request->get('search',false);
         $order  = $request->get('order','name');
@@ -54,7 +54,7 @@ class PenggunaController extends Controller
             'username' => 'required|max:80|unique:users',
             'email' => 'required|email|max:255|unique:users',
             'role_id' => 'required',
-            'password' => 'required|min:6',
+            'password' => 'required|min:6|confirmed',
         ]);
 
         $user = new User;
@@ -98,7 +98,7 @@ class PenggunaController extends Controller
                 Rule::unique('users')->ignore($id, 'id')
             ],
             'role_id' => 'required',
-            // 'password' => 'required|min:6',
+            'password' => 'sometimes|min:6|confirmed',
         ]);
 
         // dd($id);
