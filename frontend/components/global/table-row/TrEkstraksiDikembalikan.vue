@@ -10,7 +10,7 @@
     <td width="20%">
       <nuxt-link
         tag="a"
-        class="btn btn-success btn-sm"
+        class="btn btn-success btn-sm mb-2 text-nowrap"
         :to="`/ekstraksi/detail/${item.id}`"
         title="Klik untuk melihat detail"
       >
@@ -18,7 +18,7 @@
       </nuxt-link>
       <button
         type="button"
-        class="btn btn-info btn-sm"
+        class="btn btn-info btn-sm mb-2 text-nowrap"
         title="Klik untuk menandai sampel untuk diproses"
         @click="promptProses()"
         :disabled="loading"
@@ -28,7 +28,7 @@
       </button>
       <button
         type="button"
-        class="btn btn-warning btn-sm"
+        class="btn btn-warning btn-sm mb-2 text-nowrap"
         title="Klik untuk menandai sampel sebagai invalid"
         @click="promptInvalid()"
         :disabled="loading"

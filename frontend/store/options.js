@@ -3,6 +3,7 @@ import axios from 'axios'
 // state
 export const state = () => ({
   lab_pcr: [],
+  lab_satelit: [],
   validator: [],
   jenis_sampel: [],
 })
@@ -10,6 +11,7 @@ export const state = () => ({
 // getters
 export const getters = {
   lab_pcr: state => state.lab_pcr,
+  lab_satelit: state => state.lab_satelit,
   validator: state => state.validator,
   jenis_sampel: state => state.jenis_sampel,
 }
@@ -22,6 +24,13 @@ export const mutations = {
   },
 
   FETCH_LAB_PCR_FAILURE (state) {
+  },
+
+  FETCH_LAB_SATELIT_SUCCESS (state, lab_satelit) {
+    state.lab_satelit = lab_satelit
+  },
+
+  FETCH_LAB_SATELIT_FAILURE (state) {
   },
 
   FETCH_VALIDATOR_SUCCESS (state, validator) {
@@ -54,6 +63,20 @@ export const actions = {
         duration: 5000
       });
       commit('FETCH_LAB_PCR_FAILURE')
+    }
+  },
+  async fetchLabSatelit ({ commit }) {
+    try {
+      let resp = await axios.get('/lab-satelit-option')
+
+      commit('FETCH_LAB_SATELIT_SUCCESS', resp.data)
+    } catch (e) {
+      this.$toast.error("Gagal memuat data opsi Lab Satelit", {
+        icon: "times",
+        iconPack: "fontawesome",
+        duration: 5000
+      });
+      commit('FETCH_LAB_SATELIT_FAILURE')
     }
   },
   async fetchValidator ({ commit }) {

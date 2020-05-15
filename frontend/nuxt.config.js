@@ -77,6 +77,7 @@ module.exports = {
     { src: '~assets/js/flatpickr.min.js', mode: 'client' },
     { src: '~/plugins/vue-datepicker', mode: 'client', ssr: false },
     { src: '~/plugins/vue-mask', mode: 'client', ssr: false },
+    { src: "@/plugins/chart", ssr: false }
   ],
 
   modules: [

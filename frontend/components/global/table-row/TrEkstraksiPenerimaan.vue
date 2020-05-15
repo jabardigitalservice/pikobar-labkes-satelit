@@ -16,13 +16,16 @@
             <span v-if="!item.kondisi_sampel">-</span>
         </td>
         <td>
+          {{ item.status.deskripsi }}
+        </td>
+        <td>
             {{ item.waktu_sample_taken | formatDateTime }}
         </td>
         <td width="20%">
-            <nuxt-link tag="a" class="btn btn-success btn-sm" :to="`/ekstraksi/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
+            <nuxt-link tag="a" class="mb-1 btn btn-success btn-sm" :to="`/ekstraksi/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
             <button
                 type="button"
-                class="btn btn-warning btn-sm"
+                class="mb-1 btn btn-warning btn-sm"
                 title="Klik untuk menandai sampel sebagai invalid"
                 @click="promptInvalid()"
                 :disabled="loading"

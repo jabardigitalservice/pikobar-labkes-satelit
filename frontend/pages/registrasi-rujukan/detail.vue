@@ -42,12 +42,12 @@
                 <table class="table">
                   <tbody>
                     <tr>
-                      <td width="40%"><b>Dinkes Pengirim</b></td>
-                      <td width="60%">{{data?data.reg_dinkes_pengirim:null}}</td>
+                      <td width="40%"><b>Instansi Pengirim</b></td>
+                      <td width="60%">{{data.fasyankes_pengirim?(data.fasyankes_pengirim=='rumah_sakit'?'Rumah Sakit':'Dinkes'):null}}</td>
                     </tr>
                      <tr>
-                      <td width="40%"><b>Fasyankes Pengirim</b></td>
-                      <td width="60%">{{data?data.reg_fasyankes_pengirim:null}}</td>
+                      <td width="40%"><b>Nama Instansi</b></td>
+                      <td width="60%">{{data?data.nama_rs:null}}</td>
                     </tr>
                      <tr>
                       <td width="40%"><b>Dokter Penanggung Jawab</b></td>

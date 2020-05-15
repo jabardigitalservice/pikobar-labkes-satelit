@@ -13,11 +13,11 @@
                 <Ibox title="Penerimaan atau Pengambilan Sampel">
                     <form @submit.prevent="submit" @keydown="form.onKeydown($event)">
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 Nomor Registrasi
                                 <span style="color:red">*</span>
                             </label>
-                            <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_no') }">
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_no') }">
                                 <input class="form-control" type="text" name="reg_no" placeholder="Nomor Registrasi"
                                     required v-model="form.reg_no" disabled />
                                 <has-error :form="form" field="reg_no" />
@@ -25,11 +25,11 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">Kewarganegaraan <span style="color:red;">*</span></label>
-                            <div class="col-md-6">
+                            <label class="col-md-3 col-lg-2">Kewarganegaraan <span style="color:red;">*</span></label>
+                            <div class="col-md-8 col-lg-6">
                                 <select v-model="form.reg_kewarganegaraan"
                                     :class="{ 'is-invalid':form.errors.has('reg_kewarganegaraan') }"
-                                    class="multisteps-form__input form-control col-md-6" name="reg_kewarganegaraan">
+                                    class="multisteps-form__input form-control col-md-8 col-lg-6" name="reg_kewarganegaraan">
                                     <option value="WNI">WNI</option>
                                     <option value="WNA">WNA</option>
                                 </select>
@@ -38,30 +38,38 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 Kategori
                                 <span style="color:red">*</span>
                             </label>
-                            <div class="col-md-6">
+                            <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline"
                                     :class="{ 'is-invalid': form.errors.has('reg_sumberpasien') }">
-                                    <label class="form-check-label">
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input type="radio" v-model="form.reg_sumberpasien" value="Umum" >
+                                        <span><i></i>Umum</span>
+                                    </label>
+                                    <!-- <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_sumberpasien"
                                             value="Umum" />
-                                        Umum</label>
+                                        Umum</label> -->
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <label class="form-check-label">
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input type="radio" v-model="form.reg_sumberpasien" value="Other" >
+                                        <span><i></i>Isian</span>
+                                    </label>
+                                    <!-- <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_sumberpasien"
                                             value="Other" />
-                                        Isian</label>
+                                        Isian</label> -->
                                 </div>
                                 <has-error :form="form" field="reg_sumberpasien" />
                             </div>
                         </div>
                         <div class="form-group row mt-4" v-if="form.reg_sumberpasien=='Other'">
-                            <label for="" class="col-md-2"></label>
-                            <div class="col-md-6">
+                            <label for="" class="col-md-3 col-lg-2"></label>
+                            <div class="col-md-8 col-lg-6">
                                 <input type="text" name="reg_sumberpasien_isian" 
                                     placeholder="Ketikkan Kategori" id="" class="form-control" 
                                     v-model="form.reg_sumberpasien_isian" required>
@@ -69,7 +77,7 @@
                         </div>
 
                          <div class="form-group row mt-4">
-                            <div class="col-md-2">
+                            <div class="col-md-3 col-lg-2">
                                 <label for="">Hasil RDT</label>
                             </div>
                             <div class="col-md-3">
@@ -88,11 +96,11 @@
                         <p>Lengkapi Form dengan Identitas Pasien</p>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 Nama Pasien
                                 <span style="color:red">*</span>
                             </label>
-                            <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_nama_pasien') }">
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_nama_pasien') }">
                                 <input class="form-control" type="text" name="reg_nama_pasien" placeholder="" required
                                     v-model="form.reg_nama_pasien" />
                                 <has-error :form="form" field="reg_nama_pasien" />
@@ -100,10 +108,10 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 NIK
                             </label>
-                            <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_nik') }">
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_nik') }">
                                 <input class="form-control" type="text" name="reg_nik" placeholder=""
                                     v-model="form.reg_nik" maxlength="16"/>
                                 <has-error :form="form" field="reg_nik" />
@@ -111,10 +119,10 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 Tempat Lahir
                             </label>
-                            <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_tempatlahir') }">
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_tempatlahir') }">
                                 <input class="form-control" type="text" name="reg_tempatlahir" placeholder=""
                                     v-model="form.reg_tempatlahir" />
                                 <has-error :form="form" field="reg_tempatlahir" />
@@ -122,10 +130,10 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 Tanggal Lahir
                             </label>
-                            <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_tgllahir') }">
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_tgllahir') }">
                                  <dropdown-datepicker 
                                     v-model="form.reg_tgllahir"
                                     :minYear="1900"
@@ -142,34 +150,42 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 Jenis Kelamin
                                 <span style="color:red">*</span>
                             </label>
-                            <div class="col-md-6">
+                            <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline"
                                     :class="{ 'is-invalid': form.errors.has('reg_jk') }">
-                                    <label class="form-check-label">
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input type="radio" v-model="form.reg_jk" value="L"  >
+                                        <span><i></i>Laki-laki</span>
+                                    </label>
+                                    <!-- <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_jk"
                                             value="L" />
-                                        Laki-laki</label>
+                                        Laki-laki</label> -->
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <label class="form-check-label">
+                                    <label class="fancy-radio custom-color-green m-0 w-100">
+                                        <input type="radio" v-model="form.reg_jk" value="P">
+                                        <span><i></i>Perempuan</span>
+                                    </label>
+                                    <!-- <label class="form-check-label">
                                         <input class="form-check-input" type="radio" v-model="form.reg_jk"
                                             value="P" />
-                                        Perempuan</label>
+                                        Perempuan</label> -->
                                 </div>
                                 <has-error :form="form" field="reg_jk" />
                             </div>
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 No. Telp / HP
                                 <span style="color:red">*</span>
                             </label>
-                            <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_nohp') }">
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_nohp') }">
                                 <input class="form-control" type="text" name="reg_nohp" placeholder=""
                                     v-model="form.reg_nohp" />
                                 <has-error :form="form" field="reg_nohp" />
@@ -177,11 +193,11 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 Kota / Kabupaten
                                 <span style="color:red">*</span>
                             </label>
-                            <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_kota') }">
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kota') }">
                                 <select class="form-control" type="text" name="reg_kota" placeholder="" required
                                     v-model="form.reg_kota">
                                     <option :value="item.id" :key="idx" v-for="(item,idx) in optionKota">{{item.nama}}
@@ -192,10 +208,10 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 Kecamatan
                             </label>
-                            <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_kecamatan') }">
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kecamatan') }">
                                 <!-- <select class="form-control" type="text" name="reg_kecamatan" placeholder=""
                                     required v-model="form.reg_kecamatan" >
                                     <option :value="item.id" :key="idx" v-for="(item,idx) in optionKecamatan">{{item.nama}}</option>
@@ -207,10 +223,10 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 Kelurahan / Desa
                             </label>
-                            <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_kelurahan') }">
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kelurahan') }">
                                 <!-- <select class="form-control" type="text" name="reg_kelurahan" placeholder=""
                                     required v-model="form.reg_kelurahan" >
                                     <option :value="item.id" :key="idx" v-for="(item,idx) in optionKelurahan">{{item.nama}}</option>
@@ -222,11 +238,11 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 Alamat
                                 <span style="color:red">*</span>
                             </label>
-                            <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_alamat') }">
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_alamat') }">
                                 <textarea class="multisteps-form__input form-control" type="text" name="reg_alamat"
                                     required v-model="form.reg_alamat"></textarea>
                                 <has-error :form="form" field="reg_alamat" />
@@ -234,16 +250,16 @@
                         </div>
 
                         <div class="row mt-2">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 RT / RW
                             </label>
-                            <div class="input-group col-md-2" :class="{ 'is-invalid':form.errors.has('reg_rt') }">
+                            <div class="input-group col-md-3 col-lg-2" :class="{ 'is-invalid':form.errors.has('reg_rt') }">
                                 <span class="input-group-addon bootstrap-touchspin-postfix input-group-append">
                                     <span class="input-group-text">RT </span>
                                 </span>
                                 <input class="form-control" type="text" name="reg_rt" v-model="form.reg_rt" />
                             </div>
-                            <div class="input-group col-md-2" :class="{ 'is-invalid':form.errors.has('reg_rw') }">
+                            <div class="input-group col-md-3 col-lg-2" :class="{ 'is-invalid':form.errors.has('reg_rw') }">
                                 <div class="input-group-addon bootstrap-touchspin-postfix input-group-append">
                                     <span class="input-group-text">RW </span>
                                 </div>
@@ -255,10 +271,10 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 Suhu
                             </label>
-                            <div class="col-md-6">
+                            <div class="col-md-8 col-lg-6">
                                 <input class="form-control" type="text" v-model="form.reg_suhu " placeholder=""
                                     :class="{ 'is-invalid': form.errors.has('reg_suhu') }" />
                                 <has-error :form="form" field="reg_suhu" />
@@ -270,13 +286,13 @@
                         </h4>
 
                         <div class="form-group row" v-for="(item,idx) in form.reg_sampel" :key="idx">
-                            <label class="col-md-2 col-form-label" for="sampel">Nomor Sampel {{idx+1}}</label>
+                            <label class="col-md-3 col-lg-2 col-form-label" for="sampel">Nomor Sampel {{idx+1}}</label>
                             <div class="col-md-4">
                                 <input type="hidden" name="id_sampel" v-model="item.id" />
                                 <input class="form-control" type="text" name="pen_sampel" v-model="item.nomor"
                                     :class="{ 'is-invalid':form.errors.has(`reg_sampel.${idx}`) }" />
                             </div>
-                            <div class="col-md-2 mt-2">
+                            <div class="col-md-3 col-lg-2 mt-2">
                                 <span>
                                     <button class="btn btn-danger btn-xs" type="button"
                                         v-show="idx || ( !idx && form.reg_sampel.length > 1)">
@@ -290,10 +306,10 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">
+                            <label class="col-md-3 col-lg-2">
                                 Keterangan Lainnya
                             </label>
-                            <div class="col-md-6" :class="{ 'is-invalid': form.errors.has('reg_keterangan') }">
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_keterangan') }">
                                 <textarea class="form-control" type="text" name="reg_keterangan"
                                     v-model="form.reg_keterangan" rows="6"></textarea>
                                 <has-error :form="form" field="reg_keterangan" />
@@ -305,8 +321,8 @@
                         <hr>
                         <h4 class="mb-1 mt-0">Gejala</h4>
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">Tanggal onset gejala (panas)</label>
-                            <div class="col-md-6">
+                            <label class="col-md-3 col-lg-2">Tanggal onset gejala (panas)</label>
+                            <div class="col-md-8 col-lg-6">
                                 <date-picker placeholder="Tanggal Onset Panas" format="d MMMM yyyy"
                                     input-class="form-control" :monday-first="true"
                                     :wrapper-class="{ 'is-invalid': form.errors.has('reg_onset_panas') }"
@@ -314,8 +330,8 @@
                             </div>
                         </div>
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">Panas</label>
-                            <div class="col-md-6">
+                            <label class="col-md-3 col-lg-2">Panas</label>
+                            <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="gejpanasya" name="reg_gejpanas"
                                         value="Ya" v-model="form.reg_gejpanas">
@@ -335,8 +351,8 @@
                             </div>
                         </div>
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">Tanda Pneumonia</label>
-                            <div class="col-md-6">
+                            <label class="col-md-3 col-lg-2">Tanda Pneumonia</label>
+                            <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="gejpneumoniaya"
                                         name="reg_gejpenumonia" value="Ya" v-model="form.reg_gejpenumonia">
@@ -356,8 +372,8 @@
                             </div>
                         </div>
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">Batuk</label>
-                            <div class="col-md-6">
+                            <label class="col-md-3 col-lg-2">Batuk</label>
+                            <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="gejbatukya" name="reg_gejbatuk"
                                         value="Ya" v-model="form.reg_gejbatuk">
@@ -377,8 +393,8 @@
                             </div>
                         </div>
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">Nyeri Tenggorokan</label>
-                            <div class="col-md-6">
+                            <label class="col-md-3 col-lg-2">Nyeri Tenggorokan</label>
+                            <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="gejnyeritenggorokanya"
                                         name="reg_gejnyeritenggorokan" value="Ya" v-model="form.reg_gejnyeritenggorokan">
@@ -398,8 +414,8 @@
                             </div>
                         </div>
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">Sesak Nafas</label>
-                            <div class="col-md-6">
+                            <label class="col-md-3 col-lg-2">Sesak Nafas</label>
+                            <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="gejsesaknafasya"
                                         name="reg_gejsesaknafas" value="Ya" v-model="form.reg_gejsesaknafas">
@@ -419,8 +435,8 @@
                             </div>
                         </div>
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">Pilek</label>
-                            <div class="col-md-6">
+                            <label class="col-md-3 col-lg-2">Pilek</label>
+                            <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="gejpilekya" name="reg_gejpilek"
                                         value="Ya" v-model="form.reg_gejpilek">
@@ -440,8 +456,8 @@
                             </div>
                         </div>
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">Lesu</label>
-                            <div class="col-md-6">
+                            <label class="col-md-3 col-lg-2">Lesu</label>
+                            <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="gejlesuya" name="reg_gejlesu"
                                         value="Ya" v-model="form.reg_gejlesu">
@@ -461,8 +477,8 @@
                             </div>
                         </div>
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">Sakit Kepala</label>
-                            <div class="col-md-6">
+                            <label class="col-md-3 col-lg-2">Sakit Kepala</label>
+                            <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="gejsakitkepalaya"
                                         name="reg_gejsakitkepala" value="Ya" v-model="form.reg_gejsakitkepala">
@@ -482,8 +498,8 @@
                             </div>
                         </div>
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">Diare</label>
-                            <div class="col-md-6">
+                            <label class="col-md-3 col-lg-2">Diare</label>
+                            <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="gejdiareya" name="reg_gejdiare"
                                         value="Ya" v-model="form.reg_gejdiare">
@@ -503,8 +519,8 @@
                             </div>
                         </div>
                         <div class="form-group row mt-4">
-                            <label class="col-md-2">Mual/Muntah</label>
-                            <div class="col-md-6">
+                            <label class="col-md-3 col-lg-2">Mual/Muntah</label>
+                            <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="gejmualmuntahya"
                                         name="reg_gejmualmuntah" value="Ya" v-model="form.reg_gejmualmuntah">
@@ -524,7 +540,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-2 col-form-label" for="gejlain">Gejala Lainnya
+                            <label class="col-md-3 col-lg-2 col-form-label" for="gejlain">Gejala Lainnya
                                 (jelaskan)</label>
                             <div class="col-md-10">
                                 <textarea class="form-control" rows="3" name="reg_gejlain" id="gejlain" v-model="form.reg_gejlain"></textarea>

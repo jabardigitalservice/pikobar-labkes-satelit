@@ -53,6 +53,14 @@
                             </div>
                         </div>
 
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-md-right">Ulangi {{ $t('password') }}</label>
+                            <div class="col-md-7">
+                                <input v-model="form.password_confirmation" :class="{ 'is-invalid': errors.password_confirmation !=null }"
+                                    type="password" name="password_confirmation " class="form-control">
+                            </div>
+                        </div>
+
                         <!-- Roles -->
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label text-md-right">Role</label>
@@ -87,6 +95,18 @@
                                     </option>
                                 </select>
                                 <p class="text-danger" v-if="errors.validator_id">{{errors.validator_id[0]}}</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row" v-if="form.role_id == 8">
+                            <label class="col-md-3 col-form-label text-md-right">Sebagai Lab Satelit</label>
+                            <div class="col-md-7">
+                                <select class="form-control" v-model="form.lab_satelit_id"
+                                    :class="{ 'is-invalid': errors.lab_satelit_id!=null }">
+                                    <option :value="item.id" :key="item.id" v-for="item in lab_satelit">{{item.text}}
+                                    </option>
+                                </select>
+                                <p class="text-danger" v-if="errors.lab_satelit_id">{{errors.lab_satelit_id[0]}}</p>
                             </div>
                         </div>
 
@@ -126,6 +146,7 @@
             ...mapGetters({
                 validator: "options/validator",
                 lab_pcr: "options/lab_pcr",
+                lab_satelit: "options/lab_satelit",
             }),
             id_user() {
                 return this.$route.params.id;
@@ -140,6 +161,10 @@
             if (!store.getters['options/validator'].length) {
                 f2 = store.dispatch('options/fetchValidator')
             }
+
+            if (!store.getters['options/lab_satelit'].length) {
+                await store.dispatch('options/fetchLabSatelit')
+            }
             f3 = axios.get('/roles-option')
             f4 = axios.get('/pengguna/' + route.params.id)
             await f1
@@ -153,8 +178,10 @@
                     username: data.username,
                     role_id: data.role_id,
                     lab_pcr_id: data.lab_pcr_id,
+                    lab_satelit_id: data.lab_satelit_id,
                     validator_id: data.validator_id,
                     password: '',
+                    password_confirmation: ''
                 }),
             }
         },

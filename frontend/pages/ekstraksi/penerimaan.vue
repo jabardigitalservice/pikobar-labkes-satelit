@@ -40,6 +40,7 @@
                       nomor_sampel : 'Nomor Sampel',
                       jenis_sampel_nama : 'Jenis Sampel',
                       petugas_pengambil : 'Kondisi Sampel',
+                      sampel_status: 'Status',
                       waktu_sample_taken: 'Sampel diambil pada',
                     }"
           ></ajax-table>
