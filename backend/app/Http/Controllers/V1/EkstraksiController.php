@@ -154,7 +154,7 @@ class EkstraksiController extends Controller
         }
         $lab_pcr = LabPCR::find($request->lab_pcr_id);
 
-        if (!$lab_pcr) {
+        if (!$lab_pcr && $sampel->sampel_status !== 'extraction_sample_extracted') {
             $v->after(function ($validator) {
                 $validator->errors()->add("samples", 'Lab PCR Tidak ditemukan');
             });
@@ -183,10 +183,21 @@ class EkstraksiController extends Controller
         $ekstraksi->catatan_pengiriman = $request->catatan_pengiriman;
         $ekstraksi->save();
 
-        $sampel->lab_pcr_id = $request->lab_pcr_id;
-        $sampel->lab_pcr_nama = $lab_pcr->id == 999999 ? $request->lab_pcr_nama : $lab_pcr->nama;
-        $sampel->waktu_extraction_sample_extracted = $ekstraksi->tanggal_mulai_ekstraksi ? date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_mulai_ekstraksi . ' ' .$ekstraksi->jam_mulai_ekstraksi)) : null;
-        $sampel->waktu_extraction_sample_sent = $ekstraksi->tanggal_pengiriman_rna ? date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_pengiriman_rna . ' ' .$ekstraksi->jam_pengiriman_rna)) : null;
+        if ($sampel->sampel_status !== 'extraction_sample_extracted') {
+            $sampel->lab_pcr_id = $request->lab_pcr_id;
+            $sampel->lab_pcr_nama = $lab_pcr->id == 999999 ? $request->lab_pcr_nama : $lab_pcr->nama;
+        }
+
+        $tanggalEkstraksi = Carbon::parse($ekstraksi->tanggal_mulai_ekstraksi)->format('Y-m-d');
+        $sampel->waktu_extraction_sample_extracted = Carbon::parse($tanggalEkstraksi.' '.$ekstraksi->jam_mulai_ekstraksi)->format('Y-m-d H:i:s');
+
+        if ($ekstraksi->tanggal_pengiriman_rna) {
+            $tanggalPengiriman = Carbon::parse($ekstraksi->tanggal_pengiriman_rna)->format('Y-m-d');
+            $sampel->waktu_extraction_sample_sent = Carbon::parse($tanggalPengiriman.' '.$ekstraksi->jam_pengiriman_rna)->format('Y-m-d H:i:s');
+        }
+        
+        // $sampel->waktu_extraction_sample_extracted = $ekstraksi->tanggal_mulai_ekstraksi ? date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_mulai_ekstraksi . ' ' .$ekstraksi->jam_mulai_ekstraksi)) : null;
+        // $sampel->waktu_extraction_sample_sent = $ekstraksi->tanggal_pengiriman_rna ? date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_pengiriman_rna . ' ' .$ekstraksi->jam_pengiriman_rna)) : null;
         $sampel->save();
         
         return response()->json(['status'=>201,'message'=>'Perubahan berhasil disimpan']);
