@@ -10,6 +10,7 @@ use App\Models\PemeriksaanSampel;
 use App\Models\LabPCR;
 use Validator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 
 class EkstraksiController extends Controller
 {
@@ -236,7 +237,10 @@ class EkstraksiController extends Controller
             $ekstraksi->alat_ekstraksi = $request->alat_ekstraksi;
             $ekstraksi->save();
 
-            $sampel->waktu_extraction_sample_extracted = date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_mulai_ekstraksi . ' ' .$ekstraksi->jam_mulai_ekstraksi));
+            $tanggalEkstraksi = Carbon::parse($ekstraksi->tanggal_mulai_ekstraksi)->format('Y-m-d');
+
+            $sampel->waktu_extraction_sample_extracted = Carbon::parse($tanggalEkstraksi. ' ' .$ekstraksi->jam_mulai_ekstraksi)->format('Y-m-d H:i:s');
+            // $sampel->waktu_extraction_sample_extracted = date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_mulai_ekstraksi . ' ' .$ekstraksi->jam_mulai_ekstraksi));
             $sampel->updateState('extraction_sample_extracted', [
                 'user_id' => $user->id,
                 'metadata' => $ekstraksi,
