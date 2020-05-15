@@ -244,10 +244,9 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
                                 No. Telp / HP
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_nohp') }">
-                                <input class="form-control" type="text" name="reg_nohp" placeholder="" required
+                                <input class="form-control" type="text" name="reg_nohp" placeholder=""
                                     v-model="form.reg_nohp" />
                                 <has-error :form="form" field="reg_nohp" />
                             </div>
