@@ -53,6 +53,7 @@
                     }"
             :rowtemplate="'tr-pcr-penerimaan'"
             :columns="{
+                      checkbox_sampel_id: '#',
                       nomor_register: 'Nomor Register',
                       nomor_sampel : 'Nomor Sampel',
                       jenis_sampel_nama : 'Jenis Sampel',
