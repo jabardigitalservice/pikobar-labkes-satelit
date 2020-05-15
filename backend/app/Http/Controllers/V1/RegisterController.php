@@ -71,7 +71,7 @@ class RegisterController extends Controller
                 new UniqueSampel(),
             ],
             // 'reg_tanggalkunjungan' => 'required',
-            'reg_kunke' => 'required',
+            // 'reg_kunke' => 'required',
             // 'reg_rsfasyankes' => 'required',
         ], [
             'reg_kewarganegaraan.required' => 'Mohon pilih kewarganegaraan',

@@ -70,7 +70,7 @@ class RegistrasiRujukanController extends Controller
             // 'reg_nama_dokter' => 'required',
             // 'reg_telp_fas_pengirim' => 'required|max:15',
             // 'reg_tanggalkunjungan' => 'required',
-            'reg_kunke' => 'required',
+            // 'reg_kunke' => 'required',
             // 'reg_rsfasyankes' => 'required',
         ], [
             'reg_kewarganegaraan.required' => 'Mohon pilih kewarganegaraan',
@@ -265,7 +265,9 @@ class RegistrasiRujukanController extends Controller
                 'reg_usia_tahun' =>  $pasien->usia_tahun,
                 'reg_usia_bulan' => $pasien->usia_bulan,
                 'reg_hasil_rdt' => $register->hasil_rdt,
-                'reg_fasyankes_id' => $register->fasyankes_id,   
+                'reg_fasyankes_id' => $register->fasyankes_id, 
+                'nama_rs' => $register->nama_rs,
+                'fasyankes_pengirim' => $register->fasyankes_pengirim  
             ]
          ]);
     }
@@ -289,7 +291,7 @@ class RegistrasiRujukanController extends Controller
             // 'reg_nama_dokter' => 'required',
             // 'reg_telp_fas_pengirim' => 'required|max:15',
             // 'reg_tanggalkunjungan' => 'required',
-            'reg_kunke' => 'required',
+            // 'reg_kunke' => 'required',
             // 'reg_rsfasyankes' => 'required',
         ], [
             'reg_kewarganegaraan.required' => 'Mohon pilih kewarganegaraan',
@@ -323,9 +325,10 @@ class RegistrasiRujukanController extends Controller
         $rs = Fasyankes::where('id',$request->get('reg_fasyankes_id'))->first();
         $register = Register::where('id',$register_id)->first();
         // return response()->json($request->all());
-        $register->nomor_register =  $nomor_register;
+        $register->nomor_register =  $nomor_register; 
         $register->fasyankes_id =  $request->get('reg_fasyankes_id');
         $register->nomor_rekam_medis =  null;
+        
         $register->nama_dokter =  $request->get('reg_nama_dokter');
         $register->no_telp =  $request->get('reg_telp_fas_pengirim');
         $register->register_uuid =  (string) Str::uuid();
@@ -335,7 +338,7 @@ class RegistrasiRujukanController extends Controller
         $register->dinkes_pengirim =  $request->get('reg_dinkes_pengirim');
         $register->other_dinas_pengirim =  $request->get('daerahlain');
         $register->fasyankes_pengirim =  $request->get('reg_fasyankes_pengirim');
-        $register->nama_rs =  optional($rs)->nama;
+        $register->nama_rs =  $rs->nama ?? null;
         $register->other_nama_rs =  $request->get('reg_nama_rs_lainnya');
         $register->tanggal_kunjungan =  $request->get('reg_tanggalkunjungan');
         $register->kunjungan_ke =  $request->get('reg_kunke');

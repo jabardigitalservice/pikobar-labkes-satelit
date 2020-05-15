@@ -314,12 +314,12 @@
                         <h4 class="mb-1 mt-0">Riwayat Kunjungan</h4>
                         <p>Isi pada baris yang merupakan kali kunjungan saat ini.</p>
                         <div class="form-group row mt-4" :class="{ 'is-invalid':form.errors.has('reg_kunke') }">
-                            <label class="col-md-3 col-lg-2">Kunjungan Ke <span style="color:red;">*</span></label>
+                            <label class="col-md-3 col-lg-2">Kunjungan Ke</label>
                             <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline">
                                     <label class="fancy-radio custom-color-green m-0 w-100">
                                         <input  name="reg_kunke" value="1"
-                                        required v-model="form.reg_kunke" type="radio">
+                                            v-model="form.reg_kunke" type="radio">
                                         <span><i></i>Ke-1</span>
                                     </label>
                                     <!-- <input class="form-check-input" type="radio" id="kunke1" name="reg_kunke" value="1"
@@ -329,7 +329,7 @@
                                 <div class="form-check form-check-inline">
                                     <label class="fancy-radio custom-color-green m-0 w-100">
                                         <input  name="reg_kunke" value="2"
-                                        required v-model="form.reg_kunke" type="radio">
+                                         v-model="form.reg_kunke" type="radio">
                                         <span><i></i>Ke-2</span>
                                     </label>
                                     <!-- <input class="form-check-input" type="radio" id="kunke2" name="reg_kunke" value="2"
@@ -339,7 +339,7 @@
                                 <div class="form-check form-check-inline">
                                     <label class="fancy-radio custom-color-green m-0 w-100">
                                         <input  name="reg_kunke" value="3"
-                                        required v-model="form.reg_kunke" type="radio">
+                                         v-model="form.reg_kunke" type="radio">
                                         <span><i></i>Ke-3</span>
                                     </label>
                                     <!-- <input class="form-check-input" type="radio" id="kunke3" name="reg_kunke" value="3"
@@ -349,7 +349,7 @@
                                 <div class="form-check form-check-inline">
                                     <label class="fancy-radio custom-color-green m-0 w-100">
                                         <input  name="reg_kunke" value="4"
-                                        required v-model="form.reg_kunke" type="radio">
+                                         v-model="form.reg_kunke" type="radio">
                                         <span><i></i>Ke-4</span>
                                     </label>
                                     <!-- <input class="form-check-input" type="radio" id="kunke4" name="reg_kunke" value="4"
@@ -359,7 +359,7 @@
                                 <div class="form-check form-check-inline">
                                     <label class="fancy-radio custom-color-green m-0 w-100">
                                         <input  name="reg_kunke" value="5"
-                                        required v-model="form.reg_kunke" type="radio">
+                                         v-model="form.reg_kunke" type="radio">
                                         <span><i></i>Ke-5</span>
                                     </label>
                                     <!-- <input class="form-check-input" type="radio" id="kunke5" name="reg_kunke" value="5"
@@ -369,7 +369,7 @@
                                 <div class="form-check form-check-inline">
                                     <label class="fancy-radio custom-color-green m-0 w-100">
                                         <input  name="reg_kunke" value="6"
-                                        required v-model="form.reg_kunke" type="radio">
+                                         v-model="form.reg_kunke" type="radio">
                                         <span><i></i>Ke-6</span>
                                     </label>
                                     <!-- <input class="form-check-input" type="radio" id="kunke6" name="reg_kunke" value="6"
@@ -379,7 +379,7 @@
                                 <div class="form-check form-check-inline">
                                     <label class="fancy-radio custom-color-green m-0 w-100">
                                         <input  name="reg_kunke" value="7"
-                                        required v-model="form.reg_kunke" type="radio">
+                                         v-model="form.reg_kunke" type="radio">
                                         <span><i></i>Ke-7</span>
                                     </label>
                                     <!-- <input class="form-check-input" type="radio" id="kunke7" name="reg_kunke" value="7"
