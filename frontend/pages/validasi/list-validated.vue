@@ -19,7 +19,7 @@
               
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Fasyankes</label>
+                  <label>Fasyankes/Dinkes</label>
                   <dynamic-input :form="params1" field="fasyankes" v-model="params1.fasyankes" 
                     :options="listFasyankes"
                     :hasSemua="true">
@@ -107,7 +107,7 @@
                       nomor_register: 'Nomor Register',
                       pasien_nama : 'Nama Pasien',
                       kategori: 'Kategori',
-                      kota_nama : 'Kota Domisili',
+                      instansi_pengirim: 'Inst. Pengirim',
                       nomor_sampel : 'Nomor Sampel',
                       parameter_lab: 'Parameter Lab',
                       kondisi_sampel: 'Kondisi Sampel',
