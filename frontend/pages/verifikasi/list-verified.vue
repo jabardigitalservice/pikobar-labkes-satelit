@@ -19,7 +19,7 @@
             
             <div class="col-md-3">
               <div class="form-group">
-                <label>Fasyankes</label>
+                <label>Fasyankes/Dinkes</label>
                 <dynamic-input :form="params1" field="fasyankes" v-model="params1.fasyankes" 
                   :options="listFasyankes"
                   :hasSemua="true">

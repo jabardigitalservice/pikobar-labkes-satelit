@@ -77,7 +77,14 @@ class SampelVerifiedExport extends DefaultValueBinder implements FromQuery,
         
         $query = $this->queryFromPemeriksaan();
         
-        $query->where('sampel.sampel_status', $this->sampelStatus);
+
+        if ($this->sampelStatus === 'pcr_sample_analyzed') {
+            $query->where('sampel.sampel_status', $this->sampelStatus);
+        }
+
+        if ($this->sampelStatus === 'sample_verified') {
+            $query->whereIn('sampel.sampel_status', ['sample_verified', 'sample_valid']);
+        }
 
         // $query = $this->queryFromSampel()->where('sampel_status', $this->sampelStatus)
 
@@ -111,7 +118,7 @@ class SampelVerifiedExport extends DefaultValueBinder implements FromQuery,
         $query = Sampel::query()->whereHas('logs')
             ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
             ->join('register', 'sampel.register_id', 'register.id')
-            ->where('sampel_status', '!=', 'sample_valid')
+            // ->where('sampel_status', '!=', 'sample_valid')
             ->where('sampel_status', '!=', 'sample_invalid');
     }
 
