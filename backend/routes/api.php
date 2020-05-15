@@ -78,6 +78,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 });
 
 Route::group(['middleware' => ['guest:api','cors']], function () {
+    
     Route::post('login', 'Auth\LoginController@login');
     Route::post('register', 'Auth\RegisterController@register');
 
@@ -90,6 +91,7 @@ Route::group(['middleware' => ['guest:api','cors']], function () {
     Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
     Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
 });
+
 
 
 Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], function () {
@@ -111,7 +113,10 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
     Route::group(['prefix'=>'chart'], function(){
         Route::get('/regis-mandiri','DashboardController@chartMandiri');
         Route::get('/regis-rujukan','DashboardController@chartRujukan');
+        Route::get('/positif','DashboardController@chartPositif');
+        Route::get('/negatif','DashboardController@chartNegatif');
     });
+
     Route::group(['prefix'=>'ekstraksi'], function(){
         Route::get('/get-data','EkstraksiController@getData');
         Route::get('/detail/{id}','EkstraksiController@detail');

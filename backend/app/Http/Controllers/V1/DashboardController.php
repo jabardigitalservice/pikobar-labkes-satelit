@@ -250,5 +250,82 @@ class DashboardController extends Controller
             'value' => $value
         ]);
     }
+
+    public function chartEkstraksi(Request $request)
+    {
+        # code...
+    }
+
+    public function chartPcr(Request $request)
+    {
+        
+    }
+
+    public function chartPositif(Request $request)
+    {
+        // SELECT CAST(created_at AS DATE) AS DATE, COUNT(*) as total
+        // FROM register 
+        // WHERE created_at > date ('Y-m-d')
+        // GROUP BY CAST(created_at AS DATE)
+        // ORDER BY CAST(created_at AS DATE)
+        $models = PemeriksaanSampel::leftJoin('sampel','sampel.id','pemeriksaansampel.sampel_id')
+                ->where('kesimpulan_pemeriksaan','positif');
+        $tipe = $request->get('tipe','Daily');
+
+        switch($tipe) {
+            case "Daily":
+                $models = $models->whereBetween('waktu_sample_valid',[date('Y-m-d', strtotime("-7 days")), date('Y-m-d')])
+                ->select(DB::raw('CAST(waktu_sample_valid AS DATE) tanggal'),DB::raw('count(*) as jumlah'))
+                ->groupBy(DB::raw('CAST(waktu_sample_valid AS DATE)'))
+                ->pluck('jumlah','tanggal');
+                
+            break;
+            case "Monthly":
+                $models = $models
+                            ->where(DB::raw('extract(YEAR from waktu_sample_valid)'),date('Y') )
+                            ->whereNotNull('waktu_sample_valid')
+                            // ->select(DB::raw('extract(MONTH from waktu_sample_valid) bulan'),DB::raw('count(*) as jumlah'))
+                            // ->groupBy(DB::raw('extract(MONTH from waktu_sample_valid)'))
+                            ->select(DB::raw("TO_CHAR(waktu_sample_valid, 'Month') as bulan"),DB::raw('count(*) as jumlah'))
+                            ->groupBy(DB::raw("TO_CHAR(waktu_sample_valid, 'Month')"))
+                            ->pluck('jumlah','bulan');
+            break;
+        }
+        return response()->json([
+            'label' => $models->keys(),
+            'value' => $models->values()
+        ]);
+    }
+
+    public function chartNegatif(Request $request)
+    {
+        $models = PemeriksaanSampel::leftJoin('sampel','sampel.id','pemeriksaansampel.sampel_id')
+        ->where('kesimpulan_pemeriksaan','negatif');
+        $tipe = $request->get('tipe','Daily');
+
+        switch($tipe) {
+            case "Daily":
+                $models = $models->whereBetween('waktu_sample_valid',[date('Y-m-d', strtotime("-7 days")), date('Y-m-d')])
+                ->select(DB::raw('CAST(waktu_sample_valid AS DATE) tanggal'),DB::raw('count(*) as jumlah'))
+                ->groupBy(DB::raw('CAST(waktu_sample_valid AS DATE)'))
+                ->pluck('jumlah','tanggal');
+                
+            break;
+            case "Monthly":
+                $models = $models
+                            ->where(DB::raw('extract(YEAR from waktu_sample_valid)'),date('Y') )
+                            ->whereNotNull('waktu_sample_valid')
+                            // ->select(DB::raw('extract(MONTH from waktu_sample_valid) bulan'),DB::raw('count(*) as jumlah'))
+                            // ->groupBy(DB::raw('extract(MONTH from waktu_sample_valid)'))
+                            ->select(DB::raw("TO_CHAR(waktu_sample_valid, 'Month') as bulan"),DB::raw('count(*) as jumlah'))
+                            ->groupBy(DB::raw("TO_CHAR(waktu_sample_valid, 'Month')"))
+                            ->pluck('jumlah','bulan');
+            break;
+        }
+        return response()->json([
+            'label' => $models->keys(),
+            'value' => $models->values()
+        ]);
+    }
 }
 
