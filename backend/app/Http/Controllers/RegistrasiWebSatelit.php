@@ -11,7 +11,7 @@ use App\Models\Sampel;
 use DateTime;
 use App\Exports\RegisMandiriExport;
 
-class RegistrasiMandiri extends Controller
+class RegistrasiWebSatelit extends Controller
 { 
     public function getData(Request $request)
     {
@@ -29,7 +29,7 @@ class RegistrasiMandiri extends Controller
                    ->orWhere('pasien.nik','ilike','%'.$search.'%');
             });
         }
-    
+        // $models->where('lab_satelit_id',$request->lab_satelit_id);
         if ($params) {
             foreach (json_decode($params) as $key => $val) {
                 if ($val == '') continue;

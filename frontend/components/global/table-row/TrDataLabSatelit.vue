@@ -8,8 +8,15 @@
             {{ item.alamat }}
         </td>
         <td>
-            <nuxt-link :to="`lab-satelit/update/${item.id}`" class="btn btn-primary btn-sm">Update</nuxt-link>
-            <a href="#" class="btn btn-danger btn-sm" @click="deleteData(item.id)">Delete</a>
+            {{ item.longitude }}
+        </td>
+        <td>
+            {{ item.latitude }}
+        </td>
+        <td>
+            <nuxt-link :to="`lab-satelit/show/${item.id}`" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></nuxt-link>
+            <nuxt-link :to="`lab-satelit/update/${item.id}`" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></nuxt-link>
+            <a href="#" class="btn btn-danger btn-sm" @click="deleteData(item.id)"><i class="fa fa-trash"></i></a>
         </td>
     </tr>
 </template>

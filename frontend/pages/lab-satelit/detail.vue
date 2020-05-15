@@ -1,39 +1,35 @@
 <template>
     <div class="wrapper wrapper-content">
         <portal to="title-name">
-          Detail Pengguna
+          Detail Lab Satelit
         </portal>
         <portal to="title-action">
           <div class="title-action">
-            <nuxt-link to="/pengguna" class="btn btn-primary">List Pengguna</nuxt-link>
+            <nuxt-link to="/lab-satelit" class="btn btn-primary">List Lab Satelit</nuxt-link>
           </div>
         </portal>
         <div class="row">
             <div class="col-lg-8">
                 <Ibox>
-                <h3 class="header-title mt-2 mb-2">Informasi Pengguna</h3>
+                <h3 class="header-title mt-2 mb-2">Informasi Lab Satelit</h3>
                 <table class="table">
                   <tbody>
                     <tr>
-                      <td width="40%"><b>Nama Pengguna</b></td>
-                      <td width="60%">{{form.name}}</td>
+                      <td width="40%"><b>Nama Lab Satelit</b></td>
+                      <td width="60%">{{form.nama}}</td>
                     </tr>
                      <tr>
-                      <td width="40%"><b>Username</b></td>
-                      <td width="60%">{{ form.username }}</td>
+                      <td width="40%"><b>Alamat</b></td>
+                      <td width="60%">{{ form.alamat }}</td>
                     </tr>
                      <tr>
-                      <td width="40%"><b>{{ $t('email') }}</b></td>
-                      <td width="60%">{{ form.email }}</td>
+                      <td width="40%"><b>Longitude</b></td>
+                      <td width="60%">{{ form.longitude }}</td>
                     </tr>
                      <tr>
-                      <td width="40%"><b>Role</b></td>
-                      <td width="60%">
-                          <div v-for="item in roles" :key="item.id">
-                                    <div v-if="form.role_id == item.id">
-                                            {{ item.text }}
-                                    </div>
-                                </div>
+                      <td width="40%"><b>Latitude</b></td>
+                      <td width="60%">{{ form.latitude }}
+                          
                       </td>
                     </tr>
                   </tbody>
@@ -83,21 +79,18 @@
                 await store.dispatch('options/fetchLabSatelit')
             }
             f3 = axios.get('/roles-option')
-            f4 = axios.get('/pengguna/' + route.params.id)
+            f4 = axios.get('/lab-satelit/' + route.params.id)
             await f1
             await f2
             let data = (await f4).data.result
             return {
                 roles: (await f3).data,
                 form: new Form({
-                    name: data.name,
-                    email: data.email,
-                    username: data.username,
-                    role_id: data.role_id,
-                    lab_pcr_id: data.lab_pcr_id,
-                    lab_satelit_id: data.lab_satelit_id,
-                    validator_id: data.validator_id,
-                    password: '',
+                    nama: data.nama,
+                    alamat: data.alamat,
+                    longitude: data.longitude,
+                    latitude: data.latitude,
+
                 }),
             }
         },
@@ -112,7 +105,7 @@
         methods: {
             async submitForm() {
                 // Tambah User
-                await axios.post('/pengguna/' + this.id_user, this.form)
+                await axios.post('/lab-satelit/' + this.id_user, this.form)
                     .then((response) => {
                         console.log('response : ', response);
                         this.$swal.fire(

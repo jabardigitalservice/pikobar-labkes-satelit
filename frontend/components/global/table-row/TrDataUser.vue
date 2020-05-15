@@ -18,9 +18,9 @@
             {{ item.lab_pcr ? ('Lab PCR: ' + item.lab_pcr.nama) : '' }}
         </td>
         <td>
-            <nuxt-link :to="`pengguna/detail/${item.id}`" class="mb-1 btn btn-info btn-sm">Detail</nuxt-link>
-            <nuxt-link :to="`pengguna/update/${item.id}`" class="mb-1 btn btn-primary btn-sm">Update</nuxt-link>
-            <a href="#" class="mb-1 btn btn-danger btn-sm" @click="deleteData(item.id)">Delete</a>
+            <nuxt-link :to="`pengguna/detail/${item.id}`" class="mb-1 btn btn-info btn-sm"><i class="fa fa-eye"></i></nuxt-link>
+            <nuxt-link :to="`pengguna/update/${item.id}`" class="mb-1 btn btn-primary btn-sm"><i class="fa fa-pencil"></i></nuxt-link>
+            <a href="#" class="mb-1 btn btn-danger btn-sm" @click="deleteData(item.id)"><i class="fa fa-trash"></i></a>
         </td>
     </tr>
 </template>

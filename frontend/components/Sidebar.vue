@@ -49,6 +49,11 @@
                 Registrasi Rujukan (R)
               </router-link>
             </li>
+            <li>
+              <router-link to="/registrasi/WebSatelit" tag="a">
+                Registrasi Web Satelit (L)
+              </router-link>
+            </li>
           </ul>
         </li>
         <li v-if="checkPermission('sample')">

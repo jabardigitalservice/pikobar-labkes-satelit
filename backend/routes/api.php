@@ -60,6 +60,12 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/','RegistrasiMandiri@getData');
         Route::get('/export-excel','RegistrasiMandiri@exportExcel');
     });
+
+    Route::group(['prefix'=>'registrasi-WebSatelit'], function(){
+        Route::get('/','RegistrasiWebSatelit@getData');
+        Route::get('/export-excel','RegistrasiWebSatelit@exportExcel');
+    });
+
     Route::group(['prefix'=>'registrasi-rujukan'], function(){
         Route::post('/cek','RegistrasiRujukanController@cekData');
         Route::post('/store','RegistrasiRujukanController@store');
@@ -158,7 +164,11 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
         Route::group(['prefix'=>'register'], function(){
 
-            
+            Route::post('WebSatelit','RegisterWebSatelitController@storeWebSatelit');
+            Route::post('WebSatelit/update/{regis_id}/{pasien_id}','RegisterWebSatelitController@storeUpdate');
+            Route::get('WebSatelit/{register_id}/{pasien_id}','RegisterWebSatelitController@getById');
+            Route::delete('WebSatelit/{id}/{pasien}','RegisterWebSatelitController@delete');
+
             Route::get('/', 'RegisterListController@index');
 
             Route::post('store', 'RegisterController@store');
@@ -166,7 +176,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             Route::post('mandiri/update/{regis_id}/{pasien_id}','RegisterController@storeUpdate');
             Route::get('mandiri/{register_id}/{pasien_id}','RegisterController@getById');
             Route::get('delete-sampel/{id}','RegisterController@deleteSample');
-            Route::delete('mandiri/{id}/{pasien}','RegisterController@delete');
+            
 
             Route::get('detail/{register}', 'RegisterController@show');
 

@@ -31,7 +31,9 @@
                     :rowtemplate="'tr-data-lab-satelit'"
                     :columns="{
                       nama: 'Nama',
-                      alamat: 'Username',
+                      alamat: 'Alamat',
+                      longitude: 'Longitude',
+                      latitude: 'Latitude',
                     }"></ajax-table>
               </Ibox>
             </div>
