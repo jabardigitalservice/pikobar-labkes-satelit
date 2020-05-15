@@ -242,15 +242,24 @@
 								<td width="60%">
 									<span v-if="data.fasyankes">{{data.fasyankes.nama}}</span>
 									<span v-if="!data.fasyankes && data.register.nama_rs">{{data.register.nama_rs}}</span>
-									<span v-if="!data.fasyankes && !data.register.nama_rs && data.register.other_nama_rs">
-                    {{data.register.other_nama_rs}}
-                  </span>
-                  <span v-if="!data.fasyankes && !data.register.nama_rs && !data.register.other_nama_rs && data.register.dinkes_pengirim">
-                    {{data.register.dinkes_pengirim}}
-                  </span>
-                  <span v-if="!data.fasyankes && !data.register.nama_rs && !data.register.other_nama_rs && !data.register.dinkes_pengirim && data.register.other_dinas_pengirim">
-                    {{data.register.other_dinas_pengirim}}
-                  </span>
+									
+									<span v-if="!data.fasyankes && !data.register.nama_rs && data.register.dinkes_pengirim">
+										{{data.register.dinkes_pengirim}}
+									</span>
+								</td>
+							</tr>
+
+              <tr>
+								<td width="30%">
+									<b>Fasyankes/Dinkes (Lainnya)</b>
+								</td>
+								<td width="60%">
+									<span v-if="data.register.other_nama_rs">
+										{{data.register.other_nama_rs}}
+									</span>
+									<span v-if="!data.register.other_nama_rs && data.register.other_dinas_pengirim">
+										{{data.register.other_dinas_pengirim}}
+									</span>
 								</td>
 							</tr>
 
