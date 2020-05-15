@@ -11,6 +11,13 @@
             {{item.jenis_sampel_nama}}
         </td>
         <td>
+          {{ item.status.deskripsi }}
+        </td>
+        <td>
+            {{ item.ekstraksi.operator_ekstraksi }}
+            <span v-if="!item.ekstraksi.operator_ekstraksi">{{ '-' }}</span>
+        </td>
+        <td>
             {{ item.waktu_extraction_sample_extracted | formatDateTime }}
         </td>
         <td width="20%">
@@ -23,7 +30,13 @@
 export default {
     props  : ['item', 'pagination', 'rowparams', 'index'],
     data() {
+        let item = this.item;
+
+        if (!item.ekstraksi) {
+            item.ekstraksi = {}
+        }
         return {
+            item
         }
     },
     methods: {
