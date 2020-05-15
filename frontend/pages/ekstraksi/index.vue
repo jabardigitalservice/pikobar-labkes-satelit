@@ -38,6 +38,8 @@
                       nomor_register: 'Nomor Register',
                       nomor_sampel : 'Nomor Sampel',
                       jenis_sampel : 'Jenis Sampel',
+                      sampel_status: 'Status',
+                      operator: 'Operator',
                       waktu_extraction_sample_extracted: 'Ekstraksi dilakukan pada',
                     }"
           ></ajax-table>

@@ -16,6 +16,9 @@
             <span v-if="!item.kondisi_sampel">-</span>
         </td>
         <td>
+          {{ item.status.deskripsi }}
+        </td>
+        <td>
             {{ item.waktu_sample_taken | formatDateTime }}
         </td>
         <td width="20%">
