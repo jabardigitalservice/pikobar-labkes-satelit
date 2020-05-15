@@ -96,7 +96,7 @@
             :columns="{
                       nomor_register: 'Nomor Register',
                       nomor_sampel : 'Nomor Sampel',
-                      waktu_pcr_sample_analyzed:'Waktu Analisis',
+                      waktu_pcr_sample_analyzed:'Tanggal Input Hasil',
                       sampel_status : 'Status',
                       kesimpulan_pemeriksaan : 'Hasil Pemeriksaan',
                     }"

@@ -112,4 +112,7 @@ export default {
         display: block;
         color: rgb(140, 143, 135);
     }
+    .checkbox-unvalidate{
+        transform: scale(1.7);
+    }
 </style>

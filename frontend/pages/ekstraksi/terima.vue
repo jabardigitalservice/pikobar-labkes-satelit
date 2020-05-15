@@ -14,7 +14,8 @@
           <sample-picker v-model="form.samples"
             ref="sample_picker"
             sampel-status="sample_taken"
-            title="Daftar Sampel yang Diterima"
+            title="Daftar Sampel yang Diterima" 
+            :selectedNomorSampels="selectedNomorSampels"
           ></sample-picker>
         </div>
         <div class="col-md-6">
@@ -191,6 +192,8 @@ export default {
     SamplePicker,
   },
   data() {
+		let selectedNomorSampels = this.$store.state.ekstraksi_penerimaan.selectedSampels;
+
     return {
       form: new Form({
         tanggal_penerimaan_sampel: new Date(),
@@ -205,6 +208,7 @@ export default {
         alat_ekstraksi: "",
         samples: []
       }),
+      selectedNomorSampels,
       loading: false,
     };
   },
@@ -256,6 +260,10 @@ export default {
         }
         this.loading = true
         const response = await this.form.post("/v1/ekstraksi/terima");
+
+        // Clear selected sampels
+        this.$store.commit('ekstraksi_penerimaan/clear');
+
         this.$toast.success(response.data.message, {
           icon: "check",
           iconPack: "fontawesome",

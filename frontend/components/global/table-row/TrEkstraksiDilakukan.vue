@@ -2,6 +2,15 @@
     <tr>
         <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
         <td>
+            <input 
+                type="checkbox" class="form-control checkbox-ekstraksi-dilakukan" 
+                v-bind:value="item.nomor_sampel" 
+                v-bind:id="'selected-sampel-'+item.id" 
+                v-model="checked" 
+                v-on:change="sampelOnChangeSelect(item.nomor_sampel)"
+            >
+        </td>
+        <td>
             {{item.nomor_register}}
         </td>
         <td>
@@ -14,8 +23,8 @@
           {{ item.status.deskripsi }}
         </td>
         <td>
-            {{ item.ekstraksi.operator_ekstraksi }}
-            <span v-if="!item.ekstraksi.operator_ekstraksi">{{ '-' }}</span>
+            <span v-if="item.ekstraksi">{{ item.ekstraksi.operator_ekstraksi }}</span>
+            <span v-if="item.ekstraksi && !item.ekstraksi.operator_ekstraksi">{{ '-' }}</span>
         </td>
         <td>
             {{ item.waktu_extraction_sample_extracted | formatDateTime }}
@@ -30,16 +39,27 @@
 export default {
     props  : ['item', 'pagination', 'rowparams', 'index'],
     data() {
-        let item = this.item;
-
-        if (!item.ekstraksi) {
-            item.ekstraksi = {}
-        }
         return {
-            item
+            checked: false,
         }
     },
     methods: {
+        sampelOnChangeSelect(nomorSampel){
+            if (this.checked) {                
+                this.$store.commit('ekstraksi_dilakukan/add', nomorSampel)
+                // console.log(this.$store.state.validasi.selectedSampels);
+                
+            }
+
+            if (!this.checked) {
+                this.$store.commit('ekstraksi_dilakukan/remove', nomorSampel)
+            }
+        }
     }
 }
 </script>
+<style scoped>
+    .checkbox-ekstraksi-dilakukan{
+        transform: scale(1.7);
+    }
+</style>

@@ -35,6 +35,7 @@
                     }"
                 :rowtemplate="'tr-ekstraksi-dilakukan'"
                 :columns="{
+                      checkbox_sampel_id: '#',
                       nomor_register: 'Nomor Register',
                       nomor_sampel : 'Nomor Sampel',
                       jenis_sampel : 'Jenis Sampel',
