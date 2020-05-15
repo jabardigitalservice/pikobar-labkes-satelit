@@ -23,8 +23,17 @@
         </td>
         <td>
             <span v-if="item.register && item.register.jenis_registrasi == 'mandiri'">{{ '-' }}</span>
-            <span v-if="item.register && item.register.jenis_registrasi == 'rujukan'">
+            <span v-if="item.register && item.register.jenis_registrasi == 'rujukan' && item.register.nama_rs">
                 {{ item.register.nama_rs }}
+            </span>
+            <span v-if="item.register && item.register.jenis_registrasi == 'rujukan' && !item.register.nama_rs && item.register.other_nama_rs">
+                {{ item.register.other_nama_rs }}
+            </span>
+            <span v-if="item.register && item.register.jenis_registrasi == 'rujukan' && !item.register.nama_rs && !item.register.other_nama_rs && item.register.dinkes_pengirim">
+                {{ item.register.dinkes_pengirim }}
+            </span>
+            <span v-if="item.register && item.register.jenis_registrasi == 'rujukan' && !item.register.nama_rs && !item.register.other_nama_rs && !item.register.dinkes_pengirim && item.register.other_dinas_pengirim">
+                {{ item.register.other_dinas_pengirim }}
             </span>
         </td>
         <td>
