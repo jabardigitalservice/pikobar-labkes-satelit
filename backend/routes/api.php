@@ -115,6 +115,8 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::get('/regis-rujukan','DashboardController@chartRujukan');
         Route::get('/positif','DashboardController@chartPositif');
         Route::get('/negatif','DashboardController@chartNegatif');
+        Route::get('/ekstraksi','DashboardController@chartEkstraksi');
+        Route::get('/pcr','DashboardController@chartPcr');
     });
 
     Route::group(['prefix'=>'ekstraksi'], function(){

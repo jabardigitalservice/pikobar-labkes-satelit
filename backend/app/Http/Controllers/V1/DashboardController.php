@@ -253,12 +253,60 @@ class DashboardController extends Controller
 
     public function chartEkstraksi(Request $request)
     {
-        # code...
+        $models = Sampel::whereNotNull('waktu_extraction_sample_extracted');
+        $tipe = $request->get('tipe','Daily');
+
+        switch($tipe) {
+            case "Daily":
+                $models = $models->whereBetween('waktu_extraction_sample_extracted',[date('Y-m-d', strtotime("-7 days")), date('Y-m-d')])
+                ->select(DB::raw('CAST(waktu_extraction_sample_extracted AS DATE) tanggal'),DB::raw('count(*) as jumlah'))
+                ->groupBy(DB::raw('CAST(waktu_extraction_sample_extracted AS DATE)'))
+                ->pluck('jumlah','tanggal');
+                
+            break;
+            case "Monthly":
+                $models = $models
+                            ->where(DB::raw('extract(YEAR from waktu_extraction_sample_extracted)'),date('Y') )
+                            // ->select(DB::raw('extract(MONTH from waktu_extraction_sample_extracted) bulan'),DB::raw('count(*) as jumlah'))
+                            // ->groupBy(DB::raw('extract(MONTH from waktu_extraction_sample_extracted)'))
+                            ->select(DB::raw("TO_CHAR(waktu_extraction_sample_extracted, 'Month') as bulan"),DB::raw('count(*) as jumlah'))
+                            ->groupBy(DB::raw("TO_CHAR(waktu_extraction_sample_extracted, 'Month')"))
+                            ->pluck('jumlah','bulan');
+            break;
+        }
+        return response()->json([
+            'label' => $models->keys(),
+            'value' => $models->values()
+        ]);
     }
 
     public function chartPcr(Request $request)
     {
-        
+        $models = Sampel::whereNotNull('waktu_pcr_sample_analyzed');
+        $tipe = $request->get('tipe','Daily');
+
+        switch($tipe) {
+            case "Daily":
+                $models = $models->whereBetween('waktu_pcr_sample_analyzed',[date('Y-m-d', strtotime("-7 days")), date('Y-m-d')])
+                ->select(DB::raw('CAST(waktu_pcr_sample_analyzed AS DATE) tanggal'),DB::raw('count(*) as jumlah'))
+                ->groupBy(DB::raw('CAST(waktu_pcr_sample_analyzed AS DATE)'))
+                ->pluck('jumlah','tanggal');
+                
+            break;
+            case "Monthly":
+                $models = $models
+                            ->where(DB::raw('extract(YEAR from waktu_pcr_sample_analyzed)'),date('Y') )
+                            // ->select(DB::raw('extract(MONTH from waktu_pcr_sample_analyzed) bulan'),DB::raw('count(*) as jumlah'))
+                            // ->groupBy(DB::raw('extract(MONTH from waktu_pcr_sample_analyzed)'))
+                            ->select(DB::raw("TO_CHAR(waktu_pcr_sample_analyzed, 'Month') as bulan"),DB::raw('count(*) as jumlah'))
+                            ->groupBy(DB::raw("TO_CHAR(waktu_pcr_sample_analyzed, 'Month')"))
+                            ->pluck('jumlah','bulan');
+            break;
+        }
+        return response()->json([
+            'label' => $models->keys(),
+            'value' => $models->values()
+        ]);
     }
 
     public function chartPositif(Request $request)

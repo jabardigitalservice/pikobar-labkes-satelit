@@ -7,7 +7,7 @@
                         <select class="form-control h-auto mb-1 p-0 w-auto" v-model="params.mandiri">
                             <option value="Daily">Daily</option>
                             <option value="Monthly">Monthly</option>
-                            <option value="Yearly">Yearly</option>
+                            <!-- <option value="Yearly">Yearly</option> -->
                         </select>
                     </template>
                     <chart-mandiri :barId="'RegistrasiMasukMandiri'"></chart-mandiri>
@@ -20,7 +20,7 @@
                         <select class="form-control h-auto mb-1 p-0 w-auto" v-model="params.rujukan">
                             <option value="Daily">Daily</option>
                             <option value="Monthly">Monthly</option>
-                            <option value="Yearly">Yearly</option>
+                            <!-- <option value="Yearly">Yearly</option> -->
                         </select>
                     </template>
                     <!-- <chart-bar :barId="'RegistrasiMasukRujukan'"></chart-bar> -->
@@ -30,79 +30,66 @@
             <div class="col-md-6">
                 <Ibox title="Sampel Ekstraksi">
                     <template v-slot:tools>
-                        <select class="form-control h-auto mb-1 p-0 w-auto">
-                            <option value="">Daily</option>
-                            <option value="">Monthly</option>
-                            <option value="">Yearly</option>
+                        <select class="form-control h-auto mb-1 p-0 w-auto" v-model="params.ekstraksi">
+                            <option value="Daily">Daily</option>
+                            <option value="Monthly">Monthly</option>
+                            <!-- <option value="Yearly">Yearly</option> -->
                         </select>
                     </template>
-                    <chart-bar :barId="'sampelEkstraksi'"></chart-bar>
+                    <!-- <chart-bar :barId="'sampelEkstraksi'"></chart-bar> -->
+                    <chart-ekstraksi :barId="'sampelEkstraksi'"></chart-ekstraksi>
                 </Ibox>
             </div>
             <div class="col-md-6">
                 <Ibox title="Sampel PCR">
                     <template v-slot:tools>
-                        <select class="form-control h-auto mb-1 p-0 w-auto">
-                            <option value="">Daily</option>
-                            <option value="">Monthly</option>
-                            <option value="">Yearly</option>
+                        <select class="form-control h-auto mb-1 p-0 w-auto" v-model="params.pcr">
+                            <option value="Daily">Daily</option>
+                            <option value="Monthly">Monthly</option>
+                            <!-- <option value="Yearly">Yearly</option> -->
                         </select>
                     </template>
-                    <chart-bar :barId="'samplePCR'"></chart-bar>
+                    <!-- <chart-bar :barId="'samplePCR'"></chart-bar> -->
+                    <chart-pcr :barId="'samplePCR'"></chart-pcr>
                 </Ibox>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <Ibox title="Hasil Positif">
-
                     <template v-slot:tools>
-                        <select class="form-control h-auto mb-1 p-0 w-auto">
-                            <option value="">Daily</option>
-                            <option value="">Monthly</option>
-                            <option value="">Yearly</option>
+                        <select class="form-control h-auto mb-1 p-0 w-auto" v-model="params.positif">
+                            <option value="Daily">Daily</option>
+                            <option value="Monthly">Monthly</option>
+                            <!-- <option value="Yearly">Yearly</option> -->
                         </select>
                     </template>
-                    <chart-pie></chart-pie>
+                    <chart-positif :barId="'HasilPositif'"></chart-positif>
                 </Ibox>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <Ibox title="Hasil Negatif">
-
                     <template v-slot:tools>
-                        <select class="form-control h-auto mb-1 p-0 w-auto">
-                            <option value="">Daily</option>
-                            <option value="">Monthly</option>
-                            <option value="">Yearly</option>
+                        <select class="form-control h-auto mb-1 p-0 w-auto" v-model="params.negatif">
+                            <option value="Daily">Daily</option>
+                            <option value="Monthly">Monthly</option>
+                            <!-- <option value="Yearly">Yearly</option> -->
                         </select>
                     </template>
-                    <chart-pie></chart-pie>
-                </Ibox>
-            </div>
-            <div class="col-md-4">
-                <Ibox title="Belum Keluar Hasil">
-
-                    <template v-slot:tools>
-                        <select class="form-control h-auto mb-1 p-0 w-auto">
-                            <option value="">Daily</option>
-                            <option value="">Monthly</option>
-                            <option value="">Yearly</option>
-                        </select>
-                    </template>
-                    <chart-pie></chart-pie>
+                    <chart-negatif :barId="'HasilNegatif'"></chart-negatif>
                 </Ibox>
             </div>
         </div>
-        <div class="row">
+        <div class="row" v-if="false">
             <div class="col-md-12">
 
                 <Ibox title="Jumlah sampel yang diperiksa menggunakan metode PCR">
 
                     <template v-slot:tools>
                         <select class="form-control h-auto mb-1 p-0 w-auto">
-                            <option value="">Daily</option>
-                            <option value="">Monthly</option>
-                            <option value="">Yearly</option>
+                            <option value="Daily">Daily</option>
+                            <option value="Monthly">Monthly</option>
+                            <!-- <option value="Yearly">Yearly</option> -->
                         </select>
                     </template>
                     <chart-stacked-bar />
@@ -118,6 +105,10 @@
     import ChartStackedBar from "../../components/global/chart-stacked-bar";
     import ChartMandiri from "./chart/ChartMandiri";
     import ChartRujukan from "./chart/ChartRujukan";
+    import ChartPositif from "./chart/ChartPositif";
+    import ChartNegatif from "./chart/ChartNegatif";
+    import ChartEkstraksi from "./chart/ChartEkstraksi";
+    import ChartPcr from "./chart/ChartPcr";
     export default {
         name: "charts",
         components: {
@@ -125,7 +116,11 @@
             ChartPie,
             ChartStackedBar,
             ChartRujukan,
-            ChartMandiri
+            ChartMandiri,
+            ChartPositif,
+            ChartNegatif,
+            ChartEkstraksi,
+            ChartPcr
         },
         data() {
             return {
@@ -137,7 +132,11 @@
                 },
                 params: {
                     mandiri: 'Daily',
-                    rujukan: 'Daily'
+                    rujukan: 'Daily',
+                    ekstraksi: 'Daily',
+                    pcr: 'Daily',
+                    positif: 'Daily',
+                    negatif: 'Daily'
                 }
             };
         },
@@ -147,7 +146,19 @@
             },
             "params.rujukan":function(newVal, oldVal){
                 this.$bus.$emit('refresh-chart-rujukan', this.params.rujukan)
-            }
+            },
+            "params.pcr":function(newVal, oldVal){
+                this.$bus.$emit('refresh-chart-pcr', this.params.pcr)
+            },
+            "params.ekstraksi":function(newVal, oldVal){
+                this.$bus.$emit('refresh-chart-ekstraksi', this.params.ekstraksi)
+            },
+            "params.positif":function(newVal, oldVal){
+                this.$bus.$emit('refresh-chart-positif', this.params.positif)
+            },
+            "params.negatif":function(newVal, oldVal){
+                this.$bus.$emit('refresh-chart-negatif', this.params.negatif)
+            } 
         }
     }
 </script>
