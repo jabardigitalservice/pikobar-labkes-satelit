@@ -157,7 +157,8 @@
                 <td width="28%">
 
                     @if ($register && $register['jenis_registrasi'] === 'mandiri')
-                        {{ $sampel->labPCR ? $sampel->labPCR['nama'] : '-' }}
+                        {{ 'Labkesda Jawa Barat' }}
+                        {{-- {{ $sampel->labPCR ? $sampel->labPCR['nama'] : '-' }} --}}
                     @endif
 
                     @if ($register && $register['jenis_registrasi'] === 'rujukan' && $register->fasyankes)
@@ -288,14 +289,17 @@
                     @endforeach
                 @endif --}}
 
-                @if ($last_pemeriksaan_sampel['hasil_deteksi_terkecil'] && count($last_pemeriksaan_sampel['hasil_deteksi_terkecil']) > 0)
                     <tr>
                         <td>Covid-19</td>
                         <td>{{$sampel['nomor_sampel']}}</td>
                         <td>
                             {{-- {{$last_pemeriksaan_sampel['hasil_deteksi_terkecil']['target_gen']}}  --}}
                             {{-- {{$last_pemeriksaan_sampel['hasil_deteksi_terkecil']['ct_value']}}  --}}
-                            {{ round($last_pemeriksaan_sampel['hasil_deteksi_terkecil']['ct_value'], 2) }}
+                            @if ($last_pemeriksaan_sampel['hasil_deteksi_terkecil'] && ($last_pemeriksaan_sampel['hasil_deteksi_terkecil']['target_gen'] !== 'IC'))
+                                {{ round($last_pemeriksaan_sampel['hasil_deteksi_terkecil']['ct_value'], 2) }}
+                            @else
+                                {{  '-' }}
+                            @endif
                             {{-- {{ number_format((float)$last_pemeriksaan_sampel['hasil_deteksi_terkecil']['ct_value'], 2, ',','.') }} --}}
                         </td>
                         <td>
@@ -311,7 +315,6 @@
                             rRT-PCR-{{ $last_pemeriksaan_sampel['nama_kit_pemeriksaan'] }}
                         </td>
                     </tr>
-                @endif
 
                 @if (!$last_pemeriksaan_sampel['hasil_deteksi'] || count($last_pemeriksaan_sampel['hasil_deteksi']) < 1)
                     <tr>

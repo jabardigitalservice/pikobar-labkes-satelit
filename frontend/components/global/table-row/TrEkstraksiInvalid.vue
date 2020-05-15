@@ -20,10 +20,10 @@
             {{ item.ekstraksi ? item.ekstraksi.catatan_pengiriman : '-' }}
         </td>
         <td width="20%">
-            <nuxt-link tag="a" class="btn btn-success btn-sm" :to="`/ekstraksi/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
+            <nuxt-link tag="a" class="mb-1 text-nowrap btn btn-success btn-sm" :to="`/ekstraksi/detail/${item.id}`" title="Klik untuk melihat detail"><i class="uil-info-circle"></i></nuxt-link>
             <button
                 type="button"
-                class="btn btn-warning btn-sm"
+                class="mb-1 text-nowrap btn btn-warning btn-sm"
                 title="Klik untuk menandai sampel sebagai sampel yang kurang"
                 @click="promptKurang()"
                 :disabled="loading"
@@ -33,7 +33,7 @@
             </button>
             <button
                 type="button"
-                class="btn btn-info btn-sm"
+                class="mb-1 text-nowrap btn btn-info btn-sm"
                 title="Klik untuk menandai sampel sebagai sampel yang perlu swab ulang"
                 @click="promptSwabUlang()"
                 :disabled="loading"
@@ -58,8 +58,8 @@ export default {
         promptKurang() {
             const swalWithBootstrapButtons = this.$swal.mixin({
                 customClass: {
-                confirmButton: 'btn btn-success',
-                cancelButton: 'btn btn-danger'
+                confirmButton: 'mb-1 text-nowrap btn btn-success',
+                cancelButton: 'mb-1 text-nowrap btn btn-danger'
                 },
                 buttonsStyling: false
             })
@@ -110,8 +110,8 @@ export default {
         promptSwabUlang() {
             const swalWithBootstrapButtons = this.$swal.mixin({
                 customClass: {
-                confirmButton: 'btn btn-success',
-                cancelButton: 'btn btn-danger'
+                confirmButton: 'mb-1 text-nowrap btn btn-success',
+                cancelButton: 'mb-1 text-nowrap btn btn-danger'
                 },
                 buttonsStyling: false
             })

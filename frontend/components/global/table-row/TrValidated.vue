@@ -18,7 +18,10 @@
       <div
         v-for="item in item.pemeriksaanSampel.hasil_deteksi_parsed"
         :key="item.target_gen"
-      >- {{ item.target_gen }} : {{ parseFloat(item.ct_value).toFixed(2).replace('.', ',') }}</div>
+      >- {{ item.target_gen }} : 
+        <span v-if="!!item.ct_value">{{ parseFloat(item.ct_value).toFixed(2).replace('.', ',') }}</span>
+        <span v-if="item.ct_value == null">{{ '-' }}</span>
+      </div>
     </td>
     <td>{{item.kondisi_sampel}}</td>
     <td style="text-transform: capitalize;">
@@ -35,22 +38,23 @@
     <td width="20%">
       <nuxt-link
         tag="a"
-        class="btn btn-success btn-sm"
+        class="mb-1 text-nowrap btn btn-success btn-sm"
         :to="`/validasi/detail/${item.id}`"
         title="Klik untuk melihat detail"
       >
         <i class="uil-info-circle"></i>
       </nuxt-link>
-      <button @click="downloadPDF()" class="btn btn-sm btn-primary" type="button">
+      <button @click="downloadPDF()" class="btn btn-sm btn-primary" type="button" :disabled="loading == true">
         <!-- <i class="fa fa-file-excel"></i> -->
-        {{ 'Print' }}
+        <span v-if="loading == true"><i class="fa fa-spinner"></i></span>
+        <span v-if="loading == false">{{'Print'}}</span>
       </button>
       <button
         @click="regeneratePDF()"
-        class="btn btn-sm btn-primary"
+        class="mb-1 text-nowrap btn btn-sm btn-primary"
         type="button"
       >{{ 'Regenerate Print' }}</button>
-      <!-- <nuxt-link :to="`/validasi/edit/${item.id}`" class="btn btn-warning btn-sm" tag="a"><i class="fa fa-edit"></i></nuxt-link> -->
+      <!-- <nuxt-link :to="`/validasi/edit/${item.id}`" class="mb-1 text-nowrap btn btn-warning btn-sm" tag="a"><i class="fa fa-edit"></i></nuxt-link> -->
     </td>
   </tr>
 </template>
@@ -92,7 +96,7 @@ export default {
           // link.click();
           setTimeout(function(){
             window.open(url);
-          }, 100);
+          }, 500);
 
 
           // const contentDisposition = response.headers["content-disposition"];
@@ -149,15 +153,16 @@ export default {
             "error"
           );
         }
+
+        this.loading = false;
       }
-      this.loading = false;
     },
 
     regeneratePDF() {
       const swalWithBootstrapButtons = this.$swal.mixin({
         customClass: {
-          confirmButton: "btn btn-success",
-          cancelButton: "btn btn-danger"
+          confirmButton: "mb-1 text-nowrap btn btn-success",
+          cancelButton: "mb-1 text-nowrap btn btn-danger"
         },
         buttonsStyling: false
       });

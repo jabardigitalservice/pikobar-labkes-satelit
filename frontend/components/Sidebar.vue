@@ -23,7 +23,8 @@
               </li>
             </ul>
           </div>
-          <div class="logo-element">IN+</div>
+          <div class="logo-element">
+            <img src="@/assets/img/logo-lab.png" style="width:25px" /></div>
         </li>
         <li>
           <router-link to="/" tag="a">
@@ -172,6 +173,9 @@
           <ul class="nav nav-second-level collapse">
             <li>
               <nuxt-link to="/pengguna">Pengguna</nuxt-link>
+            </li>
+            <li>
+              <nuxt-link to="/lab-satelit">Lab Satelit</nuxt-link>
             </li>
           </ul>
         </li>

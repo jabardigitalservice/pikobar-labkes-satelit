@@ -12,52 +12,64 @@
             <input type="hidden" v-model="form.pen_nik" />
 
             <div class="form-group row mt-4">
-              <label class="col-md-2">
+              <label class="col-md-3 col-lg-2">
                 Sumber Sampel
                 <span style="color:red">*</span>
               </label>
-              <div class="col-md-6">
+              <div class="col-md-8 col-lg-6">
                 <div class="form-check form-check-inline"
                   :class="{ 'is-invalid': form.errors.has('pen_sampel_sumber') }">
-                  <label class="form-check-label">
+                  <label class="fancy-radio custom-color-green m-0 w-100">
+                      <input type="radio" v-model="form.pen_sampel_sumber" value="Mandiri">
+                      <span><i></i>Mandiri</span>
+                  </label>
+                  <!-- <label class="form-check-label">
                   <input
                     class="form-check-input"
                     type="radio"
                     v-model="form.pen_sampel_sumber"
                     value="Mandiri"
                   />
-                  Mandiri</label>
+                  Mandiri</label> -->
                 </div>
                 <div class="form-check form-check-inline">
-                  <label class="form-check-label">
+                  <label class="fancy-radio custom-color-green m-0 w-100">
+                      <input type="radio" v-model="form.pen_sampel_sumber" value="Rujukan Dinkes">
+                      <span><i></i>Rujukan Dinkes</span>
+                  </label>
+                  <!-- <label class="form-check-label">
                   <input
                     class="form-check-input"
                     type="radio"
                     v-model="form.pen_sampel_sumber"
                     value="Rujukan Dinkes"
                   />
-                  Rujukan Dinkes</label>
+                  Rujukan Dinkes</label> -->
                 </div>
                 <div class="form-check form-check-inline">
-                  <label class="form-check-label">
+                  <label class="fancy-radio custom-color-green m-0 w-100">
+                      <input type="radio" v-model="form.pen_sampel_sumber" value="Rujukan RS">
+                      <span><i></i>Rujukan RS</span>
+                  </label>
+                  <!-- <label class="form-check-label">
                   <input
                     class="form-check-input"
                     type="radio"
                     v-model="form.pen_sampel_sumber"
                     value="Rujukan RS"
                   />
-                  Rujukan RS</label>
+                  Rujukan RS</label> -->
                 </div>
                 <has-error :form="form" field="pen_sampel_sumber" />
               </div>
             </div>
 
             <div class="form-group row mt-4">
-              <label class="col-md-2">
+              <label class="col-md-3 col-lg-2">
                 Petugas Penerima Sampel
                 <small>Isi bila diterima dari fasyankes rujukan</small>
               </label>
-              <div class="col-md-6">
+              <div class="col-md-8 col-lg-6">
                 <dynamic-input :form="form" field="pen_penerima_sampel" 
                   :options="['Adit','Firman']" 
                   :hasLainnya="true"
@@ -69,7 +81,7 @@
             </div>
 
             <div class="form-group row">
-              <label class="col-md-2 col-form-label" for="gejlain">Catatan Lain</label>
+              <label class="col-md-3 col-lg-2 col-form-label" for="gejlain">Catatan Lain</label>
               <div class="col-md-10">
                 <textarea
                   class="form-control"
@@ -88,86 +100,87 @@
               <span style="color:red">*</span>
             </h4>
             <p>Dibawah ini adalah sampel yang diambil atau diterima, klik tambahkan sesuai dengan banyaknya sampel</p>
-            <table class="table table-striped dt-responsive table-bordered" style="width:100%">
-              <thead>
-                <tr>
-                  <th>Jenis Sampel</th>
-                  <th>Kondisi Sampel</th>
-                  <th>Tanggal</th>
-                  <th>Pukul</th>
-                  <th>Nomor sampel</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody class="field_wrapper">
-                <tr v-for="(sample, $index) in form.samples" :key="$index">
-                  <td>
-                    <select class="form-control" v-model="sample.sam_jenis_sampel"
-                    :class="{ 'is-invalid': form.errors.has(`samples.${$index}.sam_jenis_sampel`) }">
-                      <option :value="js.id" v-for="(js, $index2) in jenis_sampel" :key="$index2">{{ js.text }}</option>
-                    </select>
-                    <has-error :form="form" :field="`samples.${$index}.sam_jenis_sampel`"/>
-                    <div v-if="sample.sam_jenis_sampel == 999999">
-                      <small for="specify">Jenis Lainnya (isi apabila tidak tercantum diatas)</small>
-                      <input
-                        type="text"
-                        class="form-control"
-                        v-model="sample.sam_namadiluarjenis"
-                        placeholder="isi apabila tidak tercantum"
-                        :class="{ 'is-invalid': form.errors.has(`samples.${$index}.sam_namadiluarjenis`) }"
+            <div class="table-responsive">
+              <table class="table table-striped dt-responsive table-bordered" style="width:100%">
+                <thead>
+                  <tr>
+                    <th>Jenis Sampel</th>
+                    <th>Kondisi Sampel</th>
+                    <th>Tanggal</th>
+                    <th>Pukul</th>
+                    <th>Nomor sampel</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody class="field_wrapper">
+                  <tr v-for="(sample, $index) in form.samples" :key="$index">
+                    <td>
+                      <select class="form-control" v-model="sample.sam_jenis_sampel"
+                      :class="{ 'is-invalid': form.errors.has(`samples.${$index}.sam_jenis_sampel`) }">
+                        <option :value="js.id" v-for="(js, $index2) in jenis_sampel" :key="$index2">{{ js.text }}</option>
+                      </select>
+                      <has-error :form="form" :field="`samples.${$index}.sam_jenis_sampel`"/>
+                      <div v-if="sample.sam_jenis_sampel == 999999">
+                        <small for="specify">Jenis Lainnya (isi apabila tidak tercantum diatas)</small>
+                        <input
+                          type="text"
+                          class="form-control"
+                          v-model="sample.sam_namadiluarjenis"
+                          placeholder="isi apabila tidak tercantum"
+                          :class="{ 'is-invalid': form.errors.has(`samples.${$index}.sam_namadiluarjenis`) }"
                         preventForm
-                      />
-                      <has-error :form="form" :field="`samples.${$index}.sam_namadiluarjenis`"/>
-                    </div>
-                  </td>
-                  <td>
-                    <dynamic-input :form="sample" field="petugas_pengambil" 
-                      :options="['Baik','Sampel Sedikit','Tabung Rusak']" 
-                      :hasLainnya="true"
+                        />
+                        <has-error :form="form" :field="`samples.${$index}.sam_namadiluarjenis`"/>
+                      </div>
+                    </td>
+                    <td>
+                      <dynamic-input :form="sample" field="petugas_pengambil" 
+                        :options="['Baik','Sampel Sedikit','Tabung Rusak']" 
+                        :hasLainnya="true"
                       placeholder="Masukkan kondisi sampel"
                       preventForm
                       >
-                    </dynamic-input>
-                    <has-error :form="form" :field="`samples.${$index}.petugas_pengambil`"/>
-                  </td>
-                  <td>
-                    <date-picker
-                      placeholder="Pilih Tanggal"
-                      format="d MMMM yyyy"
-                      input-class="form-control"
-                      :monday-first="true"
-                      :wrapper-class="{ 'is-invalid': form.errors.has(`samples.${$index}.tanggalsampel`) }"
-                      v-model="sample.tanggalsampel" />
-                    <has-error :form="form" :field="`samples.${$index}.tanggalsampel`"/>
-                  </td>
-                  <td>
-                    <input class="form-control" type="text" v-model="sample.pukulsampel" 
-                      v-mask="'##\:##'" 
+                      </dynamic-input>
+                      <has-error :form="form" :field="`samples.${$index}.petugas_pengambil`"/>
+                    </td>
+                    <td>
+                      <date-picker
+                        placeholder="Pilih Tanggal"
+                        format="d MMMM yyyy"
+                        input-class="form-control"
+                        :monday-first="true"
+                        :wrapper-class="{ 'is-invalid': form.errors.has(`samples.${$index}.tanggalsampel`) }"
+                        v-model="sample.tanggalsampel" />
+                      <has-error :form="form" :field="`samples.${$index}.tanggalsampel`"/>
+                    </td>
+                    <td>
+                      <input class="form-control" type="text" v-model="sample.pukulsampel" 
+                        v-mask="'##\:##'" 
                       :class="{ 'is-invalid': form.errors.has(`samples.${$index}.pukulsampel`) }"
                       />
-                    <has-error :form="form" :field="`samples.${$index}.pukulsampel`"/>
-                  </td>
-                  <td>
-                    <input class="form-control" type="text" v-model="sample.nomorsampel" 
-                      :class="{ 'is-invalid': form.errors.has(`samples.${$index}.nomorsampel`) }"/>
+                      <has-error :form="form" :field="`samples.${$index}.pukulsampel`"/>
+                    </td>
+                    <td>
+                      <input class="form-control" type="text" v-model="sample.nomorsampel" 
+                        :class="{ 'is-invalid': form.errors.has(`samples.${$index}.nomorsampel`) }"/>
                     <has-error :form="form" :field="`samples.${$index}.nomorsampel`"
                     />
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-sm btn-danger" @click.prevent="removeSample($index)">
-                      <i class="uil-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="4"></td>
-                  <td colspan="2">
-                    <button type="button" class="btn btn-sm btn-secondary" @click.prevent="addSample()"><i class="fa fa-plus"></i> Tambah Sampel</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-sm btn-danger remove_field" @click.prevent="removeSample($index)">
+                        <i class="uil-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="4"></td>
+                    <td colspan="2">
+                      <button type="button" class="btn btn-sm btn-secondary" @click.prevent="addSample()"><i class="fa fa-plus"></i> Tambah Sampel</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             <div class="form-group row mt-4">
               <div class="col-md-4">
                 <v-button :loading="form.busy" class="btn btn-md btn-primary block full-width m-b">

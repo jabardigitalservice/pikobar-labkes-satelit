@@ -45,8 +45,14 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/pengguna/{id}', 'PenggunaController@updatePengguna');
     Route::delete('/pengguna/{id}','PenggunaController@deletePengguna');
     Route::get('/pengguna/{id}','PenggunaController@showUpdate');
+    Route::get('/lab-satelit', 'LabSatelitController@listLabSatelit');
+    Route::post('/lab-satelit', 'LabSatelitController@saveLabSatelit');
+    Route::post('/lab-satelit/{id}', 'LabSatelitController@updateLabSatelit');
+    Route::delete('/lab-satelit/{id}','LabSatelitController@deleteLabSatelit');
+    Route::get('/lab-satelit/{id}','LabSatelitController@showUpdate');
     Route::get('roles-option','OptionController@getRoles');
     Route::get('lab-pcr-option','OptionController@getLabPCR');
+    Route::get('lab-satelit-option','OptionController@getLabSatelit');
     Route::get('jenis-sampel-option','OptionController@getJenisSampel');
     Route::get('validator-option','OptionController@getValidator');
 
@@ -94,11 +100,17 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::get('/registrasi', 'DashboardController@registrasi');
         Route::get('/pcr','DashboardController@pcr');
         Route::get('/notifications','DashboardController@notifications');
+        Route::get('/positif-negatif','DashboardController@positifNegatif');
 
         Route::get('counter-belum-verifikasi', 'DashboardVerifikasiController@getCountUnverify');
         Route::get('counter-terverifikasi', 'DashboardVerifikasiController@getCountVerified');
         Route::get('counter-belum-validasi', 'DashboardValidasiController@getCountUnvalidate');
         Route::get('counter-tervalidasi', 'DashboardValidasiController@getCountValidated');
+    });
+
+    Route::group(['prefix'=>'chart'], function(){
+        Route::get('/regis-mandiri','DashboardController@chartMandiri');
+        Route::get('/regis-rujukan','DashboardController@chartRujukan');
     });
     Route::group(['prefix'=>'ekstraksi'], function(){
         Route::get('/get-data','EkstraksiController@getData');
