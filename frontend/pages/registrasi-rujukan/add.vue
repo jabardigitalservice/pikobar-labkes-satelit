@@ -110,12 +110,12 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">Nama Rumah Sakit / Fasyankes
                                 <span style="color:red">*</span> </label>
-                            <div class="col-md-8 col-lg-6" :class="{'is-invalid':form.errors.has('reg_nama_rs')}">
+                            <div class="col-md-8 col-lg-6" :class="{'is-invalid':form.errors.has('req_fasyankes_id')}">
                                 <v-select :options="optFasyankes" label="nama" :value="form.reg_fasyankes_id" v-model="form.reg_nama_rs"></v-select>
                             </div>
                         </div>
 
-                        <div class="mt-4" id="inputrslain" v-if="form.reg_nama_rs && form.reg_nama_rs.id==9999">
+                        <div class="mt-4" id="inputrslain" v-if="form.reg_fasyankes_id && form.reg_fasyankes_id.id==9999">
                             <div class="form-group row">
                                 <label class="col-md-3 col-lg-2"></label>
                                 <div class="col-md-8 col-lg-6">
@@ -244,10 +244,9 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
                                 No. Telp / HP
-                                <span style="color:red">*</span>
                             </label>
                             <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_nohp') }">
-                                <input class="form-control" type="text" name="reg_nohp" placeholder="" required
+                                <input class="form-control" type="text" name="reg_nohp" placeholder=""
                                     v-model="form.reg_nohp" />
                                 <has-error :form="form" field="reg_nohp" />
                             </div>
@@ -347,11 +346,11 @@
                         <h4 class="mb-1 mt-0">Riwayat Kunjungan</h4>
                         <p>Isi pada baris yang merupakan kali kunjungan saat ini.</p>
                         <div class="form-group row mt-4" :class="{ 'is-invalid':form.errors.has('reg_kunke') }">
-                            <label class="col-md-3 col-lg-2">Kunjungan Ke <span style="color:red;">*</span></label>
+                            <label class="col-md-3 col-lg-2">Kunjungan Ke</label>
                             <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="kunke1" name="reg_kunke" value="1"
-                                        required v-model="form.reg_kunke">
+                                         v-model="form.reg_kunke">
                                     <label class="form-check-label" for="kunke1">Ke-1</label>
                                 </div>
                                 <div class="form-check form-check-inline">

@@ -60,11 +60,14 @@
                   </tr>
                   <tr>
                     <td width="30%" align="right">
-                      <b>Tanggal Mulai Ekstraksi</b>
+                      <b>Ekstraksi dilakukan pada</b>
                     </td>
                     <td
                       width="60%"
-                    >{{data.ekstraksi.tanggal_mulai_ekstraksi | formatDate }} pada {{data.ekstraksi.jam_mulai_ekstraksi}}</td>
+                    >
+                      {{data.waktu_extraction_sample_extracted | formatDateTime }}
+                      <!-- {{data.ekstraksi.tanggal_mulai_ekstraksi | formatDate }} {{data.ekstraksi.jam_mulai_ekstraksi}} -->
+                    </td>
                   </tr>
                   <tr>
                     <td width="30%" align="right">

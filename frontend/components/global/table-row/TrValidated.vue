@@ -11,8 +11,23 @@
         <span v-if="item.register">{{ item.register.sumber_pasien }}</span>
     </td>
     <td>
-      <span v-if="item.pasien && item.pasien.kota">{{item.pasien.kota.nama}}</span>
+        <span v-if="item.register && item.register.jenis_registrasi == 'mandiri'">{{ '-' }}</span>
+        <span v-if="item.register && item.register.jenis_registrasi == 'rujukan' && item.register.nama_rs">
+            {{ item.register.nama_rs }}
+        </span>
+        <span v-if="item.register && item.register.jenis_registrasi == 'rujukan' && !item.register.nama_rs && item.register.other_nama_rs">
+            {{ item.register.other_nama_rs }}
+        </span>
+        <span v-if="item.register && item.register.jenis_registrasi == 'rujukan' && !item.register.nama_rs && !item.register.other_nama_rs && item.register.dinkes_pengirim">
+            {{ item.register.dinkes_pengirim }}
+        </span>
+        <span v-if="item.register && item.register.jenis_registrasi == 'rujukan' && !item.register.nama_rs && !item.register.other_nama_rs && !item.register.dinkes_pengirim && item.register.other_dinas_pengirim">
+            {{ item.register.other_dinas_pengirim }}
+        </span>
     </td>
+    <!-- <td>
+      <span v-if="item.pasien && item.pasien.kota">{{item.pasien.kota.nama}}</span>
+    </td> -->
     <td>{{item.nomor_sampel}}</td>
     <td nowrap>
       <div
