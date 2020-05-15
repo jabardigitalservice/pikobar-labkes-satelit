@@ -71,7 +71,7 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
                 $register = Register::create($registerData);
 
                 $pasienData = [
-                    'nik'=> $row->get('nik'),
+                    'nik'=> $this->parseNIK($row->get('nik')),
                     'nama_lengkap'=> $row->get('nama_pasien'),
                     'kewarganegaraan'=> $row->get('kewarganegaraan'),
                     'jenis_kelamin'=> $row->get('jenis_kelamin'),
@@ -99,10 +99,12 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
                     'kota_id'=> 'required|exists:kota,id',
                     'kewarganegaraan'=> 'required',
                     'jenis_kelamin'=> 'required|in:L,P',
+                    'suhu'=> ['nullable', 'regex:/^[0-9]+(\.[0-9][0-9]?)?$/']
                  ],[
                      'nik.digits'=> 'NIK harus 16 dijit.', 
                      'kota_id.required'=> 'Kota harap diisi dengan menyesuaikan dengan ID di Sheet Kota',
                      'kota_id.exists'=> 'Kota tidak ditemukan',
+                     'suhu.regex'=> 'Angka suhu tidak valid'
                  ])->validate();
 
                 $pasien = Pasien::query()->updateOrCreate(
@@ -165,5 +167,18 @@ class RegisterRujukanImport implements ToCollection, WithHeadingRow
         $result = Fasyankes::find($row->get('id_fasyankes'));
 
         return $result;
+    }
+
+    private function parseNIK($nik)
+    {
+        if (!$nik) {
+            return null;
+        }
+
+        if ($separated = explode("'", $nik)) {
+            return count($separated) > 1 ? $separated[1] : (string) $nik;
+        }
+
+        return (string) $nik;
     }
 }
