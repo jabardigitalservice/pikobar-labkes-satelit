@@ -21,8 +21,10 @@ use Auth;
 use App\Rules\UniqueSampel;
 use App\Models\PasienRegister;
 use App\Exports\RegisMandiriExport;
+use App\Models\JenisSampel;
+use App\Models\PengambilanSampel;
 
-class RegisterWebSatelitController extends Controller
+class RegistersampelController extends Controller
 {
     public function requestNomor(Request $request)
     {
@@ -37,7 +39,7 @@ class RegisterWebSatelitController extends Controller
             $date = date('Ymd');
         }
         if (empty($jenis_registrasi)) {
-            $kode_registrasi = 'L';
+            $kode_registrasi = 'S';
         } else if ($jenis_registrasi == 'mandiri') {
             $kode_registrasi = 'L';
         } else if ($jenis_registrasi == 'rujukan') {
@@ -52,67 +54,50 @@ class RegisterWebSatelitController extends Controller
         return $kode_registrasi . $date . str_pad($nextnum,4,"0",STR_PAD_LEFT);
     }
 
-    public function storeWebSatelit(Request $request)
+    public function storesampel(Request $request)
     {
         $user = Auth::user();
         $v = Validator::make($request->all(),[
-            'reg_kewarganegaraan' => 'required',
-            // 'reg_sumberpasien' => 'required',
+            'reg_instansi_pengirim' => 'required',
             'reg_nama_pasien' => 'required',
-            'reg_nik'  => 'max:16',
-            // 'reg_tempatlahir' => 'required',
-            // 'reg_tgllahir' => 'required',
-            'reg_nohp' => 'required|max:15',
-            'reg_kota' => 'required',
-            'reg_alamat' => 'required',
-            'reg_jk'=>'required',
+            'reg_nik'  => 'required|max:16',
             'reg_sampel.*' => [
                 'required',
                 new UniqueSampel(),
             ],
-            // 'reg_tanggalkunjungan' => 'required',
-            // 'reg_kunke' => 'required',
-            // 'reg_rsfasyankes' => 'required',
         ], [
-            'reg_kewarganegaraan.required' => 'Mohon pilih kewarganegaraan',
-            'reg_sumberpasien' => 'Mohon pilih sumber kedatangan pasien',
-            'peg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
+            'reg_instansi_pengirim.required' => 'Mohon pilih kewarganegaraan',
+            'reg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
             'reg_nik.max' => 'NIK maksimal terdiri dari :max karakter',
             'reg_nik.required' => 'NIK Pasien tidak boleh kosong',
-            'reg_tempatlahir.required' => 'Tempat lahir tidak boleh kosong',
-            'reg_tgllahir' => 'Tanggal lahir tidak boleh kosong',
-            'reg_nohp' => 'No HP tidak boleh kosong',
-            'reg_kota' => 'Mohon pilih salah satu kota/kabupaten',
-            'reg_alamat' => 'Alamat tidak boleh kosong',
             'reg_sampel.required' => 'Mohon isi minimal satu nomor sampel',
-            'reg_tanggalkunjungan' => 'Mohon isi form tanggal kunjungan',
-            'reg_kunke' => 'Mohon isi kunjungan keberapa',
-            'reg_rsfasyankes' => 'Mohon isi form',
-            'reg_jk' => 'Mohon pIlih Jenis Kelamin',
         ]);
         $v->validate();
         // foreach($request->get('reg_sampel') as $rows){
         //     echo "$rows[nomor]";
         // }
         // return Str::uuid();
-        $nomor_register = $request->input('reg_no');
-        if (Register::where('nomor_register', $nomor_register)->exists()) {
-            $nomor_register = $this->generateNomorRegister();
-        }
+        // $nomor_register = $request->input('reg_no');
+        // if (Register::where('nomor_register', $nomor_register)->exists()) {
+        //     $nomor_register = $this->generateNomorRegister();
+        // }
         $register = Register::create([
-            'nomor_register'=> $nomor_register,
+            'nomor_register'=> null,
             'fasyankes_id'=> null,
             'nomor_rekam_medis'=> null,
             'nama_dokter'=> null,
             'no_telp'=> null,
             'register_uuid' => (string) Str::uuid(),
             'creator_user_id' => $user->id,
-            'sumber_pasien' => $request->get('reg_sumberpasien'),
-            'tanggal_kunjungan' => $request->get('reg_tanggalkunjungan'),
-            'kunjungan_ke' => $request->get('reg_kunke'),
-            'rs_kunjungan' => $request->get('reg_rsfasyankes'),
-            'hasil_rdt' => $request->get('reg_hasil_rdt'),
-            'sumber_pasien' => $request->get('reg_sumberpasien')=="Umum"?"Umum":$request->get('reg_sumberpasien_isian'),
+            'lab_satelit_id' => $user->lab_satelit_id,
+            'sumber_pasien' => null,
+            'tanggal_kunjungan' => null,
+            'kunjungan_ke' => null,
+            'rs_kunjungan' => null,
+            'hasil_rdt' => null,
+            'sumber_pasien' => null,
+            'instansi_pengirim' => $request->get('reg_instansi_pengirim'),
+            'instansi_pengirim_nama' => $request->get('reg_instansi_pengirim_nama'),
         ]);
 
         $pasien = Pasien::where('nik',$request->get('reg_nik'))->first();
@@ -144,20 +129,37 @@ class RegisterWebSatelitController extends Controller
             'pasien_id' => $pasien->id,
             'register_id' => $register->id,
         ]);
+        
+        $pengambilan_sampel = PengambilanSampel::create([
+            'sampel_diambil' => false,
+            'sampel_diterima' => false,
+            'diterima_dari_faskes' => false,
+            'sampel_rdt' => false,
+            'catatan' => $request->get('reg_keterangan'),
+        ]);
 
         if($request->get('reg_sampel')) {
             foreach($request->get('reg_sampel') as $rows) {
                 $sampel = new Sampel;
                 $sampel->nomor_sampel = $rows['nomor'];
-                $sampel->nomor_register = $nomor_register;
+                $sampel->jenis_sampel_id = $rows['sam_jenis_sampel'];
+                if($rows['sam_jenis_sampel']!=999999){
+                    $jenis_sampel = JenisSampel::where('id',$rows['sam_jenis_sampel'])->first();
+                    $sampel->jenis_sampel_nama = $jenis_sampel->nama;
+                }else {
+                    $sampel->jenis_sampel_nama = $rows['sam_namadiluarjenis'];
+                }
+                
                 $sampel->register_id = $register->id;
+                $sampel->lab_satelit_id = $user->lab_satelit_id;
+                $sampel->pengambilan_sampel_id = $pengambilan_sampel->id;
                 $sampel->sampel_status = 'waiting_sample';
                 $sampel->updateState('waiting_sample');
                 $sampel->save();
             }
         }
 
-        return response()->json(['status'=>201,'message'=>'Proses Registrasi Web Satelit Berhasil Ditambahkan','result'=>[]]);
+        return response()->json(['status'=>201,'message'=>'Proses Registrasi Sampel Berhasil Ditambahkan','result'=>[]]);
     }
 
     public function storeUpdate(Request $request,$regis_id, $pasien_id)
@@ -198,6 +200,7 @@ class RegisterWebSatelitController extends Controller
         ]);
         $v->validate();
         
+        $register->fasyankes = $request->get('reg_fasyankes_nama');
         $register->sumber_pasien = $request->get('reg_sumberpasien');
         $register->tanggal_kunjungan = $request->get('reg_tanggalkunjungan');
         $register->kunjungan_ke = $request->get('reg_kunke');

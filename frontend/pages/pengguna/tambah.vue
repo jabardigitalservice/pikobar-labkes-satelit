@@ -74,30 +74,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group row" v-if="form.role_id == 5">
-                            <label class="col-md-3 col-form-label text-md-right">Lab PCR</label>
-                            <div class="col-md-7">
-                                <select class="form-control" v-model="form.lab_pcr_id"
-                                    :class="{ 'is-invalid': errors.lab_pcr_id!=null }">
-                                    <option :value="item.id" :key="item.id" v-for="item in lab_pcr">{{item.text}}
-                                    </option>
-                                </select>
-                                <p class="text-danger" v-if="errors.lab_pcr_id">{{errors.lab_pcr_id[0]}}</p>
-                            </div>
-                        </div>
-
-                        <div class="form-group row" v-if="form.role_id == 7">
-                            <label class="col-md-3 col-form-label text-md-right">Sebagai Validator</label>
-                            <div class="col-md-7">
-                                <select class="form-control" v-model="form.validator_id"
-                                    :class="{ 'is-invalid': errors.validator_id!=null }">
-                                    <option :value="item.id" :key="item.id" v-for="item in validator">{{item.text}}
-                                    </option>
-                                </select>
-                                <p class="text-danger" v-if="errors.validator_id">{{errors.validator_id[0]}}</p>
-                            </div>
-                        </div>
-                        <div class="form-group row" v-if="form.role_id == 8">
+                        <div class="form-group row" v-if="form.role_id == 2">
                             <label class="col-md-3 col-form-label text-md-right">Sebagai Lab Satelit</label>
                             <div class="col-md-7">
                                 <select class="form-control" v-model="form.lab_satelit_id"

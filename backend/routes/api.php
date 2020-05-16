@@ -61,9 +61,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/export-excel','RegistrasiMandiri@exportExcel');
     });
 
-    Route::group(['prefix'=>'registrasi-WebSatelit'], function(){
-        Route::get('/','RegistrasiWebSatelit@getData');
-        Route::get('/export-excel','RegistrasiWebSatelit@exportExcel');
+    Route::group(['prefix'=>'registrasi-sampel'], function(){
+        Route::get('/','Registrasisampel@getData');
+        Route::get('/export-excel','Registrasisampel@exportExcel');
     });
 
     Route::group(['prefix'=>'registrasi-rujukan'], function(){
@@ -171,10 +171,10 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
         Route::group(['prefix'=>'register'], function(){
 
-            Route::post('WebSatelit','RegisterWebSatelitController@storeWebSatelit');
-            Route::post('WebSatelit/update/{regis_id}/{pasien_id}','RegisterWebSatelitController@storeUpdate');
-            Route::get('WebSatelit/{register_id}/{pasien_id}','RegisterWebSatelitController@getById');
-            Route::delete('WebSatelit/{id}/{pasien}','RegisterWebSatelitController@delete');
+            Route::post('sampel','RegistersampelController@storesampel');
+            Route::post('sampel/update/{regis_id}/{pasien_id}','RegistersampelController@storeUpdate');
+            Route::get('sampel/{register_id}/{pasien_id}','RegistersampelController@getById');
+            Route::delete('sampel/{id}/{pasien}','RegistersampelController@delete');
 
             Route::get('/', 'RegisterListController@index');
 

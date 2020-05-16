@@ -10,7 +10,7 @@
 
         <div class="row">
           <div class="col-lg-12">
-            <filter-registrasi :oid="`registrasi-WebSatelit`"/>
+            <filter-registrasi :oid="`registrasi-sampel`"/>
           </div>
         </div>
 
@@ -19,18 +19,18 @@
               <Ibox title="Register Pasien">
                 <template v-slot:tools>
                   <div class="d-sm-block d-none">
-                    <nuxt-link tag="button" to="/registrasi/WebSatelit/import-excel" class="btn btn-xs btn-success"><i class="fa fa-upload"></i> Import Data</nuxt-link>
-                    <nuxt-link tag="button" to="/registrasi/WebSatelit/export-excel" class="btn btn-xs btn-success"><i class="fa fa-dowload"></i> Export Data</nuxt-link>
-                    <nuxt-link tag="button" to="/registrasi/WebSatelit/tambah" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Registrasi Baru</nuxt-link>
+                    <nuxt-link tag="button" to="/registrasi/sampel/import-excel" class="btn btn-xs btn-success"><i class="fa fa-upload"></i> Import Data</nuxt-link>
+                    <!-- <nuxt-link tag="button" to="/registrasi/sampel/export-excel" class="btn btn-xs btn-success"><i class="fa fa-dowload"></i> Export Data</nuxt-link> -->
+                    <nuxt-link tag="button" to="/registrasi/sampel/tambah" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Registrasi Baru</nuxt-link>
                   </div>
                 </template>
                 <div class="d-sm-none mb-2">
-                  <nuxt-link tag="button" to="/registrasi/WebSatelit/import-excel" class="mb-1 btn btn-xs btn-success"><i class="fa fa-upload"></i> Import Data</nuxt-link>
-                    <nuxt-link tag="button" to="/registrasi/WebSatelit/export-excel" class="mb-1 btn btn-xs btn-success"><i class="fa fa-dowload"></i> Export Data</nuxt-link>
-                    <nuxt-link tag="button" to="/registrasi/WebSatelit/tambah" class="mb-1 btn btn-xs btn-success"><i class="fa fa-plus"></i> Registrasi Baru</nuxt-link>
+                  <nuxt-link tag="button" to="/registrasi/sampel/import-excel" class="mb-1 btn btn-xs btn-success"><i class="fa fa-upload"></i> Import Data</nuxt-link>
+                    <nuxt-link tag="button" to="/registrasi/sampel/export-excel" class="mb-1 btn btn-xs btn-success"><i class="fa fa-dowload"></i> Export Data</nuxt-link>
+                    <nuxt-link tag="button" to="/registrasi/sampel/tambah" class="mb-1 btn btn-xs btn-success"><i class="fa fa-plus"></i> Registrasi Baru</nuxt-link>
                 </div>
                 <hr>
-                <ajax-table url="/registrasi-WebSatelit" :oid="'registrasi-WebSatelit'"
+                <ajax-table url="/registrasi-sampel" :oid="'registrasi-sampel'"
                   :params="params"
                   :config="{
                     autoload: true,
@@ -48,12 +48,11 @@
                         wrapper: ['table-responsive'],
                     }
                     }"
-                    :rowtemplate="'tr-data-regis-web-satelit'"
+                    :rowtemplate="'tr-data-regis-sample'"
                     :columns="{
-                      nomor_register: 'Nomor Registrasi',
                       nama_pasien: 'Pasien',
                       nama_kota: 'Domisili',
-                      sumber_pasien: 'Kategori',
+                      instansi_pengirim: 'Instansi Pengirim',
                       no_sampel:'Sampel',
                       tgl_input:'Tanggal Input',
                       keterangan:'Keterangan'
@@ -67,10 +66,7 @@
 <script>
 
 export default {
-  middleware: ['auth', 'checkrole'],
-  meta: {
-    allow_role_id: [8]
-  },
+  middleware: ['auth'],
   data(){
     return{
        params: {
@@ -90,7 +86,7 @@ export default {
   },
   methods:{
     doFilter(){
-      this.$bus.$emit('refresh-ajaxtable','registrasi-WebSatelit');
+      this.$bus.$emit('refresh-ajaxtable','registrasi-sampel');
     }
   }
 }

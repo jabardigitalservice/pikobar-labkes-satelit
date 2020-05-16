@@ -1,32 +1,20 @@
 <template>
     <div class="wrapper wrapper-content">
         <portal to="title-name">
-            Registrasi Pasien
+            Registrasi Sampel
         </portal>
         <portal to="title-action">
             <div class="title-action">
-                <nuxt-link to="/registrasi/WebSatelit" class="btn btn-primary">Kembali</nuxt-link>
+                <nuxt-link to="/registrasi/sampel" class="btn btn-primary">Kembali</nuxt-link>
             </div>
         </portal>
 
         <div class="row">
             <div class="col-lg-12">
-                <Ibox title="Penerimaan atau Pengambilan Sampel">
+                <Ibox title="Registrasi Sampel">
                     <form @submit.prevent="submit" @keydown="form.onKeydown($event)">
                         <div class="form-group row mt-4">
-                            <label class="col-md-3 col-lg-2">
-                                Nomor Registrasi
-                                <span style="color:red">*</span>
-                            </label>
-                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_no') }">
-                                <input class="form-control" type="text" name="reg_no" placeholder="Nomor Registrasi"
-                                    required v-model="form.reg_no" disabled />
-                                <has-error :form="form" field="reg_no" />
-                            </div>
-                        </div>
-
-                        <div class="form-group row mt-4">
-                            <label class="col-md-3 col-lg-2">Kewarganegaraan <span style="color:red;">*</span></label>
+                            <label class="col-md-3 col-lg-2">Kewarganegaraan</label>
                             <div class="col-md-8 col-lg-6">
                                 <select v-model="form.reg_kewarganegaraan"
                                     :class="{ 'is-invalid':form.errors.has('reg_kewarganegaraan') }"
@@ -46,27 +34,20 @@
                             <label class="col-md-3 col-lg-2">Instansi Pengirim
                                 <span style="color:red">*</span>
                             </label>
-                            
-                            <div class="col-md-8 col-lg-6" :class="{'is-invalid':form.errors.has('reg_fasyankes_pengirim')}">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim"
-                                        id="fasyanrs" value="Rumah Sakit" v-model="form.reg_fasyankes_pengirim">
-                                    <label class="form-check-label" for="fasyanrs">Rumah Sakit</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim"
-                                        id="fasyandinkes" value="Dinkes" v-model="form.reg_fasyankes_pengirim">
-                                    <label class="form-check-label" for="fasyandinkes">Dinkes</label>
-                                </div>
-                                <has-error :form="form" field="reg_fasyankes_pengirim"/>
+                            <div class="col-md-8 col-lg-6" :class="{'is-invalid':form.errors.has('reg_instansi_pengirim')}">
+                                <input class="form-control" type="text" name="reg_instansi_pengirim" placeholder="" required
+                                    v-model="form.reg_instansi_pengirim" />
+                                <has-error :form="form" field="reg_instansi_pengirim" />
                             </div>
                         </div>
 
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">Nama Rumah Sakit / Fasyankes
-                                <span style="color:red">*</span> </label>
-                            <div class="col-md-8 col-lg-6" :class="{'is-invalid':form.errors.has('reg_nama_rs')}">
-                                <v-select :options="optFasyankes" label="nama" :value="form.reg_fasyankes_id" v-model="form.reg_nama_rs"></v-select>
+                                 </label>
+                            <div class="col-md-8 col-lg-6" :class="{'is-invalid':form.errors.has('reg_instansi_pengirim_nama')}">
+                                <input class="form-control" type="text" name="reg_instansi_pengirim_nama" placeholder="" required
+                                    v-model="form.reg_instansi_pengirim_nama" />
+                                <has-error :form="form" field="reg_instansi_pengirim_nama" />
                             </div>
                         </div>
                         
@@ -145,7 +126,7 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
                                 Jenis Kelamin
-                                <span style="color:red">*</span>
+                                
                             </label>
                             <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline"
@@ -176,7 +157,7 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
                                 No. Telp / HP
-                                <span style="color:red">*</span>
+                                
                             </label>
                             <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_nohp') }">
                                 <input class="form-control" type="text" name="reg_nohp" placeholder="" required
@@ -188,7 +169,7 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
                                 Kota / Kabupaten
-                                <span style="color:red">*</span>
+                                
                             </label>
                             <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kota') }">
                                 <select class="form-control" type="text" name="reg_kota" placeholder="" required
@@ -233,7 +214,7 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
                                 Alamat
-                                <span style="color:red">*</span>
+                                
                             </label>
                             <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_alamat') }">
                                 <textarea class="multisteps-form__input form-control" type="text" name="reg_alamat"
@@ -374,9 +355,12 @@
                  optFasyankes:[],
                 form: new Form({
                     reg_no: null,
+                    reg_instansi_pengirim:null,
+                    reg_instansi_pengirim_nama:null,
                     reg_fasyankes_pengirim:null,
                     reg_nama_rs_lainnya:null,
                     reg_fasyankes_id: null,
+                    reg_fasyankes_nama:null,
                     reg_kewarganegaraan: null,
                     reg_nama_pasien: null,
                     reg_nik: null,
@@ -448,8 +432,11 @@
                 this.form = new Form({
                     reg_no: null,
                     reg_fasyankes_pengirim:null,
+                    reg_instansi_pengirim:null,
+                    reg_instansi_pengirim_nama:null,
                     reg_nama_rs_lainnya:null,
                     reg_fasyankes_id: null,
+                    reg_fasyankes_nama:null,
                     reg_kewarganegaraan: null,
                     reg_nama_pasien: null,
                     reg_nik: null,
@@ -518,7 +505,7 @@
             async submit() {
                 // Submit the form.
                 try {
-                    const response = await this.form.post("/v1/register/WebSatelit");
+                    const response = await this.form.post("/v1/register/sampel");
                     this.$toast.success(response.data.message, {
                         icon: 'check',
                         iconPack: 'fontawesome',

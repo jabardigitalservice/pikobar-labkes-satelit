@@ -11,7 +11,7 @@ use App\Models\Sampel;
 use DateTime;
 use App\Exports\RegisMandiriExport;
 
-class RegistrasiWebSatelit extends Controller
+class Registrasisampel extends Controller
 { 
     public function getData(Request $request)
     {
@@ -109,10 +109,10 @@ class RegistrasiWebSatelit extends Controller
                     break;
             }
         }
-        $models = $models->select('register.nomor_register','pasien.*','kota.nama as nama_kota',
+        $models = $models->select('pasien.*','kota.nama as nama_kota',
         'register.created_at as tgl_input','pasien_register.*','register.sumber_pasien',
         'register.jenis_registrasi','register.dinkes_pengirim','register.sumber_pasien','register.nama_rs',
-        'register.other_nama_rs');
+        'register.other_nama_rs','register.instansi_pengirim');
         $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
 
         foreach($models as &$model) {

@@ -98,7 +98,7 @@ class PenggunaController extends Controller
                 Rule::unique('users')->ignore($id, 'id')
             ],
             'role_id' => 'required',
-            'password' => 'sometimes|min:6|confirmed',
+            'password' => 'sometimes|confirmed',
         ]);
 
         // dd($id);

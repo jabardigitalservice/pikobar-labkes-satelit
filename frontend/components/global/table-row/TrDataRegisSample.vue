@@ -1,7 +1,6 @@
 <template>
     <tr>
         <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
-        <td>{{item.nomor_register}}</td>
         <td>
             <p><b>NIK Pasien : </b>{{ item.nik }}</p>
             <p><b>Nama Pasien : </b>{{ item.nama_lengkap }}</p>
@@ -11,7 +10,7 @@
             {{item.nama_kota}}
         </td>
         <td>
-            {{item.sumber_pasien}}
+            {{item.instansi_pengirim}}
         </td>
         <td>
             <span class="badge badge-success mr-2" style="text-align:left;margin-bottom:10px" v-for="s in item.samples" :key="s"># {{s.nomor_sampel}} <br>
@@ -26,8 +25,8 @@
             <p class="badge badge-primary" v-if="(item.nik!=null && item.nik!='') && (item.nama_lengkap!=null && item.nama_lengkap!='')">data_lengkap</p>
         </td>
         <td v-if="config.has_action">
-            <nuxt-link :to="`/registrasi/mandiri/detail/${item.register_id}/${item.pasien_id}`" class="mb-1 btn btn-success btn-sm"><i class="fa fa-eye"></i></nuxt-link>
-            <nuxt-link :to="`/registrasi/mandiri/update/${item.register_id}/${item.pasien_id}`" class="mb-1 btn btn-primary btn-sm"><i class="fa fa-edit"></i></nuxt-link>
+            <nuxt-link :to="`/registrasi/sampel/detail/${item.register_id}/${item.pasien_id}`" class="mb-1 btn btn-success btn-sm"><i class="fa fa-eye"></i></nuxt-link>
+            <nuxt-link :to="`/registrasi/sampel/update/${item.register_id}/${item.pasien_id}`" class="mb-1 btn btn-primary btn-sm"><i class="fa fa-edit"></i></nuxt-link>
             <a href="#" class="mb-1 btn btn-danger btn-sm" @click="deleteData(item.register_id, item.pasien_id)"><i class="fa fa-trash"></i></a>
         </td>
     </tr>
@@ -42,7 +41,7 @@ export default {
     },
     methods: {
         async deleteData(id, pasien){
-            await axios.delete('v1/register/mandiri/'+id+'/'+pasien)
+            await axios.delete('v1/register/sampel/'+id+'/'+pasien)
                 .then((response)=>{
                     this.$toast.success(response.data.message, {
                         icon: 'check',
@@ -50,7 +49,7 @@ export default {
                         duration: 5000
                     })
 
-                    this.$bus.$emit('refresh-ajaxtable', 'registrasi-mandiri')
+                    this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel')
                 })
                 .catch((error)=>{
                     this.$swal.fire(

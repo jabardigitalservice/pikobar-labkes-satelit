@@ -33,6 +33,24 @@
           </router-link>
         </li>
         <li v-if="checkPermission('registrasi')">
+          <router-link to="/registrasi/sampel" tag="a">
+            <i class="uil-user-square fa-fw"></i>
+            <span class="nav-label">Registrasi</span>
+          </router-link>
+        </li>
+        <li v-if="checkPermission('pcr')">
+          <router-link to="/pcr/list-pcr" tag="a">
+            <i class="uil-atom fa-fw"></i>
+            <span class="nav-label">Input Hasil</span>
+          </router-link>
+        </li>
+        <li v-if="checkPermission('pcr')">
+          <router-link to="/pcr/list-pcr" tag="a">
+            <i class="uil-check fa-fw"></i>
+            <span class="nav-label">Hasil Pemeriksaan</span>
+          </router-link>
+        </li>
+        <!-- <li v-if="checkPermission('registrasi')">
           <a href="#">
             <i class="uil-user-square fa-fw"></i>
             <span class="nav-label">Registrasi</span>
@@ -40,29 +58,19 @@
           </a>
           <ul class="nav nav-second-level collapse">
             <li>
-              <router-link to="/registrasi/mandiri" tag="a">
-                Registrasi Mandiri (L)
-              </router-link>
-            </li>
-            <li>
-              <router-link to="/registrasi/rujukan" tag="a">
-                Registrasi Rujukan (R)
-              </router-link>
-            </li>
-            <li>
-              <router-link to="/registrasi/WebSatelit" tag="a">
-                Registrasi Web Satelit (L)
+              <router-link to="/registrasi/sampel" tag="a">
+                Registrasi Sampel
               </router-link>
             </li>
           </ul>
-        </li>
-        <li v-if="checkPermission('sample')">
+        </li> -->
+        <!-- <li v-if="checkPermission('sample')">
           <router-link to="/sample" tag="a">
             <i class="uil-flask-potion fa-fw"></i>
             <span class="nav-label">Pengambilan Sample</span>
           </router-link>
-        </li>
-        <li v-if="checkPermission('ekstraksi')">
+        </li> -->
+        <!-- <li v-if="checkPermission('ekstraksi')">
           <a href="#">
             <i class="uil-flask fa-fw"></i>
             <span class="nav-label">Ekstraksi</span>
@@ -95,25 +103,25 @@
               </router-link>
             </li>
           </ul>
-        </li>
-        <li v-if="checkPermission('pcr')">
+        </li> -->
+        <!-- <li v-if="checkPermission('pcr')">
           <a href="#">
             <i class="uil-atom fa-fw"></i>
-            <span class="nav-label">Pemeriksaan RT-PCR</span>
+            <span class="nav-label">Hasil Pemeriksaan</span>
             <span class="fa arrow"></span>
           </a>
-          <ul class="nav nav-second-level collapse">
-            <li>
+          <ul class="nav nav-second-level collapse"> -->
+            <!-- <li>
               <router-link to="/pcr/list-rna" tag="a">
                 Penerimaan RNA
               </router-link>
-            </li>
-            <li>
+            </li> -->
+            <!-- <li>
               <router-link to="/pcr/list-pcr" tag="a">
-                List PCR
+                Input Hasil
               </router-link>
-            </li>
-            <li>
+            </li> -->
+            <!-- <li>
               <router-link to="/pcr/list-hasil-pemeriksaan" tag="a">
                 List Hasil Pemeriksaan
               </router-link>
@@ -122,10 +130,10 @@
               <router-link to="/pcr/list-hasil-inkonklusif" tag="a">
                 List Sampel Invalid
               </router-link>
-            </li>
-          </ul>
-        </li>
-        <li v-if="checkPermission('verifikasi')">
+            </li> -->
+          <!-- </ul> -->
+        <!-- </li> -->
+        <!-- <li v-if="checkPermission('verifikasi')">
           <a href="#">
             <i class="uil-eye fa-fw"></i>
             <span class="nav-label">Verifikasi</span>
@@ -168,7 +176,7 @@
             <i class="uil-search-alt fa-fw"></i>
             <span class="nav-label">Pelacakan Sampel</span>
           </router-link>
-        </li>
+        </li> -->
         <li v-if="checkPermission('master')">
           <a href="#">
             <i class="uil-database-alt fa-fw"></i>
@@ -213,7 +221,7 @@ export default {
       var allow_role_id
       switch (menu) {
         case 'registrasi':
-          allow_role_id = [1, 6, 7, 2]
+          allow_role_id = [1, 6, 7, 2, 8]
           break;
         case 'sample':
           allow_role_id = [1, 6, 7, 3]
