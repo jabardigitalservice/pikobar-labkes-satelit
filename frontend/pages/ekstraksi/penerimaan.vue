@@ -36,6 +36,7 @@
                     }"
                 :rowtemplate="'tr-ekstraksi-penerimaan'"
                 :columns="{
+                      checkbox_sampel_id: '#',
                       nomor_register: 'Nomor Register',
                       nomor_sampel : 'Nomor Sampel',
                       jenis_sampel_nama : 'Jenis Sampel',
@@ -55,6 +56,7 @@
 export default {
   middleware: "auth",
   data() {
+
     return {
       params1: {
         sampel_status: 'sample_taken'

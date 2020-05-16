@@ -359,7 +359,12 @@ class EkstraksiController extends Controller
 
             $sampel->lab_pcr_id = $request->lab_pcr_id;
             $sampel->lab_pcr_nama = $lab_pcr->id == 999999 ? $request->lab_pcr_nama : $lab_pcr->nama;
-            $sampel->waktu_extraction_sample_sent = date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_pengiriman_rna . ' ' .$ekstraksi->jam_pengiriman_rna));
+
+            $tanggalKirim = Carbon::parse($ekstraksi->tanggal_pengiriman_rna)->format('Y-m-d');
+
+            $sampel->waktu_extraction_sample_sent = Carbon::parse($tanggalKirim.' '.$ekstraksi->jam_pengiriman_rna)->format('Y-m-d H:i:s');
+            // $sampel->waktu_extraction_sample_sent = date('Y-m-d H:i:s', strtotime($ekstraksi->tanggal_pengiriman_rna . ' ' .$ekstraksi->jam_pengiriman_rna));
+            
             $sampel->updateState('extraction_sample_sent', [
                 'user_id' => $user->id,
                 'metadata' => $ekstraksi,

@@ -2,6 +2,15 @@
     <tr>
         <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
         <td>
+            <input 
+                type="checkbox" class="form-control checkbox-ekstraksi-penerimaan" 
+                v-bind:value="item.nomor_sampel" 
+                v-bind:id="'selected-sampel-'+item.id" 
+                v-model="checked" 
+                v-on:change="sampelOnChangeSelect(item.nomor_sampel)"
+            >
+        </td>
+        <td>
             {{item.nomor_register}}
         </td>
         <td>
@@ -43,6 +52,7 @@ export default {
     data() {
         return {
             loading: false,
+            checked: false,
         }
     },
     methods: {
@@ -104,6 +114,23 @@ export default {
         }
       })
     },
+    sampelOnChangeSelect(nomorSampel){
+        if (this.checked) {                
+            this.$store.commit('ekstraksi_penerimaan/add', nomorSampel)
+            // console.log(this.$store.state.validasi.selectedSampels);
+            
+        }
+
+        if (!this.checked) {
+            this.$store.commit('ekstraksi_penerimaan/remove', nomorSampel)
+        }
+    }
     }
 }
 </script>
+
+<style scoped>
+    .checkbox-ekstraksi-penerimaan{
+        transform: scale(1.7);
+    }
+</style>

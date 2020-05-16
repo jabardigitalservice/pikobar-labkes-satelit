@@ -14,7 +14,8 @@
           <sample-picker v-model="form.samples"
             ref="sample_picker"
             sampel-status="extraction_sample_extracted"
-            title="Daftar Sampel yang Akan Dikirim"
+            title="Daftar Sampel yang Akan Dikirim" 
+            :selectedNomorSampels="selectedNomorSampels"
           ></sample-picker>
         </div>
         <div class="col-md-6">
@@ -145,6 +146,9 @@ export default {
     lab_pcr: "options/lab_pcr",
   }),
   data() {
+
+		let selectedNomorSampels = this.$store.state.ekstraksi_dilakukan.selectedSampels;
+
     return {
       form: new Form({
         tanggal_pengiriman_rna: new Date(),
@@ -155,6 +159,7 @@ export default {
         lab_pcr_nama: "",
         samples: []
       }),
+      selectedNomorSampels,
       loading: false,
     };
   },
@@ -197,6 +202,10 @@ export default {
         }
         this.loading = true;
         const response = await this.form.post("/v1/ekstraksi/kirim");
+
+        // Clear selected sampels
+        this.$store.commit('ekstraksi_dilakukan/clear');
+
         this.$toast.success(response.data.message, {
           icon: "check",
           iconPack: "fontawesome",

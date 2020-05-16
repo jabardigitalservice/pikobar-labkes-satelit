@@ -15,7 +15,8 @@
             :disable-input="staticInput"
             ref="sample_picker"
             sampel-status="extraction_sample_sent"
-            title="Daftar Sampel RNA yang Diterima"
+            title="Daftar Sampel RNA yang Diterima" 
+            :selectedNomorSampels="selectedNomorSampels"
           ></sample-picker>
         </div>
         <div class="col-md-6">
@@ -181,6 +182,7 @@ export default {
     SamplePicker,
   },
   data() {
+		let selectedNomorSampels = this.$store.state.pcr_penerimaan.selectedSampels;
     return {
       staticInput: false,
       form: new Form({
@@ -197,7 +199,8 @@ export default {
         samples: [],
       }),
       loading: false,
-      input_nomor_sampel: ""
+      input_nomor_sampel: "",
+      selectedNomorSampels
     };
   },
   head() {
@@ -237,6 +240,10 @@ export default {
         }
         this.loading = true
         const response = await this.form.post("/v1/pcr/terima");
+
+        // Clear selected sampels
+        this.$store.commit('pcr_penerimaan/clear');
+
         this.$toast.success(response.data.message, {
           icon: "check",
           iconPack: "fontawesome",
