@@ -77,12 +77,12 @@ class RegistersampelController extends Controller
         //     echo "$rows[nomor]";
         // }
         // return Str::uuid();
-        // $nomor_register = $request->input('reg_no');
-        // if (Register::where('nomor_register', $nomor_register)->exists()) {
-        //     $nomor_register = $this->generateNomorRegister();
-        // }
+        $nomor_register = $request->input('reg_no');
+        if (Register::where('nomor_register', $nomor_register)->exists()) {
+            $nomor_register = $this->generateNomorRegister();
+        }
         $register = Register::create([
-            'nomor_register'=> null,
+            'nomor_register'=> $nomor_register,
             'fasyankes_id'=> null,
             'nomor_rekam_medis'=> null,
             'nama_dokter'=> null,
