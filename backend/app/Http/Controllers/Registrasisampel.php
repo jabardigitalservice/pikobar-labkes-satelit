@@ -10,6 +10,7 @@ use App\Models\PengambilanSampel;
 use App\Models\Sampel;
 use DateTime;
 use App\Exports\RegisMandiriExport;
+use Illuminate\Support\Facades\Auth;
 
 class Registrasisampel extends Controller
 { 
@@ -29,7 +30,10 @@ class Registrasisampel extends Controller
                    ->orWhere('pasien.nik','ilike','%'.$search.'%');
             });
         }
-        // $models->where('lab_satelit_id',$request->lab_satelit_id);
+        if (Auth::user()->lab_satelit_id !=null) {
+            $models->where('lab_satelit_id',Auth::user()->lab_satelit_id);
+        }
+        
         if ($params) {
             foreach (json_decode($params) as $key => $val) {
                 if ($val == '') continue;
