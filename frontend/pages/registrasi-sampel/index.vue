@@ -1,7 +1,7 @@
 <template>
       <div class="wrapper wrapper-content">
         <portal to="title-name">
-          Registrasi Web Satelit
+          Registrasi Sampel
         </portal>
         <portal to="title-action">
           <div class="title-action">

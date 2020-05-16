@@ -11,7 +11,7 @@
             </div>
         </div>
 
-        <div class="form-group row">
+        <!-- <div class="form-group row">
             <div class="col-md-2">
                 <label for="nama_pasien">Nomor Register</label>
             </div>
@@ -19,7 +19,7 @@
                 <input type="text" name="nomor_register" v-model="params.nomor_register" id="" class="form-control"
                     placeholder="Nomor Register">
             </div>
-        </div>
+        </div> -->
 
         <div class="form-group row">
             <div class="col-md-2">
