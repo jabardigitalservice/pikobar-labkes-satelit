@@ -83,7 +83,7 @@ const routes = [
 
     { path: '/pcr/list-rna', name: 'pcr.list-rna', component: page('pcr/list-rna.vue'), meta: { parentName: 'home' } },
     { path: '/pcr/tambah', name: 'pcr.tambah', component: page('pcr/tambah.vue'), meta: { parentName: 'home' } },
-    { path: '/pcr/list-pcr', name: 'pcr.list-pcr', component: page('pcr/list-pcr.vue'), meta: { parentName: 'home' } },
+    { path: '/input-hasil/list-input-hasil', name: 'pcr.list-pcr', component: page('pcr/list-pcr.vue'), meta: { parentName: 'home' } },
     { path: '/pcr/list-hasil-pemeriksaan', name: 'pcr.list-hasil-pemeriksaan', component: page('pcr/list-hasil-pemeriksaan.vue'), meta: { parentName: 'home' } },
     { path: '/pcr/list-hasil-inkonklusif', name: 'pcr.list-hasil-inkonklusif', component: page('pcr/list-hasil-inkonklusif.vue'), meta: { parentName: 'home' } },
     { path: '/pcr/terima/:nomor_sampels?', name: 'pcr.terima', component: page('pcr/terima.vue'), meta: { parentName: 'pcr.list-rna' } },

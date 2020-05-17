@@ -28,13 +28,13 @@ class HasilPemeriksaanImport implements ToCollection, WithHeadingRow
                 if (!$row->get('no')) {
                     continue;
                 }
-                $sampel = Sampel::where('nomor_sampel',$row->get('no_sample'))->first();
+                $sampel = Sampel::where('nomor_sampel',$row->get('kode_sampel'))->first();
                 if (!$sampel) {
-                    $this->addError($key, "Nomor sampel '".$row->get('no_sample')."' tidak ditemukan");
+                    $this->addError($key, "Nomor sampel '".$row->get('kode_sampel')."' tidak ditemukan");
                 } else if ($sampel->sampel_status == 'extraction_sample_sent') {
-                    $this->addError($key, "Nomor sampel '".$row->get('no_sample')."' belum diterima di Lab PCR. Mohon diterima terlebih dahulu. ");
-                } else if ($sampel->sampel_status != 'pcr_sample_received') {
-                    $this->addError($key, "Nomor sampel '".$row->get('no_sample')."' masih pada status " . $sampel->status->deskripsi);
+                    $this->addError($key, "Nomor sampel '".$row->get('kode_sampel')."' belum diterima di Lab PCR. Mohon diterima terlebih dahulu. ");
+                } else if ($sampel->sampel_status != 'sample_taken') {
+                    $this->addError($key, "Nomor sampel '".$row->get('kode_sampel')."' masih pada status " . $sampel->status->deskripsi);
                 }
                 if (empty($row->get('interpretasi'))) {
                     $this->addError($key, "Interpretasi kosong");
@@ -50,15 +50,16 @@ class HasilPemeriksaanImport implements ToCollection, WithHeadingRow
                         ];
                     }
                 }
-                if (is_integer($data['tanggal_periksa'])) {
-                    $data['tanggal_periksa'] = gmdate("Y-m-d",($data['tanggal_periksa'] - 25569) * 86400);
+                if (is_integer($data['tanggal_periksaan'])) {
+                    $data['tanggal_pemeriksaan'] = gmdate("Y-m-d",($data['tanggal_periksaan'] - 25569) * 86400);
                 }
                 $this->data[] = [
                     'no' => $data['no'],
-                    'nomor_sampel' => $data['no_sample'],
+                    'nomor_sampel' => $data['kode_sampel'],
                     'sampel_id' => $sampel ? $sampel->id : null,
                     'kesimpulan_pemeriksaan' => strtolower($data['interpretasi']),
-                    'tanggal_input_hasil' => $data['tanggal_periksa'],
+                    'tanggal_input_hasil' => $data['tanggal_pemeriksaan'],
+                    'nama_kit_pemeriksaan' => $data['kit_pemeriksaan'],
                     'target_gen' => $data_ct,
                 ];
             }

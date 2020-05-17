@@ -43,7 +43,7 @@
     },
     "pcr": {
       "list-rna": "Daftar Penerimaan Sampel RNA",
-      "list-pcr": "Daftar PCR",
+      "list-pcr": "Daftar Input Hasil",
       "detail": "Detail PCR",
       "input": "Input Analisa",
       "list-hasil-pemeriksaan": "Hasil Pemeriksaan",

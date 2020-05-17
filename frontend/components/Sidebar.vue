@@ -39,13 +39,13 @@
           </router-link>
         </li>
         <li v-if="checkPermission('pcr')">
-          <router-link to="/pcr/list-pcr" tag="a">
+          <router-link to="/input-hasil/list-input-hasil" tag="a">
             <i class="uil-atom fa-fw"></i>
             <span class="nav-label">Input Hasil</span>
           </router-link>
         </li>
         <li v-if="checkPermission('pcr')">
-          <router-link to="/pcr/list-pcr" tag="a">
+          <router-link to="/input-hasil/list-input-hasil" tag="a">
             <i class="uil-check fa-fw"></i>
             <span class="nav-label">Hasil Pemeriksaan</span>
           </router-link>

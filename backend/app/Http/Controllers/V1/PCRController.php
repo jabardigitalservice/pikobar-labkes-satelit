@@ -22,7 +22,9 @@ class PCRController extends Controller
     public function getData(Request $request)
     {
         $user = $request->user();
-        $models = Sampel::query();
+        $models = Sampel::leftJoin('pasien_register','sampel.register_id','pasien_register.register_id')
+                          ->leftJoin('pasien','pasien_register.pasien_id','pasien_id')
+                          ->leftJoin('register','register.id','pasien_register.register_id');
         $params = $request->get('params',false);
         $search = $request->get('search',false);
         $order  = $request->get('order' ,'name');
@@ -33,63 +35,64 @@ class PCRController extends Controller
                    ->orWhere('nomor_sampel','ilike','%'.$search.'%');
             });
         }
-        if ($params) {
-            $params = json_decode($params, true);
-            foreach ($params as $key => $val) {
-                if ($val !== false && ($val == '' || is_array($val) && count($val) == 0)) continue;
-                switch ($key) {
-                    case 'filter_inconclusive':
-                        if ($val) {
-                            $models->whereHas('pcr', function($q) {
-                                $q->where('kesimpulan_pemeriksaan', 'inkonklusif');
-                            });
-                        } else {
-                            $models->where(function ($qr) {
-                                $qr->whereHas('pcr', function($q) {
-                                    $q->where('kesimpulan_pemeriksaan', '<>', 'inkonklusif')->orWhereNull('kesimpulan_pemeriksaan');
-                                })->orWhereDoesntHave('pcr');
-                            });
-                        }
-                        break;
-                    case 'lab_pcr_id':
-                        $models->where('lab_pcr_id', $val);
-                        if ($val == 999999) {
-                            if (isset($params['lab_pcr_nama']) && !empty($params['lab_pcr_nama'])) {
-                                $models->where('lab_pcr_nama', 'ilike', '%'.$params['lab_pcr_nama'].'%');
-                            }
-                        }
-                        break;
-                    case 'kesimpulan_pemeriksaan':
-                        $models->whereHas('pcr', function($q) use ($val) {
-                            $q->where('kesimpulan_pemeriksaan', $val);
-                        });
-                        break;
-                    case 'sampel_status':
-                        if ($val == 'analyzed') {
-                            $models->whereIn('sampel_status', [
-                                'pcr_sample_analyzed',
-                                'sample_verified',
-                                'sample_valid',
-                            ]);
-                            $models->with(['pcr','status']);
-                        } else {
-                            $models->where('sampel_status', $val);
-                        }
-                        break;
-                    case 'waktu_pcr_sample_analyzed':
-                        $tgl = date('Y-m-d', strtotime($val));
-                        $models->whereBetween('waktu_pcr_sample_analyzed', [$tgl.' 00:00:00',$tgl.' 23:59:59']);
-                        break;
-                    case 'is_musnah_pcr':
-                        $models->where('is_musnah_pcr', $val == 'true' ? true : false);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-        if (!empty($user->lab_pcr_id)) {
-            $models->where('lab_pcr_id', $user->lab_pcr_id);
+        // if ($params) {
+        //     $params = json_decode($params, true);
+        //     foreach ($params as $key => $val) {
+        //         if ($val !== false && ($val == '' || is_array($val) && count($val) == 0)) continue;
+        //         switch ($key) {
+        //             case 'filter_inconclusive':
+        //                 if ($val) {
+        //                     $models->whereHas('pcr', function($q) {
+        //                         $q->where('kesimpulan_pemeriksaan', 'inkonklusif');
+        //                     });
+        //                 } else {
+        //                     $models->where(function ($qr) {
+        //                         $qr->whereHas('pcr', function($q) {
+        //                             $q->where('kesimpulan_pemeriksaan', '<>', 'inkonklusif')->orWhereNull('kesimpulan_pemeriksaan');
+        //                         })->orWhereDoesntHave('pcr');
+        //                     });
+        //                 }
+        //                 break;
+        //             case 'lab_pcr_id':
+        //                 $models->where('lab_pcr_id', $val);
+        //                 if ($val == 999999) {
+        //                     if (isset($params['lab_pcr_nama']) && !empty($params['lab_pcr_nama'])) {
+        //                         $models->where('lab_pcr_nama', 'ilike', '%'.$params['lab_pcr_nama'].'%');
+        //                     }
+        //                 }
+        //                 break;
+        //             case 'kesimpulan_pemeriksaan':
+        //                 $models->whereHas('pcr', function($q) use ($val) {
+        //                     $q->where('kesimpulan_pemeriksaan', $val);
+        //                 });
+        //                 break;
+        //             case 'sampel_status':
+        //                 if ($val == 'analyzed') {
+        //                     $models->whereIn('sampel_status', [
+        //                         'pcr_sample_analyzed',
+        //                         'sample_verified',
+        //                         'sample_valid',
+        //                         'sample_taken'
+        //                     ]);
+        //                     $models->with(['pcr','status']);
+        //                 } else {
+        //                     $models->where('sampel_status', $val);
+        //                 }
+        //                 break;
+        //             case 'waktu_pcr_sample_analyzed':
+        //                 $tgl = date('Y-m-d', strtotime($val));
+        //                 $models->whereBetween('waktu_pcr_sample_analyzed', [$tgl.' 00:00:00',$tgl.' 23:59:59']);
+        //                 break;
+        //             case 'is_musnah_pcr':
+        //                 $models->where('is_musnah_pcr', $val == 'true' ? true : false);
+        //                 break;
+        //             default:
+        //                 break;
+        //         }
+        //     }
+        // }
+        if (!empty($user->lab_satelit_id)) {
+            $models->where('lab_satelit_id', $user->lab_satelit_id);
         }
         $count = $models->count();
 
@@ -444,6 +447,7 @@ class PCRController extends Controller
 
     public function importDataHasilPemeriksaan(Request $request)
     {
+        
         $user = $request->user();
         $data = $request->data;
         foreach ($data as $row) {
@@ -456,6 +460,7 @@ class PCRController extends Controller
                     $pcr->user_id = $user->id;
                 }
                 $pcr->tanggal_input_hasil = $row['tanggal_input_hasil'];
+                $pcr->nama_kit_pemeriksaan = $row['nama_kit_pemeriksaan'];
                 $pcr->jam_input_hasil = '12:00';
                 $pcr->catatan_pemeriksaan = '';
                 $pcr->grafik = [];
@@ -475,7 +480,7 @@ class PCRController extends Controller
                         'metadata' => $pcr,
                         'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
                     ]);
-                    $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s');
+                    $sampel->waktu_sample_taken = date('Y-m-d H:i:s');
                     $sampel->save();
                 }
             }
