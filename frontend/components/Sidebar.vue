@@ -35,7 +35,7 @@
         <li v-if="checkPermission('registrasi')">
           <router-link to="/registrasi/sampel" tag="a">
             <i class="uil-user-square fa-fw"></i>
-            <span class="nav-label">Registrasi</span>
+            <span class="nav-label">Registrasi Sampel</span>
           </router-link>
         </li>
         <li v-if="checkPermission('pcr')">
