@@ -5,7 +5,7 @@
         </portal>
         <portal to="title-action">
           <div class="title-action">
-            <nuxt-link to="/pengguna" class="btn btn-primary">List Pengguna</nuxt-link>
+            <nuxt-link to="/pcr/list-pcr" class="btn btn-primary">List PCR</nuxt-link>
           </div>
         </portal>
         <div class="row">
