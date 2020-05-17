@@ -97,7 +97,7 @@ export default {
         
         // this.$toast.show('Importing in...')
 
-        await axios.post(process.env.apiUrl + "/v1/register/import-mandiri", formData, {
+        await axios.post(process.env.apiUrl + "/v1/register/import-sampel", formData, {
           headers: {
                 'Content-Type': 'multipart/form-data'
             }

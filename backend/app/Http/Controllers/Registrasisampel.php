@@ -18,7 +18,6 @@ class Registrasisampel extends Controller
     {
         $models = PasienRegister::leftJoin('register','register.id','pasien_register.register_id')
                     ->leftJoin('pasien','pasien.id','pasien_register.pasien_id')
-                    ->leftJoin('fasyankes','fasyankes.id','register.fasyankes_id')
                     ->leftJoin('kota','kota.id','pasien.kota_id');
         $params = $request->get('params',false);
         $search = $request->get('search',false);
@@ -31,7 +30,7 @@ class Registrasisampel extends Controller
             });
         }
         if (Auth::user()->lab_satelit_id !=null) {
-            $models->where('lab_satelit_id',Auth::user()->lab_satelit_id);
+            $models->where('registrasi.lab_satelit_id',Auth::user()->lab_satelit_id);
         }
         
         if ($params) {
@@ -41,8 +40,8 @@ class Registrasisampel extends Controller
                     case "nama_pasien": 
                         $models = $models->where('pasien.nama_lengkap','ilike','%'.$val.'%');
                     break;
-                    case "nomor_register":
-                        $models = $models->where('register.nomor_register','ilike','%'.$val.'%');
+                    case "nik":
+                        $models = $models->where('pasien.nik','ilike','%'.$val.'%');
                     break;
                     case "nomor_sampel":
                         $sampel = Sampel::where('nomor_sampel',$val)->pluck('register_id');
@@ -54,21 +53,11 @@ class Registrasisampel extends Controller
                     case "end_date":
                         $models = $models->where('register.created_at','<=',$val);
                     break;
-                    case "sumber_pasien":
-                        $models = $models->where('register.sumber_pasien',$val);
-                    break;
-                    case "sumber_sampel":
-                        $models = $models->where('register.nama_rs',$val);
-                        // $sampel = PengambilanSampel::where('sumber_sampel',$val)
-                        //         ->leftJoin('sampel','sampel.pengambilan_sampel_id','pengambilan_sampel.id')->pluck('sampel.nomor_register');
-                        // // $sampel = Sampel::where('sumber_sampel',$val)->pluck('register_id');
-                        // $models = $models->whereIn('register.nomor_register',$sampel);
-                    break;
-                    case "other_nama_rs":
-                        $models = $models->where('register.other_nama_rs','ilike','%'.$val.'%');
-                    break;
                     case "kota":
                         $models = $models->where('kota.id',$val);
+                    break;
+                    case "instansi_pengirim":
+                        $models = $models->where('register.instansi_pengirim',$val);
                     break;
                     default:
                         $models = $models->where($key,$val);

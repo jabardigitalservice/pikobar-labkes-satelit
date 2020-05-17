@@ -11,17 +11,17 @@
             </div>
         </div>
 
-        <!-- <div class="form-group row">
+        <div class="form-group row">
             <div class="col-md-2">
-                <label for="nama_pasien">Nomor Register</label>
+                <label for="nama_pasien">NIK</label>
             </div>
             <div class="col-md-4">
-                <input type="text" name="nomor_register" v-model="params.nomor_register" id="" class="form-control"
-                    placeholder="Nomor Register">
+                <input type="text" name="nik" v-model="params.nik" id="" class="form-control"
+                    placeholder="NIK">
             </div>
-        </div> -->
+        </div>
 
-        <div class="form-group row">
+        <!-- <div class="form-group row">
             <div class="col-md-2">
                 <label for="nama_pasien">Nomor Sampel</label>
             </div>
@@ -29,7 +29,7 @@
                 <input type="text" name="nomor_sampel" v-model="params.nomor_sampel" id="" class="form-control"
                     placeholder="Scan / Ketik No. Sampel">
             </div>
-        </div>
+        </div> -->
 
         <div class="form-group row">
             <div class="col-md-2">
@@ -115,6 +115,16 @@
         </div>
 
         <div class="form-group row">
+            <div class="col-md-2">
+                <label for="nama_pasien">Instansi Pengirim</label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="params.instansi_pengirim" v-model="params.instansi_pengirim" id="" class="form-control"
+                    placeholder="Instansi Pengirim">
+            </div>
+        </div>
+
+        <div class="form-group row">
             <div class="col-md-12 text-left">
                 <button class="btn btn-primary" style="width:200px;margin-top:20px" @click="doFilter"><i
                         class="fa fa-eye"></i> Filter</button>
@@ -134,19 +144,15 @@
             return {
                 optFasyankes:[],
                 params: {
-                    jenis_registrasi: null,
                     nama_pasien: null,
-                    nomor_register: null,
+                    instansi_pengirim:null,
+                    nik: null,
                     nomor_sampel: null,
                     start_date: null,
                     end_date: null,
                     sumber_pasien: null,
                     sumber_sampel: null,
                     kota: null,
-                    other_nama_rs: null,
-                    reg_fasyankes_pengirim:null,
-                    reg_fasyankes_id:null,
-                    nama_rs_lainnya:null
                 },
                 optionKota: []
             }

@@ -96,7 +96,7 @@ export const actions = {
   async fetchJenisSampel ({ commit }) {
     try {
       let resp = await axios.get('/jenis-sampel-option')
-
+      
       commit('FETCH_JENIS_SAMPEL_SUCCESS', resp.data)
     } catch (e) {
       this.$toast.error("Gagal memuat data opsi jenis sampel", {

@@ -10,10 +10,10 @@
     </portal>
     <div class="row">
       <div class="col-lg-12">
-        <Ibox :title="`Detail Register Pasien #${data?data.reg_no:null}`">
+        <Ibox :title="`Detail Register Sampel`">
           <template v-slot:tools>
             <button class="btn btn-xs btn-danger" @click="deleteData()"><i class="fa fa-trash"></i> Delete</button>
-            <nuxt-link tag="a" :to="`/registrasi/mandiri/update/${registerId}/${pasienId}`" class="btn btn-xs btn-warning"><i class="fa fa-pencil"></i> Edit</nuxt-link>
+            <nuxt-link tag="a" :to="`/registrasi/sampel/update/${registerId}/${pasienId}`" class="btn btn-xs btn-warning"><i class="fa fa-pencil"></i> Edit</nuxt-link>
           </template>
           <div class="container">
             <div class="row">
@@ -21,18 +21,18 @@
                 <h3 class="header-title mt-2 mb-2">Informasi Registrasi</h3>
                 <table class="table">
                   <tbody>
-                    <tr>
+                    <!-- <tr>
                       <td width="40%"><b>Nomor Registrasi</b></td>
                       <td width="60%">{{data?data.reg_no:null}}</td>
-                    </tr>
+                    </tr> -->
                      <tr>
                       <td width="40%"><b>Kewarganegaraan</b></td>
                       <td width="60%">{{data?data.reg_kewarganegaraan:null}}</td>
                     </tr>
-                     <tr>
+                     <!-- <tr>
                       <td width="40%"><b>Sumber Pasien</b></td>
                       <td width="60%">{{data?data.reg_sumberpasien:null}}</td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
               </div>
@@ -62,10 +62,10 @@
                       <td width="40%"><b>Tanggal Lahir</b></td>
                       <td width="60%">{{data.reg_tgllahir?data.reg_tgllahir.substr(0,10):''}}</td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                       <td width="40%"><b>Suhu</b></td>
                       <td width="60%">{{data?data.reg_suhu:null}}</td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
               </div>
@@ -119,29 +119,6 @@
                 </table>
 
               </div>
-
-              <div class="col-md-6">
-                <h3 class="header-title mt-2 mb-2">Riwayat Kunjungan</h3>
-                <table class="table">
-                  <tbody>
-                     <tr>
-                      <td width="40%"><b>Kunjungan Ke</b></td>
-                      <td width="60%">
-                        Ke-{{data?data.kunjungan_ke:null}}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Tanggal Kunjungan</b></td>
-                      <td width="60%">{{data?data.tanggal_kunjungan:null}}</td>
-                    </tr>
-                     <tr>
-                      <td width="40%"><b>Rumah Sakit / Fasyankes</b></td>
-                      <td width="60%">{{data?data.rs_kunjungan:null}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-              </div>
             </div>
             </div>
 
@@ -177,7 +154,7 @@
     },
     methods: {
       async deleteData(){
-        await axios.delete('v1/register/mandiri/'+id+'/'+pasien)
+        await axios.delete('v1/register/sampel/'+this.registerId+'/'+this.pasienId)
           .then((response)=>{
               this.$toast.success(response.data.message, {
                   icon: 'check',
@@ -185,8 +162,8 @@
                   duration: 5000
               })
 
-              this.$bus.$emit('refresh-ajaxtable', 'registrasi-mandiri')
-              this.$router.push('/registrasi/madiri')
+              this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel')
+              this.$router.push('/registrasi/sampel')
           })
           .catch((error)=>{
               this.$swal.fire(
