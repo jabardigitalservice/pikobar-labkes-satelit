@@ -21,4 +21,5 @@ Route::get('/', function() {
 		'App' => 'RESTfulAPI v0.1'
 	];
 });
+Route::post('import-hasil-lab','LabSatelitController@importHasil');
 Route::get('/grafik/{path}', 'V1\PCRController@getGrafik')->where('path', '(.*)')->name('grafik.url');

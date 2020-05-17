@@ -3,6 +3,10 @@
     <portal to="title-name">List PCR</portal>
     <portal to="title-action">
       <div class="title-action">
+        <router-link to="/pcr/tambah" class="btn btn-primary">
+          <i class="uil-plus"></i> Tambah
+        </router-link>
+
         <router-link to="/pcr/import-excel-hasil" class="btn btn-primary">
           <i class="uil-file-download"></i> Import Hasil Pemeriksaan
         </router-link>

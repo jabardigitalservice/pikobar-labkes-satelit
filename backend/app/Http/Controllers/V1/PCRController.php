@@ -487,4 +487,82 @@ class PCRController extends Controller
         ]);
     }
 
+    public function input_hasil_pemeriksaan(request $request)
+    {
+        $validator = \Validator::make($request->all(),[
+            'nama_kit_pemeriksaan'      => 'required',
+            'nomor_sampel'              => 'required',
+            'kesimpulan_pemeriksaan'    => 'required',
+            'tanggal_mulai_pemeriksaan' => 'required',
+            'ct_n'                      =>  'required',
+            'ct_e'                      =>  'required',
+            'ct_ic'                     =>  'required',
+            'ct_rdrp'                   =>  'required',
+            'catatan_pemeriksaan'       =>  'required',
+        ]);
+
+        if ($validator->validate()) {
+            $response['status_code']    = 404;
+            $response['message']        = "terjadi kesalah ketika melakukan import";
+            $response['result']         = $validator->messages();
+        }
+
+        $sampel = Sampel::where('nomor_sampel',$request->nomor_sampel)->first();
+        $user   = \App\User::first();
+
+        if($sampel!='')
+        {
+            $pcr = $sampel->pcr;
+            if (!$pcr) {
+                $pcr            = new PemeriksaanSampel;
+                $pcr->sampel_id = $sampel->id;
+                $pcr->user_id   = $user->id;
+            }
+
+            $target_gen = [];
+            $target_gen[] = ['ct_value'=>(int)$request->ct_n,'target_gen'=>'N'];
+            $target_gen[] = ['ct_value'=>(int)$request->ct_e,'target_gen'=>'E'];
+            $target_gen[] = ['ct_value'=>(int)$request->ct_ic,'target_gen'=>'IC'];
+            $target_gen[] = ['ct_value'=>(int)$request->ct_rdrp,'target_gen'=>'RDRP'];
+            
+            $pcr->tanggal_mulai_pemeriksaan = $request->tanggal_mulai_pemeriksaan;
+            $pcr->jam_input_hasil           = '12:00';
+            $pcr->catatan_pemeriksaan       = $request->catatan_pemeriksaan;
+            $pcr->grafik                    = [];
+            $pcr->petugas_penerima_sampel_rna="";
+            $pcr->hasil_deteksi             = $target_gen;
+            $pcr->kesimpulan_pemeriksaan    = $request->kesimpulan_pemeriksaan;
+            $pcr->nama_kit_pemeriksaan      = $request->nama_kit_pemeriksaan;
+            $pcr->save();
+
+            if ($sampel->sampel_status == 'pcr_sample_received' || $sampel->sampel_status == 'extraction_sample_sent') {
+                $sampel->updateState('pcr_sample_analyzed', [
+                        'user_id' => $user->id,
+                        'metadata' => $pcr,
+                        'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
+                    ]);
+                }
+            $response['message']        =  "berhasil menyimpan data";
+            $response['result']         =  $pcr;
+            $response['status_code']    =   201;
+        }else
+        {
+            $sampel->addLog([
+                'user_id' => $user->id,
+                'metadata' => $pcr,
+                'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
+            ]);
+
+            $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s');
+            $sampel->save();
+
+            $response['message']        =  "gagal menyimpan data";
+            $response['result']         =  $sampel;
+            $response['status_code']    =  404;
+        }
+
+        return response()->json($response);
+        
+    }
+
 }
