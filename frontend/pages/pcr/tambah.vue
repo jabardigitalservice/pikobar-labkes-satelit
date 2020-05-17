@@ -183,7 +183,7 @@
 
             async submitForm() {
                 // Tambah User
-                this.form.post('/input-hasil-pcr')
+                this.form.post('/pcr/add')
                     .then(({
                         data
                     }) => {

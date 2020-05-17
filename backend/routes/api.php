@@ -27,6 +27,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         return $request->user();
     });
 
+    Route::post('pcr/add','V1\PCRController@input_hasil_pemeriksaan');
     Route::patch('settings/profile', 'Settings\ProfileController@update');
     Route::patch('settings/password', 'Settings\PasswordController@update');
 
