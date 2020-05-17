@@ -48,13 +48,13 @@ class Registrasisampel extends Controller
                         $models = $models->whereIn('register.id',$sampel);
                     break;
                     case "start_date":
-                        $models = $models->where('register.created_at','>=',$val);
+                        $models = $models->where('register.created_at','>=',date('Y-m-d',strtotime($val)));
                     break;
                     case "end_date":
-                        $models = $models->where('register.created_at','<=',$val);
+                        $models = $models->where('register.created_at','<=',date('Y-m-d',strtotime($val)));
                     break;
                     case "kota":
-                        $models = $models->where('kota.id',$val);
+                        $models = $models->where('pasien.kota_id',$val);
                     break;
                     case "instansi_pengirim":
                         $models = $models->where('register.instansi_pengirim',$val);

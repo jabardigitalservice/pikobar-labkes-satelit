@@ -50,8 +50,14 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     'created_at'=> 'date|date_format:Y-m-d H:i:s',
                  ])->validate();
 
-                $register = Register::create($registerData);
-
+                $register = new Register;
+                $register->register_uuid = (string) \Illuminate\Support\Str::uuid();
+                $register->created_at = date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')));
+                $register->creator_user_id = $user->id;
+                $register->lab_satelit_id = $user->lab_satelit_id;
+                $register->instansi_pengirim = $row->get('instansi_pengirim');
+                $register->instansi_pengirim_nama = $row->get('nama_instansi');
+                $register->save();
                 $pasienData = [
                     'nik'=> $this->parseNIK($row->get('nik')),
                     'nama_lengkap'=> $row->get('nama'),
