@@ -177,7 +177,7 @@
             <span class="nav-label">Pelacakan Sampel</span>
           </router-link>
         </li> -->
-        <li v-if="checkPermission('master')">
+        <!-- <li v-if="checkPermission('master')">
           <a href="#">
             <i class="uil-database-alt fa-fw"></i>
             <span class="nav-label">Data Master</span>
@@ -191,7 +191,7 @@
               <nuxt-link to="/lab-satelit">Lab Satelit</nuxt-link>
             </li>
           </ul>
-        </li>
+        </li> -->
       </ul>
     </div>
   </nav>
