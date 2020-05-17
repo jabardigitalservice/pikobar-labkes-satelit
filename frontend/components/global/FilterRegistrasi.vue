@@ -178,11 +178,11 @@
             },
         },
         mounted() {
-            if (this.oid == 'registrasi-rujukan') {
-                this.params.jenis_registrasi = 'rujukan';
-            } else {
-                this.params.jenis_registrasi = "mandiri";
-            }
+            // if (this.oid == 'registrasi-rujukan') {
+            //     this.params.jenis_registrasi = 'rujukan';
+            // } else {
+            //     this.params.jenis_registrasi = "mandiri";
+            // }
         },
         created() {
             // alert(this.oid);
