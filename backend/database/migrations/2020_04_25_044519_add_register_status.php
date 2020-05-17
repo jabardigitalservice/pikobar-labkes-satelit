@@ -19,8 +19,8 @@ class AddRegisterStatus extends Migration
         });
         Schema::table('register', function (Blueprint $table) {
             $table->uuid('register_uuid')->unique();
-            $table->enum('jenis_registrasi', ['mandiri','rujukan'])->default('mandiri')->index();
-            $table->string('nomor_register')->unique();
+            $table->enum('jenis_registrasi', ['mandiri','rujukan'])->nullable();
+            $table->string('nomor_register')->nullable();
             $table->unsignedInteger('creator_user_id')->nullable();
             $table->foreign('creator_user_id')->references('id')->on('users');
         });
