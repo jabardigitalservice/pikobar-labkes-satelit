@@ -82,7 +82,7 @@
 
         </template> -->
 
-        <div class="form-group row">
+        <!-- <div class="form-group row">
             <div class="col-md-2">
                 <label for="nama_pasien">Domisili</label>
             </div>
@@ -92,7 +92,7 @@
                     </option>
                 </select>
             </div>
-        </div>
+        </div> -->
 
         <div class="form-group row">
             <div class="col-md-2">

@@ -286,8 +286,8 @@
                                         </td>
                                         <td>
                                             <input class="form-control" type="text" v-model="reg_sampel.nomor"
-                                                :class="{ 'is-invalid': form.errors.has(`reg_sampel.${$index}.nomor`) }" />
-                                            <has-error :form="form" :field="`reg_sampel.${$index}.nomor`" />
+                                                :class="{ 'is-invalid': form.errors.has(`reg_sampel.${$index}`) }" />
+                                            <has-error :form="form" :field="`reg_sampel.${$index}`" />
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-sm btn-danger remove_field"

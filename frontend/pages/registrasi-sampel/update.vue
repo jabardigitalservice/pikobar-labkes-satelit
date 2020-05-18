@@ -120,7 +120,7 @@
                             </div>
                             <div class="col-md-3 col-lg-2" :class="{ 'is-invalid': form.errors.has('reg_usia_bulan') }">
                                 <input class="form-control" type="number" name="reg_usia_bulan" placeholder="Bulan"
-                                    v-model="form.reg_usia_bulan" />
+                                    v-model="form.reg_usia_bulan" max="12"/>
                                 <has-error :form="form" field="reg_usia_bulan" />
                             </div>
                         </div>
@@ -287,8 +287,8 @@
                                         </td>
                                         <td>
                                             <input class="form-control" type="text" v-model="reg_sampel.nomor"
-                                                :class="{ 'is-invalid': form.errors.has(`reg_sampel.${$index}.nomor`) }" />
-                                            <has-error :form="form" :field="`reg_sampel.${$index}.nomor`" />
+                                                :class="{ 'is-invalid': form.errors.has(`reg_sampel.${$index}`) }" />
+                                            <has-error :form="form" :field="`reg_sampel.${$index}`" />
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-sm btn-danger remove_field"
