@@ -1,19 +1,19 @@
 <template>
   <tr>
     <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
-    <td>{{item.nomor_register}}</td>
+    <td>{{item.waktu_pcr_sample_analyzed | formatDateTime}}</td>
+    <td>{{item.nomor_sampel}}</td>
     <td nowrap>
       <span v-if="item.pasien">{{item.pasien.nama_lengkap}}</span>
       <span class="nik" v-if="item.pasien">NIK. {{item.pasien.nik}}</span>
       <span class="usia" v-if="item.pasien">{{ usiaPasien }}</span>
     </td>
     <td>
-      <span v-if="item.register">{{ item.register.sumber_pasien }}</span>
-    </td>
-    <td>
         <span v-if="item.pasien && item.pasien.kota">{{item.pasien.kota.nama}}</span>
     </td>
-    <td>{{item.nomor_sampel}}</td>
+    <td>
+      <span v-if="item.register">{{ item.register.sumber_pasien }}</span>
+    </td>
     <td nowrap>
       <div
           v-for="item in item.pemeriksaanSampel.hasil_deteksi_parsed" 
@@ -24,10 +24,10 @@
             <span v-if="item.ct_value == null">{{ '-' }}</span>
       </div>
     </td>
-    <td>{{item.kondisi_sampel}}</td>
     <td style="text-transform: capitalize;">
       {{item.pemeriksaanSampel.kesimpulan_pemeriksaan}}
     </td>
+    <td>{{item.kondisi_sampel}}</td>
     <td width="20%">
       <nuxt-link
         tag="a"
@@ -40,14 +40,6 @@
       <nuxt-link :to="`/verifikasi/edit/${item.id}`" class="mb-1 text-nowrap btn btn-warning btn-sm" tag="a">
         <i class="fa fa-edit"></i>
       </nuxt-link>
-
-      <button type="button" class="mb-1 text-nowrap btn btn-primary btn-sm" 
-        @click="verifikasiSampel()" 
-        :disabled="loading"
-        :class="{'btn-loading': loading}"
-        >   
-            Verifikasi
-        </button>
     </td>
     <!-- <CustomModal :modal_id="`modalVerifikasi${item.id}`" v-if="isModalShow"
         :title="`Verifikasi`"

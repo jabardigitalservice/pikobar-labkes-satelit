@@ -27,7 +27,7 @@
     },
     "verifikasi": {
       "index": {
-        "unverified": "Menunggu Verifikasi",
+        "unverified": "Hasil Pemeriksaan",
         "verified": "Terverifikasi"
       },
       "detail": "Detail Sampel",

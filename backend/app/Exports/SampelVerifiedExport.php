@@ -143,7 +143,7 @@ class SampelVerifiedExport extends DefaultValueBinder implements FromQuery,
             // ->orderBy('pemeriksaansampel.tanggal_input_hasil', 'desc')
             ->select([
                 DB::raw('ROW_NUMBER() OVER(ORDER BY sampel.id) AS Row'),
-                'register.nomor_register',
+                
                 'pasien.nama_lengkap',
                 'pasien.nik',
                 // DB::raw("CONCAT(pasien.nama_depan,' ',pasien.nama_belakang) AS nama_lengkap"),
@@ -152,14 +152,11 @@ class SampelVerifiedExport extends DefaultValueBinder implements FromQuery,
                 'pasien.tempat_lahir',
                 'pasien.jenis_kelamin',
                 'pasien.alamat_lengkap',
-                'pasien.no_telp',
                 'pasien.no_hp',
                 'kota.nama',
                 'sampel.nomor_sampel',
                 'pemeriksaansampel.kesimpulan_pemeriksaan',
-                'pemeriksaansampel.tanggal_input_hasil',
-                'sampel.waktu_sample_verified',
-                'register.sumber_pasien',
+                'sampel.waktu_pcr_sample_analyzed',
             ]);
 
 
@@ -170,21 +167,17 @@ class SampelVerifiedExport extends DefaultValueBinder implements FromQuery,
     {
         return [
             'No.',
-            'Nomor Registrasi',
             'Nama Pasien',
             'NIK',
             'Tanggal Lahir',
             'Tempat Lahir',
             'Jenis Kelamin',
             'Alamat',
-            'No. Telp',
             'No. HP',
             'Domisili',
             'No. Sampel',
             'Hasil Pemeriksaan',
             'Tanggal Input Hasil',
-            'Tanggal Diverifikasi',
-            'Sumber Pasien',
         ];
     }
 

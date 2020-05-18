@@ -23,7 +23,7 @@
                 </td>
               </tr>
 
-              <tr>
+              <!-- <tr>
                 <td width="40%">
                   <b>Sumber Sampel</b>
                 </td>
@@ -39,7 +39,7 @@
                 <td width="60%">
                   <span>{{data.petugas_penerima_sampel}}</span>
                 </td>
-              </tr>
+              </tr> -->
 
               <tr>
                 <td width="40%">
@@ -50,16 +50,16 @@
                 </td>
               </tr>
 
-              <tr>
+              <!-- <tr>
                 <td width="40%">
                   <b>Kondisi Sampel</b>
                 </td>
                 <td width="60%">
                   <span>{{ data.kondisi_sampel }}</span>
                 </td>
-              </tr>
+              </tr> -->
 
-              <tr>
+              <!-- <tr>
                 <td colspan="2" class="table-sub-head">
                   <span class="text-muted">PENGAMBILAN SAMPEL</span>
                 </td>
@@ -70,31 +70,31 @@
                   <b>Waktu Pengambilan</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.pengambilanSampel.created_at | formatDateTime }}</span>
+                  <span>{{ data.pengambilanSampel.created_at | formatDateTime }}</span> -->
                   <!-- <span>{{ data.tanggal_pengambilan_sampel | formatDate }} - {{ data.jam_pengambilan_sampel }}</span> -->
-                </td>
-              </tr>
+                <!-- </td>
+              </tr> -->
 
-              <tr>
+              <!-- <tr>
                 <td width="40%">
                   <b>Petugas</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.pengambilanSampel.penerima_sampel }}</span>
+                  <span>{{ data.pengambilanSampel.penerima_sampel }}</span> -->
                   <!-- <span>{{ data.tanggal_pengambilan_sampel | formatDate }} - {{ data.jam_pengambilan_sampel }}</span> -->
-                </td>
+                <!-- </td>
               </tr>
               <tr>
                 <td width="40%">
                   <b>Sumber Sampel</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.pengambilanSampel.sumber_sampel }}</span>
+                  <span>{{ data.pengambilanSampel.sumber_sampel }}</span> -->
                   <!-- <span>{{ data.tanggal_pengambilan_sampel | formatDate }} - {{ data.jam_pengambilan_sampel }}</span> -->
-                </td>
-              </tr>
+                <!-- </td>
+              </tr> -->
 
-              <tr>
+              <!-- <tr>
                 <td width="40%">
                   <b>Catatan</b>
                 </td>
@@ -199,7 +199,7 @@
                 <td width="60%">
                   <span>{{data.lab_pcr_nama}}</span>
                 </td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
         </Ibox>
@@ -208,7 +208,7 @@
         <Ibox title="Informasi Pasien">
           <table class="table table-hover">
             <tbody>
-              <tr>
+              <!-- <tr>
                 <td width="47%">
                   <b>Nomor Registrasi</b>
                 </td>
@@ -261,7 +261,7 @@
 										{{data.register.other_dinas_pengirim}}
 									</span>
 								</td>
-							</tr>
+							</tr> -->
 
               <tr>
                 <td width="30%">
@@ -360,10 +360,10 @@
                   <b>Dinkes Pengirim</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.register.dinkes_pengirim }}</span>
+                  <span>{{ data.register.instansi_pengirim }}</span>
                 </td>
               </tr>
-              <tr>
+              <!-- <tr>
                 <td width="30%">
                   <b>Tanggal Periksa / Lapor</b>
                 </td>
@@ -387,7 +387,7 @@
                 <td width="60%">
                   <span>{{ data.pasien.suhu }} (°C)</span>
                 </td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
         </Ibox>
@@ -401,7 +401,7 @@
             <Ibox title="Pemeriksaan Sampel">
               <table class="table">
                 <tbody>
-                  <tr>
+                  <!-- <tr>
                     <td width="47%">
                       <b>Tanggal Penerimaan Sampel</b>
                     </td>
@@ -436,7 +436,7 @@
                       <b>Jam Selesai Pemeriksaan</b>
                     </td>
                     <td>{{ hasil.jam_selesai_pemeriksaan }}</td>
-                  </tr>
+                  </tr> -->
                   <tr>
                     <td>
                       <b>Metode Pemeriksaan</b>

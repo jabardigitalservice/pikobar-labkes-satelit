@@ -21,13 +21,6 @@
             </div>
 
             <div class="form-group">
-              <label>Nomor Registrasi</label>
-              <p class="form-control">
-                <b>{{ data.nomor_register }}</b>
-              </p>
-            </div>
-
-            <div class="form-group">
               <label>Tanggal Input Hasil</label>
               <p class="form-control">
                 <b>
@@ -137,7 +130,7 @@
               <has-error :form="form" field="kesimpulan_pemeriksaan" />
             </div>
 
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label>
                 Grafik
               </label>
@@ -147,7 +140,7 @@
                 </a>
               </div>
               <has-error :form="form" field="grafik" />
-            </div>
+            </div> -->
 
             <input type="hidden" v-model="form.last_pemeriksaan_id">
 
@@ -170,7 +163,7 @@
                 type="button"
               >
                 <i class="fa fa-check"></i>
-                {{ 'Verifikasi' }}
+                Update Hasil Pemeriksaan
                 <!-- {{ form.kesimpulan_pemeriksaan != 'inkonklusif' ? 'Verifikasi' : 'Periksa Ulang'}} -->
               </button>
             </div>

@@ -18,7 +18,7 @@
             </span>
         </td>
         <td>
-            {{item.tgl_input}}
+            {{item.tgl_input | formatDateTime}}
         </td>
         <td>
             <p class="badge badge-danger" v-if="(item.nik==null || item.nik=='') || (item.nama_lengkap==null || item.nama_lengkap=='')">data_belum_lengkap</p>

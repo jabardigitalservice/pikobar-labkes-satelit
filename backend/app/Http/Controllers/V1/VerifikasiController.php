@@ -9,6 +9,7 @@ use App\Models\Register;
 use App\Models\Sampel;
 use App\Models\StatusSampel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class VerifikasiController extends Controller
@@ -89,6 +90,10 @@ class VerifikasiController extends Controller
             // 
                         // kategori --> sumber_pasien
                         // tanggal ver-val
+        }
+
+        if (Auth::user()->lab_satelit_id !=null) {
+            $models->where('registrasi.lab_satelit_id',Auth::user()->lab_satelit_id);
         }
 
         $count = $models->count();
@@ -335,10 +340,10 @@ class VerifikasiController extends Controller
                 'catatan_pemeriksaan'=> $request->input('catatan_pemeriksaan')
             ]);
 
-            $sampel->update([
-                'sampel_status'=> 'sample_verified',
-                'waktu_sample_verified'=> now()
-            ]);
+            // $sampel->update([
+            //     'sampel_status'=> 'sample_verified',
+            //     'waktu_sample_verified'=> now()
+            // ]);
 
             DB::commit();
 

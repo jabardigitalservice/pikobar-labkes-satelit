@@ -44,12 +44,12 @@
             <span class="nav-label">Input Hasil</span>
           </router-link>
         </li>
-        <li v-if="checkPermission('pcr')">
-          <router-link to="/input-hasil/list-input-hasil" tag="a">
-            <i class="uil-check fa-fw"></i>
-            <span class="nav-label">Hasil Pemeriksaan</span>
-          </router-link>
-        </li>
+         <li v-if="checkPermission('pcr')">
+            <router-link to="/hasil-pemeriksaan/list-hasil-pemeriksaan" tag="a">
+            <i class="uil-eye fa-fw"></i>
+              <span class="nav-label">Hasil Pemeriksaan</span>
+            </router-link>
+          </li>
         <!-- <li v-if="checkPermission('registrasi')">
           <a href="#">
             <i class="uil-user-square fa-fw"></i>

@@ -1,10 +1,10 @@
 <template>
   <div class="wrapper wrapper-content">
-    <portal to="title-name">Menunggu Verifikasi</portal>
+    <portal to="title-name">Hasil Pemeriksaan</portal>
 
     <div class="row">
       <div class="col-lg-12">
-        <Ibox title="Sampel Menunggu Verifikasi">
+        <Ibox title="Sampel Hasil Pemeriksaan">
           <p class="sub-header">Berikut ini adalah daftar sampel dari hasil pemeriksaan</p>
 
           <div class="row">
@@ -103,14 +103,14 @@
                     }"
             :rowtemplate="'tr-verifikasi'"
             :columns="{
-                      nomor_register: 'Nomor Register',
-                      pasien_nama : 'Nama Pasien',
-                      kategori: 'Kategori',
-                      kota_domilisi: 'Kota Domisili',
+                      waktu_pcr_sample_analyzed: 'Tanggal Pemeriksaan',
                       nomor_sampel : 'Nomor Sampel',
+                      pasien_nama : 'Nama Pasien',
+                      kota_domilisi: 'Kota Domisili',
+                      instansi_pengirim: 'Instansi Pengirim',
                       parameter_lab: 'Parameter Lab',
-                      kondisi_sampel: 'Kondisi Sampel',
                       kesimpulan_pemeriksaan: 'Kesimpulan Pemeriksaan',
+                      catatat: 'Keterangan',
                     }"
           ></ajax-table>
         </Ibox>
@@ -218,7 +218,7 @@ export default {
                 const link = document.createElement('a');
                 link.href = url;
                 const contentDisposition = response.headers['content-disposition'];
-                let fileName = 'belum-verifikasi.xlsx';
+                let fileName = 'hasil_pemeriksaan.xlsx';
                 if (contentDisposition) {
                     const fileNameMatch = contentDisposition.match(/filename=(.+)/);
                     if (fileNameMatch.length === 2)
