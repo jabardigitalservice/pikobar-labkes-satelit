@@ -442,7 +442,7 @@ class PCRController extends Controller
                 $pcr->kesimpulan_pemeriksaan = $row['kesimpulan_pemeriksaan'];
                 $pcr->save();
 
-                if ($sampel->sampel_status == 'pcr_sample_received' || $sampel->sampel_status == 'extraction_sample_sent') {
+                if ($sampel->sampel_status == 'sample_taken' || $sampel->sampel_status == 'extraction_sample_sent') {
                     $sampel->updateState('pcr_sample_analyzed', [
                         'user_id' => $user->id,
                         'metadata' => $pcr,
