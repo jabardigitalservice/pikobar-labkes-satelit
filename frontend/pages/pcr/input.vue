@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper wrapper-content">
-    <portal to="title-name">Input Analisa RT-PCR RNA ke Lab</portal>
+    <portal to="title-name">Input Hasil</portal>
     <portal to="title-action">
       <div class="title-action">
         <a href="#" @click.prevent="$router.back()" class="btn btn-secondary">
@@ -19,10 +19,35 @@
               </p>
             </div>
             <div class="form-group">
-              <label>Nomor Registrasi</label>
+              <label>Nama</label>
               <p class="form-control">
-                <b>{{ data.nomor_register }}</b>
+                <b>{{ data.pasien.nama_lengkap }}</b>
               </p>
+            </div>
+            <div class="form-group">
+              <label>NIK</label>
+              <p class="form-control">
+                <b>{{ data.pasien.nik }}</b>
+              </p>
+            </div>
+            <div class="form-group">
+              <label>Instansi Pengirim</label>
+              <p class="form-control">
+                <b>{{ data.register.instansi_pengirim }}</b>
+              </p>
+            </div>
+            
+          </Ibox>
+        </div>
+        <div class="col-md-6">
+          <Ibox title="Hasil Analisa PCR">
+            <div class="form-group">
+              <label>
+                Kit Pemeriksaan
+                <span style="color:red">*</span>
+              </label>
+              <input type="text" class="form-control" v-model="form.nama_kit_pemeriksaan" :class="{ 'is-invalid': form.errors.has(`nama_kit_pemeriksaan`) }">
+              <has-error :form="form" field="nama_kit_pemeriksaan" />
             </div>
             <div class="form-group">
               <label>
@@ -33,33 +58,12 @@
                 placeholder="Pilih Tanggal"
                 format="d MMMM yyyy"
                 input-class="form-control"
-                :disabled="true"
                 :monday-first="true"
                 :wrapper-class="{ 'is-invalid': form.errors.has(`tanggal_input_hasil`) }"
                 v-model="form.tanggal_input_hasil"
               />
               <has-error :form="form" field="tanggal_input_hasil" />
             </div>
-
-            <div class="form-group">
-              <label>
-                Jam Input Hasil
-                <span style="color:red">*</span>
-              </label>
-              <input
-                class="form-control"
-                type="text"
-                disabled="true"
-                v-model="form.jam_input_hasil"
-                v-mask="'##\:##'"
-                :class="{ 'is-invalid': form.errors.has(`jam_input_hasil`) }"
-              />
-              <has-error :form="form" field="jam_input_hasil" />
-            </div>
-          </Ibox>
-        </div>
-        <div class="col-md-6">
-          <Ibox title="Hasil Analisa PCR">
             <table class="table table-striped dt-responsive table-bordered" style="width:100%">
               <thead>
                 <tr>
@@ -148,26 +152,6 @@
             </div>
 
             <div class="form-group">
-              <label>
-                Grafik
-              </label>
-              <div :class="{ 'is-invalid': form.errors.has('grafik') }">
-                <a :href="url" target="_blank" v-for="(url, $index) in data.pcr.grafik" :key="$index" class="thumbnail-wrapper">
-                  <img :src="url" />
-                </a>
-                <dropzone
-                  id="foo"
-                  ref="dz_grafik"
-                  @vdropzone-success="onFileSuccess"
-                  :options="dz_options"
-                  :destroyDropzone="true"
-                  :duplicateCheck="true"
-                ></dropzone>
-              </div>
-              <has-error :form="form" field="grafik" />
-            </div>
-
-            <div class="form-group">
               <label>Catatan Pemeriksaan</label>
               <textarea
                 class="form-control"
@@ -186,9 +170,9 @@
                 type="button"
               >
                 <i class="fa fa-check"></i>
-                Verifikasi Hasil PCR
+                submit hasil pemeriksaan
               </button>
-              <button
+              <!-- <button
                 @click="submit()"
                 :disabled="loading || form.kesimpulan_pemeriksaan != 'inkonklusif'"
                 :class="{'btn-loading': loading}"
@@ -197,7 +181,7 @@
               >
                 <i class="fa fa-refresh"></i>
                 Periksa Ulang
-              </button>
+              </button> -->
             </div>
           </Ibox>
         </div>
@@ -253,6 +237,7 @@ export default {
       catatan_penerimaan: data.pcr.catatan_penerimaan,
       kesimpulan_pemeriksaan: data.pcr.kesimpulan_pemeriksaan,
       hasil_deteksi: data.pcr.hasil_deteksi ? data.pcr.hasil_deteksi : default_hasil_deteksi,
+      nama_kit_pemeriksaan:data.pcr.nama_kit_pemeriksaan, 
       grafik: data.pcr.grafik ? data.pcr.grafik : [],
     });
     return {

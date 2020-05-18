@@ -142,6 +142,7 @@ class RegistersampelController extends Controller
                     $sampel->lab_satelit_id = $user->lab_satelit_id;
                     $sampel->pengambilan_sampel_id = $pengambilan_sampel->id;
                     $sampel->sampel_status = 'sample_taken';
+                    $sampel->waktu_sample_taken =  date('Y-m-d H:i:s');
                     // $sampel->updateState('sample_taken');
                     $sampel->save();
                 }
@@ -224,7 +225,8 @@ class RegistersampelController extends Controller
                         }else {
                             $sampel->jenis_sampel_nama = $rows['sam_namadiluarjenis'];
                         }
-                        
+                        $sampel->sampel_status = 'sample_taken';
+                        $sampel->waktu_sample_taken =  date('Y-m-d H:i:s');
                         $sampel->register_id = $register->id;
                         $sampel->save();
                     }

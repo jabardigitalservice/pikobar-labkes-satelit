@@ -107,7 +107,8 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                         'creator_user_id'=> $user->id,
                         'jenis_sampel_id'=> $jenissampel ? $jenissampel->id : 999999,
                         'jenis_sampel_nama'=> $row->get('jenis_sampel'),
-                        'created_at' => date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')))
+                        'created_at' => date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s'))),
+                        'waktu_sample_taken' => date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s'))),
                     ];
 
                     $sampel = Sampel::query()->updateOrCreate(
