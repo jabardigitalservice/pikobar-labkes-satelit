@@ -69,8 +69,8 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     'kelurahan'=> $row->get('desakelurahan'),
                     'alamat_lengkap'=> $row->get('alamat'),
                     'usia_tahun'=> $row->get('usia'),
+                    'lab_satelit_id'=> $user->lab_satelit_id,
                 ];
-
                 Validator::make($pasienData, [
                     'nik'=> 'required|digits:16',
                     'nama_lengkap'=> 'required|min:3',
@@ -82,11 +82,21 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                      'kota_id.required'=> 'Kota harap diisi dengan menyesuaikan dengan ID di Sheet Kota',
                      'kota_id.exists'=> 'Kota tidak ditemukan',
                  ])->validate();
-
-                $pasien = Pasien::query()->updateOrCreate(
-                    \Illuminate\Support\Arr::only($pasienData, ['nik']),
-                    $pasienData
-                );
+                 $pasien = Pasien::where('nik',$row->get('nik'))->first();
+                 if (!$pasien) {
+                     $pasien = new Pasien;
+                 }
+                 $pasien->nik = $this->parseNIK($row->get('nik'));
+                 $pasien->nama_lengkap = $row->get('nama');
+                 $pasien->jenis_kelamin = $row->get('jenis_kelamin');
+                 $pasien->tanggal_lahir = date('Y-m-d',strtotime($row->get('tgl_lahir')));
+                 $pasien->kota_id = optional($this->getKota($row))->id;
+                 $pasien->kecamatan = $row->get('kecamatan');
+                 $pasien->kelurahan = $row->get('desakelurahan');
+                 $pasien->alamat_lengkap = $row->get('alamat');
+                 $pasien->usia_tahun = $row->get('usia');
+                 $pasien->lab_satelit_id = $user->lab_satelit_id;
+                 $pasien->save();
 
                 $register->pasiens()->attach($pasien);
 
@@ -100,21 +110,26 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     }
                     
                     abort_if($error == count($nomorSampels), 403,"Nomor Sampel Sudah Terpakai {$nomor}");
-                    $sampelData = [
-                        'nomor_sampel'=> $nomor,
-                        'sampel_status'=> 'sample_taken',
-                        'lab_satelit_id'=> $user->lab_satelit_id,
-                        'creator_user_id'=> $user->id,
-                        'jenis_sampel_id'=> $jenissampel ? $jenissampel->id : 999999,
-                        'jenis_sampel_nama'=> $row->get('jenis_sampel'),
-                        'created_at' => date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s'))),
-                        'waktu_sample_taken' => date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s'))),
-                    ];
-
-                    $sampel = Sampel::query()->updateOrCreate(
-                        \Illuminate\Support\Arr::only($sampelData, ['nomor_sampel']),
-                        $sampelData
-                    );
+                    // $sampelData = [
+                    //     'nomor_sampel'=> $nomor,
+                    //     'sampel_status'=> 'sample_taken',
+                    //     'lab_satelit_id'=> (int) $user->lab_satelit_id,
+                    //     'creator_user_id'=> $user->id,
+                    //     'jenis_sampel_id'=> $jenissampel ? $jenissampel->id : 999999,
+                    //     'jenis_sampel_nama'=> $row->get('jenis_sampel'),
+                    //     'created_at' => date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s'))),
+                    //     'waktu_sample_taken' => date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s'))),
+                    // ];
+                    $sampel = new Sampel();
+                    $sampel->nomor_sampel = $nomor;
+                    $sampel->sampel_status = 'sample_taken';
+                    $sampel->lab_satelit_id = (int) $user->lab_satelit_id;
+                    $sampel->creator_user_id = $user->id;
+                    $sampel->jenis_sampel_id = $jenissampel ? $jenissampel->id : 999999;
+                    $sampel->jenis_sampel_nama = $row->get('jenis_sampel');
+                    $sampel->created_at = date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')));
+                    $sampel->waktu_sample_taken = date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')));
+                    $sampel->save();
 
                     $register->sampel()->save($sampel);
                 }

@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use App\Imports\HasilPemeriksaanImport;
 use App\Models\PasienRegister;
 use App\Traits\PemeriksaanTrait;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PCRController extends Controller
@@ -23,9 +24,7 @@ class PCRController extends Controller
     public function getData(Request $request)
     {
         $user = $request->user();
-        $models = Sampel::leftJoin('pasien_register','sampel.register_id','pasien_register.register_id')
-                          ->leftJoin('pasien','pasien_register.pasien_id','pasien_id')
-                          ->leftJoin('register','register.id','pasien_register.register_id');
+        $models = Sampel::query();
         $params = $request->get('params',false);
         $search = $request->get('search',false);
         $order  = $request->get('order' ,'name');
@@ -45,23 +44,21 @@ class PCRController extends Controller
                     case "end_date":
                         $models = $models->where('sampel.waktu_sample_taken','<=',date('Y-m-d',strtotime($val)));
                     break;
-                    case "kota":
-                        $models = $models->where('pasien.kota_id',$val);
-                    break;
-                    case "instansi_pengirim":
-                        $models = $models->where('register.instansi_pengirim',$val);
-                    break;
+                    case 'instansi_pengirim': 
+                        $models->whereHas('register', function ($query) use ($val){
+                            $query->where('register.instansi_pengirim', 'ilike', '%'. $val .'%');
+                        });
+                        break;
                     default:
                         $models = $models->where($key,$val);
                         break;
                 }
             }
         }
-        if (!empty($user->lab_satelit_id)) {
-            $models->where('lab_satelit_id', $user->lab_satelit_id);
+       if (Auth::user()->lab_satelit_id !=null) {
+            $models->where('sampel.lab_satelit_id',Auth::user()->lab_satelit_id);
         }
         $models->where('sampel.sampel_status','sample_taken');
-        $models->select('pasien.nama_lengkap','pasien.nik','sampel.*','instansi_pengirim');
         $count = $models->count();
 
         $page = $request->get('page',1);
@@ -87,6 +84,8 @@ class PCRController extends Controller
         
         // format data
         foreach ($models as &$model) {
+            $model->register = $model->register ?? null;
+            $model->pasien = $model->register ? optional($model->register)->pasiens()->with(['kota'])->first() : null;
         }
 
         $result = [

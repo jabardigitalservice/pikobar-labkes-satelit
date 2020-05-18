@@ -29,8 +29,10 @@ class Registrasisampel extends Controller
                    ->orWhere('pasien.nik','ilike','%'.$search.'%');
             });
         }
+
+        
         if (Auth::user()->lab_satelit_id !=null) {
-            $models->where('registrasi.lab_satelit_id',Auth::user()->lab_satelit_id);
+            $models->where('register.lab_satelit_id',Auth::user()->lab_satelit_id);
         }
         
         if ($params) {

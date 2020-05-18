@@ -95,7 +95,7 @@ class VerifikasiController extends Controller
         }
 
         if (Auth::user()->lab_satelit_id !=null) {
-            $models->where('registrasi.lab_satelit_id',Auth::user()->lab_satelit_id);
+            $models->where('sampel.lab_satelit_id',Auth::user()->lab_satelit_id);
         }
 
         $count = $models->count();

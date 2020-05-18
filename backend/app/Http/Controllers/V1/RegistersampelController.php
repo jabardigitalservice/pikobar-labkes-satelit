@@ -63,6 +63,7 @@ class RegistersampelController extends Controller
             $v = Validator::make($request->all(),[
                 'reg_instansi_pengirim' => 'required',
                 'reg_nama_pasien' => 'required',
+                'reg_kota' => 'required',
                 'reg_nik'  => 'required|digits:16',
                 'reg_sampel.*' => [
                     'required',
@@ -70,6 +71,8 @@ class RegistersampelController extends Controller
                 ],
             ], [
                 'reg_instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
+                'reg_kota.required' => 'Instansi Pengirim tidak boleh kosong',
+                
                 'reg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
                 'reg_nik.digits' => 'NIK terdiri dari :digits karakter',
                 'reg_nik.required' => 'NIK Pasien tidak boleh kosong',
@@ -109,6 +112,7 @@ class RegistersampelController extends Controller
             $pasien->keterangan_lain = $request->get('reg_keterangan');
             $pasien->usia_tahun = $request->get('reg_usia_tahun');
             $pasien->usia_bulan = $request->get('reg_usia_bulan');
+            $pasien->lab_satelit_id = $user->lab_satelit_id;
             $pasien->save();
 
             // $tandaGejala = $this->getRequestTandaGejala($request);
@@ -168,12 +172,14 @@ class RegistersampelController extends Controller
             $v = Validator::make($request->all(),[
                 'reg_instansi_pengirim' => 'required',
                     'reg_nama_pasien' => 'required',
+                    'reg_kota' => 'required',
                     'reg_nik'  => 'required|digits:16',
                     // 'reg_sampel.*' => [
                     //     'required',
                     //     new UniqueSampel(),
                     // ],
             ], [
+                'reg_kota.required' => 'Instansi Pengirim tidak boleh kosong',
                 'reg_instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
                     'reg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
                     'reg_nik.digits' => 'NIK terdiri dari :digits karakter',

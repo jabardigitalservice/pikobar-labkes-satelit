@@ -5,13 +5,13 @@
             {{item.nomor_sampel}}
         </td>
         <td>
-            {{item.nama_lengkap}}
+            {{item.pasien.nama_lengkap}}
         </td>
         <td>
-            {{item.nik}}
+            {{item.pasien.nik}}
         </td>
         <td>
-            {{item.instansi_pengirim}}
+            {{item.register.instansi_pengirim}}
         </td>
         <td>
             {{ item.waktu_sample_taken | formatDateTime }}

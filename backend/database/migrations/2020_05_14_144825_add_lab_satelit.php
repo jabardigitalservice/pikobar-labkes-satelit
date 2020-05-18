@@ -22,7 +22,7 @@ class AddLabSatelit extends Migration
         Schema::table('register', function (Blueprint $table) {
             $table->unsignedInteger('lab_satelit_id')->nullable();
         });
-        Schema::table('ekstraksi', function (Blueprint $table) {
+        Schema::table('pasien', function (Blueprint $table) {
             $table->unsignedInteger('lab_satelit_id')->nullable();
         });
     }
@@ -43,7 +43,7 @@ class AddLabSatelit extends Migration
         Schema::table('register', function (Blueprint $table) {
             $table->dropColumn(['lab_satelit_id']);
         });
-        Schema::table('ekstraksi', function (Blueprint $table) {
+        Schema::table('pasien', function (Blueprint $table) {
             $table->dropColumn(['lab_satelit_id']);
         });
         

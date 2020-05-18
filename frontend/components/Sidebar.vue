@@ -32,19 +32,19 @@
             <span class="nav-label">Dashboard</span>
           </router-link>
         </li>
-        <li v-if="checkPermission('registrasi')">
+        <li>
           <router-link to="/registrasi/sampel" tag="a">
             <i class="uil-user-square fa-fw"></i>
             <span class="nav-label">Registrasi Sampel</span>
           </router-link>
         </li>
-        <li v-if="checkPermission('pcr')">
+        <li>
           <router-link to="/input-hasil/list-input-hasil" tag="a">
             <i class="uil-atom fa-fw"></i>
             <span class="nav-label">Input Hasil</span>
           </router-link>
         </li>
-         <li v-if="checkPermission('pcr')">
+         <li>
             <router-link to="/hasil-pemeriksaan/list-hasil-pemeriksaan" tag="a">
             <i class="uil-eye fa-fw"></i>
               <span class="nav-label">Hasil Pemeriksaan</span>

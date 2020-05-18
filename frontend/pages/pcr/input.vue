@@ -164,7 +164,6 @@
             <div class="form-group">
               <button
                 @click="submit()"
-                :disabled="loading || form.kesimpulan_pemeriksaan == 'inkonklusif'"
                 :class="{'btn-loading': loading}"
                 class="btn btn-md btn-primary block full-width m-b"
                 type="button"
