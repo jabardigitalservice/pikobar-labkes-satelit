@@ -142,7 +142,7 @@ class RegistersampelController extends Controller
                     $sampel->lab_satelit_id = $user->lab_satelit_id;
                     $sampel->pengambilan_sampel_id = $pengambilan_sampel->id;
                     $sampel->sampel_status = 'sample_taken';
-                    $sampel->updateState('sample_taken');
+                    // $sampel->updateState('sample_taken');
                     $sampel->save();
                 }
             }

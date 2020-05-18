@@ -91,9 +91,15 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                 $register->pasiens()->attach($pasien);
 
                 $nomorSampels = explode(';', $row->get('kode_sampel'));
-                
+                $error = 0;
                 foreach ($nomorSampels as $key => $nomor) {
                     $jenissampel = JenisSampel::where('nama','ilike','%'.$row->get('jenis_sampel').'%')->first();
+                    $nomorsampel = Sampel::where('nomor_sampel',$nomor)->first();
+                    if ($nomorsampel) {
+                        ++$error;
+                    }
+                    
+                    abort_if($error == count($nomorSampels), 403,"Nomor Sampel Sudah Terpakai {$nomor}");
                     $sampelData = [
                         'nomor_sampel'=> $nomor,
                         'sampel_status'=> 'sample_taken',
@@ -101,7 +107,6 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                         'creator_user_id'=> $user->id,
                         'jenis_sampel_id'=> $jenissampel ? $jenissampel->id : 999999,
                         'jenis_sampel_nama'=> $row->get('jenis_sampel'),
-                        'waktu_sample_taken' => date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s'))), 
                         'created_at' => date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')))
                     ];
 
