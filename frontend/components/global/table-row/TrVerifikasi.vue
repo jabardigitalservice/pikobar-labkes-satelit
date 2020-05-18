@@ -24,7 +24,7 @@
     <td style="text-transform: capitalize;">
       {{item.pemeriksaanSampel.kesimpulan_pemeriksaan}}
     </td>
-    <td>{{item.catatan_pemeriksaan}}</td>
+    <td>{{item.pemeriksaanSampel.catatan_pemeriksaan}}</td>
     <td width="20%">
       <nuxt-link tag="a" class="mb-1 text-nowrap btn btn-success btn-sm" :to="`/hasil-pemeriksaan/detail/${item.id}`"
         title="Klik untuk melihat detail">
