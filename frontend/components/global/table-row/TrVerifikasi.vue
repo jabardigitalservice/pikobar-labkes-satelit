@@ -9,35 +9,28 @@
       <span class="usia" v-if="item.pasien">{{ usiaPasien }}</span>
     </td>
     <td>
-        <span v-if="item.pasien && item.pasien.kota">{{item.pasien.kota.nama}}</span>
+      <span v-if="item.pasien && item.pasien.kota">{{item.pasien.kota.nama}}</span>
     </td>
     <td>
-      <span v-if="item.register">{{ item.register.sumber_pasien }}</span>
+      <span v-if="item.register">{{ item.register.instansi_pengirim }}</span>
     </td>
     <td nowrap>
-      <div
-          v-for="item in item.pemeriksaanSampel.hasil_deteksi_parsed" 
-          :key="item.target_gen"
-      >
-          - {{ item.target_gen }} : 
-            <span v-if="!!item.ct_value">{{ parseFloat(item.ct_value).toFixed(2).replace('.', ',') }}</span>
-            <span v-if="item.ct_value == null">{{ '-' }}</span>
+      <div v-for="item in item.pemeriksaanSampel.hasil_deteksi_parsed" :key="item.target_gen">
+        - {{ item.target_gen }} :
+        <span v-if="!!item.ct_value">{{ parseFloat(item.ct_value).toFixed(2).replace('.', ',') }}</span>
+        <span v-if="item.ct_value == null">{{ '-' }}</span>
       </div>
     </td>
     <td style="text-transform: capitalize;">
       {{item.pemeriksaanSampel.kesimpulan_pemeriksaan}}
     </td>
-    <td>{{item.kondisi_sampel}}</td>
+    <td>{{item.catatan_pemeriksaan}}</td>
     <td width="20%">
-      <nuxt-link
-        tag="a"
-        class="mb-1 text-nowrap btn btn-success btn-sm"
-        :to="`/verifikasi/detail/${item.id}`"
-        title="Klik untuk melihat detail"
-      >
+      <nuxt-link tag="a" class="mb-1 text-nowrap btn btn-success btn-sm" :to="`/hasil-pemeriksaan/detail/${item.id}`"
+        title="Klik untuk melihat detail">
         <i class="uil-info-circle"></i>
       </nuxt-link>
-      <nuxt-link :to="`/verifikasi/edit/${item.id}`" class="mb-1 text-nowrap btn btn-warning btn-sm" tag="a">
+      <nuxt-link :to="`/hasil-pemeriksaan/edit/${item.id}`" class="mb-1 text-nowrap btn btn-warning btn-sm" tag="a">
         <i class="fa fa-edit"></i>
       </nuxt-link>
     </td>
@@ -48,114 +41,113 @@
   </tr>
 </template>
 <script>
-import Form from "vform";
-import axios from "axios";
+  import Form from "vform";
+  import axios from "axios";
 
-export default {
-  props: ["item", "pagination", "rowparams", "index"],
-  components: {},
-  data() {
+  export default {
+    props: ["item", "pagination", "rowparams", "index"],
+    components: {},
+    data() {
 
-    let loading = false
+      let loading = false
 
-    let form = new Form({
+      let form = new Form({
         sampel_id: this.item.id
-    });
+      });
 
-    return {
+      return {
         loading,
         form
-    };
-  },
-  methods: {
-    showModalVerifikasi(sampelId) {},
-    verifikasiSampel(){
+      };
+    },
+    methods: {
+      showModalVerifikasi(sampelId) {},
+      verifikasiSampel() {
 
         const swalWithBootstrapButtons = this.$swal.mixin({
-            customClass: {
-                confirmButton: 'mb-1 text-nowrap btn btn-success',
-                cancelButton: 'mb-1 text-nowrap btn btn-danger'
-            },
-            buttonsStyling: false
+          customClass: {
+            confirmButton: 'mb-1 text-nowrap btn btn-success',
+            cancelButton: 'mb-1 text-nowrap btn btn-danger'
+          },
+          buttonsStyling: false
         })
 
         swalWithBootstrapButtons.fire({
-            title: 'Apakah Anda Yakin untuk Verifikasi Sampel ini?',
-            text: "Setelah sampel menjadi verifikasi, data tidak dapat dikembalikan.",
-            type: 'warning',
-            // input: 'text',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, Tandai Sampel Terverifikasi',
-            cancelButtonText: 'Batalkan',
-            reverseButtons: true
+          title: 'Apakah Anda Yakin untuk Verifikasi Sampel ini?',
+          text: "Setelah sampel menjadi verifikasi, data tidak dapat dikembalikan.",
+          type: 'warning',
+          // input: 'text',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, Tandai Sampel Terverifikasi',
+          cancelButtonText: 'Batalkan',
+          reverseButtons: true
         }).then(async (result) => {
-            console.log(result)
-            if (result.value == '') {
+          console.log(result)
+          if (result.value == '') {
+            swalWithBootstrapButtons.fire(
+              'Gagal',
+              'Terjadi kesalahan. Hubungi Admin!',
+              'error'
+            )
+          } else if (result.value) {
+            try {
+              this.loading = true
+              let resp = await this.form.post("/v1/verifikasi/verifikasi-single-sampel/" + this.item.id);
+              swalWithBootstrapButtons.fire(
+                'Selesai!',
+                'Sampel berhasil ditandai sebagai invalid',
+                'success'
+              )
+              this.$bus.$emit('refresh-ajaxtable', 'verifikasi')
+            } catch (err) {
+              if (err.response && err.response.data.code == 422) {
                 swalWithBootstrapButtons.fire(
-                    'Gagal',
-                    'Terjadi kesalahan. Hubungi Admin!',
-                    'error'
+                  'Gagal',
+                  err.response.data.message,
+                  'error'
                 )
-            } else if (result.value) {
-                try {
-                    this.loading = true
-                    let resp = await this.form.post("/v1/verifikasi/verifikasi-single-sampel/" + this.item.id);
-                    swalWithBootstrapButtons.fire(
-                        'Selesai!',
-                        'Sampel berhasil ditandai sebagai invalid',
-                        'success'
-                    )
-                    this.$bus.$emit('refresh-ajaxtable', 'verifikasi')
-                } catch (err) {
-                    if (err.response && err.response.data.code == 422) {
-                    swalWithBootstrapButtons.fire(
-                        'Gagal',
-                        err.response.data.message,
-                        'error'
-                    )
-                    } else {
-                    swalWithBootstrapButtons.fire(
-                        'Gagal',
-                        'Gagal menandai sampel menjadi invalid',
-                        'error'
-                    )
-                    }
-                }
+              } else {
+                swalWithBootstrapButtons.fire(
+                  'Gagal',
+                  'Gagal menandai sampel menjadi invalid',
+                  'error'
+                )
+              }
+            }
 
-                this.loading = false
+            this.loading = false
 
-            } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === this.$swal.DismissReason.cancel
-                ) {
-                }
+          } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === this.$swal.DismissReason.cancel
+          ) {}
         })
 
-    }
-  },
-  computed: {
-    usiaPasien() {
-      let tglLahir = new Date(this.item.pasien.tanggal_lahir);
-      let today_date = new Date();
-      let today_year = today_date.getFullYear();
-      let today_month = today_date.getMonth();
-      let today_day = today_date.getDate();
-
-      var age = today_date.getFullYear() - tglLahir.getFullYear();
-      var m = today_date.getMonth() - tglLahir.getMonth();
-      if (m < 0 || (m === 0 && today_date.getDate() < tglLahir.getDate())) {
-        age--;
       }
+    },
+    computed: {
+      usiaPasien() {
+        let tglLahir = new Date(this.item.pasien.tanggal_lahir);
+        let today_date = new Date();
+        let today_year = today_date.getFullYear();
+        let today_month = today_date.getMonth();
+        let today_day = today_date.getDate();
 
-      return `Usia: ${age} tahun`;
+        var age = today_date.getFullYear() - tglLahir.getFullYear();
+        var m = today_date.getMonth() - tglLahir.getMonth();
+        if (m < 0 || (m === 0 && today_date.getDate() < tglLahir.getDate())) {
+          age--;
+        }
+
+        return `Usia: ${age} tahun`;
+      }
     }
-  }
-};
+  };
 </script>
 
 <style scoped>
-.nik {
-  display: block;
-  color: rgb(140, 143, 135);
-}
+  .nik {
+    display: block;
+    color: rgb(140, 143, 135);
+  }
 </style>

@@ -13,27 +13,7 @@
 
         <div class="form-group row">
             <div class="col-md-2">
-                <label for="nama_pasien">NIK</label>
-            </div>
-            <div class="col-md-4">
-                <input type="text" name="nik" v-model="params.nik" id="" class="form-control"
-                    placeholder="NIK">
-            </div>
-        </div>
-
-        <!-- <div class="form-group row">
-            <div class="col-md-2">
-                <label for="nama_pasien">Nomor Sampel</label>
-            </div>
-            <div class="col-md-4">
-                <input type="text" name="nomor_sampel" v-model="params.nomor_sampel" id="" class="form-control"
-                    placeholder="Scan / Ketik No. Sampel">
-            </div>
-        </div> -->
-
-        <div class="form-group row">
-            <div class="col-md-2">
-                <label for="nama_pasien">Tanggal Input</label>
+                <label for="nama_pasien">Tanggal Pemeriksaan</label>
             </div>
             <div class="col-md-4">
                 <date-picker placeholder="Tanggal Mulai Input" format="d MMMM yyyy" input-class="form-control"
@@ -61,7 +41,7 @@
                 </select>
             </div>
         </div> -->
-        
+
         <!-- <template v-if="oid=='registrasi-rujukan'">
         <div class="form-group row mt-4">
             <label class="col-md-2">Instansi Pengirim
@@ -119,8 +99,21 @@
                 <label for="nama_pasien">Instansi Pengirim</label>
             </div>
             <div class="col-md-4">
-                <input type="text" name="params.instansi_pengirim" v-model="params.instansi_pengirim" id="" class="form-control"
-                    placeholder="Instansi Pengirim">
+                <input type="text" name="params.instansi_pengirim" v-model="params.instansi_pengirim" id=""
+                    class="form-control" placeholder="Instansi Pengirim">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-2">
+                <label for="nama_pasien">Hasil Pemeriksaan</label>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" type="text" name="reg_kota" placeholder=""
+                    v-model="params.kesimpulan_pemeriksaan">
+                    <option :value="item.id" :key="idx" v-for="(item,idx) in hasil_pemeriksaan">{{item.nama}}
+                    </option>
+                </select>
             </div>
         </div>
 
@@ -138,14 +131,24 @@
     import axios from 'axios'
     let _this = null;
     export default {
-        name: 'FilterRegistrasi',
+        name: 'FilterHasilPemeriksaan',
         props: ['oid'],
         data() {
             return {
-                optFasyankes:[],
+                hasil_pemeriksaan: [{
+                    id: 'positif',
+                    nama: 'POSITIF'
+                }, {
+                    id: 'negatif',
+                    nama: 'NEGATIF'
+                }, {
+                    id: 'inkonklusif',
+                    nama: 'INKONKLUSIF'
+                }],
+                optFasyankes: [],
                 params: {
                     nama_pasien: null,
-                    instansi_pengirim:null,
+                    instansi_pengirim: null,
                     nik: null,
                     nomor_sampel: null,
                     start_date: null,
@@ -168,12 +171,12 @@
             },
             async changeFasyankes(tipe) {
                 // this.form.reg_nama_rs = null;
-                let tp = tipe=="Dinkes"?"dinkes":"rumah_sakit";
-                let resp = await axios.get('/v1/list-fasyankes-jabar?tipe='+tp)
+                let tp = tipe == "Dinkes" ? "dinkes" : "rumah_sakit";
+                let resp = await axios.get('/v1/list-fasyankes-jabar?tipe=' + tp)
                 this.optFasyankes = resp.data;
                 this.optFasyankes.push({
-                    id:9999,
-                    nama:'Fasyankes Lainnya'
+                    id: 9999,
+                    nama: 'Fasyankes Lainnya'
                 })
             },
         },
@@ -192,8 +195,8 @@
             // }
             this.getKota();
         },
-        watch:{
-            "params.reg_fasyankes_pengirim":function(newVal, oldVal){
+        watch: {
+            "params.reg_fasyankes_pengirim": function (newVal, oldVal) {
                 this.changeFasyankes(this.params.reg_fasyankes_pengirim)
             },
         }

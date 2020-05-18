@@ -1,79 +1,17 @@
 <template>
   <div class="wrapper wrapper-content">
     <portal to="title-name">Hasil Pemeriksaan</portal>
-
+      <div class="row">
+        <div class="col-lg-12">
+          <filter-hasil-pemeriksaan :oid="`verifikasi`"/>
+        </div>
+      </div>
     <div class="row">
       <div class="col-lg-12">
         <Ibox title="Sampel Hasil Pemeriksaan">
-          <p class="sub-header">Berikut ini adalah daftar sampel dari hasil pemeriksaan</p>
-
-          <div class="row">
-            <div class="col-md-3">
-              <div class="form-group">
-                <label>Kategori</label>
-                <input class="form-control" type="text" v-model="params1.kategori" @keyup="refreshDebounce"/>
-                <!-- <dynamic-input :form="params1" field="kategori" v-model="params1.kategori"
-                  :options="listKategori"
-                  :hasSemua="true">
-                </dynamic-input> -->
-              </div>
-            </div>
-            
-            <div class="col-md-3">
-              <div class="form-group">
-                <label>Fasyankes/Dinkes</label>
-                <dynamic-input :form="params1" field="fasyankes" v-model="params1.fasyankes" 
-                  :options="listFasyankes"
-                  :hasSemua="true">
-                </dynamic-input>
-              </div>
-            </div>
-            <!-- <div class="col-md-3">
-              <div class="form-group">
-                <label>Tanggal Verifikasi (Awal)</label>
-                <date-picker
-                  placeholder="Pilih Tanggal"
-                  format="d MMMM yyyy"
-                  input-class="form-control"
-                  :monday-first="true"
-                  v-model="params1.tanggal_verifikasi_start"
-                />
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="form-group">
-                <label>Tanggal Verifikasi (Akhir)</label>
-                <date-picker
-                  placeholder="Pilih Tanggal"
-                  format="d MMMM yyyy"
-                  input-class="form-control"
-                  :monday-first="true"
-                  v-model="params1.tanggal_verifikasi_end"
-                />
-              </div>
-            </div> -->
-          </div>
-          <div class="row">
-            <div class="col-md-3">
-              <div class="form-group">
-                <label>Kota Domisili</label>
-                <dynamic-input :form="params1" field="kota_domisili" v-model="params1.kota_domilisi"
-                  :options="listKota"
-                  :hasSemua="true">
-                </dynamic-input>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="form-group">
-                <label>Hasil Pemeriksaan</label>
-                <dynamic-input :form="params1" field="kesimpulan_pemeriksaan" v-model="params1.kesimpulan_pemeriksaan"
-                  :options="[{id: 'positif',name: 'POSITIF'},{id: 'negatif',name: 'NEGATIF'},{id: 'sampel kurang',name: 'SAMPEL KURANG'}]"
-                  :hasSemua="true">
-                </dynamic-input>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <button id="btn-export" class="btn btn-primary pull-right mt-4" 
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <button id="btn-export" class="btn btn-primary pull-right" 
                 @click="onExport('verifikasi')"
               >
                 <i class="fa fa-file-excel-o"></i> Export Excel

@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper wrapper-content">
-    <portal to="title-name">Verifikasi Hasil Pemeriksaan</portal>
+    <portal to="title-name">Hasil Pemeriksaan</portal>
     <portal to="title-action">
       <div class="title-action">
         <a href="#" @click.prevent="$router.back()" class="btn btn-secondary">
@@ -118,8 +118,8 @@
                 </div>
                 <div>
                   <label class="fancy-radio custom-color-green m-0 w-100">
-                      <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="sampel kurang" >
-                      <span><i></i>SAMPEL KURANG</span>
+                      <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="inkonklusif" >
+                      <span><i></i>INKONKLUSIF</span>
                   </label>
                   <!-- <label class="form-check-label">
                     <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="sampel kurang" />

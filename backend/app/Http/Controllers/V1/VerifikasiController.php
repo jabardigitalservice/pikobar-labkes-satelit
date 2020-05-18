@@ -59,28 +59,30 @@ class VerifikasiController extends Controller
                             $query->where('kesimpulan_pemeriksaan', $val);
                         });
                         break;
-                    case 'kota_domisili':
+                    case 'kota':
                         $models->whereHas('register', function($query) use ($val){
                             $query->join('pasien_register', 'register.id', 'pasien_register.register_id')
                                 ->join('pasien', 'pasien_register.pasien_id', 'pasien.id')
                                 ->where('pasien.kota_id', $val);
                         });
                         break;
-                    case 'fasyankes': 
-                        $models->whereHas('register', function ($query) use ($val){
-                            $query->where('fasyankes_id', $val);
+                    case 'nama_pasien': 
+                        $models->whereHas('register', function($query) use ($val){
+                            $query->join('pasien_register', 'register.id', 'pasien_register.register_id')
+                                ->join('pasien', 'pasien_register.pasien_id', 'pasien.id')
+                                ->where('pasien.nama_lengkap', $val);
                         });
                         break;
-                    case 'kategori': 
+                    case 'instansi_pengiriman': 
                         $models->whereHas('register', function ($query) use ($val){
-                            $query->where('sumber_pasien', 'ilike', '%'. $val .'%');
+                            $query->where('register.instansi_pengiriman', 'ilike', '%'. $val .'%');
                         });
                         break;
-                    case 'tanggal_verifikasi_start':
-                        $models->where('waktu_sample_verified', '>=', $val);
+                    case 'start_date':
+                        $models->where('waktu_pcr_sample_analyzed', '>=', $val);
                         break;
-                    case 'tanggal_verifikasi_end':
-                        $models->where('waktu_sample_verified', '<=', $val);
+                    case 'end_date':
+                        $models->where('waktu_pcr_sample_analyzed', '<=', $val);
                         break;
                     default:
                         break;
@@ -327,7 +329,7 @@ class VerifikasiController extends Controller
     public function updateToVerified(Request $request, Sampel $sampel)
     {
         $request->validate([
-            'kesimpulan_pemeriksaan'=> 'required|in:positif,negatif,invalid,sampel kurang',
+            'kesimpulan_pemeriksaan'=> 'required|in:positif,negatif,inkonklusif,sampel kurang',
             'catatan_pemeriksaan'=> 'nullable|max:255',
             'last_pemeriksaan_id'=> 'required|exists:pemeriksaansampel,id'
         ], $request->only(['kesimpulan_pemeriksaan', 'catatan_pemeriksaan', 'last_pemeriksaan_id']));

@@ -3,7 +3,7 @@
     <portal to="title-name">Detail Sampel</portal>
     <portal to="title-action">
       <div class="title-action">
-        <router-link :to="'/verifikasi/edit/' + this.data.id" class="btn btn-warning">
+        <router-link :to="'/hasil-pemeriksaan/edit/' + this.data.id" class="btn btn-warning">
           <i class="fa fa-edit"></i> Ubah
         </router-link>
       </div>

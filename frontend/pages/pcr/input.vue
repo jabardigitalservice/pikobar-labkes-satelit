@@ -144,7 +144,7 @@
                 <div>
                   <label class="form-check-label">
                     <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="inkonklusif" />
-                    <b>INVALID</b>
+                    <b>INKONKLUSIF</b>
                   </label>
                 </div>
               </div>
