@@ -300,17 +300,17 @@ class DashboardController extends Controller
         $tipe = $request->get('tipe','Daily');
         $data = [];
         $data['label'] = [];
-        $data['data'][0]['dataLabel'] = 'positif';
+        $data['data'][0]['label'] = 'positif';
         $data['data'][0]['data'] = [];
-        $data['data'][0]['bgColor'] = '#c41a1a';
+        $data['data'][0]['backgroundColor'] = '#c41a1a';
         $data['data'][0]['borderColor'] = '#c41a1a';
-        $data['data'][1]['dataLabel'] = 'negatif';
+        $data['data'][1]['label'] = 'negatif';
         $data['data'][1]['data'] = [];
-        $data['data'][1]['bgColor'] = '#c4c2c2';
+        $data['data'][1]['backgroundColor'] = '#c4c2c2';
         $data['data'][1]['borderColor'] = '#c4c2c2';
-        $data['data'][2]['dataLabel'] = 'inkonklusif';
+        $data['data'][2]['label'] = 'inkonklusif';
         $data['data'][2]['data'] = [];
-        $data['data'][2]['bgColor'] = '#403d3d';
+        $data['data'][2]['backgroundColor'] = '#403d3d';
         $data['data'][2]['borderColor'] = '#403d3d';
         switch($tipe) {
             case "Daily":
