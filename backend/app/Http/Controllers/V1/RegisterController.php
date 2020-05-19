@@ -115,7 +115,8 @@ class RegisterController extends Controller
             'sumber_pasien' => $request->get('reg_sumberpasien')=="Umum"?"Umum":$request->get('reg_sumberpasien_isian'),
         ]);
 
-        $pasien = Pasien::where('nik',$request->get('reg_nik'))->first();
+        //$pasien = Pasien::where('nik',$request->get('reg_nik'))->first();
+        $pasien = Pasien::where('nik',$request->get('reg_nik'))->where('tanggal_lahir',$request->get('reg_tanggal_lahir'))->where('nama_lengkap',$request->get('reg_nama_lengkap'))->first();
         if(!$pasien) {
             $pasien = new Pasien;
         }

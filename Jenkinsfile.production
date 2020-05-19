@@ -1,0 +1,48 @@
+pipeline {
+
+    agent any
+    environment {
+        USER_PIKOBAR = "${env.USER_PIKOBAR}"
+        HOST_LABKES_SATELITE = "${env.HOST_LABKES_SATELITE}"
+ 
+    }
+
+    options {
+        timeout(time: 1, unit: 'HOURS')
+    }
+
+    stages {
+
+        stage('hello world'){
+            steps{
+                sh 'echo "hello world"'
+            }
+        }
+
+        stage('Run Docker on Production') {
+
+            input{
+                message "Press Ok to continue to Deploy Production ?"
+            
+            }
+            
+            environment {
+                SSH_COMMAND = "ssh-agent bash -c 'ssh-add ~/.ssh/id_rsa; git pull origin master'"     
+            }
+
+            steps{
+                   sshagent (['']){
+                        // ssh block
+                    sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_LABKES_SATELITE "cd /home/ubuntu/app/pikobar-labkes-satelit && $SSH_COMMAND \
+                                                                                    && sudo docker-compose -f docker-compose-production.yml down \
+                                                                                    && sudo docker-compose -f docker-compose-production.yml build --no-cache \
+                                                                                    && sudo docker-compose -f docker-compose-production.yml up -d"'
+                                                                                        
+                    }
+                
+            }      
+         }
+        
+    } 
+
+}
