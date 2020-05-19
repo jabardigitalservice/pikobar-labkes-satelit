@@ -222,6 +222,8 @@ class RegistersampelController extends Controller
                         $sampel = Sampel::where('nomor_sampel',$rows['nomor'])->first();
                         if ($sampel == null) {
                             $sampel = new Sampel;
+                            $sampel->sampel_status = 'sample_taken';
+                            $sampel->waktu_sample_taken =  date('Y-m-d H:i:s');
                         }
                         $sampel->nomor_sampel = $rows['nomor'];
                         $sampel->jenis_sampel_id = $rows['sam_jenis_sampel'];
@@ -231,6 +233,7 @@ class RegistersampelController extends Controller
                         }else {
                             $sampel->jenis_sampel_nama = $rows['sam_namadiluarjenis'];
                         }
+                        $sampel->lab_satelit_id = $user->lab_satelit_id;
                         $sampel->register_id = $register->id;
                         $sampel->save();
                     }

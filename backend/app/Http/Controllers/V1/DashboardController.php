@@ -12,6 +12,7 @@ use App\Models\PasienRegister;
 use App\Models\PemeriksaanSampel;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -38,17 +39,27 @@ class DashboardController extends Controller
     }
     public function tracking()
     {
-        $count_by_status = Sampel::groupBy('sampel_status')->select('sampel_status', DB::raw('count(*) as total'))->pluck('total','sampel_status');
-        $registration_incomplete = Sampel::whereNull('nomor_register')->count();
+        $user = Auth::user();
+        $register = Register::where('lab_satelit_id',$user->lab_satelit_id)->count();
+        $sampel_masuk = Sampel::where('lab_satelit_id',$user->lab_satelit_id)->count();
+        $positif = Sampel::where('lab_satelit_id',$user->lab_satelit_id)
+                            ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                            ->where('kesimpulan_pemeriksaan','positif')
+                            ->count();
+        $negatif = Sampel::where('lab_satelit_id',$user->lab_satelit_id)
+                            ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                            ->where('kesimpulan_pemeriksaan','negatif')
+                            ->count();
+        $inkonklusif = Sampel::where('lab_satelit_id',$user->lab_satelit_id)
+                            ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                            ->where('kesimpulan_pemeriksaan','inkonklusif')
+                            ->count();
         $tracking = [
-            'registration_incomplete' => $registration_incomplete,
-            'waiting_sample' => @$count_by_status['waiting_sample'],
-            'extraction' => @$count_by_status['sample_taken'] + @$count_by_status['extraction_sample_extracted'] + @$count_by_status['extraction_sample_reextract'],
-            'pcr' => @$count_by_status['extraction_sample_sent'] + @$count_by_status['pcr_sample_received'],
-            'verification' => @$count_by_status['pcr_sample_analyzed'],
-            'validation' => @$count_by_status['sample_verified'],
-            'done' => @$count_by_status['sample_valid'],
-            'invalid' => @$count_by_status['sample_invalid'],
+            'register' => $register,
+            'sampel_masuk' => $sampel_masuk,
+            'positif' => $positif,
+            'negatif' => $negatif,
+            'inkonklusif' => $inkonklusif,
         ];
 
         return response()->json([
@@ -282,31 +293,77 @@ class DashboardController extends Controller
 
     public function chartPcr(Request $request)
     {
-        $models = Sampel::whereNotNull('waktu_pcr_sample_analyzed');
+        $models = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
+                        ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id');
         $tipe = $request->get('tipe','Daily');
-
+        $data = [];
+        $data['label'] = [];
+        $data['data'][0]['dataLabel'] = 'positif';
+        $data['data'][0]['data'] = [];
+        $data['data'][0]['bgColor'] = '#c41a1a';
+        $data['data'][0]['borderColor'] = '#c41a1a';
+        $data['data'][1]['dataLabel'] = 'negatif';
+        $data['data'][1]['data'] = [];
+        $data['data'][1]['bgColor'] = '#c4c2c2';
+        $data['data'][1]['borderColor'] = '#c4c2c2';
+        $data['data'][2]['dataLabel'] = 'inkonklusif';
+        $data['data'][2]['data'] = [];
+        $data['data'][2]['bgColor'] = '#403d3d';
+        $data['data'][2]['borderColor'] = '#403d3d';
         switch($tipe) {
             case "Daily":
-                $models = $models->whereBetween('waktu_pcr_sample_analyzed',[date('Y-m-d', strtotime("-7 days")), date('Y-m-d')])
-                ->select(DB::raw('CAST(waktu_pcr_sample_analyzed AS DATE) tanggal'),DB::raw('count(*) as jumlah'))
-                ->groupBy(DB::raw('CAST(waktu_pcr_sample_analyzed AS DATE)'))
-                ->pluck('jumlah','tanggal');
+                $models = $models->whereBetween(DB::raw('DATE(waktu_pcr_sample_analyzed)'),[date('Y-m-d', strtotime("-7 days")), date('Y-m-d')])->get();
+                $key = 0;
+                $waktu_pcr_sample_analyzed = [];
+                foreach($models as $row){
+                    if (!in_array(date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)),$waktu_pcr_sample_analyzed)) {
+                        $waktu_pcr_sample_analyzed[] = date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed));
+                        $data['label'][$key] = date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed));
+                        $data['data'][0]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
+                                                    ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                                                    ->where('kesimpulan_pemeriksaan','positif')
+                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))->count();
+                        $data['data'][1]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
+                                                    ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                                                    ->where('kesimpulan_pemeriksaan','negatif')
+                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))->count();
+                        $data['data'][2]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
+                                                    ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                                                    ->where('kesimpulan_pemeriksaan','inkonklusif')
+                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))->count();
+                        $key++;
+                    }
+                    
+                }
                 
             break;
             case "Monthly":
-                $models = $models
-                            ->where(DB::raw('extract(YEAR from waktu_pcr_sample_analyzed)'),date('Y') )
-                            // ->select(DB::raw('extract(MONTH from waktu_pcr_sample_analyzed) bulan'),DB::raw('count(*) as jumlah'))
-                            // ->groupBy(DB::raw('extract(MONTH from waktu_pcr_sample_analyzed)'))
-                            ->select(DB::raw("TO_CHAR(waktu_pcr_sample_analyzed, 'Month') as bulan"),DB::raw('count(*) as jumlah'))
-                            ->groupBy(DB::raw("TO_CHAR(waktu_pcr_sample_analyzed, 'Month')"))
-                            ->pluck('jumlah','bulan');
+                $models = $models->whereMonth('waktu_pcr_sample_analyzed',date('m'))->get();
+                $key = 0;
+                $waktu_pcr_sample_analyzed = [];
+                foreach($models as $row){
+                    if (!in_array(date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)),$waktu_pcr_sample_analyzed)) {
+                        $waktu_pcr_sample_analyzed[] = date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed));
+                        $data['label'][$key] = date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed));
+                        $data['data'][0]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
+                                                    ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                                                    ->where('kesimpulan_pemeriksaan','positif')
+                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))->count();
+                        $data['data'][1]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
+                                                    ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                                                    ->where('kesimpulan_pemeriksaan','negatif')
+                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))->count();
+                        $data['data'][2]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
+                                                    ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                                                    ->where('kesimpulan_pemeriksaan','inkonklusif')
+                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))->count();
+                        $key++;
+                    }
+                    
+                }
             break;
         }
-        return response()->json([
-            'label' => $models->keys(),
-            'value' => $models->values()
-        ]);
+        return response()->json($data);
     }
 
     public function chartPositif(Request $request)

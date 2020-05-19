@@ -3,21 +3,16 @@
     <div class="col-lg-12">
       <div class="ibox">
         <div class="ibox-title">
-          <div class="ibox-tools">
-            <span class="label label-warning float-right">Sampel Invalid: {{ data.status.invalid }}</span>
-            <br class="d-sm-none">
-            <span class="label label-primary float-right">Selesai: {{ data.status.done }}</span>
-          </div>
-          <h5>Tracking Progress
+          <h5>Informasi
             <br class="d-sm-none"><br class="d-sm-none">
           </h5>
         </div>
         <div class="ibox-content">
           <div class="row tracking-row">
-            <div class="col-md-2 col-6 mb-3 mb-md-0">
+            <div class="col-md-3 col-6 mb-3 mb-md-0">
               <div class="text-center">
                 <h5 class="font-weight-bold text-muted">Registrasi</h5>
-                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.registration_incomplete | formatCurrency}}</h2>
+                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.register | formatCurrency}}</h2>
                 <img
                 v-if="loading"
                 src="~/assets/css/plugins/blueimp/img/loading.gif"
@@ -46,7 +41,7 @@
             <div class="col-md-2 col-6 mb-3 mb-md-0">
               <div class="text-center">
                 <h5 class="font-weight-bold text-muted">Sampel</h5>
-                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.waiting_sample | formatCurrency}}</h2>
+                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.sampel_masuk | formatCurrency}}</h2>
                 <img
                 v-if="loading"
                 src="~/assets/css/plugins/blueimp/img/loading.gif"
@@ -77,15 +72,15 @@
             </div>
             <div class="col-md-2 col-6 mb-3 mb-md-0">
               <div class="text-center">
-                <h5 class="font-weight-bold text-muted">Ekstraksi</h5>
-                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.extraction | formatCurrency}}</h2>
+                <h5 class="font-weight-bold text-muted">Positif</h5>
+                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.positif | formatCurrency}}</h2>
                 <img
                 v-if="loading"
                 src="~/assets/css/plugins/blueimp/img/loading.gif"
                 width="36"
                 height="36"
               />
-                <small class="text-muted">Pcs</small>
+                <small class="text-muted">Orang</small>
                 <router-link to="/registrasi/rujukan" tag="span">
                   <i class="fa fa-level-up"></i>
                 </router-link>
@@ -109,15 +104,15 @@
             </div>
             <div class="col-md-2 col-6 mb-3 mb-md-0">
               <div class="text-center">
-                <h5 class="font-weight-bold text-muted">rRT-PCR</h5>
-                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.pcr | formatCurrency}}</h2>
+                <h5 class="font-weight-bold text-muted">Negatif</h5>
+                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.negatif | formatCurrency}}</h2>
                 <img
                 v-if="loading"
                 src="~/assets/css/plugins/blueimp/img/loading.gif"
                 width="36"
                 height="36"
               />
-                <small class="text-muted">Pcs</small>
+                <small class="text-muted">Orang</small>
                   <router-link to="/" tag="span">
                     <i class="fa fa-level-up"></i>
                   </router-link>
@@ -138,15 +133,15 @@
             </div>
             <div class="col-md-2 col-6 mb-3 mb-md-0">
               <div class="text-center">
-                <h5 class="font-weight-bold text-muted">Verifikasi</h5>
-                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.verification | formatCurrency}}</h2>
+                <h5 class="font-weight-bold text-muted">Inkonklusif</h5>
+                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.inkonklusif | formatCurrency}}</h2>
                 <img
                 v-if="loading"
                 src="~/assets/css/plugins/blueimp/img/loading.gif"
                 width="36"
                 height="36"
               />
-                <small class="text-muted">Sampel</small>
+                <small class="text-muted">Orang</small>
                 <router-link to="/" tag="span">
                   <i class="fa fa-level-up"></i>
                 </router-link>
@@ -160,35 +155,6 @@
               />
               <div class="font-bold text-info">
                 <small>Verifikasi</small>
-                <router-link to="/" tag="span">
-                  <i class="fa fa-level-up"></i>
-                </router-link>
-              </div> -->
-            </div>
-            <div class="col-md-2 col-6 mb-3 mb-md-0">
-              <div class="text-center">
-                <h5 class="font-weight-bold text-muted">Validasi</h5>
-                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.waiting_sample | formatCurrency}}</h2>
-                <img
-                v-if="loading"
-                src="~/assets/css/plugins/blueimp/img/loading.gif"
-                width="36"
-                height="36"
-              />
-                <small class="text-muted">Sampel</small>
-                <router-link to="/" tag="span">
-                  <i class="fa fa-level-up"></i>
-                </router-link>
-              </div>
-              <!-- <h1 class="no-margins" v-if="!loading">{{ data.status.validation | formatCurrency}}</h1>
-              <img
-                v-if="loading"
-                src="~/assets/css/plugins/blueimp/img/loading.gif"
-                width="36"
-                height="36"
-              />
-              <div class="font-bold text-success">
-                <small>Validasi</small>
                 <router-link to="/" tag="span">
                   <i class="fa fa-level-up"></i>
                 </router-link>
@@ -221,14 +187,11 @@ export default {
         let resp = await axios.get("/v1/dashboard/tracking");
         this.data = resp.data;
       } catch (e) {
-        this.data.status.registration_incomplete = "-";
-        this.data.status.waiting_sample = "-";
-        this.data.status.extraction = "-";
-        this.data.status.pcr = "-";
-        this.data.status.verification = "-";
-        this.data.status.validation = "-";
-        this.data.status.done = "-";
-        this.data.status.invalid = "-";
+        this.data.status.register = "-";
+        this.data.status.sampel_masuk = "-";
+        this.data.status.positif = "-";
+        this.data.status.negatif = "-";
+        this.data.status.inkonklusif = "-";
       }
       this.loading = false;
     }
