@@ -42,7 +42,7 @@
                         </div>
 
                         <div class="form-group row mt-4">
-                            <label class="col-md-3 col-lg-2">Nama Rumah Sakit / Fasyankes
+                            <label class="col-md-3 col-lg-2">Nama Rumah Sakit/Dinkes <span style="color:red">*</span>
                                  </label>
                             <div class="col-md-8 col-lg-6" >
                                 <input class="form-control" type="text" name="reg_instansi_pengirim_nama" placeholder=""
@@ -72,8 +72,7 @@
 
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
-                                NIK <small>16 digit</small>
-                                <span style="color:red">*</span>
+                                NIK
                             </label>
                             <div class="col-md-8 col-lg-6" >
                                 <input class="form-control" type="text" name="reg_nik" placeholder="" :class="{ 'is-invalid': form.errors.has('reg_nik') }"
@@ -101,7 +100,7 @@
                             <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_tgllahir') }">
                                 <dropdown-datepicker v-model="form.reg_tgllahir" :minYear="1900" :daySuffixes="false"
                                     :maxYear="(new Date).getFullYear()" displayFormat="dmy" sortYear="asc"
-                                    :default-date="nik_tgl" ref="tgl_lahir"
+                                     ref="tgl_lahir"
                                     :wrapper-class="form.errors.has('reg_tgllahir') ? 'is-invalid' : ''">
                                 </dropdown-datepicker>
                                 <has-error :form="form" field="reg_tgllahir" />
@@ -160,9 +159,9 @@
                                 No. Telp / HP
                                 
                             </label>
-                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_nohp') }">
+                            <div class="col-md-8 col-lg-6" >
                                 <input class="form-control" type="text" name="reg_nohp" placeholder="" 
-                                    v-model="form.reg_nohp" />
+                                    v-model="form.reg_nohp" :class="{ 'is-invalid': form.errors.has('reg_nohp') }"/>
                                 <has-error :form="form" field="reg_nohp" />
                             </div>
                         </div>
@@ -266,7 +265,7 @@
                                 <tbody class="field_wrapper">
                                     <tr v-for="(reg_sampel, $index) in form.reg_sampel" :key="$index">
                                         <td>
-                                            <select class="form-control" v-model="reg_sampel.sam_jenis_sampel" required
+                                            <select class="form-control" v-model="reg_sampel.sam_jenis_sampel"
                                                 :class="{ 'is-invalid': form.errors.has(`reg_sampel.${$index}.sam_jenis_sampel`) }">
                                                 <option :value="js.id" v-for="(js, $index2) in jenis_sampel"
                                                     :key="$index2">{{ js.text }}</option>
@@ -394,7 +393,7 @@
                     reg_usia_tahun: null,
                     reg_usia_bulan: null,
                     reg_sampel: [{
-                        nomor: '1',
+                        nomor: '',
                         sam_namadiluarjenis:null,
                         sam_jenis_sampel:null,
                     }],
@@ -574,25 +573,31 @@
                 }
             },
             "form.reg_tgllahir": function (newVal, oldVal) {
-                var birthday = new Date(this.form.reg_tgllahir)
-                var now = new Date();
-                var yearNow = now.getYear();
-                var monthNow = now.getMonth() + 1;
-                var dayNow = now.getDate();
+                if (this.form.reg_tgllahir == null) {
+                    this.form.reg_usia_tahun = null;
+                    this.form.reg_usia_bulan = null;
+                }else{
+                    var birthday = new Date(this.form.reg_tgllahir)
+                    var now = new Date();
+                    var yearNow = now.getYear();
+                    var monthNow = now.getMonth() + 1;
+                    var dayNow = now.getDate();
 
-                var yearDob = birthday.getYear();
-                var monthDob = birthday.getMonth() + 1;
-                var dayDob = birthday.getDate();
-                var second = 1000;
-                var minute = second * 60;
-                var hour = minute * 60;
-                var day = hour * 24;
-                var month = day * 30;
-                var year = day * 365;
-                var ms = now - birthday;
-                var msb = Math.round(ms % year)
-                this.form.reg_usia_tahun = Math.round(ms / year)
-                this.form.reg_usia_bulan = Math.round(msb / month)
+                    var yearDob = birthday.getYear();
+                    var monthDob = birthday.getMonth() + 1;
+                    var dayDob = birthday.getDate();
+                    var second = 1000;
+                    var minute = second * 60;
+                    var hour = minute * 60;
+                    var day = hour * 24;
+                    var month = day * 30;
+                    var year = day * 365;
+                    var ms = now - birthday;
+                    var msb = Math.round(ms % year)
+                    this.form.reg_usia_tahun = Math.round(ms / year)
+                    this.form.reg_usia_bulan = Math.round(msb / month)
+                }
+                
             },
             "form.reg_fasyankes_pengirim":function(newVal, oldVal){
                 this.changeFasyankes(this.form.reg_fasyankes_pengirim)

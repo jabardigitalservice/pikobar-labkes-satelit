@@ -62,20 +62,24 @@ class RegistersampelController extends Controller
             $user = Auth::user();
             $v = Validator::make($request->all(),[
                 'reg_instansi_pengirim' => 'required',
+                'reg_instansi_pengirim_nama' => 'required',
                 'reg_nama_pasien' => 'required',
-                'reg_kota' => 'required',
-                'reg_nik'  => 'required|digits:16',
+                'reg_nohp' => 'nullable|numeric',
+                // 'reg_kota' => 'required',
+                'reg_nik'  => 'nullable|numeric|max:16',
                 'reg_sampel.*' => [
                     'required',
                     new UniqueSampel(),
                 ],
             ], [
                 'reg_instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
-                'reg_kota.required' => 'Instansi Pengirim tidak boleh kosong',
+                'reg_nohp.numeric' => 'No. Telp / HP hanya berupa angka',
+                'reg_instansi_pengirim_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
+                // 'reg_kota.required' => 'Kota tidak boleh kosong',
                 
                 'reg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
-                'reg_nik.digits' => 'NIK terdiri dari :digits karakter',
-                'reg_nik.required' => 'NIK Pasien tidak boleh kosong',
+                'reg_nik.max' => 'NIK terdiri dari :max karakter',
+                'reg_nik.numeric' => 'NIK terdiri hanya berupa angka',
                 'reg_sampel.required' => 'Mohon isi minimal satu nomor sampel',
             ]);
             $v->validate();
@@ -89,18 +93,20 @@ class RegistersampelController extends Controller
             $register->creator_user_id = $user->id;
             $register->lab_satelit_id = $user->lab_satelit_id;
             $register->instansi_pengirim = $request->get('reg_instansi_pengirim');
-            $register->instansi_pengirim_nama = $request->get('instansi_pengirim_nama');
+            $register->instansi_pengirim_nama = $request->get('reg_instansi_pengirim_nama');
             $register->save();
 
-            $pasien = Pasien::where('nik',$request->get('reg_nik'))->first();
-            if(!$pasien) {
-                $pasien = new Pasien;
-            }
+            // $pasien = Pasien::where('nik',$request->get('reg_nik'))->first();
+            // if(!$pasien) {
+                // }
+            $pasien = new Pasien;
             $pasien->nama_lengkap = $request->get('reg_nama_pasien');
             $pasien->kewarganegaraan = $request->get('reg_kewarganegaraan');
             $pasien->nik = $request->get('reg_nik');
             $pasien->tempat_lahir = $request->get('reg_tempatlahir');
-            $pasien->tanggal_lahir = $request->get('reg_tgllahir');
+            if ($request->get('reg_tgllahir') != null) {
+                $pasien->tanggal_lahir = date('Y-m-d',strtotime($request->get('reg_tgllahir')));
+            }
             $pasien->no_hp = $request->get('reg_nohp');
             $pasien->kota_id = $request->get('reg_kota');
             $pasien->kecamatan = $request->get('reg_kecamatan');
@@ -132,23 +138,25 @@ class RegistersampelController extends Controller
 
             if($request->get('reg_sampel')) {
                 foreach($request->get('reg_sampel') as $rows) {
-                    $sampel = new Sampel;
-                    $sampel->nomor_sampel = $rows['nomor'];
-                    $sampel->jenis_sampel_id = $rows['sam_jenis_sampel'];
-                    if($rows['sam_jenis_sampel']!=999999){
-                        $jenis_sampel = JenisSampel::where('id',$rows['sam_jenis_sampel'])->first();
-                        $sampel->jenis_sampel_nama = $jenis_sampel->nama;
-                    }else {
-                        $sampel->jenis_sampel_nama = $rows['sam_namadiluarjenis'];
+                    if ($rows['nomor'] != "") {
+                        $sampel = new Sampel;
+                        $sampel->nomor_sampel = $rows['nomor'];
+                        $sampel->jenis_sampel_id = $rows['sam_jenis_sampel'];
+                        if($rows['sam_jenis_sampel']!=999999){
+                            $jenis_sampel = JenisSampel::where('id',$rows['sam_jenis_sampel'])->first();
+                            $sampel->jenis_sampel_nama = $jenis_sampel->nama;
+                        }else {
+                            $sampel->jenis_sampel_nama = $rows['sam_namadiluarjenis'];
+                        }
+                        
+                        $sampel->register_id = $register->id;
+                        $sampel->lab_satelit_id = $user->lab_satelit_id;
+                        $sampel->pengambilan_sampel_id = $pengambilan_sampel->id;
+                        $sampel->sampel_status = 'sample_taken';
+                        $sampel->waktu_sample_taken =  date('Y-m-d H:i:s');
+                        // $sampel->updateState('sample_taken');
+                        $sampel->save();
                     }
-                    
-                    $sampel->register_id = $register->id;
-                    $sampel->lab_satelit_id = $user->lab_satelit_id;
-                    $sampel->pengambilan_sampel_id = $pengambilan_sampel->id;
-                    $sampel->sampel_status = 'sample_taken';
-                    $sampel->waktu_sample_taken =  date('Y-m-d H:i:s');
-                    // $sampel->updateState('sample_taken');
-                    $sampel->save();
                 }
             }
          DB::commit();
@@ -171,25 +179,26 @@ class RegistersampelController extends Controller
             $user = Auth::user();
             $v = Validator::make($request->all(),[
                 'reg_instansi_pengirim' => 'required',
+                'reg_instansi_pengirim_nama' => 'required',
                     'reg_nama_pasien' => 'required',
-                    'reg_kota' => 'required',
-                    'reg_nik'  => 'required|digits:16',
+                    'reg_nik'  => 'nullable|max:16',
+                    'reg_nohp' => 'nullable|numeric',
                     // 'reg_sampel.*' => [
                     //     'required',
                     //     new UniqueSampel(),
                     // ],
             ], [
-                'reg_kota.required' => 'Instansi Pengirim tidak boleh kosong',
-                'reg_instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
+                    'reg_instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
+                    'reg_instansi_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
                     'reg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
-                    'reg_nik.digits' => 'NIK terdiri dari :digits karakter',
-                    'reg_nik.required' => 'NIK Pasien tidak boleh kosong',
+                    'reg_nik.max' => 'NIK terdiri dari :max karakter',
+                    'reg_nohp.numeric' => 'No. Telp / HP hanya berupa angka',
             ]);
             $v->validate();
             $register->register_uuid = (string) Str::uuid();
             $register->creator_user_id = $user->id;
             $register->instansi_pengirim = $request->get('reg_instansi_pengirim');
-            $register->instansi_pengirim_nama = $request->get('reg_instansi_pengirim');
+            $register->instansi_pengirim_nama = $request->get('reg_instansi_pengirim_nama');
             $register->save();
             
             
@@ -197,7 +206,9 @@ class RegistersampelController extends Controller
             $pasien->kewarganegaraan = $request->get('reg_kewarganegaraan');
             $pasien->nik = $request->get('reg_nik');
             $pasien->tempat_lahir = $request->get('reg_tempatlahir');
-            $pasien->tanggal_lahir = $request->get('reg_tgllahir');
+            if ($request->get('reg_tgllahir') != null) {
+                $pasien->tanggal_lahir = date('Y-m-d',strtotime($request->get('reg_tgllahir')));
+            }
             $pasien->no_hp = $request->get('reg_nohp');
             $pasien->kota_id = $request->get('reg_kota');
             $pasien->kecamatan = $request->get('reg_kecamatan');
@@ -219,23 +230,25 @@ class RegistersampelController extends Controller
             // ]);
             if($request->get('reg_sampel')) {
                     foreach($request->get('reg_sampel') as $rows) {
-                        $sampel = Sampel::where('nomor_sampel',$rows['nomor'])->first();
-                        if ($sampel == null) {
-                            $sampel = new Sampel;
-                            $sampel->sampel_status = 'sample_taken';
-                            $sampel->waktu_sample_taken =  date('Y-m-d H:i:s');
+                        if ($rows['nomor'] != "") {
+                            $sampel = Sampel::where('nomor_sampel',$rows['nomor'])->first();
+                            if ($sampel == null) {
+                                $sampel = new Sampel;
+                                $sampel->sampel_status = 'sample_taken';
+                                $sampel->waktu_sample_taken =  date('Y-m-d H:i:s');
+                            }
+                            $sampel->nomor_sampel = $rows['nomor'];
+                            $sampel->jenis_sampel_id = $rows['sam_jenis_sampel'];
+                            if($rows['sam_jenis_sampel']!=999999){
+                                $jenis_sampel = JenisSampel::where('id',$rows['sam_jenis_sampel'])->first();
+                                $sampel->jenis_sampel_nama = $jenis_sampel->nama;
+                            }else {
+                                $sampel->jenis_sampel_nama = $rows['sam_namadiluarjenis'];
+                            }
+                            $sampel->lab_satelit_id = $user->lab_satelit_id;
+                            $sampel->register_id = $register->id;
+                            $sampel->save();
                         }
-                        $sampel->nomor_sampel = $rows['nomor'];
-                        $sampel->jenis_sampel_id = $rows['sam_jenis_sampel'];
-                        if($rows['sam_jenis_sampel']!=999999){
-                            $jenis_sampel = JenisSampel::where('id',$rows['sam_jenis_sampel'])->first();
-                            $sampel->jenis_sampel_nama = $jenis_sampel->nama;
-                        }else {
-                            $sampel->jenis_sampel_nama = $rows['sam_namadiluarjenis'];
-                        }
-                        $sampel->lab_satelit_id = $user->lab_satelit_id;
-                        $sampel->register_id = $register->id;
-                        $sampel->save();
                     }
                 }
             DB::commit();
@@ -283,8 +296,8 @@ class RegistersampelController extends Controller
             'reg_kecamatan' =>  $pasien->kecamatan,
             'reg_kelurahan' =>  $pasien->kelurahan,
             'reg_alamat' =>  $pasien->alamat_lengkap,
-            'reg_rt' =>  (int)$pasien->no_rt,
-            'reg_rw' =>  (int) $pasien->no_rw,
+            'reg_rt' =>  $pasien->no_rt,
+            'reg_rw' =>   $pasien->no_rw,
             'reg_sampel' =>  $smp,
             'reg_keterangan' =>  $pasien->keterangan_lain,
             'reg_jk' => $pasien->jenis_kelamin,

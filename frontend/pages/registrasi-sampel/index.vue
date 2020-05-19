@@ -52,7 +52,7 @@
                     :columns="{
                       nama_pasien: 'Pasien',
                       nama_kota: 'Domisili',
-                      instansi_pengirim: 'Instansi Pengirim',
+                      instansi_pengirim_nama: 'Nama Rumah Sakit/Dinkes',
                       no_sampel:'Sampel',
                       tgl_input:'Tanggal Input',
                       keterangan:'Keterangan'

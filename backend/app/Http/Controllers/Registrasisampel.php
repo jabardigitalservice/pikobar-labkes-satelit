@@ -16,7 +16,7 @@ class Registrasisampel extends Controller
 { 
     public function getData(Request $request)
     {
-        $models = PasienRegister::leftJoin('register','register.id','pasien_register.register_id')
+        $models = Register::leftJoin('pasien_register','register.id','pasien_register.register_id')
                     ->leftJoin('pasien','pasien.id','pasien_register.pasien_id')
                     ->leftJoin('kota','kota.id','pasien.kota_id');
         $params = $request->get('params',false);
@@ -107,15 +107,20 @@ class Registrasisampel extends Controller
         $models = $models->select('pasien.*','kota.nama as nama_kota',
         'register.created_at as tgl_input','pasien_register.*','register.sumber_pasien',
         'register.jenis_registrasi','register.dinkes_pengirim','register.sumber_pasien','register.nama_rs',
-        'register.other_nama_rs','register.instansi_pengirim');
+        'register.other_nama_rs','register.instansi_pengirim_nama');
         $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
 
         foreach($models as &$model) {
             $model->samples = Sampel::where('register_id',$model->register_id)->get();
-            $bday = new DateTime($model->tanggal_lahir); 
-            $today = new Datetime(date('Y-m-d'));
-            $diff = $today->diff($bday);
-            $model->usia = $diff->y . ' Tahun ' . $diff->m . ' Bulan '  . $diff->d . ' Hari ';
+            if ($model->tanggal_lahir != null) {
+                $bday = new DateTime($model->tanggal_lahir); 
+                $today = new Datetime(date('Y-m-d'));
+                $diff = $today->diff($bday);
+                $model->usia = $diff->y . ' Tahun ' . $diff->m . ' Bulan '  . $diff->d . ' Hari ';    
+            }else{
+                $model->usia = $model->usia_tahun ? 0 : $model->usia_tahun. ' Tahun ' . $model->usia_bulan ? 0 : $model->usia_bulan  . ' Bulan ';
+            }
+            
         }
 
         $result = [

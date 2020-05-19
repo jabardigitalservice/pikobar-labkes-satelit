@@ -10,7 +10,7 @@
             {{item.nama_kota}}
         </td>
         <td>
-            {{item.instansi_pengirim}}
+            {{item.instansi_pengirim_nama}}
         </td>
         <td>
             <span class="badge badge-success mr-2" style="text-align:left;margin-bottom:10px" v-for="s in item.samples" :key="s"># {{s.nomor_sampel}} <br>
@@ -41,23 +41,35 @@ export default {
     },
     methods: {
         async deleteData(id, pasien){
-            await axios.delete('v1/register/sampel/'+id+'/'+pasien)
-                .then((response)=>{
-                    this.$toast.success(response.data.message, {
-                        icon: 'check',
-                        iconPack: 'fontawesome',
-                        duration: 5000
+            this.$swal.fire({
+                title: 'Apakah Anda Yakin ?',
+                text: "untuk menghapus data",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+            }).then((result) => {
+                if (result.value) {
+                     axios.delete('v1/register/sampel/'+id+'/'+pasien)
+                    .then((response)=>{
+                        this.$swal.fire(
+                            'Berhasil Menghapus Data',
+                            'Data Berhasil dihapus',
+                            'success'
+                        );
+                        this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel')
                     })
-
-                    this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel')
-                })
-                .catch((error)=>{
-                    this.$swal.fire(
-                        'Terjadi Kesalahan',
-                        'Gagal menghapus data, silakan hubungi admin',
-                        'error'
-                    );
-                })
+                    .catch((error)=>{
+                        this.$swal.fire(
+                                'Terjadi Kesalahan',
+                                'Gagal menghapus data, silakan coba kembali',
+                                'error'
+                            );
+                    })
+                }
+            })
             // await axios.delete('pengguna/'+id)
             //     .then((response)=>{
             //          this.$swal.fire(

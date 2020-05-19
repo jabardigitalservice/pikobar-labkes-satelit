@@ -33,7 +33,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
         try {
             $user = Auth::user();
             foreach ($rows as $key => $row) {
-                if (!$row->get('no') || !$row->get('nik')) {
+                if (!$row->get('no')) {
                     continue;
                 }
 
@@ -82,10 +82,10 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                      'kota_id.required'=> 'Kota harap diisi dengan menyesuaikan dengan ID di Sheet Kota',
                      'kota_id.exists'=> 'Kota tidak ditemukan',
                  ])->validate();
-                 $pasien = Pasien::where('nik',$row->get('nik'))->first();
-                 if (!$pasien) {
+                //  $pasien = Pasien::where('nik',$row->get('nik'))->first();
+                //  if (!$pasien) {
                      $pasien = new Pasien;
-                 }
+                //  }
                  $pasien->nik = $this->parseNIK($row->get('nik'));
                  $pasien->nama_lengkap = $row->get('nama');
                  $pasien->jenis_kelamin = $row->get('jenis_kelamin');
@@ -159,7 +159,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
 
         }
 
-        abort_if(!$kota, 403, "Kota domisili tidak ditemukan pada pasien dengan NIK {$row->get('nik')}");
+        // abort_if(!$kota, 403, "Kota domisili tidak ditemukan pada pasien dengan NIK {$row->get('nik')}");
 
 
         return $kota;
