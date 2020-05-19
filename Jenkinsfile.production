@@ -22,7 +22,7 @@ pipeline {
         stage('Run Docker on Production') {
 
             input{
-                message "Press Ok to continue to Deploy Production ?"
+                message "Press Ok to continue to Deploy Production?"
             
             }
             
