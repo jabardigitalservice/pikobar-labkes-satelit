@@ -66,7 +66,7 @@ class RegistersampelController extends Controller
                 'reg_nama_pasien' => 'required',
                 'reg_nohp' => 'nullable|numeric',
                 // 'reg_kota' => 'required',
-                'reg_nik'  => 'nullable|numeric|max:16',
+                'reg_nik'  => 'nullable|digits:16',
                 'reg_sampel.*' => [
                     'required',
                     new UniqueSampel(),
@@ -78,8 +78,7 @@ class RegistersampelController extends Controller
                 // 'reg_kota.required' => 'Kota tidak boleh kosong',
                 
                 'reg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
-                'reg_nik.max' => 'NIK terdiri dari :max karakter',
-                'reg_nik.numeric' => 'NIK terdiri hanya berupa angka',
+                'reg_nik.digits' => 'NIK terdiri dari :digits karakter',
                 'reg_sampel.required' => 'Mohon isi minimal satu nomor sampel',
             ]);
             $v->validate();
@@ -181,7 +180,7 @@ class RegistersampelController extends Controller
                 'reg_instansi_pengirim' => 'required',
                 'reg_instansi_pengirim_nama' => 'required',
                     'reg_nama_pasien' => 'required',
-                    'reg_nik'  => 'nullable|max:16',
+                    'reg_nik'  => 'nullable|digits:16',
                     'reg_nohp' => 'nullable|numeric',
                     // 'reg_sampel.*' => [
                     //     'required',
@@ -191,7 +190,7 @@ class RegistersampelController extends Controller
                     'reg_instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
                     'reg_instansi_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
                     'reg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
-                    'reg_nik.max' => 'NIK terdiri dari :max karakter',
+                    'reg_nik.digits' => 'NIK terdiri dari :digits karakter',
                     'reg_nohp.numeric' => 'No. Telp / HP hanya berupa angka',
             ]);
             $v->validate();
