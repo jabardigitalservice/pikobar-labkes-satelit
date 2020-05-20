@@ -73,14 +73,16 @@ var MyStatus;
       }
     },
     created() {
+      setTimeout(() => { 
         this.loadData('Daily');
+      }, 1000); 
     },
     mounted() {
         this.$bus.$on('refresh-chart-pcr', (tipe) => {
-        MyStatus.destroy();
-        setTimeout(() => {
-          this.loadData(tipe)
-        }, 500);
+          MyStatus.destroy();
+          setTimeout(() => {
+            this.loadData(tipe)
+          }, 1000);
       })
     }
   };

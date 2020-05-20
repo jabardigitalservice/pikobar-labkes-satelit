@@ -314,7 +314,7 @@ class DashboardController extends Controller
         $data['data'][2]['borderColor'] = '#403d3d';
         switch($tipe) {
             case "Daily":
-                $models = $models->whereBetween(DB::raw('DATE(waktu_pcr_sample_analyzed)'),[date('Y-m-d', strtotime("-7 days")), date('Y-m-d')])->where('lab_satelit_id',$user->lab_satelit_id)->get();
+                $models = $models->whereBetween(DB::raw('DATE(waktu_pcr_sample_analyzed)'),[date('Y-m-d', strtotime("-7 days")), date('Y-m-d')])->get();
                 $key = 0;
                 $waktu_pcr_sample_analyzed = [];
                 foreach($models as $row){
