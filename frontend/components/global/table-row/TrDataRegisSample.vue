@@ -14,7 +14,6 @@
         </td>
         <td>
             <span class="badge badge-success mr-2" style="text-align:left;margin-bottom:10px" v-for="s in item.samples" :key="s"># {{s.nomor_sampel}} <br>
-            Status : {{s.sampel_status}}
             </span>
         </td>
         <td>

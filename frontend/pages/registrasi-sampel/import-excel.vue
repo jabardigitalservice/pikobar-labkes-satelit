@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper wrapper-content">
-    <portal to="title-name">Import Registrasi Mandiri</portal>
+    <portal to="title-name">Import Registrasi Sampel</portal>
     <portal to="title-action">
       <div class="title-action">
         <a href="#" @click.prevent="$router.back()" class="btn btn-secondary">

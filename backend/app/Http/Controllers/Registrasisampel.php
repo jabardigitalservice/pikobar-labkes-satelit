@@ -112,15 +112,9 @@ class Registrasisampel extends Controller
 
         foreach($models as &$model) {
             $model->samples = Sampel::where('register_id',$model->register_id)->get();
-            if ($model->tanggal_lahir != null) {
-                $bday = new DateTime($model->tanggal_lahir); 
-                $today = new Datetime(date('Y-m-d'));
-                $diff = $today->diff($bday);
-                $model->usia = $diff->y . ' Tahun ' . $diff->m . ' Bulan '  . $diff->d . ' Hari ';    
-            }else{
-                $model->usia = $model->usia_tahun ? 0 : $model->usia_tahun. ' Tahun ' . $model->usia_bulan ? 0 : $model->usia_bulan  . ' Bulan ';
-            }
-            
+            $tahun = $model->usia_tahun == null ? 0 : $model->usia_tahun;
+            $bulan = $model->usia_bulan == null ? 0 : $model->usia_bulan;
+            $model->usia =  $tahun. ' Tahun ' . $bulan . ' Bulan ';
         }
 
         $result = [

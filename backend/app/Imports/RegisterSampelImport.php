@@ -39,7 +39,6 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
 
                 $registerData = [
                     'register_uuid'=> (string) \Illuminate\Support\Str::uuid(),
-                    'jenis_registrasi'=> 'mandiri',
                     'creator_user_id' => $user->id,
                     'lab_satelit_id' => $user->lab_satelit_id,
                     'created_at'=> date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s'))),
@@ -48,8 +47,13 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                 ];
 
                 Validator::make($registerData, [
-                    'created_at'=> 'date|date_format:Y-m-d H:i:s',
-                 ])->validate();
+                    'instansi_pengirim'=> 'required',
+                    'instansi_pengirim_nama'=> 'required',
+                ],[
+                    'instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
+                    'instansi_pengirim_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
+                ]
+                )->validate();
 
                 $register = new Register;
                 $register->register_uuid = (string) \Illuminate\Support\Str::uuid();
@@ -72,15 +76,11 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     'lab_satelit_id'=> $user->lab_satelit_id,
                 ];
                 Validator::make($pasienData, [
-                    'nik'=> 'required|digits:16',
-                    'nama_lengkap'=> 'required|min:3',
-                    'tanggal_lahir'=> 'required|date|date_format:Y-m-d',
-                    'kota_id'=> 'required|exists:kota,id',
-                    'jenis_kelamin'=> 'required|in:L,P',
+                    'nik'=> 'nullable|digits:16',
+                    'nama_lengkap'=> 'required',
                  ],[
-                     'nik.digits'=> 'NIK harus 16 dijit.', 
-                     'kota_id.required'=> 'Kota harap diisi dengan menyesuaikan dengan ID di Sheet Kota',
-                     'kota_id.exists'=> 'Kota tidak ditemukan',
+                     'nik.digits'=> 'NIK terdiri dari 16 karakter', 
+                     'nama_lengkap.required'=> 'Nama Pasien Tidak Boleh Kosong', 
                  ])->validate();
                 //  $pasien = Pasien::where('nik',$row->get('nik'))->first();
                 //  if (!$pasien) {
@@ -125,7 +125,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     $sampel->sampel_status = 'sample_taken';
                     $sampel->lab_satelit_id = (int) $user->lab_satelit_id;
                     $sampel->creator_user_id = $user->id;
-                    $sampel->jenis_sampel_id = $jenissampel ? $jenissampel->id : 999999;
+                    $sampel->jenis_sampel_id = $jenissampel ? $jenissampel->id : null;
                     $sampel->jenis_sampel_nama = $row->get('jenis_sampel');
                     $sampel->created_at = date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')));
                     $sampel->waktu_sample_taken = date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')));
