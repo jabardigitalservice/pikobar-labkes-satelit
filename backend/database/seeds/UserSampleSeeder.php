@@ -34,7 +34,7 @@ class UserSampleSeeder extends Seeder
                 "email" => "websatelit",
                 "name" => "websatelit",
                 "password" => bcrypt('jabarjuara'),
-                "role_id" => 2,
+                "role_id" => 8,
                 "username" => "websatelit",
                 "lab_satelit_id" => 1,
             ]
