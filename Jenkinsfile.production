@@ -12,17 +12,11 @@ pipeline {
     }
 
     stages {
-
-        stage('hello world'){
-            steps{
-                sh 'echo "hello world"'
-            }
-        }
-
+        
         stage('Run Docker on Production') {
 
             input{
-                message "Press Ok to continue to Deploy Production?"
+                message "Press Ok to continue to Deploy Production ?"
             
             }
             
@@ -42,6 +36,17 @@ pipeline {
                 
             }      
          }
+
+        stage('Deliver for hook-frontend.sh') {
+            
+            steps{
+                   sshagent (['']){
+                        // ssh block
+                       sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_LABKES_SATELITE "cd /home/ubuntu/app/pikobar-labkes-satelit  \
+                                                                                        && ./hook-frontend.sh"'
+                    }
+            }    
+        }
         
     } 
 
