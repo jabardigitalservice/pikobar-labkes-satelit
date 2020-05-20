@@ -39,10 +39,10 @@ class PCRController extends Controller
                 if ($val == '') continue;
                 switch($key) {
                     case "start_date":
-                        $models = $models->where('sampel.waktu_sample_taken','>=',date('Y-m-d',strtotime($val)));
+                        $models = $models->whereDate('sampel.waktu_sample_taken','>=',date('Y-m-d',strtotime($val)));
                     break;
                     case "end_date":
-                        $models = $models->where('sampel.waktu_sample_taken','<=',date('Y-m-d',strtotime($val)));
+                        $models = $models->whereDate('sampel.waktu_sample_taken','<=',date('Y-m-d',strtotime($val)));
                     break;
                     case 'instansi_pengirim': 
                         $models->whereHas('register', function ($query) use ($val){
@@ -133,9 +133,7 @@ class PCRController extends Controller
             ->whereIn('sampel_status', ['pcr_sample_received','pcr_sample_analyzed','extraction_sample_reextract'])
             ->orderByDesc('created_at')
             ->get();
-        $model['pasien'] = PasienRegister::where('register_id',$model->register_id)
-                        ->leftJoin('pasien','pasien_register.pasien_id','pasien_id')
-                        ->first();
+        $model->pasien = $model->register ? optional($model->register)->pasiens()->with(['kota'])->first() : null;
         return response()->json(['status'=>200,'message'=>'success','data'=>$model]);
     }
 

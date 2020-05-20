@@ -51,7 +51,7 @@ class HasilPemeriksaanImport implements ToCollection, WithHeadingRow
                     }
                 }
                 if (is_integer($data['tanggal_periksaan'])) {
-                    $data['tanggal_pemeriksaan'] = gmdate("Y-m-d",($data['tanggal_periksaan'] - 25569) * 86400);
+                    $data['tanggal_pemeriksaan'] = gmdate("Y-m-d",($data['tanggal_pemeriksaan'] - 25569) * 86400);
                 }
                 $this->data[] = [
                     'no' => $data['no'],

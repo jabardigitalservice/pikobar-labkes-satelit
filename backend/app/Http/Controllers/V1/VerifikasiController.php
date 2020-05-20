@@ -79,10 +79,10 @@ class VerifikasiController extends Controller
                         });
                         break;
                     case 'start_date':
-                        $models->where('waktu_pcr_sample_analyzed', '>=', $val);
+                        $models->whereDate('waktu_pcr_sample_analyzed', '>=', $val);
                         break;
                     case 'end_date':
-                        $models->where('waktu_pcr_sample_analyzed', '<=', $val);
+                        $models->whereDate('waktu_pcr_sample_analyzed', '<=', $val);
                         break;
                     default:
                         break;

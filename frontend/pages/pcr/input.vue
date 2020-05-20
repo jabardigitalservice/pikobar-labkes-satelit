@@ -52,9 +52,9 @@
             <div class="form-group">
               <label>
                 Tanggal Input Hasil
-                <span style="color:red">*</span>
               </label>
               <date-picker
+                :disabled="true"
                 placeholder="Pilih Tanggal"
                 format="d MMMM yyyy"
                 input-class="form-control"
