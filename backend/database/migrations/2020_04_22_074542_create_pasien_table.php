@@ -25,7 +25,7 @@ class CreatePasienTable extends Migration
             $table->string('no_hp', 25)->nullable();
             $table->string('no_telp', 20)->nullable();
             $table->string('pekerjaan', 150)->nullable();
-            $table->char('jenis_kelamin', 1);
+            $table->char('jenis_kelamin', 1)->nullable();
             $table->unsignedInteger('kota_id')->nullable();
             $table->string('kecamatan', 100)->nullable();
             $table->string('kelurahan', 100)->nullable();
