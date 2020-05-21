@@ -36,7 +36,6 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                 if (!$row->get('no')) {
                     continue;
                 }
-
                 $registerData = [
                     'register_uuid'=> (string) \Illuminate\Support\Str::uuid(),
                     'creator_user_id' => $user->id,
@@ -46,14 +45,14 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     'instansi_pengirim_nama'=> $row->get('nama_instansi'),
                 ];
 
-                Validator::make($registerData, [
-                    'instansi_pengirim'=> 'required',
-                    'instansi_pengirim_nama'=> 'required',
-                ],[
-                    'instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
-                    'instansi_pengirim_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
-                ]
-                )->validate();
+                // Validator::make($registerData, [
+                //     'instansi_pengirim'=> 'required',
+                //     'instansi_pengirim_nama'=> 'required',
+                // ],[
+                //     'instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
+                //     'instansi_pengirim_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
+                // ]
+                // )->validate();
 
                 $register = new Register;
                 $register->register_uuid = (string) \Illuminate\Support\Str::uuid();
@@ -64,7 +63,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                 $register->instansi_pengirim_nama = $row->get('nama_instansi');
                 $register->save();
                 $pasienData = [
-                    'nik'=> $this->parseNIK($row->get('nik')),
+                    'nik'=> $row->get('nik'),
                     'nama_lengkap'=> $row->get('nama'),
                     'jenis_kelamin'=> $row->get('jenis_kelamin'),
                     'tanggal_lahir'=> date('Y-m-d',strtotime($row->get('tgl_lahir'))),
@@ -77,7 +76,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                 ];
                 Validator::make($pasienData, [
                     'nik'=> 'nullable|digits:16',
-                    'nama_lengkap'=> 'required',
+                    // 'nama_lengkap'=> 'required',
                  ],[
                      'nik.digits'=> 'NIK terdiri dari 16 karakter', 
                      'nama_lengkap.required'=> 'Nama Pasien Tidak Boleh Kosong', 
@@ -106,7 +105,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     $jenissampel = JenisSampel::where('nama','ilike','%'.$row->get('jenis_sampel').'%')->first();
                     $nomorsampel = Sampel::where('nomor_sampel',$nomor)->first();
                     if ($nomorsampel) {
-                        ++$error;
+                        $error++;
                     }
                     
                     abort_if($error == count($nomorSampels), 403,"Nomor Sampel Sudah Terpakai {$nomor}");
