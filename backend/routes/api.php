@@ -197,6 +197,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             Route::post('import-mandiri', 'ImportRegisterController@importRegisterMandiri');
             Route::post('import-sampel', 'ImportRegisterController@importRegisterSampel');
+            Route::post('import-hasil-pemeriksaan', 'ImportRegisterController@importHasilPemeriksaan');
 
             Route::post('import-rujukan', 'ImportRegisterController@importRegisterRujukan');
 

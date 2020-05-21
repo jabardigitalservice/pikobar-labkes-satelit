@@ -5,7 +5,7 @@
     </portal>
     <portal to="title-action">
       <div class="title-action">
-        <nuxt-link to="/registrasi/mandiri" class="btn btn-primary">Kembali</nuxt-link>
+        <nuxt-link to="/registrasi/sampel" class="btn btn-primary">Kembali</nuxt-link>
       </div>
     </portal>
     <div class="row">

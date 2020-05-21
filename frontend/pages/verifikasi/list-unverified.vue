@@ -11,11 +11,16 @@
         <Ibox title="Sampel Hasil Pemeriksaan">
           <div class="row mb-4">
             <div class="col-md-12">
-              <button id="btn-export" class="btn btn-primary pull-right" 
+              
+              <button id="btn-export" class="btn btn-primary pull-right ml-1" 
                 @click="onExport('verifikasi')"
               >
                 <i class="fa fa-file-excel-o"></i> Export Excel
               </button>
+              <router-link to="/hasil-pemeriksaan/import-excel" class="btn btn-primary pull-right " 
+              >
+                <i class="fa fa-file-excel-o"></i> Import Excel
+              </router-link>
             </div>
             
           </div>

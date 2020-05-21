@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
 use App\Imports\RegisterMandiriImport;
 use App\Imports\RegisterRujukanImport;
+use App\Imports\HasilPemeriksaanAkhirImport;
 use App\Imports\RegisterSampelImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -38,6 +39,19 @@ class ImportRegisterController extends Controller
         $this->importValidator($request)->validate();
 
         Excel::import(new RegisterSampelImport, $request->file('register_file'));
+
+        return response()->json([
+            'status'=> 200,
+            'message'=> 'Sukses import data.',
+            'data'=> null
+        ]);
+    }
+
+    public function importHasilPemeriksaan(Request $request)
+    {       
+        $this->importValidator($request)->validate();
+
+        Excel::import(new HasilPemeriksaanAkhirImport, $request->file('register_file'));
 
         return response()->json([
             'status'=> 200,

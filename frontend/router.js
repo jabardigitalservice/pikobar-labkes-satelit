@@ -99,7 +99,8 @@ const routes = [
     { path: '/verifikasi/list-verified', name: 'verifikasi.index.verified', component: page('verifikasi/list-verified.vue'), meta: { parentName: 'home' } },
     { path: '/hasil-pemeriksaan/detail/:id', name: 'verifikasi.detail', component: page('verifikasi/detail.vue'), meta: { parentName: 'verifikasi.index.unverified' } },
     { path: '/hasil-pemeriksaan/edit/:id', name: 'verifikasi.edit', component: page('verifikasi/edit.vue'), meta: { parentName: 'verifikasi.index.unverified' } },
-    { path: '/hasil-pemeriksaan/export-excel', name: 'verifikasi.export-excel', component: page('verifikasi/export-excel.vue'), meta: { parentName: 'verifikasi.index.verified' } },
+    { path: '/hasil-pemeriksaan/export-excel', name: 'verifikasi.export-excel', component: page('verifikasi/export-excel.vue'), meta: { parentName: 'verifikasi.index.unverified' } },
+    { path: '/hasil-pemeriksaan/import-excel', name: 'verifikasi.import-excel', component: page('verifikasi/import-excel.vue'), meta: { parentName: 'verifikasi.index.unverified' } },
 
     // Validasi
     { path: '/validasi/list-unvalidate', name: 'validasi.index.unvalidate', component: page('validasi/list-unvalidate.vue'), meta: { parentName: 'home' } },
