@@ -41,19 +41,22 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                     'register_uuid'=> (string) \Illuminate\Support\Str::uuid(),
                     'creator_user_id' => $user->id,
                     'lab_satelit_id' => $user->lab_satelit_id,
-                    'created_at'=> date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s'))),
+                    'created_at'=> $row->get('tgl_masuk_sampel'),
                     'instansi_pengirim'=> $row->get('instansi_pengirim'),
                     'instansi_pengirim_nama'=> $row->get('nama_instansi'),
                 ];
 
-                // Validator::make($registerData, [
-                //     'instansi_pengirim'=> 'required',
-                //     'instansi_pengirim_nama'=> 'required',
-                // ],[
-                //     'instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
-                //     'instansi_pengirim_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
-                // ]
-                // )->validate();
+                 Validator::make($registerData, [
+                    'instansi_pengirim'=> 'required',
+                    'instansi_pengirim_nama'=> 'required',
+                    'created_at'=> 'date|date_format:Y-m-d'
+                ],[
+                    'instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
+                    'instansi_pengirim_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
+                    'created_at.date' => 'Tanggal tidak valid',
+                    'created_at.date_format' => 'Format Tanggal yyyy-mm-dd',
+                ]
+                )->validate();
 
                 $register = new Register;
                 $register->register_uuid = (string) \Illuminate\Support\Str::uuid();
@@ -77,7 +80,7 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                 ];
                 Validator::make($pasienData, [
                     'nik'=> 'nullable|digits:16',
-                    // 'nama_lengkap'=> 'required',
+                    'nama_lengkap'=> 'required',
                  ],[
                      'nik.digits'=> 'NIK terdiri dari 16 karakter', 
                      'nama_lengkap.required'=> 'Nama Pasien Tidak Boleh Kosong', 

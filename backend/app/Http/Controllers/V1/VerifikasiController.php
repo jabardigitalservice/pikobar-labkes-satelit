@@ -73,9 +73,9 @@ class VerifikasiController extends Controller
                                 ->where('pasien.nama_lengkap', $val);
                         });
                         break;
-                    case 'instansi_pengiriman': 
+                    case 'instansi_pengirim': 
                         $models->whereHas('register', function ($query) use ($val){
-                            $query->where('register.instansi_pengiriman', 'ilike', '%'. $val .'%');
+                            $query->where('register.instansi_pengirim', 'ilike', '%'. $val .'%');
                         });
                         break;
                     case 'start_date':
