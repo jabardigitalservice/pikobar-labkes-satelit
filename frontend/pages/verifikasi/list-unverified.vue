@@ -11,12 +11,7 @@
         <Ibox title="Sampel Hasil Pemeriksaan">
           <div class="row mb-4">
             <div class="col-md-12">
-              
-              <button id="btn-export" class="btn btn-primary pull-right ml-1" 
-                @click="onExport('verifikasi')"
-              >
-                <i class="fa fa-file-excel-o"></i> Export Excel
-              </button>
+              <download-export-button :parentRefs="$refs" ajaxTableRef="verifikasi" class="btn btn-primary pull-right ml-1"></download-export-button>
               <router-link to="/hasil-pemeriksaan/import-excel" class="btn btn-primary pull-right " 
               >
                 <i class="fa fa-file-excel-o"></i> Import Excel
@@ -26,7 +21,9 @@
           </div>
           
           <ajax-table
+            ref="verifikasi"
             url="/v1/verifikasi/list"
+            urlexport="/v1/verifikasi/export"
             :oid="'verifikasi'"
             :params="params1"
             :config="{

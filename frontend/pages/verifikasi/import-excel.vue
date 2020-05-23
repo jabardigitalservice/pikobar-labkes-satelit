@@ -16,7 +16,7 @@
 
             <div class="form-group">
               <label for="register_file">
-                File Registrasi
+                File Hasil Pemeriksaan
               </label>
               <input class="form-control" 
                 type="file" 

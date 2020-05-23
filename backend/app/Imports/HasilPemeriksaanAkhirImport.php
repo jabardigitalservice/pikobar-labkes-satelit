@@ -53,8 +53,8 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                 ],[
                     'instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
                     'instansi_pengirim_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
-                    'created_at.date' => 'Tanggal tidak valid',
-                    'created_at.date_format' => 'Format Tanggal yyyy-mm-dd',
+                    'created_at.date' => 'Tanggal Masuk Sampel tidak valid',
+                    'created_at.date_format' => 'Format Tanggal Masuk Sampel harus yyyy-mm-dd',
                 ]
                 )->validate();
 
@@ -70,7 +70,7 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                     'nik'=> $row->get('nik'),
                     'nama_lengkap'=> $row->get('nama'),
                     'jenis_kelamin'=> $row->get('jenis_kelamin'),
-                    'tanggal_lahir'=> date('Y-m-d',strtotime($row->get('tgl_lahir'))),
+                    'tanggal_lahir'=> $row->get('tgl_lahir'),
                     'kota_id'=> optional($this->getKota($row))->id,
                     'kecamatan'=> $row->get('kecamatan'),
                     'kelurahan'=> $row->get('desakelurahan'),
@@ -81,9 +81,12 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                 Validator::make($pasienData, [
                     'nik'=> 'nullable|digits:16',
                     'nama_lengkap'=> 'required',
+                    'tanggal_lahir'=> 'nullable|date|date_format:Y-m-d'
                  ],[
                      'nik.digits'=> 'NIK terdiri dari 16 karakter', 
-                     'nama_lengkap.required'=> 'Nama Pasien Tidak Boleh Kosong', 
+                     'nama_lengkap.required'=> 'Nama Pasien Tidak Boleh Kosong',
+                     'tanggal_lahir.date' => 'Tanggal Lahit tidak valid',
+                     'tanggal_lahir.date_format' => 'Format Tanggal Lahir harus yyyy-mm-dd', 
                  ])->validate();
                 //  $pasien = Pasien::where('nik',$row->get('nik'))->first();
                 //  if (!$pasien) {
@@ -107,26 +110,16 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                 $error = 0;
                 foreach ($nomorSampels as $key => $nomor) {
                     $jenissampel = JenisSampel::where('nama','ilike','%'.$row->get('jenis_sampel').'%')->first();
-                    $nomorsampel = Sampel::where('nomor_sampel',$nomor)->first();
+                    $nomorsampel = Sampel::where('nomor_sampel','ilike','%'.$nomor.'%')->where('lab_satelit_id',$user->lab_satelit_id)->first();
                     if ($nomorsampel) {
                         $error++;
                     }
                     
                     abort_if($error == count($nomorSampels), 403,"Nomor Sampel Sudah Terpakai {$nomor}");
-                    // $sampelData = [
-                    //     'nomor_sampel'=> $nomor,
-                    //     'sampel_status'=> 'sample_taken',
-                    //     'lab_satelit_id'=> (int) $user->lab_satelit_id,
-                    //     'creator_user_id'=> $user->id,
-                    //     'jenis_sampel_id'=> $jenissampel ? $jenissampel->id : 999999,
-                    //     'jenis_sampel_nama'=> $row->get('jenis_sampel'),
-                    //     'created_at' => date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s'))),
-                    //     'waktu_sample_taken' => date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s'))),
-                    // ];
                     $sampel = new Sampel();
-                    $sampel->nomor_sampel = $nomor;
+                    $sampel->nomor_sampel = strtoupper($nomor);
                     $sampel->sampel_status = 'sample_taken';
-                    $sampel->lab_satelit_id = (int) $user->lab_satelit_id;
+                    $sampel->lab_satelit_id = $user->lab_satelit_id;
                     $sampel->creator_user_id = $user->id;
                     $sampel->jenis_sampel_id = $jenissampel ? $jenissampel->id : null;
                     $sampel->jenis_sampel_nama = $row->get('jenis_sampel');

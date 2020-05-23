@@ -285,8 +285,8 @@
                                         </td>
                                         <td>
                                             <input class="form-control" type="text" v-model="reg_sampel.nomor"
-                                                :class="{ 'is-invalid': form.errors.has(`reg_sampel.${$index}`) }" />
-                                            <has-error :form="form" :field="`reg_sampel.${$index}`" />
+                                                :class="{ 'is-invalid': form.errors.has(`reg_sampel.${$index}.nomor`) }" />
+                                            <has-error :form="form" :field="`reg_sampel.${$index}.nomor`" />
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-sm btn-danger remove_field"
@@ -466,7 +466,7 @@
                     reg_kunke: null,
                     reg_rsfasyankes: null,
                     reg_sampel: [{
-                        nomor: '',
+                        nomor: null,
                         sam_namadiluarjenis:null,
                         sam_jenis_sampel:null,
                     }],
@@ -474,7 +474,7 @@
             },
             addSample() {
                 this.form.reg_sampel.push({
-                    nomor: '',
+                    nomor: null,
                     sam_namadiluarjenis:null,
                     sam_jenis_sampel:null,
                 })

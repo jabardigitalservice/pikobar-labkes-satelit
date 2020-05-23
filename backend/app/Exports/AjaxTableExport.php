@@ -8,24 +8,32 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Sheet;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class AjaxTableExport implements FromCollection, WithEvents, WithMapping, WithHeadings, WithColumnFormatting, ShouldAutoSize
+class AjaxTableExport implements FromCollection, WithEvents, WithMapping, WithHeadings, WithColumnFormatting, ShouldAutoSize , WithTitle 
 {
     private $models = "";
+    private $totals = "";
     private $header = "";
     private $mapping = "";
     private $column_format = "";
     private $style = "";
 
-    public function __construct($models, $header, $mapping, $column_format, $style = [])
+    public function __construct($models, $header, $mapping, $column_format, $style = [],$totals)
     {
         $this->models = $models;
         $this->header = $header;
         $this->mapping = $mapping;
         $this->column_format = $column_format;
         $this->style = $style;
+        $this->totals = $totals + 1;
+    }
+
+    public function title(): string
+    {
+        return 'Hasil Pemeriksaan';
     }
 
     public function headings(): array
@@ -55,25 +63,22 @@ class AjaxTableExport implements FromCollection, WithEvents, WithMapping, WithHe
 
     public function registerEvents(): array
     {
-        Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
-            $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
-        });
-        Sheet::macro('freezePane', function (Sheet $sheet, $pane) {
-        $sheet->getDelegate()->getActiveSheet()->freezePane($pane);
-        });
-
-        if($this->style!='' && count($this->style)>0){
-            return [
-                AfterSheet::class => function(AfterSheet $event) {
-                    $event->sheet->styleCells(
-                        $this->style['cell'], $this->style['center']);
-                    $event->sheet->freezePane($this->style['freeze']);
-                },
-            ];
-        }
-        else {
-            return [];
-        }
+       return [
+            AfterSheet::class    => function(AfterSheet $event) {
+                $cellRange = 'A1:K1'; // All headers
+                $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(12);
+                $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold(true);
+                $styleArray = [
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
+                        ],
+                    ]
+                ];
+                $event->sheet->getDelegate()->getStyle("A1:K{$this->totals}")->applyFromArray($styleArray);
+            },
+        ];
         
     }
 }
