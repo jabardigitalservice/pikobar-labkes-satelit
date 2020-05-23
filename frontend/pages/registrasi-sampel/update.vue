@@ -421,6 +421,7 @@
             addSample() {
                 // console.log(this.form.reg_sampel)
                 this.form.reg_sampel.push({
+                    id:null,
                     nomor: null,
                     sam_namadiluarjenis: null,
                     sam_jenis_sampel: null,

@@ -261,6 +261,9 @@ class RegistersampelController extends Controller
             if($request->get('reg_sampel')) {
                     foreach($request->get('reg_sampel') as $rows) {
                             $sampel = Sampel::where('id',$rows['id'])->first();
+                            if ($sampel == null) {
+                                $sampel = new Sampel();
+                            }
                             $sampel->nomor_sampel = strtoupper($rows['nomor']);
                             $sampel->jenis_sampel_id = $rows['sam_jenis_sampel'];
                             if($rows['sam_jenis_sampel']!=999999){
