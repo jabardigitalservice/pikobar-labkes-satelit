@@ -84,7 +84,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                  ],[
                      'nik.digits'=> 'NIK terdiri dari 16 karakter', 
                      'nama_lengkap.required'=> 'Nama Pasien Tidak Boleh Kosong',
-                     'tanggal_lahir.date' => 'Tanggal Lahit tidak valid',
+                     'tanggal_lahir.date' => 'Tanggal Lahir tidak valid',
                      'tanggal_lahir.date_format' => 'Format Tanggal Lahir harus yyyy-mm-dd', 
                  ])->validate();
                 //  $pasien = Pasien::where('nik',$row->get('nik'))->first();
