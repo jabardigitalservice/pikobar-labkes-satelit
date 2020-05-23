@@ -108,6 +108,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                 $nomorSampels = explode(';', $row->get('kode_sampel'));
                 $error = 0;
                 foreach ($nomorSampels as $key => $nomor) {
+                    abort_if($nomor == "", 403,"Nomor Sampel Tidak Boleh Kosong");
                     $jenissampel = JenisSampel::where('nama','ilike','%'.$row->get('jenis_sampel').'%')->first();
                     $nomorsampel = Sampel::where('nomor_sampel','ilike','%'.$nomor.'%')->where('lab_satelit_id',$user->lab_satelit_id)->first();
                     if ($nomorsampel) {
@@ -115,6 +116,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     }
                     
                     abort_if($error == count($nomorSampels), 403,"Nomor Sampel Sudah Terpakai {$nomor}");
+                    
                     $sampel = new Sampel();
                     $sampel->nomor_sampel = strtoupper($nomor);
                     $sampel->sampel_status = 'sample_taken';

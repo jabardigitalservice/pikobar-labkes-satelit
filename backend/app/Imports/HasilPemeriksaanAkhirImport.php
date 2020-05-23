@@ -85,7 +85,7 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                  ],[
                      'nik.digits'=> 'NIK terdiri dari 16 karakter', 
                      'nama_lengkap.required'=> 'Nama Pasien Tidak Boleh Kosong',
-                     'tanggal_lahir.date' => 'Tanggal Lahit tidak valid',
+                     'tanggal_lahir.date' => 'Tanggal Lahir tidak valid',
                      'tanggal_lahir.date_format' => 'Format Tanggal Lahir harus yyyy-mm-dd', 
                  ])->validate();
                 //  $pasien = Pasien::where('nik',$row->get('nik'))->first();
@@ -109,6 +109,7 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                 $nomorSampels = explode(';', $row->get('kode_sampel'));
                 $error = 0;
                 foreach ($nomorSampels as $key => $nomor) {
+                    abort_if($nomor == "", 403,"Nomor Sampel Tidak Boleh Kosong");
                     $jenissampel = JenisSampel::where('nama','ilike','%'.$row->get('jenis_sampel').'%')->first();
                     $nomorsampel = Sampel::where('nomor_sampel','ilike','%'.$nomor.'%')->where('lab_satelit_id',$user->lab_satelit_id)->first();
                     if ($nomorsampel) {
