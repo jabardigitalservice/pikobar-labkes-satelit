@@ -261,7 +261,7 @@ class RegistersampelController extends Controller
             if($request->get('reg_sampel')) {
                     foreach($request->get('reg_sampel') as $rows) {
                             $sampel = Sampel::where('id',$rows['id'])->first();
-                            if ($sampel == null) {
+                            if ($rows['id'] == null) {
                                 $sampel = new Sampel();
                             }
                             $sampel->nomor_sampel = strtoupper($rows['nomor']);
