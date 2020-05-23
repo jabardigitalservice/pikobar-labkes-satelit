@@ -172,7 +172,7 @@ class VerifikasiController extends Controller
                 $model->pasien->nama_lengkap,
                 $model->pasien->nik,
                 $model->pasien->usia_tahun,
-                $model->pasien->kota->nama,
+                isset($model->pasien->kota->nama) ? $model->pasien->kota->nama : null,
                 $model->register->instansi_pengirim,
                 $model->pemeriksaanSampel->hasil_deteksi_parsed != null ? 
                 $model->pemeriksaanSampel->hasil_deteksi_parsed->transform(function($r){
