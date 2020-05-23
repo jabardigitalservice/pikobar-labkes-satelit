@@ -153,7 +153,7 @@ class RegistersampelController extends Controller
                         $sampel->jenis_sampel_id = $rows['sam_jenis_sampel'];
                         if($rows['sam_jenis_sampel']!=999999){
                             $jenis_sampel = JenisSampel::where('id',$rows['sam_jenis_sampel'])->first();
-                            $sampel->jenis_sampel_nama = $jenis_sampel->nama;
+                            $sampel->jenis_sampel_nama = isset($jenis_sampel->nama) ? $jenis_sampel->nama : null;
                         }else {
                             $sampel->jenis_sampel_nama = $rows['sam_namadiluarjenis'];
                         }
@@ -265,7 +265,7 @@ class RegistersampelController extends Controller
                             $sampel->jenis_sampel_id = $rows['sam_jenis_sampel'];
                             if($rows['sam_jenis_sampel']!=999999){
                                 $jenis_sampel = JenisSampel::where('id',$rows['sam_jenis_sampel'])->first();
-                                $sampel->jenis_sampel_nama = $jenis_sampel->nama;
+                                $sampel->jenis_sampel_nama = isset($jenis_sampel->nama) ? $jenis_sampel->nama : null;
                             }else {
                                 $sampel->jenis_sampel_nama = $rows['sam_namadiluarjenis'];
                             }
