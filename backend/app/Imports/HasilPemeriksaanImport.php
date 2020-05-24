@@ -34,6 +34,8 @@ class HasilPemeriksaanImport implements ToCollection, WithHeadingRow
                           ->where('lab_satelit_id',$user->lab_satelit_id)->first();
                 if (!$sampel) {
                     $this->addError($key, "Nomor sampel '".$row->get('kode_sampel')."' tidak ditemukan");
+                } else if ($sampel->sampel_status == 'pcr_sample_analyzed') {
+                    $this->addError($key, "Nomor sampel '".$row->get('kode_sampel')."' sudah pada status " . $sampel->status->deskripsi);
                 } else if ($sampel->sampel_status != 'sample_taken') {
                     $this->addError($key, "Nomor sampel '".$row->get('kode_sampel')."' masih pada status " . $sampel->status->deskripsi);
                 }
