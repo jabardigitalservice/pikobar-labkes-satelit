@@ -7,6 +7,7 @@ use App\Models\Pasien;
 use App\Models\Register;
 use App\Models\Sampel;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
