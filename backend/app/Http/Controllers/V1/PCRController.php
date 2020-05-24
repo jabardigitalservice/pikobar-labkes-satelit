@@ -50,7 +50,6 @@ class PCRController extends Controller
                         });
                         break;
                     default:
-                        $models = $models->where($key,$val);
                         break;
                 }
             }

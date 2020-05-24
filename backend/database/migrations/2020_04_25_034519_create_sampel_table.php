@@ -26,7 +26,7 @@ class CreateSampelTable extends Migration
         });
         Schema::create('sampel', function (Blueprint $table) {
             $table->id();
-            $table->string('nomor_sampel')->unique();
+            $table->string('nomor_sampel');
             $table->string('nomor_register')->index()->nullable();
             $table->unsignedInteger('register_id')->index()->nullable();
             $table->unsignedInteger('jenis_sampel_id')->index()->nullable();

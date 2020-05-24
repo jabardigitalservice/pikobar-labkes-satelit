@@ -405,7 +405,7 @@ export default {
                 const link = document.createElement('a');
                 link.href = url;
                 const contentDisposition = response.headers['content-disposition'];
-                let fileName = 'unknown';
+                let fileName = 'hasil_pemeriksaan.xlsx';
                 if (contentDisposition) {
                     const fileNameMatch = contentDisposition.match(/filename=(.+)/);
                     if (fileNameMatch.length === 2)

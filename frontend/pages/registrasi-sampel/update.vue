@@ -102,6 +102,7 @@
                                 <dropdown-datepicker v-model="form.reg_tgllahir" :minYear="1900" :daySuffixes="false"
                                     :maxYear="(new Date).getFullYear()" displayFormat="dmy" sortYear="asc"
                                     ref="tgl_lahir"
+                                    :default-date="form.reg_tgllahir"
                                     :wrapper-class="form.errors.has('reg_tgllahir') ? 'is-invalid' : ''">
                                 </dropdown-datepicker>
                                 <has-error :form="form" field="reg_tgllahir" />
@@ -286,8 +287,8 @@
                                         </td>
                                         <td>
                                             <input class="form-control" type="text" v-model="reg_sampel.nomor"
-                                                :class="{ 'is-invalid': form.errors.has(`reg_sampel.${$index}`) }" />
-                                            <has-error :form="form" :field="`reg_sampel.${$index}`" />
+                                                :class="{ 'is-invalid': form.errors.has(`reg_sampel.${$index}.nomor`) }" />
+                                            <has-error :form="form" :field="`reg_sampel.${$index}.nomor`" />
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-sm btn-danger remove_field"
@@ -408,7 +409,7 @@
                     reg_rw: null,
                     reg_suhu: null,
                     reg_sampel: [{
-                        nomor: '',
+                        nomor: null,
                         sam_namadiluarjenis: null,
                         sam_jenis_sampel: null
                     }],
@@ -420,7 +421,8 @@
             addSample() {
                 // console.log(this.form.reg_sampel)
                 this.form.reg_sampel.push({
-                    nomor: '',
+                    id:null,
+                    nomor: null,
                     sam_namadiluarjenis: null,
                     sam_jenis_sampel: null,
                 })

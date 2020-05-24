@@ -41,19 +41,22 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                     'register_uuid'=> (string) \Illuminate\Support\Str::uuid(),
                     'creator_user_id' => $user->id,
                     'lab_satelit_id' => $user->lab_satelit_id,
-                    'created_at'=> date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s'))),
+                    'created_at'=> $row->get('tgl_masuk_sampel'),
                     'instansi_pengirim'=> $row->get('instansi_pengirim'),
                     'instansi_pengirim_nama'=> $row->get('nama_instansi'),
                 ];
 
-                // Validator::make($registerData, [
-                //     'instansi_pengirim'=> 'required',
-                //     'instansi_pengirim_nama'=> 'required',
-                // ],[
-                //     'instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
-                //     'instansi_pengirim_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
-                // ]
-                // )->validate();
+                 Validator::make($registerData, [
+                    'instansi_pengirim'=> 'required',
+                    'instansi_pengirim_nama'=> 'required',
+                    'created_at'=> 'date|date_format:Y-m-d'
+                ],[
+                    'instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
+                    'instansi_pengirim_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
+                    'created_at.date' => 'Tanggal Masuk Sampel tidak valid',
+                    'created_at.date_format' => 'Format Tanggal Masuk Sampel harus yyyy-mm-dd',
+                ]
+                )->validate();
 
                 $register = new Register;
                 $register->register_uuid = (string) \Illuminate\Support\Str::uuid();
@@ -67,8 +70,8 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                     'nik'=> $row->get('nik'),
                     'nama_lengkap'=> $row->get('nama'),
                     'jenis_kelamin'=> $row->get('jenis_kelamin'),
-                    'tanggal_lahir'=> date('Y-m-d',strtotime($row->get('tgl_lahir'))),
-                    'kota_id'=> optional($this->getKota($row))->id,
+                    'tanggal_lahir'=> $row->get('tgl_lahir'),
+                    'kota_id'=> $this->getKota($row),
                     'kecamatan'=> $row->get('kecamatan'),
                     'kelurahan'=> $row->get('desakelurahan'),
                     'alamat_lengkap'=> $row->get('alamat'),
@@ -77,10 +80,13 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                 ];
                 Validator::make($pasienData, [
                     'nik'=> 'nullable|digits:16',
-                    // 'nama_lengkap'=> 'required',
+                    'nama_lengkap'=> 'required',
+                    'tanggal_lahir'=> 'nullable|date|date_format:Y-m-d'
                  ],[
                      'nik.digits'=> 'NIK terdiri dari 16 karakter', 
-                     'nama_lengkap.required'=> 'Nama Pasien Tidak Boleh Kosong', 
+                     'nama_lengkap.required'=> 'Nama Pasien Tidak Boleh Kosong',
+                     'tanggal_lahir.date' => 'Tanggal Lahir tidak valid',
+                     'tanggal_lahir.date_format' => 'Format Tanggal Lahir harus yyyy-mm-dd', 
                  ])->validate();
                 //  $pasien = Pasien::where('nik',$row->get('nik'))->first();
                 //  if (!$pasien) {
@@ -90,7 +96,7 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                  $pasien->nama_lengkap = $row->get('nama');
                  $pasien->jenis_kelamin = $row->get('jenis_kelamin');
                  $pasien->tanggal_lahir = date('Y-m-d',strtotime($row->get('tgl_lahir')));
-                 $pasien->kota_id = optional($this->getKota($row))->id;
+                 $pasien->kota_id = $this->getKota($row);
                  $pasien->kecamatan = $row->get('kecamatan');
                  $pasien->kelurahan = $row->get('desakelurahan');
                  $pasien->alamat_lengkap = $row->get('alamat');
@@ -103,27 +109,18 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                 $nomorSampels = explode(';', $row->get('kode_sampel'));
                 $error = 0;
                 foreach ($nomorSampels as $key => $nomor) {
+                    abort_if($nomor == "", 403,"Nomor Sampel Tidak Boleh Kosong");
                     $jenissampel = JenisSampel::where('nama','ilike','%'.$row->get('jenis_sampel').'%')->first();
-                    $nomorsampel = Sampel::where('nomor_sampel',$nomor)->first();
+                    $nomorsampel = Sampel::where('nomor_sampel','ilike','%'.$nomor.'%')->where('lab_satelit_id',$user->lab_satelit_id)->first();
                     if ($nomorsampel) {
                         $error++;
                     }
                     
                     abort_if($error == count($nomorSampels), 403,"Nomor Sampel Sudah Terpakai {$nomor}");
-                    // $sampelData = [
-                    //     'nomor_sampel'=> $nomor,
-                    //     'sampel_status'=> 'sample_taken',
-                    //     'lab_satelit_id'=> (int) $user->lab_satelit_id,
-                    //     'creator_user_id'=> $user->id,
-                    //     'jenis_sampel_id'=> $jenissampel ? $jenissampel->id : 999999,
-                    //     'jenis_sampel_nama'=> $row->get('jenis_sampel'),
-                    //     'created_at' => date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s'))),
-                    //     'waktu_sample_taken' => date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s'))),
-                    // ];
                     $sampel = new Sampel();
-                    $sampel->nomor_sampel = $nomor;
+                    $sampel->nomor_sampel = strtoupper($nomor);
                     $sampel->sampel_status = 'sample_taken';
-                    $sampel->lab_satelit_id = (int) $user->lab_satelit_id;
+                    $sampel->lab_satelit_id = $user->lab_satelit_id;
                     $sampel->creator_user_id = $user->id;
                     $sampel->jenis_sampel_id = $jenissampel ? $jenissampel->id : null;
                     $sampel->jenis_sampel_nama = $row->get('jenis_sampel');
@@ -182,19 +179,19 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
     }
 
 
-    private function getKota(Collection $row)
+   private function getKota(Collection $row)
     {
-        $kota = Kota::find($row->get('kotakab'));
+        $kotakab = $row->get('kotakab');
+        $kota = Kota::where('id',$kotakab)->first();
         if (!$kota) {
             $kotaId = (int) substr(($row->get('nik')), 0, 4);
-            $kota = Kota::find($kotaId);
-
+            $kota = Kota::where('id',$kotaId)->first();
         }
 
         // abort_if(!$kota, 403, "Kota domisili tidak ditemukan pada pasien dengan NIK {$row->get('nik')}");
 
 
-        return $kota;
+        return $kota != null ? $kota->id : null;
     }
 
     private function parseNIK($nik)

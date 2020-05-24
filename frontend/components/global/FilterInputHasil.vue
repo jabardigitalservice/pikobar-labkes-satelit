@@ -108,6 +108,8 @@
             <div class="col-md-12 text-left">
                 <button class="btn btn-primary" style="width:200px;margin-top:20px" @click="doFilter"><i
                         class="fa fa-eye"></i> Filter</button>
+                <button class="btn btn-secondary" style="width:200px;margin-top:20px" @click="resetForm"><i
+                        class="fa fa-close"></i> Reset</button>
 
             </div>
         </div>
@@ -124,12 +126,9 @@
             return {
                 optFasyankes:[],
                 params: {
-                    nik: null,
-                    nomor_sampel: null,
                     start_date: null,
                     end_date: null,
                     instansi_pengirim: null,
-                    kota: null,
                 },
                 optionKota: []
             }
@@ -153,6 +152,12 @@
                     nama:'Fasyankes Lainnya'
                 })
             },
+            resetForm(){
+                this.params.instansi_pengirim = null;
+                this.params.start_date = null;
+                this.params.end_date = null;
+                this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
+            }
         },
         mounted() {
             // if (this.oid == 'registrasi-rujukan') {

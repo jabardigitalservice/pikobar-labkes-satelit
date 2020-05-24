@@ -256,6 +256,8 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             Route::get('list', 'VerifikasiController@index');
 
+            Route::get('export', 'VerifikasiController@export');
+
             Route::get('list-verified', 'VerifikasiController@indexVerified');
 
             Route::get('detail/{sampel}', 'VerifikasiController@show');

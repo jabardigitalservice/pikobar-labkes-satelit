@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Exports\AjaxTableExport;
 use App\Http\Controllers\Controller;
 use App\Models\PemeriksaanSampel;
 use App\Models\PengambilanSampel;
@@ -11,6 +12,7 @@ use App\Models\StatusSampel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VerifikasiController extends Controller
 {
@@ -20,7 +22,7 @@ class VerifikasiController extends Controller
      * @param \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, $isData = false)
     {
         $models = Sampel::query()->whereHas('logs')
             ->whereHas('pemeriksaanSampel')
@@ -70,19 +72,19 @@ class VerifikasiController extends Controller
                         $models->whereHas('register', function($query) use ($val){
                             $query->join('pasien_register', 'register.id', 'pasien_register.register_id')
                                 ->join('pasien', 'pasien_register.pasien_id', 'pasien.id')
-                                ->where('pasien.nama_lengkap', $val);
+                                ->where('pasien.nama_lengkap','ilike' ,'%'.$val.'%');
                         });
                         break;
-                    case 'instansi_pengiriman': 
+                    case 'instansi_pengirim': 
                         $models->whereHas('register', function ($query) use ($val){
-                            $query->where('register.instansi_pengiriman', 'ilike', '%'. $val .'%');
+                            $query->where('register.instansi_pengirim', 'ilike', '%'. $val .'%');
                         });
                         break;
                     case 'start_date':
-                        $models->whereDate('waktu_pcr_sample_analyzed', '>=', $val);
+                        $models->whereDate('waktu_pcr_sample_analyzed', '>=', date('Y-m-d',strtotime($val)));
                         break;
                     case 'end_date':
-                        $models->whereDate('waktu_pcr_sample_analyzed', '<=', $val);
+                        $models->whereDate('waktu_pcr_sample_analyzed', '<=', date('Y-m-d',strtotime($val)));
                         break;
                     default:
                         break;
@@ -137,10 +139,58 @@ class VerifikasiController extends Controller
             $model->pemeriksaanSampel = $model->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first() ?? null;
         }
 
-        return response()->json([
+        return !$isData ? response()->json([
             'data'=> $models,
             'count'=> $count
-        ]);
+        ]) : $models;
+    }
+
+    public function export(Request $request)
+    {
+        $models = $this->index($request, true);
+        foreach ($models as $idx => &$model) {
+            $model->no = $idx+1;
+        }
+        $header = [
+            'No',
+            'Tanggal Pemeriksaan',
+            'Nomor Sampel',
+            'Nama Pasien',
+            'NIK',
+            'Usia',
+            'Kota Domisili',
+            'Instansi Pengiriman',
+            'Parameter Lab',
+            'Kesimpulan Pemeriksaan',
+            'Keterangan',
+        ];
+        $mapping = function($model) {
+            return [
+                $model->no,
+                $model->waktu_pcr_sample_analyzed,
+                $model->nomor_sampel,
+                $model->pasien->nama_lengkap,
+                $model->pasien->nik,
+                $model->pasien->usia_tahun,
+                isset($model->pasien->kota->nama) ? $model->pasien->kota->nama : null,
+                $model->register->instansi_pengirim,
+                $model->pemeriksaanSampel->hasil_deteksi_parsed != null ? 
+                $model->pemeriksaanSampel->hasil_deteksi_parsed->transform(function($r){
+                return $r['target_gen'] . ": " . $r['ct_value'];})->implode("\n") : null,
+                $model->pemeriksaanSampel->kesimpulan_pemeriksaan,
+                $model->pemeriksaanSampel->catatan_pemeriksaan,
+                // $model->jabatan_jenis == 2 ? $model->jabatan_nama : (
+                //     $$model->jabatan_jenis == 3 ? ($$model->jft ? $$model->jft->jf_nama : 'ERR JFT') : (
+                //         $$model->jabatan_jenis == 4 ? ($$model->jfu ? $$model->jfu->jfu_nama : 'ERR JFU') : 'ERR JAB'
+                //     )
+                // ),
+            ];
+        };
+        $column_format = [
+            'E' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER,
+        ];
+        return Excel::download(new AjaxTableExport($models, $header, $mapping, $column_format,[],$models->count()), 'hasil_pemeriksaan.xlsx');
+    
     }
 
     /**
@@ -268,6 +318,8 @@ class VerifikasiController extends Controller
             'count'=> $count
         ]);
     }
+
+    
 
     /**
      * Store a newly created resource in storage.

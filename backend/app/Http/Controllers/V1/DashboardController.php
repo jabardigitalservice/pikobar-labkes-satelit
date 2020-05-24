@@ -40,20 +40,26 @@ class DashboardController extends Controller
     public function tracking()
     {
         $user = Auth::user();
-        $register = Register::where('lab_satelit_id',$user->lab_satelit_id)->count();
-        $sampel_masuk = Sampel::where('lab_satelit_id',$user->lab_satelit_id)->count();
-        $positif = Sampel::where('lab_satelit_id',$user->lab_satelit_id)
-                            ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
-                            ->where('kesimpulan_pemeriksaan','positif')
-                            ->count();
-        $negatif = Sampel::where('lab_satelit_id',$user->lab_satelit_id)
-                            ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
-                            ->where('kesimpulan_pemeriksaan','negatif')
-                            ->count();
-        $inkonklusif = Sampel::where('lab_satelit_id',$user->lab_satelit_id)
-                            ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
-                            ->where('kesimpulan_pemeriksaan','inkonklusif')
-                            ->count();
+        $register = Register::query();
+        $sampel_masuk = Sampel::query();
+        $positif = Sampel::join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                            ->where('kesimpulan_pemeriksaan','positif');
+        $negatif = Sampel::join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                            ->where('kesimpulan_pemeriksaan','negatif');
+        $inkonklusif = Sampel::join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                            ->where('kesimpulan_pemeriksaan','inkonklusif');
+        if ($user->lab_satelit_id != null) {
+            $register->where('lab_satelit_id',$user->lab_satelit_id);
+            $sampel_masuk->where('lab_satelit_id',$user->lab_satelit_id);
+            $positif->where('lab_satelit_id',$user->lab_satelit_id);
+            $negatif->where('lab_satelit_id',$user->lab_satelit_id);
+            $inkonklusif->where('lab_satelit_id',$user->lab_satelit_id);
+        }
+        $register = $register->count();
+        $sampel_masuk = $sampel_masuk->count();
+        $positif = $positif->count();
+        $negatif = $negatif->count();
+        $inkonklusif = $inkonklusif->count();
         $tracking = [
             'register' => $register,
             'sampel_masuk' => $sampel_masuk,
@@ -295,8 +301,10 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $models = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
-                        ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
-                        ->where('lab_satelit_id',$user->lab_satelit_id);
+                        ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id');
+        if ($user->lab_satelit_id != null) {
+            $models->where('lab_satelit_id',$user->lab_satelit_id);
+        }
         $tipe = $request->get('tipe','Daily');
         $data = [];
         $data['label'] = [];
@@ -321,21 +329,44 @@ class DashboardController extends Controller
                     if (!in_array(date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)),$waktu_pcr_sample_analyzed)) {
                         $waktu_pcr_sample_analyzed[] = date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed));
                         $data['label'][$key] = date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed));
-                        $data['data'][0]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
+                        if ($user->lab_satelit_id != null) {
+                            $data['data'][0]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
                                                     ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
                                                     ->where('kesimpulan_pemeriksaan','positif')
+                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))
                                                     ->where('lab_satelit_id',$user->lab_satelit_id)
-                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))->count();
+                                                    ->count();
                         $data['data'][1]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
                                                     ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
                                                     ->where('kesimpulan_pemeriksaan','negatif')
+                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))
                                                     ->where('lab_satelit_id',$user->lab_satelit_id)
-                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))->count();
+                                                    ->count();
                         $data['data'][2]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
                                                     ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
                                                     ->where('kesimpulan_pemeriksaan','inkonklusif')
+                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))
                                                     ->where('lab_satelit_id',$user->lab_satelit_id)
-                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))->count();
+                                                    ->count();
+                        } else {
+                            $data['data'][0]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
+                                                    ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                                                    ->where('kesimpulan_pemeriksaan','positif')
+                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))
+                                                    ->count();
+                        $data['data'][1]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
+                                                    ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                                                    ->where('kesimpulan_pemeriksaan','negatif')
+                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))
+                                                    ->count();
+                        $data['data'][2]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
+                                                    ->join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                                                    ->where('kesimpulan_pemeriksaan','inkonklusif')
+                                                    ->whereDate('waktu_pcr_sample_analyzed',date('Y-m-d',strtotime($row->waktu_pcr_sample_analyzed)))
+                                                    ->count();
+                        }
+                        
+                        
                         $key++;
                     }
                     

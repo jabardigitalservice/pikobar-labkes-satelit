@@ -116,11 +116,11 @@
 
         <div class="form-group row">
             <div class="col-md-2">
-                <label for="nama_pasien">Instansi Pengirim</label>
+                <label for="nama_pasien">Nama Rumah Sakit/Dinkes</label>
             </div>
             <div class="col-md-4">
-                <input type="text" name="params.instansi_pengirim" v-model="params.instansi_pengirim" id="" class="form-control"
-                    placeholder="Instansi Pengirim">
+                <input type="text" name="params.instansi_pengirim_nama" v-model="params.instansi_pengirim_nama" id="" class="form-control"
+                    placeholder="Nama Rumah Sakit/Dinkes">
             </div>
         </div>
 
@@ -128,6 +128,8 @@
             <div class="col-md-12 text-left">
                 <button class="btn btn-primary" style="width:200px;margin-top:20px" @click="doFilter"><i
                         class="fa fa-eye"></i> Filter</button>
+                <button class="btn btn-secondary" style="width:200px;margin-top:20px" @click="resetForm"><i
+                        class="fa fa-close"></i> Reset</button>
 
             </div>
         </div>
@@ -145,13 +147,10 @@
                 optFasyankes:[],
                 params: {
                     nama_pasien: null,
-                    instansi_pengirim:null,
+                    instansi_pengirim_nama:null,
                     nik: null,
-                    nomor_sampel: null,
                     start_date: null,
                     end_date: null,
-                    sumber_pasien: null,
-                    sumber_sampel: null,
                     kota: null,
                 },
                 optionKota: []
@@ -176,6 +175,15 @@
                     nama:'Fasyankes Lainnya'
                 })
             },
+            resetForm(){
+                this.params.nama_pasien = null;
+                this.params.instansi_pengirim_nama = null;
+                this.params.nik = null;
+                this.params.start_date = null;
+                this.params.end_date = null;
+                this.params.kota = null;
+                this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
+            }
         },
         mounted() {
             // if (this.oid == 'registrasi-rujukan') {

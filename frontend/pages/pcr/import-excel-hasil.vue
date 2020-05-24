@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper wrapper-content">
-    <portal to="title-name">Import Hasil PCR Laboratorium</portal>
+    <portal to="title-name">Import Input Hasil PCR Laboratorium</portal>
     <portal to="title-action">
       <div class="title-action">
         <a href="#" @click.prevent="$router.back()" class="btn btn-secondary">
@@ -13,7 +13,7 @@
         <div class="col-md-4">
           <Ibox title="Loading Data">
             <div class="form-group">
-              <label for="register_file">File Hasil Pemeriksaan</label>
+              <label for="register_file">File Input Hasil</label>
               <input class="form-control" type="file" ref="myFile" @change="previewFile"
                 accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
             </div>
