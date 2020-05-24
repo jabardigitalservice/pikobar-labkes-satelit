@@ -92,6 +92,9 @@ class RegistersampelController extends Controller
                     if ($item['sam_jenis_sampel'] == null) {
                         $validator->errors()->add("reg_sampel.$key.sam_jenis_sampel", 'Jenis Sampel tidak boleh kosong');
                     }
+                    if ($item['sam_jenis_sampel'] == 999999 && $item['sam_namadiluarjenis'] == null) {
+                        $validator->errors()->add("reg_sampel.$key.sam_namadiluarjenis", 'Nama diluar jenis tidak boleh kosong');
+                    }
                 });
             }
             $v->validate();
@@ -227,6 +230,9 @@ class RegistersampelController extends Controller
                     }
                     if ($item['sam_jenis_sampel'] == null) {
                         $validator->errors()->add("reg_sampel.$key.sam_jenis_sampel", 'Jenis Sampel tidak boleh kosong');
+                    }
+                    if ($item['sam_jenis_sampel'] == 999999 && $item['sam_namadiluarjenis'] == null) {
+                        $validator->errors()->add("reg_sampel.$key.sam_namadiluarjenis", 'Nama diluar jenis tidak boleh kosong');
                     }
                 });
             }
