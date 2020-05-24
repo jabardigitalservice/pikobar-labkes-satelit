@@ -316,7 +316,7 @@ class RegistersampelController extends Controller
             'reg_nama_pasien' =>  $pasien->nama_lengkap,
             'reg_nik' =>  $pasien->nik,
             'reg_tempatlahir' =>  $pasien->tempat_lahir,
-            'reg_tgllahir' =>  $pasien->tanggal_lahir,
+            'reg_tgllahir' =>  date('Y-m-d',strtotime($pasien->tanggal_lahir)),
             'reg_nohp' =>  $pasien->no_hp,
             'reg_kota' =>  $pasien->kota_id,
             'reg_kecamatan' =>  $pasien->kecamatan,

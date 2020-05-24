@@ -22,17 +22,17 @@ class HasilPemeriksaanImport implements ToCollection, WithHeadingRow
     {
         $this->data = [];
         $this->errors = [];
+        $user = Auth::user();
         DB::beginTransaction();
         try {
             foreach ($rows as $key => $row) {
                 if (!$row->get('no')) {
                     continue;
                 }
-                $sampel = Sampel::where('nomor_sampel',$row->get('kode_sampel'))->first();
+                $sampel = Sampel::where('nomor_sampel','ilike','%'.$row->get('kode_sampel').'%')
+                          ->where('lab_satelit_id',$user->lab_satelit_id)->first();
                 if (!$sampel) {
                     $this->addError($key, "Nomor sampel '".$row->get('kode_sampel')."' tidak ditemukan");
-                } else if ($sampel->sampel_status == 'extraction_sample_sent') {
-                    $this->addError($key, "Nomor sampel '".$row->get('kode_sampel')."' belum diterima di Lab PCR. Mohon diterima terlebih dahulu. ");
                 } else if ($sampel->sampel_status != 'sample_taken') {
                     $this->addError($key, "Nomor sampel '".$row->get('kode_sampel')."' masih pada status " . $sampel->status->deskripsi);
                 }

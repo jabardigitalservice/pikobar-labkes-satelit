@@ -71,7 +71,7 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                     'nama_lengkap'=> $row->get('nama'),
                     'jenis_kelamin'=> $row->get('jenis_kelamin'),
                     'tanggal_lahir'=> $row->get('tgl_lahir'),
-                    'kota_id'=> optional($this->getKota($row))->id,
+                    'kota_id'=> $this->getKota($row),
                     'kecamatan'=> $row->get('kecamatan'),
                     'kelurahan'=> $row->get('desakelurahan'),
                     'alamat_lengkap'=> $row->get('alamat'),
@@ -96,7 +96,7 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                  $pasien->nama_lengkap = $row->get('nama');
                  $pasien->jenis_kelamin = $row->get('jenis_kelamin');
                  $pasien->tanggal_lahir = date('Y-m-d',strtotime($row->get('tgl_lahir')));
-                 $pasien->kota_id = optional($this->getKota($row))->id;
+                 $pasien->kota_id = $this->getKota($row);
                  $pasien->kecamatan = $row->get('kecamatan');
                  $pasien->kelurahan = $row->get('desakelurahan');
                  $pasien->alamat_lengkap = $row->get('alamat');
@@ -179,19 +179,18 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
     }
 
 
-    private function getKota(Collection $row)
+   private function getKota(Collection $row)
     {
-        $kota = Kota::find($row->get('kotakab'));
+        $kota = Kota::where('id',$row->get('kotakab'))->orWhere('nama','ilike','%'.$row->get('kotakab').'%')->first();
         if (!$kota) {
             $kotaId = (int) substr(($row->get('nik')), 0, 4);
-            $kota = Kota::find($kotaId);
-
+            $kota = Kota::where('id',$kotaId)->orWhere('nama','ilike','%'.$row->get('kotakab').'%')->first();
         }
 
         // abort_if(!$kota, 403, "Kota domisili tidak ditemukan pada pasien dengan NIK {$row->get('nik')}");
 
 
-        return $kota;
+        return $kota != null ? $kota->id : null;
     }
 
     private function parseNIK($nik)
