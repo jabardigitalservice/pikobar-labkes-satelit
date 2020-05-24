@@ -148,6 +148,7 @@ export default {
 
       $('#register_file').val('');
       this.form.reset();
+      this.form.register_file = null;
 
       this.loading = false;
 
