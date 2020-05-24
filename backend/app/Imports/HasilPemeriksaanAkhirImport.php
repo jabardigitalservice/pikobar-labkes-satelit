@@ -181,10 +181,11 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
 
    private function getKota(Collection $row)
     {
-        $kota = Kota::where('id',$row->get('kotakab'))->orWhere('nama','ilike','%'.$row->get('kotakab').'%')->first();
+        $kotakab = $row->get('kotakab');
+        $kota = Kota::where('id',$kotakab)->first();
         if (!$kota) {
             $kotaId = (int) substr(($row->get('nik')), 0, 4);
-            $kota = Kota::where('id',$kotaId)->orWhere('nama','ilike','%'.$row->get('kotakab').'%')->first();
+            $kota = Kota::where('id',$kotaId)->first();
         }
 
         // abort_if(!$kota, 403, "Kota domisili tidak ditemukan pada pasien dengan NIK {$row->get('nik')}");
