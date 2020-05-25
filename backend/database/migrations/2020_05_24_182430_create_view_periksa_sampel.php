@@ -13,7 +13,12 @@ class CreateViewPeriksaSampel extends Migration
      */
     public function up()
     {
-        \DB::statement("create view view_durasi_periksa_sampel as select pr.*,p.created_at,s.waktu_pcr_sample_analyzed,s.waktu_pcr_sample_analyzed::date-p.created_at::date as durasi_periksa_sampel
+        \DB::statement("DROP VIEW IF EXISTS view_durasi_periksa_sampel");
+        \DB::statement("DROP VIEW IF EXISTS view_durasi_proses_sampel");
+        \DB::statement("DROP VIEW IF EXISTS view_pemeriksaansampel");
+
+        \DB::statement("create view view_durasi_periksa_sampel as 
+        select pr.*,p.created_at,s.waktu_pcr_sample_analyzed,s.waktu_pcr_sample_analyzed::date-p.created_at::date as durasi_periksa_sampel
         from pasien as p
         left join pasien_register as pr on p.id=pr.pasien_id
         left join sampel as s on s.register_id=pr.register_id");
