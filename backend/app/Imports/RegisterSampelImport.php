@@ -109,7 +109,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                 $error = 0;
                 foreach ($nomorSampels as $key => $nomor) {
                     abort_if($nomor == "", 403,"Nomor Sampel Tidak Boleh Kosong");
-                    $jenissampel = JenisSampel::where('nama','ilike','%'.$row->get('jenis_sampel').'%')->first();
+                    $jenissampel = JenisSampel::where('nama',$row->get('jenis_sampel'))->first();
                     $nomorsampel = Sampel::where('nomor_sampel','ilike','%'.$nomor.'%')->where('lab_satelit_id',$user->lab_satelit_id)->first();
                     if ($nomorsampel) {
                         $error++;
