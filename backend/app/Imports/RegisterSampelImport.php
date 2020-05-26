@@ -122,7 +122,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     $sampel->sampel_status = 'sample_taken';
                     $sampel->lab_satelit_id = $user->lab_satelit_id;
                     $sampel->creator_user_id = $user->id;
-                    $sampel->jenis_sampel_id = $jenissampel ? $jenissampel->id : null;
+                    $sampel->jenis_sampel_id = $jenissampel ? $jenissampel->id : 999999;
                     $sampel->jenis_sampel_nama = $row->get('jenis_sampel');
                     $sampel->created_at = date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')));
                     $sampel->waktu_sample_taken = date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')));
