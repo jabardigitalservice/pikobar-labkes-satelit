@@ -39,8 +39,11 @@ class HasilPemeriksaanImport implements ToCollection, WithHeadingRow
                 } else if ($sampel->sampel_status != 'sample_taken') {
                     $this->addError($key, "Nomor sampel '".$row->get('kode_sampel')."' masih pada status " . $sampel->status->deskripsi);
                 }
-                if (empty($row->get('interpretasi'))) {
+                if (empty($row->get('interpretasi')) ) {
                     $this->addError($key, "Interpretasi kosong");
+                }
+                if (!in_array($row->get('interpretasi'),['Positif','Negatif','Inkonklusif'])) {
+                    $this->addError($key, "Interpretasi tidak valid harus Positif,Negatif,Inkonklusif");
                 }
                 $data = $row->toArray();
                 $keys = array_keys($data);
