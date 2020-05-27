@@ -11,9 +11,9 @@ services:
       - ./frontend:/var/www/frontend
       - ./certbot:/var/www/certbot
       - ./data/certbot/conf:/etc/letsencrypt
-    #ports:
-    #  - "80:80"
-    #  - "443:443"
+    ports:
+      - "80:80"
+      - "443:443"
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     networks: 
       - gateway
