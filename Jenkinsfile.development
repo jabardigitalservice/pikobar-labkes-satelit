@@ -13,12 +13,12 @@ pipeline {
 
     stages {
         
-        stage('Run Docker on Production') {
+        stage('Run Docker on development') {
 
-            input{
-                message "Press Ok to continue to Deploy Production ?"
+            //input{
+            //    message "Press Ok to continue to Deploy Production ?"
             
-            }
+            //}
             
             environment {
                 SSH_COMMAND = "ssh-agent bash -c 'ssh-add ~/.ssh/id_rsa; git pull origin master'"     
@@ -28,9 +28,9 @@ pipeline {
                    sshagent (['']){
                         // ssh block
                     sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_LABKES_SATELITE_STAGING "cd /home/ubuntu/app/pikobar-labkes-satelit && $SSH_COMMAND \
-                                                                                    && sudo docker-compose -f docker-compose-production.yml down \
-                                                                                    && sudo docker-compose -f docker-compose-production.yml build --no-cache \
-                                                                                    && sudo docker-compose -f docker-compose-production.yml up -d"'
+                                                                                    && sudo docker-compose -f docker-compose-development.yml down \
+                                                                                    && sudo docker-compose -f docker-compose-development.yml build --no-cache \
+                                                                                    && sudo docker-compose -f docker-compose-development.yml up -d"'
                                                                                         
                     }
                 
