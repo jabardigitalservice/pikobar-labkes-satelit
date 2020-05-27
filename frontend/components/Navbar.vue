@@ -2,14 +2,14 @@
   <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                <form role="search" class="navbar-form-custom" action="search_results.html">
+                <!-- <form role="search" class="navbar-form-custom" action="#">
                     <div class="form-group">
                         <input type="text" placeholder="Pelacakan Sampel..." class="form-control" name="top-search" id="top-search">
                     </div>
-                </form>
+                </form> -->
             </div>
             <ul class="nav navbar-top-links navbar-right">
-                <li class="dropdown">
+                <!-- <li class="dropdown">
                     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" aria-expanded="false">
                         <i class="fa fa-bell"></i>
                         <span class="label label-primary" v-if="notifications.count > 0">{{ notifications.count }}</span>
@@ -30,7 +30,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> -->
                 <li>
                     <a @click.prevent="logout" href="#">
                         <i class="fa fa-sign-out"></i> {{ $t('logout') }}

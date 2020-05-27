@@ -16,7 +16,9 @@
     <div class="row">
       <div class="col-lg-12">
         <Ibox title="List Input Hasil">
-          <ajax-table url="/v1/pcr/get-data" :oid="'pcr-analisis'" :params="params1" :config="{
+          <ajax-table url="/v1/pcr/get-data" :oid="'pcr-analisis'" :params="params1" 
+          :disableSort="['nama_lengkap','nik','instansi_pengirim']"
+          :config="{
                     autoload: true,
                     has_number: true,
                     has_entry_page: true,

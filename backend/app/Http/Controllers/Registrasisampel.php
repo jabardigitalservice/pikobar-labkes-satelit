@@ -26,7 +26,15 @@ class Registrasisampel extends Controller
         if ($search != '') {
             $models = $models->where(function($q) use ($search) {
                 $q->where('pasien.nama_lengkap','ilike','%'.$search.'%')
-                   ->orWhere('pasien.nik','ilike','%'.$search.'%');
+                   ->orWhere('pasien.nik','ilike','%'.$search.'%')
+                   ->orWhere('kota.nama','ilike','%'.$search.'%')
+                   ->orWhere('register.instansi_pengirim_nama','ilike','%'.$search.'%')
+                   ->orWhere('pasien.usia_tahun','ilike','%'.$search.'%')
+                   ->orWhere('register.created_at','ilike','%'.$search.'%')
+                   ->orWhereHas('sampel', function ($query) use ($search){
+                        $query->where('sampel.nomor_sampel', 'ilike', '%'. $search .'%');
+                    });
+                   ;
             });
         }
 
@@ -86,17 +94,11 @@ class Registrasisampel extends Controller
                 case 'tgl_input':
                     $models = $models->orderBy('register.created_at',$order_direction);
                 break;
-                case 'nomor_register':
-                    $models = $models->orderBy('register.nomor_register',$order_direction);
-                break;
                 case 'nama_kota':
                     $models = $models->orderBy('kota.nama',$order_direction);
                 break;
-                case 'sumber_pasien':
-                    $models = $models->orderBy('register.sumber_pasien',$order_direction);
-                break;
-                case 'nama_rs':
-                    $models = $models->orderBy('register.nama_rs',$order_direction);
+                case 'instansi_pengirim_nama':
+                    $models = $models->orderBy('register.instansi_pengirim_nama',$order_direction);
                 break;
                 case 'no_sampel':
                 break;

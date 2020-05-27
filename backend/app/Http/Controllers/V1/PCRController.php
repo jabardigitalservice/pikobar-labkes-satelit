@@ -30,8 +30,16 @@ class PCRController extends Controller
         $order  = $request->get('order' ,'name');
         if ($search != '') {
             $models = $models->where(function($q) use ($search) {
-                $q->where('nomor_register','ilike','%'.$search.'%')
-                   ->orWhere('nomor_sampel','ilike','%'.$search.'%');
+                $q->where('nomor_sampel','ilike','%'.$search.'%')
+                   ->orWhereHas('register', function ($query) use ($search){
+                        $query->where('register.instansi_pengirim', 'ilike', '%'. $search .'%');
+                    })
+                   ->orWhereHas('register', function($query) use ($search){
+                        $query->whereHas('pasiens', function($query) use ($search) {
+                            $query->where('nama_lengkap', 'ilike','%'.$search.'%')
+                                ->orWhere('nik', 'ilike','%'.$search.'%');
+                        });
+                    });
             });
         }
         if ($params) {
@@ -68,13 +76,37 @@ class PCRController extends Controller
             if (empty($order_direction)) $order_direction = 'asc';
 
             switch ($order) {
-                case 'nomor_register':
                 case 'nomor_sampel':
-                case 'waktu_extraction_sample_sent':
-                case 'waktu_pcr_sample_received':
-                case 'waktu_pcr_sample_analyzed':
-                case 'waktu_extraction_sample_reextract':
+                    $models = $models->orderBy('nomor_sampel',$order_direction);
+                break;
+                // case 'nama_lengkap':
+                //     // $models = $models->orderBy('nomor_sampel',$order_direction);
+                //     $models =
+                //         $models->leftJoin('register','sampel.register_id','register_id')
+                //                 ->leftJoin('pasien_register','pasien_register.register_id','register.id' )
+                //                 ->leftJoin('pasien','pasien_register.pasien_id','pasien.id' )
+                //                 ->orderBy('pasien.nama_lengkap',$order_direction)
+                //         ;
+                // break;
+                // case 'nik':
+                //     // $models = $models->orderBy('nomor_sampel',$order_direction);
+                //     $models =
+                //         $models->leftJoin('register','sampel.register_id','register_id')
+                //                 ->leftJoin('pasien_register','pasien_register.register_id','register.id' )
+                //                 ->leftJoin('pasien','pasien_register.pasien_id','pasien.id' )
+                //                 ->orderBy('pasien.nik',$order_direction)
+                //         ;
+                // break;
+                // case 'instansi_pengirim':
+                //     // $models = $models->orderBy('nomor_sampel',$order_direction);
+                //     $models =
+                //         $models->join('register','sampel.register_id','register_id')
+                //                 ->orderBy('register.instansi_pengirim',$order_direction)
+                //         ;
+                // break;
+                case 'waktu_sample_taken':
                     $models = $models->orderBy($order,$order_direction);
+                break;
                 default:
                     break;
             }

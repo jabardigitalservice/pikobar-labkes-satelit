@@ -32,6 +32,7 @@
                 <hr>
                 <ajax-table url="/registrasi-sampel" :oid="'registrasi-sampel'"
                   :params="params"
+                  :disableSort="['no_sampel','keterangan']"
                   :config="{
                     autoload: true,
                     has_number: true,

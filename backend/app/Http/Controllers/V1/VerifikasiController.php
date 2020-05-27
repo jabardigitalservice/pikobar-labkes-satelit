@@ -37,16 +37,24 @@ class VerifikasiController extends Controller
 
         if ($search != '') {
             $models = $models->where(function($q) use ($search) {
-                $q->where('nomor_register','ilike','%'.$search.'%')
-                   ->orWhere('nomor_sampel','ilike','%'.$search.'%')
+                $q->where('nomor_sampel','ilike','%'.$search.'%')
                    ->orWhereHas('pemeriksaanSampel', function($query) use ($search){
-                       $query->where('kesimpulan_pemeriksaan', 'ilike','%'.$search.'%');
+                       $query->where('kesimpulan_pemeriksaan', 'ilike','%'.$search.'%')
+                                ->orWhere('catatan_pemeriksaan','ilike','%'.$search.'%');
                    })
                    ->orWhereHas('register', function($query) use ($search){
                         $query->whereHas('pasiens', function($query) use ($search) {
                             $query->where('nama_lengkap', 'ilike','%'.$search.'%')
-                                ->orWhere('nik', 'ilike','%'.$search.'%');
+                                ->orWhere('nik', 'ilike','%'.$search.'%')
+                                ->orWhere('usia_tahun', 'ilike','%'.$search.'%')
+                                ->orWhereHas('kota',function($query) use ($search) {
+                                    $query->where('kota.nama','ilike','%'.$search.'%');
+                            });
                         });
+                    })
+                   ->orWhereHas('register', function($query) use ($search){
+                            $query->where('instansi_pengirim', 'ilike','%'.$search.'%')
+                                ;
                     });
             }); 
         }
@@ -110,21 +118,24 @@ class VerifikasiController extends Controller
             if (empty($order_direction)) $order_direction = 'desc';
 
             switch ($order) {
-                case 'created_at':
+                case 'waktu_pcr_sample_analyzed':
                     $models = $models->orderBy($order,$order_direction);
                     break;
-                case 'nomor_register':
+                case 'nomor_sampel':
                     $models = $models->orderBy($order,$order_direction);
                     break;
-                case 'pasien_nama':
-                    $models = $models->leftJoin('register', 'sampel.register_id', '=', 'register.id')
-                        ->leftJoin('pasien_register', 'register.id', '=', 'pasien_register.register_id')
-                        ->leftJoin('pasien', 'pasien_register.pasien_id', '=', 'pasien.id')
-                        ->select('sampel.*')
-                        ->addSelect('pasien.nama_depan')
-                        ->distinct()
-                        ->orderBy('nama_depan', $order_direction);
-                    break;
+                // case 'kesimpulan_pemeriksaan':
+                //     $models = $models->orderBy('$order',$order_direction);
+                //     break;
+                // case 'pasien_nama':
+                //     $models = $models->leftJoin('register', 'sampel.register_id', '=', 'register.id')
+                //         ->leftJoin('pasien_register', 'register.id', '=', 'pasien_register.register_id')
+                //         ->leftJoin('pasien', 'pasien_register.pasien_id', '=', 'pasien.id')
+                //         ->select('sampel.*')
+                //         ->addSelect('pasien.nama_depan')
+                //         ->distinct()
+                //         ->orderBy('nama_depan', $order_direction);
+                //     break;
                 default:
                     break;
             }

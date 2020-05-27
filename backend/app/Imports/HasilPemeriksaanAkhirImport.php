@@ -77,16 +77,23 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                     'alamat_lengkap'=> $row->get('alamat'),
                     'usia_tahun'=> $row->get('usia'),
                     'lab_satelit_id'=> $user->lab_satelit_id,
+                    'tanggal_pemeriksaan' => $row->get('tanggal_pemeriksaan'),
+                    'interpretasi' => $row->get('interpretasi'),
                 ];
                 Validator::make($pasienData, [
                     'nik'=> 'nullable|digits:16',
                     'nama_lengkap'=> 'required',
-                    'tanggal_lahir'=> 'nullable|date|date_format:Y-m-d'
+                    'tanggal_lahir'=> 'nullable|date|date_format:Y-m-d',
+                    'tanggal_pemeriksaan'=> 'nullable|date|date_format:Y-m-d',
+                    'interpretasi'=> 'in:Positif,Negatif,Inkonklusif',
                  ],[
                      'nik.digits'=> 'NIK terdiri dari 16 karakter', 
                      'nama_lengkap.required'=> 'Nama Pasien Tidak Boleh Kosong',
                      'tanggal_lahir.date' => 'Tanggal Lahir tidak valid',
                      'tanggal_lahir.date_format' => 'Format Tanggal Lahir harus yyyy-mm-dd', 
+                     'tanggal_pemeriksaan.date' => 'Tanggal Pemeriksaan tidak valid',
+                     'tanggal_pemeriksaan.date_format' => 'Format Tanggal Pemeriksaan harus yyyy-mm-dd', 
+                     'interpretasi.in' => 'Interpretasi tidak valid harus Positif,Negatif,Inkonklusif', 
                  ])->validate();
                 //  $pasien = Pasien::where('nik',$row->get('nik'))->first();
                 //  if (!$pasien) {
@@ -155,7 +162,7 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                             'metadata' => $pcr,
                             'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
                         ]);
-                        $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s');
+                        $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s',strtotime($row->get('tanggal_pemeriksaan')));
                         $sampel->save();
                     }
 

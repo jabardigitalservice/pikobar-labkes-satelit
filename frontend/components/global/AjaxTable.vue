@@ -256,7 +256,8 @@ var capitalize = require('lodash/capitalize')
 export default {
     name: 'AjaxTable',
     components: modules,
-    props   : ['oid', 'url', 'urlexport', 'params', 'columns', 'config', 'rowparams', 'rowtemplate', 'columnsStyle'],
+    props   : ['oid', 'url', 'urlexport', 'params', 'columns', 'config', 'rowparams', 'rowtemplate', 'columnsStyle',
+                'disableSort'],
     data() {
         return {
             isLoading   : true,
@@ -322,7 +323,10 @@ export default {
             this.pagination.page = 1;
             this.changePage();
         },
-        sort(col, default_sort_dir) {
+        sort(col, default_sort_dir) {            
+            if (this.disableSort != null && this.disableSort.indexOf(col) != -1){ 
+                return;
+            }
             if (this.sortColumn == col) {
                 this.sortDir = default_sort_dir ? default_sort_dir : ((this.sortDir == 'asc') ? 'desc' : 'asc');
             } else {

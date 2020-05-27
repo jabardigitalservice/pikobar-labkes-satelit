@@ -24,6 +24,8 @@
             ref="verifikasi"
             url="/v1/verifikasi/list"
             urlexport="/v1/verifikasi/export"
+            :disableSort="['pasien_nama','kota_domilisi','instansi_pengirim',
+                            'parameter_lab','kesimpulan_pemeriksaan','catatat']"
             :oid="'verifikasi'"
             :params="params1"
             :config="{
