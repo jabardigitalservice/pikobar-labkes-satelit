@@ -14,11 +14,6 @@ pipeline {
     stages {
         
         stage('Run Docker on development') {
-
-            //input{
-            //    message "Press Ok to continue to Deploy Production ?"
-            
-            //}
             
             environment {
                 SSH_COMMAND = "ssh-agent bash -c 'ssh-add ~/.ssh/id_rsa; git pull origin master'"     
@@ -42,8 +37,8 @@ pipeline {
             steps{
                    sshagent (['']){
                         // ssh block
-                       sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_LABKES_SATELITE_STAGING "cd /home/ubuntu/app/pikobar-labkes-satelit/frontend  \
-                                                                                        && source ~/.bashrc && ./hook-frontend.sh"'
+                       sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_LABKES_SATELITE_STAGING "cd /home/ubuntu/app/pikobar-labkes-satelit  \
+                                                                                        && ./hook-frontend.sh"'
                     }
             }    
         }
