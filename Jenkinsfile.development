@@ -48,8 +48,8 @@ pipeline {
             steps{
                    sshagent (['']){
                         // ssh block
-                       sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_LABKES_SATELITE_STAGING "docker exec app composer install -d /var/www/backend/  \
-                                                                                                    && docker exec app composer dump-autoload -d /var/www/backend/ \ 
+                       sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_LABKES_SATELITE_STAGING "docker exec app composer install -d /var/www/backend  \
+                                                                                                    && docker exec app composer dump-autoload -d /var/www/backend \ 
                                                                                                     && docker exec app php /var/www/backend/artisan config:cache \ 
                                                                                                     && docker exec app php /var/www/backend/artisan config:clear"'  
                     }
