@@ -28,7 +28,7 @@ class RolesTableSeeder extends Seeder
                 "roles_name"=> "Admin",
             ],
             [
-                "id" => "2",
+                "id" => "8",
                 "roles_name"=> "Admin Lab Satelit",
             ],
         ];
