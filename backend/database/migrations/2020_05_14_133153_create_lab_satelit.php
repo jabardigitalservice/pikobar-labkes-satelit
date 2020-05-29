@@ -19,6 +19,7 @@ class CreateLabSatelit extends Migration
             $table->string('alamat')->nullable();
             $table->decimal('latitude',12,8)->nullable();
             $table->decimal('longitude',12,8)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
