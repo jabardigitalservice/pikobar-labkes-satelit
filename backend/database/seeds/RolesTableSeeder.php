@@ -24,10 +24,6 @@ class RolesTableSeeder extends Seeder
     {
         return [
             [
-                "id" => "1",
-                "roles_name"=> "Admin",
-            ],
-            [
                 "id" => "8",
                 "roles_name"=> "Admin Lab Satelit",
             ],
