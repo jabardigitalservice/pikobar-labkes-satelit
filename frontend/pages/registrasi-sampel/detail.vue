@@ -60,7 +60,7 @@
                     </tr>
                     <tr>
                       <td width="40%"><b>Tanggal Lahir</b></td>
-                      <td width="60%">{{data.reg_tgllahir?data.reg_tgllahir.substr(0,10):''}}</td>
+                      <td width="60%">{{data.reg_tgllahir?data.reg_tgllahir:''}}</td>
                     </tr>
                     <!-- <tr>
                       <td width="40%"><b>Suhu</b></td>
