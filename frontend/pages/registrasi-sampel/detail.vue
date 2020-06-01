@@ -139,7 +139,7 @@
     middleware: 'auth',
     async asyncData({route, store}) {
         let error = false;
-        let resp = await axios.get("/v1/register/mandiri/"+route.params.register_id+"/"+route.params.pasien_id);
+        let resp = await axios.get("/v1/register/sampel/"+route.params.register_id+"/"+route.params.pasien_id);
         return {
           data: resp.data
         }
