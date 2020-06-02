@@ -463,7 +463,7 @@ class PCRController extends Controller
                 }
                 $pcr->tanggal_input_hasil = $row['tanggal_input_hasil'];
                 $pcr->nama_kit_pemeriksaan = $row['nama_kit_pemeriksaan'];
-                $pcr->jam_input_hasil = '12:00';
+                $pcr->jam_input_hasil = date('H:i');
                 $pcr->catatan_pemeriksaan = '';
                 $pcr->grafik = [];
                 $pcr->hasil_deteksi = $row['target_gen'];
