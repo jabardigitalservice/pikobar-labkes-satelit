@@ -24,9 +24,9 @@
               {{ $t('login') }}
             </v-button>
 
-            <router-link :to="{ name: 'password.request' }" class="small ml-auto my-auto">
+            <!-- <router-link :to="{ name: 'password.request' }" class="small ml-auto my-auto">
               {{ $t('forgot_password') }}
-            </router-link>
+            </router-link> -->
           </form>
         </div>
       </div>
