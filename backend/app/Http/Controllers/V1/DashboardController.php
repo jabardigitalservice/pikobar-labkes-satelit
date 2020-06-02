@@ -322,7 +322,7 @@ class DashboardController extends Controller
         $data['data'][2]['borderColor'] = '#403d3d';
         switch($tipe) {
             case "Daily":
-                $days = cal_days_in_month(CAL_GREGORIAN,date('m'),date('Y'));;
+                $days = Carbon::parse(date('Y-m-d'))->daysInMonth;
                 $key = 0;
                 foreach(range(1,$days) as $row){
                         $data['label'][$key] = date('d',strtotime(date('Y-m-'.$row)));
