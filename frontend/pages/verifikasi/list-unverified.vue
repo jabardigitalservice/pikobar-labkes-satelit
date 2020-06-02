@@ -67,7 +67,10 @@ import Form from "vform";
 var debounce = require('lodash/debounce')
 
 export default {
-  middleware: "auth",
+  middleware: ['auth','checkrole'],
+    meta: {
+      allow_role_id: [8]
+    },
   data() {
     return {
       params1: {

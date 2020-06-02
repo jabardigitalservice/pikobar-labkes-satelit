@@ -48,13 +48,11 @@ class DashboardController extends Controller
                             ->where('kesimpulan_pemeriksaan','negatif');
         $inkonklusif = Sampel::join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
                             ->where('kesimpulan_pemeriksaan','inkonklusif');
-        if ($user->lab_satelit_id != null) {
-            $register->where('lab_satelit_id',$user->lab_satelit_id);
-            $sampel_masuk->where('lab_satelit_id',$user->lab_satelit_id);
-            $positif->where('lab_satelit_id',$user->lab_satelit_id);
-            $negatif->where('lab_satelit_id',$user->lab_satelit_id);
-            $inkonklusif->where('lab_satelit_id',$user->lab_satelit_id);
-        }
+        $register->where('lab_satelit_id',$user->lab_satelit_id);
+        $sampel_masuk->where('lab_satelit_id',$user->lab_satelit_id);
+        $positif->where('lab_satelit_id',$user->lab_satelit_id);
+        $negatif->where('lab_satelit_id',$user->lab_satelit_id);
+        $inkonklusif->where('lab_satelit_id',$user->lab_satelit_id);
         $register = $register->count();
         $sampel_masuk = $sampel_masuk->count();
         $positif = $positif->count();

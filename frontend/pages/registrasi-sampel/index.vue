@@ -67,7 +67,10 @@
 <script>
 
 export default {
-  middleware: ['auth'],
+  middleware: ['auth','checkrole'],
+  meta: {
+    allow_role_id: [8]
+  },
   data(){
     return{
        params: {

@@ -53,7 +53,10 @@
   var debounce = require('lodash/debounce')
 
   export default {
-    middleware: "auth",
+    middleware: ['auth','checkrole'],
+    meta: {
+      allow_role_id: [8]
+    },
     computed: mapGetters({
       user: "auth/user",
       lab_pcr: "options/lab_pcr",

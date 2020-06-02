@@ -32,19 +32,19 @@
             <span class="nav-label">Dashboard</span>
           </router-link>
         </li>
-        <li>
+        <li v-if="checkPermission('satelit')">
           <router-link to="/registrasi/sampel" tag="a">
             <i class="uil-user-square fa-fw"></i>
             <span class="nav-label">Registrasi Sampel</span>
           </router-link>
         </li>
-        <li>
+        <li v-if="checkPermission('satelit')">
           <router-link to="/input-hasil/list-input-hasil" tag="a">
             <i class="uil-atom fa-fw"></i>
             <span class="nav-label">Input Hasil</span>
           </router-link>
         </li>
-         <li>
+         <li v-if="checkPermission('satelit')">
             <router-link to="/hasil-pemeriksaan/list-hasil-pemeriksaan" tag="a">
             <i class="uil-eye fa-fw"></i>
               <span class="nav-label">Hasil Pemeriksaan</span>
@@ -220,26 +220,8 @@ export default {
     checkPermission(menu) {
       var allow_role_id
       switch (menu) {
-        case 'registrasi':
-          allow_role_id = [1, 6, 7, 2, 8]
-          break;
-        case 'sample':
-          allow_role_id = [1, 6, 7, 3]
-          break;
-        case 'ekstraksi':
-          allow_role_id = [1, 6, 7, 4]
-          break;
-        case 'pcr':
-          allow_role_id = [1, 6, 7, 5]
-          break;
-        case 'verifikasi':
-          allow_role_id = [1, 6, 7]
-          break;
-        case 'validasi':
-          allow_role_id = [1, 7]
-          break;
-        case 'master':
-          allow_role_id = [1]
+        case 'satelit':
+          allow_role_id = [8]
           break;
       }
       return allow_role_id.indexOf(this.user.role_id) > -1
