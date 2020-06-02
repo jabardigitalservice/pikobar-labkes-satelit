@@ -81,8 +81,8 @@ export default {
     }
   },
   created() {
-    this.fetchNotifications()
-    setInterval(this.fetchNotifications, 60000)
+    // this.fetchNotifications()
+    // setInterval(this.fetchNotifications, 60000)
   },
 }
 
