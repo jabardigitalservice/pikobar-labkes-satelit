@@ -464,7 +464,7 @@ class PCRController extends Controller
                 $pcr->tanggal_input_hasil = $row['tanggal_input_hasil'];
                 $pcr->nama_kit_pemeriksaan = $row['nama_kit_pemeriksaan'];
                 $pcr->jam_input_hasil = date('H:i');
-                $pcr->catatan_pemeriksaan = '';
+                $pcr->catatan_pemeriksaan = $row['catatan_pemeriksaan'];
                 $pcr->grafik = [];
                 $pcr->hasil_deteksi = $row['target_gen'];
                 $pcr->kesimpulan_pemeriksaan = $row['kesimpulan_pemeriksaan'];
@@ -483,6 +483,7 @@ class PCRController extends Controller
                         'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
                     ]);
                     $sampel->waktu_sample_taken = date('Y-m-d H:i:s');
+                    $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s',strtotime($row['tanggal_input_hasil']));
                     $sampel->save();
                 }
             }

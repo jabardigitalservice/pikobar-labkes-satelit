@@ -63,6 +63,7 @@
                   <th>Target Gen</th>
                   <th>Kesimpulan Pemeriksaan</th>
                   <th>Tanggal Periksa</th>
+                  <th>Keterangan</th>
                 </tr>
               </thead>
               <tbody>
@@ -75,10 +76,11 @@
                     </td>
                     <td>{{ row.kesimpulan_pemeriksaan }}</td>
                     <td>{{ row.tanggal_input_hasil }}</td>
+                    <td>{{ row.catatan_pemeriksaan }}</td>
                   </tr>
                   <tr :key="$index" class="bg-warning" v-if="errors[$index]">
                     <td>Error</td>
-                    <td colspan="4">
+                    <td colspan="5">
                       <div v-for="(error, $index2) in errors[$index]" :key="$index2">- {{ error }}</div>
                     </td>
                   </tr>

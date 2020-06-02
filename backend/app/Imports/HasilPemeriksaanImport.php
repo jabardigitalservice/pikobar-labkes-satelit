@@ -66,6 +66,7 @@ class HasilPemeriksaanImport implements ToCollection, WithHeadingRow
                     'kesimpulan_pemeriksaan' => strtolower($data['interpretasi']),
                     'tanggal_input_hasil' => $data['tanggal_pemeriksaan'],
                     'nama_kit_pemeriksaan' => $data['kit_pemeriksaan'],
+                    'catatan_pemeriksaan' => $data['keterangan'],
                     'target_gen' => $data_ct,
                 ];
             }
