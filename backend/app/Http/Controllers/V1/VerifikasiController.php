@@ -355,12 +355,15 @@ class VerifikasiController extends Controller
         $pasien = $sampel->register ? optional($sampel->register->pasiens()->with(['kota']))->first() : null;
         $fasyankes = $sampel->register ? $sampel->register->fasyankes : null;
         $pengambilanSampel = PengambilanSampel::find($sampel->getAttribute('pengambilan_sampel_id'));
-
+        if ($pasien != null) {
+            $pasien->tanggal_lahir = date('Y-m-d',strtotime($pasien->tanggal_lahir));
+            $pasien->tanggal_lahir1 = date('Y-m-d',strtotime($pasien->tanggal_lahir));
+        }
         return response()->json([
             'status'=>200,
             'message'=>'success',
             'data'=> $result + [
-                'pasien'=> optional($pasien)->toArray(),
+                'pasien'=> $pasien,
                 'last_pemeriksaan_sampel'=> $sampel->pemeriksaanSampel()->orderBy('tanggal_input_hasil', 'desc')->first(),
                 'fasyankes'=> $fasyankes,
                 'pengambilanSampel'=> $pengambilanSampel

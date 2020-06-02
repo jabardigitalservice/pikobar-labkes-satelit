@@ -284,7 +284,7 @@
                   <b>Tempat, Tanggal Lahir Pasien</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.pasien.tempat_lahir }} {{data.pasien.tanggal_lahir | formatDate }} - {{ umurPasien }}</span>
+                  <span>{{ data.pasien.tempat_lahir }} {{data.pasien.tanggal_lahir1 | formatDate }} - {{ umurPasien }}</span>
                 </td>
               </tr>
               <tr>

@@ -14,7 +14,7 @@
           <Ibox title="Loading Data">
             <div class="form-group">
               <label for="register_file">File Input Hasil</label>
-              <input class="form-control" type="file" ref="myFile" @change="previewFile"
+              <input class="form-control" type="file" ref="myFile" @change="previewFile" id="register_file"
                 accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
             </div>
 
@@ -201,6 +201,9 @@ export default {
       this.form.register_file = this.$refs.myFile.files[0];
       this.$nextTick(() => {
         this.submit()
+        $('#register_file').val('');
+        this.form.reset();
+        this.form.register_file = null;
       })
     }
   }
