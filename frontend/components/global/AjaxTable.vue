@@ -323,7 +323,7 @@ export default {
             this.pagination.page = 1;
             this.changePage();
         },
-        sort(col, default_sort_dir) {            
+        sort(col, default_sort_dir) {
             if (this.disableSort != null && this.disableSort.indexOf(col) != -1){ 
                 return;
             }
@@ -336,7 +336,11 @@ export default {
             if (this.config.local_sort) {
 
             } else {
-                this.pagination.page = 1;
+                if (window.pagestate && window.pagestate[this.oid]) {
+                        this.pagination.page = window.pagestate[this.oid]
+                }else{
+                    this.pagination.page = 1;
+                }
                 this.changePage();
             }
         },
@@ -482,7 +486,15 @@ export default {
                 this.pagination.page = 1;
                 this.doSearch();
             }
-        },
+        }
+    },
+    watch: {
+        'pagination.page'(){
+            if (!window.pagestate) {
+                window.pagestate = []
+            }
+            window.pagestate[this.oid] = this.pagination.page
+        }
     },
     created() {
         var that = this;
@@ -507,8 +519,11 @@ export default {
                     that.sortColumn = that.config.default_sort;
                     that.sortDir    = that.config.default_sort_dir ? that.config.default_sort_dir : 'asc';
                 }
-            } else if (that.config.autoload) {
-                that.changePage(1)
+            }else if (that.config.autoload) {
+                if (window.pagestate && window.pagestate[that.oid]) {
+                    that.pagination.page = window.pagestate[that.oid]
+                }
+                that.changePage()
             }
         });
     }
