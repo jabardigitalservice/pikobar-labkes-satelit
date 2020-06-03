@@ -74,7 +74,7 @@
         // Submit the form.
         try {
           const response = await this.form.post('/login')
-          data = response.data
+          data = response.data          
         } catch (e) {
           this.$swal.fire(
             'Login gagal',
@@ -83,7 +83,15 @@
           )
           return
         }
-
+        
+        if (data.user.role_id == 1) {
+            this.$swal.fire(
+              'Login gagal',
+              'Harap Login Sebagai Lab Satelit',
+              'error'
+            )
+          return
+        }
         // Save the token.
         this.$store.dispatch('auth/saveToken', { 
           token: data.token,
