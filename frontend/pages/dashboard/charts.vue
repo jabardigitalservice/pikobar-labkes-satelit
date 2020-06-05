@@ -5,8 +5,8 @@
                 <Ibox title="Sampel PCR">
                     <template v-slot:tools>
                         <select class="form-control h-auto mb-1 p-0 w-auto" v-model="params.pcr">
-                            <option value="Daily">Monthly</option>
-                            <option value="Monthly">Yearly</option>
+                            <option value="Daily">Daily</option>
+                            <option value="Monthly">Monthly</option>
                             <!-- <option value="Yearly">Yearly</option> -->
                         </select>
                     </template>

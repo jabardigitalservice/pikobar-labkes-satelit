@@ -1,5 +1,5 @@
 <template>
-  <ol class="breadcrumb">
+  <ol class="breadcrumb" style="background-color: #90ee90">
     <li class="breadcrumb-item" v-if="crumbs.length > 1">
       <a href="#" @click.prevent="$router.back()"><i class="fa fa-chevron-left"></i></a>
     </li>

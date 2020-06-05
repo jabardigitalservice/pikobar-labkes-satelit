@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar-default navbar-static-side" role="navigation">
+  <nav class="navbar-default navbar-static-side" role="navigation" style="background-color: #556b2f">
     <div class="sidebar-collapse" v-if="user">
       <ul class="nav metismenu" id="side-menu">
         <li class="nav-header">

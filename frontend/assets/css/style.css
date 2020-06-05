@@ -873,7 +873,7 @@ h5 {
 }
 .navbar-default .nav > li > a:hover,
 .navbar-default .nav > li > a:focus {
-  background-color: #293846;
+  background-color: #32cd32;
   color: white;
 }
 .nav .open > a,
@@ -997,8 +997,8 @@ h5 {
 }
 .nav-header {
   padding: 33px 25px;
-  background-color: #2f4050;
-  background-image: url("patterns/header-profile.png");
+  /* background-color: #2f4050; */
+  background-image: url("patterns/header-profile-skin-4.png");
 }
 .caret {
   display: inline-block;
@@ -1017,11 +1017,11 @@ h5 {
   transition: all 0.4s;
 }
 ul.nav-second-level {
-  background: #293846;
+  background: #32cd32;
 }
 .nav > li.active {
   border-left: 4px solid #19aa8d;
-  background: #293846;
+  background: #32cd32;
 }
 .nav.nav-second-level > li.active {
   border: none;
@@ -1142,7 +1142,7 @@ body.mini-navbar .navbar-default .nav > li > .nav-second-level li a {
   font-size: 12px;
 }
 .canvas-menu.mini-navbar .nav-second-level {
-  background: #293846;
+  background: #32cd32;
 }
 .mini-navbar li.active .nav-second-level {
   left: 65px;
@@ -4900,6 +4900,8 @@ code {
   margin-bottom: 25px;
   margin-top: 0;
   padding: 0;
+  border: solid #90ee90 0.5px;
+
 }
 .ibox.collapsed .ibox-content {
   display: none;
@@ -5044,6 +5046,9 @@ table.table-mail tr td {
 }
 .white-bg {
   background-color: #ffffff;
+}
+.lightgreen-bg{
+  background-color: #90ee90;
 }
 .blue-bg,
 .bg-success {

@@ -12,7 +12,7 @@
             <div class="col-md-3 col-6 mb-3 mb-md-0">
               <div class="text-center">
                 <h5 class="font-weight-bold text-muted">Registrasi</h5>
-                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.register | formatCurrency}}</h2>
+                <h2 v-if="!loading" class="font-weight-bold" style="color: #32CD32;">{{ data.status.register | formatCurrency}}</h2>
                 <img
                 v-if="loading"
                 src="~/assets/css/plugins/blueimp/img/loading.gif"
@@ -41,7 +41,7 @@
             <div class="col-md-2 col-6 mb-3 mb-md-0">
               <div class="text-center">
                 <h5 class="font-weight-bold text-muted">Sampel</h5>
-                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.sampel_masuk | formatCurrency}}</h2>
+                <h2 v-if="!loading" class="font-weight-bold" style="color: #32CD32;">{{ data.status.sampel_masuk | formatCurrency}}</h2>
                 <img
                 v-if="loading"
                 src="~/assets/css/plugins/blueimp/img/loading.gif"
@@ -73,7 +73,7 @@
             <div class="col-md-2 col-6 mb-3 mb-md-0">
               <div class="text-center">
                 <h5 class="font-weight-bold text-muted">Positif</h5>
-                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.positif | formatCurrency}}</h2>
+                <h2 v-if="!loading" class="font-weight-bold" style="color: #32CD32;">{{ data.status.positif | formatCurrency}}</h2>
                 <img
                 v-if="loading"
                 src="~/assets/css/plugins/blueimp/img/loading.gif"
@@ -105,7 +105,7 @@
             <div class="col-md-2 col-6 mb-3 mb-md-0">
               <div class="text-center">
                 <h5 class="font-weight-bold text-muted">Negatif</h5>
-                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.negatif | formatCurrency}}</h2>
+                <h2 v-if="!loading" class="font-weight-bold" style="color: #32CD32;">{{ data.status.negatif | formatCurrency}}</h2>
                 <img
                 v-if="loading"
                 src="~/assets/css/plugins/blueimp/img/loading.gif"
@@ -134,7 +134,7 @@
             <div class="col-md-2 col-6 mb-3 mb-md-0">
               <div class="text-center">
                 <h5 class="font-weight-bold text-muted">Inkonklusif</h5>
-                <h2 v-if="!loading" class="font-weight-bold">{{ data.status.inkonklusif | formatCurrency}}</h2>
+                <h2 v-if="!loading" class="font-weight-bold" style="color: #32CD32;">{{ data.status.inkonklusif | formatCurrency}}</h2>
                 <img
                 v-if="loading"
                 src="~/assets/css/plugins/blueimp/img/loading.gif"
