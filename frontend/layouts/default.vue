@@ -7,7 +7,7 @@
             <navbar/>
         </div>
         <div>
-          <div class="row wrapper border-bottom lightgreen-bg page-heading">
+          <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-sm-6">
               <h2><portal-target name="title-name">Loading...</portal-target></h2>
               <inspinia-breadcrumbs></inspinia-breadcrumbs>
