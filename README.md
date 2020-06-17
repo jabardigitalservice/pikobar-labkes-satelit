@@ -1,7 +1,7 @@
 # pikobar-labkes-satelit
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/988338d3d796c34a74ee/maintainability)](https://codeclimate.com/repos/5ee0a3949df705017700cdef/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/988338d3d796c34a74ee/test_coverage)](https://codeclimate.com/repos/5ee0a3949df705017700cdef/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/51bc226583c547f4edd9/maintainability)](https://codeclimate.com/github/jabardigitalservice/pikobar-labkes-satelit/maintainability)
+<a href="https://codeclimate.com/github/jabardigitalservice/pikobar-labkes-satelit/test_coverage"><img src="https://api.codeclimate.com/v1/badges/51bc226583c547f4edd9/test_coverage" /></a>
 
 # pikobar-app-boilerplate
 
