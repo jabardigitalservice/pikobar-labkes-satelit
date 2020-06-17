@@ -1,3 +1,8 @@
+# pikobar-labkes-satelit
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/988338d3d796c34a74ee/maintainability)](https://codeclimate.com/repos/5ee0a3949df705017700cdef/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/988338d3d796c34a74ee/test_coverage)](https://codeclimate.com/repos/5ee0a3949df705017700cdef/test_coverage)
+
 # pikobar-app-boilerplate
 
 # Origin
