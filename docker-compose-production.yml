@@ -15,11 +15,25 @@ services:
       - "80:80"
       - "443:443"
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    logging:
+      driver: "awslogs"
+      options:
+          awslogs-region: "ap-southeast-1"
+          awslogs-group: "pikobar-labkes-satelite"
+          awslogs-stream: "prod-nginx"
+
   # Redis session and queue management
   redis:
     container_name: redis
     restart: always
     image: redis:3.2-alpine
+    logging:
+      driver: "awslogs"
+      options:
+          awslogs-region: "ap-southeast-1"
+          awslogs-group: "pikobar-labkes-satelite"
+          awslogs-stream: "prod-redis"
+
   certbot:
     container_name: certbot
     image: certbot/certbot
@@ -27,6 +41,12 @@ services:
       - ./certbot:/var/www/certbot
       - ./data/certbot/conf:/etc/letsencrypt
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot-path /var/www/certbot; sleep 12h & wait $${!}; done;'"
+    logging:
+      driver: "awslogs"
+      options:
+          awslogs-region: "ap-southeast-1"
+          awslogs-group: "pikobar-labkes-satelite"
+          awslogs-stream: "prod-certbot"
 
     
   #PHP Service
@@ -47,3 +67,9 @@ services:
       - ./backend:/var/www/backend
       - ./frontend:/var/www/frontend
       - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    logging:
+      driver: "awslogs"
+      options:
+          awslogs-region: "ap-southeast-1"
+          awslogs-group: "pikobar-labkes-satelite"
+          awslogs-stream: "prod-app"
