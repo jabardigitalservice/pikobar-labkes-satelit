@@ -1,3 +1,8 @@
+# pikobar-labkes-satelit
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/51bc226583c547f4edd9/maintainability)](https://codeclimate.com/github/jabardigitalservice/pikobar-labkes-satelit/maintainability)
+<a href="https://codeclimate.com/github/jabardigitalservice/pikobar-labkes-satelit/test_coverage"><img src="https://api.codeclimate.com/v1/badges/51bc226583c547f4edd9/test_coverage" /></a>
+
 # pikobar-app-boilerplate
 
 # Origin
