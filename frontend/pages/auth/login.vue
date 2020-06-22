@@ -9,10 +9,10 @@
       </div>
       <div class="col-md-6">
         <div class="ibox-content">
-          <form  class="m-t" @submit.prevent="login" @keydown="form.onKeydown($event)">
+          <form class="m-t" @submit.prevent="login" @keydown="form.onKeydown($event)">
             <div class="form-group">
-              <input v-model="form.username" :class="{ 'is-invalid': form.errors.has('username') }" type="text" name="username"
-                class="form-control" placeholder="Username">
+              <input v-model="form.username" :class="{ 'is-invalid': form.errors.has('username') }" type="text"
+                name="username" class="form-control" placeholder="Username">
               <has-error :form="form" field="username" />
             </div>
             <div class="form-group">
@@ -74,7 +74,28 @@
         // Submit the form.
         try {
           const response = await this.form.post('/login')
-          data = response.data          
+          data = response.data
+          if (data.user.role_id == 1) {
+            this.$swal.fire(
+              'Login gagal',
+              'Harap Login Sebagai Lab Satelit',
+              'error'
+            )
+            return
+          }
+          // Save the token.
+          this.$store.dispatch('auth/saveToken', {
+            token: data.token,
+            remember: this.remember
+          })
+
+          // Fetch the user.
+          await this.$store.dispatch('auth/fetchUser', data.user)
+
+          // Redirect home.
+          this.$router.push({
+            name: 'home'
+          })
         } catch (e) {
           this.$swal.fire(
             'Login gagal',
@@ -83,28 +104,6 @@
           )
           return
         }
-        
-        if (data.user.role_id == 1) {
-            this.$swal.fire(
-              'Login gagal',
-              'Harap Login Sebagai Lab Satelit',
-              'error'
-            )
-          return
-        }
-        // Save the token.
-        this.$store.dispatch('auth/saveToken', { 
-          token: data.token,
-          remember: this.remember
-        })
-
-        // Fetch the user.
-        await this.$store.dispatch('auth/fetchUser', data.user)
-
-        // Redirect home.
-        this.$router.push({
-          name: 'home'
-        })
       }
     }
   }
