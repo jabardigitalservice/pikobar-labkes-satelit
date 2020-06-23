@@ -111,7 +111,7 @@ class VerifikasiController extends Controller
         $count = $models->count();
 
         $page = $request->get('page',1);
-        $perpage = $request->get('perpage',999999);
+        $perpage = $request->get('perpage',500);
 
         if ($order) {
             $order_direction = $request->get('order_direction','asc');
@@ -280,7 +280,7 @@ class VerifikasiController extends Controller
         $count = $models->count();
 
         $page = $request->get('page',1);
-        $perpage = $request->get('perpage',999999);
+        $perpage = $request->get('perpage',500);
 
         if ($order) {
             $order_direction = $request->get('order_direction','asc');
