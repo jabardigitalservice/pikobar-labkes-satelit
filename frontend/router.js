@@ -11,12 +11,6 @@ const routes = [
     { path: '/', redirect: 'home' },
 
     { path: '/login', name: 'login', component: page('auth/login.vue') },
-    // { path: '/register', name: 'register', component: page('auth/register.vue') },
-    // { path: '/password/reset', name: 'password.request', component: page('auth/password/email.vue') },
-    // { path: '/password/reset/:token', name: 'password.reset', component: page('auth/password/reset.vue') },
-    // { path: '/email/verify/:id', name: 'verification.verify', component: page('auth/verification/verify.vue') },
-    // { path: '/email/resend', name: 'verification.resend', component: page('auth/verification/resend.vue') },
-
     { path: '/home', name: 'home', component: page('home.vue') },
     { path: '/error-role', name: 'error-role', component: page('error-role.vue'), meta: { parentName: 'home' } },
     { path: '/sample', name: 'sample.index', component: page('sample/index.vue'), meta: { parentName: 'home' } },
@@ -31,14 +25,6 @@ const routes = [
             { path: 'password', name: 'settings.password', component: page('settings/password.vue'), meta: { parentName: 'home' } }
         ]
     },
-    { path: '/pengguna', name: 'pengguna.index', component: page('pengguna/index.vue'), meta: { parentName: 'home' } },
-    { path: '/pengguna/tambah', name: 'pengguna.tambah', component: page('pengguna/tambah.vue'), meta: { parentName: 'pengguna.index' } },
-    { path: '/pengguna/update/:id', name: 'pengguna.update', component: page('pengguna/update.vue'), meta: { parentName: 'pengguna.index' } },
-    { path: '/pengguna/detail/:id', name: 'pengguna.detail', component: page('pengguna/detail.vue'), meta: { parentName: 'pengguna.index' } },
-    { path: '/lab-satelit', name: 'lab-satelit.index', component: page('lab-satelit/index.vue'), meta: { parentName: 'home' } },
-    { path: '/lab-satelit/tambah', name: 'lab-satelit.tambah', component: page('lab-satelit/tambah.vue'), meta: { parentName: 'lab-satelit.index' } },
-    { path: '/lab-satelit/update/:id', name: 'lab-satelit.update', component: page('lab-satelit/update.vue'), meta: { parentName: 'lab-satelit.index' } },
-    { path: '/lab-satelit/show/:id', name: 'lab-satelit.detail', component: page('lab-satelit/detail.vue'), meta: { parentName: 'lab-satelit.index' } },
     { path: '/registrasi/mandiri', name: 'registrasi.mandiri', component: page('registrasi-mandiri/index.vue'), meta: { parentName: 'home' } },
     { path: '/registrasi/mandiri/tambah', name: 'registrasi.mandiri.tambah', component: page('registrasi-mandiri/tambah.vue'), meta: { parentName: 'registrasi.mandiri' } },
     {
