@@ -24,22 +24,19 @@ class PCRController extends Controller
     public function getData(Request $request)
     {
         $user = $request->user();
-        $models = Sampel::query();
+        $models = Sampel::leftJoin('register','sampel.register_id','register.id')
+                        ->leftJoin('pasien_register','pasien_register.register_id','register.id')                    
+                        ->leftJoin('pasien','pasien_register.pasien_id','pasien.id')
+                        ->leftJoin('kota','kota.id','pasien.kota_id');
         $params = $request->get('params',false);
         $search = $request->get('search',false);
         $order  = $request->get('order' ,'name');
         if ($search != '') {
             $models = $models->where(function($q) use ($search) {
                 $q->where('nomor_sampel','ilike','%'.$search.'%')
-                   ->orWhereHas('register', function ($query) use ($search){
-                        $query->where('register.instansi_pengirim', 'ilike', '%'. $search .'%');
-                    })
-                   ->orWhereHas('register', function($query) use ($search){
-                        $query->whereHas('pasiens', function($query) use ($search) {
-                            $query->where('nama_lengkap', 'ilike','%'.$search.'%')
-                                ->orWhere('nik', 'ilike','%'.$search.'%');
-                        });
-                    });
+                  ->orWhere('register.instansi_pengirim_nama', 'ilike', '%'. $search .'%')
+                  ->orWhere('nama_lengkap', 'ilike', '%'. $search .'%')
+                  ->orWhere('nik', 'ilike', '%'. $search .'%');
             });
         }
         if ($params) {
@@ -53,9 +50,7 @@ class PCRController extends Controller
                         $models = $models->whereDate('sampel.waktu_sample_taken','<=',date('Y-m-d',strtotime($val)));
                     break;
                     case 'instansi_pengirim': 
-                        $models->whereHas('register', function ($query) use ($val){
-                            $query->where('register.instansi_pengirim', 'ilike', '%'. $val .'%');
-                        });
+                        $models = $models->where('register.instansi_pengirim_nama', 'ilike', '%'. $val .'%');
                         break;
                     default:
                         break;
@@ -65,6 +60,7 @@ class PCRController extends Controller
        if (Auth::user()->lab_satelit_id !=null) {
             $models->where('sampel.lab_satelit_id',Auth::user()->lab_satelit_id);
         }
+
         $models->where('sampel.sampel_status','sample_taken');
         $count = $models->count();
 
@@ -79,31 +75,15 @@ class PCRController extends Controller
                 case 'nomor_sampel':
                     $models = $models->orderBy('nomor_sampel',$order_direction);
                 break;
-                // case 'nama_lengkap':
-                //     // $models = $models->orderBy('nomor_sampel',$order_direction);
-                //     $models =
-                //         $models->leftJoin('register','sampel.register_id','register_id')
-                //                 ->leftJoin('pasien_register','pasien_register.register_id','register.id' )
-                //                 ->leftJoin('pasien','pasien_register.pasien_id','pasien.id' )
-                //                 ->orderBy('pasien.nama_lengkap',$order_direction)
-                //         ;
-                // break;
-                // case 'nik':
-                //     // $models = $models->orderBy('nomor_sampel',$order_direction);
-                //     $models =
-                //         $models->leftJoin('register','sampel.register_id','register_id')
-                //                 ->leftJoin('pasien_register','pasien_register.register_id','register.id' )
-                //                 ->leftJoin('pasien','pasien_register.pasien_id','pasien.id' )
-                //                 ->orderBy('pasien.nik',$order_direction)
-                //         ;
-                // break;
-                // case 'instansi_pengirim':
-                //     // $models = $models->orderBy('nomor_sampel',$order_direction);
-                //     $models =
-                //         $models->join('register','sampel.register_id','register_id')
-                //                 ->orderBy('register.instansi_pengirim',$order_direction)
-                //         ;
-                // break;
+                case 'nama_lengkap':
+                    $models = $models->orderBy('pasien.nama_lengkap',$order_direction);
+                break;
+                case 'nik':
+                    $models = $models->orderBy('pasien.nik',$order_direction);
+                break;
+                case 'instansi_pengirim':
+                    $models = $models->orderBy('register.instansi_pengirim_nama',$order_direction);
+                break;
                 case 'waktu_sample_taken':
                     $models = $models->orderBy($order,$order_direction);
                 break;
@@ -111,13 +91,8 @@ class PCRController extends Controller
                     break;
             }
         }
+        $models = $models->select('*','sampel.id as sampel_id');
         $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
-        
-        // format data
-        foreach ($models as &$model) {
-            $model->register = $model->register ?? null;
-            $model->pasien = $model->register ? optional($model->register)->pasiens()->with(['kota'])->first() : null;
-        }
 
         $result = [
             'data' => $models,
@@ -329,6 +304,39 @@ class PCRController extends Controller
         return response()->json(['status'=>201,'message'=>'Hasil analisa berhasil disimpan']);
     }
 
+    public function inputInvalid(Request $request, $id)
+    {
+        $user = $request->user();
+        $sampel = Sampel::with(['pcr'])->find($id);
+
+        $pcr = $sampel->pcr;
+        if (!$pcr) {
+            $pcr = new PemeriksaanSampel;
+            $pcr->sampel_id = $sampel->id;
+            $pcr->user_id = $user->id;
+        }
+        $pcr->kesimpulan_pemeriksaan = 'invalid';
+        $pcr->save();
+
+        if ($sampel->sampel_status == 'sample_taken') {
+            $sampel->updateState('pcr_sample_analyzed', [
+                'user_id' => $user->id,
+                'metadata' => $pcr,
+                'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
+            ]);
+        } else {
+            $sampel->addLog([
+                'user_id' => $user->id,
+                'metadata' => $pcr,
+                'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
+            ]);
+            $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s');
+            $sampel->save();
+        }
+        
+        return response()->json(['status'=>201,'message'=>'Hasil analisa berhasil disimpan']);
+    }
+
     public function terima(Request $request)
     {
         $user = $request->user();
@@ -475,7 +483,7 @@ class PCRController extends Controller
                         'user_id' => $user->id,
                         'metadata' => $pcr,
                         'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
-                    ]);
+                    ],$row['tanggal_input_hasil']);
                 } else {
                     $sampel->addLog([
                         'user_id' => $user->id,

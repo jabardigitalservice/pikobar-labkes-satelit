@@ -4,40 +4,45 @@
     <td>{{item.waktu_pcr_sample_analyzed | formatDateTime}}</td>
     <td>{{item.nomor_sampel}}</td>
     <td nowrap>
-      <span v-if="item.pasien">{{item.pasien.nama_lengkap}}</span>
-      <span class="nik" v-if="item.pasien">NIK. {{item.pasien.nik}}</span>
-      <span class="usia" v-if="item.pasien">{{ usiaPasien }}</span>
+      <span>{{item.nama_lengkap}}</span>
+      <span class="nik">NIK. {{item.nik}}</span>
+      <span class="usia">{{ usiaPasien }}</span>
     </td>
     <td>
-      <span v-if="item.pasien && item.pasien.kota">{{item.pasien.kota.nama}}</span>
+      <span>{{item.nama_kota}}</span>
     </td>
     <td>
-      <span v-if="item.register">{{ item.register.instansi_pengirim }}</span>
+      <span>{{ item.instansi_pengirim_nama }}</span>
     </td>
     <td nowrap>
-      <div v-for="item in item.pemeriksaanSampel.hasil_deteksi_parsed" :key="item.target_gen">
+      <div v-for="item in JSON.parse(item.hasil_deteksi)" :key="item.target_gen">
         - {{ item.target_gen }} :
         <span v-if="!!item.ct_value">{{ parseFloat(item.ct_value).toFixed(2).replace('.', ',') }}</span>
         <span v-if="item.ct_value == null">{{ '-' }}</span>
       </div>
     </td>
     <td style="text-transform: capitalize;">
-      {{item.pemeriksaanSampel.kesimpulan_pemeriksaan}}
+      {{item.status ? item.status.toUpperCase() : null}}
     </td>
-    <td>{{item.pemeriksaanSampel.catatan_pemeriksaan}}</td>
+    <td style="text-transform: capitalize;">
+      {{item.sumber_pasien}}
+    </td>
+    <td style="text-transform: capitalize;">
+      {{item.kesimpulan_pemeriksaan}}
+      <span v-if="item.kesimpulan == 'positif' && item.status != 'positif'">Baru</span>
+      <span v-else-if="item.kesimpulan == 'positif' && item.status == 'positif'">Lama</span>
+    </td>
+    <td>{{item.catatan_pemeriksaan}}</td>
     <td width="20%">
-      <nuxt-link tag="a" class="mb-1 text-nowrap btn btn-success btn-sm" :to="`/hasil-pemeriksaan/detail/${item.id}`"
-        title="Klik untuk melihat detail">
+      <nuxt-link tag="a" class="mb-1 text-nowrap btn btn-success btn-sm"
+        :to="`/hasil-pemeriksaan/detail/${item.sampel_id}`" title="Klik untuk melihat detail">
         <i class="uil-info-circle"></i>
       </nuxt-link>
-      <nuxt-link :to="`/hasil-pemeriksaan/edit/${item.id}`" class="mb-1 text-nowrap btn btn-warning btn-sm" tag="a">
+      <nuxt-link :to="`/hasil-pemeriksaan/edit/${item.sampel_id}`" class="mb-1 text-nowrap btn btn-warning btn-sm"
+        tag="a">
         <i class="fa fa-edit"></i>
       </nuxt-link>
     </td>
-    <!-- <CustomModal :modal_id="`modalVerifikasi${item.id}`" v-if="isModalShow"
-        :title="`Verifikasi`"
-    >
-    </CustomModal>-->
   </tr>
 </template>
 <script>
@@ -127,19 +132,24 @@
     },
     computed: {
       usiaPasien() {
-        let tglLahir = new Date(this.item.pasien.tanggal_lahir);
-        let today_date = new Date();
-        let today_year = today_date.getFullYear();
-        let today_month = today_date.getMonth();
-        let today_day = today_date.getDate();
+        if (this.item.tanggal_lahir) {
+          let tglLahir = new Date(this.item.tanggal_lahir);
+          let today_date = new Date();
+          let today_year = today_date.getFullYear();
+          let today_month = today_date.getMonth();
+          let today_day = today_date.getDate();
 
-        var age = today_date.getFullYear() - tglLahir.getFullYear();
-        var m = today_date.getMonth() - tglLahir.getMonth();
-        if (m < 0 || (m === 0 && today_date.getDate() < tglLahir.getDate())) {
-          age--;
+          var age = today_date.getFullYear() - tglLahir.getFullYear();
+          var m = today_date.getMonth() - tglLahir.getMonth();
+          if (m < 0 || (m === 0 && today_date.getDate() < tglLahir.getDate())) {
+            age--;
+          }
+          return `Usia: ${age} tahun`;
         }
-
-        return `Usia: ${age} tahun`;
+        if (this.item.usia_tahun) {
+          return `Usia: ${this.item.usia_tahun} tahun`;
+        }
+        return 'Usia: -'
       }
     }
   };

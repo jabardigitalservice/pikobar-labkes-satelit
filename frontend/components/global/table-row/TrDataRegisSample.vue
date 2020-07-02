@@ -2,9 +2,9 @@
     <tr>
         <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
         <td>
-            <p><b>NIK Pasien : </b>{{ item.nik }}</p>
-            <p><b>Nama Pasien : </b>{{ item.nama_lengkap }}</p>
-            <p><b>Usia Pasien : </b>{{ item.usia }}</p>
+            <p><b>NIK : </b>{{ item.nik }}</p>
+            <p><b>Nama : </b>{{ item.nama_lengkap }}</p>
+            <p><b>Usia : </b>{{ umurPasien }}</p>
         </td>
         <td>
             {{item.nama_kota}}
@@ -13,11 +13,16 @@
             {{item.instansi_pengirim_nama}}
         </td>
         <td>
-            <span class="badge badge-success mr-2" style="text-align:left;margin-bottom:10px" v-for="s in item.samples" :key="s"># {{s.nomor_sampel}} <br>
-            </span>
+            {{item.nomor_sampel}}
         </td>
         <td>
-            {{item.tgl_input | formatDateTime}}
+            {{item.sumber_pasien}}
+        </td>
+        <td>
+            {{item.status ? item.status.toUpperCase() : null}}
+        </td>
+        <td>
+            {{item.waktu_sample_taken | formatDate}}
         </td>
         <td>
             <p class="badge badge-danger" v-if="(item.nik==null || item.nik=='') || (item.nama_lengkap==null || item.nama_lengkap=='')">data_belum_lengkap</p>
@@ -96,6 +101,30 @@ export default {
             this.$router.push('/registrasi/mandiri/detail')
             // console.log(this.$store.getters['register/data'])
         }
-    }
+    },
+    computed: {
+        umurPasien() {
+            if (this.item.tanggal_lahir) {
+                let tglLahir = new Date(this.item.tanggal_lahir);
+                let today_date = new Date();
+                let today_year = today_date.getFullYear();
+                let today_month = today_date.getMonth();
+                let today_day = today_date.getDate();
+
+                var age = today_date.getFullYear() - tglLahir.getFullYear();
+                var m = today_date.getMonth() - tglLahir.getMonth();
+                if (m < 0 || (m === 0 && today_date.getDate() < tglLahir.getDate())) {
+                    age--;
+                }
+                return `${age} tahun`;
+            }
+
+            if (this.item.usia_tahun) {
+                return `${this.item.usia_tahun} tahun`;
+            }
+
+            return "";
+      }
+    },
 }
 </script>

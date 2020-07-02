@@ -1,7 +1,10 @@
 <?php
 
 function parseDate($date) {
-    return date('Y-m-d',strtotime($date));
+    if ($date != null) {
+        return date('Y-m-d',strtotime($date));
+    }
+    return $date;
 }
 function parseTime($time) {
     $time = str_replace(':','', $time);

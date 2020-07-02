@@ -8,7 +8,7 @@
 </template>
 
 <script>
-var MyStatus;
+  var MyStatus;
   import axios from 'axios'
   export default {
     props: ['barId'],
@@ -53,15 +53,15 @@ var MyStatus;
     },
     methods: {
       async loadData(tipe) {
-        let resp = await axios.get('v1/chart/pcr?tipe=' + tipe)        
+        let resp = await axios.get('v1/chart/pcr?tipe=' + tipe)
         this.chart.labels = resp.data.label;
         this.chart.datasets = resp.data.data;
         this.setChart();
       },
-      setChart(){
+      setChart() {
         var ctx = document.getElementById("chart").getContext("2d");
         let chartData = {
-          labels:this.chart.labels,
+          labels: this.chart.labels,
           datasets: this.chart.datasets
         };
 
@@ -73,16 +73,16 @@ var MyStatus;
       }
     },
     created() {
-      setTimeout(() => { 
+      setTimeout(() => {
         this.loadData('Daily');
-      }, 1000); 
+      }, 500);
     },
     mounted() {
-        this.$bus.$on('refresh-chart-pcr', (tipe) => {
-          MyStatus.destroy();
-          setTimeout(() => {
-            this.loadData(tipe)
-          }, 1000);
+      this.$bus.$on('refresh-chart-pcr', (tipe) => {
+        MyStatus.destroy();
+        setTimeout(() => {
+          this.loadData(tipe)
+        }, 500);
       })
     }
   };

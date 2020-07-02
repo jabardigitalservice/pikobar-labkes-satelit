@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper wrapper-content">
-    <portal to="title-name">Detail Sampel</portal>
+    <portal to="title-name">Detail Hasil Pemeriksaan</portal>
     <portal to="title-action">
       <div class="title-action">
         <router-link :to="'/hasil-pemeriksaan/edit/' + this.data.id" class="btn btn-warning">
@@ -23,183 +23,54 @@
                 </td>
               </tr>
 
-              <!-- <tr>
-                <td width="40%">
-                  <b>Sumber Sampel</b>
-                </td>
-                <td width="60%">
-                  <span>{{data.sumber_sampel}}</span>
-                </td>
-              </tr>
-
               <tr>
                 <td width="40%">
-                  <b>Petugas Penerima Sampel</b>
-                </td>
-                <td width="60%">
-                  <span>{{data.petugas_penerima_sampel}}</span>
-                </td>
-              </tr> -->
-
-              <tr>
-                <td width="40%">
-                  <b>Tipe Sampel</b>
+                  <b>Jenis Sampel</b>
                 </td>
                 <td width="60%">
                   <span>{{ data.jenis_sampel }}</span>
                 </td>
               </tr>
 
-              <!-- <tr>
+              <tr>
                 <td width="40%">
-                  <b>Kondisi Sampel</b>
+                  <b>Swab ke</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.kondisi_sampel }}</span>
-                </td>
-              </tr> -->
-
-              <!-- <tr>
-                <td colspan="2" class="table-sub-head">
-                  <span class="text-muted">PENGAMBILAN SAMPEL</span>
+                  <span>{{ data.swab_ke }}</span>
                 </td>
               </tr>
 
               <tr>
                 <td width="40%">
-                  <b>Waktu Pengambilan</b>
+                  <b>Tanggal Swab</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.pengambilanSampel.created_at | formatDateTime }}</span> -->
-                  <!-- <span>{{ data.tanggal_pengambilan_sampel | formatDate }} - {{ data.jam_pengambilan_sampel }}</span> -->
-                <!-- </td>
-              </tr> -->
-
-              <!-- <tr>
+                  <span>{{ data.tanggal_swab | formatDate }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Ibox>
+        <Ibox title="Informasi Pengirim">
+          <table class="table table-hover">
+            <tbody>
+              <tr>
                 <td width="40%">
-                  <b>Petugas</b>
+                  <b>Instansi Pengirim</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.pengambilanSampel.penerima_sampel }}</span> -->
-                  <!-- <span>{{ data.tanggal_pengambilan_sampel | formatDate }} - {{ data.jam_pengambilan_sampel }}</span> -->
-                <!-- </td>
+                  <span>{{data.instansi_pengirim}}</span>
+                </td>
               </tr>
               <tr>
                 <td width="40%">
-                  <b>Sumber Sampel</b>
+                  <b>Nama Rumah Sakit/Dinkes</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.pengambilanSampel.sumber_sampel }}</span> -->
-                  <!-- <span>{{ data.tanggal_pengambilan_sampel | formatDate }} - {{ data.jam_pengambilan_sampel }}</span> -->
-                <!-- </td>
-              </tr> -->
-
-              <!-- <tr>
-                <td width="40%">
-                  <b>Catatan</b>
-                </td>
-                <td width="60%">
-                  <span>{{ data.pengambilanSampel.catatan }}</span>
+                  <span>{{ data.instansi_pengirim_nama }}</span>
                 </td>
               </tr>
-
-              <tr>
-                <td colspan="2" class="table-sub-head text-muted">EKSTRAKSI</td>
-              </tr>
-
-              <tr>
-                <td width="40%">
-                  <b>Tanggal Penerimaan</b>
-                </td>
-                <td width="60%">
-                  <span>{{ data.ekstraksi.tanggal_penerimaan_sampel | formatDate }}</span>
-                </td>
-              </tr>
-
-              <tr>
-                <td width="40%">
-                  <b>Jam Penerimaan</b>
-                </td>
-                <td width="60%">
-                  <span>{{ data.ekstraksi.jam_penerimaan_sampel }}</span>
-                </td>
-              </tr>
-
-              <tr>
-                <td width="40%">
-                  <b>Petugas Penerimaan</b>
-                </td>
-                <td width="60%">
-                  <span>{{ data.ekstraksi.petugas_penerima_sampel }}</span>
-                </td>
-              </tr>
-
-              <tr>
-                <td width="40%">
-                  <b>Catatan Penerimaan</b>
-                </td>
-                <td width="60%">
-                  <span>{{ data.ekstraksi.catatan_penerimaan }}</span>
-                </td>
-              </tr>
-
-              <tr>
-                <td width="40%">
-                  <b>Operator Ekstraksi</b>
-                </td>
-                <td width="60%">
-                  <span>{{ data.ekstraksi.operator_ekstraksi }}</span>
-                </td>
-              </tr>
-
-              <tr>
-                <td width="40%">
-                  <b>Tanggal Mulai Ekstraksi</b>
-                </td>
-                <td width="60%">
-                  <span>{{ data.ekstraksi.tanggal_mulai_ekstraksi | formatDate }}</span>
-                </td>
-              </tr>
-
-              <tr>
-                <td width="40%">
-                  <b>Jam Mulai Ekstraksi</b>
-                </td>
-                <td width="60%">
-                  <span>{{ data.ekstraksi.jam_mulai_ekstraksi }}</span>
-                </td>
-              </tr>
-
-              <tr>
-                <td width="40%">
-                  <b>Metode Ekstraksi</b>
-                </td>
-                <td width="60%">
-                  <span>{{ data.ekstraksi.metode_ekstraksi }}</span>
-                </td>
-              </tr>
-
-              <tr>
-                <td width="40%">
-                  <b>Nama Kit Ekstraksi</b>
-                </td>
-                <td width="60%">
-                  <span>{{ data.ekstraksi.nama_kit_ekstraksi }}</span>
-                </td>
-              </tr>
-
-              <tr>
-                <td class="table-sub-head text-muted" colspan="2"></td>
-              </tr>
-
-              <tr>
-                <td width="40%">
-                  <b>Lab Penerima</b>
-                </td>
-                <td width="60%">
-                  <span>{{data.lab_pcr_nama}}</span>
-                </td>
-              </tr> -->
             </tbody>
           </table>
         </Ibox>
@@ -208,67 +79,12 @@
         <Ibox title="Informasi Pasien">
           <table class="table table-hover">
             <tbody>
-              <!-- <tr>
-                <td width="47%">
-                  <b>Nomor Registrasi</b>
-                </td>
-                <td width="60%">
-                  <span>{{data.nomor_register}}</span>
-                </td>
-              </tr>
-
-              <tr>
-                <td width="47%">
-                  <b>Jenis Registrasi</b>
-                </td>
-                <td width="60%">
-                  <span>{{data.register.jenis_registrasi}}</span>
-                </td>
-              </tr>
-
-              <tr>
-								<td width="30%">
-									<b>Kategori</b>
-								</td>
-								<td width="60%">
-									<span>{{data.register.sumber_pasien}}</span>
-								</td>
-							</tr>
-
-							<tr>
-								<td width="30%">
-									<b>Fasyankes/Dinkes</b>
-								</td>
-								<td width="60%">
-									<span v-if="data.fasyankes">{{data.fasyankes.nama}}</span>
-									<span v-if="!data.fasyankes && data.register.nama_rs">{{data.register.nama_rs}}</span>
-									
-									<span v-if="!data.fasyankes && !data.register.nama_rs && data.register.dinkes_pengirim">
-										{{data.register.dinkes_pengirim}}
-									</span>
-								</td>
-							</tr>
-
-              <tr>
-								<td width="30%">
-									<b>Fasyankes/Dinkes (Lainnya)</b>
-								</td>
-								<td width="60%">
-									<span v-if="data.register.other_nama_rs">
-										{{data.register.other_nama_rs}}
-									</span>
-									<span v-if="!data.register.other_nama_rs && data.register.other_dinas_pengirim">
-										{{data.register.other_dinas_pengirim}}
-									</span>
-								</td>
-							</tr> -->
-
               <tr>
                 <td width="30%">
                   <b>Nama Pasien</b>
                 </td>
                 <td width="60%">
-                  <span>{{data.pasien.nama_lengkap}}</span>
+                  <span>{{data.nama_lengkap}}</span>
                 </td>
               </tr>
               <tr>
@@ -276,7 +92,7 @@
                   <b>Nomor Induk Kependudukan</b>
                 </td>
                 <td width="60%">
-                  <span>{{data.pasien.nik }}</span>
+                  <span>{{data.nik }}</span>
                 </td>
               </tr>
               <tr>
@@ -284,7 +100,7 @@
                   <b>Tempat, Tanggal Lahir Pasien</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.pasien.tempat_lahir }} {{data.pasien.tanggal_lahir1 | formatDate }} - {{ umurPasien }}</span>
+                  <span>{{ data.tempat_lahir }} {{data.tanggal_lahir | formatDate }} - {{ umurPasien }}</span>
                 </td>
               </tr>
               <tr>
@@ -292,8 +108,8 @@
                   <b>Jenis Kelamin</b>
                 </td>
                 <td width="60%">
-                  <span v-if="data.pasien.jenis_kelamin === 'L'">Laki - laki</span>
-                  <span v-if="data.pasien.jenis_kelamin === 'P'">Perempuan</span>
+                  <span v-if="data.jenis_kelamin === 'L'">Laki - laki</span>
+                  <span v-if="data.jenis_kelamin === 'P'">Perempuan</span>
                 </td>
               </tr>
               <tr>
@@ -301,7 +117,7 @@
                   <b>Kabupaten/Kota</b>
                 </td>
                 <td width="60%">
-                  <span v-if="data.pasien.kota">{{ data.pasien.kota.nama }}</span>
+                  <span v-if="data.nama_kota">{{ data.nama_kota }}</span>
                 </td>
               </tr>
               <tr>
@@ -309,7 +125,7 @@
                   <b>Kecamatan</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.pasien.kecamatan }}</span>
+                  <span>{{ data.kecamatan }}</span>
                 </td>
               </tr>
               <tr>
@@ -317,7 +133,7 @@
                   <b>Kelurahan</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.pasien.kelurahan }}</span>
+                  <span>{{ data.kelurahan }}</span>
                 </td>
               </tr>
               <tr>
@@ -325,9 +141,9 @@
                   <b>RT/RW</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.pasien.no_rt }}</span>
-                  <span v-if="data.pasien.no_rw">/</span>
-                  <span>{{ data.pasien.no_rw }}</span>
+                  <span>{{ data.no_rt }}</span>
+                  <span v-if="data.no_rw">/</span>
+                  <span>{{ data.no_rw }}</span>
                 </td>
               </tr>
               <tr>
@@ -335,7 +151,7 @@
                   <b>Alamat</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.pasien.alamat_lengkap }}</span>
+                  <span>{{ data.alamat_lengkap }}</span>
                 </td>
               </tr>
               <tr>
@@ -343,8 +159,8 @@
                   <b>No. Telp/HP</b>
                 </td>
                 <td width="60%">
-                  <span v-if="data.pasien.no_hp">{{data.pasien.no_hp }}</span>
-                  <span v-else-if="data.pasien.no_telp">{{data.pasien.no_telp }}</span>
+                  <span v-if="data.no_hp">{{data.no_hp }}</span>
+                  <span v-else-if="data.no_telp">{{data.no_telp }}</span>
                 </td>
               </tr>
               <tr>
@@ -352,7 +168,7 @@
                   <b>Tanggal Registrasi</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.register.created_at | formatDate }}</span>
+                  <span>{{ data.created_at | formatDate }}</span>
                 </td>
               </tr>
               <tr>
@@ -360,34 +176,9 @@
                   <b>Dinkes Pengirim</b>
                 </td>
                 <td width="60%">
-                  <span>{{ data.register.instansi_pengirim }}</span>
+                  <span>{{ data.instansi_pengirim }}</span>
                 </td>
               </tr>
-              <!-- <tr>
-                <td width="30%">
-                  <b>Tanggal Periksa / Lapor</b>
-                </td>
-                <td width="60%">
-                  <span>{{ data.register.tanggal_kunjungan | formatDate }}</span>
-                </td>
-              </tr>
-              <tr>
-                <td width="30%">
-                  <b>Fasyankes</b>
-                </td>
-                <td width="60%">
-                  <span v-if="data.fasyankes">{{ data.fasyankes.nama }}</span>
-                  <span v-if="!data.fasyankes">{{ data.register.rs_kunjungan }}</span>
-                </td>
-              </tr>
-              <tr>
-                <td width="30%">
-                  <b>Suhu</b>
-                </td>
-                <td width="60%">
-                  <span>{{ data.pasien.suhu }} (°C)</span>
-                </td>
-              </tr> -->
             </tbody>
           </table>
         </Ibox>
@@ -397,71 +188,21 @@
     <div class="row">
       <div class="col-md-12">
         <div class="row">
-          <div class="col-md-6" v-for="hasil in data.pemeriksaan_sampel" :key="hasil.id">
+          <div class="col-md-6">
             <Ibox title="Pemeriksaan Sampel">
               <table class="table">
                 <tbody>
-                  <!-- <tr>
-                    <td width="47%">
-                      <b>Tanggal Penerimaan Sampel</b>
-                    </td>
-                    <td>{{ hasil.tanggal_penerimaan_sampel | formatDate }}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Petugas Penerimaan Sampel RNA</b>
-                    </td>
-                    <td>{{ hasil.petugas_penerimaan_sampel_rna }}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Operator Realtime PCR</b>
-                    </td>
-                    <td>{{ hasil.operator_realtime_pcr }}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Tanggal Mulai Pemeriksaan</b>
-                    </td>
-                    <td>{{ hasil.tanggal_mulai_pemeriksaan | formatDate }}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Jam Mulai Pemeriksaan</b>
-                    </td>
-                    <td>{{ hasil.jam_mulai_pemeriksaan }}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Jam Selesai Pemeriksaan</b>
-                    </td>
-                    <td>{{ hasil.jam_selesai_pemeriksaan }}</td>
-                  </tr> -->
-                  <tr>
-                    <td>
-                      <b>Metode Pemeriksaan</b>
-                    </td>
-                    <td>
-                      <span v-if="hasil.nama_kit_pemeriksaan">PCR - {{ hasil.nama_kit_pemeriksaan }}</span>
-                    </td>
-                  </tr>
                   <tr>
                     <td>
                       <b>Tanggal Input Hasil</b>
                     </td>
-                    <td>{{ hasil.tanggal_input_hasil | formatDate }}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Jam Input Hasil</b>
-                    </td>
-                    <td>{{ hasil.jam_input_hasil }}</td>
+                    <td>{{ data.waktu_pcr_sample_analyzed | formatDate }}</td>
                   </tr>
                   <tr>
                     <td>
                       <b>Kesimpulan Pemeriksaan</b>
                     </td>
-                    <td>{{ hasil.kesimpulan_pemeriksaan }}</td>
+                    <td>{{ data.kesimpulan_pemeriksaan }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -474,7 +215,7 @@
                   </tr>
                 </thead>
                 <tbody class="field_wrapper">
-                  <tr v-for="(hasil, $index) in hasil.hasil_deteksi" :key="$index">
+                  <tr v-for="(hasil, $index) in JSON.parse(data.hasil_deteksi)" :key="$index">
                     <td>
                       <p class="form-control">
                         <b>{{ hasil.target_gen }}</b>
@@ -483,7 +224,7 @@
                     <td>
                       <p class="form-control">
                         <b v-if="!!hasil.ct_value">{{ hasil.ct_value }}</b>
-												<b v-if="hasil.ct_value == null">{{ '-' }}</b>
+                        <b v-if="hasil.ct_value == null">{{ '-' }}</b>
                       </p>
                     </td>
                   </tr>
@@ -520,67 +261,73 @@
 </template>
 
 <script>
-import axios from "axios";
+  import axios from "axios";
 
-export default {
-  middleware: "auth",
-  async asyncData({ route }) {
-    let resp = await axios.get("/v1/verifikasi/detail/" + route.params.id);
-    let data = resp.data.data;
+  export default {
+    middleware: "auth",
+    async asyncData({
+      route
+    }) {
+      let resp = await axios.get("/v1/verifikasi/detail/" + route.params.id);
+      let data = resp.data.data;
 
-    if (!data.pasien) {
-      data.pasien = {};
-    }
-
-    if (!data.pengambilanSampel) {
-      data.pengambilanSampel = {};
-    }
-
-    if (!data.ekstraksi) {
-      data.ekstraksi = {};
-    }
-
-    if (!data.pemeriksaan_sampel) {
-      data.pemeriksaan_sampel = {};
-    }
-
-    if (!data.register) {
-      data.register = {};
-    }
-
-    return { data };
-  },
-  computed: {
-    umurPasien() {
-      if (this.data.pasien) {
-        let tglLahir = new Date(this.data.pasien.tanggal_lahir);
-        let today_date = new Date();
-        let today_year = today_date.getFullYear();
-        let today_month = today_date.getMonth();
-        let today_day = today_date.getDate();
-
-        var age = today_date.getFullYear() - tglLahir.getFullYear();
-        var m = today_date.getMonth() - tglLahir.getMonth();
-        if (m < 0 || (m === 0 && today_date.getDate() < tglLahir.getDate())) {
-          age--;
-        }
-
-        return `Usia: ${age} tahun`;
+      if (!data.pasien) {
+        data.pasien = {};
       }
 
-      return "";
+      if (!data.pengambilanSampel) {
+        data.pengambilanSampel = {};
+      }
+
+      if (!data.ekstraksi) {
+        data.ekstraksi = {};
+      }
+
+      if (!data.pemeriksaan_sampel) {
+        data.pemeriksaan_sampel = {};
+      }
+
+      if (!data.register) {
+        data.register = {};
+      }
+
+      return {
+        data
+      };
+    },
+    computed: {
+      umurPasien() {
+        if (this.data.tanggal_lahir) {
+          let tglLahir = new Date(this.data.tanggal_lahir);
+          let today_date = new Date();
+          let today_year = today_date.getFullYear();
+          let today_month = today_date.getMonth();
+          let today_day = today_date.getDate();
+
+          var age = today_date.getFullYear() - tglLahir.getFullYear();
+          var m = today_date.getMonth() - tglLahir.getMonth();
+          if (m < 0 || (m === 0 && today_date.getDate() < tglLahir.getDate())) {
+            age--;
+          }
+
+          return `Usia: ${age} tahun`;
+        }
+        if (this.data.usia_tahun) {
+          return `Usia: ${this.data.usia_tahun} tahun`;
+        }
+        return "";
+      }
+    },
+    head() {
+      return {
+        title: "Detil Sampel Hasil Pemeriksaan"
+      };
     }
-  },
-  head() {
-    return {
-      title: "Detil Sampel Hasil Pemeriksaan"
-    };
-  }
-};
+  };
 </script>
 
 <style scoped>
-.table-sub-head {
-	padding-top: 25px;
-}
+  .table-sub-head {
+    padding-top: 25px;
+  }
 </style>
