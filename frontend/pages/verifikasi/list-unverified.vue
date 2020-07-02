@@ -138,9 +138,6 @@
       "params1.kesimpulan_pemeriksaan": function (newVal, oldVal) {
         this.$bus.$emit("refresh-ajaxtable", "verifikasi");
       },
-      // "params1.kategori": function(newVal, oldVal) {
-      //   this.$bus.$emit("refresh-ajaxtable", "verifikasi");
-      // },
     },
     methods: {
       async onExport(type) {
