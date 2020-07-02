@@ -233,6 +233,8 @@ class RegistersampelController extends Controller
         return response()->json([
             'instansi_pengirim' =>  $register->instansi_pengirim,
             'instansi_pengirim_nama' =>  $register->instansi_pengirim_nama,
+            'reg_register' =>  $register->lab_satelit_id,
+            'reg_pasien' =>  $pasien->lab_satelit_id,
             'reg_kewarganegaraan' =>  $pasien->kewarganegaraan,
             'reg_nama_pasien' =>  $pasien->nama_lengkap,
             'reg_nik' =>  $pasien->nik,

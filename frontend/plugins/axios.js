@@ -32,6 +32,14 @@ export default ({ app, store, redirect }) => {
   axios.interceptors.response.use(response => response, (error) => {
     const { status } = error.response || {}
 
+    if (status == 403) {
+      swal.fire(
+            "Terjadi kesalahan",
+            'This action is unauthorized',
+            "error"
+      );
+    }
+
     if (status >= 500) {
       swal({
         type: 'error',

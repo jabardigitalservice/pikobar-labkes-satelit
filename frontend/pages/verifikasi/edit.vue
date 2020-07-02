@@ -24,7 +24,7 @@
               <label>Tanggal Input Hasil</label>
               <p class="form-control">
                 <b>
-                  {{ data.last_pemeriksaan_sampel.tanggal_input_hasil }}
+                  {{ data.waktu_pcr_sample_analyzed | formatDate}}
                 </b>
               </p>
             </div>
@@ -33,7 +33,7 @@
               <label>Jam Input Hasil</label>
               <p class="form-control">
                 <b>
-                  {{ data.last_pemeriksaan_sampel.jam_input_hasil }}
+                  {{ data.waktu_pcr_sample_analyzed | formatTime }}
                 </b>
               </p>
             </div>
@@ -41,21 +41,21 @@
             <div class="form-group">
               <label>Nama Pasien</label>
               <p class="form-control">
-                <b>{{ data.pasien.nama_lengkap }}</b>
+                <b>{{ data.nama_lengkap }}</b>
               </p>
             </div>
 
             <div class="form-group">
               <label>NIK</label>
               <p class="form-control">
-                <b>{{ data.pasien.nik }}</b>
+                <b>{{ data.nik }}</b>
               </p>
             </div>
 
             <div class="form-group">
               <label>Tanggal Lahir</label>
               <p class="form-control">
-                <b>{{ data.pasien.tanggal_lahir | formatDate }}</b>
+                <b>{{ data.tanggal_lahir | formatDate }}</b>
               </p>
             </div>
 
@@ -193,15 +193,15 @@
         tanggal_input_hasil: new Date(),
         jam_input_hasil: ("" + new Date().getHours()).padStart(2, "0") + ":" + ("" + new Date().getMinutes())
           .padStart(2, "0"),
-        last_pemeriksaan_id: data.last_pemeriksaan_sampel.id,
-        catatan_pemeriksaan: data.last_pemeriksaan_sampel.catatan_pemeriksaan,
-        kesimpulan_pemeriksaan: data.last_pemeriksaan_sampel.kesimpulan_pemeriksaan,
-        hasil_deteksi: data.last_pemeriksaan_sampel.hasil_deteksi ? data.last_pemeriksaan_sampel.hasil_deteksi :
+        last_pemeriksaan_id: data.pemeriksaan_id,
+        catatan_pemeriksaan: data.catatan_pemeriksaan,
+        kesimpulan_pemeriksaan: data.kesimpulan_pemeriksaan,
+        hasil_deteksi: data.hasil_deteksi ? JSON.parse(data.hasil_deteksi) :
       [{
           'target_gen': null,
           'ct_value': null
         }],
-        grafik: data.last_pemeriksaan_sampel.grafik ? data.last_pemeriksaan_sampel.grafik : [],
+        sampel:data.sampel
       });
 
       return {

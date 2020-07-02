@@ -419,7 +419,8 @@
                     reg_swab_ke: data.reg_swab_ke,
                     reg_tanggal_swab: data.reg_tanggal_swab,
                     reg_sumber_pasien: data.reg_sumber_pasien,
-
+                    reg_register: data.reg_register,
+                    reg_pasien: data.reg_pasien,
                 }),
 
                 selected_reg: {},

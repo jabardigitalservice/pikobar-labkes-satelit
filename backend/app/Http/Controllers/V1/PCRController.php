@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreInputHasil;
 use Illuminate\Http\Request;
 use App\Models\Sampel;
 use App\Models\PemeriksaanSampel;
@@ -139,6 +140,7 @@ class PCRController extends Controller
             ->whereIn('sampel_status', ['pcr_sample_received','pcr_sample_analyzed','extraction_sample_reextract'])
             ->orderByDesc('created_at')
             ->get();
+        $model->sampel = Auth::user()->lab_satelit_id;
         $model->pasien = $model->register ? optional($model->register)->pasiens()->with(['kota'])->first() : null;
         return response()->json(['status'=>200,'message'=>'success','data'=>$model]);
     }
@@ -245,39 +247,18 @@ class PCRController extends Controller
         return response()->json(['status'=>201,'message'=>'Perubahan berhasil disimpan']);
     }
 
-    public function input(Request $request, $id)
+    public function input(StoreInputHasil $request, $id)
     {
         $user = $request->user();
         $sampel = Sampel::with(['pcr'])->find($id);
-        $v = Validator::make($request->all(),[
-            'kesimpulan_pemeriksaan' => 'required',
-            'nama_kit_pemeriksaan' => 'required',
-            'hasil_deteksi.*.target_gen' => 'required',
-            'hasil_deteksi.*.ct_value' => 'required',
-            // 'grafik' => 'required',
-        ]);
-        // cek minimal file
-        // if (count($request->grafik) < 1) {
-        //     $v->after(function ($validator) {
-        //         $validator->errors()->add("samples", 'Minimal 1 file untuk grafik');
-        //     });
-        // }
-        if (count($request->hasil_deteksi) < 1) {
-            $v->after(function ($validator) {
-                $validator->errors()->add("samples", 'Minimal 1 hasil deteksi CT Value');
-            });
-        }
-
-        $v->validate();
-
         $pcr = $sampel->pcr;
         if (!$pcr) {
             $pcr = new PemeriksaanSampel;
             $pcr->sampel_id = $sampel->id;
             $pcr->user_id = $user->id;
         }
-        $pcr->tanggal_input_hasil = $request->tanggal_input_hasil;
-        $pcr->jam_input_hasil = $request->jam_input_hasil;
+        $pcr->tanggal_input_hasil = date('Y-m-d',strtotime($request->tanggal_input_hasil));
+        $pcr->jam_input_hasil = date('H:s');
         $pcr->catatan_pemeriksaan = $request->catatan_pemeriksaan;
         $pcr->grafik = $request->grafik;
         $pcr->hasil_deteksi = $this->parseHasilDeteksi($request->hasil_deteksi);
@@ -290,7 +271,7 @@ class PCRController extends Controller
                 'user_id' => $user->id,
                 'metadata' => $pcr,
                 'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
-            ]);
+            ],$pcr->tanggal_input_hasil);
         } else {
             $sampel->addLog([
                 'user_id' => $user->id,
@@ -469,7 +450,7 @@ class PCRController extends Controller
                     $pcr->sampel_id = $sampel->id;
                     $pcr->user_id = $user->id;
                 }
-                $pcr->tanggal_input_hasil = $row['tanggal_input_hasil'];
+                $pcr->tanggal_input_hasil = date('Y-m-d',strtotime($row['tanggal_input_hasil']));
                 $pcr->nama_kit_pemeriksaan = $row['nama_kit_pemeriksaan'];
                 $pcr->jam_input_hasil = date('H:i');
                 $pcr->catatan_pemeriksaan = $row['catatan_pemeriksaan'];
@@ -490,7 +471,6 @@ class PCRController extends Controller
                         'metadata' => $pcr,
                         'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
                     ]);
-                    $sampel->waktu_sample_taken = date('Y-m-d H:i:s');
                     $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s',strtotime($row['tanggal_input_hasil']));
                     $sampel->save();
                 }

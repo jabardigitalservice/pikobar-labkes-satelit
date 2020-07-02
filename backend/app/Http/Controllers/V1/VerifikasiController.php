@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Exports\AjaxTableExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreHasilPemeriksaan;
 use App\Models\PemeriksaanSampel;
 use App\Models\PengambilanSampel;
 use App\Models\Register;
@@ -373,10 +374,11 @@ class VerifikasiController extends Controller
         if (Auth::user()->lab_satelit_id !=null) {
             $sampel->where('sampel.lab_satelit_id',Auth::user()->lab_satelit_id);
         }
-        $sampel->select('*','sampel.id as id','kota.nama as nama_kota','register.created_at as created_at');
+        $sampel->select('*','sampel.id as id','kota.nama as nama_kota','register.created_at as created_at','pemeriksaansampel.id as pemeriksaan_id');
         $result = $sampel->first();
         $log = SampelLog::where('sampel_id',$result->id)->orderBy('created_at','desc')->get();
         $result->logs = $log;
+        $result->sampel = Auth::user()->lab_satelit_id;
         return response()->json([
             'status'=>200,
             'message'=>'success',
@@ -405,7 +407,7 @@ class VerifikasiController extends Controller
      * @param  \App\Models\Sampel  $sampel
      * @return \Illuminate\Http\Response
      */
-    public function updateToVerified(Request $request, Sampel $sampel)
+    public function updateToVerified(StoreHasilPemeriksaan $request, Sampel $sampel)
     {
         $request->validate([
             'kesimpulan_pemeriksaan'=> 'required',

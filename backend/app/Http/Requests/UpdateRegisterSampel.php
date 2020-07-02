@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Register;
 use App\Models\Sampel;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ class UpdateRegisterSampel extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::user()->lab_satelit_id == $this->reg_register && Auth::user()->lab_satelit_id == $this->reg_pasien;
     }
 
     /**
