@@ -56,6 +56,5 @@ Vue.filter('formatTime', function (value) {
   var bulan = parseInt(value.toString().substring(5,7));
   var jam = value.toString().substring(11,13)
   var menit = value.toString().substring(14,16)
-  // return nmBulan[bulan];
   return jam + ":" + menit;
 });
