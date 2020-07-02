@@ -179,7 +179,6 @@
             this.isLoadingExp = false;
           });
 
-          // const response = await this.form.post("/v1/verifikasi/export-excel");
 
           // this.$toast.success(response.data.message, {
           //   icon: "check",
