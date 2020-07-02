@@ -49,7 +49,6 @@ Vue.filter('formatTime', function (value) {
     var bulan = date.getMonth() + 1;
     var jam = date.getHours()
     var menit = date.getMinutes()
-    // return nmBulan[bulan];
     return jam + ":" + menit;
   }
   var tanggal = parseInt(value.toString().substring(8,10));
