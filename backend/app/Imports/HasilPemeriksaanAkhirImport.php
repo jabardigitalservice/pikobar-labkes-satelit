@@ -6,7 +6,9 @@ use App\Models\Fasyankes;
 use App\Models\JenisSampel;
 use App\Models\Kota;
 use App\Models\Pasien;
+use App\Models\PasienRegister;
 use App\Models\PemeriksaanSampel;
+use App\Models\PengambilanSampel;
 use App\Models\Register;
 use App\Models\Sampel;
 use App\Traits\RegisterTrait;
@@ -23,13 +25,6 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
 
     public function collection(Collection $rows)
     {
-
-        // $lastRegister = Register::query()->orderBy('id', 'desc')->first();
-        // $lengthNumber = $lastRegister ? (strlen($lastRegister->nomor_register) - 9 ): null;
-        // $counterNomorRegister = $lastRegister ? ((int) substr($lastRegister->nomor_register, 9, $lengthNumber) + 1) : 1;
-
-        // $omgRegisterId = $lastRegister ? (++$lastRegister->id) : 1;
-
         DB::beginTransaction();
         try {
             $user = Auth::user();
@@ -37,147 +32,118 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                 if (!$row->get('no')) {
                     continue;
                 }
-                $registerData = [
-                    'register_uuid'=> (string) \Illuminate\Support\Str::uuid(),
-                    'creator_user_id' => $user->id,
-                    'lab_satelit_id' => $user->lab_satelit_id,
-                    'created_at'=> $row->get('tgl_masuk_sampel'),
-                    'instansi_pengirim'=> $row->get('instansi_pengirim'),
-                    'instansi_pengirim_nama'=> $row->get('nama_instansi'),
-                ];
-
-                 Validator::make($registerData, [
-                    'instansi_pengirim'=> 'required',
-                    'instansi_pengirim_nama'=> 'required',
-                    'created_at'=> 'date|date_format:Y-m-d'
-                ],[
-                    'instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
-                    'instansi_pengirim_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
-                    'created_at.date' => 'Tanggal Masuk Sampel tidak valid',
-                    'created_at.date_format' => 'Format Tanggal Masuk Sampel harus yyyy-mm-dd',
-                ]
-                )->validate();
-
+                $v = Validator::make($row->toArray(), [
+                        'nama_instansi'=> 'required',
+                        'instansi_pengirim'=> 'required',
+                        'tgl_masuk_sampel'=> 'date|date_format:Y-m-d',
+                        'nik'=> 'nullable|digits:16',
+                        'nama'=> 'required',
+                        'tgl_lahir'=> 'nullable|date|date_format:Y-m-d',
+                        'kode_sampel' => 'required',
+                        'jenis_sampel' => 'required',
+                        'swab_ke' => 'nullable|numeric',
+                        'tanggal_swab'=> 'nullable|date|date_format:Y-m-d',
+                        'interpretasi'=> 'in:Positif,Negatif,Inkonklusif',
+                    ],[
+                        'nama_instansi.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
+                        'instansi_pengirim_nama.required' => 'Instansi Pengirim tidak boleh kosong',
+                        'tgl_masuk_sampel.date' => 'Tanggal Masuk Sampel tidak valid',
+                        'tgl_masuk_sampel.date_format' => 'Format Tanggal Masuk Sampel harus yyyy-mm-dd',
+                        'nik.digits'=> 'NIK terdiri dari 16 karakter', 
+                        'nama.required'=> 'Nama Pasien Tidak Boleh Kosong',
+                        'tgl_lahir.date' => 'Tanggal Lahir tidak valid',
+                        'tgl_lahir.date_format' => 'Format Tanggal Lahir harus yyyy-mm-dd',
+                        'kode_sampel.required' => 'Nomor Sampel tidak boleh kosong',
+                        'jenis_sampel.required' => 'Jenis Sampel tidak boleh kosong', 
+                        'swab_ke.numeric' => 'Swab ke harus berupa angka', 
+                        'tanggal_swab.date' => 'Tanggal Swab tidak valid',
+                        'tanggal_swab.date_format' => 'Format Tanggal Swab harus yyyy-mm-dd',
+                        'interpretasi.in' => 'Interpretasi tidak valid harus Positif,Negatif,Inkonklusif', 
+                ]);
+                
+                $v->after(function ($validator) use ($row) {
+                    $user = Auth::user();
+                    $nomorsampel = Sampel::where('nomor_sampel','ilike','%'.$row['kode_sampel'].'%')
+                    ->where('lab_satelit_id',$user->lab_satelit_id)->first();
+                    if ($nomorsampel != null) { 
+                        $validator->errors()->add("reg_sampel_nomor", "Nomor Sampel sudah digunakan {$row['kode_sampel']}");
+                    }
+                })->validate();
+                                
                 $register = new Register;
                 $register->register_uuid = (string) \Illuminate\Support\Str::uuid();
                 $register->created_at = date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')));
                 $register->creator_user_id = $user->id;
                 $register->lab_satelit_id = $user->lab_satelit_id;
-                $register->instansi_pengirim = $row->get('instansi_pengirim');
                 $register->instansi_pengirim_nama = $row->get('nama_instansi');
-                $register->save();
-                $pasienData = [
-                    'nik'=> $row->get('nik'),
-                    'nama_lengkap'=> $row->get('nama'),
-                    'jenis_kelamin'=> $row->get('jenis_kelamin'),
-                    'tanggal_lahir'=> $row->get('tgl_lahir'),
-                    'kota_id'=> $this->getKota($row),
-                    'kecamatan'=> $row->get('kecamatan'),
-                    'kelurahan'=> $row->get('desakelurahan'),
-                    'alamat_lengkap'=> $row->get('alamat'),
-                    'usia_tahun'=> $row->get('usia'),
-                    'lab_satelit_id'=> $user->lab_satelit_id,
-                    'tanggal_pemeriksaan' => $row->get('tanggal_pemeriksaan'),
-                    'interpretasi' => $row->get('interpretasi'),
-                ];
-                Validator::make($pasienData, [
-                    'nik'=> 'nullable|digits:16',
-                    'nama_lengkap'=> 'required',
-                    'tanggal_lahir'=> 'nullable|date|date_format:Y-m-d',
-                    'tanggal_pemeriksaan'=> 'nullable|date|date_format:Y-m-d',
-                    'interpretasi'=> 'in:Positif,Negatif,Inkonklusif',
-                 ],[
-                     'nik.digits'=> 'NIK terdiri dari 16 karakter', 
-                     'nama_lengkap.required'=> 'Nama Pasien Tidak Boleh Kosong',
-                     'tanggal_lahir.date' => 'Tanggal Lahir tidak valid',
-                     'tanggal_lahir.date_format' => 'Format Tanggal Lahir harus yyyy-mm-dd', 
-                     'tanggal_pemeriksaan.date' => 'Tanggal Pemeriksaan tidak valid',
-                     'tanggal_pemeriksaan.date_format' => 'Format Tanggal Pemeriksaan harus yyyy-mm-dd', 
-                     'interpretasi.in' => 'Interpretasi tidak valid harus Positif,Negatif,Inkonklusif', 
-                 ])->validate();
-                //  $pasien = Pasien::where('nik',$row->get('nik'))->first();
-                //  if (!$pasien) {
-                     $pasien = new Pasien;
-                //  }
-                 $pasien->nik = $this->parseNIK($row->get('nik'));
-                 $pasien->nama_lengkap = $row->get('nama');
-                 $pasien->jenis_kelamin = $row->get('jenis_kelamin');
-                 $pasien->tanggal_lahir = date('Y-m-d',strtotime($row->get('tgl_lahir')));
-                 $pasien->kota_id = $this->getKota($row);
-                 $pasien->kecamatan = $row->get('kecamatan');
-                 $pasien->kelurahan = $row->get('desakelurahan');
-                 $pasien->alamat_lengkap = $row->get('alamat');
-                 $pasien->usia_tahun = $row->get('usia');
-                 $pasien->lab_satelit_id = $user->lab_satelit_id;
-                 $pasien->save();
-
-                $register->pasiens()->attach($pasien);
-
-                $nomorSampels = explode(';', $row->get('kode_sampel'));
-                $error = 0;
-                foreach ($nomorSampels as $key => $nomor) {
-                    abort_if($nomor == "", 403,"Nomor Sampel Tidak Boleh Kosong");
-                    $jenissampel = JenisSampel::where('nama',$row->get('jenis_sampel'))->first();
-                    $nomorsampel = Sampel::where('nomor_sampel','ilike','%'.$nomor.'%')->where('lab_satelit_id',$user->lab_satelit_id)->first();
-                    if ($nomorsampel) {
-                        $error++;
-                    }
-                    
-                    abort_if($error == count($nomorSampels), 403,"Nomor Sampel Sudah Terpakai {$nomor}");
-                    $sampel = new Sampel();
-                    $sampel->nomor_sampel = strtoupper($nomor);
-                    $sampel->sampel_status = 'sample_taken';
-                    $sampel->lab_satelit_id = $user->lab_satelit_id;
-                    $sampel->creator_user_id = $user->id;
-                    $sampel->jenis_sampel_id = $jenissampel ? $jenissampel->id : 999999;
-                    $sampel->jenis_sampel_nama = $row->get('jenis_sampel');
-                    $sampel->created_at = date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')));
-                    $sampel->waktu_sample_taken = date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')));
-                    $sampel->save();
-
-                    $register->sampel()->save($sampel);
-
-                    $sampel = Sampel::with(['pcr'])->find($sampel->id);
-
-                    $pcr = $sampel->pcr;
-                    if (!$pcr) {
-                        $pcr = new PemeriksaanSampel;
-                        $pcr->sampel_id = $sampel->id;
-                        $pcr->user_id = $user->id;
-                    }
-                    $pcr->tanggal_input_hasil = date('Y-m-d',strtotime($row->get('tanggal_pemeriksaan')));
-                    $pcr->catatan_pemeriksaan = $row->get('keterangan');
-                    $pcr->kesimpulan_pemeriksaan = strtolower($row->get('interpretasi'));
-                    $pcr->save();
-
-                    if ($sampel->sampel_status == 'sample_taken') {
-                        $sampel->updateState('pcr_sample_analyzed', [
-                            'user_id' => $user->id,
-                            'metadata' => $pcr,
-                            'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
-                        ]);
-                    } else {
-                        $sampel->addLog([
-                            'user_id' => $user->id,
-                            'metadata' => $pcr,
-                            'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
-                        ]);
-                        $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s',strtotime($row->get('tanggal_pemeriksaan')));
-                        $sampel->save();
-                    }
-
+                $register->sumber_pasien = $row->get('kategori');
+                $register->instansi_pengirim = $row->get('instansi_pengirim');
+                $register->status = strtolower($row->get('status'));
+                $register->swab_ke = $row->get('swab_ke');
+                if ($row->get('tanggal_swap') != '') {
+                    $register->tanggal_swab = date('Y-m-d',strtotime($row->get('tanggal_swap')));
                 }
+                $register->save();
+                
+                $pasien = new Pasien;
+                $pasien->nik = $this->parseNIK($row->get('nik'));
+                $pasien->nama_lengkap = $row->get('nama');
+                $pasien->jenis_kelamin = $row->get('jenis_kelamin');
+                if ($row->get('tgl_lahir') != '') {
+                    $pasien->tanggal_lahir = date('Y-m-d',strtotime($row->get('tgl_lahir')));
+                }
+                $pasien->kota_id = $this->getKota($row);
+                $pasien->kecamatan = $row->get('kecamatan');
+                $pasien->kelurahan = $row->get('desakelurahan');
+                $pasien->alamat_lengkap = $row->get('alamat');
+                $pasien->usia_tahun = $row->get('usia');
+                $pasien->lab_satelit_id = $user->lab_satelit_id;
+                $pasien->save();
 
+                PasienRegister::create([
+                    'pasien_id' => $pasien->id,
+                    'register_id' => $register->id,
+                ]);
+                $pengambilan_sampel = PengambilanSampel::create([
+                    'sampel_diambil' => false,
+                    'sampel_diterima' => false,
+                    'diterima_dari_faskes' => false,
+                    'sampel_rdt' => false,
+                    'catatan' => null,
+                ]);
+                $jenissampel = JenisSampel::where('nama',$row->get('jenis_sampel'))->first();
+                                    
+                $sampel = new Sampel();
+                $sampel->nomor_sampel = strtoupper($row->get('kode_sampel'));
+                $sampel->sampel_status = 'sample_taken';
+                $sampel->lab_satelit_id = $user->lab_satelit_id;
+                $sampel->creator_user_id = $user->id;
+                $sampel->register_id = $register->id;
+                $sampel->pengambilan_sampel_id = $pengambilan_sampel->id;
+                $sampel->jenis_sampel_id = $jenissampel ? $jenissampel->id : 999999;
+                $sampel->jenis_sampel_nama = $row->get('jenis_sampel');
+                $sampel->created_at = date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')));
+                $sampel->waktu_sample_taken = date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')));
+                $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')));
+                $sampel->save();
 
+                $pcr = new PemeriksaanSampel;
+                $pcr->sampel_id = $sampel->id;
+                $pcr->user_id = $user->id;
+                if ($row->get('tanggal_pemeriksaan') != '') {
+                    $pcr->tanggal_input_hasil = date('Y-m-d',strtotime($row->get('tanggal_pemeriksaan')));
+                }
+                $pcr->catatan_pemeriksaan = $row->get('keterangan');
+                $pcr->kesimpulan_pemeriksaan = strtolower($row->get('interpretasi'));
+                $pcr->save();
 
-                // $counterNomorRegister++;
-                // $omgRegisterId++;
+                $sampel->updateState('pcr_sample_analyzed', [
+                    'user_id' => $user->id,
+                    'metadata' => $pcr,
+                    'description' => 'PCR Sample analyzed as [' . strtoupper($pcr->kesimpulan_pemeriksaan) . ']',
+                ]);
             }
-
-
             DB::commit();
-
-
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

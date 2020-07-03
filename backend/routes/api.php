@@ -133,6 +133,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::post('/terima', 'PCRController@terima');
         Route::post('/invalid/{id}','PCRController@invalid');
         Route::post('/input/{id}','PCRController@input');
+        Route::post('/input-invalid/{id}','PCRController@inputInvalid');
         Route::post('/upload-grafik','PCRController@uploadGrafik');
         Route::post('/musnahkan/{id}', 'PCRController@musnahkan');
         Route::post('/import-hasil-pemeriksaan','PCRController@importHasilPemeriksaan');

@@ -13,20 +13,8 @@
             <div class="col-lg-12">
                 <Ibox title="Registrasi Sampel">
                     <form @submit.prevent="submit" @keydown="form.onKeydown($event)">
-                        <div class="form-group row mt-4">
-                            <label class="col-md-3 col-lg-2">Kewarganegaraan</label>
-                            <div class="col-md-8 col-lg-6">
-                                <select v-model="form.reg_kewarganegaraan"
-                                    :class="{ 'is-invalid':form.errors.has('reg_kewarganegaraan') }"
-                                    class="multisteps-form__input form-control col-md-8 col-lg-6"
-                                    name="reg_kewarganegaraan">
-                                    <option value="WNI">WNI</option>
-                                    <option value="WNA">WNA</option>
-                                </select>
-                                <has-error :form="form" field="reg_kewarganegaraan" />
-                            </div>
-                        </div>
-                         <h4 class="mb-1 mt-0">
+
+                        <h4 class="mb-1 mt-0">
                             Identitas Pengirim
                         </h4>
                         <p>Lengkapi Form dengan Identitas Pengirim</p>
@@ -34,23 +22,25 @@
                             <label class="col-md-3 col-lg-2">Instansi Pengirim
                                 <span style="color:red">*</span>
                             </label>
-                            <div class="col-md-8 col-lg-6" >
+                            <div class="col-md-8 col-lg-6">
                                 <input class="form-control" type="text" name="reg_instansi_pengirim" placeholder=""
-                                    v-model="form.reg_instansi_pengirim" :class="{'is-invalid':form.errors.has('reg_instansi_pengirim')}"/>
+                                    v-model="form.reg_instansi_pengirim"
+                                    :class="{'is-invalid':form.errors.has('reg_instansi_pengirim')}" />
                                 <has-error :form="form" field="reg_instansi_pengirim" />
                             </div>
                         </div>
 
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">Nama Rumah Sakit/Dinkes <span style="color:red">*</span>
-                                 </label>
-                            <div class="col-md-8 col-lg-6" >
+                            </label>
+                            <div class="col-md-8 col-lg-6">
                                 <input class="form-control" type="text" name="reg_instansi_pengirim_nama" placeholder=""
-                                    v-model="form.reg_instansi_pengirim_nama" :class="{'is-invalid':form.errors.has('reg_instansi_pengirim_nama')}" />
+                                    v-model="form.reg_instansi_pengirim_nama"
+                                    :class="{'is-invalid':form.errors.has('reg_instansi_pengirim_nama')}" />
                                 <has-error :form="form" field="reg_instansi_pengirim_nama" />
                             </div>
                         </div>
-                        
+
                         <hr>
                         <h4 class="mb-1 mt-0">
                             Identitas Pasien
@@ -62,9 +52,9 @@
                                 Nama Pasien
                                 <span style="color:red">*</span>
                             </label>
-                            <div class="col-md-8 col-lg-6"
-                                >
-                                <input class="form-control" type="text" name="reg_nama_pasien" placeholder="" :class="{ 'is-invalid': form.errors.has('reg_nama_pasien') }"
+                            <div class="col-md-8 col-lg-6">
+                                <input class="form-control" type="text" name="reg_nama_pasien" placeholder=""
+                                    :class="{ 'is-invalid': form.errors.has('reg_nama_pasien') }"
                                     v-model="form.reg_nama_pasien" />
                                 <has-error :form="form" field="reg_nama_pasien" />
                             </div>
@@ -74,9 +64,10 @@
                             <label class="col-md-3 col-lg-2">
                                 NIK
                             </label>
-                            <div class="col-md-8 col-lg-6" >
-                                <input class="form-control" type="text" name="reg_nik" placeholder="" :class="{ 'is-invalid': form.errors.has('reg_nik') }"
-                                    v-model="form.reg_nik" maxlength="16" />
+                            <div class="col-md-8 col-lg-6">
+                                <input class="form-control" type="text" name="reg_nik" placeholder=""
+                                    :class="{ 'is-invalid': form.errors.has('reg_nik') }" v-model="form.reg_nik"
+                                    maxlength="16" />
                                 <has-error :form="form" field="reg_nik" />
                             </div>
                         </div>
@@ -100,7 +91,7 @@
                             <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_tgllahir') }">
                                 <dropdown-datepicker v-model="form.reg_tgllahir" :minYear="1900" :daySuffixes="false"
                                     :maxYear="(new Date).getFullYear()" displayFormat="dmy" sortYear="asc"
-                                     ref="tgl_lahir"
+                                    ref="tgl_lahir"
                                     :wrapper-class="form.errors.has('reg_tgllahir') ? 'is-invalid' : ''">
                                 </dropdown-datepicker>
                                 <has-error :form="form" field="reg_tgllahir" />
@@ -126,7 +117,7 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
                                 Jenis Kelamin
-                                
+
                             </label>
                             <div class="col-md-8 col-lg-6">
                                 <div class="form-check form-check-inline"
@@ -154,71 +145,28 @@
                             </div>
                         </div>
 
+
+
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
                                 No. Telp / HP
-                                
+
                             </label>
-                            <div class="col-md-8 col-lg-6" >
-                                <input class="form-control" type="text" name="reg_nohp" placeholder="" 
-                                    v-model="form.reg_nohp" :class="{ 'is-invalid': form.errors.has('reg_nohp') }"/>
+                            <div class="col-md-8 col-lg-6">
+                                <input class="form-control" type="text" name="reg_nohp" placeholder=""
+                                    v-model="form.reg_nohp" :class="{ 'is-invalid': form.errors.has('reg_nohp') }" />
                                 <has-error :form="form" field="reg_nohp" />
                             </div>
                         </div>
 
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
-                                Kota / Kabupaten
-                                
-                            </label>
-                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kota') }">
-                                <select class="form-control" type="text" name="reg_kota" placeholder="" 
-                                    v-model="form.reg_kota">
-                                    <option :value="item.id" :key="idx" v-for="(item,idx) in optionKota">{{item.nama}}
-                                    </option>
-                                </select>
-                                <has-error :form="form" field="reg_kota" />
-                            </div>
-                        </div>
-
-                        <div class="form-group row mt-4">
-                            <label class="col-md-3 col-lg-2">
-                                Kecamatan
-                            </label>
-                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kecamatan') }">
-                                <!-- <select class="form-control" type="text" name="reg_kecamatan" placeholder=""
-                                     v-model="form.reg_kecamatan" >
-                                    <option :value="item.id" :key="idx" v-for="(item,idx) in optionKecamatan">{{item.nama}}</option>
-                                </select> -->
-                                <input v-model="form.reg_kecamatan" class="form-control" type="text"
-                                    name="reg_kecamatan" />
-                                <has-error :form="form" field="reg_kecamatan" />
-                            </div>
-                        </div>
-
-                        <div class="form-group row mt-4">
-                            <label class="col-md-3 col-lg-2">
-                                Kelurahan / Desa
-                            </label>
-                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kelurahan') }">
-                                <!-- <select class="form-control" type="text" name="reg_kelurahan" placeholder=""
-                                     v-model="form.reg_kelurahan" >
-                                    <option :value="item.id" :key="idx" v-for="(item,idx) in optionKelurahan">{{item.nama}}</option>
-                                </select> -->
-                                <input class="multisteps-form__input form-control" type="text" name="reg_kelurahan"
-                                    v-model="form.reg_kelurahan" />
-                                <has-error :form="form" field="reg_kelurahan" />
-                            </div>
-                        </div>
-
-                        <div class="form-group row mt-4">
-                            <label class="col-md-3 col-lg-2">
                                 Alamat
-                                
+
                             </label>
                             <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_alamat') }">
                                 <textarea class="multisteps-form__input form-control" type="text" name="reg_alamat"
-                                     v-model="form.reg_alamat"></textarea>
+                                    v-model="form.reg_alamat"></textarea>
                                 <has-error :form="form" field="reg_alamat" />
                             </div>
                         </div>
@@ -247,64 +195,154 @@
                             <has-error :form="form" field="reg_rw" />
                         </div>
 
+                        <div class="form-group row mt-4">
+                            <label class="col-md-3 col-lg-2">
+                                Kecamatan
+                            </label>
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kecamatan') }">
+                                <!-- <select class="form-control" type="text" name="reg_kecamatan" placeholder=""
+                                     v-model="form.reg_kecamatan" >
+                                    <option :value="item.id" :key="idx" v-for="(item,idx) in optionKecamatan">{{item.nama}}</option>
+                                </select> -->
+                                <input v-model="form.reg_kecamatan" class="form-control" type="text"
+                                    name="reg_kecamatan" />
+                                <has-error :form="form" field="reg_kecamatan" />
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row mt-4">
+                            <label class="col-md-3 col-lg-2">
+                                Kota / Kabupaten
+
+                            </label>
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kota') }">
+                                <select class="form-control" type="text" name="reg_kota" placeholder=""
+                                    v-model="form.reg_kota">
+                                    <option :value="item.id" :key="idx" v-for="(item,idx) in optionKota">{{item.nama}}
+                                    </option>
+                                </select>
+                                <has-error :form="form" field="reg_kota" />
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row mt-4">
+                            <label class="col-md-3 col-lg-2">
+                                Kelurahan / Desa
+                            </label>
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kelurahan') }">
+                                <!-- <select class="form-control" type="text" name="reg_kelurahan" placeholder=""
+                                     v-model="form.reg_kelurahan" >
+                                    <option :value="item.id" :key="idx" v-for="(item,idx) in optionKelurahan">{{item.nama}}</option>
+                                </select> -->
+                                <input class="multisteps-form__input form-control" type="text" name="reg_kelurahan"
+                                    v-model="form.reg_kelurahan" />
+                                <has-error :form="form" field="reg_kelurahan" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row mt-4">
+                            <label class="col-md-3 col-lg-2">Kewarganegaraan</label>
+                            <div class="col-md-8 col-lg-6">
+                                <select v-model="form.reg_kewarganegaraan"
+                                    :class="{ 'is-invalid':form.errors.has('reg_kewarganegaraan') }"
+                                    class="multisteps-form__input form-control col-md-8 col-lg-6"
+                                    name="reg_kewarganegaraan">
+                                    <option value="WNI">WNI</option>
+                                    <option value="WNA">WNA</option>
+                                </select>
+                                <has-error :form="form" field="reg_kewarganegaraan" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row mt-4">
+                            <label class="col-md-3 col-lg-2">Status Pasien</label>
+                            <div class="col-md-8 col-lg-6">
+                                <select v-model="form.reg_status"
+                                    :class="{ 'is-invalid':form.errors.has('reg_status') }"
+                                    class="multisteps-form__input form-control col-md-8 col-lg-6" name="reg_status">
+                                    <option value="otg">OTG</option>
+                                    <option value="odp">ODP</option>
+                                    <option value="pdp">PDP</option>
+                                    <option value="positif">Positif</option>
+                                    <option value="tanpa status">Tanpa Status</option>
+                                </select>
+                                <has-error :form="form" field="reg_status" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row mt-4">
+                            <label class="col-md-3 col-lg-2">
+                                Kategori
+                            </label>
+                            <div class="col-md-8 col-lg-6">
+                                <input class="multisteps-form__input form-control" type="text" name="reg_sumber_pasien"
+                                    v-model="form.reg_sumber_pasien"
+                                    :class="{ 'is-invalid': form.errors.has('reg_sumber_pasien') }" />
+                                <has-error :form="form" field="reg_sumber_pasien" />
+                            </div>
+                        </div>
+
                         <hr>
                         <h4 class="mb-1 mt-0">
                             Identitas Sampel
                         </h4>
-                        <p>Dibawah ini adalah sampel yang diambil atau diterima, klik tambahkan sesuai dengan banyaknya
-                            sampel</p>
-                        <div class="table-responsive">
-                            <table class="table table-striped dt-responsive table-bordered" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Jenis Sampel</th>
-                                        <th>Nomor sampel</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="field_wrapper">
-                                    <tr v-for="(reg_sampel, $index) in form.reg_sampel" :key="$index">
-                                        <td>
-                                            <select class="form-control" v-model="reg_sampel.sam_jenis_sampel"
-                                                :class="{ 'is-invalid': form.errors.has(`reg_sampel.${$index}.sam_jenis_sampel`) }">
-                                                <option :value="js.id" v-for="(js, $index2) in jenis_sampel"
-                                                    :key="$index2">{{ js.text }}</option>
-                                            </select>
-                                            <has-error :form="form" :field="`reg_sampel.${$index}.sam_jenis_sampel`" />
-                                            <div v-if="reg_sampel.sam_jenis_sampel == 999999">
-                                                <small for="specify">Jenis Lainnya (isi apabila tidak tercantum
-                                                    diatas)</small>
-                                                <input type="text" class="form-control"
-                                                    v-model="reg_sampel.sam_namadiluarjenis"
-                                                    placeholder="isi apabila tidak tercantum"
-                                                    :class="{ 'is-invalid': form.errors.has(`reg_sampel.${$index}.sam_namadiluarjenis`) }"
-                                                    preventForm />
-                                                <has-error :form="form"
-                                                    :field="`reg_sampel.${$index}.sam_namadiluarjenis`" />
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <input class="form-control" type="text" v-model="reg_sampel.nomor"
-                                                :class="{ 'is-invalid': form.errors.has(`reg_sampel.${$index}.nomor`) }" />
-                                            <has-error :form="form" :field="`reg_sampel.${$index}.nomor`" />
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger remove_field"
-                                                @click.prevent="removeSample($index)">
-                                                <i class="uil-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2"></td>
-                                        <td colspan="2">
-                                            <button type="button" class="btn btn-sm btn-secondary"
-                                                @click.prevent="addSample()"><i class="fa fa-plus"></i> Tambah
-                                                Sampel</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="form-group row mt-4">
+                            <label class="col-md-3 col-lg-2">
+                                Swab Ke
+                            </label>
+                            <div class="col-md-8 col-lg-6">
+                                <input class="multisteps-form__input form-control" type="number" name="reg_swab_ke"
+                                    v-model="form.reg_swab_ke"
+                                    :class="{ 'is-invalid': form.errors.has('reg_swab_ke') }" />
+                                <has-error :form="form" field="reg_swab_ke" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row mt-4">
+                            <label class="col-md-3 col-lg-2">
+                                Tanggal Swab
+                            </label>
+                            <div class="col-md-8 col-lg-6">
+                                <date-picker format="d MMMM yyyy" input-class="multisteps-form__input form-control"
+                                    :monday-first="true" v-model="form.reg_tanggal_swab"
+                                    :class="{ 'is-invalid': form.errors.has('reg_tanggal_swab') }" />
+                                <has-error :form="form" field="reg_tanggal_swab" />
+                            </div>
+                        </div>
+                        <div class="form-group row mt-4">
+                            <label class="col-md-3 col-lg-2">
+                                Jenis Sampel <span style="color:red">*</span>
+                            </label>
+                            <div class="col-md-8 col-lg-6">
+                                <select class="form-control" v-model="form.reg_sampel_jenis_sampel"
+                                    :class="{ 'is-invalid': form.errors.has(`reg_sampel_jenis_sampel`) }">
+                                    <option :value="item.id" v-for="(item, $key) in jenis_sampel" :key="$key">
+                                        {{ item.text }}</option>
+                                </select>
+                                <has-error :form="form" :field="`reg_sampel_jenis_sampel`" />
+                                <div v-if="form.reg_sampel_jenis_sampel == 999999">
+                                    <small for="specify">Jenis Lainnya (isi apabila tidak tercantum
+                                        diatas)</small>
+                                    <input type="text" class="form-control" v-model="form.reg_sampel_namadiluarjenis"
+                                        placeholder="isi apabila tidak tercantum"
+                                        :class="{ 'is-invalid': form.errors.has(`reg_sampel_namadiluarjenis`) }"
+                                        preventForm />
+                                    <has-error :form="form" :field="`reg_sampel_namadiluarjenis`" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row mt-4">
+                            <label class="col-md-3 col-lg-2">
+                                Nomor sampel <span style="color:red">*</span>
+                            </label>
+                            <div class="col-md-8 col-lg-6">
+                                <input class="multisteps-form__input form-control" type="text" name="reg_sampel_nomor"
+                                    v-model="form.reg_sampel_nomor"
+                                    :class="{ 'is-invalid': form.errors.has('reg_sampel_nomor') }" />
+                                <has-error :form="form" field="reg_sampel_nomor" />
+                            </div>
                         </div>
 
                         <div class="form-group row mt-4">
@@ -352,16 +390,16 @@
         },
         data() {
             return {
-                 optFasyankes:[],
+                optFasyankes: [],
                 form: new Form({
                     reg_no: null,
-                    reg_instansi_pengirim:null,
-                    reg_instansi_pengirim_nama:null,
-                    reg_fasyankes_pengirim:null,
-                    reg_nama_rs_lainnya:null,
+                    reg_instansi_pengirim: null,
+                    reg_instansi_pengirim_nama: null,
+                    reg_fasyankes_pengirim: null,
+                    reg_nama_rs_lainnya: null,
                     reg_fasyankes_id: null,
-                    reg_fasyankes_nama:null,
-                    reg_kewarganegaraan: null,
+                    reg_fasyankes_nama: null,
+                    reg_kewarganegaraan: 'WNI',
                     reg_nama_pasien: null,
                     reg_nik: null,
                     reg_tempatlahir: null,
@@ -392,11 +430,13 @@
                     reg_sumberpasien_isian: null,
                     reg_usia_tahun: null,
                     reg_usia_bulan: null,
-                    reg_sampel: [{
-                        nomor: '',
-                        sam_namadiluarjenis:null,
-                        sam_jenis_sampel:null,
-                    }],
+                    reg_sampel_namadiluarjenis: null,
+                    reg_sampel_jenis_sampel: null,
+                    reg_sampel_nomor: null,
+                    reg_status: null,
+                    reg_swab_ke: null,
+                    reg_tanggal_swab: null,
+                    reg_sumber_pasien: null,
 
                 }),
                 selected_reg: {},
@@ -409,12 +449,12 @@
         methods: {
             async changeFasyankes(tipe) {
                 // this.form.reg_nama_rs = null;
-                let tp = tipe=="Dinkes"?"dinkes":"rumah_sakit";
-                let resp = await axios.get('/v1/list-fasyankes-jabar?tipe='+tp)
+                let tp = tipe == "Dinkes" ? "dinkes" : "rumah_sakit";
+                let resp = await axios.get('/v1/list-fasyankes-jabar?tipe=' + tp)
                 this.optFasyankes = resp.data;
                 this.optFasyankes.push({
-                    id:9999,
-                    nama:'Fasyankes Lainnya'
+                    id: 9999,
+                    nama: 'Fasyankes Lainnya'
                 })
             },
             preventForm() {
@@ -431,12 +471,12 @@
             initForm() {
                 this.form = new Form({
                     reg_no: null,
-                    reg_fasyankes_pengirim:null,
-                    reg_instansi_pengirim:null,
-                    reg_instansi_pengirim_nama:null,
-                    reg_nama_rs_lainnya:null,
+                    reg_fasyankes_pengirim: null,
+                    reg_instansi_pengirim: null,
+                    reg_instansi_pengirim_nama: null,
+                    reg_nama_rs_lainnya: null,
                     reg_fasyankes_id: null,
-                    reg_fasyankes_nama:null,
+                    reg_fasyankes_nama: null,
                     reg_kewarganegaraan: null,
                     reg_nama_pasien: null,
                     reg_nik: null,
@@ -465,18 +505,20 @@
                     reg_tanggalkunjungan: null,
                     reg_kunke: null,
                     reg_rsfasyankes: null,
-                    reg_sampel: [{
-                        nomor: null,
-                        sam_namadiluarjenis:null,
-                        sam_jenis_sampel:null,
-                    }],
+                    reg_sampel_namadiluarjenis: null,
+                    reg_sampel_jenis_sampel: null,
+                    reg_sampel_nomor: null,
+                    reg_status: null,
+                    reg_swab_ke: null,
+                    reg_tanggal_swab: null,
+                    reg_sumber_pasien: null
                 })
             },
             addSample() {
                 this.form.reg_sampel.push({
                     nomor: null,
-                    sam_namadiluarjenis:null,
-                    sam_jenis_sampel:null,
+                    sam_namadiluarjenis: null,
+                    sam_jenis_sampel: null,
                 })
             },
             // addSample() {
@@ -576,7 +618,7 @@
                 if (this.form.reg_tgllahir == null) {
                     this.form.reg_usia_tahun = null;
                     this.form.reg_usia_bulan = null;
-                }else{
+                } else {
                     var birthday = new Date(this.form.reg_tgllahir)
                     var now = new Date();
                     var yearNow = now.getYear();
@@ -597,9 +639,9 @@
                     this.form.reg_usia_tahun = Math.round(ms / year)
                     this.form.reg_usia_bulan = Math.round(msb / month)
                 }
-                
+
             },
-            "form.reg_fasyankes_pengirim":function(newVal, oldVal){
+            "form.reg_fasyankes_pengirim": function (newVal, oldVal) {
                 this.changeFasyankes(this.form.reg_fasyankes_pengirim)
             },
 

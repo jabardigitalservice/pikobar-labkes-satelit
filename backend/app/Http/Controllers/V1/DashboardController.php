@@ -40,6 +40,7 @@ class DashboardController extends Controller
     public function tracking()
     {
         $user = Auth::user();
+
         $register = Register::query();
         $sampel_masuk = Sampel::query();
         $positif = Sampel::join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
@@ -48,22 +49,44 @@ class DashboardController extends Controller
                             ->where('kesimpulan_pemeriksaan','negatif');
         $inkonklusif = Sampel::join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
                             ->where('kesimpulan_pemeriksaan','inkonklusif');
+        $invalid = Sampel::join('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
+                            ->where('kesimpulan_pemeriksaan','invalid');
+
         $register->where('lab_satelit_id',$user->lab_satelit_id);
         $sampel_masuk->where('lab_satelit_id',$user->lab_satelit_id);
         $positif->where('lab_satelit_id',$user->lab_satelit_id);
         $negatif->where('lab_satelit_id',$user->lab_satelit_id);
         $inkonklusif->where('lab_satelit_id',$user->lab_satelit_id);
+        $invalid->where('lab_satelit_id',$user->lab_satelit_id);
+        
+        $register_otg = $register->where('status','otg')->count();
+        $register_odp = $register->where('status','odp')->count();
+        $register_pdp = $register->where('status','pdp')->count();
+        $register_positif = $register->where('status','positif')->count();
+        $register_tanpa_status = $register->where('status','tanpa status')->count();
+        $register_instansi_pengirim = $register->whereNotNull('instansi_pengirim')->groupBy('instansi_pengirim')->count();
+
         $register = $register->count();
         $sampel_masuk = $sampel_masuk->count();
         $positif = $positif->count();
         $negatif = $negatif->count();
         $inkonklusif = $inkonklusif->count();
+        $invalid = $invalid->count();
+
         $tracking = [
             'register' => $register,
             'sampel_masuk' => $sampel_masuk,
             'positif' => $positif,
             'negatif' => $negatif,
             'inkonklusif' => $inkonklusif,
+            'invalid' => $invalid,
+            'register_otg' => $register_otg,
+            'register_odp' => $register_odp,
+            'register_pdp' => $register_pdp,
+            'register_positif' => $register_positif,
+            'register_tanpa_status' => $register_tanpa_status,
+            'register_instansi_pengirim' => $register_instansi_pengirim,
+
         ];
 
         return response()->json([

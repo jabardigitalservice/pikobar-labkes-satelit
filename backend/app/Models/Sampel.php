@@ -76,7 +76,7 @@ class Sampel extends Model
         return $this->jenis_sampel_nama;
     }
 
-    public function updateState($newstate, $options = [])
+    public function updateState($newstate, $options = [], $tanggal = null)
     {
         $arr = array_merge($options, [
             'sampel_id' => $this->id,
@@ -86,6 +86,9 @@ class Sampel extends Model
         $log = SampelLog::create($arr);
         if (empty($this->{'waktu_'.$newstate})) {
             $this->{'waktu_'.$newstate} = date('Y-m-d H:i:s');
+            if ($tanggal) {
+                $this->{'waktu_'.$newstate} = date('Y-m-d H:i:s',strtotime($tanggal));
+            }
         }
         $this->sampel_status = $newstate;
         $this->save();
@@ -108,7 +111,7 @@ class Sampel extends Model
 
     public function pemeriksaanSampel()
     {
-        return $this->hasMany(PemeriksaanSampel::class);
+        return $this->hasOne(PemeriksaanSampel::class);
     }
 
     public function validator()

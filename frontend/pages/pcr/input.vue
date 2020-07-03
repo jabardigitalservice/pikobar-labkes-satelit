@@ -238,6 +238,7 @@ export default {
       hasil_deteksi: data.pcr.hasil_deteksi ? data.pcr.hasil_deteksi : default_hasil_deteksi,
       nama_kit_pemeriksaan:data.pcr.nama_kit_pemeriksaan, 
       grafik: data.pcr.grafik ? data.pcr.grafik : [],
+      sampel:data.sampel
     });
     return {
       data,

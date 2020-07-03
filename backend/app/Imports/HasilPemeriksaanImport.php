@@ -42,8 +42,8 @@ class HasilPemeriksaanImport implements ToCollection, WithHeadingRow
                 if (empty($row->get('interpretasi')) ) {
                     $this->addError($key, "Interpretasi kosong");
                 }
-                if (!in_array(ucfirst(strtolower($row->get('interpretasi'))),['Positif','Negatif','Inkonklusif'])) {
-                    $this->addError($key, "Interpretasi tidak valid harus Positif,Negatif,Inkonklusif");
+                if (!in_array(ucfirst(strtolower($row->get('interpretasi'))),['Positif','Negatif','Inkonklusif','Invalid'])) {
+                    $this->addError($key, "Interpretasi tidak valid harus Positif,Negatif,Inkonklusif,Invalid");
                 }
                 $data = $row->toArray();
                 $keys = array_keys($data);
