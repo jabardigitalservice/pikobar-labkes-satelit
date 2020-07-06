@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 use App\Models\Pasien;
 use App\Models\Register;
 use App\Models\PasienRegister;
@@ -13,7 +13,7 @@ use App\Exports\RegisMandiriExport;
 use Illuminate\Support\Facades\Auth;
 
 class Registrasisampel extends Controller
-{ 
+{
     public function getData(Request $request)
     {
         $models = Register::leftJoin('pasien_register','register.id','pasien_register.register_id')
@@ -38,16 +38,16 @@ class Registrasisampel extends Controller
             });
         }
 
-        
+
         if (Auth::user()->lab_satelit_id !=null) {
             $models->where('register.lab_satelit_id',Auth::user()->lab_satelit_id);
         }
-        
+
         if ($params) {
             foreach (json_decode($params) as $key => $val) {
                 if ($val == '') continue;
                 switch($key) {
-                    case "nama_pasien": 
+                    case "nama_pasien":
                         $models = $models->where('pasien.nama_lengkap','ilike','%'.$val.'%')
                                             ->orWhere('pasien.nik','ilike','%'.$val.'%');
                     break;
@@ -70,6 +70,9 @@ class Registrasisampel extends Controller
                     case "sumber_pasien":
                         $models = $models->where('register.sumber_pasien','ilike','%'.$val.'%');
                     break;
+                    case "status":
+                        $models = $models->where('register.status','ilike','%'.$val.'%');
+                    break;
                     default:
                         // $models = $models->where($key,$val);
                         break;
@@ -81,7 +84,7 @@ class Registrasisampel extends Controller
         $page = $request->get('page',1);
         $perpage = $request->get('perpage',500);
 
-        
+
         if ($order) {
             $order_direction = $request->get('order_direction','asc');
             if (empty($order_direction)) $order_direction = 'desc';
@@ -115,7 +118,7 @@ class Registrasisampel extends Controller
         $models = $models->select('pasien.*','sampel.*','kota.nama as nama_kota','pasien_register.*','register.sumber_pasien',
         'register.*');
         $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
-        
+
         $result = [
             'data' => $models,
             'count' => $count
@@ -132,7 +135,7 @@ class Registrasisampel extends Controller
             'end_date'=> 'nullable', // 'date|date_format:Y-m-d',
         ]);
 
-        $payload = []; 
+        $payload = [];
 
         if ($request->has('start_date')) {
             $payload['startDate'] = parseDate($request->input('start_date'));
