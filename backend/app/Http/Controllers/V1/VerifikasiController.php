@@ -30,7 +30,7 @@ class VerifikasiController extends Controller
     {
         $models = Sampel::leftJoin('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
                         ->leftJoin('register','sampel.register_id','register.id')
-                        ->leftJoin('pasien_register','pasien_register.register_id','register.id')                    
+                        ->leftJoin('pasien_register','pasien_register.register_id','register.id')
                         ->leftJoin('pasien','pasien_register.pasien_id','pasien.id')
                         ->leftJoin('kota','kota.id','pasien.kota_id')
                         ->where('sampel.sampel_status','pcr_sample_analyzed');
@@ -50,7 +50,7 @@ class VerifikasiController extends Controller
                     ->orWhere('status', 'ilike','%'.$search.'%')
                     ->orWhere('sumber_pasien', 'ilike','%'.$search.'%')
                     ->orWhere('catatan_pemeriksaan', 'ilike','%'.$search.'%');
-            }); 
+            });
         }
 
         if ($params) {
@@ -64,10 +64,10 @@ class VerifikasiController extends Controller
                     case 'kota':
                         $models->where('pasien.kota_id', $val);
                         break;
-                    case 'nama_pasien': 
+                    case 'nama_pasien':
                         $models->where('pasien.nama_lengkap','ilike' ,'%'.$val.'%');
                         break;
-                    case 'instansi_pengirim': 
+                    case 'instansi_pengirim':
                         $models->where('register.instansi_pengirim_nama', 'ilike', '%'. $val .'%');
                         break;
                     case 'start_date':
@@ -77,7 +77,7 @@ class VerifikasiController extends Controller
                         $models->whereDate('waktu_pcr_sample_analyzed', '<=', date('Y-m-d',strtotime($val)));
                         break;
                     case 'sumber_pasien':
-                        $models->where('sumber_pasien', 'ilike', '%'.$val.'%');
+                        $models->where('register.sumber_pasien', 'ilike', '%'.$val.'%');
                         break;
                     case 'status':
                         $models->where('status', 'ilike', '%'.$val.'%');
@@ -134,7 +134,7 @@ class VerifikasiController extends Controller
             }
         }
 
-        $models = $models->select('*','sampel.id as sampel_id','kota.nama as nama_kota','register.created_at as created_at');
+        $models = $models->select('*','sampel.id as sampel_id','kota.nama as nama_kota','register.created_at as created_at','register.sumber_pasien as sumber_pasien');
 
         $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
 
@@ -205,7 +205,7 @@ class VerifikasiController extends Controller
         $column_format = [
         ];
         return Excel::download(new AjaxTableExport($models, $header, $mapping, $column_format,[],$models->count()), 'hasil_pemeriksaan.xlsx');
-    
+
     }
 
     private function getKeterangan($model)
@@ -215,7 +215,7 @@ class VerifikasiController extends Controller
         } elseif($model->kesimpulan_pemeriksaan == 'positif' && $model->status != null && $model->status != 'positif') {
             return 'baru';
         }
-        return '';        
+        return '';
     }
 
     /**
@@ -248,7 +248,7 @@ class VerifikasiController extends Controller
                             ->orWhere('nik', 'ilike','%'.$search.'%');
                         });
                     });
-            });  
+            });
         }
 
         if ($params) {
@@ -268,12 +268,12 @@ class VerifikasiController extends Controller
                                 ->where('pasien.kota_id', $val);
                         });
                         break;
-                    case 'fasyankes': 
+                    case 'fasyankes':
                         $models->whereHas('register', function ($query) use ($val){
                             $query->where('fasyankes_id', $val);
                         });
                         break;
-                    case 'kategori': 
+                    case 'kategori':
                         $models->whereHas('register', function ($query) use ($val){
                             $query->where('sumber_pasien', 'ilike', '%'. $val .'%');
                         });
@@ -286,7 +286,7 @@ class VerifikasiController extends Controller
                         break;
                     default:
                         break;
-                        
+
                 }
             }
         }
@@ -344,7 +344,7 @@ class VerifikasiController extends Controller
         ]);
     }
 
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -367,14 +367,14 @@ class VerifikasiController extends Controller
     {
         $sampel = Sampel::leftJoin('pemeriksaansampel','sampel.id','pemeriksaansampel.sampel_id')
                         ->leftJoin('register','sampel.register_id','register.id')
-                        ->leftJoin('pasien_register','pasien_register.register_id','register.id')                    
+                        ->leftJoin('pasien_register','pasien_register.register_id','register.id')
                         ->leftJoin('pasien','pasien_register.pasien_id','pasien.id')
                         ->leftJoin('kota','kota.id','pasien.kota_id');
         $sampel->where('sampel.id',$id);
         if (Auth::user()->lab_satelit_id !=null) {
             $sampel->where('sampel.lab_satelit_id',Auth::user()->lab_satelit_id);
         }
-        $sampel->select('*','sampel.id as id','kota.nama as nama_kota','register.created_at as created_at','pemeriksaansampel.id as pemeriksaan_id');
+        $sampel->select('*','sampel.id as id','kota.nama as nama_kota','register.created_at as created_at','pemeriksaansampel.id as pemeriksaan_id','register.sumber_pasien as sumber_pasien');
         $result = $sampel->first();
         $log = SampelLog::where('sampel_id',$result->id)->orderBy('created_at','desc')->get();
         $result->logs = $log;
@@ -435,7 +435,7 @@ class VerifikasiController extends Controller
             DB::rollBack();
             throw $th;
         }
-        
+
     }
 
     /**

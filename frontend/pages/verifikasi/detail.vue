@@ -179,6 +179,22 @@
                   <span>{{ data.instansi_pengirim }}</span>
                 </td>
               </tr>
+              <tr>
+                <td width="30%">
+                  <b>Status</b>
+                </td>
+                <td width="60%">
+                  <span>{{ data.status }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td width="30%">
+                  <b>Kategori</b>
+                </td>
+                <td width="60%">
+                  <span>{{ data.sumber_pasien }}</span>
+                </td>
+              </tr>
             </tbody>
           </table>
         </Ibox>

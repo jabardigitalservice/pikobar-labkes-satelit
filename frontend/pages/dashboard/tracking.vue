@@ -94,7 +94,7 @@
         </div>
         <div class="ibox-content">
           <div class="row tracking-row">
-            <div class="col-md-2 col-6 mb-3 mb-md-0">
+            <div class="col-md-3 col-6 mb-3 mb-md-0">
               <div class="text-center">
                 <h5 class="font-weight-bold text-muted">OTG</h5>
                 <h2 v-if="!loading" class="font-weight-bold" style="color: #32CD32;">
@@ -147,18 +147,6 @@
                 <h5 class="font-weight-bold text-muted">Tanpa Status</h5>
                 <h2 v-if="!loading" class="font-weight-bold" style="color: #32CD32;">
                   {{ data.status.register_tanpa_status | formatCurrency}}</h2>
-                <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
-                <small class="text-muted">Orang</small>
-                <router-link to="/" tag="span">
-                  <i class="fa fa-level-up"></i>
-                </router-link>
-              </div>
-            </div>
-            <div class="col-md-2 col-6 mb-3 mb-md-0">
-              <div class="text-center">
-                <h5 class="font-weight-bold text-muted">Instansi Pengirim</h5>
-                <h2 v-if="!loading" class="font-weight-bold" style="color: #32CD32;">
-                  {{ data.status.register_instansi_pengirim | formatCurrency}}</h2>
                 <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
                 <small class="text-muted">Orang</small>
                 <router-link to="/" tag="span">
