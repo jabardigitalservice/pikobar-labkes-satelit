@@ -40,7 +40,7 @@ class UpdateRegisterSampel extends FormRequest
     {
         return [
             'reg_instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
-            'reg_instansi_pengirim_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',                
+            'reg_instansi_pengirim_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
             'reg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
             'reg_nik.digits' => 'NIK terdiri dari :digits karakter',
             'reg_sampel_nomor.required' => 'Nomor Sampel tidak boleh kosong',
@@ -52,18 +52,18 @@ class UpdateRegisterSampel extends FormRequest
     {
         $validator->after(function ($validator) {
             $user = Auth::user();
-            $nomorsampel = Sampel::where('nomor_sampel','ilike','%'.$this->reg_sampel_nomor.'%')
+            $nomorsampel = Sampel::where('nomor_sampel',strtoupper($this->reg_sampel_nomor))
             ->where('lab_satelit_id',$user->lab_satelit_id)
             ->where('id',$this->reg_sampel_id)
             ->first();
             if ($nomorsampel == null) {
-                $nomorsampel = Sampel::where('nomor_sampel','ilike','%'.$this->reg_sampel_nomor.'%')
+                $nomorsampel = Sampel::where('nomor_sampel',strtoupper($this->reg_sampel_nomor))
                             ->where('lab_satelit_id',$user->lab_satelit_id)
                             ->where('id','!=',$this->reg_sampel_id)
                             ->first();
                 if ($nomorsampel != null) {
                     $validator->errors()->add("reg_sampel_nomor", 'Nomor Sampel sudah digunakan');
-                } 
+                }
             }
             if ($this->reg_sampel_jenis_sampel == 999999 && $this->reg_sampel_namadiluarjenis == null) {
                 $validator->errors()->add("reg_sampel_namadiluarjenis", 'Nama diluar jenis tidak boleh kosong');

@@ -60,6 +60,18 @@
             </div>
         </div>
 
+         <div class="form-group row">
+            <div class="col-md-2">
+                <label for="nama_pasien">Status</label>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" type="text" name="reg_kota" placeholder="" v-model="params.status">
+                    <option :value="item.id" :key="idx" v-for="(item,idx) in status">{{item.nama}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
         <div class="form-group row">
             <div class="col-md-12 text-left">
                 <button class="btn btn-primary" style="width:200px;margin-top:20px" @click="doFilter"><i
@@ -80,6 +92,22 @@
         props: ['oid'],
         data() {
             return {
+                status: [{
+                    id: 'otg',
+                    nama: 'OTG'
+                }, {
+                    id: 'odp',
+                    nama: 'ODP'
+                }, {
+                    id: 'pdp',
+                    nama: 'PDP'
+                }, {
+                    id: 'positif',
+                    nama: 'Positif'
+                }, {
+                    id: 'tanpa_status',
+                    nama: 'Tanpa Status'
+                }],
                 optFasyankes: [],
                 params: {
                     nama_pasien: null,
@@ -89,6 +117,7 @@
                     start_date: null,
                     end_date: null,
                     kota: null,
+                    status: null
                 },
                 optionKota: []
             }
@@ -120,6 +149,7 @@
                 this.params.start_date = null;
                 this.params.end_date = null;
                 this.params.kota = null;
+                this.params.status = null;
                 this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
             }
         },

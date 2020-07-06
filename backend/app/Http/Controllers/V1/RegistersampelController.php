@@ -105,7 +105,7 @@ class RegistersampelController extends Controller
                 'pasien_id' => $pasien->id,
                 'register_id' => $register->id,
             ]);
-            
+
             $pengambilan_sampel = PengambilanSampel::create([
                 'sampel_diambil' => false,
                 'sampel_diterima' => false,
@@ -113,7 +113,7 @@ class RegistersampelController extends Controller
                 'sampel_rdt' => false,
                 'catatan' => $request->get('reg_keterangan'),
             ]);
-            
+
             $sampel = new Sampel();
             $sampel->nomor_sampel = strtoupper($request->reg_sampel_nomor);
             $sampel->jenis_sampel_id = $request->reg_sampel_jenis_sampel;
@@ -135,7 +135,7 @@ class RegistersampelController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
-        }     
+        }
 
         return response()->json(['status'=>201,'message'=>'Proses Registrasi Sampel Berhasil Ditambahkan','result'=>[]]);
     }
@@ -160,8 +160,8 @@ class RegistersampelController extends Controller
                 $register->tanggal_swab = date('Y-m-d',strtotime($request->get('reg_tanggal_swab')));
             }
             $register->save();
-            
-            
+
+
             $pasien->nama_lengkap = $request->get('reg_nama_pasien');
             $pasien->kewarganegaraan = $request->get('reg_kewarganegaraan');
             $pasien->nik = $request->get('reg_nik');
@@ -181,7 +181,7 @@ class RegistersampelController extends Controller
             $pasien->usia_tahun = $request->get('reg_usia_tahun');
             $pasien->usia_bulan = $request->get('reg_usia_bulan');
             $pasien->save();
-            
+
             $sampel = Sampel::where('id',$request->reg_sampel_id)->first();
 
             $pengambilan_sampel = PengambilanSampel::where('id',$sampel->pengambilan_sampel_id)->first();
@@ -203,17 +203,15 @@ class RegistersampelController extends Controller
             $sampel->lab_satelit_id = $user->lab_satelit_id;
             $sampel->pengambilan_sampel_id = $pengambilan_sampel->id;
             $sampel->creator_user_id = $user->id;
-            $sampel->sampel_status = 'sample_taken';
-            $sampel->waktu_sample_taken =  date('Y-m-d H:i:s');
             $sampel->save();
 
-            
+
 
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
-        }  
+        }
 
         return response()->json(['status'=>200,'message'=>'Data Register Berhasil Diubah']);
     }
@@ -314,7 +312,7 @@ class RegistersampelController extends Controller
                 DB::rollBack();
 
                 return response()->json(
-                    __("Gagal menambah data. Pasien dengan nomor identitas tersebut telah tersedia."), 
+                    __("Gagal menambah data. Pasien dengan nomor identitas tersebut telah tersedia."),
                     422
                 );
             }
@@ -355,7 +353,7 @@ class RegistersampelController extends Controller
             foreach ($riwayatLawatan as $key => $riwayat) {
                 $register->riwayatLawatan()->attach($pasien, $riwayat);
             }
-            
+
             DB::commit();
 
             return new RegisterResource($register);
@@ -381,15 +379,15 @@ class RegistersampelController extends Controller
         DB::beginTransaction();
         try {
 
-            
+
             $register->gejalaPasien()->detach();
-            
+
             $register->pemeriksaanPenunjang()->detach();
-            
+
             $register->riwayatLawatan()->detach();
-            
+
             $register->riwayatKontak()->detach();
-            
+
             $register->riwayatKunjungan()->delete();
 
             $register->riwayatPenyakitPenyerta()->delete();
@@ -438,7 +436,7 @@ class RegistersampelController extends Controller
             foreach ($riwayatLawatan as $key => $riwayat) {
                 $register->riwayatLawatan()->attach($pasien, $riwayat);
             }
-            
+
             DB::commit();
 
             return new RegisterResource($updatedRegister);
@@ -446,7 +444,7 @@ class RegistersampelController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
-        }        
+        }
     }
 
     /**
@@ -494,7 +492,7 @@ class RegistersampelController extends Controller
             "tanggal_rdt"=> $request->input('tanda_gejala.tanggal_rdt'),
             "keterangan_rdt"=> $request->input('tanda_gejala.keterangan_rdt'),
             "daftar_gejala"=> $request->input('tanda_gejala.daftar_gejala'),
-            "gejala_lain"=> $request->input('tanda_gejala.gejala_lain'),   
+            "gejala_lain"=> $request->input('tanda_gejala.gejala_lain'),
         ];
     }
 
@@ -512,7 +510,7 @@ class RegistersampelController extends Controller
         ];
     }
 
-    private function getRequestRiwayatKontak(Request $request) : array 
+    private function getRequestRiwayatKontak(Request $request) : array
     {
         return $request->input('riwayat_kontak');
     }
@@ -576,7 +574,7 @@ class RegistersampelController extends Controller
             $register->riwayatPenyakitPenyerta()->delete();
 
             $register->delete();
-            
+
             DB::commit();
 
             return response()->json([

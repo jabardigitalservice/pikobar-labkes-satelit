@@ -46,26 +46,26 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                         'instansi_pengirim_nama.required' => 'Instansi Pengirim tidak boleh kosong',
                         'tgl_masuk_sampel.date' => 'Tanggal Masuk Sampel tidak valid',
                         'tgl_masuk_sampel.date_format' => 'Format Tanggal Masuk Sampel harus yyyy-mm-dd',
-                        'nik.digits'=> 'NIK terdiri dari 16 karakter', 
+                        'nik.digits'=> 'NIK terdiri dari 16 karakter',
                         'nama.required'=> 'Nama Pasien Tidak Boleh Kosong',
                         'tgl_lahir.date' => 'Tanggal Lahir tidak valid',
                         'tgl_lahir.date_format' => 'Format Tanggal Lahir harus yyyy-mm-dd',
                         'kode_sampel.required' => 'Nomor Sampel tidak boleh kosong',
-                        'jenis_sampel.required' => 'Jenis Sampel tidak boleh kosong', 
-                        'swab_ke.numeric' => 'Swab ke harus berupa angka', 
+                        'jenis_sampel.required' => 'Jenis Sampel tidak boleh kosong',
+                        'swab_ke.numeric' => 'Swab ke harus berupa angka',
                         'tanggal_swab.date' => 'Tanggal Swab tidak valid',
                         'tanggal_swab.date_format' => 'Format Tanggal Swab harus yyyy-mm-dd',
                 ]);
-                
+
                 $v->after(function ($validator) use ($row) {
                     $user = Auth::user();
-                    $nomorsampel = Sampel::where('nomor_sampel','ilike','%'.$row['kode_sampel'].'%')
+                    $nomorsampel = Sampel::where('nomor_sampel',strtoupper($row['kode_sampel']))
                     ->where('lab_satelit_id',$user->lab_satelit_id)->first();
-                    if ($nomorsampel != null) { 
+                    if ($nomorsampel != null) {
                         $validator->errors()->add("reg_sampel_nomor", "Nomor Sampel sudah digunakan {$row['kode_sampel']}");
                     }
                 })->validate();
-                                
+
                 $register = new Register;
                 $register->register_uuid = (string) \Illuminate\Support\Str::uuid();
                 $register->created_at = date('Y-m-d H:i:s',strtotime($row->get('tgl_masuk_sampel').' '.date('H:i:s')));
@@ -80,7 +80,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     $register->tanggal_swab = date('Y-m-d',strtotime($row->get('tanggal_swap')));
                 }
                 $register->save();
-                
+
                 $pasien = new Pasien;
                 $pasien->nik = $this->parseNIK($row->get('nik'));
                 $pasien->nama_lengkap = $row->get('nama');
@@ -108,7 +108,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     'catatan' => null,
                 ]);
                 $jenissampel = JenisSampel::where('nama',$row->get('jenis_sampel'))->first();
-                                    
+
                 $sampel = new Sampel();
                 $sampel->nomor_sampel = strtoupper($row->get('kode_sampel'));
                 $sampel->sampel_status = 'sample_taken';
@@ -158,6 +158,6 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
 
         return (string) $nik;
     }
-    
+
 
 }

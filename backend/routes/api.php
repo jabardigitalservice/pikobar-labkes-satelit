@@ -32,7 +32,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('settings/password', 'Settings\PasswordController@update');
 
     Route::group(["prefix" => "sample"], function(){
-        Route::get('/get-data', 'SampleController@getData'); 
+        Route::get('/get-data', 'SampleController@getData');
         Route::post('/add', 'SampleController@add');
         Route::get('/get/{id}','SampleController@getById');
         Route::get('/edit/{id}','SampleController@getUpdate');
@@ -97,6 +97,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
         Route::get('/pcr','DashboardController@pcr');
         Route::get('/notifications','DashboardController@notifications');
         Route::get('/positif-negatif','DashboardController@positifNegatif');
+        Route::get('/instansi-pengirim','DashboardController@instansi_pengirim');
 
         Route::get('counter-belum-verifikasi', 'DashboardVerifikasiController@getCountUnverify');
         Route::get('counter-terverifikasi', 'DashboardVerifikasiController@getCountVerified');
@@ -154,7 +155,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
         Route::get('list-gejala', 'GejalaController@getListMasterGejala');
         Route::get('gejala/detail/{gejala}', 'GejalaController@show');
-        
+
         Route::get('list-penyakit-penyerta', 'PenyakitPenyertaController@getListMaster');
         Route::get('penyakit-penyerta/detail/{penyakitPenyerta}', 'PenyakitPenyertaController@show');
 
@@ -172,7 +173,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             Route::post('mandiri/update/{regis_id}/{pasien_id}','RegisterController@storeUpdate');
             Route::get('mandiri/{register_id}/{pasien_id}','RegisterController@getById');
             Route::get('delete-sampel/{id}','RegisterController@deleteSample');
-            
+
 
             Route::get('detail/{register}', 'RegisterController@show');
 
@@ -189,12 +190,12 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
             Route::post('import-rujukan', 'ImportRegisterController@importRegisterRujukan');
 
-            
+
             Route::group(['prefix'=>'rujukan'], function(){
 
                 Route::post('store', 'RegisterRujukanController@store');
 
-                Route::get('detail/{register}', 'RegisterRujukanController@show'); 
+                Route::get('detail/{register}', 'RegisterRujukanController@show');
 
                 Route::post('update/{register}', 'RegisterRujukanController@update');
 
@@ -212,7 +213,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             Route::get('list-dikirim', 'PengambilanListController@listDikirim');
 
             Route::get('list-sampel-register', 'PengambilanListController@listSampelRegister');
-            
+
             Route::post('store', 'PengambilanSampelController@store');
 
             Route::post('update/{pengambilan}', 'PengambilanSampelController@update');
@@ -239,7 +240,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
 
 
         });
-   
+
         Route::group(['prefix'=>'verifikasi'], function(){
 
             Route::get('list', 'VerifikasiController@index');
@@ -259,7 +260,7 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             Route::post('verifikasi-single-sampel/{sampel}', 'VerifikasiController@verifiedSingleSampel');
 
             Route::get('list-kategori', 'VerifikasiController@listKategori');
-                        
+
         });
 
         Route::group(['prefix'=>'validasi'], function(){
@@ -269,21 +270,21 @@ Route::group(['middleware' => 'auth:api', 'namespace'=> 'V1', 'prefix'=> 'v1'], 
             Route::get('list-validated', 'ValidasiController@indexValidated');
 
             Route::get('detail/{sampel}', 'ValidasiController@show');
-            
+
             // Route::get('get-sampel-status', 'ValidasiController@sampelStatusList');
-            
+
             Route::post('edit-status-sampel/{sampel}', 'ValidasiController@updateToValidate');
-            
+
             Route::get('list-validator', 'ValidasiController@getValidator');
-            
+
             Route::get('export-pdf/{sampel}', 'ValidasiExportController@exportPDF');
-            
+
             Route::post('bulk-validasi', 'ValidasiController@bulkValidate');
 
             Route::get('export-excel', 'ValidasiExportController@exportExcel');
 
             Route::post('regenerate-pdf/{sampel}', 'ValidasiController@regeneratePdfHasil');
-            
+
         });
 
        Route::apiResource('validator', 'ValidatorController');
