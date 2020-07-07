@@ -104,6 +104,10 @@ export default {
     },
     computed: {
         umurPasien() {
+            if (this.item.usia_tahun) {
+                return `${this.item.usia_tahun} tahun`;
+            }
+            
             if (this.item.tanggal_lahir) {
                 let tglLahir = new Date(this.item.tanggal_lahir);
                 let today_date = new Date();
@@ -119,9 +123,6 @@ export default {
                 return `${age} tahun`;
             }
 
-            if (this.item.usia_tahun) {
-                return `${this.item.usia_tahun} tahun`;
-            }
 
             return "";
       }

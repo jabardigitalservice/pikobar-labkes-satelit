@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Sampel;
-use Illuminate\Http\Request;
-use DB;
-use App\Models\Register;
-use App\Models\Pasien;
 use App\Models\PasienRegister;
 use App\Models\PemeriksaanSampel;
+use App\Models\Register;
+use App\Models\Sampel;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -58,10 +57,10 @@ class DashboardController extends Controller
         $invalid->where('lab_satelit_id', $user->lab_satelit_id);
 
         $register_otg = Register::where('lab_satelit_id', $user->lab_satelit_id)->where('status', 'otg')->count();
-        $register_odp = Register::where('lab_satelit_id', $user->lab_satelit_id)->where('status', 'odp')->count();;
-        $register_pdp = Register::where('lab_satelit_id', $user->lab_satelit_id)->where('status', 'pdp')->count();;
-        $register_positif = Register::where('lab_satelit_id', $user->lab_satelit_id)->where('status', 'positif')->count();;
-        $register_tanpa_status = Register::where('lab_satelit_id', $user->lab_satelit_id)->where('status', 'tanpa status')->count();;
+        $register_odp = Register::where('lab_satelit_id', $user->lab_satelit_id)->where('status', 'odp')->count();
+        $register_pdp = Register::where('lab_satelit_id', $user->lab_satelit_id)->where('status', 'pdp')->count();
+        $register_positif = Register::where('lab_satelit_id', $user->lab_satelit_id)->where('status', 'positif')->count();
+        $register_tanpa_status = Register::where('lab_satelit_id', $user->lab_satelit_id)->where('status', 'tanpa status')->count();
         $register_instansi_pengirim = 0;
 
         $register = Register::where('lab_satelit_id', $user->lab_satelit_id)->count();
@@ -90,7 +89,7 @@ class DashboardController extends Controller
             'register_positif' => $register_positif,
             'register_tanpa_status' => $register_tanpa_status,
             'register_instansi_pengirim' => $register_instansi_pengirim,
-            'instansi_pengirim' => $instansi_pengirim
+            'instansi_pengirim' => $instansi_pengirim,
         ];
 
         return response()->json([
@@ -108,20 +107,20 @@ class DashboardController extends Controller
         $perpage = $request->get('perpage', 500);
 
         $count = count(Register::select(DB::raw('upper(instansi_pengirim) as name'), DB::raw('count(*) as y'))
-            ->where('lab_satelit_id', $user->lab_satelit_id)
-            ->groupBy('instansi_pengirim')
-            ->orderBy('y', 'desc')
-            ->whereNotNull('instansi_pengirim')
-            ->get());
+                ->where('lab_satelit_id', $user->lab_satelit_id)
+                ->groupBy('name')
+                ->orderBy('y', 'desc')
+                ->whereNotNull('instansi_pengirim')
+                ->get());
 
         $models = $models->select(DB::raw('upper(instansi_pengirim) as name'), DB::raw('count(*) as y'));
         $models = $models->orderBy('y', 'desc');
-        $models = $models->groupBy('instansi_pengirim');
+        $models = $models->groupBy('name');
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
         return response()->json([
             'data' => $models,
-            'count' => $count
+            'count' => $count,
         ]);
     }
 
@@ -166,19 +165,19 @@ class DashboardController extends Controller
             ->pluck('total', 'jenis_registrasi');
 
         $tracking = [
-            'total_registrasi' => @$count_by_jenis['mandiri'] + @$count_by_jenis['rujukan'],
+            'total_registrasi' => @$count_by_jenis['mandiri']+@$count_by_jenis['rujukan'],
             'registrasi_mandiri' => @$count_by_jenis['mandiri'],
             'registrasi_rujukan' => @$count_by_jenis['rujukan'],
             'mandiri' => [
                 'today' => @$today['mandiri'],
                 'belum_lengkap' => @$bmandiri['mandiri'],
-                'done' => @$smandiri['sample_valid']
+                'done' => @$smandiri['sample_valid'],
             ],
             'rujukan' => [
                 'today' => @$today['rujukan'],
                 'belum_lengkap' => $bmandiri['rujukan'],
                 'done' => @$srujukan['sample_valid'],
-                'none' => $ninput
+                'none' => $ninput,
             ],
             'done' => @$count_by_status['sample_valid'],
 
@@ -192,11 +191,11 @@ class DashboardController extends Controller
             ->pluck('total', 'sampel_status');
         // dd($count_by_status);
         $count_by_status['extraction_sent'] = 0
-            + @$count_by_status['extraction_sample_sent']
-            + @$count_by_status['pcr_sample_received']
-            + @$count_by_status['pcr_sample_analyzed']
-            + @$count_by_status['sample_verified']
-            + @$count_by_status['sample_valid'];
+        +@$count_by_status['extraction_sample_sent']
+        +@$count_by_status['pcr_sample_received']
+        +@$count_by_status['pcr_sample_analyzed']
+        +@$count_by_status['sample_verified']
+        +@$count_by_status['sample_valid'];
         $count_by_status = $count_by_status->only(['extraction_sent', 'sample_taken', 'extraction_sample_extracted', 'extraction_sample_reextract', 'waiting_sampel', 'sample_invalid']);
 
         $count_by_labs = DB::table('lab_pcr')->leftJoin('sampel', 'sampel.lab_pcr_id', 'lab_pcr.id')
@@ -214,7 +213,7 @@ class DashboardController extends Controller
             'send' => $count_by_labs,
             'kurang' => @$invalid['sampel kurang'],
             'ulang' => @$invalid['swab ulang'],
-            'invalid' => @$count_by_status['sample_invalid']
+            'invalid' => @$count_by_status['sample_invalid'],
         ]);
     }
     public function pcr(Request $request)
@@ -252,7 +251,7 @@ class DashboardController extends Controller
             ->pluck('total', 'kesimpulan_pemeriksaan');
         return response()->json([
             'negatif' => @$count_by_status['negatif'],
-            'positif' => @$count_by_status['positif']
+            'positif' => @$count_by_status['positif'],
         ]);
     }
 
@@ -273,7 +272,7 @@ class DashboardController extends Controller
         }
         return response()->json([
             'label' => $label,
-            'value' => $value
+            'value' => $value,
         ]);
         // SELECT CAST(created_at AS DATE) AS DATE, COUNT(*) as total
         // FROM register
@@ -315,7 +314,7 @@ class DashboardController extends Controller
 
         return response()->json([
             'label' => $label,
-            'value' => $value
+            'value' => $value,
         ]);
     }
 
@@ -344,7 +343,7 @@ class DashboardController extends Controller
         }
         return response()->json([
             'label' => $models->keys(),
-            'value' => $models->values()
+            'value' => $models->values(),
         ]);
     }
 
@@ -395,7 +394,6 @@ class DashboardController extends Controller
                         ->whereDate('waktu_pcr_sample_analyzed', date('Y-m-d', strtotime(date('Y-m-' . $row))))
                         ->where('lab_satelit_id', $user->lab_satelit_id)
                         ->count();
-
 
                     $key++;
                 }
@@ -463,7 +461,7 @@ class DashboardController extends Controller
         }
         return response()->json([
             'label' => $models->keys(),
-            'value' => $models->values()
+            'value' => $models->values(),
         ]);
     }
 
@@ -494,7 +492,7 @@ class DashboardController extends Controller
         }
         return response()->json([
             'label' => $models->keys(),
-            'value' => $models->values()
+            'value' => $models->values(),
         ]);
     }
 }
