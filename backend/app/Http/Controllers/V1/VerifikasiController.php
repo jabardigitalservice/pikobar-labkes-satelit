@@ -420,7 +420,7 @@ class VerifikasiController extends Controller
             'kesimpulan_pemeriksaan' => 'required',
             'catatan_pemeriksaan' => 'nullable|max:255',
             'last_pemeriksaan_id' => 'required|exists:pemeriksaansampel,id',
-        ], $request->only(['kesimpulan_pemeriksaan', 'catatan_pemeriksaan', 'last_pemeriksaan_id']));
+        ], $request->only(['kesimpulan_pemeriksaan', 'catatan_pemeriksaan', 'last_pemeriksaan_id', 'hasil_deteksi']));
 
         DB::beginTransaction();
         try {

@@ -190,18 +190,15 @@
       }
 
       let form = new Form({
-        tanggal_input_hasil: new Date(),
-        jam_input_hasil: ("" + new Date().getHours()).padStart(2, "0") + ":" + ("" + new Date().getMinutes())
-          .padStart(2, "0"),
+        tanggal_input_hasil: data.tanggal_input_hasil,
         last_pemeriksaan_id: data.pemeriksaan_id,
         catatan_pemeriksaan: data.catatan_pemeriksaan,
         kesimpulan_pemeriksaan: data.kesimpulan_pemeriksaan,
-        hasil_deteksi: data.hasil_deteksi ? JSON.parse(data.hasil_deteksi) :
-      [{
+        hasil_deteksi: data.hasil_deteksi ? JSON.parse(data.hasil_deteksi) : [{
           'target_gen': null,
           'ct_value': null
         }],
-        sampel:data.sampel
+        sampel: data.sampel
       });
 
       return {

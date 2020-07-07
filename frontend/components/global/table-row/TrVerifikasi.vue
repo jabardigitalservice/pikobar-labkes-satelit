@@ -20,9 +20,7 @@
     </td>
     <td nowrap>
       <div v-for="item in JSON.parse(item.hasil_deteksi)" :key="item.target_gen">
-        - {{ item.target_gen }} :
-        <span v-if="!item.ct_value">{{ parseFloat(item.ct_value).toFixed(2).replace('.', ',') }}</span>
-        <span v-if="item.ct_value == null">{{ '-' }}</span>
+        {{ item.target_gen }} : {{ item.ct_value ? item.ct_value : '-' }}
       </div>
     </td>
     <td style="text-transform: capitalize;">
