@@ -29,7 +29,7 @@ class StoreRegisterSampel extends FormRequest
             'reg_instansi_pengirim' => 'required',
             'reg_instansi_pengirim_nama' => 'required',
             'reg_nama_pasien' => 'required',
-            'reg_nik'  => 'nullable|digits:16',
+            'reg_nik' => 'nullable|digits:16',
             'reg_sampel_jenis_sampel' => 'required',
             'reg_sampel_nomor' => 'required',
         ];
@@ -51,8 +51,8 @@ class StoreRegisterSampel extends FormRequest
     {
         $validator->after(function ($validator) {
             $user = Auth::user();
-            $nomorsampel = Sampel::where('nomor_sampel',strtoupper($this->reg_sampel_nomor))
-            ->where('lab_satelit_id',$user->lab_satelit_id)->first();
+            $nomorsampel = Sampel::where('nomor_sampel', strtoupper($this->reg_sampel_nomor))
+                ->where('lab_satelit_id', $user->lab_satelit_id)->first();
             if ($nomorsampel != null) {
                 $validator->errors()->add("reg_sampel_nomor", 'Nomor Sampel sudah digunakan');
             }
