@@ -305,6 +305,7 @@
                             <div class="col-md-8 col-lg-6">
                                 <date-picker format="d MMMM yyyy" input-class="multisteps-form__input form-control"
                                     :monday-first="true" v-model="form.reg_tanggal_swab"
+                                    :default-date="form.reg_tanggal_swab"
                                     :class="{ 'is-invalid': form.errors.has('reg_tanggal_swab') }" />
                                 <has-error :form="form" field="reg_tanggal_swab" />
                             </div>
