@@ -47,7 +47,7 @@ class VerifikasiController extends Controller
                     ->orWhere('kota.nama', 'ilike', '%' . $search . '%')
                     ->orWhere('instansi_pengirim_nama', 'ilike', '%' . $search . '%')
                     ->orWhere('status', 'ilike', '%' . $search . '%')
-                    ->orWhere('sumber_pasien', 'ilike', '%' . $search . '%')
+                    ->orWhere('register.sumber_pasien', 'ilike', '%' . $search . '%')
                     ->orWhere('catatan_pemeriksaan', 'ilike', '%' . $search . '%');
             });
         }
@@ -125,7 +125,7 @@ class VerifikasiController extends Controller
                     $models = $models->orderBy($order, $order_direction);
                     break;
                 case 'sumber_pasien':
-                    $models = $models->orderBy($order, $order_direction);
+                    $models = $models->orderBy('register.sumber_pasien', $order_direction);
                     break;
                 case 'kesimpulan_pemeriksaan':
                     $models = $models->orderBy($order, $order_direction);
@@ -203,7 +203,7 @@ class VerifikasiController extends Controller
                 parseDate($model->tanggal_swab),
                 $model->kesimpulan_pemeriksaan,
                 parseDate($model->waktu_pcr_sample_analyzed),
-                $this->getKeterangan($model),
+                $this->__getKeterangan($model),
             ];
         };
         $column_format = [
@@ -420,7 +420,7 @@ class VerifikasiController extends Controller
             'kesimpulan_pemeriksaan' => 'required',
             'catatan_pemeriksaan' => 'nullable|max:255',
             'last_pemeriksaan_id' => 'required|exists:pemeriksaansampel,id',
-        ], $request->only(['kesimpulan_pemeriksaan', 'catatan_pemeriksaan', 'last_pemeriksaan_id']));
+        ], $request->only(['kesimpulan_pemeriksaan', 'catatan_pemeriksaan', 'last_pemeriksaan_id', 'hasil_deteksi']));
 
         DB::beginTransaction();
         try {

@@ -5,7 +5,7 @@
       <span>{{item.waktu_pcr_sample_analyzed | formatDate}}</span>
       <span>{{ item.jam_input_hasil }}</span>
     </td>
-    
+
     <td>{{item.nomor_sampel}}</td>
     <td nowrap>
       <span>{{item.nama_lengkap}}</span>
@@ -20,9 +20,7 @@
     </td>
     <td nowrap>
       <div v-for="item in JSON.parse(item.hasil_deteksi)" :key="item.target_gen">
-        - {{ item.target_gen }} :
-        <span v-if="!item.ct_value">{{ parseFloat(item.ct_value).toFixed(2).replace('.', ',') }}</span>
-        <span v-if="item.ct_value == null">{{ '-' }}</span>
+        {{ item.target_gen }} : {{ item.ct_value ? item.ct_value : '-' }}
       </div>
     </td>
     <td style="text-transform: capitalize;">
