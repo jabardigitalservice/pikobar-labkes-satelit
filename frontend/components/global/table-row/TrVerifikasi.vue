@@ -5,7 +5,7 @@
       <span>{{item.waktu_pcr_sample_analyzed | formatDate}}</span>
       <span>{{ item.jam_input_hasil }}</span>
     </td>
-    
+
     <td>{{item.nomor_sampel}}</td>
     <td nowrap>
       <span>{{item.nama_lengkap}}</span>

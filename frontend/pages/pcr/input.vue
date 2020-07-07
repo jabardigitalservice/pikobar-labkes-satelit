@@ -232,7 +232,6 @@ export default {
     : [{}])
     let form = new Form({
       tanggal_input_hasil: new Date(),
-      jam_input_hasil: ("" + new Date().getHours()).padStart(2, "0")+ ":" + ("" + new Date().getMinutes()).padStart(2, "0"),
       catatan_penerimaan: data.pcr.catatan_penerimaan,
       kesimpulan_pemeriksaan: data.pcr.kesimpulan_pemeriksaan,
       hasil_deteksi: data.pcr.hasil_deteksi ? data.pcr.hasil_deteksi : default_hasil_deteksi,

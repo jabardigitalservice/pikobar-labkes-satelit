@@ -72,7 +72,6 @@ class Registrasisampel extends Controller
                         $models = $models->where('register.status', 'ilike', '%' . $val . '%');
                         break;
                     default:
-                        // $models = $models->where($key,$val);
                         break;
                 }
             }
@@ -140,7 +139,6 @@ class Registrasisampel extends Controller
         }
 
         if ($request->has('end_date')) {
-            // $payload['endDate'] = parseDate($request->input('end_date'));
             $payload['endDate'] = date('Y-m-d', strtotime($request->input('end_date') . "+1 days"));
         }
 
