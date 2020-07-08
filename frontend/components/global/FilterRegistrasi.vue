@@ -43,10 +43,8 @@
                 <label for="nama_pasien">Domisili</label>
             </div>
             <div class="col-md-4">
-                <select class="form-control" type="text" name="reg_kota" placeholder="" v-model="params.kota">
-                    <option :value="item.id" :key="idx" v-for="(item,idx) in optionKota">{{item.nama}}
-                    </option>
-                </select>
+                <multiselect v-model="kota" :options="optionKota" track-by="nama" label="nama"
+                    placeholder="Pilih Domisili"></multiselect>
             </div>
         </div>
 
@@ -60,7 +58,7 @@
             </div>
         </div>
 
-         <div class="form-group row">
+        <div class="form-group row">
             <div class="col-md-2">
                 <label for="nama_pasien">Status</label>
             </div>
@@ -119,6 +117,7 @@
                     kota: null,
                     status: null
                 },
+                kota: {},
                 optionKota: []
             }
         },
@@ -132,7 +131,6 @@
                 this.optionKota = resp.data;
             },
             async changeFasyankes(tipe) {
-                // this.form.reg_nama_rs = null;
                 let tp = tipe == "Dinkes" ? "dinkes" : "rumah_sakit";
                 let resp = await axios.get('/v1/list-fasyankes-jabar?tipe=' + tp)
                 this.optFasyankes = resp.data;
@@ -150,28 +148,25 @@
                 this.params.end_date = null;
                 this.params.kota = null;
                 this.params.status = null;
+                this.kota = null;
                 this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
             }
         },
-        mounted() {
-            // if (this.oid == 'registrasi-rujukan') {
-            //     this.params.jenis_registrasi = 'rujukan';
-            // } else {
-            //     this.params.jenis_registrasi = "mandiri";
-            // }
-        },
+        mounted() {},
         created() {
-            // alert(this.oid);
             _this = this;
-            // if(this.oid == 'registrasi-rujukan') {
-            //     this.jenis_registrasi = 'rujukan';
-            // }
             this.getKota();
         },
         watch: {
             "params.reg_fasyankes_pengirim": function (newVal, oldVal) {
                 this.changeFasyankes(this.params.reg_fasyankes_pengirim)
             },
+            "kota": function (newVal, oldVal) {
+                this.params.kota = null
+                if (this.kota) {
+                    this.params.kota = this.kota.id
+                }
+            }
         }
     }
 </script>
