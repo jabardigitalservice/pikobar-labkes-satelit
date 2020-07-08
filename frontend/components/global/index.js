@@ -12,3 +12,7 @@ requireContext.keys().forEach((file) => {
     Vue.component(Component.name, Component)
   }
 })
+
+import Multiselect from 'vue-multiselect'
+import 'vue-multiselect/dist/vue-multiselect.min.css';
+Vue.component('multiselect', Multiselect)
