@@ -48,7 +48,7 @@ class VerifikasiController extends Controller
                     ->orWhere('instansi_pengirim_nama', 'ilike', '%' . $search . '%')
                     ->orWhere('status', 'ilike', '%' . $search . '%')
                     ->orWhere('register.sumber_pasien', 'ilike', '%' . $search . '%')
-                    ->orWhere('catatan_pemeriksaan', 'ilike', '%' . $search . '%');
+                    ->orWhere('pemeriksaansampel.catatan_pemeriksaan', 'ilike', '%' . $search . '%');
             });
         }
 
@@ -131,7 +131,7 @@ class VerifikasiController extends Controller
                     $models = $models->orderBy($order, $order_direction);
                     break;
                 case 'catatat':
-                    $models = $models->orderBy('catatan_pemeriksaan', $order_direction);
+                    $models = $models->orderBy('pemeriksaansampel.catatan_pemeriksaan', $order_direction);
                     break;
                 default:
                     break;
