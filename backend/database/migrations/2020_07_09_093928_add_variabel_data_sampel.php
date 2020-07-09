@@ -72,7 +72,6 @@ class AddVariabelDataSampel extends Migration
         });
         Schema::table('lab_satelit', function (Blueprint $table) {
             $table->dropColumn('kode_lab');
-
         });
     }
 }
