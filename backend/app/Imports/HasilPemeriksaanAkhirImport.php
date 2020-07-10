@@ -86,13 +86,13 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                 $register->save();
 
                 $pasien = new Pasien;
-                $pasien->nik = $this->parseNIK($row->get('nik'));
+                $pasien->nik = $this->__parseNIK($row->get('nik'));
                 $pasien->nama_lengkap = $row->get('nama');
                 $pasien->jenis_kelamin = $row->get('jenis_kelamin');
                 if ($row->get('tgl_lahir') != '') {
                     $pasien->tanggal_lahir = date('Y-m-d', strtotime($row->get('tgl_lahir')));
                 }
-                $pasien->kota_id = $this->getKota($row);
+                $pasien->kota_id = $this->__getKota($row);
                 $pasien->kecamatan = $row->get('kecamatan');
                 $pasien->kelurahan = $row->get('desakelurahan');
                 $pasien->alamat_lengkap = $row->get('alamat');
