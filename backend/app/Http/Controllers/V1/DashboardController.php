@@ -82,14 +82,14 @@ class DashboardController extends Controller
         $page = $request->get('page', 1);
         $perpage = $request->get('perpage', 500);
 
-        $count = count(Register::select(DB::raw('upper(instansi_pengirim) as name'), DB::raw('count(*) as y'))
+        $count = count(Register::select(DB::raw('upper(instansi_pengirim_nama) as name'), DB::raw('count(*) as y'))
                 ->where('lab_satelit_id', $user->lab_satelit_id)
                 ->groupBy('name')
                 ->orderBy('y', 'desc')
-                ->whereNotNull('instansi_pengirim')
+                ->whereNotNull('instansi_pengirim_nama')
                 ->get());
 
-        $models = $models->select(DB::raw('upper(instansi_pengirim) as name'), DB::raw('count(*) as y'));
+        $models = $models->select(DB::raw('upper(instansi_pengirim_nama) as name'), DB::raw('count(*) as y'));
         $models = $models->orderBy('y', 'desc');
         $models = $models->groupBy('name');
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
