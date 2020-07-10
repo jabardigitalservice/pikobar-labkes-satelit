@@ -263,7 +263,7 @@ class PCRController extends Controller
         }
         $pcr->tanggal_input_hasil = date('Y-m-d', strtotime($request->tanggal_input_hasil));
         $pcr->jam_input_hasil = date('H:s');
-        $pcr->catatan_pemeriksaan = $request->catatan_pemeriksaan;
+        $pcr->catatan_pemeriksaan = $request->catatan_pemeriksaan != '' ? $request->catatan_pemeriksaan : null;
         $pcr->grafik = $request->grafik;
         $pcr->hasil_deteksi = $this->parseHasilDeteksi($request->hasil_deteksi);
         $pcr->kesimpulan_pemeriksaan = $request->kesimpulan_pemeriksaan;
@@ -457,7 +457,7 @@ class PCRController extends Controller
                 $pcr->tanggal_input_hasil = date('Y-m-d', strtotime($row['tanggal_input_hasil']));
                 $pcr->nama_kit_pemeriksaan = $row['nama_kit_pemeriksaan'];
                 $pcr->jam_input_hasil = date('H:i');
-                $pcr->catatan_pemeriksaan = $row['catatan_pemeriksaan'];
+                $pcr->catatan_pemeriksaan = $row['catatan_pemeriksaan'] != '' ? $row['catatan_pemeriksaan'] : null;
                 $pcr->grafik = [];
                 $pcr->hasil_deteksi = $row['target_gen'];
                 $pcr->kesimpulan_pemeriksaan = $row['kesimpulan_pemeriksaan'];

@@ -21,11 +21,9 @@ use Illuminate\Support\Str;
 
 class RegistersampelController extends Controller
 {
-    public function generateNomorRegister($date = null, $jenis_registrasi = null)
+    public function generateNomorRegister()
     {
-        if (!$date) {
-            $date = date('Ymd');
-        }
+        $date = date('Ymd');
         $kode_registrasi = 'S';
         $res = DB::select("select max(right(nomor_register, 4))::int8 val from register where nomor_register ilike '{$kode_registrasi}{$date}%'");
         if (count($res)) {
@@ -44,7 +42,7 @@ class RegistersampelController extends Controller
             $user = Auth::user();
 
             $register = new Register;
-            $register->nomor_register = $this->generateNomorRegister();
+            $register->nomor_register = generateNomorRegister();
             $register->register_uuid = (string)Str::uuid();
             $register->creator_user_id = $user->id;
             $register->lab_satelit_id = $user->lab_satelit_id;
@@ -146,6 +144,8 @@ class RegistersampelController extends Controller
             $pasien->tempat_lahir = $request->get('reg_tempatlahir');
             if ($request->get('reg_tgllahir') != null) {
                 $pasien->tanggal_lahir = date('Y-m-d', strtotime($request->get('reg_tgllahir')));
+            } else {
+                $pasien->tanggal_lahir = $request->get('reg_tgllahir');
             }
             $pasien->no_hp = $request->get('reg_nohp');
             $pasien->kota_id = $request->get('reg_kota');

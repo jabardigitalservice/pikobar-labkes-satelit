@@ -67,6 +67,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                 })->validate();
 
                 $register = new Register;
+                $register->nomor_register = generateNomorRegister();
                 $register->register_uuid = (string) \Illuminate\Support\Str::uuid();
                 $register->created_at = date('Y-m-d H:i:s', strtotime($row->get('tgl_masuk_sampel') . ' ' . date('H:i:s')));
                 $register->creator_user_id = $user->id;

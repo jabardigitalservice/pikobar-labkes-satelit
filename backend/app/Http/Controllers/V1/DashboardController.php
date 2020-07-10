@@ -123,6 +123,10 @@ class DashboardController extends Controller
         $data['data'][2]['data'] = [];
         $data['data'][2]['backgroundColor'] = '#403d3d';
         $data['data'][2]['borderColor'] = '#403d3d';
+        $data['data'][3]['label'] = 'invalid';
+        $data['data'][3]['data'] = [];
+        $data['data'][3]['backgroundColor'] = '#32427b';
+        $data['data'][3]['borderColor'] = '#32427b';
         switch ($tipe) {
             case "Daily":
                 $days = Carbon::parse(date('Y-m-d'))->daysInMonth;
@@ -144,6 +148,12 @@ class DashboardController extends Controller
                     $data['data'][2]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
                         ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
                         ->where('kesimpulan_pemeriksaan', 'inkonklusif')
+                        ->whereDate('waktu_pcr_sample_analyzed', date('Y-m-d', strtotime(date('Y-m-' . $row))))
+                        ->where('lab_satelit_id', $user->lab_satelit_id)
+                        ->count();
+                    $data['data'][3]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
+                        ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
+                        ->where('kesimpulan_pemeriksaan', 'invalid')
                         ->whereDate('waktu_pcr_sample_analyzed', date('Y-m-d', strtotime(date('Y-m-' . $row))))
                         ->where('lab_satelit_id', $user->lab_satelit_id)
                         ->count();
@@ -172,6 +182,11 @@ class DashboardController extends Controller
                     $data['data'][2]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
                         ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
                         ->where('kesimpulan_pemeriksaan', 'inkonklusif')
+                        ->where('lab_satelit_id', $user->lab_satelit_id)
+                        ->whereMonth('waktu_pcr_sample_analyzed', $bulan)->count();
+                    $data['data'][3]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
+                        ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
+                        ->where('kesimpulan_pemeriksaan', 'invalid')
                         ->where('lab_satelit_id', $user->lab_satelit_id)
                         ->whereMonth('waktu_pcr_sample_analyzed', $bulan)->count();
                     $key++;
