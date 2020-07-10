@@ -21,19 +21,6 @@ use Illuminate\Support\Str;
 
 class RegistersampelController extends Controller
 {
-    public function generateNomorRegister()
-    {
-        $date = date('Ymd');
-        $kode_registrasi = 'S';
-        $res = DB::select("select max(right(nomor_register, 4))::int8 val from register where nomor_register ilike '{$kode_registrasi}{$date}%'");
-        if (count($res)) {
-            $nextnum = $res[0]->val + 1;
-        } else {
-            $nextnum = 1;
-        }
-        return $kode_registrasi . $date . str_pad($nextnum, 4, "0", STR_PAD_LEFT);
-    }
-
     public function storesampel(StoreRegisterSampel $request)
     {
         DB::beginTransaction();
