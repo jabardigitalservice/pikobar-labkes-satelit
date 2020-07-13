@@ -411,7 +411,6 @@
                     this.year_tgllahir = null;
                 } else {
                     this.year_tgllahir = year;
-
                 }
             },
             async getNoreg() {
