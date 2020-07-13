@@ -427,7 +427,7 @@ class VerifikasiController extends Controller
 
             PemeriksaanSampel::find($request->input('last_pemeriksaan_id'))->update([
                 'kesimpulan_pemeriksaan' => $request->input('kesimpulan_pemeriksaan'),
-                'catatan_pemeriksaan' => $request->input('catatan_pemeriksaan'),
+                'catatan_pemeriksaan' => $request->input('catatan_pemeriksaan') != '' ? $request->input('catatan_pemeriksaan') : null,
                 'hasil_deteksi' => $this->parseHasilDeteksi($request->hasil_deteksi),
             ]);
 

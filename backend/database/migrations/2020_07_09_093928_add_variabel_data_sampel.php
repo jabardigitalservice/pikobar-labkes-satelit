@@ -32,8 +32,9 @@ class AddVariabelDataSampel extends Migration
         Schema::table('fasyankes', function (Blueprint $table) {
             $table->string('kode_fasyankes')->nullable();
             $table->string('nama_fasyankes')->nullable();
-            $table->string('kode_kabupaten')->nullable();
-            $table->string('nama_kabupaten')->nullable();
+            $table->string('jenis_fasyankes')->nullable();
+            $table->string('kode_kabupaten_fasyankes')->nullable();
+            $table->string('nama_kabupaten_fasyankes')->nullable();
         });
         Schema::table('lab_satelit', function (Blueprint $table) {
             $table->string('kode_lab')->nullable();
