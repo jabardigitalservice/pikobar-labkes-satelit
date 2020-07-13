@@ -112,10 +112,6 @@
                                             <i></i>Laki-laki
                                         </span>
                                     </label>
-                                    <!-- <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" v-model="form.reg_jk"
-                                            value="L" />
-                  Laki-laki</label>-->
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <label class="fancy-radio custom-color-green m-0 w-100">
@@ -124,10 +120,6 @@
                                             <i></i>Perempuan
                                         </span>
                                     </label>
-                                    <!-- <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" v-model="form.reg_jk"
-                                            value="P" />
-                  Perempuan</label>-->
                                 </div>
                                 <has-error :form="form" field="reg_jk" />
                             </div>
@@ -392,9 +384,9 @@
                     reg_register: data.reg_register,
                     reg_pasien: data.reg_pasien
                 }),
-                day_tgllahir: null,
-                month_tgllahir: null,
-                year_tgllahir: null,
+                day_tgllahir: data.reg_tgllahir ? data.reg_tgllahir.substr(8, 2) : null,
+                month_tgllahir: data.reg_tgllahir ? data.reg_tgllahir.substr(5, 2) : null,
+                year_tgllahir: data.reg_tgllahir ? data.reg_tgllahir.substr(0, 4) : null,
                 selected_reg: {},
                 optionKota: [],
                 optionKecamatan: [],
@@ -477,7 +469,7 @@
             },
             async submit() {
                 try {
-                    if (!this.day_tgllahir || !this.month_tgllahir || !this.year) {
+                    if (!this.day_tgllahir || !this.month_tgllahir || !this.year_tgllahir) {
                         this.form.reg_tgllahir = null;
                     }
                     const response = await this.form.post(
