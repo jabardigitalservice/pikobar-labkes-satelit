@@ -397,13 +397,21 @@
             onChange(day, month, year) {
                 if (isNaN(parseInt(day))) {
                     this.day_tgllahir = null;
+                } else {
+                    this.day_tgllahir = day;
                 }
 
                 if (isNaN(parseInt(month))) {
                     this.month_tgllahir = null;
+                } else {
+                    this.month_tgllahir = month;
                 }
+
                 if (!year) {
                     this.year_tgllahir = null;
+                } else {
+                    this.year_tgllahir = year;
+
                 }
             },
             async getNoreg() {
