@@ -58,7 +58,7 @@ class IntegrasiController extends Controller
             $mapping[$key]['lab_nosampel'] = $row->nomor_sampel;
             $mapping[$key]['lab_nopemeriksaan'] = $row->swab_ke;
             $mapping[$key]['jns_sampel'] = $row->jenis_sampel_id;
-            $mapping[$key]['jns_sampel2'] = $row->jenis_sampel_id == 999999 ?? $row->jenis_sampel_nama;
+            $mapping[$key]['jns_sampel2'] = $row->jenis_sampel_id == 999999 ? $row->jenis_sampel_nama : null;
             $mapping[$key]['tgl_pengambilan'] = date('Y-m-d', strtotime($row->tanggal_swab));
             $mapping[$key]['tgl_kirim'] = date('Y-m-d', strtotime($row->waktu_sample_taken));
             $mapping[$key]['tgl_terima'] = date('Y-m-d', strtotime($row->waktu_sample_taken));
