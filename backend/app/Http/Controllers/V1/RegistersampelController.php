@@ -123,6 +123,11 @@ class RegistersampelController extends Controller
             if ($request->get('reg_tanggal_swab') != '') {
                 $register->tanggal_swab = date('Y-m-d', strtotime($request->get('reg_tanggal_swab')));
             }
+
+            if ($register->nomor_register == null) {
+                $register->nomor_register = generateNomorRegister();
+            }
+
             $register->save();
 
             $pasien->nama_lengkap = $request->get('reg_nama_pasien');
