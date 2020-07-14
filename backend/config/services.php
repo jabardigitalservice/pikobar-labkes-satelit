@@ -12,7 +12,7 @@ return [
     | default location for this type of information, allowing packages
     | to have a conventional place to find your various credentials.
     |
-    */
+     */
 
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
@@ -56,14 +56,19 @@ return [
     ],
 
     'keycloak' => [
-        'authServerUrl'         => env('KEYCLOAK_AUTHSERVERURL'),
-        'realm'                 => env('KEYCLOAK_REALM'),
-        'clientId'              => env('KEYCLOAK_CLIENTID'),
-        'clientSecret'          => env('KEYCLOAK_CLIENTSECRET'),
-        'redirectUri'           => env('KEYCLOAK_REDIRECTURI'),
-        'encryptionAlgorithm'   => env('KEYCLOAK_ENCRYPTIONALGORITHM'),
-        'encryptionKeyPath'     => env('KEYCLOAK_ENCRYPTIONKEYPATH'),
-        'encryptionKey'         => env('KEYCLOAK_ENCRYPTIONKEY'),
-    ]
+        'authServerUrl' => env('KEYCLOAK_AUTHSERVERURL'),
+        'realm' => env('KEYCLOAK_REALM'),
+        'clientId' => env('KEYCLOAK_CLIENTID'),
+        'clientSecret' => env('KEYCLOAK_CLIENTSECRET'),
+        'redirectUri' => env('KEYCLOAK_REDIRECTURI'),
+        'encryptionAlgorithm' => env('KEYCLOAK_ENCRYPTIONALGORITHM'),
+        'encryptionKeyPath' => env('KEYCLOAK_ENCRYPTIONKEYPATH'),
+        'encryptionKey' => env('KEYCLOAK_ENCRYPTIONKEY'),
+    ],
+
+    'pelaporan' => [
+        'api_key' => env('PELAPORAN_KEY'),
+        'url' => env('PELAPORAN_URL'),
+    ],
 
 ];
