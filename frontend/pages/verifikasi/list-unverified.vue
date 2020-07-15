@@ -29,7 +29,8 @@
                     has_action: true,
                     has_search_input: true,
                     custom_header: '',
-                    default_sort: '',
+                    default_sort: 'waktu_pcr_sample_analyzed',
+                    default_sort_dir: 'desc',
                     custom_empty_page: true,
                     class: {
                         table: [],
