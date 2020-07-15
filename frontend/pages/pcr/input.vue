@@ -232,7 +232,7 @@ export default {
     : [{}])
     let form = new Form({
       tanggal_input_hasil: new Date(),
-      catatan_penerimaan: null,
+      catatan_pemeriksaan: null,
       kesimpulan_pemeriksaan: null,
       hasil_deteksi:[{target_gen:null,ct_value:null}],
       nama_kit_pemeriksaan:null, 
