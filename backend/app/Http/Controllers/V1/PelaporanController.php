@@ -11,7 +11,7 @@ class PelaporanController extends Controller
     public function fetch_data(Request $request)
     {
         $pelaporan = new PelaporanService;
-        $response = $pelaporan->pendaftar_rdt($request->get('keyword'))->json();
+        $response = $pelaporan->pendaftar_rdt($request->get('keyword'), $request->get('limit', 20))->json();
         return response()->json($response, 200);
     }
 }
