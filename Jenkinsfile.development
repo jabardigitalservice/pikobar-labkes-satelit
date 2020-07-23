@@ -4,6 +4,7 @@ pipeline {
     environment {
         USER_PIKOBAR = "${env.USER_PIKOBAR}"
         HOST_LABKES_SATELITE_STAGING = "${env.HOST_LABKES_SATELITE_STAGING}"
+        HOST_LABKES_SATELITE_STAGING_JACLOUD = "${env.HOST_LABKES_SATELITE_STAGING_JACLOUD}"
  
     }
 
@@ -49,6 +50,47 @@ pipeline {
                    sshagent (['']){
                         // ssh block
                        sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_LABKES_SATELITE_STAGING "docker exec app composer install -d /var/www/backend/ && docker exec app composer dump-autoload -d /var/www/backend/  && docker exec app php /var/www/backend/artisan config:cache && docker exec app php /var/www/backend/artisan config:clear"'
+                    }
+            }    
+        }
+
+
+        stage('Run Docker on development jabarcloud') {
+            
+            environment {
+                SSH_COMMAND = "ssh-agent bash -c 'ssh-add ~/.ssh/id_rsa; git pull origin development'"     
+            }
+
+            steps{
+                   sshagent (['']){
+                        // ssh block
+                    sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_LABKES_SATELITE_STAGING_JACLOUD "cd /home/ubuntu/app/pikobar-labkes-satelit && $SSH_COMMAND \
+                                                                                    && sudo docker-compose -f docker-compose-development.yml down \
+                                                                                    && sudo docker-compose -f docker-compose-development.yml build --no-cache \
+                                                                                    && sudo docker-compose -f docker-compose-development.yml up -d"'
+                                                                                        
+                    }
+                
+            }      
+         }
+
+        stage('Deliver for hook-frontend.sh jabarcloud') {
+            
+            steps{
+                   sshagent (['']){
+                        // ssh block
+                       sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_LABKES_SATELITE_STAGING_JACLOUD "cd /home/ubuntu/app/pikobar-labkes-satelit  \
+                                                                                        && ./hook-frontend.sh"'
+                    }
+            }    
+        }
+
+        stage('Deliver for php composer install jabarcloud') {
+            
+            steps{
+                   sshagent (['']){
+                        // ssh block
+                       sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_LABKES_SATELITE_STAGING_JACLOUD "docker exec app composer install -d /var/www/backend/ && docker exec app composer dump-autoload -d /var/www/backend/  && docker exec app php /var/www/backend/artisan config:cache && docker exec app php /var/www/backend/artisan config:clear"'
                     }
             }    
         }
