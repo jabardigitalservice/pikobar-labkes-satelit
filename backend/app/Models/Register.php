@@ -28,8 +28,10 @@ class Register extends Model
         'nama_rs',
         'other_nama_rs',
         'fasyankes_pengirim',
-        'hasil_rdt'
-        // 'keterangan_lain'
+        'hasil_rdt',
+        'status',
+        'swab_ke',
+        'tanggal_swab',
     ];
 
     protected $hidden = ['fasyankes_id'];
@@ -130,7 +132,7 @@ class Register extends Model
 
     public function sampel()
     {
-        return $this->hasMany(Sampel::class);
+        return $this->hasOne(Sampel::class);
     }
 
 }

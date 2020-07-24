@@ -41,7 +41,7 @@
                 </select>
             </div>
         </div> -->
-        
+
         <!-- <template v-if="oid=='registrasi-rujukan'">
         <div class="form-group row mt-4">
             <label class="col-md-2">Instansi Pengirim
@@ -96,11 +96,11 @@
 
         <div class="form-group row">
             <div class="col-md-2">
-                <label for="nama_pasien">Instansi Pengirim</label>
+                <label for="nama_pasien">Nama Rumah Sakit/Dinkes</label>
             </div>
             <div class="col-md-4">
-                <input type="text" name="params.instansi_pengirim" v-model="params.instansi_pengirim" id="" class="form-control"
-                    placeholder="Instansi Pengirim">
+                <input type="text" name="params.instansi_pengirim" v-model="params.instansi_pengirim" id=""
+                    class="form-control" placeholder="Nama Rumah Sakit/Dinkes">
             </div>
         </div>
 
@@ -124,7 +124,7 @@
         props: ['oid'],
         data() {
             return {
-                optFasyankes:[],
+                optFasyankes: [],
                 params: {
                     start_date: null,
                     end_date: null,
@@ -144,15 +144,15 @@
             },
             async changeFasyankes(tipe) {
                 // this.form.reg_nama_rs = null;
-                let tp = tipe=="Dinkes"?"dinkes":"rumah_sakit";
-                let resp = await axios.get('/v1/list-fasyankes-jabar?tipe='+tp)
+                let tp = tipe == "Dinkes" ? "dinkes" : "rumah_sakit";
+                let resp = await axios.get('/v1/list-fasyankes-jabar?tipe=' + tp)
                 this.optFasyankes = resp.data;
                 this.optFasyankes.push({
-                    id:9999,
-                    nama:'Fasyankes Lainnya'
+                    id: 9999,
+                    nama: 'Fasyankes Lainnya'
                 })
             },
-            resetForm(){
+            resetForm() {
                 this.params.instansi_pengirim = null;
                 this.params.start_date = null;
                 this.params.end_date = null;
@@ -174,8 +174,8 @@
             // }
             this.getKota();
         },
-        watch:{
-            "params.reg_fasyankes_pengirim":function(newVal, oldVal){
+        watch: {
+            "params.reg_fasyankes_pengirim": function (newVal, oldVal) {
                 this.changeFasyankes(this.params.reg_fasyankes_pengirim)
             },
         }

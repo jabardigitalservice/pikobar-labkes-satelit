@@ -232,12 +232,11 @@ export default {
     : [{}])
     let form = new Form({
       tanggal_input_hasil: new Date(),
-      jam_input_hasil: ("" + new Date().getHours()).padStart(2, "0")+ ":" + ("" + new Date().getMinutes()).padStart(2, "0"),
-      catatan_penerimaan: data.pcr.catatan_penerimaan,
-      kesimpulan_pemeriksaan: data.pcr.kesimpulan_pemeriksaan,
-      hasil_deteksi: data.pcr.hasil_deteksi ? data.pcr.hasil_deteksi : default_hasil_deteksi,
-      nama_kit_pemeriksaan:data.pcr.nama_kit_pemeriksaan, 
-      grafik: data.pcr.grafik ? data.pcr.grafik : [],
+      catatan_pemeriksaan: null,
+      kesimpulan_pemeriksaan: null,
+      hasil_deteksi:[{target_gen:null,ct_value:null}],
+      nama_kit_pemeriksaan:null, 
+      sampel:data.sampel
     });
     return {
       data,
@@ -287,8 +286,8 @@ export default {
     },
     addHasilDeteksi() {
       this.form.hasil_deteksi.push({
-        tanggalsampel: new Date(),
-        pukulsampel: new Date().getHours() * 100 + new Date().getMinutes()
+        ct_value: null,
+        target_gen: null
       });
     },
     removeHasilDeteksi(index) {

@@ -40,3 +40,15 @@ Vue.filter('formatDateTime', function (value) {
   // return nmBulan[bulan];
   return tanggal + " " +nmBulan[bulan]+" "+value.toString().substring(0,4) + " " + jam + ":" + menit;
 });
+Vue.filter('formatTime', function (value) {
+  if (!value || value == '') return ''
+  if (value.indexOf('T') > -1) {
+    var date = new Date(value)
+    var jam = date.getHours()
+    var menit = date.getMinutes()
+    return jam + ":" + menit;
+  }
+  var jam = value.toString().substring(11,13)
+  var menit = value.toString().substring(14,16)
+  return jam + ":" + menit;
+});

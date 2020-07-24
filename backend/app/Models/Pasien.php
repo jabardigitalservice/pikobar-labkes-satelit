@@ -35,7 +35,6 @@ class Pasien extends Model
     ];
 
     protected $dates = [
-        'tanggal_lahir',
     ];
 
     protected $casts = [

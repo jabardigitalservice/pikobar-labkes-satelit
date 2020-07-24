@@ -13,6 +13,16 @@
 
         <div class="form-group row">
             <div class="col-md-2">
+                <label for="">Kategori</label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="params.sumber_pasien" v-model="params.sumber_pasien" id="" class="form-control"
+                    placeholder="Kategori">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-2">
                 <label for="nama_pasien">Tanggal Pemeriksaan</label>
             </div>
             <div class="col-md-4">
@@ -28,79 +38,23 @@
             </div>
         </div>
 
-        <!-- <div class="form-group row" v-if="oid=='registrasi-mandiri'">
-            <div class="col-md-2">
-                <label for="nama_pasien">Sumber Pasien</label>
-            </div>
-            <div class="col-md-4">
-                <select name="sumber_pasien" class="form-control" v-model="params.sumber_pasien">
-                    <option value="" selected>Semua Sumber</option>
-                    <option value="Mandiri">Mandiri</option>
-                    <option value="Dinkes">Dinkes</option>
-                    <option value="RDT">RDT</option>
-                </select>
-            </div>
-        </div> -->
-
-        <!-- <template v-if="oid=='registrasi-rujukan'">
-        <div class="form-group row mt-4">
-            <label class="col-md-2">Instansi Pengirim
-            </label>
-
-            <div class="col-md-6">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" id="fasyanrs"
-                        value="Rumah Sakit" v-model="params.reg_fasyankes_pengirim">
-                    <label class="form-check-label" for="fasyanrs">Rumah Sakit</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" id="fasyandinkes"
-                        value="Dinkes" v-model="params.reg_fasyankes_pengirim">
-                    <label class="form-check-label" for="fasyandinkes">Dinkes</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group row mt-4">
-            <label class="col-md-2">Nama Rumah Sakit / Fasyankes
-            <div class="col-md-6">
-                <v-select :options="optFasyankes" label="nama" :value="params.reg_fasyankes_id"
-                    v-model="params.reg_nama_rs"></v-select>
-            </div>
-        </div>
-
-        <div class="mt-4" id="inputrslain" v-if="params.reg_fasyankes_id && params.reg_fasyankes_id.id==9999">
-            <div class="form-group row">
-                <label class="col-md-2"></label>
-                <div class="col-md-6">
-                    <input class=" form-control" type="text" v-model="params.reg_nama_rs_lainnya"
-                        name="reg_nama_rs_lainnya" placeholder="Nama Rumah Sakit / Fasyankes" />
-                </div>
-            </div>
-        </div>
-
-
-        </template> -->
-
         <div class="form-group row">
             <div class="col-md-2">
                 <label for="nama_pasien">Domisili</label>
             </div>
             <div class="col-md-4">
-                <select class="form-control" type="text" name="reg_kota" placeholder="" v-model="params.kota">
-                    <option :value="item.id" :key="idx" v-for="(item,idx) in optionKota">{{item.nama}}
-                    </option>
-                </select>
+                <multiselect v-model="kota" :options="optionKota" track-by="nama" label="nama"
+                    placeholder="Pilih Domisili"></multiselect>
             </div>
         </div>
 
         <div class="form-group row">
             <div class="col-md-2">
-                <label for="nama_pasien">Instansi Pengirim</label>
+                <label for="nama_pasien">Nama Rumah Sakit/Dinkes</label>
             </div>
             <div class="col-md-4">
                 <input type="text" name="params.instansi_pengirim" v-model="params.instansi_pengirim" id=""
-                    class="form-control" placeholder="Instansi Pengirim">
+                    class="form-control" placeholder="Nama Rumah Sakit/Dinkes">
             </div>
         </div>
 
@@ -118,10 +72,22 @@
         </div>
 
         <div class="form-group row">
+            <div class="col-md-2">
+                <label for="nama_pasien">Status</label>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" type="text" name="reg_kota" placeholder="" v-model="params.status">
+                    <option :value="item.id" :key="idx" v-for="(item,idx) in status">{{item.nama}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
             <div class="col-md-12 text-left">
                 <button class="btn btn-primary" style="width:200px;margin-top:20px" @click="doFilter"><i
                         class="fa fa-eye"></i> Filter</button>
-                        <button class="btn btn-secondary" style="width:200px;margin-top:20px" @click="resetForm"><i
+                <button class="btn btn-secondary" style="width:200px;margin-top:20px" @click="resetForm"><i
                         class="fa fa-close"></i> Reset</button>
 
             </div>
@@ -146,6 +112,25 @@
                 }, {
                     id: 'inkonklusif',
                     nama: 'INKONKLUSIF'
+                }, {
+                    id: 'invalid',
+                    nama: 'INVALID'
+                }],
+                status: [{
+                    id: 'otg',
+                    nama: 'OTG'
+                }, {
+                    id: 'odp',
+                    nama: 'ODP'
+                }, {
+                    id: 'pdp',
+                    nama: 'PDP'
+                }, {
+                    id: 'positif',
+                    nama: 'Positif'
+                }, {
+                    id: 'tanpa_status',
+                    nama: 'Tanpa Status'
                 }],
                 optFasyankes: [],
                 params: {
@@ -154,8 +139,11 @@
                     start_date: null,
                     end_date: null,
                     kota: null,
-                    kesimpulan_pemeriksaan:null
+                    kesimpulan_pemeriksaan: null,
+                    sumber_pasien: null,
+                    status: null
                 },
+                kota: {},
                 optionKota: []
             }
         },
@@ -178,35 +166,34 @@
                     nama: 'Fasyankes Lainnya'
                 })
             },
-            resetForm(){
+            resetForm() {
                 this.params.nama_pasien = null;
                 this.params.instansi_pengirim = null;
                 this.params.start_date = null;
                 this.params.end_date = null;
                 this.params.kota = null;
                 this.params.kesimpulan_pemeriksaan = null;
+                this.params.sumber_pasien = null;
+                this.params.status = null;
+                this.kota = null;
                 this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
             }
         },
-        mounted() {
-            // if (this.oid == 'registrasi-rujukan') {
-            //     this.params.jenis_registrasi = 'rujukan';
-            // } else {
-            //     this.params.jenis_registrasi = "mandiri";
-            // }
-        },
+        mounted() {},
         created() {
-            // alert(this.oid);
             _this = this;
-            // if(this.oid == 'registrasi-rujukan') {
-            //     this.jenis_registrasi = 'rujukan';
-            // }
             this.getKota();
         },
         watch: {
             "params.reg_fasyankes_pengirim": function (newVal, oldVal) {
                 this.changeFasyankes(this.params.reg_fasyankes_pengirim)
             },
+            "kota": function (newVal, oldVal) {
+                this.params.kota = null
+                if (this.kota) {
+                    this.params.kota = this.kota.id
+                }
+            }
         }
     }
 </script>
