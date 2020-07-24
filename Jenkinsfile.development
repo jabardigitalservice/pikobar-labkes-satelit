@@ -53,6 +53,7 @@ pipeline {
                     }
             }    
         }
+        
 
 
         stage('Run Docker on development jabarcloud') {
@@ -65,9 +66,9 @@ pipeline {
                    sshagent (['']){
                         // ssh block
                     sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_LABKES_SATELITE_STAGING_JACLOUD "cd /home/ubuntu/app/pikobar-labkes-satelit && $SSH_COMMAND \
-                                                                                    && sudo docker-compose -f docker-compose-development.yml down \
-                                                                                    && sudo docker-compose -f docker-compose-development.yml build --no-cache \
-                                                                                    && sudo docker-compose -f docker-compose-development.yml up -d"'
+                                                                                    && sudo docker-compose -f docker-compose-dev-jabarcloud.yml down \
+                                                                                    && sudo docker-compose -f docker-compose-dev-jabarcloud.yml build --no-cache \
+                                                                                    && sudo docker-compose -f docker-compose-dev-jabarcloud.yml up -d"'
                                                                                         
                     }
                 
