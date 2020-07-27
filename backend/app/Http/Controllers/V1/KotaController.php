@@ -3,12 +3,19 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
 use App\Models\Kota;
-use Illuminate\Http\Request;
+use App\Models\Provinsi;
 
 class KotaController extends Controller
 {
-    public function listKota($provinsi = 32)
+    public function listProvinsi()
+    {
+        return response()->json(Provinsi::all());
+    }
+
+    public function listKota($provinsi)
     {
         return response()->json(Kota::whereProvinsiId($provinsi)->get());
     }
@@ -20,11 +27,13 @@ class KotaController extends Controller
 
     public function listKecamatan($kota)
     {
-        # code...
+        return response()->json(Kecamatan::whereKabupatenId($kota)->get());
+
     }
 
-    public function listKelurahan($kec)
+    public function listKelurahan($kecamatan)
     {
-        # code...
+        return response()->json(Kelurahan::whereKecamatanId($kecamatan)->get());
+
     }
 }
