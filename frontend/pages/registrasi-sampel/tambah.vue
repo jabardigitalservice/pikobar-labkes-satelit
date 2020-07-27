@@ -18,15 +18,26 @@
                             Identitas Pengirim
                         </h4>
                         <p>Lengkapi Form dengan Identitas Pengirim</p>
+
                         <div class="form-group row mt-4">
-                            <label class="col-md-3 col-lg-2">Instansi Pengirim
-                                <span style="color:red">*</span>
+                            <label class="col-md-3 col-lg-2">Instansi Pengirim <span style="color:red">*</span>
                             </label>
                             <div class="col-md-8 col-lg-6">
-                                <input class="form-control" type="text" name="reg_instansi_pengirim" placeholder=""
-                                    v-model="form.reg_instansi_pengirim"
-                                    :class="{'is-invalid':form.errors.has('reg_instansi_pengirim')}" />
-                                <has-error :form="form" field="reg_instansi_pengirim" />
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim"
+                                        value="rumah_sakit" v-model="form.reg_fasyankes_pengirim" required>
+                                    <label class="form-check-label" for="fasyanrs">Rumah Sakit</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim"
+                                        value="dinkes" v-model="form.reg_fasyankes_pengirim" required>
+                                    <label class="form-check-label" for="fasyandinkes">Dinkes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim"
+                                        value="puskesmas" v-model="form.reg_fasyankes_pengirim" required>
+                                    <label class="form-check-label" for="fasyandinkes">Puskesmas</label>
+                                </div>
                             </div>
                         </div>
 
@@ -34,10 +45,11 @@
                             <label class="col-md-3 col-lg-2">Nama Rumah Sakit/Dinkes <span style="color:red">*</span>
                             </label>
                             <div class="col-md-8 col-lg-6">
-                                <input class="form-control" type="text" name="reg_instansi_pengirim_nama" placeholder=""
-                                    v-model="form.reg_instansi_pengirim_nama"
-                                    :class="{'is-invalid':form.errors.has('reg_instansi_pengirim_nama')}" />
-                                <has-error :form="form" field="reg_instansi_pengirim_nama" />
+                                <multiselect v-model="fasyankes" :options="optionFasyankes" track-by="nama" label="nama"
+                                    placeholder="Nama Rumah Sakit/Dinkes"
+                                    :class="{ 'is-invalid': form.errors.has('reg_fasyankes_id') }">
+                                </multiselect>
+                                <has-error :form="form" field="reg_fasyankes_id" />
                             </div>
                         </div>
 
@@ -197,32 +209,40 @@
 
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
-                                Kecamatan
+                                Provinsi
                             </label>
-                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kecamatan') }">
-                                <!-- <select class="form-control" type="text" name="reg_kecamatan" placeholder=""
-                                     v-model="form.reg_kecamatan" >
-                                    <option :value="item.id" :key="idx" v-for="(item,idx) in optionKecamatan">{{item.nama}}</option>
-                                </select> -->
-                                <input v-model="form.reg_kecamatan" class="form-control" type="text"
-                                    name="reg_kecamatan" />
-                                <has-error :form="form" field="reg_kecamatan" />
+                            <div class="col-md-8 col-lg-6">
+                                <multiselect v-model="provinsi" :options="optionProvinsi" track-by="nama" label="nama"
+                                    placeholder="Pilih Provinsi"
+                                    :class="{ 'is-invalid': form.errors.has('reg_provinsi') }">
+                                </multiselect>
+                                <has-error :form="form" field="reg_provinsi" />
                             </div>
                         </div>
-
 
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
                                 Kota / Kabupaten
-
                             </label>
-                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kota') }">
-                                <select class="form-control" type="text" name="reg_kota" placeholder=""
-                                    v-model="form.reg_kota">
-                                    <option :value="item.id" :key="idx" v-for="(item,idx) in optionKota">{{item.nama}}
-                                    </option>
-                                </select>
+                            <div class="col-md-8 col-lg-6">
+                                <multiselect v-model="kota" :options="optionKota" track-by="nama" label="nama"
+                                    placeholder="Pilih Kota / Kabupaten"
+                                    :class="{ 'is-invalid': form.errors.has('reg_kota') }">
+                                </multiselect>
                                 <has-error :form="form" field="reg_kota" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row mt-4">
+                            <label class="col-md-3 col-lg-2">
+                                Kecamatan
+                            </label>
+                            <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kecamatan') }">
+                                <multiselect v-model="kecamatan" :options="optionKecamatan" track-by="nama" label="nama"
+                                    placeholder="Pilih Kecamatan"
+                                    :class="{ 'is-invalid': form.errors.has('reg_kecamatan') }">
+                                </multiselect>
+                                <has-error :form="form" field="reg_kecamatan" />
                             </div>
                         </div>
 
@@ -232,12 +252,10 @@
                                 Kelurahan / Desa
                             </label>
                             <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kelurahan') }">
-                                <!-- <select class="form-control" type="text" name="reg_kelurahan" placeholder=""
-                                     v-model="form.reg_kelurahan" >
-                                    <option :value="item.id" :key="idx" v-for="(item,idx) in optionKelurahan">{{item.nama}}</option>
-                                </select> -->
-                                <input class="multisteps-form__input form-control" type="text" name="reg_kelurahan"
-                                    v-model="form.reg_kelurahan" />
+                                <multiselect v-model="kelurahan" :options="optionKelurahan" track-by="nama" label="nama"
+                                    placeholder="Pilih Kelurahan / Desa"
+                                    :class="{ 'is-invalid': form.errors.has('reg_kelurahan') }">
+                                </multiselect>
                                 <has-error :form="form" field="reg_kelurahan" />
                             </div>
                         </div>
@@ -390,15 +408,8 @@
         },
         data() {
             return {
-                optFasyankes: [],
                 form: new Form({
-                    reg_no: null,
-                    reg_instansi_pengirim: null,
-                    reg_instansi_pengirim_nama: null,
-                    reg_fasyankes_pengirim: null,
-                    reg_nama_rs_lainnya: null,
                     reg_fasyankes_id: null,
-                    reg_fasyankes_nama: null,
                     reg_kewarganegaraan: 'WNI',
                     reg_nama_pasien: null,
                     reg_nik: null,
@@ -411,23 +422,7 @@
                     reg_alamat: null,
                     reg_rt: null,
                     reg_rw: null,
-                    reg_keterangan: null,
-                    reg_gejpanas: null,
-                    reg_gejpenumonia: null,
-                    reg_gejbatuk: null,
-                    reg_gejnyeritenggorokan: null,
-                    reg_gejsesaknafas: null,
-                    reg_gejpilek: null,
-                    reg_gejlesu: null,
-                    reg_gejsakitkepala: null,
-                    reg_gejdiare: null,
-                    reg_gejmualmuntah: null,
-                    reg_gejlain: null,
                     reg_jk: null,
-                    reg_tanggalkunjungan: null,
-                    reg_kunke: null,
-                    reg_rsfasyankes: null,
-                    reg_sumberpasien_isian: null,
                     reg_usia_tahun: null,
                     reg_usia_bulan: null,
                     reg_sampel_namadiluarjenis: null,
@@ -436,48 +431,29 @@
                     reg_status: null,
                     reg_swab_ke: null,
                     reg_tanggal_swab: null,
-                    reg_sumber_pasien: null,
-
+                    reg_sumber_pasien: null
                 }),
-                selected_reg: {},
-                optionKota: [],
+                optionFasyankes: [],
+                optionProvinsi: [],
                 optionKecamatan: [],
                 optionKelurahan: [],
-                nik_tgl: null,
+                optionKota: [],
+                fasyankes: {},
+                provinsi: {},
+                kota: {},
+                kecamatan: {},
+                kelurahan: {},
             };
         },
         methods: {
             async changeFasyankes(tipe) {
-                // this.form.reg_nama_rs = null;
-                let tp = tipe == "Dinkes" ? "dinkes" : "rumah_sakit";
-                let resp = await axios.get('/v1/list-fasyankes-jabar?tipe=' + tp)
-                this.optFasyankes = resp.data;
-                this.optFasyankes.push({
-                    id: 9999,
-                    nama: 'Fasyankes Lainnya'
-                })
-            },
-            preventForm() {
-                return false;
-            },
-            getTimeNow() {
-                let h = ('' + new Date().getHours()).padStart(2, '0')
-                return h + ':' + ('' + new Date().getMinutes()).padStart(2, '0')
-            },
-            async getNoreg() {
-                let resp = await axios.get('/v1/register/noreg')
-                this.form.reg_no = resp.data
+                let resp = await axios.get('/v1/list-fasyankes-jabar?tipe=' + tipe)
+                this.optionFasyankes = resp.data;
             },
             initForm() {
                 this.form = new Form({
-                    reg_no: null,
-                    reg_fasyankes_pengirim: null,
-                    reg_instansi_pengirim: null,
-                    reg_instansi_pengirim_nama: null,
-                    reg_nama_rs_lainnya: null,
                     reg_fasyankes_id: null,
-                    reg_fasyankes_nama: null,
-                    reg_kewarganegaraan: null,
+                    reg_kewarganegaraan: 'WNI',
                     reg_nama_pasien: null,
                     reg_nik: null,
                     reg_tempatlahir: null,
@@ -489,22 +465,9 @@
                     reg_alamat: null,
                     reg_rt: null,
                     reg_rw: null,
-                    reg_keterangan: null,
-                    reg_gejpanas: null,
-                    reg_gejpenumonia: null,
-                    reg_gejbatuk: null,
-                    reg_gejnyeritenggorokan: null,
-                    reg_gejsesaknafas: null,
-                    reg_gejpilek: null,
-                    reg_gejlesu: null,
-                    reg_gejsakitkepala: null,
-                    reg_gejdiare: null,
-                    reg_gejmualmuntah: null,
-                    reg_gejlain: null,
                     reg_jk: null,
-                    reg_tanggalkunjungan: null,
-                    reg_kunke: null,
-                    reg_rsfasyankes: null,
+                    reg_usia_tahun: null,
+                    reg_usia_bulan: null,
                     reg_sampel_namadiluarjenis: null,
                     reg_sampel_jenis_sampel: null,
                     reg_sampel_nomor: null,
@@ -514,35 +477,21 @@
                     reg_sumber_pasien: null
                 })
             },
-            addSample() {
-                this.form.reg_sampel.push({
-                    nomor: null,
-                    sam_namadiluarjenis: null,
-                    sam_jenis_sampel: null,
-                })
+            async getProvinsi() {
+                const resp = await axios.get('/v1/list-provinsi/');
+                this.optionProvinsi = resp.data;
             },
-            // addSample() {
-            //     // console.log(this.form.reg_sampel)
-            //     this.form.reg_sampel.push({
-            //         nomor: ""
-            //     })
-            // },
-            removeSample(index) {
-                if (this.form.reg_sampel.length <= 1) {
-                    this.$toast.error('Jumlah sampel minimal satu', {
-                        duration: 5000
-                    })
-                    return false
-                } else {
-                    this.form.reg_sampel.splice(index, 1)
-                }
-            },
-            // removeSample(index) {
-            //     this.form.reg_sampel.splice(index, 1)
-            // },
-            async getKota() {
-                const resp = await axios.get('/v1/list-kota-jabar');
+            async getKota(provinsi) {
+                const resp = await axios.get('/v1/list-kota/' + provinsi);
                 this.optionKota = resp.data;
+            },
+            async getKecamatan(kabupaten) {
+                const resp = await axios.get('/v1/list-kecamatan/' + kabupaten);
+                this.optionKecamatan = resp.data;
+            },
+            async getKelurahan(kecamatan) {
+                const resp = await axios.get('/v1/list-kelurahan/' + kecamatan);
+                this.optionKelurahan = resp.data;
             },
             async submit() {
                 // Submit the form.
@@ -579,14 +528,9 @@
             };
         },
         created() {
-            this.getKota()
-            this.getNoreg();
-
+            this.getProvinsi()
         },
         watch: {
-            "form.reg_kota": function (newVal, oldVal) {
-
-            },
             "form.reg_nik": function (newVal, oldVal) {
                 if (newVal && newVal.length >= 12) {
                     let dd = parseInt(newVal.substr(6, 2))
@@ -602,12 +546,10 @@
                         let str = '' + (2000 + yy) + '-' + ('' + mm).padStart(2, '0') + '-' + ('' + dd).padStart(2,
                             '0')
                         this.form.reg_tgllahir = str
-                        this.nik_tgl = str
                     } else {
                         let str = '' + (1900 + yy) + '-' + ('' + mm).padStart(2, '0') + '-' + ('' + dd).padStart(2,
                             '0')
                         this.form.reg_tgllahir = str
-                        this.nik_tgl = str
                     }
                     this.$nextTick(() => {
                         this.$refs.tgl_lahir.init();
@@ -642,9 +584,44 @@
 
             },
             "form.reg_fasyankes_pengirim": function (newVal, oldVal) {
+                this.fasyankes = {};
+                this.form.reg_kota = null
                 this.changeFasyankes(this.form.reg_fasyankes_pengirim)
             },
+            "fasyankes": function (newVal, oldVal) {
+                this.form.reg_fasyankes_id = null
+                if (this.fasyankes) {
+                    this.form.reg_fasyankes_id = this.fasyankes.id
+                }
+            },
+            "kota": function (newVal, oldVal) {
+                this.form.reg_kota = null
+                if (this.kota) {
+                    this.form.reg_kota = this.kota.id
+                    this.getKecamatan(this.form.reg_kota);
+                }
+            },
+            "provinsi": function (newVal, oldVal) {
+                this.form.reg_provinsi = null
+                if (this.provinsi) {
+                    this.form.reg_provinsi = this.provinsi.id
+                    this.getKota(this.form.reg_provinsi);
+                }
 
+            },
+            "kecamatan": function (newVal, oldVal) {
+                this.form.reg_kecamatan = null
+                if (this.kecamatan) {
+                    this.form.reg_kecamatan = this.kecamatan.id
+                    this.getKelurahan(this.form.reg_kecamatan);
+                }
+            },
+            "kelurahan": function (newVal, oldVal) {
+                this.form.reg_kelurahan = null
+                if (this.kelurahan) {
+                    this.form.reg_kelurahan = this.kelurahan.id
+                }
+            },
         }
     };
 </script>
