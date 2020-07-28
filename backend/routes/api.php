@@ -146,6 +146,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
 
     Route::get('list-provinsi', 'KotaController@listProvinsi');
     Route::get('list-kota/{provinsi}', 'KotaController@listKota');
+    Route::get('list-kota-jabar', 'KotaController@listKota');
     Route::get('list-kecamatan/{kota}', 'KotaController@listKecamatan');
     Route::get('list-kelurahan/{kec}', 'KotaController@listKelurahan');
 

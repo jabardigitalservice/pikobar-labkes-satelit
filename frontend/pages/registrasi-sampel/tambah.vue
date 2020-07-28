@@ -58,7 +58,18 @@
                             Identitas Pasien
                         </h4>
                         <p>Lengkapi Form dengan Identitas Pasien</p>
-
+                        <div class="form-group row mt-4">
+                            <label class="col-md-3 col-lg-2">
+                                Pencarian
+                            </label>
+                            <div class="col-md-8 col-lg-6">
+                                <multiselect v-model="pencarian" :options="optionPencarian" track-by="name" label="name"
+                                    placeholder="Pilih NIK/Nama/No Telp" @search-change="asyncFind" :loading="isLoading"
+                                    :searchable="true" :internal-search="false" :clear-on-select="false"
+                                    :show-no-results="false" :hide-selected="true">
+                                </multiselect>
+                            </div>
+                        </div>
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
                                 Nama Pasien
@@ -103,7 +114,7 @@
                             <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_tgllahir') }">
                                 <dropdown-datepicker v-model="form.reg_tgllahir" :minYear="1900" :daySuffixes="false"
                                     :maxYear="(new Date).getFullYear()" displayFormat="dmy" sortYear="asc"
-                                    ref="tgl_lahir"
+                                    :default-date="form.reg_tgllahir" ref="tgl_lahir"
                                     :wrapper-class="form.errors.has('reg_tgllahir') ? 'is-invalid' : ''">
                                 </dropdown-datepicker>
                                 <has-error :form="form" field="reg_tgllahir" />
@@ -392,7 +403,6 @@
     import {
         mapGetters
     } from "vuex";
-
     export default {
         middleware: "auth",
         computed: mapGetters({
@@ -438,14 +448,27 @@
                 optionKecamatan: [],
                 optionKelurahan: [],
                 optionKota: [],
+                optionPencarian: [],
                 fasyankes: {},
                 provinsi: {},
                 kota: {},
                 kecamatan: {},
                 kelurahan: {},
+                wilayah: true,
+                pencarian: null,
+                pelaporan: null,
+                isLoading: false
             };
         },
         methods: {
+            async asyncFind(query) {
+                this.isLoading = true
+                if (query != '') {
+                    let resp = await axios.get('/v1/pelaporan/fetch?keyword=' + query);
+                    this.optionPencarian = resp.data.data.content
+                    this.isLoading = false
+                }
+            },
             async changeFasyankes(tipe) {
                 let resp = await axios.get('/v1/list-fasyankes-jabar?tipe=' + tipe)
                 this.optionFasyankes = resp.data;
@@ -474,23 +497,41 @@
                     reg_status: null,
                     reg_swab_ke: null,
                     reg_tanggal_swab: null,
-                    reg_sumber_pasien: null
+                    reg_sumber_pasien: null,
                 })
+                this.pencarian = null
+            },
+            async getPasien(pelaporan) {
+                if (pelaporan) {
+                    this.form.reg_nama_pasien = pelaporan.name;
+                    this.form.reg_usia_tahun = pelaporan.age;
+                    this.form.reg_nik = pelaporan.nik;
+                    this.form.reg_nohp = pelaporan.phone_number;
+                    this.form.reg_kewarganegaraan = pelaporan.nationality;
+                    this.form.reg_jk = pelaporan.gender;
+                    this.form.reg_tgllahir = pelaporan.birth_date;
+                    this.form.reg_status = pelaporan.status.toLowerCase();
+                    this.form.reg_alamat = pelaporan.address_detail;
+                    if (this.form.reg_tgllahir) {
+                        this.$refs.tgl_lahir.init();
+                    }
+                    console.log(pelaporan);
+                }
             },
             async getProvinsi() {
-                const resp = await axios.get('/v1/list-provinsi/');
+                let resp = await axios.get('/v1/list-provinsi/');
                 this.optionProvinsi = resp.data;
             },
             async getKota(provinsi) {
-                const resp = await axios.get('/v1/list-kota/' + provinsi);
+                let resp = await axios.get('/v1/list-kota/' + provinsi);
                 this.optionKota = resp.data;
             },
             async getKecamatan(kabupaten) {
-                const resp = await axios.get('/v1/list-kecamatan/' + kabupaten);
+                let resp = await axios.get('/v1/list-kecamatan/' + kabupaten);
                 this.optionKecamatan = resp.data;
             },
             async getKelurahan(kecamatan) {
-                const resp = await axios.get('/v1/list-kelurahan/' + kecamatan);
+                let resp = await axios.get('/v1/list-kelurahan/' + kecamatan);
                 this.optionKelurahan = resp.data;
             },
             async submit() {
@@ -504,7 +545,6 @@
                     })
                     // console.log('Response : ', response);
                     this.initForm();
-                    this.getNoreg();
                 } catch (err) {
                     if (err.response && err.response.data.code == 422) {
                         this.$nextTick(() => {
@@ -528,7 +568,7 @@
             };
         },
         created() {
-            this.getProvinsi()
+            this.getProvinsi();
         },
         watch: {
             "form.reg_nik": function (newVal, oldVal) {
@@ -585,7 +625,6 @@
             },
             "form.reg_fasyankes_pengirim": function (newVal, oldVal) {
                 this.fasyankes = {};
-                this.form.reg_kota = null
                 this.changeFasyankes(this.form.reg_fasyankes_pengirim)
             },
             "fasyankes": function (newVal, oldVal) {
@@ -594,22 +633,34 @@
                     this.form.reg_fasyankes_id = this.fasyankes.id
                 }
             },
+            "provinsi": function (newVal, oldVal) {
+                console.log(oldVal);
+                this.kota = {}
+                this.kecamatan = {}
+                this.kelurahan = {}
+                this.optionKota = [];
+                this.optionKecamatan = [];
+                this.optionKelurahan = [];
+                this.form.reg_provinsi = null
+                if (this.provinsi) {
+                    this.form.reg_provinsi = this.provinsi.id
+                    this.getKota(this.form.reg_provinsi);
+                }
+            },
             "kota": function (newVal, oldVal) {
+                this.kecamatan = {}
+                this.kelurahan = {}
+                this.optionKecamatan = [];
+                this.optionKelurahan = [];
                 this.form.reg_kota = null
                 if (this.kota) {
                     this.form.reg_kota = this.kota.id
                     this.getKecamatan(this.form.reg_kota);
                 }
             },
-            "provinsi": function (newVal, oldVal) {
-                this.form.reg_provinsi = null
-                if (this.provinsi) {
-                    this.form.reg_provinsi = this.provinsi.id
-                    this.getKota(this.form.reg_provinsi);
-                }
-
-            },
             "kecamatan": function (newVal, oldVal) {
+                this.kelurahan = {}
+                this.optionKelurahan = [];
                 this.form.reg_kecamatan = null
                 if (this.kecamatan) {
                     this.form.reg_kecamatan = this.kecamatan.id
@@ -620,6 +671,11 @@
                 this.form.reg_kelurahan = null
                 if (this.kelurahan) {
                     this.form.reg_kelurahan = this.kelurahan.id
+                }
+            },
+            "pencarian": function (newVal, oldVal) {
+                if (this.pencarian) {
+                    this.getPasien(this.pencarian);
                 }
             },
         }

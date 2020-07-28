@@ -12,12 +12,12 @@ class KotaController extends Controller
 {
     public function listProvinsi()
     {
-        return response()->json(Provinsi::all());
+        return response()->json(Provinsi::select('id', 'nama')->orderBy('nama')->get());
     }
 
-    public function listKota($provinsi)
+    public function listKota($provinsi = 32)
     {
-        return response()->json(Kota::whereProvinsiId($provinsi)->get());
+        return response()->json(Kota::select('id', 'nama')->orderBy('nama')->whereProvinsiId($provinsi)->get());
     }
 
     public function show(Kota $kota)
@@ -27,13 +27,13 @@ class KotaController extends Controller
 
     public function listKecamatan($kota)
     {
-        return response()->json(Kecamatan::whereKabupatenId($kota)->get());
+        return response()->json(Kecamatan::select('id', 'nama')->orderBy('nama')->whereKabupatenId($kota)->get());
 
     }
 
     public function listKelurahan($kecamatan)
     {
-        return response()->json(Kelurahan::whereKecamatanId($kecamatan)->get());
+        return response()->json(Kelurahan::select('id', 'nama')->orderBy('nama')->whereKecamatanId($kecamatan)->get());
 
     }
 }
