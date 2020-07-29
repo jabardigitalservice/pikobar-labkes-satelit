@@ -26,8 +26,8 @@ class StoreRegisterSampel extends FormRequest
     public function rules()
     {
         return [
-            'reg_instansi_pengirim' => 'required',
-            'reg_instansi_pengirim_nama' => 'required',
+            'reg_fasyankes_pengirim' => 'required',
+            'reg_nama_rs' => 'required',
             'reg_nama_pasien' => 'required',
             'reg_nik' => 'nullable|digits:16',
             'reg_sampel_jenis_sampel' => 'required',
@@ -38,8 +38,8 @@ class StoreRegisterSampel extends FormRequest
     public function messages()
     {
         return [
-            'reg_instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
-            'reg_instansi_pengirim_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
+            'reg_fasyankes_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
+            'reg_nama_rs.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
             'reg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
             'reg_nik.digits' => 'NIK terdiri dari :digits karakter',
             'reg_sampel_nomor.required' => 'Nomor Sampel tidak boleh kosong',

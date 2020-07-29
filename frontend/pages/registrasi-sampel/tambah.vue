@@ -58,18 +58,19 @@
                             Identitas Pasien
                         </h4>
                         <p>Lengkapi Form dengan Identitas Pasien</p>
-                        <div class="form-group row mt-4">
+                        <!-- Masih di pake yah -->
+                        <!-- <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
                                 Pencarian
                             </label>
                             <div class="col-md-8 col-lg-6">
                                 <multiselect v-model="pencarian" :options="optionPencarian" track-by="name" label="name"
-                                    placeholder="Pilih NIK/Nama/No Telp" @search-change="asyncFind" :loading="isLoading"
-                                    :searchable="true" :internal-search="false" :clear-on-select="false"
-                                    :show-no-results="false" :hide-selected="true">
+                                    placeholder="Cari berdasarkan NIK/Nama/No Telp" @search-change="asyncFind"
+                                    :loading="isLoadingPencarian" :searchable="true" :internal-search="false"
+                                    :clear-on-select="false" :show-no-results="false" :hide-selected="true">
                                 </multiselect>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
                                 Nama Pasien
@@ -149,20 +150,12 @@
                                         <input v-model="form.reg_jk" value="L" type="radio">
                                         <span><i></i>Laki-laki</span>
                                     </label>
-                                    <!-- <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" v-model="form.reg_jk"
-                                            value="L" />
-                                        Laki-laki</label> -->
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <label class="fancy-radio custom-color-green m-0 w-100">
                                         <input v-model="form.reg_jk" value="P" type="radio">
                                         <span><i></i>Perempuan</span>
                                     </label>
-                                    <!-- <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" v-model="form.reg_jk"
-                                            value="P" />
-                                        Perempuan</label> -->
                                 </div>
                                 <has-error :form="form" field="reg_jk" />
                             </div>
@@ -173,7 +166,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
                                 No. Telp / HP
-
                             </label>
                             <div class="col-md-8 col-lg-6">
                                 <input class="form-control" type="text" name="reg_nohp" placeholder=""
@@ -185,7 +177,6 @@
                         <div class="form-group row mt-4">
                             <label class="col-md-3 col-lg-2">
                                 Alamat
-
                             </label>
                             <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_alamat') }">
                                 <textarea class="multisteps-form__input form-control" type="text" name="reg_alamat"
@@ -238,7 +229,8 @@
                             <div class="col-md-8 col-lg-6">
                                 <multiselect v-model="kota" :options="optionKota" track-by="nama" label="nama"
                                     placeholder="Pilih Kota / Kabupaten"
-                                    :class="{ 'is-invalid': form.errors.has('reg_kota') }">
+                                    :class="{ 'is-invalid': form.errors.has('reg_kota') }" :loading="isLoadingKota"
+                                    :searchable="true">
                                 </multiselect>
                                 <has-error :form="form" field="reg_kota" />
                             </div>
@@ -251,7 +243,8 @@
                             <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kecamatan') }">
                                 <multiselect v-model="kecamatan" :options="optionKecamatan" track-by="nama" label="nama"
                                     placeholder="Pilih Kecamatan"
-                                    :class="{ 'is-invalid': form.errors.has('reg_kecamatan') }">
+                                    :class="{ 'is-invalid': form.errors.has('reg_kecamatan') }"
+                                    :loading="isLoadingKecamatan" :searchable="true">
                                 </multiselect>
                                 <has-error :form="form" field="reg_kecamatan" />
                             </div>
@@ -265,7 +258,8 @@
                             <div class="col-md-8 col-lg-6" :class="{ 'is-invalid': form.errors.has('reg_kelurahan') }">
                                 <multiselect v-model="kelurahan" :options="optionKelurahan" track-by="nama" label="nama"
                                     placeholder="Pilih Kelurahan / Desa"
-                                    :class="{ 'is-invalid': form.errors.has('reg_kelurahan') }">
+                                    :class="{ 'is-invalid': form.errors.has('reg_kelurahan') }"
+                                    :loading="isLoadingKelurahan" :searchable="true">
                                 </multiselect>
                                 <has-error :form="form" field="reg_kelurahan" />
                             </div>
@@ -420,15 +414,14 @@
             return {
                 form: new Form({
                     reg_fasyankes_id: null,
+                    reg_fasyankes_pengirim: null,
+                    reg_nama_rs: null,
                     reg_kewarganegaraan: 'WNI',
                     reg_nama_pasien: null,
                     reg_nik: null,
                     reg_tempatlahir: null,
                     reg_tgllahir: null,
                     reg_nohp: null,
-                    reg_kota: null,
-                    reg_kecamatan: null,
-                    reg_kelurahan: null,
                     reg_alamat: null,
                     reg_rt: null,
                     reg_rw: null,
@@ -441,7 +434,17 @@
                     reg_status: null,
                     reg_swab_ke: null,
                     reg_tanggal_swab: null,
-                    reg_sumber_pasien: null
+                    reg_sumber_pasien: null,
+                    reg_pelaporan_id: null,
+                    reg_pelaporan_id_case: null,
+                    reg_kode_provinsi: null,
+                    reg_nama_provinsi: null,
+                    reg_kode_kota: null,
+                    reg_nama_kota: null,
+                    reg_kode_kecamatan: null,
+                    reg_nama_kecamatan: null,
+                    reg_kode_kelurahan: null,
+                    reg_nama_kelurahan: null,
                 }),
                 optionFasyankes: [],
                 optionProvinsi: [],
@@ -449,24 +452,27 @@
                 optionKelurahan: [],
                 optionKota: [],
                 optionPencarian: [],
-                fasyankes: {},
-                provinsi: {},
-                kota: {},
-                kecamatan: {},
-                kelurahan: {},
+                fasyankes: null,
+                provinsi: null,
+                kota: null,
+                kecamatan: null,
+                kelurahan: null,
                 wilayah: true,
                 pencarian: null,
                 pelaporan: null,
-                isLoading: false
+                isLoadingPencarian: false,
+                isLoadingKota: false,
+                isLoadingKecamatan: false,
+                isLoadingKelurahan: false,
             };
         },
         methods: {
             async asyncFind(query) {
-                this.isLoading = true
+                this.isLoadingPencarian = true
                 if (query != '') {
                     let resp = await axios.get('/v1/pelaporan/fetch?keyword=' + query);
                     this.optionPencarian = resp.data.data.content
-                    this.isLoading = false
+                    this.isLoadingPencarian = false
                 }
             },
             async changeFasyankes(tipe) {
@@ -482,9 +488,6 @@
                     reg_tempatlahir: null,
                     reg_tgllahir: null,
                     reg_nohp: null,
-                    reg_kota: null,
-                    reg_kecamatan: null,
-                    reg_kelurahan: null,
                     reg_alamat: null,
                     reg_rt: null,
                     reg_rw: null,
@@ -498,6 +501,13 @@
                     reg_swab_ke: null,
                     reg_tanggal_swab: null,
                     reg_sumber_pasien: null,
+                    reg_sumber_pasien: null,
+                    reg_sumber_pasien: null,
+                    reg_sumber_pasien: null,
+                    reg_sumber_pasien: null,
+                    reg_sumber_pasien: null,
+                    reg_sumber_pasien: null,
+                    reg_sumber_pasien: null,
                 })
                 this.pencarian = null
             },
@@ -510,12 +520,36 @@
                     this.form.reg_kewarganegaraan = pelaporan.nationality;
                     this.form.reg_jk = pelaporan.gender;
                     this.form.reg_tgllahir = pelaporan.birth_date;
-                    this.form.reg_status = pelaporan.status.toLowerCase();
+                    this.form.reg_status = pelaporan.status.toLowerCase() || pelaporan.status;
                     this.form.reg_alamat = pelaporan.address_detail;
+                    this.form.reg_pelaporan_id = pelaporan.id;
+                    this.form.reg_pelaporan_id_case = pelaporan.id_case;
+                    this.form.reg_kode_kabupaten = pelaporan.address_district_code;
+                    this.form.reg_nama_kabupaten = pelaporan.address_district_name.toUpperCase() || pelaporan
+                        .address_district_name;
+                    this.form.reg_kode_kecamatan = pelaporan.address_village_code;
+                    this.form.reg_nama_kecamatan = pelaporan.address_subdistrict_name.toUpperCase() || pelaporan
+                        .address_subdistrict_name;
+                    this.form.reg_kode_kelurahan = pelaporan.address_village_code;
+                    this.form.reg_nama_kelurahan = pelaporan.address_village_name.toUpperCase() || pelaporan
+                        .address_village_name;
+
+                    this.kota = {
+                        id: pelaporan.address_district_code,
+                        nama: pelaporan.address_district_name.toUpperCase() || pelaporan.address_district_name
+                    };
+                    this.kecamatan = {
+                        id: pelaporan.address_subdistrict_code,
+                        nama: pelaporan.address_subdistrict_name.toUpperCase() || pelaporan
+                            .address_subdistrict_name
+                    };
+                    this.kelurahan = {
+                        id: pelaporan.address_village_code,
+                        nama: pelaporan.address_village_name.toUpperCase() || pelaporan.address_village_name
+                    };
                     if (this.form.reg_tgllahir) {
                         this.$refs.tgl_lahir.init();
                     }
-                    console.log(pelaporan);
                 }
             },
             async getProvinsi() {
@@ -523,16 +557,34 @@
                 this.optionProvinsi = resp.data;
             },
             async getKota(provinsi) {
-                let resp = await axios.get('/v1/list-kota/' + provinsi);
-                this.optionKota = resp.data;
+                this.isLoadingKota = true;
+                if (provinsi) {
+                    let resp = await axios.get('/v1/list-kota/' + provinsi);
+                    this.optionKota = resp.data;
+                    this.isLoadingKota = false;
+                } else {
+                    this.isLoadingKota = false;
+                }
             },
             async getKecamatan(kabupaten) {
-                let resp = await axios.get('/v1/list-kecamatan/' + kabupaten);
-                this.optionKecamatan = resp.data;
+                this.isLoadingKecamatan = true;
+                if (kabupaten) {
+                    let resp = await axios.get('/v1/list-kecamatan/' + kabupaten);
+                    this.optionKecamatan = resp.data;
+                    this.isLoadingKecamatan = false;
+                } else {
+                    this.isLoadingKecamatan = false;
+                }
             },
             async getKelurahan(kecamatan) {
-                let resp = await axios.get('/v1/list-kelurahan/' + kecamatan);
-                this.optionKelurahan = resp.data;
+                this.isLoadingKelurahan = true;
+                if (kecamatan) {
+                    let resp = await axios.get('/v1/list-kelurahan/' + kecamatan);
+                    this.optionKelurahan = resp.data;
+                    this.isLoadingKelurahan = false;
+                } else {
+                    this.isLoadingKelurahan = false;
+                }
             },
             async submit() {
                 // Submit the form.
@@ -624,53 +676,59 @@
 
             },
             "form.reg_fasyankes_pengirim": function (newVal, oldVal) {
-                this.fasyankes = {};
+                this.fasyankes = null;
+                this.form.reg_fasyankes_id = null
+                this.form.reg_nama_rs = null
                 this.changeFasyankes(this.form.reg_fasyankes_pengirim)
             },
             "fasyankes": function (newVal, oldVal) {
                 this.form.reg_fasyankes_id = null
                 if (this.fasyankes) {
                     this.form.reg_fasyankes_id = this.fasyankes.id
+                    this.form.reg_nama_rs = this.fasyankes.nama
                 }
             },
             "provinsi": function (newVal, oldVal) {
-                console.log(oldVal);
-                this.kota = {}
-                this.kecamatan = {}
-                this.kelurahan = {}
+                this.kota = null
+                this.kecamatan = null
+                this.kelurahan = null
                 this.optionKota = [];
                 this.optionKecamatan = [];
                 this.optionKelurahan = [];
-                this.form.reg_provinsi = null
+                this.form.reg_kode_provinsi = null
                 if (this.provinsi) {
-                    this.form.reg_provinsi = this.provinsi.id
-                    this.getKota(this.form.reg_provinsi);
+                    this.form.reg_kode_provinsi = this.provinsi.id
+                    this.form.reg_nama_provinsi = this.provinsi.nama
+                    this.getKota(this.form.reg_kode_provinsi);
                 }
             },
             "kota": function (newVal, oldVal) {
-                this.kecamatan = {}
-                this.kelurahan = {}
+                this.kecamatan = null
+                this.kelurahan = null
                 this.optionKecamatan = [];
                 this.optionKelurahan = [];
                 this.form.reg_kota = null
                 if (this.kota) {
-                    this.form.reg_kota = this.kota.id
-                    this.getKecamatan(this.form.reg_kota);
+                    this.form.reg_kode_kota = this.kota.id
+                    this.form.reg_nama_kota = this.kota.nama
+                    this.getKecamatan(this.form.reg_kode_kota);
                 }
             },
             "kecamatan": function (newVal, oldVal) {
-                this.kelurahan = {}
+                this.kelurahan = null
                 this.optionKelurahan = [];
-                this.form.reg_kecamatan = null
+                this.form.reg_kode_kecamatan = null
                 if (this.kecamatan) {
-                    this.form.reg_kecamatan = this.kecamatan.id
-                    this.getKelurahan(this.form.reg_kecamatan);
+                    this.form.reg_kode_kecamatan = this.kecamatan.id
+                    this.form.reg_nama_kecamatan = this.kecamatan.nama
+                    this.getKelurahan(this.form.reg_kode_kecamatan);
                 }
             },
             "kelurahan": function (newVal, oldVal) {
-                this.form.reg_kelurahan = null
+                this.form.reg_kode_kelurahan = null
                 if (this.kelurahan) {
-                    this.form.reg_kelurahan = this.kelurahan.id
+                    this.form.reg_kode_kelurahan = this.kelurahan.id
+                    this.form.reg_nama_kelurahan = this.kelurahan.nama
                 }
             },
             "pencarian": function (newVal, oldVal) {
