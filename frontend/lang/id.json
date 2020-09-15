@@ -3,6 +3,16 @@
     "path": {
       "settings": "Setting"
     },
+    "registrasi": {
+      "sampel": "Registrasi Sampel",
+      "index": {
+        "tambah": "Tambah Registrasi Baru",
+        "detail": "Detail Registrasi",
+        "update": "Edit Data Registrasi",
+        "import-excel": "Import Excel",
+        "export-excel": "Export Excel"
+      }
+    },
     "sample": {
       "index": "Penerimaan Sampel",
       "add": "Pengambilan / Penerimaan Sampel Baru"
@@ -140,8 +150,8 @@
     "show": "Tampilkan",
     "nodata_show": "Tidak ada data",
     "search": "Cari",
-    "number": "No",
-    "actions": "Aksi",
+    "number": "NO",
+    "actions": "AKSI",
     "previous": "Sebelumnya",
     "next": "Selanjutnya",
     "to": "Sampai"

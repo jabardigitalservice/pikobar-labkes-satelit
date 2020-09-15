@@ -37,16 +37,16 @@ const routes = [
     { path: '/registrasi/mandiri/export-excel', name: 'registrasi.mandiri.export-excel', component: page('registrasi-mandiri/export-excel.vue'), meta: { parentName: 'registrasi.mandiri' } },
     { path: '/registrasi/mandiri/import-excel', name: 'registrasi.mandiri.import-excel', component: page('registrasi-mandiri/import-excel.vue'), meta: { parentName: 'registrasi.mandiri' } },
     { path: '/registrasi/sampel', name: 'registrasi.sampel', component: page('registrasi-sampel/index.vue'), meta: { parentName: 'home' } },
-    { path: '/registrasi/sampel/tambah', name: 'registrasi.sampel.tambah', component: page('registrasi-sampel/tambah.vue'), meta: { parentName: 'registrasi.sampel' } },
+    { path: '/registrasi/sampel/tambah', name: 'registrasi.index.tambah', component: page('registrasi-sampel/tambah.vue'), meta: { parentName: 'registrasi.sampel' } },
     {
         path: '/registrasi/sampel/detail/:register_id/:pasien_id',
         name: 'registrasi.sampel.detail',
         component: page('registrasi-sampel/detail.vue'),
         meta: { parentName: 'registrasi.sampel' }
     },
-    { path: '/registrasi/sampel/update/:register_id/:pasien_id', name: 'registrasi.sampel.update', meta: { parentName: 'registrasi.sampel' }, component: page('registrasi-sampel/update.vue') },
-    { path: '/registrasi/sampel/export-excel', name: 'registrasi.sampel.export-excel', component: page('registrasi-sampel/export-excel.vue'), meta: { parentName: 'registrasi.sampel' } },
-    { path: '/registrasi/sampel/import-excel', name: 'registrasi.sampel.import-excel', component: page('registrasi-sampel/import-excel.vue'), meta: { parentName: 'registrasi.sampel' } },
+    { path: '/registrasi/sampel/update/:register_id/:pasien_id', name: 'registrasi.index.update', meta: { parentName: 'registrasi.sampel' }, component: page('registrasi-sampel/update.vue') },
+    { path: '/registrasi/sampel/export-excel', name: 'registrasi.index.export-excel', component: page('registrasi-sampel/export-excel.vue'), meta: { parentName: 'registrasi.sampel' } },
+    { path: '/registrasi/sampel/import-excel', name: 'registrasi.index.import-excel', component: page('registrasi-sampel/import-excel.vue'), meta: { parentName: 'registrasi.sampel' } },
 
     { path: '/registrasi/rujukan', name: 'registrasi.rujukan', component: page('registrasi-rujukan/index.vue'), meta: { parentName: 'home' } },
     { path: '/registrasi/rujukan/add/:nomor_sampel', name: 'registrasi.rujukan.add', component: page('registrasi-rujukan/add.vue'), meta: { parentName: 'home' } },

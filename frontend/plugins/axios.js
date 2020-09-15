@@ -3,8 +3,13 @@ import swal from 'sweetalert2'
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-export default ({ app, store, redirect }) => {
+export default ({
+  app,
+  store,
+  redirect
+}, inject) => {
   axios.defaults.baseURL = process.env.apiUrl
+  inject('axios', axios);
 
   if (process.server) {
     return
@@ -30,13 +35,15 @@ export default ({ app, store, redirect }) => {
 
   // Response interceptor
   axios.interceptors.response.use(response => response, (error) => {
-    const { status } = error.response || {}
+    const {
+      status
+    } = error.response || {}
 
     if (status == 403) {
       swal.fire(
-            "Terjadi kesalahan",
-            'This action is unauthorized',
-            "error"
+        "Terjadi kesalahan",
+        app.i18n.t('error_alert_author'),
+        "error"
       );
     }
 
@@ -62,7 +69,9 @@ export default ({ app, store, redirect }) => {
       }).then(() => {
         store.commit('auth/LOGOUT')
 
-        redirect({ name: 'login' })
+        redirect({
+          name: 'login'
+        })
       })
     }
 

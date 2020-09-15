@@ -1,53 +1,52 @@
 <template>
   <div class="wrapper wrapper-content">
     <portal to="title-name">Hasil Pemeriksaan</portal>
+    <portal to="title-action">
+      <div class="title-action">
+        <router-link to="/hasil-pemeriksaan/import-excel" class="btn btn-import-export">
+          <i class="fa fa-download" /> Import
+        </router-link>
+        <download-export-button :parentRefs="$refs" ajaxTableRef="verifikasi" class="btn btn-primary" />
+      </div>
+    </portal>
+
     <div class="row">
       <div class="col-lg-12">
         <filter-hasil-pemeriksaan :oid="`verifikasi`" />
       </div>
     </div>
+
     <div class="row">
       <div class="col-lg-12">
         <Ibox title="Sampel Hasil Pemeriksaan">
-          <div class="row mb-4">
-            <div class="col-md-12">
-              <download-export-button :parentRefs="$refs" ajaxTableRef="verifikasi"
-                class="btn btn-primary pull-right ml-1"></download-export-button>
-              <router-link to="/hasil-pemeriksaan/import-excel" class="btn btn-primary pull-right ">
-                <i class="fa fa-file-excel-o"></i> Import Excel
-              </router-link>
-            </div>
-
-          </div>
-
           <ajax-table ref="verifikasi" url="/v1/verifikasi/list" urlexport="/v1/verifikasi/export"
             :disableSort="['parameter_lab']" :oid="'verifikasi'" :params="params1" :config="{
-                    autoload: true,
-                    has_number: true,
-                    has_entry_page: true,
-                    has_pagination: true,
-                    has_action: true,
-                    has_search_input: true,
-                    custom_header: '',
-                    default_sort: 'waktu_pcr_sample_analyzed',
-                    default_sort_dir: 'desc',
-                    custom_empty_page: true,
-                    class: {
-                        table: [],
-                        wrapper: ['table-responsive'],
-                    }
-                    }" :rowtemplate="'tr-verifikasi'" :columns="{
-                      waktu_pcr_sample_analyzed: 'Tanggal Pemeriksaan',
-                      nomor_sampel : 'Nomor Sampel',
-                      pasien_nama : 'Nama Pasien',
-                      kota_domilisi: 'Kota Domisili',
-                      instansi_pengirim: 'Nama Rumah Sakit/Dinkes',
-                      parameter_lab: 'Parameter Lab',
-                      status: 'Status',
-                      sumber_pasien: 'Kategori',
-                      kesimpulan_pemeriksaan: 'Kesimpulan Pemeriksaan',
-                      catatat: 'Keterangan',
-                    }"></ajax-table>
+              autoload: true,
+              has_number: true,
+              has_entry_page: true,
+              has_pagination: true,
+              has_action: true,
+              has_search_input: true,
+              custom_header: '',
+              default_sort: 'waktu_pcr_sample_analyzed',
+              default_sort_dir: 'desc',
+              custom_empty_page: true,
+              class: {
+                table: [],
+                wrapper: ['table-responsive'],
+              }
+            }" :rowtemplate="'tr-verifikasi'" :columns="{
+              waktu_pcr_sample_analyzed: 'TANGGAL PEMERIKSAAN',
+              nomor_sampel : 'NO SAMPEL',
+              pasien_nama : 'NAMA PASIEN',
+              kota_domilisi: 'DOMISILI',
+              instansi_pengirim: 'INSTANSI',
+              parameter_lab: 'PARAMETER LAB',
+              status: 'STATUS',
+              sumber_pasien: 'KATEGORI',
+              kesimpulan_pemeriksaan: 'KESIMPULAN PEMERIKSAAN',
+              catatat: 'KETERANGAN',
+            }" />
         </Ibox>
       </div>
     </div>
@@ -83,35 +82,28 @@
       let listKota = await axios.get("/v1/list-kota-jabar");
       let listFasyankes = await axios.get("v1/list-fasyankes-jabar");
       let listKategori = await axios.get("v1/verifikasi/list-kategori");
-
       if (listKota.data) {
         listKota = listKota.data.map(function (kota, index) {
           let newKota = kota;
           newKota.name = kota.nama;
-
           return newKota;
         })
       }
-
       if (listFasyankes.data) {
         listFasyankes = listFasyankes.data.map(function (fasyan, index) {
           let newFasyankes = fasyan;
           newFasyankes.name = fasyan.nama;
-
           return newFasyankes;
         })
       }
-
       if (listKategori.data.data) {
         listKategori = listKategori.data.data.map(function (kategori, index) {
           let newKategori = kategori;
           newKategori.name = kategori.sumber_pasien;
           newKategori.id = kategori.sumber_pasien;
-
           return newKategori;
         })
       }
-
       return {
         listKota,
         listFasyankes,

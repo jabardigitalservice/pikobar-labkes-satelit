@@ -3,8 +3,8 @@
     <portal to="title-name">List Input Hasil</portal>
     <portal to="title-action">
       <div class="title-action">
-        <router-link to="/pcr/import-excel-hasil" class="btn btn-primary">
-          <i class="uil-file-download"></i> Import Input Hasil
+        <router-link to="/pcr/import-excel-hasil" class="btn btn-import-export">
+          <i class="fa fa-download" /> Import
         </router-link>
       </div>
     </portal>
@@ -17,27 +17,27 @@
       <div class="col-lg-12">
         <Ibox title="List Input Hasil">
           <ajax-table url="/v1/pcr/get-data" :oid="'pcr-analisis'" :params="params1" :disableSort="[]" :config="{
-                    autoload: true,
-                    has_number: true,
-                    has_entry_page: true,
-                    has_pagination: true,
-                    has_action: true,
-                    has_search_input: true,
-                    custom_header: '',
-                    default_sort: 'waktu_sample_taken',
-                    default_sort_dir:'desc',
-                    custom_empty_page: true,
-                    class: {
-                        table: [],
-                        wrapper: ['table-responsive'],
-                    }
-                    }" :rowtemplate="'tr-pcr-analisis'" :columns="{
-                      nomor_sampel : 'Nomor Sampel',
-                      nama_lengkap : 'Nama',
-                      nik : 'Nik Pasien',
-                      instansi_pengirim : 'Nama Rumah Sakit/Dinkes',
-                      waktu_sample_taken:'Waktu Diterima',
-                    }"></ajax-table>
+            autoload: true,
+            has_number: true,
+            has_entry_page: true,
+            has_pagination: true,
+            has_action: true,
+            has_search_input: true,
+            custom_header: '',
+            default_sort: 'waktu_sample_taken',
+            default_sort_dir:'desc',
+            custom_empty_page: true,
+            class: {
+              table: [],
+              wrapper: ['table-responsive'],
+            }
+          }" :rowtemplate="'tr-pcr-analisis'" :columns="{
+            nomor_sampel : 'NO SAMPEL',
+            nama_lengkap : 'NAMA',
+            nik : 'NIK',
+            instansi_pengirim : 'INSTANSI',
+            waktu_sample_taken:'WAKTU DITERIMA',
+          }" />
         </Ibox>
       </div>
     </div>
@@ -45,7 +45,6 @@
 </template>
 
 <script>
-  import axios from "axios";
   import {
     mapGetters
   } from "vuex";
