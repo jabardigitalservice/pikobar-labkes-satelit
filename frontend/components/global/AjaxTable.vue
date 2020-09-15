@@ -10,6 +10,7 @@
                         <option value="50">50</option>
                         <option value="100">100</option>
                         <option value="500">500</option>
+                        <option value="1000">1000</option>
                     </select>
                     Entri &nbsp;
                 </div>
@@ -357,7 +358,7 @@ export default {
             axios.get(that.url, {
                 params: {
                     page           : page,
-                    perpage        : that.config.show_all ? 99999999 : that.pagination.perpage,
+                    perpage        : that.pagination.perpage,
                     params         : that.params,
                     search         : that.search,
                     order          : that.sortColumn,
@@ -397,8 +398,8 @@ export default {
             axios({
                 url: that.urlexport,
                 params: {
-                    page           : 1,
-                    perpage        : 99999999,
+                    page           : that.pagination.page,
+                    perpage        : that.pagination.perpage,
                     params         : that.params,
                     search         : that.search,
                     order          : that.sortColumn,

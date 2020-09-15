@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Exports\RegisMandiriExport;
 use App\Models\Register;
-use App\Models\Sampel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -49,10 +48,6 @@ class Registrasisampel extends Controller
                         $models = $models->where('pasien.nama_lengkap', 'ilike', '%' . $val . '%')
                             ->orWhere('pasien.nik', 'ilike', '%' . $val . '%');
                         break;
-                    case "nomor_sampel":
-                        $sampel = Sampel::where('nomor_sampel', $val)->pluck('register_id');
-                        $models = $models->whereIn('register.id', $sampel);
-                        break;
                     case "start_date":
                         $models = $models->whereDate('sampel.waktu_sample_taken', '>=', date('Y-m-d', strtotime($val)));
                         break;
@@ -88,7 +83,7 @@ class Registrasisampel extends Controller
             }
 
             switch ($order) {
-                case 'nama_lengkap':
+                case 'nama_pasien':
                     $models = $models->orderBy('pasien.nama_lengkap', $order_direction);
                     break;
                 case 'tgl_input':
@@ -107,14 +102,13 @@ class Registrasisampel extends Controller
                     $models = $models->orderBy('register.sumber_pasien', $order_direction);
                     break;
                 case 'status':
-                    $models = $models->orderBy('register.status', $order_direction);
+                    $models = $models->orderBy('status', $order_direction);
                     break;
                 default:
                     break;
             }
         }
-        $models = $models->select('pasien.*', 'sampel.*', 'kota.nama as nama_kota', 'pasien_register.*', 'register.sumber_pasien',
-            'register.*');
+        $models = $models->select('nik', 'nama_lengkap', 'tanggal_lahir', 'usia_tahun', 'nomor_sampel', 'kota.nama as nama_kota', 'pasien_register.*', 'register.sumber_pasien', 'status', 'waktu_sample_taken');
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
         $result = [
