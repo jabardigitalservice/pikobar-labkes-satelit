@@ -1,39 +1,21 @@
 <template id="table-template">
-  <div>
-    <div v-bind:id="oid">
-      <div v-if="config.has_entry_page || config.has_search_input" style="margin-bottom: 15px">
-        <div class="form-inline d-flex justify-content-between" style="position: relative;min-height:35px;">
-          <div class="text-center text-sm-left mb-2 table-search" v-if="config.has_entry_page">
-            {{$t('title.show')}} &nbsp;
-            <select class="form-control-sm form-control w-auto input-s-sm inline" v-model="pagination.perpage"
-              v-on:change="changePage()">
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-              <option value="500">500</option>
-              <option value="1000">1000</option>
-            </select>
-            Entri &nbsp;
-          </div>
+  <div v-bind:id="oid">
+    <div v-if="config.has_entry_page || config.has_search_input" style="margin-bottom: 10px">
+      <div class="form-inline d-flex justify-content-between">
 
-          <div class="text-center text-sm-right table-search ml-md-2 mb-2 pl-2" v-if="config.has_search_input">
-            {{$t('title.search')}} &nbsp;<input placeholder="Search" v-model="search_input" @keyup="doSearchDebounce"
-              type="text" class="form-control form-control-sm">
-          </div>
+        <div class="form-group text-muted" v-if="config.has_search_input">
+          <input placeholder="Search" v-model="search_input" @keyup="doSearchDebounce"
+            type="text" class="form-control input-placeholder">
+            <span class="fa fa-search" style="position: absolute; margin-left: 10px" />
         </div>
-        <div class="clearfix"></div>
-      </div>
 
-      <div class="text-center text-sm-right table-search ml-md-2 mb-2 pl-2" v-if="config.has_search_input">
-        {{$t('title.search')}} &nbsp;<input placeholder="Search" v-model="search_input" @keyup="doSearchDebounce"
-          type="text" class="form-control form-control-sm">
       </div>
+      <div class="clearfix"></div>
     </div>
-    <div class="clearfix"></div>
+
     <div v-show="!showCustomEmptyPage" style="position:relative">
       <div v-bind:class="config.class.wrapper">
-        <table class="table table-bordered table-striped " v-bind:class="config.class.table">
+        <table class="table" v-bind:class="config.class.table">
           <thead v-bind:class="config.class.thead" v-if="!config.disable_header || config.has_search_header">
             <tr :is="config.custom_header" v-if="!config.disable_header && config.custom_header != ''" :sort="sort"
               :sort-column.sync="sortColumn" :sort-dir.sync="sortDir"></tr>
@@ -66,20 +48,20 @@
           </tfoot>
         </table>
       </div>
+      
       <div v-if="config.has_pagination && config.pagination_type == 'jumptopage'" style="margin-top: 10px;display: none"
         v-show="pagination.count > 0">
         <div class="row">
-          <div class="col-sm-6" style="line-height: 40px">
+          <div class="col-sm-8" style="line-height: 40px">
             <div class="pagination-summary">
-              {{ capitalize($t('common.entry')) }}&nbsp;{{ (pagination.page - 1) * pagination.perpage + 1
-                            }}&nbsp;{{ $t('title.to') }}&nbsp;{{
-                            Math.min(pagination.count, pagination.page * pagination.perpage) }} {{
-                            $t('common.from') }}&nbsp;{{
-                            pagination.count }}&nbsp;{{ $t('common.entry') }}&nbsp;({{
-                            pagination.total }} {{ $t('common.page') }})
+              {{ capitalize($t('common.entry')) }}&nbsp;{{ entriFrom }}&nbsp;
+              {{ $t('title.to') }}&nbsp;
+              {{ entriTo }}
+              {{ $t('common.from') }}&nbsp;{{ pagination.count }}&nbsp;
+              {{ $t('common.entry') }}&nbsp;({{ pagination.total }} {{ $t('common.page') }})
             </div>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-4">
             <div class="text-right form-group pagination-summary">
               {{ capitalize($t('common.page')) }} &nbsp;
               <!--first page button-->
@@ -99,15 +81,24 @@
         </div>
         <div class="clearfix"></div>
       </div>
+
       <div v-else-if="config.has_pagination && pagination.count > 0" class="row pagination-wrapper">
         <div class="col-sm-12 col-md-5" style="margin-top: 10px;">
           <div class="paging_info">
-            {{ capitalize($t('common.entry')) }}&nbsp;{{ (pagination.page - 1) * pagination.perpage + 1
-                        }}&nbsp;{{ $t('title.to') }}&nbsp;{{
-                        Math.min(pagination.count, pagination.page * pagination.perpage) }} {{
-                        $t('common.from') }}&nbsp;{{
-                        pagination.count }}&nbsp;{{ $t('common.entry') }}&nbsp;({{
-                        pagination.total }} {{ $t('common.page') }})
+          <select class="form-control-sm form-control w-auto input-s-sm inline" v-model="pagination.perpage"
+            v-on:change="changePage()" v-if="config.has_entry_page">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>&nbsp;&nbsp;
+            {{ capitalize($t('common.entry')) }}&nbsp;{{ entriFrom }}&nbsp;
+            {{ $t('title.to') }}&nbsp;
+            {{ entriTo }}
+            {{ $t('common.from') }}&nbsp;
+            {{ pagination.count }}&nbsp;{{ $t('common.entry') }}&nbsp;({{ pagination.total }} {{ $t('common.page') }})
           </div>
         </div>
         <div class="col-sm-12 col-md-7" style="margin-top: 10px;" v-if="pagination.total > 1">
@@ -128,10 +119,10 @@
                 <a href="#" class="page-link" v-on:click="paginate('next')">{{ $t('title.next') }}</a>
               </li>
             </ul>
-            <!-- .page-numbers -->
           </div>
         </div>
       </div>
+
       <div class="dimmed" v-if="isLoading">
         <div class="loading-indicator">
           <img src="~/assets/img/loading.gif" width="48" height="48">
@@ -241,10 +232,7 @@
 </style>
 
 <script>
-  import axios from 'axios'
   import Sorter from './Sorter'
-  // import eventHub from '~/plugins/event-bus'
-  // Load store modules dynamically.
   const requireContext = require.context('./table-row', false, /.*\.vue$/)
 
   var modules = requireContext.keys()
@@ -358,7 +346,7 @@
       getData(page) {
         var that = this;
         that.isLoading = true;
-        axios.get(that.url, {
+        this.$axios.get(that.url, {
           params: {
             page: page,
             perpage: that.pagination.perpage,
@@ -399,7 +387,7 @@
         var that = this;
         that.isLoadingExp = true;
         this.$bus.$emit('download-export', 'start', this.oid);
-        axios({
+        this.$axios({
           url: that.urlexport,
           params: {
             page: that.pagination.page,
@@ -471,6 +459,12 @@
           no += 1;
         }
         return arr;
+      },
+      entriFrom: function () {
+        return (this.pagination.page - 1) * this.pagination.perpage + 1;
+      },
+      entriTo: function () {
+        return Math.min(this.pagination.count, this.pagination.page * this.pagination.perpage);
       },
     },
     events: {

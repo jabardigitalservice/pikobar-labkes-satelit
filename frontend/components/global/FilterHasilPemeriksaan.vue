@@ -139,6 +139,10 @@
         this.params.status = null;
         this.kota = null;
         this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
+      },
+      onDateSelected: function (daterange) {
+        this.params.start_date = daterange.start || null;
+        this.params.end_date = daterange.end || null;
       }
     },
     mounted() {},

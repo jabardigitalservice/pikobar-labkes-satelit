@@ -3,9 +3,9 @@
     <portal to="title-name">Hasil Pemeriksaan</portal>
     <portal to="title-action">
       <div class="title-action">
-        <router-link to="/hasil-pemeriksaan/import-excel" class="btn btn-import-export">
+        <button tag="button" class="btn btn-import-export" data-toggle="modal" data-target="#importHasil">
           <i class="fa fa-download" /> Import
-        </router-link>
+        </button>
         <download-export-button :parentRefs="$refs" ajaxTableRef="verifikasi" class="btn btn-primary" />
       </div>
     </portal>
@@ -50,12 +50,35 @@
         </Ibox>
       </div>
     </div>
+
+    <custom-modal modal_id="importHasil" title="Import Data">
+      <div slot="body">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <label for="register_file">
+              Upload an .xlsx file
+            </label>
+            <input class="form-control" type="file" id="register_file" ref="myFile" @change="previewFile">
+          </div>
+          <div class="form-group">
+            <button @click="doImport()" :disabled="loading" :class="{'btn-loading': loading}"
+              class="btn btn-md btn-primary block m-b" type="button">
+              <i class="fa fa-check" /> Import Excel
+            </button>
+          </div>
+        </div>
+      </div>
+    </custom-modal>
+
   </div>
 </template>
 
 <script>
   import axios from "axios";
   import Form from "vform";
+  import $ from "jquery";
+  import CustomModal from "~/components/CustomModal";
+  const JQuery = $;
   var debounce = require('lodash/debounce')
 
   export default {
@@ -63,8 +86,13 @@
     meta: {
       allow_role_id: [8]
     },
+    components: {
+      CustomModal,
+    },
     data() {
       return {
+        loading: false,
+        dataError: [],
         params1: {
           fasyankes: "",
           kota_domisili: "",
@@ -79,6 +107,9 @@
       route,
       store
     }) {
+      let form = new Form({
+        register_file: null
+      });
       let listKota = await axios.get("/v1/list-kota-jabar");
       let listFasyankes = await axios.get("v1/list-fasyankes-jabar");
       let listKategori = await axios.get("v1/verifikasi/list-kategori");
@@ -105,6 +136,7 @@
         })
       }
       return {
+        form,
         listKota,
         listFasyankes,
         listKategori
@@ -136,12 +168,10 @@
       async onExport(type) {
         try {
           this.loading = true;
-
           let form = new Form({
             ...this.params1,
             type: type
           })
-
           axios({
             url: process.env.apiUrl + "/v1/verifikasi/export-excel",
             params: form,
@@ -168,16 +198,6 @@
             window.URL.revokeObjectURL(url);
             this.isLoadingExp = false;
           });
-
-
-          // this.$toast.success(response.data.message, {
-          //   icon: "check",
-          //   iconPack: "fontawesome",
-          //   duration: 5000
-          // });
-
-          // this.$router.back()
-
         } catch (err) {
           if (err.response && err.response.data.code == 422) {
             this.$nextTick(() => {
@@ -201,6 +221,55 @@
       refreshDebounce: debounce(function () {
         this.$bus.$emit('refresh-ajaxtable', 'verifikasi')
       }, 500),
+      async doImport() {
+        let formData = new FormData();
+        formData.append('register_file', this.form.register_file);
+        this.loading = true;
+        JQuery('#importHasil').modal('hide');
+        try {
+          await axios.post(process.env.apiUrl + "/v1/register/import-hasil-pemeriksaan", formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+          this.$toast.success('Sukses import data', {
+            icon: "check",
+            iconPack: "fontawesome",
+            duration: 5000
+          });
+        } catch (err) {
+          if (err.response && err.response.data.code == 422) {
+            for (const property in err.response.data.error) {
+              this.$toast.error(err.response.data.error[property][0], {
+                icon: "times",
+                iconPack: "fontawesome",
+                duration: 5000
+              });
+            }
+          }
+          if (err.response && err.response.data.code == 403) {
+            this.$toast.error(err.response.data.error, {
+              icon: "times",
+              iconPack: "fontawesome",
+              duration: 5000
+            });
+          }
+          if (err.response && err.response.data.code == 500) {
+            this.$swal.fire(
+              "Terjadi kesalahan",
+              "Silakan hubungi Admin",
+              "error"
+            );
+          }
+        }
+        this.$bus.$emit('refresh-ajaxtable', 'verifikasi');
+        $('#register_file').val('');
+        this.form.reset();
+        this.loading = false;
+      },
+      previewFile() {
+        this.form.register_file = this.$refs.myFile.files[0]
+      }
     }
   };
 </script>

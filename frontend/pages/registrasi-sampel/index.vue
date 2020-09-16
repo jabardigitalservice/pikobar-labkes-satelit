@@ -72,23 +72,6 @@
       </div>
     </custom-modal>
 
-    <custom-modal modal_id="modalErrorMessage" title="Import Registrasi Error">
-      <div slot="body">
-        <div class="row">
-          <div class="form-group">
-            <div v-for="item in dataError" :key="item.id">
-              {{ item.message }}
-            </div>
-          </div>
-        </div>
-        <div class="row pull-right">
-          <button class="btn btn-md btn-danger" type="button" data-dismiss="modal">
-            OK
-          </button>
-        </div>
-      </div>
-    </custom-modal>
-
   </div>
 </template>
 
@@ -142,13 +125,13 @@
         let formData = new FormData();
         formData.append('register_file', this.form.register_file);
         this.loading = true;
+        JQuery('#importRM').modal('hide');
         try {
-          await this.$axios.post(`${process.env.apiUrl}/v1/register/import-mandiri`, formData, {
+          await this.$axios.post(`${process.env.apiUrl}/v1/register/import-sampel`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           });
-          JQuery('#importRM').modal('hide');
           this.$toast.success('Sukses import data', {
             icon: "check",
             iconPack: "fontawesome",
@@ -156,16 +139,15 @@
           });
         } catch (err) {
           if (err.response && err.response.data.code == 422) {
-            let errMessageArr = []
             for (const property in err.response.data.error) {
-              errMessageArr.push({
-                id: property,
-                message: err.response.data.error[property][0],
+              this.$toast.error(err.response.data.error[property][0], {
+                icon: "times",
+                iconPack: "fontawesome",
+                duration: 5000
               });
             }
-            this.dataError = errMessageArr;
-            JQuery('#modalErrorMessage').modal('show');
           }
+
           if (err.response && err.response.data.code == 403) {
             this.$toast.error(err.response.data.error, {
               icon: "times",
@@ -173,6 +155,7 @@
               duration: 5000
             });
           }
+
           if (err.response && err.response.data.code == 500) {
             this.$swal.fire(
               "Terjadi kesalahan",
@@ -181,12 +164,17 @@
             );
           }
         }
+        
+        this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
+
         $('#register_file').val('');
         this.form.reset();
+        this.form.register_file = null;
         this.loading = false;
       },
       previewFile() {
-        this.form.register_file = this.$refs.myFile.files[0];
+        this.form.register_file = this.$refs.myFile.files[0]
+
       }
     }
   }
