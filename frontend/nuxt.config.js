@@ -90,7 +90,7 @@ module.exports = {
   ],
 
   sentry: {
-    dsn: '', // Enter your project's DSN here
+    dsn: process.env.SENTRY_LARAVEL_DSN, // Enter your project's DSN here
     config: {}, // Additional config
   },
 

@@ -151,8 +151,9 @@ class VerifikasiController extends Controller
     public function export(Request $request)
     {
         $models = $this->index($request, true);
+        $no = (int)($request->get('page', 1) - 1) * $request->get('perpage', 500) + 1;
         foreach ($models as $idx => &$model) {
-            $model->no = $idx + 1;
+            $model->no = $no++;
         }
         $header = [
             'No',

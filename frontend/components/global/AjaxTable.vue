@@ -1,27 +1,36 @@
 <template id="table-template">
-  <div v-bind:id="oid">
-    <div v-if="config.has_entry_page || config.has_search_input" style="margin-bottom: 15px">
-      <div class="form-inline d-flex justify-content-between" style="position: relative;min-height:35px;">
-        <div class="text-center text-sm-left mb-2 table-search" v-if="config.has_entry_page">
-          {{$t('title.show')}} &nbsp;
-          <select class="form-control-sm form-control w-auto input-s-sm inline" v-model="pagination.perpage"
-            v-on:change="changePage()">
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-            <option value="500">500</option>
-          </select>
-          Entri &nbsp;
-        </div>
+  <div>
+    <div v-bind:id="oid">
+      <div v-if="config.has_entry_page || config.has_search_input" style="margin-bottom: 15px">
+        <div class="form-inline d-flex justify-content-between" style="position: relative;min-height:35px;">
+          <div class="text-center text-sm-left mb-2 table-search" v-if="config.has_entry_page">
+            {{$t('title.show')}} &nbsp;
+            <select class="form-control-sm form-control w-auto input-s-sm inline" v-model="pagination.perpage"
+              v-on:change="changePage()">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="500">500</option>
+              <option value="1000">1000</option>
+            </select>
+            Entri &nbsp;
+          </div>
 
-        <div class="text-center text-sm-right table-search ml-md-2 mb-2 pl-2" v-if="config.has_search_input">
-          {{$t('title.search')}} &nbsp;<input placeholder="Search" v-model="search_input" @keyup="doSearchDebounce"
-            type="text" class="form-control form-control-sm">
+          <div class="text-center text-sm-right table-search ml-md-2 mb-2 pl-2" v-if="config.has_search_input">
+            {{$t('title.search')}} &nbsp;<input placeholder="Search" v-model="search_input" @keyup="doSearchDebounce"
+              type="text" class="form-control form-control-sm">
+          </div>
         </div>
+        <div class="clearfix"></div>
       </div>
-      <div class="clearfix"></div>
+
+      <div class="text-center text-sm-right table-search ml-md-2 mb-2 pl-2" v-if="config.has_search_input">
+        {{$t('title.search')}} &nbsp;<input placeholder="Search" v-model="search_input" @keyup="doSearchDebounce"
+          type="text" class="form-control form-control-sm">
+      </div>
     </div>
+    <div class="clearfix"></div>
     <div v-show="!showCustomEmptyPage" style="position:relative">
       <div v-bind:class="config.class.wrapper">
         <table class="table table-bordered table-striped " v-bind:class="config.class.table">
@@ -343,11 +352,6 @@
           this.changePage();
         }
       },
-      doSearch() {
-        this.search = this.search_input;
-        this.pagination.page = 1;
-        this.changePage();
-      },
       doSearchDebounce: debounce(function () {
         this.doSearch();
       }, 500),
@@ -357,7 +361,7 @@
         axios.get(that.url, {
           params: {
             page: page,
-            perpage: that.config.show_all ? 99999999 : that.pagination.perpage,
+            perpage: that.pagination.perpage,
             params: that.params,
             search: that.search,
             order: that.sortColumn,
@@ -398,8 +402,8 @@
         axios({
           url: that.urlexport,
           params: {
-            page: 1,
-            perpage: 99999999,
+            page: that.pagination.page,
+            perpage: that.pagination.perpage,
             params: that.params,
             search: that.search,
             order: that.sortColumn,
@@ -501,16 +505,12 @@
     },
     created() {
       var that = this;
-      // console.log('Event Hub : ',eventHub);
       this.$bus.$on('refresh-ajaxtable', this.doRefresh)
       this.$bus.$on('refresh-ajaxtable2', this.doRefresh2)
-
-      // eventHub.$on('refresh-ajaxtable', this.doRefresh)
     },
     beforeDestroy() {
       this.$bus.$off('refresh-ajaxtable', this.doRefresh)
       this.$bus.$off('refresh-ajaxtable2', this.doRefresh2)
-      // eventHub.$off('refresh-ajaxtable', this.doRefresh)
     },
     mounted() {
       var that = this;
