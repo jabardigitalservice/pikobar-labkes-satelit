@@ -5,8 +5,8 @@
     </portal>
     <portal to="title-action">
       <div class="title-action">
-        <nuxt-link tag="a" :to="`/registrasi/sampel/update/${registerId}/${pasienId}`" class="btn btn-import-export"><i
-            class="fa fa-pencil" /> Perbarui Data
+        <nuxt-link tag="a" :to="`/registrasi/sampel/update/${registerId}/${pasienId}`" class="btn btn-import-export">
+          <i class="fa fa-pencil" /> Perbarui Data
         </nuxt-link>
         <nuxt-link to="/registrasi/sampel" class="btn btn-black">
           <i class="uil-arrow-left" /> Kembali
@@ -34,7 +34,7 @@
             </div>
           </div>
         </Ibox>
-        
+
         <Ibox title="Identitas Pasien">
           <div class="form-group row">
             <div class="col-md-5 text-blue flex-text-center">
@@ -146,7 +146,7 @@
             </div>
           </div>
         </Ibox>
-        
+
         <Ibox title="Identitas Sampel">
           <div class="form-group row">
             <div class="col-md-5 text-blue flex-text-center">
