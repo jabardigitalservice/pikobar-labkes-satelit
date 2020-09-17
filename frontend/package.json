@@ -24,6 +24,7 @@
     "js-cookie": "^2.2.1",
     "metismenu": "^3.0.6",
     "metismenujs": "^1.1.0",
+    "moment": "^2.27.0",
     "nuxt": "^2.11.0",
     "nuxt-dropzone": "^1.0.4",
     "nuxt-matomo": "^1.2.3",
@@ -38,7 +39,8 @@
     "vue-multiselect": "^2.1.6",
     "vue-select": "^3.10.3",
     "vue-sidebar-menu": "^4.5.3",
-    "vuejs-datepicker": "^1.6.2"
+    "vuejs-datepicker": "^1.6.2",
+    "vue-rangedate-picker": "^1.0.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^1.1.2",
