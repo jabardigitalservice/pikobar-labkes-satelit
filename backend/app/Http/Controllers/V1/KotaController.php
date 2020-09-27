@@ -27,7 +27,7 @@ class KotaController extends Controller
 
     public function listKecamatan($kota)
     {
-        return response()->json(Kecamatan::select('id', 'nama')->orderBy('nama')->whereKabupatenId($kota)->get());
+        return response()->json(Kecamatan::select('id', 'nama')->orderBy('nama')->whereKotaId($kota)->get());
 
     }
 
