@@ -20,16 +20,27 @@
                 Instansi Pengirim
                 <span style="color:red">*</span>
               </div>
-              <div class="col-md-8" :class="{ 'is-invalid': form.errors.has('reg_instansi_pengirim') }">
-                <input class="form-control" type="text" name="reg_instansi_pengirim" placeholder
-                  v-model="form.reg_instansi_pengirim"
-                  :class="{'is-invalid':form.errors.has('reg_instansi_pengirim')}" />
-                <has-error :form="form" field="reg_instansi_pengirim" />
+              <div class="col-md-8" :class="{ 'is-invalid': form.errors.has('reg_fasyankes_pengirim') }">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" value="rumah_sakit"
+                    v-model="form.reg_fasyankes_pengirim" required>
+                  <label class="form-check-label" for="fasyanrs">Rumah Sakit</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" value="dinkes"
+                    v-model="form.reg_fasyankes_pengirim" required>
+                  <label class="form-check-label" for="fasyandinkes">Dinkes</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" value="puskesmas"
+                    v-model="form.reg_fasyankes_pengirim" required>
+                  <label class="form-check-label" for="fasyandinkes">Puskesmas</label>
+                </div>
               </div>
             </div>
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
-                Nama Rumah Sakit/Dinkes
+                Nama Fasyankes
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8" :class="{ 'is-invalid': form.errors.has('reg_instansi_pengirim_nama') }">

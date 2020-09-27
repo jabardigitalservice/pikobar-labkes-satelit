@@ -40,7 +40,7 @@
             </div>
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
-                Nama Rumah Sakit/Dinkes
+                Nama Fasyankes
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8" :class="{ 'is-invalid': form.errors.has('reg_fasyankes_id') }">
@@ -244,11 +244,8 @@
               <div class="col-md-8" :class="{ 'is-invalid': form.errors.has('reg_status') }">
                 <select v-model="form.reg_status" class="multisteps-form__input form-control col-md-8 col-lg-6"
                   name="reg_status">
-                  <option value="otg">OTG</option>
-                  <option value="odp">ODP</option>
-                  <option value="pdp">PDP</option>
-                  <option value="positif">Positif</option>
-                  <option value="tanpa status">Tanpa Status</option>
+                  <option v-for="index in pasien_status_option" v-bind:key="index.value" :value="index.value">
+                    {{index.text}}</option>
                 </select>
                 <has-error :form="form" field="reg_status" />
               </div>
@@ -355,6 +352,9 @@
   import {
     mapGetters
   } from "vuex";
+  import {
+    pasienStatus
+  } from '~/assets/js/constant/enum';
   export default {
     middleware: "auth",
     computed: mapGetters({
@@ -422,6 +422,7 @@
         isLoadingKota: false,
         isLoadingKecamatan: false,
         isLoadingKelurahan: false,
+        pasien_status_option: pasienStatus,
       };
     },
     methods: {
