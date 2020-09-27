@@ -13,7 +13,7 @@ class CreateKeldes extends Migration
      */
     public function up()
     {
-        Schema::create('keldes', function (Blueprint $table) {
+        Schema::create('kelurahan', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
             $table->integer('kecamatan_id');
