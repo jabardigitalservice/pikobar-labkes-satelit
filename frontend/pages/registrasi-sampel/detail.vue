@@ -22,7 +22,7 @@
               Instansi Pengirim
             </div>
             <div class="col-md-7 flex-text-center">
-              {{data.instansi_pengirim || null}}
+              {{data.reg_fasyankes_pengirim || null}}
             </div>
           </div>
           <div class="form-group row">
@@ -30,7 +30,7 @@
               Nama Rumah Sakit/Dinkes
             </div>
             <div class="col-md-7 flex-text-center">
-              {{data.instansi_pengirim_nama || null}}
+              {{data.reg_nama_rs || null}}
             </div>
           </div>
         </Ibox>
@@ -110,7 +110,7 @@
               Kota / Kabupaten
             </div>
             <div class="col-md-7 flex-text-center">
-              {{data.nama_kota || null}}
+              {{data.reg_nama_kota || null}}
             </div>
           </div>
           <div class="form-group row">
@@ -118,7 +118,7 @@
               Kecamatan
             </div>
             <div class="col-md-7 flex-text-center">
-              {{data.reg_kecamatan || null}}
+              {{data.reg_nama_kecamatan || null}}
             </div>
           </div>
           <div class="form-group row">
@@ -126,7 +126,7 @@
               Kelurahan/Desa
             </div>
             <div class="col-md-7 flex-text-center">
-              {{data.reg_kelurahan || null}}
+              {{data.reg_nama_kelurahan || null}}
             </div>
           </div>
           <div class="form-group row">
