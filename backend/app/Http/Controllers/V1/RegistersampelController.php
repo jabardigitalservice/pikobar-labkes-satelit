@@ -58,6 +58,8 @@ class RegistersampelController extends Controller
             $pasien->kode_provinsi = $request->get('reg_kode_provinsi');
             $pasien->nama_provinsi = $request->get('reg_nama_provinsi');
             $pasien->kota_id = $request->get('reg_kode_kota');
+            $pasien->kecamatan = $request->get('reg_nama_kecamatan');
+            $pasien->kelurahan = $request->get('reg_nama_kelurahan');
             $pasien->kode_kabupaten = $request->get('reg_kode_kota');
             $pasien->nama_kabupaten = $request->get('reg_nama_kota');
             $pasien->kode_kecamatan = $request->get('reg_kode_kecamatan');
@@ -123,23 +125,28 @@ class RegistersampelController extends Controller
         try {
             $register = Register::where('id', $regis_id)->first();
             $pasien = Pasien::where('id', $pasien_id)->first();
+            $sampel = Sampel::where('register_id', $regis_id)->first();
+            $pengambilan_sampel = PengambilanSampel::where('id', $sampel->pengambilan_sampel_id)->first();
+
             $user = Auth::user();
 
             $register->register_uuid = (string)Str::uuid();
             $register->creator_user_id = $user->id;
-            $register->instansi_pengirim = $request->get('reg_instansi_pengirim');
-            $register->instansi_pengirim_nama = $request->get('reg_instansi_pengirim_nama');
+            $register->lab_satelit_id = $user->lab_satelit_id;
+            $register->fasyankes_id = $request->get('reg_fasyankes_id');
+            $register->fasyankes_pengirim = $request->get('reg_fasyankes_pengirim');
+            $register->nama_rs = $request->get('reg_nama_rs');
+            $register->instansi_pengirim_nama = $request->get('reg_nama_rs');
+            $register->instansi_pengirim = $request->get('reg_fasyankes_pengirim');
+            $register->sumber_pasien = $request->get('reg_sumber_pasien');
             $register->status = $request->get('reg_status');
             $register->swab_ke = $request->get('reg_swab_ke');
-            $register->sumber_pasien = $request->get('reg_sumber_pasien');
             if ($request->get('reg_tanggal_swab') != '') {
                 $register->tanggal_swab = date('Y-m-d', strtotime($request->get('reg_tanggal_swab')));
             }
-
             if ($register->nomor_register == null) {
                 $register->nomor_register = generateNomorRegister();
             }
-
             $register->save();
 
             $pasien->nama_lengkap = $request->get('reg_nama_pasien');
@@ -148,29 +155,34 @@ class RegistersampelController extends Controller
             $pasien->tempat_lahir = $request->get('reg_tempatlahir');
             if ($request->get('reg_tgllahir') != null) {
                 $pasien->tanggal_lahir = date('Y-m-d', strtotime($request->get('reg_tgllahir')));
-            } else {
-                $pasien->tanggal_lahir = $request->get('reg_tgllahir');
             }
             $pasien->no_hp = $request->get('reg_nohp');
-            $pasien->kota_id = $request->get('reg_kota');
-            $pasien->kecamatan = $request->get('reg_kecamatan');
-            $pasien->kelurahan = $request->get('reg_kelurahan');
+            $pasien->kode_provinsi = $request->get('reg_kode_provinsi');
+            $pasien->nama_provinsi = $request->get('reg_nama_provinsi');
+            $pasien->kota_id = $request->get('reg_kode_kota');
+            $pasien->kecamatan = $request->get('reg_nama_kecamatan');
+            $pasien->kelurahan = $request->get('reg_nama_kelurahan');
+            $pasien->kode_kabupaten = $request->get('reg_kode_kota');
+            $pasien->nama_kabupaten = $request->get('reg_nama_kota');
+            $pasien->kode_kecamatan = $request->get('reg_kode_kecamatan');
+            $pasien->nama_kecamatan = $request->get('reg_nama_kecamatan');
+            $pasien->kode_kelurahan = $request->get('reg_kode_kelurahan');
+            $pasien->nama_kelurahan = $request->get('reg_nama_kelurahan');
             $pasien->alamat_lengkap = $request->get('reg_alamat');
+            $pasien->sumber_pasien = $request->get('reg_sumber_pasien');
             $pasien->no_rt = $request->get('reg_rt');
             $pasien->no_rw = $request->get('reg_rw');
             $pasien->jenis_kelamin = $request->get('reg_jk');
             $pasien->keterangan_lain = $request->get('reg_keterangan');
             $pasien->usia_tahun = $request->get('reg_usia_tahun');
             $pasien->usia_bulan = $request->get('reg_usia_bulan');
+            $pasien->pelaporan_id = $request->get('reg_pelaporan_id');
+            $pasien->pelaporan_id_case = $request->get('reg_pelaporan_id_case');
+            $pasien->lab_satelit_id = $user->lab_satelit_id;
             $pasien->save();
 
-            $sampel = Sampel::where('id', $request->reg_sampel_id)->first();
 
-            $pengambilan_sampel = PengambilanSampel::where('id', $sampel->pengambilan_sampel_id)->first();
-            if ($pengambilan_sampel == null) {
-                $pengambilan_sampel = new PengambilanSampel;
-                $pengambilan_sampel->catatan = $request->get('reg_keterangan');
-            }
+            $pengambilan_sampel->catatan = $request->get('reg_keterangan');
             $pengambilan_sampel->save();
 
             $sampel->nomor_sampel = strtoupper($request->reg_sampel_nomor);
@@ -204,32 +216,25 @@ class RegistersampelController extends Controller
     public function getById(Request $request, $register_id, $pasien_id)
     {
         $register = Register::where('id', $register_id)->first();
-        $pasien = Pasien::where('pasien.id', $pasien_id)->leftJoin('kota', 'kota.id', 'pasien.kota_id')->first();
+        $pasien = Pasien::where('pasien.id', $pasien_id)->first();
         $sampel = Sampel::where('register_id', $register_id)->first();
         $pengambilan_sampel = PengambilanSampel::where('id', $sampel->pengambilan_sampel_id)->first();
         return response()->json([
-            'instansi_pengirim' => $register->instansi_pengirim,
-            'instansi_pengirim_nama' => $register->instansi_pengirim_nama,
-            'reg_register' => $register->lab_satelit_id,
-            'reg_pasien' => $pasien->lab_satelit_id,
+            'reg_fasyankes_id' => $register->fasyankes_id,
+            'reg_fasyankes_pengirim' => $register->fasyankes_pengirim,
+            'reg_nama_rs' => $register->nama_rs,
             'reg_kewarganegaraan' => $pasien->kewarganegaraan,
             'reg_nama_pasien' => $pasien->nama_lengkap,
             'reg_nik' => $pasien->nik,
             'reg_tempatlahir' => $pasien->tempat_lahir,
             'reg_tgllahir' => parseDate($pasien->tanggal_lahir),
             'reg_nohp' => $pasien->no_hp,
-            'reg_kota' => $pasien->kota_id,
-            'reg_kecamatan' => $pasien->kecamatan,
-            'reg_kelurahan' => $pasien->kelurahan,
             'reg_alamat' => $pasien->alamat_lengkap,
             'reg_rt' => $pasien->no_rt,
             'reg_rw' => $pasien->no_rw,
-            'reg_keterangan' => $pasien->keterangan_lain,
             'reg_jk' => $pasien->jenis_kelamin,
-            'nama_kota' => $pasien->nama,
             'reg_usia_tahun' => $pasien->usia_tahun,
             'reg_usia_bulan' => $pasien->usia_bulan,
-            'reg_sampel_id' => $sampel->id,
             'reg_sampel_namadiluarjenis' => $sampel->jenis_sampel_nama,
             'reg_sampel_jenis_sampel' => $sampel->jenis_sampel_id,
             'reg_sampel_nomor' => $sampel->nomor_sampel,
@@ -237,7 +242,20 @@ class RegistersampelController extends Controller
             'reg_swab_ke' => $register->swab_ke,
             'reg_tanggal_swab' => parseDate($register->tanggal_swab),
             'reg_sumber_pasien' => $register->sumber_pasien,
+            'reg_pelaporan_id' => $pasien->pelaporan_id,
+            'reg_pelaporan_id_case' => $pasien->pelaporan_id_case,
+            'reg_kode_provinsi' => $pasien->kode_provinsi,
+            'reg_nama_provinsi' => $pasien->nama_provinsi,
+            'reg_kode_kota' => $pasien->kode_kabupaten,
+            'reg_nama_kota' => $pasien->nama_kabupaten,
+            'reg_kode_kecamatan' => $pasien->kode_kecamatan,
+            'reg_nama_kecamatan' => $pasien->nama_kecamatan,
+            'reg_kode_kelurahan' => $pasien->kode_kelurahan,
+            'reg_nama_kelurahan' => $pasien->nama_kelurahan,
             'reg_keterangan' => optional($pengambilan_sampel)->catatan,
+            'reg_register' => $register->lab_satelit_id,
+            'reg_pasien' => $pasien->lab_satelit_id,
+            'reg_sampel_id' => $sampel->id,
         ]);
     }
 

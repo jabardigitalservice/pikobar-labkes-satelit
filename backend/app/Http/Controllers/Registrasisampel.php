@@ -102,7 +102,7 @@ class Registrasisampel extends Controller
                     $models = $models->orderBy('register.sumber_pasien', $order_direction);
                     break;
                 case 'status':
-                    $models = $models->orderBy('status', $order_direction);
+                    $models = $models->orderBy('register.status', $order_direction);
                     break;
                 default:
                     break;
