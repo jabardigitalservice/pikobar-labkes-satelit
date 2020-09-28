@@ -7,14 +7,14 @@
       <div class="text-muted">{{ usiaPasien || null }}</div>
     </td>
     <td>{{item.nama_kota}}</td>
-    <td>{{item.instansi_pengirim_nama}}</td>
+    <td>{{item.nama_rs}}</td>
     <td>
       <div class="badge badge-white" style="text-align:left; padding:10px">
         {{item.nomor_sampel}}
       </div>
     </td>
     <td>{{item.sumber_pasien}}</td>
-    <td>{{item.status ? item.status.toUpperCase() : null}}</td>
+    <td>{{item.status ? pasienStatus.find(x => x.value == item.status).text : null }}</td>
     <td nowrap>
       <div><b>{{ item.waktu_sample_taken ? momentFormatDate(item.waktu_sample_taken) : null }}</b></div>
       <div class="text-muted">
@@ -48,6 +48,9 @@
 <script>
   import axios from "axios";
   import {
+    pasienStatus
+  } from '~/assets/js/constant/enum';
+  import {
     getHumanAge,
     getAlertDelete,
     momentFormatDate,
@@ -57,6 +60,7 @@
     props: ["item", "pagination", "rowparams", "index", "config"],
     data() {
       return {
+        pasienStatus,
         momentFormatDate,
         momentFormatTime
       };

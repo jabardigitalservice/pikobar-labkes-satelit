@@ -93,7 +93,7 @@ class Registrasisampel extends Controller
                     $models = $models->orderBy('kota.nama', $order_direction);
                     break;
                 case 'instansi_pengirim_nama':
-                    $models = $models->orderBy('register.instansi_pengirim_nama', $order_direction);
+                    $models = $models->orderBy('register.nama_rs', $order_direction);
                     break;
                 case 'no_sampel':
                     $models = $models->orderBy('sampel.nomor_sampel', $order_direction);
@@ -102,13 +102,13 @@ class Registrasisampel extends Controller
                     $models = $models->orderBy('register.sumber_pasien', $order_direction);
                     break;
                 case 'status':
-                    $models = $models->orderBy('status', $order_direction);
+                    $models = $models->orderBy('register.status', $order_direction);
                     break;
                 default:
                     break;
             }
         }
-        $models = $models->select('nik', 'nama_lengkap', 'tanggal_lahir', 'usia_tahun', 'nomor_sampel', 'kota.nama as nama_kota', 'pasien_register.*', 'register.sumber_pasien', 'status', 'waktu_sample_taken');
+        $models = $models->select('nik', 'nama_lengkap', 'tanggal_lahir', 'usia_tahun', 'nomor_sampel', 'kota.nama as nama_kota', 'pasien_register.*', 'register.sumber_pasien', 'status', 'waktu_sample_taken', 'nama_rs');
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
         $result = [

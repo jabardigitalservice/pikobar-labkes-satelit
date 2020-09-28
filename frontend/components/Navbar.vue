@@ -6,29 +6,6 @@
       </div>
     </div>
     <ul class="nav navbar-top-links navbar-right">
-      <li class="dropdown">
-        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" aria-expanded="false"
-          style="padding-top: 1.5em">
-          <i class="fa fa-bell-o fa-lg"></i>
-          <span class="label label-primary" v-if="notifications.count > 0">{{ notifications.count }}</span>
-        </a>
-        <ul class="dropdown-menu dropdown-alerts">
-          <li v-for="(notification, $index) in notifications.data" :key="$index">
-            <nuxt-link tag="a" :to="notification.link" class="dropdown-item">
-              <div>
-                <i class="fa-fw" :class="notification.icon"></i> {{ notification.message }}
-              </div>
-            </nuxt-link>
-          </li>
-          <li v-if="notifications.count == 0">
-            <a class="dropdown-item">
-              <div>
-                <em>Tidak ada notifikasi</em>
-              </div>
-            </a>
-          </li>
-        </ul>
-      </li>
       <li>
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
           <span class="block m-t-xs font-bold">{{user.name}}</span>
@@ -73,11 +50,6 @@
     }),
 
     methods: {
-      async fetchNotifications() {
-        let resp = await axios.get("/v1/dashboard/notifications");
-        this.notifications.data = resp.data.data
-        this.notifications.count = resp.data.count
-      },
       async logout() {
         // Log out the user.
         await this.$store.dispatch('auth/logout')

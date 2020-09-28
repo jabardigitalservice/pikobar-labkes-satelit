@@ -92,6 +92,14 @@
         try {
           const response = await this.form.post('/login')
           data = response.data
+          if (data.user.role_id == 1) {
+            this.$swal.fire(
+              'Login gagal',
+              'Harap Login Sebagai Lab Satelit',
+              'error'
+            )
+            return
+          }
           // Save the token.
           this.$store.dispatch('auth/saveToken', {
             token: data.token,
