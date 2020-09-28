@@ -7,7 +7,7 @@
       <div class="text-muted">{{ usiaPasien || null }}</div>
     </td>
     <td>{{item.nama_kota}}</td>
-    <td>{{item.instansi_pengirim_nama}}</td>
+    <td>{{item.nama_rs}}</td>
     <td>
       <div class="badge badge-white" style="text-align:left; padding:10px">
         {{item.nomor_sampel}}
