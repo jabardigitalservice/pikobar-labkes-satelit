@@ -30,7 +30,7 @@
               has_entry_page: true,
               has_pagination: true,
               has_action: true,
-              has_search_input: true,
+              has_search_input: false,
               custom_header: '',
               default_sort: 'tgl_input',
               default_sort_dir:'desc',
@@ -40,12 +40,12 @@
                 wrapper: ['table-responsive'],
               }
             }" :rowtemplate="'tr-data-regis-sample'" :columns="{
+              no_sampel:'SAMPEL',
               nama_pasien: 'PASIEN',
               nama_kota: 'DOMISILI',
               instansi_pengirim_nama: 'INSTANSI',
-              no_sampel:'SAMPEL',
               sumber_pasien:'KATEGORI',
-              status:'STATUS',
+              status:'KRITERIA',
               tgl_input:'TANGGAL INPUT',
               keterangan:'KETERANGAN'
             }" />

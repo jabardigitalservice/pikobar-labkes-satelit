@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRegisterSampel;
 use App\Http\Requests\UpdateRegisterSampel;
 use App\Http\Resources\RegisterResource;
+use App\Models\RegisterLog;
 use App\Models\JenisSampel;
 use App\Models\Pasien;
 use App\Models\PasienRegister;
@@ -128,9 +129,12 @@ class RegistersampelController extends Controller
             $sampel = Sampel::where('register_id', $regis_id)->first();
             $pengambilan_sampel = PengambilanSampel::where('id', $sampel->pengambilan_sampel_id)->first();
 
+            $registerOrigin = clone $register;
+            $pasienOrigin = clone $pasien;
+            $sampelOrigin = clone $sampel;
+
             $user = Auth::user();
 
-            $register->register_uuid = (string)Str::uuid();
             $register->creator_user_id = $user->id;
             $register->lab_satelit_id = $user->lab_satelit_id;
             $register->fasyankes_id = $request->get('reg_fasyankes_id');
@@ -198,6 +202,46 @@ class RegistersampelController extends Controller
             $sampel->pengambilan_sampel_id = $pengambilan_sampel->id;
             $sampel->creator_user_id = $user->id;
             $sampel->save();
+
+            $registerChanges = $register->getChanges();
+            $pasienChanges = $pasien->getChanges();
+            $sampelChanges = $sampel->getChanges();
+
+            $registerLogs = array();
+            foreach ($registerChanges as $key => $value) {
+                if ($key != "updated_at") {
+                    $registerLogs[$key]["from"] = $key == 'status' ? STATUSES[$registerOrigin[$key]] : $registerOrigin[$key];
+                    $registerLogs[$key]["to"] = $key == 'status' ? STATUSES[$value] : $value;
+                }
+            }
+
+            $pasienLogs = array();
+            foreach ($pasienChanges as $key => $value) {
+                if ($key != "updated_at") {
+                    $pasienLogs[$key]["from"] = $key == 'tanggal_lahir' ? date('d-m-Y', strtotime($pasienOrigin[$key])) : $pasienOrigin[$key];
+                    $pasienLogs[$key]["to"] = $key == 'tanggal_lahir' ? date('d-m-Y', strtotime($value)) : $value;
+                }
+
+            }
+
+            $sampelLogs = array();
+            foreach ($sampelChanges as $key => $value) {
+                if ($key != "updated_at") {
+                    $sampelLogs[$key]["from"] = $sampelOrigin[$key];
+                    $sampelLogs[$key]["to"] = $value;
+                }
+            }
+
+            $register->logs()->create([
+                "user_id" => $user->id,
+                "info" => json_encode(array(
+                    "register" => $registerLogs,
+                    "sampel" => $sampelLogs,
+                    "pasien" => $pasienLogs
+                ))
+            ]);
+
+
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -257,6 +301,29 @@ class RegistersampelController extends Controller
             'reg_pasien' => $pasien->lab_satelit_id,
             'reg_sampel_id' => $sampel->id,
         ]);
+    }
+
+    public function logs($register_id)
+    {
+        $model = RegisterLog::where('register_id', $register_id)->join('users', 'users.id', 'register_logs.user_id')
+            ->whereRaw("(info->>'pasien' <> '[]'::text or info->>'register' <> '[]'::text or info->>'sampel' <> '[]'::text)")
+            ->select('info', 'register_logs.created_at', 'users.name as updated_by')->get();
+
+        foreach($model as $key => $val) {
+            $info = json_decode($val->info);
+
+            if (isset($info->pasien->status)) {
+                $info->pasien->status->from = STATUSES[$info->pasien->status->from] ?? null;
+                $info->pasien->status->to = STATUSES[$info->pasien->status->to] ?? null;
+            }
+
+            $val->info = json_encode($info);
+        }
+
+        return response()->json([
+            'result' => $model,
+            'statys' => 'success'
+        ], 200);
     }
 
     public function exportExcelMandiri(Request $request)

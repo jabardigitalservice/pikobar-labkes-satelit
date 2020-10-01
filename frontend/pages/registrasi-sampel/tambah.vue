@@ -242,7 +242,7 @@
             </div>
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
-                Status Pasien
+                Kriteria Pasien
               </div>
               <div class="col-md-8">
                 <select v-model="form.reg_status" class="multisteps-form__input form-control col-md-8 col-lg-6"

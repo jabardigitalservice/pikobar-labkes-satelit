@@ -167,6 +167,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::post('sampel/update/{regis_id}/{pasien_id}', 'RegistersampelController@storeUpdate');
         Route::get('sampel/{register_id}/{pasien_id}', 'RegistersampelController@getById');
         Route::delete('sampel/{id}/{pasien}', 'RegistersampelController@delete');
+        Route::get('logs/{register_id}', 'RegistersampelController@logs');
 
         Route::get('/', 'RegisterListController@index');
 
