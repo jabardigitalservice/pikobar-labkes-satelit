@@ -127,17 +127,6 @@ export default {
                 window.URL.revokeObjectURL(url);
                 this.isLoadingExp = false;
             });
-
-        // const response = await this.form.post("/v1/verifikasi/export-excel");
-
-        // this.$toast.success(response.data.message, {
-        //   icon: "check",
-        //   iconPack: "fontawesome",
-        //   duration: 5000
-        // });
-
-        // this.$router.back()
-
       } catch (err) {
         if (err.response && err.response.data.code == 422) {
           this.$nextTick(() => {
