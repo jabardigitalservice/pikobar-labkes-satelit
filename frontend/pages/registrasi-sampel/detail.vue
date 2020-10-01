@@ -86,10 +86,10 @@
           </div>
           <div class="form-group row">
             <div class="col-md-5 text-blue flex-text-center">
-              Status Pasien
+              Kriteria Pasien
             </div>
             <div class="col-md-7 flex-text-center">
-              {{data.reg_status || null}}
+              {{data.reg_status ? pasienStatus.find(x => x.value == data.reg_status).text : null }}
             </div>
           </div>
           <div class="form-group row">
@@ -98,6 +98,14 @@
             </div>
             <div class="col-md-7 flex-text-center">
               {{usiaPasien}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              No HP
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_nohp}}
             </div>
           </div>
         </Ibox>
@@ -181,6 +189,11 @@
             </div>
           </div>
         </Ibox>
+        <Ibox title="Riwayat Perubahan">
+          <div class="col-12">
+           <Timeline :data="logs" />
+          </div>
+        </Ibox>
       </div>
     </div>
 
@@ -196,6 +209,9 @@
   import {
     getHumanAge,
   } from '~/utils';
+  import {
+    pasienStatus
+  } from '~/assets/js/constant/enum';
 
   export default {
     middleware: 'auth',
@@ -207,6 +223,12 @@
       let resp = await axios.get("/v1/register/sampel/" + route.params.register_id + "/" + route.params.pasien_id);
       return {
         data: resp.data
+      }
+    },
+    data() {
+      return {
+        pasienStatus,
+        logs: null
       }
     },
     computed: {
@@ -249,6 +271,18 @@
               'error'
             );
           })
+      },
+      getLogs(id) {
+        let url = `v1/register/logs/${id}`
+        let self = this
+        axios
+          .get(url)
+          .then(function (response) {
+              self.logs = response.data.result; // Data existed
+          })
+          .catch(function (err) {
+              console.log(err);
+        });
       }
     },
     head() {
@@ -257,7 +291,7 @@
       }
     },
     created() {
-      // this.getData();
+      this.getLogs(this.$route.params.register_id)
     },
   }
 </script>

@@ -1,6 +1,11 @@
 <template>
   <tr>
     <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
+    <td>
+      <div class="badge badge-white" style="text-align:left; padding:10px">
+        {{item.nomor_sampel}}
+      </div>
+    </td>
     <td nowrap>
       <div v-if="item.nama_lengkap" style="text-transform: capitalize;"><b>{{ item.nama_lengkap }}</b></div>
       <div v-if="item.nik" class="text-muted">{{ item.nik }}</div>
@@ -8,11 +13,6 @@
     </td>
     <td>{{item.nama_kota}}</td>
     <td>{{item.nama_rs}}</td>
-    <td>
-      <div class="badge badge-white" style="text-align:left; padding:10px">
-        {{item.nomor_sampel}}
-      </div>
-    </td>
     <td>{{item.sumber_pasien}}</td>
     <td>{{item.status ? pasienStatus.find(x => x.value == item.status).text : null }}</td>
     <td nowrap>
