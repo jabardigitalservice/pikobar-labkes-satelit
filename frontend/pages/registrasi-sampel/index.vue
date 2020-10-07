@@ -105,7 +105,6 @@
     data() {
       return {
         loading: false,
-        loadingFormat: false,
         dataError: [],
         params: {
           nama_pasien: null,
