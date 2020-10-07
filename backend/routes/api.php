@@ -299,6 +299,8 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
     Route::group(['prefix' => 'pelaporan'], function () {
         Route::get('fetch', 'PelaporanController@fetch_data');
     });
+
+    Route::get('download', 'FileDownloadController@download');
 });
 
 Route::group(['middleware' => ['auth:api', 'can:integrasi-kemenkes'], 'prefix' => 'integrasi'], function () {

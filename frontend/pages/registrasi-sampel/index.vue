@@ -57,6 +57,20 @@
       <div slot="body">
         <div class="col-lg-12">
           <div class="form-group">
+            <button @click="downloadFormat('formatRegistrasi')" :disabled="loading" :class="{'btn-loading': loading}"
+              class="btn btn-md btn-primary " type="button">
+              <i class="fa fa-download" /> Download Format
+            </button>
+            <button @click="downloadFormat('wilayah')" :disabled="loading" :class="{'btn-loading': loading}"
+              class="btn btn-md btn-primary " type="button">
+              <i class="fa fa-file" /> Wilayah
+            </button>
+            <button @click="downloadFormat('fasyankes')" :disabled="loading" :class="{'btn-loading': loading}"
+              class="btn btn-md btn-primary " type="button">
+              <i class="fa fa-file" /> Fasyankes
+            </button>
+          </div>
+          <div class="form-group">
             <label for="register_file">
               Upload an .xlsx file
             </label>
@@ -91,6 +105,7 @@
     data() {
       return {
         loading: false,
+        loadingFormat: false,
         dataError: [],
         params: {
           nama_pasien: null,
@@ -118,6 +133,18 @@
       };
     },
     methods: {
+      downloadFormat(namaFile) {
+        this.$axios.get(`v1/download?namaFile=${namaFile}`)
+          .then(response => {
+            let blob = new Blob([response.data], {
+              type: response.data.type
+            })
+            let link = document.createElement('a')
+            link.href = window.URL.createObjectURL(blob)
+            link.download = namaFile + '.xlsx'
+            link.click()
+          });
+      },
       doFilter() {
         this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
       },
@@ -164,7 +191,6 @@
             );
           }
         }
-        
         this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
 
         $('#register_file').val('');
@@ -174,7 +200,6 @@
       },
       previewFile() {
         this.form.register_file = this.$refs.myFile.files[0]
-
       }
     }
   }
