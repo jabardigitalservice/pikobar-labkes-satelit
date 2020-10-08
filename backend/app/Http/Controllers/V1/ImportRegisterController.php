@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Imports\HasilPemeriksaanAkhirImport;
 use App\Imports\RegisterMandiriImport;
 use App\Imports\RegisterRujukanImport;
-use App\Imports\HasilPemeriksaanAkhirImport;
 use App\Imports\RegisterSampelImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -15,48 +15,48 @@ class ImportRegisterController extends Controller
 {
     /**
      * Import Register Mandiri
-     * 
+     *
      */
     public function importRegisterMandiri(Request $request)
-    {       
+    {
         $this->importValidator($request)->validate();
 
         Excel::import(new RegisterMandiriImport, $request->file('register_file'));
 
         return response()->json([
-            'status'=> 200,
-            'message'=> 'Sukses import data.',
-            'data'=> null
+            'status' => 200,
+            'message' => 'Sukses import data.',
+            'data' => null,
         ]);
     }
 
     /**
      * Import Register Mandiri
-     * 
+     *
      */
     public function importRegisterSampel(Request $request)
-    {       
+    {
         $this->importValidator($request)->validate();
 
         Excel::import(new RegisterSampelImport, $request->file('register_file'));
 
         return response()->json([
-            'status'=> 200,
-            'message'=> 'Sukses import data.',
-            'data'=> null
+            'status' => 200,
+            'message' => 'Sukses import data.',
+            'data' => null,
         ]);
     }
 
     public function importHasilPemeriksaan(Request $request)
-    {       
+    {
         $this->importValidator($request)->validate();
 
         Excel::import(new HasilPemeriksaanAkhirImport, $request->file('register_file'));
 
         return response()->json([
-            'status'=> 200,
-            'message'=> 'Sukses import data.',
-            'data'=> null
+            'status' => 200,
+            'message' => 'Sukses import data.',
+            'data' => null,
         ]);
     }
 
@@ -64,19 +64,19 @@ class ImportRegisterController extends Controller
      * Import Register Rujukan
      */
     public function importRegisterRujukan(Request $request)
-    {        
+    {
         $this->importValidator($request)->validate();
 
         Excel::import(new RegisterRujukanImport, $request->file('register_file'));
 
         return response()->json([
-            'status'=> 200,
-            'message'=> 'Sukses import data.',
-            'data'=> null
+            'status' => 200,
+            'message' => 'Sukses import data.',
+            'data' => null,
         ]);
     }
 
-    private function importValidator(Request $request)
+    private function __importValidator(Request $request)
     {
         $extension = '';
 
@@ -85,11 +85,11 @@ class ImportRegisterController extends Controller
         }
 
         return Validator::make([
-            'register_file'=> $request->file('register_file'),
-            'extension'=> $extension
-        ],[
-            'register_file'=> 'required|file|max:2048',
-            'extension'=> 'required|in:csv,xlsx,xls'
+            'register_file' => $request->file('register_file'),
+            'extension' => $extension,
+        ], [
+            'register_file' => 'required|file|max:2048',
+            'extension' => 'required|in:csv,xlsx,xls',
         ]);
 
         // OLD
