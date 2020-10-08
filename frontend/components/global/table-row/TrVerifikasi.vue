@@ -28,7 +28,7 @@
       </div>
     </td>
     <td style="text-transform: capitalize;">
-      {{item.status ? item.status.toUpperCase() : null}}
+      {{item.status ? pasienStatus.find(x => x.value == item.status).text : null }}
     </td>
     <td style="text-transform: capitalize;">
       {{item.sumber_pasien}}
@@ -54,7 +54,9 @@
 <script>
   import Form from "vform";
   import axios from "axios";
-
+  import {
+    pasienStatus
+  } from '~/assets/js/constant/enum';
   export default {
     props: ["item", "pagination", "rowparams", "index"],
     components: {},
@@ -68,7 +70,8 @@
 
       return {
         loading,
-        form
+        form,
+        pasienStatus
       };
     },
     methods: {

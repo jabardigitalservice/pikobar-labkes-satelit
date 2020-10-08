@@ -20,7 +20,7 @@
               Instansi Pengirim
             </div>
             <div class="col-md-7 flex-text-center">
-              {{data.instansi_pengirim || null}}
+              {{data.instansi_pengirim == 'rumah_sakit' ? 'rumah sakit' : data.instansi_pengirim || null}}
             </div>
           </div>
           <div class="form-group row">
@@ -183,7 +183,7 @@
               Kriteria
             </div>
             <div class="col-md-7 flex-text-center">
-              {{data.status || null}}
+              {{data.status ? pasienStatus.find(x => x.value == data.status).text : null  || null}}
             </div>
           </div>
           <div class="form-group row">
@@ -272,6 +272,9 @@
 <script>
   import axios from "axios";
   import {
+    pasienStatus
+  } from '~/assets/js/constant/enum';
+  import {
     getHumanAge
   } from '~/utils';
 
@@ -306,6 +309,11 @@
       return {
         data
       };
+    },
+    data() {
+      return {
+        pasienStatus,
+      }
     },
     computed: {
       usiaPasien() {
