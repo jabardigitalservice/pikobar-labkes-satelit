@@ -415,9 +415,6 @@
           reg_pasien: data.reg_pasien,
           reg_sampel_id: data.reg_sampel_id,
         }),
-        day_tgllahir: data.reg_tgllahir ? data.reg_tgllahir.substr(8, 2) : null,
-        month_tgllahir: data.reg_tgllahir ? data.reg_tgllahir.substr(5, 2) : null,
-        year_tgllahir: data.reg_tgllahir ? data.reg_tgllahir.substr(0, 4) : null,
         optionFasyankes: fasyankes.data,
         optionProvinsi: provinsi,
         optionKecamatan: kecamatan,
@@ -450,25 +447,6 @@
       async changeFasyankes(tipe) {
         let resp = await axios.get('/v1/list-fasyankes-jabar?tipe=' + tipe)
         this.optionFasyankes = resp.data;
-      },
-      onChange(day, month, year) {
-        if (isNaN(parseInt(day))) {
-          this.day_tgllahir = null;
-        } else {
-          this.day_tgllahir = day;
-        }
-
-        if (isNaN(parseInt(month))) {
-          this.month_tgllahir = null;
-        } else {
-          this.month_tgllahir = month;
-        }
-
-        if (!year) {
-          this.year_tgllahir = null;
-        } else {
-          this.year_tgllahir = year;
-        }
       },
       async getProvinsi() {
         let resp = await axios.get('/v1/list-provinsi/');
@@ -506,9 +484,6 @@
       },
       async submit() {
         try {
-          if (!this.day_tgllahir || !this.month_tgllahir || !this.year_tgllahir) {
-            this.form.reg_tgllahir = null;
-          }
           const response = await this.form.post(
             "/v1/register/sampel/update/" +
             this.$route.params.register_id +
