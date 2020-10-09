@@ -210,7 +210,7 @@ class RegistersampelController extends Controller
             $registerLogs = array();
             foreach ($registerChanges as $key => $value) {
                 if ($key != "updated_at") {
-                    $registerLogs[$key]["from"] = $key == 'status' ? STATUSES[$registerOrigin[$key]] : $registerOrigin[$key];
+                    $registerLogs[$key]["from"] = $key == 'status' && $registerOrigin[$key] ? STATUSES[$registerOrigin[$key]] : $registerOrigin[$key];
                     $registerLogs[$key]["to"] = $key == 'status' ? STATUSES[$value] : $value;
                 }
             }
