@@ -10,7 +10,10 @@ class FileDownloadController extends Controller
     public function download(Request $request)
     {
         $namaFile = $request->namaFile;
-        $path = "format/$namaFile.xlsx";
-        return response()->download($path);
+        $path = public_path()."/format/$namaFile.xlsx";
+        return response()->download($path, $namaFile.'.xlsx', [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'inline; filename="' . $namaFile . '"'
+        ]);
     }
 }

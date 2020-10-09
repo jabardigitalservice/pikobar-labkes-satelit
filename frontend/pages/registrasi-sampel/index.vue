@@ -136,12 +136,16 @@
         this.$axios.get(`v1/download?namaFile=${namaFile}`)
           .then(response => {
             let blob = new Blob([response.data], {
-              type: response.data.type
+              type: response.headers['content-type']
             })
             let link = document.createElement('a')
             link.href = window.URL.createObjectURL(blob)
             link.download = namaFile + '.xlsx'
+            link.setAttribute('download', link.download);
+            document.body.appendChild(link);
             link.click()
+            window.URL.revokeObjectURL(link.href);
+            link.remove();
           });
       },
       doFilter() {
