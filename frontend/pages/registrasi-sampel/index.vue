@@ -133,7 +133,7 @@
     },
     methods: {
       downloadFormat(namaFile) {
-        this.$axios.get(`v1/download?namaFile=${namaFile}`)
+        this.$axios.get(`v1/download?namaFile=${namaFile}`, { responseType: 'blob'})
           .then(response => {
             let blob = new Blob([response.data], {
               type: response.headers['content-type']
