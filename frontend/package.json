@@ -40,7 +40,8 @@
     "vue-select": "^3.10.3",
     "vue-sidebar-menu": "^4.5.3",
     "vuejs-datepicker": "^1.6.2",
-    "vue-rangedate-picker": "^1.0.0"
+    "vue-rangedate-picker": "^1.0.0",
+    "vue2-dropzone": "^3.6.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^1.1.2",

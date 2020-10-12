@@ -57,29 +57,31 @@
       <div slot="body">
         <div class="col-lg-12">
           <div class="form-group">
-            <button @click="downloadFormat('formatRegistrasi')" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-md btn-primary " type="button">
-              <i class="fa fa-download" /> Download Format
-            </button>
-            <button @click="downloadFormat('wilayah')" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-md btn-primary " type="button">
-              <i class="fa fa-file" /> Wilayah
-            </button>
-            <button @click="downloadFormat('fasyankes')" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-md btn-primary " type="button">
-              <i class="fa fa-file" /> Fasyankes
-            </button>
-          </div>
-          <div class="form-group">
-            <label for="register_file">
-              Upload an .xlsx file
-            </label>
-            <input class="form-control" type="file" id="register_file" ref="myFile" @change="previewFile">
+            <dropzone-import-excel :previewFile="previewFile" />
           </div>
           <div class="form-group">
             <button @click="doImport()" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-md btn-primary block m-b" type="button">
+              class="btn btn-md btn-primary block m-b pull-right" type="button">
               <i class="fa fa-check" /> Import Excel
+            </button>
+          </div>
+          <br>
+          <div class="form-group">
+            <label class="text-muted" style="text-align: justify">
+              Berikut adalah contoh format untuk import excel, data wilayah, dan data fasyankes yang dapat diunduh
+              sebagai referensi.
+            </label>
+            <button @click="downloadFormat('formatRegistrasi')" :disabled="loading" :class="{'btn-loading': loading}"
+              class="btn btn-sm btn-default" type="button">
+              <i class="fa fa-file" /> Format Import
+            </button>
+            <button @click="downloadFormat('wilayah')" :disabled="loading" :class="{'btn-loading': loading}"
+              class="btn btn-sm btn-default" type="button">
+              <i class="fa fa-file" /> Data Wilayah
+            </button>
+            <button @click="downloadFormat('fasyankes')" :disabled="loading" :class="{'btn-loading': loading}"
+              class="btn btn-sm btn-default" type="button">
+              <i class="fa fa-file" /> Data Fasyankes
             </button>
           </div>
         </div>
@@ -133,7 +135,9 @@
     },
     methods: {
       downloadFormat(namaFile) {
-        this.$axios.get(`v1/download?namaFile=${namaFile}`, { responseType: 'blob'})
+        this.$axios.get(`v1/download?namaFile=${namaFile}`, {
+            responseType: 'blob'
+          })
           .then(response => {
             let blob = new Blob([response.data], {
               type: response.headers['content-type']
@@ -201,8 +205,8 @@
         this.form.register_file = null;
         this.loading = false;
       },
-      previewFile() {
-        this.form.register_file = this.$refs.myFile.files[0]
+      previewFile(file) {
+        this.form.register_file = file;
       }
     }
   }
