@@ -22,7 +22,7 @@
               Instansi Pengirim
             </div>
             <div class="col-md-7 flex-text-center">
-              {{data.reg_fasyankes_pengirim || null}}
+              {{data.reg_fasyankes_pengirim == 'rumah_sakit' ? 'rumah sakit' : data.reg_fasyankes_pengirim || null}}
             </div>
           </div>
           <div class="form-group row">
