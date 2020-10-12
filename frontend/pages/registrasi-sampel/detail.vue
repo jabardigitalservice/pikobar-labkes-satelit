@@ -22,7 +22,7 @@
               Instansi Pengirim
             </div>
             <div class="col-md-7 flex-text-center">
-              {{data.reg_fasyankes_pengirim == 'rumah_sakit' ? 'rumah sakit' : data.reg_fasyankes_pengirim || null}}
+              {{ humanize(data.reg_fasyankes_pengirim) || null }}
             </div>
           </div>
           <div class="form-group row">
@@ -207,7 +207,7 @@
   } from 'vuex'
   import axios from 'axios'
   import {
-    getHumanAge,
+    getHumanAge, humanize
   } from '~/utils';
   import {
     pasienStatus

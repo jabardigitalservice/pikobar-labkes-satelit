@@ -36,7 +36,7 @@ class ImportRegisterController extends Controller
      */
     public function importRegisterSampel(Request $request)
     {
-        $this->importValidator($request)->validate();
+        $this->__importValidator($request)->validate();
 
         Excel::import(new RegisterSampelImport, $request->file('register_file'));
 
@@ -49,7 +49,7 @@ class ImportRegisterController extends Controller
 
     public function importHasilPemeriksaan(Request $request)
     {
-        $this->importValidator($request)->validate();
+        $this->__importValidator($request)->validate();
 
         Excel::import(new HasilPemeriksaanAkhirImport, $request->file('register_file'));
 

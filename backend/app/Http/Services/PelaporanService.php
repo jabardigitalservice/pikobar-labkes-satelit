@@ -6,8 +6,7 @@ use Illuminate\Support\Facades\Http;
 
 class PelaporanService
 {
-
-    public function pendaftar_rdt($keyword, $limit)
+    public function pendaftar_rdt($keyword, $limit = 10)
     {
         $url = Config::get('services.pelaporan.url');
 
@@ -16,7 +15,7 @@ class PelaporanService
             'mode' => 'bykeyword',
             'keyword' => $keyword,
             'limit' => $limit,
-            'api_key' => Config::get('services.pelaporan.api_key'),
+            'api_key' => Config::get('services.pelaporan.api_key')
         ]);
     }
 }
