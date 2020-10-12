@@ -433,8 +433,8 @@
         if (query != '') {
           let resp = await axios.get('/v1/pelaporan/fetch?search=' + query);
           this.optionPencarian = resp.data.data.content
-          this.isLoadingPencarian = false
         }
+        this.isLoadingPencarian = false
       },
       async changeFasyankes(tipe) {
         let resp = await axios.get('/v1/list-fasyankes-jabar?tipe=' + tipe)
