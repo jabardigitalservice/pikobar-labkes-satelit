@@ -62,7 +62,7 @@
         </div>
         <div class="form-group row">
           <div class="col-md-4 flex-text-center">
-            <div>Status</div>
+            <div>Kriteria</div>
           </div>
           <div class="col-md-8">
             <select class="form-control" type="text" name="reg_kota" placeholder="" v-model="params.status">
@@ -132,6 +132,8 @@
         this.params.kota = null;
         this.params.status = null;
         this.kota = null;
+        this.params.start_nomor_sampel = null;
+        this.params.end_nomor_sampel = null;
         this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
       },
       onDateSelected: function (daterange) {
