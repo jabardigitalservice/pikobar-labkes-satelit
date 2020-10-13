@@ -22,7 +22,7 @@
               Instansi Pengirim
             </div>
             <div class="col-md-7 flex-text-center">
-              {{ humanize(data.reg_fasyankes_pengirim) || null }}
+              {{ instansiPengirim }}
             </div>
           </div>
           <div class="form-group row">
@@ -249,6 +249,12 @@
           return getHumanAge(this.data.reg_tgllahir);
         }
         return "";
+      },
+      instansiPengirim() {
+        if(this.data.instansi_pengirim) {
+          return humanize(this.data.instansi_pengirim)
+        }
+        return ""
       }
     },
     methods: {
