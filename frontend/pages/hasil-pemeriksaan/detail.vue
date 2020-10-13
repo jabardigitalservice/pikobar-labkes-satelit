@@ -20,7 +20,7 @@
               Instansi Pengirim
             </div>
             <div class="col-md-7 flex-text-center">
-              {{data.instansi_pengirim == 'rumah_sakit' ? 'rumah sakit' : data.instansi_pengirim || null}}
+              {{ humanize(data.instansi_pengirim) || null }}
             </div>
           </div>
           <div class="form-group row">
@@ -275,7 +275,7 @@
     pasienStatus
   } from '~/assets/js/constant/enum';
   import {
-    getHumanAge
+    getHumanAge, humanize
   } from '~/utils';
 
   export default {

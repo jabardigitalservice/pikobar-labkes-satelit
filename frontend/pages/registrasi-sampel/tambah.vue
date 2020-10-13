@@ -53,8 +53,7 @@
           </Ibox>
 
           <Ibox title="Identitas Pasien">
-            <!-- Masih dipakai -->
-            <!-- <div class="form-group row">
+            <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Pencarian
               </div>
@@ -65,7 +64,7 @@
                   :show-no-results="false" :hide-selected="true">
                 </multiselect>
               </div>
-            </div> -->
+            </div>
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Nama Pasien
@@ -432,10 +431,10 @@
       async asyncFind(query) {
         this.isLoadingPencarian = true
         if (query != '') {
-          let resp = await axios.get('/v1/pelaporan/fetch?keyword=' + query);
+          let resp = await axios.get('/v1/pelaporan/fetch?search=' + query);
           this.optionPencarian = resp.data.data.content
-          this.isLoadingPencarian = false
         }
+        this.isLoadingPencarian = false
       },
       async changeFasyankes(tipe) {
         let resp = await axios.get('/v1/list-fasyankes-jabar?tipe=' + tipe)
@@ -488,32 +487,34 @@
           this.form.reg_kewarganegaraan = pelaporan.nationality;
           this.form.reg_jk = pelaporan.gender;
           this.form.reg_tgllahir = pelaporan.birth_date;
-          this.form.reg_status = pelaporan.status.toLowerCase() || pelaporan.status;
+          this.form.reg_status = pelaporan.status;
           this.form.reg_alamat = pelaporan.address_detail;
           this.form.reg_pelaporan_id = pelaporan.id;
           this.form.reg_pelaporan_id_case = pelaporan.id_case;
+          this.form.reg_kode_provinsi = pelaporan.address_province_code;
+          this.form.reg_nama_provinsi = pelaporan.address_province_name;
           this.form.reg_kode_kabupaten = pelaporan.address_district_code;
-          this.form.reg_nama_kabupaten = pelaporan.address_district_name.toUpperCase() || pelaporan
-            .address_district_name;
-          this.form.reg_kode_kecamatan = pelaporan.address_village_code;
-          this.form.reg_nama_kecamatan = pelaporan.address_subdistrict_name.toUpperCase() || pelaporan
-            .address_subdistrict_name;
+          this.form.reg_nama_kabupaten = pelaporan.address_district_name;
+          this.form.reg_kode_kecamatan = pelaporan.address_subdistrict_code;
+          this.form.reg_nama_kecamatan = pelaporan.address_subdistrict_name;
           this.form.reg_kode_kelurahan = pelaporan.address_village_code;
-          this.form.reg_nama_kelurahan = pelaporan.address_village_name.toUpperCase() || pelaporan
-            .address_village_name;
+          this.form.reg_nama_kelurahan = pelaporan.address_village_name;
 
+          this.provinsi = {
+            id: pelaporan.address_province_code,
+            nama: pelaporan.address_province_name
+          };
           this.kota = {
             id: pelaporan.address_district_code,
-            nama: pelaporan.address_district_name.toUpperCase() || pelaporan.address_district_name
+            nama: pelaporan.address_district_name
           };
           this.kecamatan = {
             id: pelaporan.address_subdistrict_code,
-            nama: pelaporan.address_subdistrict_name.toUpperCase() || pelaporan
-              .address_subdistrict_name
+            nama: pelaporan.address_subdistrict_name
           };
           this.kelurahan = {
             id: pelaporan.address_village_code,
-            nama: pelaporan.address_village_name.toUpperCase() || pelaporan.address_village_name
+            nama: pelaporan.address_village_name
           };
           if (this.form.reg_tgllahir) {
             this.$refs.tgl_lahir.init();
