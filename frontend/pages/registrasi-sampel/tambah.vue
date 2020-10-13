@@ -487,7 +487,7 @@
           this.form.reg_kewarganegaraan = pelaporan.nationality;
           this.form.reg_jk = pelaporan.gender;
           this.form.reg_tgllahir = pelaporan.birth_date;
-          this.form.reg_status = pelaporan.status;
+          this.form.reg_status = pelaporan.status_code;
           this.form.reg_alamat = pelaporan.address_detail;
           this.form.reg_pelaporan_id = pelaporan.id;
           this.form.reg_pelaporan_id_case = pelaporan.id_case;
@@ -504,14 +504,17 @@
             id: pelaporan.address_province_code,
             nama: pelaporan.address_province_name
           };
+          await this.getKota(pelaporan.address_province_code);
           this.kota = {
             id: pelaporan.address_district_code,
             nama: pelaporan.address_district_name
           };
+          await this.getKecamatan(pelaporan.address_district_code);
           this.kecamatan = {
             id: pelaporan.address_subdistrict_code,
             nama: pelaporan.address_subdistrict_name
           };
+          await this.getKelurahan(pelaporan.address_subdistrict_code);
           this.kelurahan = {
             id: pelaporan.address_village_code,
             nama: pelaporan.address_village_name

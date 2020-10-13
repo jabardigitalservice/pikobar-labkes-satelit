@@ -85,7 +85,7 @@
 
 <script>
   import {
-    pasienStatusOld
+    pasienStatus
   } from './../../assets/js/constant/enum';
   let _this = null;
   export default {
@@ -93,7 +93,7 @@
     props: ['oid'],
     data() {
       return {
-        status: pasienStatusOld,
+        status: pasienStatus,
         optFasyankes: [],
         params: {
           nama_pasien: null,
