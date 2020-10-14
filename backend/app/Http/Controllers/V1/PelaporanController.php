@@ -23,8 +23,9 @@ class PelaporanController extends Controller
             $key = 0;
             $dataUnique = [];
             foreach ($data as $item) {
-                if (!in_array($item['id_case'], $dataUnique)) {
-                    $dataUnique[] = $item['id_case'];
+                $dataBy = $item['nik'].strtoupper($item['name']).$item['phone_number'];
+                if (!in_array($dataBy, $dataUnique)) {
+                    $dataUnique[] = $dataBy;
                     $response['data']['content'][$key]['status_code'] = $this->setStatusCoce($item['status']);
                     $response['data']['content'][$key]['address_district_code'] = (int)str_replace('.', '', $item['address_district_code']);
                     $response['data']['content'][$key]['address_district_name'] = $this->__getWilayah('kota', (int)str_replace('.', '', $item['address_district_code']));
@@ -37,7 +38,7 @@ class PelaporanController extends Controller
                     $response['data']['content'][$key]['id'] = $item['id'];
                     $response['data']['content'][$key]['id_case'] = $item['id_case'];
                     $response['data']['content'][$key]['nik'] = $item['nik'];
-                    $response['data']['content'][$key]['name'] = $item['nama_lengkap'];
+                    $response['data']['content'][$key]['name'] = $item['name'];
                     $response['data']['content'][$key]['birth_date'] = $item['birth_date'];
                     $response['data']['content'][$key]['age'] = $item['age'];
                     $response['data']['content'][$key]['gender'] = $item['gender'];
