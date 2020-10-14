@@ -5,7 +5,7 @@
 
       <div class="col-md-7">
         <div class="title-welcome">Selamat Datang di Website</div>
-        <div class="title-welcome">Manajemen Laboratorium</div>
+        <div class="title-welcome">Sistem Informasi Lab Jejaring</div>
         <div class="title-welcome">COVID-19 Jawa Barat</div>
 
         <div class="title-footer row">
@@ -17,19 +17,12 @@
                 <img alt="image" class="img-footer-logo" src="~/assets/img/logo/jds.png" />
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="row footer-logo-desc">Supported by</div>
-              <div class="row">
-                <img alt="image" class="img-footer-logo" src="~/assets/img/logo/itb.png" />
-                <img alt="image" class="img-footer-logo" src="~/assets/img/logo/unpad.png" />
-              </div>
-            </div>
           </div>
         </div>
       </div>
 
       <div class="col-md-5">
-        <div class="ibox-content" style="padding: 35px 30px 20px 30px;">
+        <div class="ibox-content">
           <div class="col-md-12">
             <img alt="image" class="img-fluid" src="~/assets/img/logo-lab-black.png" />
             <div class="login-guide">Klik tombol log in untuk mengakses data</div>
@@ -125,3 +118,32 @@
     }
   }
 </script>
+
+
+<style scoped>
+  .ibox-content {
+    padding: 35px 30px 20px 30px;
+  }
+
+  @media all and (max-width: 670px) {
+    .title-welcome {
+      font-size: 24px;
+    }
+
+    .ibox-content {
+      padding: 15px 20px 20px 20px;
+    }
+
+    .loginColumns {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 20px 20px 20px;
+    }
+
+    .title-footer {
+      position: relative;
+      bottom: 10px;
+    padding-top: 15px;
+    }
+  }
+</style>
