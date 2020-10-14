@@ -158,13 +158,13 @@
         this.loading = true;
         JQuery('#importRM').modal('hide');
         this.$bus.$emit('reset-importfile');
-        this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
         try {
           await this.$axios.post(`${process.env.apiUrl}/v1/register/import-sampel`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           });
+          this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
           this.$toast.success('Sukses import data', {
             icon: "check",
             iconPack: "fontawesome",
