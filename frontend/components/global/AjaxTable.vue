@@ -340,6 +340,11 @@
           this.changePage();
         }
       },
+      doSearch() {
+        this.search = this.search_input;
+        this.pagination.page = 1;
+        this.changePage();
+      },
       doSearchDebounce: debounce(function () {
         this.doSearch();
       }, 500),
