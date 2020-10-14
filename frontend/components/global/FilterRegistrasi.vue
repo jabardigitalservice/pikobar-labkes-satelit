@@ -26,9 +26,7 @@
             <div>Nomor Sampel</div>
           </div>
           <div class="col-md-8 input-group">
-            <input type="text" class="form-control" placeholder="Nomor awal" v-model="params.start_nomor_sampel">
-            &nbsp;
-            <input type="text" class="form-control" placeholder="Nomor akhir" v-model="params.end_nomor_sampel">
+            <input type="text" class="form-control" placeholder="Nomor awal" v-model="params.nomor_sampel">
           </div>
         </div>
         <div class="form-group row">
@@ -132,8 +130,7 @@
         this.params.kota = null;
         this.params.status = null;
         this.kota = null;
-        this.params.start_nomor_sampel = null;
-        this.params.end_nomor_sampel = null;
+        this.params.nomor_sampel = null;
         this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
       },
       onDateSelected: function (daterange) {

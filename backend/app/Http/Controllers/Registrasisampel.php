@@ -66,6 +66,9 @@ class Registrasisampel extends Controller
                     case "status":
                         $models = $models->where('register.status', 'ilike', '%' . $val . '%');
                         break;
+                    case "nomor_sampel":
+                        $models = $models->where('sampel.nomor_sampel', 'ilike', '%' . $val . '%');
+                        break;
                     default:
                         break;
                 }
