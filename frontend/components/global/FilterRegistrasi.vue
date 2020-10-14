@@ -132,6 +132,7 @@
         this.params.status = null;
         this.kota = null;
         this.params.nomor_sampel = null;
+        this.$refs.rangedatepicker.$data.dateRange = {};
         this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
       },
       onDateSelected: function (daterange) {
