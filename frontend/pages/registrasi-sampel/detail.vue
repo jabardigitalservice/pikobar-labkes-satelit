@@ -251,8 +251,8 @@
         return "";
       },
       instansiPengirim() {
-        if(this.data.instansi_pengirim) {
-          return humanize(this.data.instansi_pengirim)
+        if(this.data.reg_fasyankes_pengirim) {
+          return humanize(this.data.reg_fasyankes_pengirim)
         }
         return ""
       }
