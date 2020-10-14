@@ -152,14 +152,13 @@
             link.remove();
           });
       },
-      doFilter() {
-        this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
-      },
       async doImport() {
         let formData = new FormData();
         formData.append('register_file', this.form.register_file);
         this.loading = true;
         JQuery('#importRM').modal('hide');
+        this.$bus.$emit('reset-importfile');
+        this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
         try {
           await this.$axios.post(`${process.env.apiUrl}/v1/register/import-sampel`, formData, {
             headers: {
@@ -198,7 +197,6 @@
             );
           }
         }
-        this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
 
         $('#register_file').val('');
         this.form.reset();

@@ -58,6 +58,13 @@
         }
       }
     },
-    methods: {}
+    created() {
+      this.$bus.$on('reset-importfile', this.doResetFile)
+    },
+    methods: {
+      doResetFile () {
+        this.$refs.myFile.removeAllFiles();
+      }
+    }
   }
 </script>
