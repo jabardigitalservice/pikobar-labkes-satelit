@@ -37,8 +37,7 @@ class PelaporanController extends Controller
                 ->distinct('nama_lengkap', 'nik')
                 ->orderByRaw('nama_lengkap desc, nik desc, updated_at desc')
                 ->limit(10)->get();
-            $key = $response['status_code'] == 200 ? count($response['data']['content']) : 0;
-            foreach ($pasien as $item) {
+            foreach ($pasien as $key => $item) {
                 $response['data']['content'][$key]['id'] = null;
                 $response['data']['content'][$key]['id_case'] = null;
                 $response['data']['content'][$key]['nik'] = $item->nik;
