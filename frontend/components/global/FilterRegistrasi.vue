@@ -26,7 +26,7 @@
             <div>Nomor Sampel</div>
           </div>
           <div class="col-md-8 input-group">
-            <input type="text" class="form-control" placeholder="Nomor awal" v-model="params.nomor_sampel">
+            <input type="text" class="form-control" placeholder="Nomor Sampel" v-model="params.nomor_sampel">
           </div>
         </div>
         <div class="form-group row">
@@ -101,7 +101,8 @@
           start_date: null,
           end_date: null,
           kota: null,
-          status: null
+          status: null,
+          nomor_sampel: null,
         },
         kota: {},
         optionKota: []
