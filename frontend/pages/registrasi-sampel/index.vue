@@ -152,20 +152,19 @@
             link.remove();
           });
       },
-      doFilter() {
-        this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
-      },
       async doImport() {
         let formData = new FormData();
         formData.append('register_file', this.form.register_file);
         this.loading = true;
         JQuery('#importRM').modal('hide');
+        this.$bus.$emit('reset-importfile');
         try {
           await this.$axios.post(`${process.env.apiUrl}/v1/register/import-sampel`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           });
+          this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
           this.$toast.success('Sukses import data', {
             icon: "check",
             iconPack: "fontawesome",
@@ -198,7 +197,6 @@
             );
           }
         }
-        this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
 
         $('#register_file').val('');
         this.form.reset();
