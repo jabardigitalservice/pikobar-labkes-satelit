@@ -70,7 +70,7 @@ class VerifikasiController extends Controller
                         $models->where('pasien.nama_lengkap', 'ilike', '%' . $val . '%');
                         break;
                     case 'instansi_pengirim':
-                        $models->where('register.instansi_pengirim_nama', 'ilike', '%' . $val . '%');
+                        $models->where('register.nama_rs', 'ilike', '%' . $val . '%');
                         break;
                     case 'start_date':
                         $models->whereDate('waktu_pcr_sample_analyzed', '>=', date('Y-m-d', strtotime($val)));
@@ -82,7 +82,7 @@ class VerifikasiController extends Controller
                         $models->where('register.sumber_pasien', 'ilike', '%' . $val . '%');
                         break;
                     case 'status':
-                        $models->where('status', 'ilike', '%' . $val . '%');
+                        $models->where('register.status', $val);
                         break;
                     default:
                         break;
@@ -431,7 +431,12 @@ class VerifikasiController extends Controller
                 'catatan_pemeriksaan' => $request->input('catatan_pemeriksaan') != '' ? $request->input('catatan_pemeriksaan') : null,
                 'hasil_deteksi' => $this->parseHasilDeteksi($request->hasil_deteksi),
             ]);
-
+            $pcr = PemeriksaanSampel::with('sampel')->find($request->input('last_pemeriksaan_id'));
+            $pcr->sampel->addLog([
+                'user_id' => $request->user()->id,
+                'metadata' => $pcr,
+                'description' => "PCR Sample analyzed as [$pcr->kesimpulan_pemeriksaan]",
+            ]);
             DB::commit();
 
             return response()->json([

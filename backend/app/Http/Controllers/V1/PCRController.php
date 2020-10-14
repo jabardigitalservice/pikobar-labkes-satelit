@@ -23,7 +23,6 @@ class PCRController extends Controller
 
     public function getData(Request $request)
     {
-        $user = $request->user();
         $models = Sampel::leftJoin('register', 'sampel.register_id', 'register.id')
             ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
             ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
@@ -34,7 +33,7 @@ class PCRController extends Controller
         if ($search != '') {
             $models = $models->where(function ($q) use ($search) {
                 $q->where('nomor_sampel', 'ilike', '%' . $search . '%')
-                    ->orWhere('register.instansi_pengirim_nama', 'ilike', '%' . $search . '%')
+                    ->orWhere('register.nama_rs', 'ilike', '%' . $search . '%')
                     ->orWhere('nama_lengkap', 'ilike', '%' . $search . '%')
                     ->orWhere('nik', 'ilike', '%' . $search . '%');
             });
@@ -53,7 +52,7 @@ class PCRController extends Controller
                         $models = $models->whereDate('sampel.waktu_sample_taken', '<=', date('Y-m-d', strtotime($val)));
                         break;
                     case 'instansi_pengirim':
-                        $models = $models->where('register.instansi_pengirim_nama', 'ilike', '%' . $val . '%');
+                        $models = $models->where('register.nama_rs', 'ilike', '%' . $val . '%');
                         break;
                     default:
                         break;

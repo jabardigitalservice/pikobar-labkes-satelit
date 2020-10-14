@@ -62,11 +62,11 @@
         </div>
         <div class="form-group row">
           <div class="col-md-4 flex-text-center">
-            <div>Status</div>
+            <div>Kriteria</div>
           </div>
           <div class="col-md-8">
             <select class="form-control" type="text" name="reg_kota" placeholder="" v-model="params.status">
-              <option :value="item.id" :key="idx" v-for="(item,idx) in status">{{item.nama}}
+              <option :value="item.value" :key="idx" v-for="(item,idx) in status">{{item.text}}
               </option>
             </select>
           </div>
@@ -86,7 +86,7 @@
 <script>
   import {
     KesimpulanPemeriksaan,
-    pasienStatusOld
+    pasienStatus
   } from './../../assets/js/constant/enum';
   let _this = null;
   export default {
@@ -95,7 +95,7 @@
     data() {
       return {
         hasil_pemeriksaan: KesimpulanPemeriksaan,
-        status: pasienStatusOld,
+        status: pasienStatus,
         optFasyankes: [],
         params: {
           nama_pasien: null,
@@ -138,6 +138,8 @@
         this.params.sumber_pasien = null;
         this.params.status = null;
         this.kota = null;
+        this.$refs.rangedatepicker.dateRange.start = null;
+        this.$refs.rangedatepicker.dateRange.end = null;
         this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
       },
       onDateSelected: function (daterange) {
@@ -145,7 +147,6 @@
         this.params.end_date = daterange.end || null;
       }
     },
-    mounted() {},
     created() {
       _this = this;
       this.getKota();

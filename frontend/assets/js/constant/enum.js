@@ -12,23 +12,6 @@ export const KesimpulanPemeriksaan = [{
   nama: 'INVALID'
 }];
 
-export const pasienStatusOld = [{
-  id: 'otg',
-  nama: 'OTG'
-}, {
-  id: 'odp',
-  nama: 'ODP'
-}, {
-  id: 'pdp',
-  nama: 'PDP'
-}, {
-  id: 'positif',
-  nama: 'Positif'
-}, {
-  id: 'tanpa_status',
-  nama: 'Tanpa Status'
-}];
-
 export const oidHasChecked = ['ekstraksi-penerimaan', 'ekstraksi-dilakukan', 'pcr-penerimaan', 'validasi'];
 
 export const metodeEkstraksi = ['Manual', 'Otomatis'];

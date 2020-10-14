@@ -64,6 +64,8 @@
         this.params.instansi_pengirim = null;
         this.params.start_date = null;
         this.params.end_date = null;
+        this.$refs.rangedatepicker.dateRange.start = null;
+        this.$refs.rangedatepicker.dateRange.end = null;
         this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
       },
       onDateSelected: function (daterange) {
