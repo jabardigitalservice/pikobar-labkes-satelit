@@ -105,24 +105,34 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                 if ($row->get('tgl_lahir')) {
                     $pasien->tanggal_lahir = date('Y-m-d', strtotime($row->get('tgl_lahir')));
                 }
-                $namaProvinsi = $this->__getWilayah('provinsi', $row->get('kode_provinsi'));
-                $namaKota = $this->__getWilayah('kota', $row->get('kode_kota_kab'));
-                $namaKecamatan = $this->__getWilayah('kecamatan', $row->get('kode_kecamatan'));
-                $namaKelurahan = $this->__getWilayah('kelurahan', $row->get('kode_kelurahan'));
+                $provinsi = $this->__getWilayah('provinsi', $row->get('kode_provinsi'));
+                $kota = $this->__getWilayah('kota', $row->get('kode_kota_kab'));
+                $kecamatan = $this->__getWilayah('kecamatan', $row->get('kode_kecamatan'));
+                $kelurahan = $this->__getWilayah('kelurahan', $row->get('kode_kelurahan'));
 
-                $pasien->kode_provinsi = $row->get('kode_provinsi');
+                $namaProvinsi = option($provinsi)->nama;
+                $namaKota = option($kota)->nama;
+                $namaKecamatan = option($kecamatan)->nama;
+                $namaKelurahan = option($kelurahan)->nama;
+
+                $kodeProvinsi = option($provinsi)->kode;
+                $kodeKota = option($kota)->kode;
+                $kodeKecamatan = option($kecamatan)->kode;
+                $kodeKelurahan = option($kelurahan)->kode;
+
+                $pasien->kode_provinsi = $kodeProvinsi;
                 $pasien->nama_provinsi = $namaProvinsi;
 
-                $pasien->kota_id = $row->get('kode_kota_kab');
-                $pasien->kode_kabupaten = $row->get('kode_id');
+                $pasien->kota_id = $kodeKota;
+                $pasien->kode_kabupaten = $kodeKota;
                 $pasien->nama_kabupaten = $namaKota;
 
                 $pasien->kecamatan = $namaKecamatan;
-                $pasien->kode_kecamatan = $row->get('kode_kecamatan');
+                $pasien->kode_kecamatan = $kodeKecamatan;
                 $pasien->nama_kecamatan = $namaKecamatan;
 
                 $pasien->kelurahan = $namaKelurahan;
-                $pasien->kode_kelurahan = $row->get('kode_kelurahan');
+                $pasien->kode_kelurahan = $kodeKelurahan;
                 $pasien->nama_kelurahan = $namaKelurahan;
 
                 $pasien->alamat_lengkap = $row->get('alamat');
@@ -181,16 +191,16 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
         }
         switch ($tingkat) {
             case 'provinsi':
-                $namaWilayah = optional(Provinsi::find($id_wilayah))->nama;
+                $namaWilayah = Provinsi::find($id_wilayah);
                 break;
             case 'kota':
-                $namaWilayah = optional(Kota::find($id_wilayah))->nama;
+                $namaWilayah = Kota::find($id_wilayah);
                 break;
             case 'kecamatan':
-                $namaWilayah = optional(Kecamatan::find($id_wilayah))->nama;
+                $namaWilayah = Kecamatan::find($id_wilayah);
                 break;
             case 'kelurahan':
-                $namaWilayah = optional(Kelurahan::find($id_wilayah))->nama;
+                $namaWilayah = Kelurahan::find($id_wilayah);
                 break;
             default:
                 break;
