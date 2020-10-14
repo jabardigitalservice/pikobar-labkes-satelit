@@ -17,7 +17,7 @@ class PelaporanController extends Controller
     {
         $pelaporan = new PelaporanService;
         $response = $pelaporan->pendaftar_rdt($request->get('search'), $request->get('limit', 10))->json();
-        if ($response['status_code'] == 200) {
+        if ($response['status_code'] == 200 && count($response['data']['content']) > 0) {
             foreach ($response['data']['content'] as $key => $item) {
                 $response['data']['content'][$key]['status_code'] = $this->setStatusCoce($item['status']);
                 $response['data']['content'][$key]['address_district_code'] = (int)str_replace('.', '', $item['address_district_code']);
