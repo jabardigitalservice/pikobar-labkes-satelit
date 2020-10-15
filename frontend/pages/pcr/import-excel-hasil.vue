@@ -10,28 +10,19 @@
     </portal>
     <form @submit.prevent="dummy">
       <div class="row">
-        <div class="col-md-4">
-          <Ibox title="Loading Data">
+        <div class="col-md-5">
+          <Ibox title="Import Data">
             <div class="form-group">
-              <label for="register_file">File Input Hasil</label>
-              <input class="form-control" type="file" ref="myFile" @change="previewFile" id="register_file"
-                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+              <dropzone-import-excel :previewFile="previewFile" />
             </div>
 
             <div class="form-group">
-              <button
-                @click="submit()"
-                :disabled="loading"
-                :class="{'btn-loading': loading}"
-                class="btn btn-md btn-primary block full-width m-b"
-                type="button"
-              >
-                <i class="fa fa-search"></i>
-                Baca Excel
+              <button @click="submit()" :disabled="loading" :class="{'btn-loading': loading}"
+                class="btn btn-md btn-default block full-width m-b" type="button">
+                <i class="fa fa-search" /> Baca Excel
               </button>
             </div>
-          </Ibox>
-          <Ibox title="Import Data">
+            <hr><br>
             <div class="form-group" v-if="errors_count == 0 && data.length > 0">
               Terdapat {{ data.length }} data
             </div>
@@ -40,20 +31,24 @@
             </div>
 
             <div class="form-group">
-              <button
-                @click="submitData()"
-                :disabled="loading || data.length == 0 || errors_count > 0"
-                :class="{'btn-loading': loading}"
-                class="btn btn-md btn-success block full-width m-b"
-                type="button"
-              >
-                <i class="fa fa-check"></i>
-                Import Data
+              <button @click="submitData()" :disabled="loading || data.length == 0 || errors_count > 0"
+                :class="{'btn-loading': loading}" class="btn btn-md btn-primary block full-width m-b" type="button">
+                <i class="fa fa-check" /> Import Excel
               </button>
+              <div class="form-group">
+                <label class="text-muted" style="text-align: justify">
+                  Berikut adalah contoh format untuk Import Excel Input Hasil PCR Laboratorium yang dapat diunduh
+                  sebagai referensi.
+                </label>
+                <button @click="downloadFormat('formatInputHasil')" :disabled="loading"
+                  :class="{'btn-loading': loading}" class="btn btn-sm btn-default" type="button">
+                  <i class="fa fa-file" /> Format Import
+                </button>
+              </div>
             </div>
           </Ibox>
         </div>
-        <div class="col-md-8" v-if="data.length > 0">
+        <div class="col-md-7" v-if="data.length > 0">
           <Ibox title="Pratijau Import Data">
             <table class="table table-bordered table-striped">
               <thead>
@@ -72,7 +67,8 @@
                     <td>{{ row.no }}</td>
                     <td>{{ row.nomor_sampel }}</td>
                     <td>
-                      <div v-for="(value) in row.target_gen" :key="value.target_gen">- {{ value.target_gen }}: {{ value.ct_value }}</div>
+                      <div v-for="(value) in row.target_gen" :key="value.target_gen">- {{ value.target_gen }}:
+                        {{ value.ct_value }}</div>
                     </td>
                     <td>{{ row.kesimpulan_pemeriksaan }}</td>
                     <td>{{ row.tanggal_input_hasil }}</td>
@@ -95,119 +91,130 @@
 </template>
 
 <script>
-import Form from "vform";
-import axios from "axios";
+  import Form from "vform";
+  import axios from "axios";
 
-export default {
-  middleware: "auth",
+  export default {
+    middleware: "auth",
 
-  data() {
-    return {
-      loading: false,
-      data: [],
-      errors: {},
-      errors_count: 0,
-    };
-  },
-
-  async asyncData({ route, store }) {
-    let form = new Form({
-      register_file: null
-    });
-
-    return {
-      form
-    };
-  },
-
-  head() {
-    return {
-      title: "Import Hasil PCR Laboratorium"
-    };
-  },
-  methods: {
-    dummy() {
-      return false;
+    data() {
+      return {
+        loading: false,
+        data: [],
+        errors: {},
+        errors_count: 0,
+      };
     },
 
-    async submit() {
-      let formData = new FormData();
+    async asyncData({
+      route,
+      store
+    }) {
+      let form = new Form({
+        register_file: null
+      });
 
-      formData.append("register_file", this.form.register_file);
+      return {
+        form
+      };
+    },
 
-      this.loading = true;
+    head() {
+      return {
+        title: "Import Hasil PCR Laboratorium"
+      };
+    },
+    methods: {
+      dummy() {
+        return false;
+      },
+      downloadFormat(namaFile) {
+        this.$axios.get(`v1/download?namaFile=${namaFile}`, {
+            responseType: 'blob'
+          })
+          .then(response => {
+            let blob = new Blob([response.data], {
+              type: response.headers['content-type']
+            })
+            let link = document.createElement('a')
+            link.href = window.URL.createObjectURL(blob)
+            link.download = namaFile + '.xlsx'
+            link.setAttribute('download', link.download);
+            document.body.appendChild(link);
+            link.click()
+            window.URL.revokeObjectURL(link.href);
+            link.remove();
+          });
+      },
+      async submit() {
+        let formData = new FormData();
+        formData.append("register_file", this.form.register_file);
+        this.loading = true;
 
-      try {
-        // this.$toast.show('Importing in...')
-
-        let resp = await axios.post("/v1/pcr/import-hasil-pemeriksaan", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          }
-        });
-
-        this.$toast.success("Mohon cek data ini terlebih dahulu", {
-          icon: "check",
-          iconPack: "fontawesome",
-          duration: 5000
-        });
-        this.data = resp.data.data
-        this.errors = resp.data.errors
-        this.errors_count = resp.data.errors_count
-      } catch (err) {
-        console.log("ERRRR", err);
-
-        if (err.response && err.response.data.code == 422) {
-          this.$nextTick(() => {
-            this.form.errors.set(err.response.data.error);
+        try {
+          let resp = await axios.post("/v1/pcr/import-hasil-pemeriksaan", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
           });
 
-          this.$toast.error("Mohon cek kembali formulir Anda", {
-            icon: "times",
+          this.$toast.success("Mohon cek data ini terlebih dahulu", {
+            icon: "check",
             iconPack: "fontawesome",
             duration: 5000
           });
-        } else {
+          this.data = resp.data.data
+          this.errors = resp.data.errors
+          this.errors_count = resp.data.errors_count
+        } catch (err) {
+          console.log("ERRRR", err);
+
+          if (err.response && err.response.data.code == 422) {
+            this.$nextTick(() => {
+              this.form.errors.set(err.response.data.error);
+            });
+
+            this.$toast.error("Mohon cek kembali formulir Anda", {
+              icon: "times",
+              iconPack: "fontawesome",
+              duration: 5000
+            });
+          } else {
+            this.$swal.fire(
+              "Terjadi kesalahan",
+              "Silakan hubungi Admin",
+              "error"
+            );
+          }
+          this.$sentry.captureException(err)
+        }
+        this.loading = false;
+      },
+      async submitData() {
+        // Submit the form.
+        this.$bus.$emit('reset-importfile');
+        try {
+          this.loading = true;
+          const response = await axios.post("/v1/pcr/import-data-hasil-pemeriksaan", {
+            data: this.data
+          });
+          this.$toast.success(response.data.message, {
+            icon: "check",
+            iconPack: "fontawesome",
+            duration: 5000
+          });
+          this.$router.back()
+        } catch (err) {
           this.$swal.fire(
             "Terjadi kesalahan",
             "Silakan hubungi Admin",
             "error"
           );
         }
-        this.$sentry.captureException(err)
+      },
+      previewFile(file) {
+        this.form.register_file = file;
       }
-
-      this.loading = false;
-
-    },
-    async submitData() {
-      // Submit the form.
-      try {
-        this.loading = true;
-        const response = await axios.post("/v1/pcr/import-data-hasil-pemeriksaan", {data: this.data});
-        this.$toast.success(response.data.message, {
-          icon: "check",
-          iconPack: "fontawesome",
-          duration: 5000
-        });
-        this.$router.back()
-      } catch (err) {
-        this.$swal.fire(
-          "Terjadi kesalahan",
-          "Silakan hubungi Admin",
-          "error"
-        );
-      }
-    },
-    previewFile() {
-      this.form.register_file = this.$refs.myFile.files[0];
-      this.$nextTick(() => {
-        this.submit()
-        $('#register_file').val('');
-        this.form.reset();
-        this.form.register_file = null;
-      })
     }
-  }
-};
+  };
 </script>
