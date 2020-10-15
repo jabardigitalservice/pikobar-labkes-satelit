@@ -38,7 +38,7 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                 }
 
                 $validator = Validator::make($row->toArray(), [
-                    'tgl_masuk_sampel' => 'nullable|date|date_format:Y-m-d',
+                    'tgl_masuk_sampel' => 'required|date|date_format:Y-m-d',
                     'kode_sampel' => 'required',
                     'kategori' => 'required',
                     'nama' => 'required',
@@ -52,6 +52,7 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                     'interpretasi' => 'required|in:Positif,Negatif,Inkonklusif',
                     'tanggal_pemeriksaan' => 'required|date|date_format:Y-m-d',
                 ], [
+                    'tgl_masuk_sampel.required' => 'Tanggal masuk sampel tidak boleh kosong',
                     'tgl_masuk_sampel.date' => 'Tanggal Masuk Sampel tidak valid',
                     'tgl_masuk_sampel.date_format' => 'Format Tanggal Masuk Sampel harus yyyy-mm-dd',
                     'kode_sampel.required' => 'Nomor Sampel tidak boleh kosong',
@@ -114,7 +115,7 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                     $pasien->tanggal_lahir = date('Y-m-d', strtotime($row->get('tgl_lahir')));
                 }
                 $provinsi = $this->__getWilayah('provinsi', $row->get('kode_provinsi'));
-                $kota = $this->__getWilayah('kota', $row->get('kode_kota_kab'));
+                $kota = $this->__getWilayah('kota', $row->get('kode_kotakab'));
                 $kecamatan = $this->__getWilayah('kecamatan', $row->get('kode_kecamatan'));
                 $kelurahan = $this->__getWilayah('kelurahan', $row->get('kode_kelurahan'));
 
@@ -123,10 +124,10 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                 $namaKecamatan = optional($kecamatan)->nama;
                 $namaKelurahan = optional($kelurahan)->nama;
 
-                $kodeProvinsi = optional($provinsi)->kode;
-                $kodeKota = optional($kota)->kode;
-                $kodeKecamatan = optional($kecamatan)->kode;
-                $kodeKelurahan = optional($kelurahan)->kode;
+                $kodeProvinsi = optional($provinsi)->id;
+                $kodeKota = optional($kota)->id;
+                $kodeKecamatan = optional($kecamatan)->id;
+                $kodeKelurahan = optional($kelurahan)->id;
 
                 $pasien->kode_provinsi = $kodeProvinsi;
                 $pasien->nama_provinsi = $namaProvinsi;
@@ -174,15 +175,9 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
                 $sampel->pengambilan_sampel_id = $pengambilan_sampel->id;
                 $sampel->creator_user_id = $user->id;
                 $sampel->sampel_status = 'sample_taken';
-                if ($row->get('tgl_masuk_sampel')) {
-                    $sampel->created_at = date('Y-m-d H:i:s', strtotime($row->get('tgl_masuk_sampel') . ' ' . date('H:i:s')));
-                    $sampel->waktu_sample_taken = date('Y-m-d H:i:s', strtotime($row->get('tgl_masuk_sampel') . ' ' . date('H:i:s')));
-                    $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s', strtotime($row->get('tgl_masuk_sampel') . ' ' . date('H:i:s')));
-                } else {
-                    $sampel->waktu_sample_taken = date('Y-m-d H:i:s');
-                    $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s');
-                }
-
+                $sampel->created_at = date('Y-m-d H:i:s', strtotime($row->get('tgl_masuk_sampel') . ' ' . date('H:i:s')));
+                $sampel->waktu_sample_taken = date('Y-m-d H:i:s', strtotime($row->get('tgl_masuk_sampel') . ' ' . date('H:i:s')));
+                $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s', strtotime($row->get('tanggal_pemeriksaan') . ' ' . date('H:i:s')));
                 $sampel->save();
 
                 $pcr = new PemeriksaanSampel;
