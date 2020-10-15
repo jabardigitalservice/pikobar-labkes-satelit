@@ -172,14 +172,6 @@
           </div>
           <div class="form-group row">
             <div class="col-md-5 text-blue flex-text-center">
-              Dinkes Pengirim
-            </div>
-            <div class="col-md-7 flex-text-center">
-              {{data.instansi_pengirim || null}}
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-md-5 text-blue flex-text-center">
               Kriteria
             </div>
             <div class="col-md-7 flex-text-center">

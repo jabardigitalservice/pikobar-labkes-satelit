@@ -430,6 +430,7 @@
     methods: {
       async asyncFind(query) {
         this.isLoadingPencarian = true
+        this.optionPencarian = []
         if (query != '') {
           let resp = await axios.get('/v1/pelaporan/fetch?search=' + query);
           this.optionPencarian = resp.data.data.content

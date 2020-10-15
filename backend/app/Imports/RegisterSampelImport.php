@@ -43,7 +43,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     'nik' => 'nullable|digits:16',
                     'tgl_lahir' => 'nullable|date|date_format:Y-m-d',
                     'kriteria' => 'nullable|in:Kontak Erat,Suspek,Probable,Konfirmasi,Tanpa Kriteria',
-                    'id_fasyankes' => 'required|numeric',
+                    'kode_instansi' => 'required|numeric',
                     'jenis_sampel' => 'required',
                     'swab_ke' => 'nullable|numeric',
                     'tanggal_swab' => 'nullable|date|date_format:Y-m-d',
@@ -58,8 +58,8 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     'tgl_lahir.date_format' => 'Format Tanggal Lahir harus yyyy-mm-dd',
                     'kriteria.in' => 'kriteria harus berisi Kontak Erat, Suspek, Probable, Konfirmasi atau Tanpa Kriteria',
                     'jenis_sampel.required' => 'Jenis Sampel tidak boleh kosong',
-                    'id_fasyankes.required' => 'ID Fasyankes tidak boleh kosong',
-                    'id_fasyankes.numeric' => 'ID Fasyankes harus berupa angka',
+                    'kode_instansi.required' => 'Kode Instansi tidak boleh kosong',
+                    'kode_instansi.numeric' => 'Kode Instansi harus berupa angka',
                     'swab_ke.numeric' => 'Swab ke harus berupa angka',
                     'tanggal_swab.date' => 'Tanggal Swab tidak valid',
                     'tanggal_swab.date_format' => 'Format Tanggal Swab harus yyyy-mm-dd',
@@ -72,8 +72,13 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     if ($nomorsampel) {
                         $validator->errors()->add("kode_sampel", "Nomor Sampel sudah digunakan {$row['kode_sampel']}");
                     }
+                    $fasyankes = $this->__getFasyankes($row->get('kode_instansi'));
+                    if (!$fasyankes) {
+                        $validator->errors()->add("kode_instansi", "Kode Instansi tidak ditemukan {$row['kode_instansi']}");
+                    }
                 })->validate();
-                $fasyankes = $this->__getFasyankes($row->get('id_fasyankes'));
+                $fasyankes = $this->__getFasyankes($row->get('kode_instansi'));
+                $fasyankesId = optional($fasyankes)->id;
                 $fasyankesNama = optional($fasyankes)->nama;
                 $fasyankesTipe = optional($fasyankes)->tipe;
                 $register = new Register;
@@ -81,7 +86,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                 $register->register_uuid = (string)Str::uuid();
                 $register->creator_user_id = $user->id;
                 $register->lab_satelit_id = $user->lab_satelit_id;
-                $register->fasyankes_id = $row->get('id_fasyankes');
+                $register->fasyankes_id = $fasyankesId;
                 $register->fasyankes_pengirim = $fasyankesTipe;
                 $register->nama_rs = $fasyankesNama;
                 $register->instansi_pengirim = $fasyankesTipe;
@@ -93,7 +98,6 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                     $register->tanggal_swab = date('Y-m-d', strtotime($row->get('tanggal_swab')));
                 }
                 $register->save();
-
                 $pasien = new Pasien;
                 $pasien->nama_lengkap = $row->get('nama');
                 $pasien->kewarganegaraan = $row->get('kewarganegaraan');
@@ -101,33 +105,40 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                 if ($row->get('tgl_lahir')) {
                     $pasien->tanggal_lahir = date('Y-m-d', strtotime($row->get('tgl_lahir')));
                 }
-                $namaProvinsi = $this->__getWilayah('provinsi', $row->get('provinsi_id'));
-                $namaKota = $this->__getWilayah('kota', $row->get('kota_id'));
-                $namaKecamatan = $this->__getWilayah('kecamatan', $row->get('kecamatan_id'));
-                $namaKelurahan = $this->__getWilayah('kelurahan', $row->get('kelurahan_id'));
+                $provinsi = $this->__getWilayah('provinsi', $row->get('kode_provinsi'));
+                $kota = $this->__getWilayah('kota', $row->get('kode_kota_kab'));
+                $kecamatan = $this->__getWilayah('kecamatan', $row->get('kode_kecamatan'));
+                $kelurahan = $this->__getWilayah('kelurahan', $row->get('kode_kelurahan'));
 
-                $pasien->kode_provinsi = $row->get('provinsi_id');
+                $namaProvinsi = option($provinsi)->nama;
+                $namaKota = option($kota)->nama;
+                $namaKecamatan = option($kecamatan)->nama;
+                $namaKelurahan = option($kelurahan)->nama;
+
+                $kodeProvinsi = option($provinsi)->kode;
+                $kodeKota = option($kota)->kode;
+                $kodeKecamatan = option($kecamatan)->kode;
+                $kodeKelurahan = option($kelurahan)->kode;
+
+                $pasien->kode_provinsi = $kodeProvinsi;
                 $pasien->nama_provinsi = $namaProvinsi;
 
-                $pasien->kota_id = $row->get('kota_id');
-                $pasien->kode_kabupaten = $row->get('kode_id');
+                $pasien->kota_id = $kodeKota;
+                $pasien->kode_kabupaten = $kodeKota;
                 $pasien->nama_kabupaten = $namaKota;
 
                 $pasien->kecamatan = $namaKecamatan;
-                $pasien->kode_kecamatan = $row->get('kecamatan_id');
+                $pasien->kode_kecamatan = $kodeKecamatan;
                 $pasien->nama_kecamatan = $namaKecamatan;
 
                 $pasien->kelurahan = $namaKelurahan;
-                $pasien->kode_kelurahan = $row->get('kelurahan_id');
+                $pasien->kode_kelurahan = $kodeKelurahan;
                 $pasien->nama_kelurahan = $namaKelurahan;
 
                 $pasien->alamat_lengkap = $row->get('alamat');
                 $pasien->sumber_pasien = $row->get('kategori');
-                $pasien->no_rt = $row->get('rt');
-                $pasien->no_rw = $row->get('rw');
                 $pasien->jenis_kelamin = $row->get('jenis_kelamin');
-                $pasien->usia_tahun = $row->get('usia_tahun');
-                $pasien->usia_bulan = $row->get('usia_bulan');
+                $pasien->usia_tahun = $row->get('usia');
                 $pasien->lab_satelit_id = $user->lab_satelit_id;
                 $pasien->save();
 
@@ -180,16 +191,16 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
         }
         switch ($tingkat) {
             case 'provinsi':
-                $namaWilayah = optional(Provinsi::find($id_wilayah))->nama;
+                $namaWilayah = Provinsi::find($id_wilayah);
                 break;
             case 'kota':
-                $namaWilayah = optional(Kota::find($id_wilayah))->nama;
+                $namaWilayah = Kota::find($id_wilayah);
                 break;
             case 'kecamatan':
-                $namaWilayah = optional(Kecamatan::find($id_wilayah))->nama;
+                $namaWilayah = Kecamatan::find($id_wilayah);
                 break;
             case 'kelurahan':
-                $namaWilayah = optional(Kelurahan::find($id_wilayah))->nama;
+                $namaWilayah = Kelurahan::find($id_wilayah);
                 break;
             default:
                 break;

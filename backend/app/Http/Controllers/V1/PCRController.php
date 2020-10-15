@@ -445,7 +445,7 @@ class PCRController extends Controller
         $user = $request->user();
         $data = $request->data;
         foreach ($data as $row) {
-            $sampel = Sampel::find($row['sampel_id']);
+            $sampel = Sampel::with(['pcr'])->find($row['sampel_id']);
             if ($sampel) {
                 $pcr = $sampel->pcr;
                 if (!$pcr) {
