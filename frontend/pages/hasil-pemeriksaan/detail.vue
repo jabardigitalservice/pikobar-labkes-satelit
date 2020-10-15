@@ -212,7 +212,7 @@
 
           <div class="form-group row">
             <div class="col-md-5 text-blue flex-text-center">
-              Nama Kit Pemeriksaan 
+              Nama Kit Pemeriksaan
             </div>
             <div class="col-md-7 flex-text-center">
               {{data.nama_kit_pemeriksaan || null}}
