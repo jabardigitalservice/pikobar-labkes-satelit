@@ -68,7 +68,7 @@
           <br>
           <div class="form-group">
             <label class="text-muted" style="text-align: justify">
-              Berikut adalah contoh format untuk import excel, data wilayah, dan data fasyankes yang dapat diunduh
+              Berikut adalah contoh format untuk import excel Registrasi sampel, data wilayah, dan data fasyankes yang dapat diunduh
               sebagai referensi.
             </label>
             <button @click="downloadFormat('formatRegistrasi')" :disabled="loading" :class="{'btn-loading': loading}"

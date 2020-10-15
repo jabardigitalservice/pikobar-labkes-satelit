@@ -128,17 +128,30 @@
       dummy() {
         return false;
       },
-
+      downloadFormat(namaFile) {
+        this.$axios.get(`v1/download?namaFile=${namaFile}`, {
+            responseType: 'blob'
+          })
+          .then(response => {
+            let blob = new Blob([response.data], {
+              type: response.headers['content-type']
+            })
+            let link = document.createElement('a')
+            link.href = window.URL.createObjectURL(blob)
+            link.download = namaFile + '.xlsx'
+            link.setAttribute('download', link.download);
+            document.body.appendChild(link);
+            link.click()
+            window.URL.revokeObjectURL(link.href);
+            link.remove();
+          });
+      },
       async submit() {
         let formData = new FormData();
-
         formData.append("register_file", this.form.register_file);
-
         this.loading = true;
 
         try {
-          // this.$toast.show('Importing in...')
-
           let resp = await axios.post("/v1/pcr/import-hasil-pemeriksaan", formData, {
             headers: {
               "Content-Type": "multipart/form-data"
@@ -175,9 +188,7 @@
           }
           this.$sentry.captureException(err)
         }
-
         this.loading = false;
-
       },
       async submitData() {
         // Submit the form.
@@ -201,14 +212,8 @@
           );
         }
       },
-      previewFile() {
-        this.form.register_file = this.$refs.myFile.files[0];
-        this.$nextTick(() => {
-          this.submit()
-          $('#register_file').val('');
-          this.form.reset();
-          this.form.register_file = null;
-        })
+      previewFile(file) {
+        this.form.register_file = file;
       }
     }
   };

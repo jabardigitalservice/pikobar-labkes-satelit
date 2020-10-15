@@ -55,15 +55,31 @@
       <div slot="body">
         <div class="col-lg-12">
           <div class="form-group">
-            <label for="register_file">
-              Upload an .xlsx file
-            </label>
-            <input class="form-control" type="file" id="register_file" ref="myFile" @change="previewFile">
+            <dropzone-import-excel :previewFile="previewFile" />
           </div>
           <div class="form-group">
             <button @click="doImport()" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-md btn-primary block m-b" type="button">
+              class="btn btn-md btn-primary block m-b pull-right" type="button">
               <i class="fa fa-check" /> Import Excel
+            </button>
+          </div>
+          <br>
+          <div class="form-group">
+            <label class="text-muted" style="text-align: justify">
+              Berikut adalah contoh format untuk import excel Hasil Pemeriksaan, data wilayah, dan data fasyankes yang dapat diunduh
+              sebagai referensi.
+            </label>
+            <button @click="downloadFormat('formatHasilPemeriksaan')" :disabled="loading" :class="{'btn-loading': loading}"
+              class="btn btn-sm btn-default" type="button">
+              <i class="fa fa-file" /> Format Import
+            </button>
+            <button @click="downloadFormat('wilayah')" :disabled="loading" :class="{'btn-loading': loading}"
+              class="btn btn-sm btn-default" type="button">
+              <i class="fa fa-file" /> Data Wilayah
+            </button>
+            <button @click="downloadFormat('fasyankes')" :disabled="loading" :class="{'btn-loading': loading}"
+              class="btn btn-sm btn-default" type="button">
+              <i class="fa fa-file" /> Data Fasyankes
             </button>
           </div>
         </div>
@@ -165,6 +181,24 @@
       },
     },
     methods: {
+      downloadFormat(namaFile) {
+        this.$axios.get(`v1/download?namaFile=${namaFile}`, {
+            responseType: 'blob'
+          })
+          .then(response => {
+            let blob = new Blob([response.data], {
+              type: response.headers['content-type']
+            })
+            let link = document.createElement('a')
+            link.href = window.URL.createObjectURL(blob)
+            link.download = namaFile + '.xlsx'
+            link.setAttribute('download', link.download);
+            document.body.appendChild(link);
+            link.click()
+            window.URL.revokeObjectURL(link.href);
+            link.remove();
+          });
+      },
       async onExport(type) {
         try {
           this.loading = true;
@@ -226,12 +260,14 @@
         formData.append('register_file', this.form.register_file);
         this.loading = true;
         JQuery('#importHasil').modal('hide');
+        this.$bus.$emit('reset-importfile');
         try {
           await axios.post(process.env.apiUrl + "/v1/register/import-hasil-pemeriksaan", formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           });
+          this.$bus.$emit('refresh-ajaxtable', 'verifikasi');
           this.$toast.success('Sukses import data', {
             icon: "check",
             iconPack: "fontawesome",
@@ -262,13 +298,12 @@
             );
           }
         }
-        this.$bus.$emit('refresh-ajaxtable', 'verifikasi');
         $('#register_file').val('');
         this.form.reset();
         this.loading = false;
       },
-      previewFile() {
-        this.form.register_file = this.$refs.myFile.files[0]
+      previewFile(file) {
+        this.form.register_file = file;
       }
     }
   };
