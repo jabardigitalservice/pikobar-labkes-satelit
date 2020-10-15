@@ -110,15 +110,15 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow
                 $kecamatan = $this->__getWilayah('kecamatan', $row->get('kode_kecamatan'));
                 $kelurahan = $this->__getWilayah('kelurahan', $row->get('kode_kelurahan'));
 
-                $namaProvinsi = option($provinsi)->nama;
-                $namaKota = option($kota)->nama;
-                $namaKecamatan = option($kecamatan)->nama;
-                $namaKelurahan = option($kelurahan)->nama;
+                $namaProvinsi = optional($provinsi)->nama;
+                $namaKota = optional($kota)->nama;
+                $namaKecamatan = optional($kecamatan)->nama;
+                $namaKelurahan = optional($kelurahan)->nama;
 
-                $kodeProvinsi = option($provinsi)->kode;
-                $kodeKota = option($kota)->kode;
-                $kodeKecamatan = option($kecamatan)->kode;
-                $kodeKelurahan = option($kelurahan)->kode;
+                $kodeProvinsi = optional($provinsi)->kode;
+                $kodeKota = optional($kota)->kode;
+                $kodeKecamatan = optional($kecamatan)->kode;
+                $kodeKelurahan = optional($kelurahan)->kode;
 
                 $pasien->kode_provinsi = $kodeProvinsi;
                 $pasien->nama_provinsi = $namaProvinsi;
