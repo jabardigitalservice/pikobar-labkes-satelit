@@ -68,7 +68,8 @@
           <br>
           <div class="form-group">
             <label class="text-muted" style="text-align: justify">
-              Berikut adalah contoh format untuk import excel Registrasi sampel, data wilayah, dan data fasyankes yang dapat diunduh
+              Berikut adalah contoh format untuk import excel Registrasi sampel, data wilayah, dan data fasyankes yang
+              dapat diunduh
               sebagai referensi.
             </label>
             <button @click="downloadFormat('formatRegistrasi')" :disabled="loading" :class="{'btn-loading': loading}"
@@ -157,7 +158,6 @@
         formData.append('register_file', this.form.register_file);
         this.loading = true;
         JQuery('#importRM').modal('hide');
-        this.$bus.$emit('reset-importfile');
         try {
           await this.$axios.post(`${process.env.apiUrl}/v1/register/import-sampel`, formData, {
             headers: {
@@ -171,6 +171,7 @@
             duration: 5000
           });
         } catch (err) {
+          console.log(err);
           if (err.response && err.response.data.code == 422) {
             for (const property in err.response.data.error) {
               this.$toast.error(err.response.data.error[property][0], {
@@ -179,25 +180,15 @@
                 duration: 5000
               });
             }
-          }
-
-          if (err.response && err.response.data.code == 403) {
-            this.$toast.error(err.response.data.error, {
-              icon: "times",
-              iconPack: "fontawesome",
-              duration: 5000
-            });
-          }
-
-          if (err.response && err.response.data.code == 500) {
+          } else {
             this.$swal.fire(
               "Terjadi kesalahan",
-              "Silakan hubungi Admin",
+              "cek kembali file import",
               "error"
             );
           }
         }
-
+        this.$bus.$emit('reset-importfile');
         $('#register_file').val('');
         this.form.reset();
         this.form.register_file = null;

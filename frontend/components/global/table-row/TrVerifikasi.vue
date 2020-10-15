@@ -35,8 +35,6 @@
     </td>
     <td style="text-transform: capitalize;">
       {{item.kesimpulan_pemeriksaan}}
-      <span v-if="item.kesimpulan_pemeriksaan == 'positif' && item.status != 'positif'">Baru</span>
-      <span v-else-if="item.kesimpulan_pemeriksaan == 'positif' && item.status == 'positif'">Lama</span>
     </td>
     <td>{{item.catatan_pemeriksaan}}</td>
     <td width="20%">
