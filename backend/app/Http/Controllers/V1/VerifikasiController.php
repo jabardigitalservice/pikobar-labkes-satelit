@@ -170,7 +170,7 @@ class VerifikasiController extends Controller
             'Desa/Kelurahan',
             'Kecamatan',
             'Kota/Kab',
-            'Status',
+            'Kriteria',
             'Instansi Pengirim',
             'Nama Instansi',
             'Jenis Sampel',
@@ -192,12 +192,12 @@ class VerifikasiController extends Controller
                 $model->jenis_kelamin,
                 parseDate($model->tanggal_lahir),
                 $model->usia_tahun,
-                $model->alamat_lengkap,
+                $this->__getAlamat($model),
                 $model->kelurahan,
                 $model->kecamatan,
-                $model->kota_id,
-                $model->status,
-                $model->instansi_pengirim,
+                $model->nama_kota,
+                $model->status ? STATUSES[$model->status] : null,
+                $model->instansi_pengirim == 'rumah_sakit' ? 'rumah sakit' : $model->instansi_pengirim,
                 $model->instansi_pengirim_nama,
                 $model->jenis_sampel_nama,
                 $model->swab_ke,
@@ -221,6 +221,14 @@ class VerifikasiController extends Controller
             return 'baru';
         }
         return '';
+    }
+
+    private function __getAlamat($model)
+    {
+        $alamat = $model->alamat_lengkap;
+        $alamat .= ' RT/RW ';
+        $alamat .= $model->no_rt . '/' . $model->no_rw;
+        return $alamat;
     }
 
     /**

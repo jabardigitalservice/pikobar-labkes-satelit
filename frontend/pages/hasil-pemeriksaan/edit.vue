@@ -39,6 +39,15 @@
             </div>
 
             <div class="form-group">
+              <label class="text-blue">Nama Kit Pemeriksaan</label>
+              <p class="form-control">
+                <b>
+                  {{data.nama_kit_pemeriksaan || null}}
+                </b>
+              </p>
+            </div>
+
+            <div class="form-group">
               <label class="text-blue">Nama Pasien</label>
               <p class="form-control">
                 <b>{{ data.nama_lengkap }}</b>

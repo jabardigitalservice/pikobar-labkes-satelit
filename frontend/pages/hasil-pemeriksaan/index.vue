@@ -66,11 +66,12 @@
           <br>
           <div class="form-group">
             <label class="text-muted" style="text-align: justify">
-              Berikut adalah contoh format untuk import excel Hasil Pemeriksaan, data wilayah, dan data fasyankes yang dapat diunduh
+              Berikut adalah contoh format untuk import excel Hasil Pemeriksaan, data wilayah, dan data fasyankes yang
+              dapat diunduh
               sebagai referensi.
             </label>
-            <button @click="downloadFormat('formatHasilPemeriksaan')" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-sm btn-default" type="button">
+            <button @click="downloadFormat('formatHasilPemeriksaan')" :disabled="loading"
+              :class="{'btn-loading': loading}" class="btn btn-sm btn-default" type="button">
               <i class="fa fa-file" /> Format Import
             </button>
             <button @click="downloadFormat('wilayah')" :disabled="loading" :class="{'btn-loading': loading}"
@@ -260,7 +261,6 @@
         formData.append('register_file', this.form.register_file);
         this.loading = true;
         JQuery('#importHasil').modal('hide');
-        this.$bus.$emit('reset-importfile');
         try {
           await axios.post(process.env.apiUrl + "/v1/register/import-hasil-pemeriksaan", formData, {
             headers: {
@@ -282,22 +282,15 @@
                 duration: 5000
               });
             }
-          }
-          if (err.response && err.response.data.code == 403) {
-            this.$toast.error(err.response.data.error, {
-              icon: "times",
-              iconPack: "fontawesome",
-              duration: 5000
-            });
-          }
-          if (err.response && err.response.data.code == 500) {
+          } else {
             this.$swal.fire(
               "Terjadi kesalahan",
-              "Silakan hubungi Admin",
+              "cek kembali file import",
               "error"
             );
           }
         }
+        this.$bus.$emit('reset-importfile');
         $('#register_file').val('');
         this.form.reset();
         this.loading = false;

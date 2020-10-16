@@ -4,9 +4,9 @@
       <div class="form-inline d-flex justify-content-between">
 
         <div class="form-group text-muted" v-if="config.has_search_input">
-          <input placeholder="Search" v-model="search_input" @keyup="doSearchDebounce"
-            type="text" class="form-control input-placeholder">
-            <span class="fa fa-search" style="position: absolute; margin-left: 10px" />
+          <input placeholder="Search" v-model="search_input" @keyup="doSearchDebounce" type="text"
+            class="form-control input-placeholder">
+          <span class="fa fa-search" style="position: absolute; margin-left: 10px" />
         </div>
 
       </div>
@@ -48,7 +48,7 @@
           </tfoot>
         </table>
       </div>
-      
+
       <div v-if="config.has_pagination && config.pagination_type == 'jumptopage'" style="margin-top: 10px;display: none"
         v-show="pagination.count > 0">
         <div class="row">
@@ -85,15 +85,15 @@
       <div v-else-if="config.has_pagination && pagination.count > 0" class="row pagination-wrapper">
         <div class="col-sm-12 col-md-5" style="margin-top: 10px;">
           <div class="paging_info">
-          <select class="form-control-sm form-control w-auto input-s-sm inline" v-model="pagination.perpage"
-            v-on:change="changePage()" v-if="config.has_entry_page">
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-            <option value="500">500</option>
-            <option value="1000">1000</option>
-          </select>&nbsp;&nbsp;
+            <select class="form-control-sm form-control w-auto input-s-sm inline" v-model="pagination.perpage"
+              v-on:change="changePage()" v-if="config.has_entry_page">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="500">500</option>
+              <option value="1000">1000</option>
+            </select>&nbsp;&nbsp;
             {{ capitalize($t('common.entry')) }}&nbsp;{{ entriFrom }}&nbsp;
             {{ $t('title.to') }}&nbsp;
             {{ entriTo }}
@@ -423,9 +423,9 @@
           link.click();
           link.remove();
           window.URL.revokeObjectURL(url);
-          that.isLoadingExp = false;
           this.$bus.$emit('download-export', 'end', this.oid);
         });
+        that.isLoadingExp = false;
       },
     },
     computed: {

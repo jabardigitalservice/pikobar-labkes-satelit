@@ -167,27 +167,13 @@
           this.errors = resp.data.errors
           this.errors_count = resp.data.errors_count
         } catch (err) {
-          console.log("ERRRR", err);
-
-          if (err.response && err.response.data.code == 422) {
-            this.$nextTick(() => {
-              this.form.errors.set(err.response.data.error);
-            });
-
-            this.$toast.error("Mohon cek kembali formulir Anda", {
-              icon: "times",
-              iconPack: "fontawesome",
-              duration: 5000
-            });
-          } else {
-            this.$swal.fire(
-              "Terjadi kesalahan",
-              "Silakan hubungi Admin",
-              "error"
-            );
-          }
-          this.$sentry.captureException(err)
+          this.$swal.fire(
+            "Terjadi kesalahan",
+            "cek kembali file import",
+            "error"
+          );
         }
+        this.$bus.$emit('reset-importfile');
         this.loading = false;
       },
       async submitData() {

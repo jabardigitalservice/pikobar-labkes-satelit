@@ -63,7 +63,16 @@
     },
     methods: {
       doResetFile () {
-        this.$refs.myFile.removeAllFiles();
+        const file = document.querySelectorAll('#register_file');
+        if (file.length) {
+            for (let index = 0; index < file.length; index++) {
+              let element = file[index];
+              if (element.dropzone.files.length) {
+                let buttonReset = element.dropzone.files[0]._removeLink;
+                buttonReset.click()
+              }
+            }
+        }
       }
     }
   }
