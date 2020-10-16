@@ -63,12 +63,12 @@
     },
     methods: {
       doResetFile () {
-        let file = $('#register_file');
+        const file = $('#register_file');
         if (file.length) {
             for (let index = 0; index < file.length; index++) {
-              const element = file[index];
+              let element = file[index];
               if (element.dropzone.files.length) {
-                const buttonReset = element.dropzone.files[0]._removeLink;
+                let buttonReset = element.dropzone.files[0]._removeLink;
                 buttonReset.click()
               }
             }
