@@ -63,7 +63,7 @@
     },
     methods: {
       doResetFile () {
-        const file = $('#register_file');
+        const file = document.querySelectorAll('#register_file');
         if (file.length) {
             for (let index = 0; index < file.length; index++) {
               let element = file[index];
