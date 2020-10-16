@@ -167,7 +167,6 @@
           this.errors = resp.data.errors
           this.errors_count = resp.data.errors_count
         } catch (err) {
-          console.log(err);
           this.$swal.fire(
             "Terjadi kesalahan",
             "cek kembali file import",

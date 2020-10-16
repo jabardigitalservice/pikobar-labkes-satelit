@@ -171,7 +171,6 @@
             duration: 5000
           });
         } catch (err) {
-          console.log(err);
           if (err.response && err.response.data.code == 422) {
             for (const property in err.response.data.error) {
               this.$toast.error(err.response.data.error[property][0], {
