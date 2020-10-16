@@ -64,7 +64,7 @@
           </div>
           <div class="col-md-8">
             <select class="form-control" type="text" name="reg_kota" placeholder="" v-model="params.status">
-              <option :value="item.id" :key="idx" v-for="(item,idx) in status">{{item.nama}}
+              <option :value="item.value" :key="idx" v-for="(item,idx) in status">{{item.text}}
               </option>
             </select>
           </div>
