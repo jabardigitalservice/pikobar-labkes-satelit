@@ -72,17 +72,29 @@ class DashboardController extends Controller
 
     public function pasienDiperiksa()
     {
-        $user = Auth::user();
         $data = [];
         foreach (STATUSES as $key => $value) {
-            $data[str_replace(' ', '_', strtolower($value))] = Register::where('status', $key)
-                ->where('lab_satelit_id', $user->lab_satelit_id)
-                ->count();
+            $data[str_replace(' ', '_', strtolower($value))] = $this->__getPasienStatus($key);
         }
         return response()->json([
             'result' => $data,
             'status' => 200,
         ]);
+    }
+
+    private function __getPasienStatus($statusPasien)
+    {
+        $user = Auth::user();
+        return Sampel::leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
+        ->leftJoin('register', 'sampel.register_id', 'register.id')
+        ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
+        ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
+        ->where('sampel.sampel_status', 'pcr_sample_analyzed')
+        ->where('register.lab_satelit_id', $user->lab_satelit_id)
+        ->where('sampel.lab_satelit_id', $user->lab_satelit_id)
+        ->where('pasien.lab_satelit_id', $user->lab_satelit_id)
+        ->where('register.status', $statusPasien)
+        ->count();
     }
 
     public function instansi_pengirim(Request $request)

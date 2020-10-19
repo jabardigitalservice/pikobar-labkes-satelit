@@ -7,7 +7,7 @@
             <div class="text-center">
               <h5 class="font-weight-bold text-blue">Kontrak Erat</h5>
               <h2 v-if="!loading" class="font-weight-bold">
-                {{ data.kontrak_erat | formatCurrency}}
+                {{ data.kontak_erat | formatCurrency}}
               </h2>
               <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
               <small v-if="!loading">Pcs</small>
