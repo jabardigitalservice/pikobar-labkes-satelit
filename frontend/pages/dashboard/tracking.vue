@@ -90,7 +90,7 @@
           this.data = resp.data.result;
         } catch (e) {
           this.data.register = "-";
-          this.data.sampel_masuk = "-";
+          this.data.sampel = "-";
           this.data.positif = "-";
           this.data.negatif = "-";
           this.data.inkonklusif = "-";
