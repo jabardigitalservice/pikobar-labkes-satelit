@@ -1,64 +1,53 @@
 <template>
   <div class="row">
     <div class="col-lg-12">
-
-      <Ibox title="Tracking Progress">
+      <Ibox title="Pasien Diperiksa">
         <div class="row tracking-row">
-          <div class="col-md-2 mb-3 mb-md-0">
+          <div class="col-split-5 mb-3 mb-md-0">
             <div class="text-center">
-              <h5 class="font-weight-bold text-blue">Registrasi</h5>
+              <h5 class="font-weight-bold text-blue">Kontrak Erat</h5>
               <h2 v-if="!loading" class="font-weight-bold">
-                {{ data.register | formatCurrency}}
-              </h2>
-              <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
-              <small v-if="!loading">Orang</small>
-            </div>
-          </div>
-          <div class="col-md-2 mb-3 mb-md-0">
-            <div class="text-center">
-              <h5 class="font-weight-bold text-blue">Sampel</h5>
-              <h2 v-if="!loading" class="font-weight-bold">
-                {{ data.sampel | formatCurrency}}
+                {{ data.kontrak_erat | formatCurrency}}
               </h2>
               <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
               <small v-if="!loading">Pcs</small>
             </div>
           </div>
-          <div class="col-md-2 mb-3 mb-md-0">
+          <div class="col-split-5 mb-3 mb-md-0">
             <div class="text-center">
-              <h5 class="font-weight-bold text-blue">Positif</h5>
+              <h5 class="font-weight-bold text-blue">Suspek</h5>
               <h2 v-if="!loading" class="font-weight-bold">
-                {{ data.positif | formatCurrency}}
+                {{ data.suspek | formatCurrency}}
               </h2>
               <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
               <small v-if="!loading">Orang</small>
             </div>
           </div>
-          <div class="col-md-2 mb-3 mb-md-0">
+          <div class="col-split-5 mb-3 mb-md-0">
             <div class="text-center">
-              <h5 class="font-weight-bold text-blue">Negatif</h5>
+              <h5 class="font-weight-bold text-blue">Probable</h5>
               <h2 v-if="!loading" class="font-weight-bold">
-                {{ data.negatif | formatCurrency}}
+                {{ data.probable | formatCurrency}}
               </h2>
               <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
               <small v-if="!loading">Orang</small>
             </div>
           </div>
-          <div class="col-md-2 mb-3 mb-md-0">
+          <div class="col-split-5 mb-3 mb-md-0">
             <div class="text-center">
-              <h5 class="font-weight-bold text-blue">Inkonklusif</h5>
+              <h5 class="font-weight-bold text-blue">Konfirmasi</h5>
               <h2 v-if="!loading" class="font-weight-bold">
-                {{ data.inkonklusif | formatCurrency}}
+                {{ data.konfirmasi | formatCurrency}}
               </h2>
               <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
               <small v-if="!loading">Orang</small>
             </div>
           </div>
-          <div class="col-md-2 mb-3 mb-md-0">
+          <div class="col-split-5 mb-3 mb-md-0">
             <div class="text-center">
-              <h5 class="font-weight-bold text-blue">Invalid</h5>
+              <h5 class="font-weight-bold text-blue">Tanpa Kriteria</h5>
               <h2 v-if="!loading" class="font-weight-bold">
-                {{ data.invalid | formatCurrency}}
+                {{ data.tanpa_kriteria | formatCurrency}}
               </h2>
               <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
               <small v-if="!loading">Orang</small>
@@ -66,13 +55,14 @@
           </div>
         </div>
       </Ibox>
+
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: "tracking",
+    name: "pasien-diperiksa",
     data() {
       return {
         loading: true,
@@ -86,14 +76,14 @@
       async loadData() {
         this.loading = true;
         try {
-          let resp = await this.$axios.get("/v1/dashboard/tracking");
+          let resp = await this.$axios.get("/v1/dashboard/pasien-diperiksa");
           this.data = resp.data.result;
         } catch (e) {
-          this.data.register = "-";
-          this.data.sampel_masuk = "-";
-          this.data.positif = "-";
-          this.data.negatif = "-";
-          this.data.inkonklusif = "-";
+          this.data.kontrak_erat = "-";
+          this.data.suspek = "-";
+          this.data.probable = "-";
+          this.data.konfirmasi = "-";
+          this.data.tanpa_kriteria = "-";
         }
         this.loading = false;
       }

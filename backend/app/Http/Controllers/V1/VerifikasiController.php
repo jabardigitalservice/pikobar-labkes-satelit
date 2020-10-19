@@ -27,12 +27,16 @@ class VerifikasiController extends Controller
      */
     public function index(Request $request, $isData = false)
     {
+        $user = Auth::user();
         $models = Sampel::leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
             ->leftJoin('register', 'sampel.register_id', 'register.id')
             ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
             ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
             ->leftJoin('kota', 'kota.id', 'pasien.kota_id')
-            ->where('sampel.sampel_status', 'pcr_sample_analyzed');
+            ->where('sampel.sampel_status', 'pcr_sample_analyzed')
+            ->where('register.lab_satelit_id', $user->lab_satelit_id)
+            ->where('sampel.lab_satelit_id', $user->lab_satelit_id)
+            ->where('pasien.lab_satelit_id', $user->lab_satelit_id);
 
         $params = $request->get('params', false);
         $search = $request->get('search', false);
@@ -88,10 +92,6 @@ class VerifikasiController extends Controller
                         break;
                 }
             }
-        }
-
-        if (Auth::user()->lab_satelit_id != null) {
-            $models->where('sampel.lab_satelit_id', Auth::user()->lab_satelit_id);
         }
 
         $count = $models->count();

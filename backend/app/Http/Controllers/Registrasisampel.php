@@ -11,10 +11,16 @@ class Registrasisampel extends Controller
 {
     public function getData(Request $request)
     {
+        $user = Auth::user();
         $models = Register::leftJoin('pasien_register', 'register.id', 'pasien_register.register_id')
             ->leftJoin('pasien', 'pasien.id', 'pasien_register.pasien_id')
             ->leftJoin('sampel', 'register.id', 'sampel.register_id')
-            ->leftJoin('kota', 'kota.id', 'pasien.kota_id');
+            ->leftJoin('kota', 'kota.id', 'pasien.kota_id')
+            ->where('register.lab_satelit_id', $user->lab_satelit_id)
+            ->where('sampel.lab_satelit_id', $user->lab_satelit_id)
+            ->where('pasien.lab_satelit_id', $user->lab_satelit_id)
+            ->whereNull('sampel.deleted_at');
+
         $params = $request->get('params', false);
         $search = $request->get('search', false);
         $order = $request->get('order', 'name');
@@ -31,10 +37,6 @@ class Registrasisampel extends Controller
                     ->orWhere('register.status', 'ilike', '%' . $search . '%')
                     ->orWhere('sampel.nomor_sampel', 'ilike', '%' . $search . '%');
             });
-        }
-
-        if (Auth::user()->lab_satelit_id != null) {
-            $models->where('register.lab_satelit_id', Auth::user()->lab_satelit_id);
         }
 
         if ($params) {

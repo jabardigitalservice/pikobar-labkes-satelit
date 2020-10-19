@@ -92,6 +92,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
 
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/tracking', 'DashboardController@tracking');
+        Route::get('/pasien-diperiksa', 'DashboardController@pasienDiperiksa');
         Route::get('/ekstraksi', 'DashboardController@ekstraksi');
         Route::get('/registrasi', 'DashboardController@registrasi');
         Route::get('/pcr', 'DashboardController@pcr');
