@@ -2,9 +2,10 @@
   <div class="wrapper wrapper-content">
     <portal to="title-name">Dashboard</portal>
 
-    <tracking />
-    <charts />
-    <div class="row">
+    <!-- Web Satelit -->
+    <tracking v-if="checkPermission('satelit')" />
+    <charts v-if="checkPermission('satelit')" />
+    <div v-if="checkPermission('satelit')" class="row">
       <div class="col-md-12">
         <Ibox title="Instansi Pengirim">
           <ajax-table url="/v1/dashboard/instansi-pengirim" :disableSort="[]" :oid="'instansi_pengirim'" :config="{
@@ -28,6 +29,10 @@
         </Ibox>
       </div>
     </div>
+
+    <!-- Dashboard superadmin -->
+    <tracking-admin />
+
   </div>
 </template>
 
@@ -37,12 +42,14 @@
   } from "vuex";
   import Tracking from './dashboard/tracking'
   import Charts from './dashboard/charts'
+  import TrackingAdmin from './dashboard-admin/tracking'
 
   export default {
     middleware: "auth",
     components: {
       Tracking,
-      Charts
+      Charts,
+      TrackingAdmin
     },
 
     computed: mapGetters({
@@ -65,25 +72,10 @@
       checkPermission(menu) {
         var allow_role_id
         switch (menu) {
-          case 'registrasi':
-            allow_role_id = [1, 6, 7, 2]
+          case 'satelit':
+            allow_role_id = [8]
             break;
-          case 'sample':
-            allow_role_id = [1, 6, 7, 3]
-            break;
-          case 'ekstraksi':
-            allow_role_id = [1, 6, 7, 4]
-            break;
-          case 'pcr':
-            allow_role_id = [1, 6, 7, 5]
-            break;
-          case 'verifikasi':
-            allow_role_id = [1, 6, 7]
-            break;
-          case 'validasi':
-            allow_role_id = [1, 7]
-            break;
-          case 'master':
+          case 'superadmin':
             allow_role_id = [1]
             break;
         }
