@@ -86,15 +86,15 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         return Sampel::leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
-        ->leftJoin('register', 'sampel.register_id', 'register.id')
-        ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
-        ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
-        ->where('sampel.sampel_status', 'pcr_sample_analyzed')
-        ->where('register.lab_satelit_id', $user->lab_satelit_id)
-        ->where('sampel.lab_satelit_id', $user->lab_satelit_id)
-        ->where('pasien.lab_satelit_id', $user->lab_satelit_id)
-        ->where('register.status', $statusPasien)
-        ->count();
+            ->leftJoin('register', 'sampel.register_id', 'register.id')
+            ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
+            ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
+            ->where('sampel.sampel_status', 'pcr_sample_analyzed')
+            ->where('register.lab_satelit_id', $user->lab_satelit_id)
+            ->where('sampel.lab_satelit_id', $user->lab_satelit_id)
+            ->where('pasien.lab_satelit_id', $user->lab_satelit_id)
+            ->where('register.status', $statusPasien)
+            ->count();
     }
 
     public function instansi_pengirim(Request $request)
