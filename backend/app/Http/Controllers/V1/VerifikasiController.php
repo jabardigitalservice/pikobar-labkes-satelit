@@ -34,6 +34,7 @@ class VerifikasiController extends Controller
             ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
             ->leftJoin('kota', 'kota.id', 'pasien.kota_id')
             ->where('sampel.sampel_status', 'pcr_sample_analyzed')
+            ->whereNull('register.deleted_at')
             ->where('register.lab_satelit_id', $user->lab_satelit_id)
             ->where('sampel.lab_satelit_id', $user->lab_satelit_id)
             ->where('pasien.lab_satelit_id', $user->lab_satelit_id);
