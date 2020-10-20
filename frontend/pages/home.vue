@@ -4,6 +4,7 @@
 
     <!-- Web Satelit -->
     <tracking v-if="checkPermission('satelit')" />
+    <pasien-diperiksa v-if="checkPermission('satelit')" />
     <charts v-if="checkPermission('satelit')" />
     <div v-if="checkPermission('satelit')" class="row">
       <div class="col-md-12">
@@ -41,12 +42,14 @@
     mapGetters
   } from "vuex";
   import Tracking from './dashboard/tracking'
+  import PasienDiperiksa from './dashboard/pasien-diperiksa'
   import Charts from './dashboard/charts'
   import TrackingAdmin from './dashboard-admin/tracking'
 
   export default {
     middleware: "auth",
     components: {
+      PasienDiperiksa,
       Tracking,
       Charts,
       TrackingAdmin

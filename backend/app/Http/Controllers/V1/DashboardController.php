@@ -14,63 +14,88 @@ class DashboardController extends Controller
 {
     public function tracking()
     {
-        $user = Auth::user();
-
-        $sampel_masuk = Sampel::query();
-        $positif = Sampel::join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
-            ->where('kesimpulan_pemeriksaan', 'positif');
-        $negatif = Sampel::join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
-            ->where('kesimpulan_pemeriksaan', 'negatif');
-        $inkonklusif = Sampel::join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
-            ->where('kesimpulan_pemeriksaan', 'inkonklusif');
-        $invalid = Sampel::join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
-            ->where('kesimpulan_pemeriksaan', 'invalid');
-
-        $sampel_masuk->where('lab_satelit_id', $user->lab_satelit_id);
-        $positif->where('lab_satelit_id', $user->lab_satelit_id);
-        $negatif->where('lab_satelit_id', $user->lab_satelit_id);
-        $inkonklusif->where('lab_satelit_id', $user->lab_satelit_id);
-        $invalid->where('lab_satelit_id', $user->lab_satelit_id);
-
-        $register_otg = Register::where('lab_satelit_id', $user->lab_satelit_id)->where('status', 'otg')->count();
-        $register_odp = Register::where('lab_satelit_id', $user->lab_satelit_id)->where('status', 'odp')->count();
-        $register_pdp = Register::where('lab_satelit_id', $user->lab_satelit_id)->where('status', 'pdp')->count();
-        $register_positif = Register::where('lab_satelit_id', $user->lab_satelit_id)->where('status', 'positif')->count();
-        $register_tanpa_status = Register::where('lab_satelit_id', $user->lab_satelit_id)->where('status', 'tanpa status')->count();
-        $register_instansi_pengirim = 0;
-
-        $register = Register::where('lab_satelit_id', $user->lab_satelit_id)->count();
-        $sampel_masuk = $sampel_masuk->count();
-        $positif = $positif->count();
-        $negatif = $negatif->count();
-        $inkonklusif = $inkonklusif->count();
-        $invalid = $invalid->count();
-
-        $instansi_pengirim = Register::select(DB::raw('upper(instansi_pengirim) as name'), DB::raw('count(*) as y'))
-            ->where('lab_satelit_id', $user->lab_satelit_id)
-            ->groupBy('instansi_pengirim')
-            ->orderBy('y', 'desc')
-            ->whereNotNull('instansi_pengirim')
-            ->get();
-        $tracking = [
-            'register' => $register,
-            'sampel_masuk' => $sampel_masuk,
-            'positif' => $positif,
-            'negatif' => $negatif,
-            'inkonklusif' => $inkonklusif,
-            'invalid' => $invalid,
-            'register_otg' => $register_otg,
-            'register_odp' => $register_odp,
-            'register_pdp' => $register_pdp,
-            'register_positif' => $register_positif,
-            'register_tanpa_status' => $register_tanpa_status,
-            'register_instansi_pengirim' => $register_instansi_pengirim,
-            'instansi_pengirim' => $instansi_pengirim,
-        ];
+        $data['register'] = $this->__getRegistrasi();
+        $data['sampel'] = $this->__getRegistrasi();
+        $data['positif'] = $this->__getKesimpulanPemeriksaan('positif');
+        $data['negatif'] = $this->__getKesimpulanPemeriksaan('negatif');
+        $data['inkonklusif'] = $this->__getKesimpulanPemeriksaan('inkonklusif');
+        $data['invalid'] = $this->__getKesimpulanPemeriksaan('invalid');
 
         return response()->json([
-            'status' => $tracking,
+            'result' => $data,
+            'status' => 200,
         ]);
+    }
+
+    private function __getKesimpulanPemeriksaan($hasilPemeriksaan, $isChart = null, $date = null)
+    {
+        $user = Auth::user();
+        $models = Sampel::leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
+            ->leftJoin('register', 'sampel.register_id', 'register.id')
+            ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
+            ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
+            ->leftJoin('kota', 'kota.id', 'pasien.kota_id')
+            ->whereNull('register.deleted_at')
+            ->where('sampel.sampel_status', 'pcr_sample_analyzed')
+            ->where('register.lab_satelit_id', $user->lab_satelit_id)
+            ->where('sampel.lab_satelit_id', $user->lab_satelit_id)
+            ->where('pasien.lab_satelit_id', $user->lab_satelit_id)
+            ->where('pemeriksaansampel.kesimpulan_pemeriksaan', $hasilPemeriksaan);
+        if ($isChart) {
+            switch ($isChart) {
+                case 'Daily':
+                    $models->whereDate('waktu_pcr_sample_analyzed', date('Y-m-d', strtotime(date('Y-m-' . $date))));
+                    break;
+                case 'Monthly':
+                    $models->whereMonth('waktu_pcr_sample_analyzed', $date);
+                    break;
+                default:
+                    break;
+            }
+        }
+        return $models->count('pemeriksaansampel.kesimpulan_pemeriksaan');
+    }
+
+    private function __getRegistrasi()
+    {
+        $user = Auth::user();
+        $models = Register::leftJoin('pasien_register', 'register.id', 'pasien_register.register_id')
+            ->leftJoin('pasien', 'pasien.id', 'pasien_register.pasien_id')
+            ->leftJoin('sampel', 'register.id', 'sampel.register_id')
+            ->whereNull('sampel.deleted_at')
+            ->where('register.lab_satelit_id', $user->lab_satelit_id)
+            ->where('sampel.lab_satelit_id', $user->lab_satelit_id)
+            ->where('pasien.lab_satelit_id', $user->lab_satelit_id)
+            ->whereNull('sampel.deleted_at')
+            ->count();
+        return $models;
+    }
+
+    public function pasienDiperiksa()
+    {
+        $data = [];
+        foreach (STATUSES as $key => $value) {
+            $data[str_replace(' ', '_', strtolower($value))] = $this->__getPasienStatus($key);
+        }
+        return response()->json([
+            'result' => $data,
+            'status' => 200,
+        ]);
+    }
+
+    private function __getPasienStatus($statusPasien)
+    {
+        $user = Auth::user();
+        return Register::leftJoin('pasien_register', 'register.id', 'pasien_register.register_id')
+            ->leftJoin('pasien', 'pasien.id', 'pasien_register.pasien_id')
+            ->leftJoin('sampel', 'register.id', 'sampel.register_id')
+            ->whereNull('sampel.deleted_at')
+            ->where('register.lab_satelit_id', $user->lab_satelit_id)
+            ->where('sampel.lab_satelit_id', $user->lab_satelit_id)
+            ->where('pasien.lab_satelit_id', $user->lab_satelit_id)
+            ->where('register.status', $statusPasien)
+            ->whereNull('sampel.deleted_at')
+            ->count();
     }
 
     public function instansi_pengirim(Request $request)
@@ -95,6 +120,7 @@ class DashboardController extends Controller
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
         return response()->json([
+            'status' => 200,
             'data' => $models,
             'count' => $count,
         ]);
@@ -102,98 +128,39 @@ class DashboardController extends Controller
 
     public function chartPcr(Request $request)
     {
-        $user = Auth::user();
-        $models = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
-            ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id');
-        if ($user->lab_satelit_id != null) {
-            $models->where('lab_satelit_id', $user->lab_satelit_id);
-        }
         $tipe = $request->get('tipe', 'Daily');
-        $data = [];
-        $data['label'] = [];
-        $data['data'][0]['label'] = 'positif';
-        $data['data'][0]['data'] = [];
-        $data['data'][0]['backgroundColor'] = '#c41a1a';
-        $data['data'][0]['borderColor'] = '#c41a1a';
-        $data['data'][1]['label'] = 'negatif';
-        $data['data'][1]['data'] = [];
-        $data['data'][1]['backgroundColor'] = '#c4c2c2';
-        $data['data'][1]['borderColor'] = '#c4c2c2';
-        $data['data'][2]['label'] = 'inkonklusif';
-        $data['data'][2]['data'] = [];
-        $data['data'][2]['backgroundColor'] = '#403d3d';
-        $data['data'][2]['borderColor'] = '#403d3d';
-        $data['data'][3]['label'] = 'invalid';
-        $data['data'][3]['data'] = [];
-        $data['data'][3]['backgroundColor'] = '#32427b';
-        $data['data'][3]['borderColor'] = '#32427b';
+        $data['labels'] = [];
+        $data['positif'] = [];
+        $data['negatif'] = [];
+        $data['inkonklusif'] = [];
+        $data['invalid'] = [];
         switch ($tipe) {
             case "Daily":
                 $days = Carbon::parse(date('Y-m-d'))->daysInMonth;
-                $key = 0;
                 foreach (range(1, $days) as $row) {
-                    $data['label'][$key] = date('d', strtotime(date('Y-m-' . $row)));
-                    $data['data'][0]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
-                        ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
-                        ->where('kesimpulan_pemeriksaan', 'positif')
-                        ->whereDate('waktu_pcr_sample_analyzed', date('Y-m-d', strtotime(date('Y-m-' . $row))))
-                        ->where('lab_satelit_id', $user->lab_satelit_id)
-                        ->count();
-                    $data['data'][1]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
-                        ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
-                        ->where('kesimpulan_pemeriksaan', 'negatif')
-                        ->whereDate('waktu_pcr_sample_analyzed', date('Y-m-d', strtotime(date('Y-m-' . $row))))
-                        ->where('lab_satelit_id', $user->lab_satelit_id)
-                        ->count();
-                    $data['data'][2]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
-                        ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
-                        ->where('kesimpulan_pemeriksaan', 'inkonklusif')
-                        ->whereDate('waktu_pcr_sample_analyzed', date('Y-m-d', strtotime(date('Y-m-' . $row))))
-                        ->where('lab_satelit_id', $user->lab_satelit_id)
-                        ->count();
-                    $data['data'][3]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
-                        ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
-                        ->where('kesimpulan_pemeriksaan', 'invalid')
-                        ->whereDate('waktu_pcr_sample_analyzed', date('Y-m-d', strtotime(date('Y-m-' . $row))))
-                        ->where('lab_satelit_id', $user->lab_satelit_id)
-                        ->count();
-
-                    $key++;
+                    $key = $row - 1;
+                    $data['labels'][$key] = date('Y-m-d', strtotime(date('Y-m-' . $row)));
+                    $data['positif'][$key] = $this->__getKesimpulanPemeriksaan('positif', 'Daily', $row);
+                    $data['negatif'][$key] = $this->__getKesimpulanPemeriksaan('negatif', 'Daily', $row);
+                    $data['inkonklusif'][$key] = $this->__getKesimpulanPemeriksaan('inkonklusif', 'Daily', $row);
+                    $data['invalid'][$key] = $this->__getKesimpulanPemeriksaan('invalid', 'Daily', $row);
                 }
-
                 break;
             case "Monthly":
-                $month = array("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");
-                $key = 0;
-                foreach (range(0, count($month) - 1) as $row) {
-                    $bulan = $row;
+                foreach (range(0, count(MONTH) - 1) as $key) {
+                    $bulan = $key;
                     ++$bulan;
-                    $data['label'][$key] = $month[$row];
-                    $data['data'][0]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
-                        ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
-                        ->where('kesimpulan_pemeriksaan', 'positif')
-                        ->where('lab_satelit_id', $user->lab_satelit_id)
-                        ->whereMonth('waktu_pcr_sample_analyzed', $bulan)->count();
-                    $data['data'][1]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
-                        ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
-                        ->where('kesimpulan_pemeriksaan', 'negatif')
-                        ->where('lab_satelit_id', $user->lab_satelit_id)
-                        ->whereMonth('waktu_pcr_sample_analyzed', $bulan)->count();
-                    $data['data'][2]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
-                        ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
-                        ->where('kesimpulan_pemeriksaan', 'inkonklusif')
-                        ->where('lab_satelit_id', $user->lab_satelit_id)
-                        ->whereMonth('waktu_pcr_sample_analyzed', $bulan)->count();
-                    $data['data'][3]['data'][$key] = Sampel::whereNotNull('waktu_pcr_sample_analyzed')
-                        ->join('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
-                        ->where('kesimpulan_pemeriksaan', 'invalid')
-                        ->where('lab_satelit_id', $user->lab_satelit_id)
-                        ->whereMonth('waktu_pcr_sample_analyzed', $bulan)->count();
-                    $key++;
+                    $data['labels'][$key] = MONTH[$key];
+                    $data['positif'][$key] = $this->__getKesimpulanPemeriksaan('positif', 'Monthly', $bulan);
+                    $data['negatif'][$key] = $this->__getKesimpulanPemeriksaan('negatif', 'Monthly', $bulan);
+                    $data['inkonklusif'][$key] = $this->__getKesimpulanPemeriksaan('inkonklusif', 'Monthly', $bulan);
+                    $data['invalid'][$key] = $this->__getKesimpulanPemeriksaan('invalid', 'Monthly', $bulan);
                 }
-
                 break;
         }
-        return response()->json($data);
+        return response()->json([
+            'result' => $data,
+            'status' => 200,
+        ]);
     }
 }
