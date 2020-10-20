@@ -17,13 +17,13 @@ class PelaporanController extends Controller
     {
         $pelaporan = new PelaporanService;
         $response = $pelaporan->pendaftar_rdt($request->get('search'), $request->get('limit', 10))->json();
+        $key = 0;
+        $dataUnique = [];
         if ($response['status_code'] == 200 && count($response['data']['content']) > 0) {
             $data = $response['data']['content'];
             $response['data']['content'] = [];
-            $key = 0;
-            $dataUnique = [];
             foreach ($data as $item) {
-                $dataBy = $item['nik'].strtoupper($item['name']).$item['phone_number'];
+                $dataBy = $item['nik'] . strtoupper($item['name']) . $item['phone_number'];
                 if (!in_array($dataBy, $dataUnique)) {
                     $dataUnique[] = $dataBy;
                     $response['data']['content'][$key]['status_code'] = $this->setStatusCoce($item['status']);
@@ -55,15 +55,18 @@ class PelaporanController extends Controller
                     $key++;
                 }
             }
-        } else {
-            $search = $request->search;
-            $pasien = Pasien::where('nama_lengkap', 'ilike', "%$search%")
-                ->orWhere('nik', 'ilike', "$search%")
-                ->orWhere('no_hp', 'ilike', "$search%")
-                ->distinct('nama_lengkap', 'nik')
-                ->orderByRaw('nama_lengkap desc, nik desc, updated_at desc')
-                ->limit(10)->get();
-            foreach ($pasien as $key => $item) {
+        }
+        $search = $request->search;
+        $pasien = Pasien::where('nama_lengkap', 'ilike', "%$search%")
+            ->orWhere('nik', 'ilike', "$search%")
+            ->orWhere('no_hp', 'ilike', "$search%")
+            ->distinct('nama_lengkap', 'nik')
+            ->orderByRaw('nama_lengkap desc, nik desc, updated_at desc')
+            ->limit(10 - $key)->get();
+        foreach ($pasien as $item) {
+            $dataBy = $item->nik . strtoupper($item->nama_lengkap) . $item->no_hp;
+            if (!in_array($dataBy, $dataUnique)) {
+                $dataUnique[] = $dataBy;
                 $response['data']['content'][$key]['id'] = null;
                 $response['data']['content'][$key]['id_case'] = null;
                 $response['data']['content'][$key]['nik'] = $item->nik;
@@ -90,6 +93,7 @@ class PelaporanController extends Controller
                 $response['data']['content'][$key]['test_date'] = null;
                 $response['data']['content'][$key]['id_match'] = null;
                 $response['data']['content'][$key]['status_code'] = $item->status;
+                $key++;
             }
         }
 
