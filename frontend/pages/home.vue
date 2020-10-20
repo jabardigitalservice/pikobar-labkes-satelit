@@ -3,6 +3,7 @@
     <portal to="title-name">Dashboard</portal>
 
     <tracking />
+    <pasien-diperiksa />
     <charts />
     <div class="row">
       <div class="col-md-12">
@@ -36,11 +37,13 @@
     mapGetters
   } from "vuex";
   import Tracking from './dashboard/tracking'
+  import PasienDiperiksa from './dashboard/pasien-diperiksa'
   import Charts from './dashboard/charts'
 
   export default {
     middleware: "auth",
     components: {
+      PasienDiperiksa,
       Tracking,
       Charts
     },

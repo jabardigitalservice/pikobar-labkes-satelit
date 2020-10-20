@@ -23,10 +23,16 @@ class PCRController extends Controller
 
     public function getData(Request $request)
     {
+        $user = Auth::user();
         $models = Sampel::leftJoin('register', 'sampel.register_id', 'register.id')
             ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
             ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
-            ->leftJoin('kota', 'kota.id', 'pasien.kota_id');
+            ->leftJoin('kota', 'kota.id', 'pasien.kota_id')
+            ->where('sampel.sampel_status', 'sample_taken')
+            ->whereNull('register.deleted_at')
+            ->where('register.lab_satelit_id', $user->lab_satelit_id)
+            ->where('sampel.lab_satelit_id', $user->lab_satelit_id)
+            ->where('pasien.lab_satelit_id', $user->lab_satelit_id);
         $params = $request->get('params', false);
         $search = $request->get('search', false);
         $order = $request->get('order', 'name');
@@ -59,11 +65,7 @@ class PCRController extends Controller
                 }
             }
         }
-        if (Auth::user()->lab_satelit_id != null) {
-            $models->where('sampel.lab_satelit_id', Auth::user()->lab_satelit_id);
-        }
 
-        $models->where('sampel.sampel_status', 'sample_taken');
         $count = $models->count();
 
         $page = $request->get('page', 1);

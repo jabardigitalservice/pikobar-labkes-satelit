@@ -7,7 +7,7 @@ use App\Http\Services\PelaporanService;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use App\Models\Kota;
-use App\Models\Pasien;
+use App\Models\Labkes\Pasien;
 use App\Models\Provinsi;
 use Illuminate\Http\Request;
 

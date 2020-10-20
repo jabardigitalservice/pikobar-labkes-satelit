@@ -18,24 +18,25 @@
         chart: {
           labels: ['January', 'February'],
           datasets: [{
-            label: 'Dataset 1',
-            backgroundColor: 'red',
-            data: [
-              2, 6
-            ]
-          }, {
-            label: 'Dataset 2',
-            backgroundColor: 'blue',
-            data: [
-              2, 6
-            ]
-          }, {
-            label: 'Dataset 3',
-            backgroundColor: 'green',
-            data: [
-              2, 6
-            ]
-          }],
+              label: 'Positif',
+              backgroundColor: '#c41a1a',
+              data: []
+            }, {
+              label: 'Negatif',
+              backgroundColor: '#c4c2c2',
+              data: []
+            },
+            {
+              label: 'Inkonklusif',
+              backgroundColor: '#403d3d',
+              data: []
+            },
+            {
+              label: 'Invalid',
+              backgroundColor: '#32427b',
+              data: []
+            },
+          ],
           type: "bar",
           options: {
             responsive: true,
@@ -54,8 +55,11 @@
     methods: {
       async loadData(tipe) {
         let resp = await axios.get('v1/chart/pcr?tipe=' + tipe)
-        this.chart.labels = resp.data.label;
-        this.chart.datasets = resp.data.data;
+        this.chart.labels = resp.data.result.labels;
+        this.chart.datasets[0].data = resp.data.result.positif;
+        this.chart.datasets[1].data = resp.data.result.negatif;
+        this.chart.datasets[2].data = resp.data.result.inkonklusif;
+        this.chart.datasets[3].data = resp.data.result.invalid;
         this.setChart();
       },
       setChart() {
