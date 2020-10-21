@@ -2,10 +2,11 @@
   <div class="wrapper wrapper-content">
     <portal to="title-name">Dashboard</portal>
 
-    <tracking />
-    <pasien-diperiksa />
-    <charts />
-    <div class="row">
+    <!-- Web Satelit -->
+    <tracking v-if="checkPermission('satelit')" />
+    <pasien-diperiksa v-if="checkPermission('satelit')" />
+    <charts v-if="checkPermission('satelit')" />
+    <div v-if="checkPermission('satelit')" class="row">
       <div class="col-md-12">
         <Ibox title="Instansi Pengirim">
           <ajax-table url="/v1/dashboard/instansi-pengirim" :disableSort="[]" :oid="'instansi_pengirim'" :config="{
@@ -29,6 +30,11 @@
         </Ibox>
       </div>
     </div>
+
+    <!-- Dashboard superadmin -->
+    <tracking-admin v-if="checkPermission('superadmin')" />
+    <chart-admin v-if="checkPermission('superadmin')" />
+
   </div>
 </template>
 
@@ -39,13 +45,17 @@
   import Tracking from './dashboard/tracking'
   import PasienDiperiksa from './dashboard/pasien-diperiksa'
   import Charts from './dashboard/charts'
+  import TrackingAdmin from './dashboard-admin/tracking'
+  import ChartAdmin from './dashboard-admin/chart/charts'
 
   export default {
     middleware: "auth",
     components: {
       PasienDiperiksa,
       Tracking,
-      Charts
+      Charts,
+      TrackingAdmin,
+      ChartAdmin
     },
 
     computed: mapGetters({
@@ -68,25 +78,10 @@
       checkPermission(menu) {
         var allow_role_id
         switch (menu) {
-          case 'registrasi':
-            allow_role_id = [1, 6, 7, 2]
+          case 'satelit':
+            allow_role_id = [8]
             break;
-          case 'sample':
-            allow_role_id = [1, 6, 7, 3]
-            break;
-          case 'ekstraksi':
-            allow_role_id = [1, 6, 7, 4]
-            break;
-          case 'pcr':
-            allow_role_id = [1, 6, 7, 5]
-            break;
-          case 'verifikasi':
-            allow_role_id = [1, 6, 7]
-            break;
-          case 'validasi':
-            allow_role_id = [1, 7]
-            break;
-          case 'master':
+          case 'superadmin':
             allow_role_id = [1]
             break;
         }
