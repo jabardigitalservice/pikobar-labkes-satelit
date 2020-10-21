@@ -9,7 +9,7 @@
             <h2 v-if="!loading" class="font-weight-bold text-center">
               {{ data.total_masuk_sampel | formatCurrency}}</h2>
             <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
-            <div class="text-muted text-center">Pcs</div>
+            <small v-if="!loading">Pcs</small>
           </div>
         </div>
       </div>
@@ -23,7 +23,7 @@
             <h2 v-if="!loading" class="font-weight-bold text-center">
               {{ data.total_sampel_diperiksa | formatCurrency}}</h2>
             <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
-            <div class="text-muted text-center">Pcs</div>
+            <small v-if="!loading">Pcs</small>
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@
             <h2 v-if="!loading" class="font-weight-bold text-center">
               {{ data.rata_rata_waktu_pemeriksaan | formatCurrency}}</h2>
             <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
-            <div class="text-muted text-center">Jam</div>
+            <small v-if="!loading">Jam</small>
           </div>
         </div>
       </div>
@@ -47,11 +47,11 @@
       <div class="ibox">
         <div class="ibox-content" style="height: 135px;">
           <div class="text-center">
-            <div class="font-weight-bold text-center text-yellow">Total Sampel Positif</div>
+            <div class="font-weight-bold text-center text-blue">Total Sampel Positif</div>
             <h2 v-if="!loading" class="font-weight-bold text-center">
               {{ data.total_sample_positif | formatCurrency}}</h2>
             <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
-            <div class="text-muted text-center">Pcs</div>
+            <small v-if="!loading">Pcs</small>
           </div>
         </div>
       </div>
@@ -61,11 +61,11 @@
       <div class="ibox">
         <div class="ibox-content" style="height: 135px;">
           <div class="text-center">
-            <div class="font-weight-bold text-center">Total Sampel Negatif</div>
+            <div class="font-weight-bold text-center text-blue">Total Sampel Negatif</div>
             <h2 v-if="!loading" class="font-weight-bold text-center">
               {{ data.total_sample_negatif | formatCurrency}}</h2>
             <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
-            <div class="text-muted text-center">Pcs</div>
+            <small v-if="!loading">Pcs</small>
           </div>
         </div>
       </div>

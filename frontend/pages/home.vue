@@ -32,7 +32,8 @@
     </div>
 
     <!-- Dashboard superadmin -->
-    <tracking-admin />
+    <tracking-admin v-if="checkPermission('superadmin')" />
+    <chart-admin v-if="checkPermission('superadmin')" />
 
   </div>
 </template>
@@ -45,6 +46,7 @@
   import PasienDiperiksa from './dashboard/pasien-diperiksa'
   import Charts from './dashboard/charts'
   import TrackingAdmin from './dashboard-admin/tracking'
+  import ChartAdmin from './dashboard-admin/chart/charts'
 
   export default {
     middleware: "auth",
@@ -52,7 +54,8 @@
       PasienDiperiksa,
       Tracking,
       Charts,
-      TrackingAdmin
+      TrackingAdmin,
+      ChartAdmin
     },
 
     computed: mapGetters({
