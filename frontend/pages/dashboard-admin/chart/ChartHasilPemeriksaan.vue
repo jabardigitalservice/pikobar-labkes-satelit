@@ -20,19 +20,20 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default {
     data() {
       return {
         params: {
-          kota: 'bandung',
+          kota: '',
           tanggal_pemeriksaan: ''
         },
         datasets: [{
-          data: [1, 6, 2, 3],
+          data: [1, 6, 2],
           backgroundColor: ["#F2C94C", "#2F80ED", "#109858", '#EA4343'],
           // hoverBackgroundColor: ["#d1e3f7", "#fbd2cd", "#fef5c9"]
         }],
-        labels: ['Positif', 'Negatif', 'Inkonklusif', 'Invalid'],
+        labels: ['Positif', 'Negatif', 'Inkonklusif'],
         option: {
           legend: {
             display: true,
@@ -45,9 +46,14 @@
       async loadData() {
         this.loading = true;
         try {
-          // TODO: fetch data
+          let resp = await axios.get(`v1/dashboard-admin/chart-hasil-pemeriksaan?kota=${this.params.kota}&tanggal_pemeriksaan=${this.params.tanggal_pemeriksaan}`);
+          this.datasets[0].data[0] = resp.data.result.positif;
+          this.datasets[0].data[1] = resp.data.result.negatif;
+          this.datasets[0].data[2] = resp.data.result.lainnya;
         } catch (e) {
-          console.log(e);
+          this.datasets[0].data[0] = 0;
+          this.datasets[0].data[1] = 0;
+          this.datasets[0].data[2] = 0;
         }
         this.loading = false;
       },

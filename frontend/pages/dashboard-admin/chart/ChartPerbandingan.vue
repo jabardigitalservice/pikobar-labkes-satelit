@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="input-group mb-2">
-      <select class="form-control ml-1" v-model="params.perbandingan">
-        <option value="Daily">7 Hari Terakhir</option>
+      <select class="form-control ml-1" v-model="params.tipe">
+        <option value="Weekly">7 Hari Terakhir</option>
         <option value="Monthly">1 Bulan Terakhir</option>
       </select>
       <select class="form-control ml-2" v-model="params.kota">
@@ -15,14 +15,16 @@
 
 <script>
   var chartPerbandingan;
+  import axios from 'axios'
+
   export default {
     props: ['barId'],
     name: 'chartPerbandingan',
     data() {
       return {
         params: {
-          kota: 'bandung',
-          perbandingan: 'Daily',
+          kota: '',
+          tipe: 'Weekly',
         },
         chart: {
           labels: [
@@ -89,7 +91,15 @@
     },
     methods: {
       async loadData(tipe) {
-        // TODO: fetch data
+        try {
+          let resp = await axios.get(`v1/dashboard-admin/chart-trendline?kota=${this.params.kota}&tipe=${this.params.tipe}`);
+          this.chart.datasets[0].data = resp.data.result.positif
+          this.chart.datasets[1].data = resp.data.result.negatif
+          this.chart.datasets[2].data = resp.data.result.lainnya
+          this.chart.labels = resp.data.result.labels
+        } catch (e) {
+          
+        }
         this.setChart(tipe);
       },
       setChart(tipe) {
@@ -102,13 +112,13 @@
         chartPerbandingan = new Chart(ctx, {
           type: this.chart.type,
           data: chartData,
-          options: tipe === 'Daily' ? this.chart.options : this.chart.options1
+          options: tipe === 'Weekly' ? this.chart.options : this.chart.options1
         });
       }
     },
     created() {
       setTimeout(() => {
-        this.loadData('Daily');
+        this.loadData('Weekly');
       }, 1000);
     },
     mounted() {
