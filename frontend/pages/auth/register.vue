@@ -28,6 +28,23 @@
               </div>
             </div>
 
+            <!-- Koordinator -->
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label text-md-right">{{
+                $t("coordinator")
+              }}</label>
+              <div class="col-md-7">
+                <input
+                  v-model="form.koordinator"
+                  :class="{ 'is-invalid': form.errors.has('koodinator') }"
+                  type="text"
+                  name="koordinator"
+                  class="form-control"
+                />
+                <has-error :form="form" field="koordinator" />
+              </div>
+            </div>
+
             <!-- Name -->
             <div class="form-group row">
               <label class="col-md-3 col-form-label text-md-right">{{
@@ -144,6 +161,7 @@ export default {
       username: "",
       name: "",
       email: "",
+      koordinator: "",
       password: "",
       password_confirmation: "",
       token: "",

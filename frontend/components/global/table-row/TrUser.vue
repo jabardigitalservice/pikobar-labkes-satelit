@@ -8,7 +8,9 @@
             {{item.name}}
         </td>
         <td>{{item.email}}</td>
-        <td>{{ item.lab_satelit ? item.lab_satelit.name : '-'}}</td>
+        <td>{{item.koordinator}}</td>
+        <td>{{item.lab_satelit ? item.lab_satelit.nama : '-'}}</td>
+        <td>{{item.lab_satelit ? item.lab_satelit.alamat : '-'}}</td>
         <td>{{item.status}}</td>
         <td>
             <nuxt-link :to="`v1/user/${item.id}`" class="btn btn-warning btn-sm">
@@ -30,13 +32,13 @@ export default {
     methods: {
         async deleteData(id){
             try {
-                let resp = await axios.get('/sample/delete/'+id);
+                let resp = await axios.delete('/v1/user/'+id);
                 this.$toast.success('Berhasil menghapus data', {
                     icon: 'check',
                     iconPack: 'fontawesome',
                     duration: 5000
                 })
-                this.$bus.$emit('refresh-ajaxtable', 'sample-sent');
+                this.$bus.$emit('refresh-ajaxtable', 'user');
             }catch(e){
                 this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
                 console.log(e);

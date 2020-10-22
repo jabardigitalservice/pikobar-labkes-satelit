@@ -100,6 +100,7 @@ class UserController extends Controller
             'username' => 'required|unique:users,username',
             'email' => 'required|email|unique:users,email',
             'name' => 'required',
+            'koordinator' => 'required',
             'lab_satelit_id' => 'required',
             'token' => 'required',
             'password' => 'required|confirmed|min:6',
@@ -111,6 +112,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'username' => $request->username,
+            'koordinator' => $request->koordinator,
             'password' => Hash::make($request->password),
             'lab_satelit_id' => $request->lab_satelit_id,
             'role_id' => 8
@@ -119,5 +121,9 @@ class UserController extends Controller
         $invite->delete();
 
         return $user;
+    }
+
+    public function delete(User $user) {
+        return $user->delete();
     }
 }

@@ -46,7 +46,9 @@
               username: 'USERNAME',
               name: 'NAMA',
               email: 'EMAIL',
+              koordinator: 'KOORDINATOR',
               lab: 'LAB',
+              alamat_lab: 'ALAMAT LAB',
               status: 'STATUS',
             }"
           />
