@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Fasyankes;
+use App\Models\Kota;
 use App\Models\Labkes\DashboardCounter as DashboardCounterLabkes;
+use App\Models\Labkes\Pasien as PasienLabkes;
+use App\Models\Labkes\Register as RegisterLabkes;
 use App\Models\Labkes\Sampel as SampelLabkes;
-use App\Models\Register;
+use App\Models\Pasien as PasienSatelit;
+use App\Models\Register as RegisterSatelit;
 use App\Models\Sampel as SampelSatelit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -101,9 +106,12 @@ class DashboardAdminController extends Controller
             ->where('pasien.is_from_migration', false)
             ->where('pasien_register.is_from_migration', false)
             ->whereNull('register.deleted_at');
-        if ($tanggal) {
+        if ($tanggal && !is_array($tanggal)) {
             $satelit->whereDate('waktu_pcr_sample_analyzed', date('Y-m-d', strtotime($tanggal)));
             $labkes->whereDate('waktu_sample_valid', date('Y-m-d', strtotime($tanggal)));
+        } else {
+            $satelit->whereBetween('waktu_pcr_sample_analyzed', [date('Y-m-d', strtotime($tanggal[0])), date('Y-m-d', strtotime($tanggal[count($tanggal) - 1]))]);
+            $labkes->whereBetween('waktu_sample_valid', [date('Y-m-d', strtotime($tanggal[0])), date('Y-m-d', strtotime($tanggal[count($tanggal) - 1]))]);
         }
         if ($kota) {
             $satelit->where('pasien.kota_id', $kota);
@@ -145,7 +153,7 @@ class DashboardAdminController extends Controller
                     break;
                 case 'Monthly':
                     $data['labels'][] = $item;
-                break;
+                    break;
             }
         }
         return response()->json([
@@ -177,5 +185,91 @@ class DashboardAdminController extends Controller
             $start->addDays(1);
         }
         return $blackoutDays;
+    }
+
+    public function chartHasilPemeriksaanByKota(Request $request)
+    {
+        $tipe = $request->get('tipe', 'Weekly');
+        $date = $this->__getDate($tipe);
+        $kota = $this->__getPasienByKota();
+
+        $data['positif'] = [];
+        $data['negatif'] = [];
+        $data['lainnya'] = [];
+        $data['labels'] = [];
+        foreach ($kota as $item) {
+            $data['positif'][] = $this->__getChartHasilPemeriksaan('positif', $date, $item->id);
+            $data['negatif'][] = $this->__getChartHasilPemeriksaan('negatif', $date, $item->id);
+            $data['lainnya'][] = $this->__getChartHasilPemeriksaan('lainnya', $date, $item->id);
+            $data['labels'][] = $item->nama;
+        }
+        return response()->json([
+            'result' => $data,
+            'status' => 200,
+        ]);
+    }
+
+    public function chartRegisterByFasyankes(Request $request)
+    {
+        $tipe = $request->get('tipe', 'Weekly');
+        $date = $request->get('tanggal_pemeriksaan') ? $request->get('tanggal_pemeriksaan') : $this->__getDate($tipe);
+        $fasyankes = $this->__getRegistrasiByFasyankes();
+
+        $data['data'] = [];
+        $data['labels'] = [];
+        foreach ($fasyankes as $item) {
+            $data['data'][] = $this->__getChartFasyankes($item->id, $date);
+            $data['labels'][] = $item->nama;
+        }
+        return response()->json([
+            'result' => $data,
+            'status' => 200,
+        ]);
+    }
+
+    private function __getChartFasyankes($fasyankes_id, $tanggal)
+    {
+        $satelit = RegisterSatelit::where('fasyankes_id', $fasyankes_id);
+        $labkes = RegisterLabkes::where('fasyankes_id', $fasyankes_id);
+        if ($tanggal && !is_array($tanggal)) {
+            $satelit->whereDate('created_at', date('Y-m-d', strtotime($tanggal)));
+            $labkes->whereDate('created_at', date('Y-m-d', strtotime($tanggal)));
+        } else {
+            $satelit->whereBetween('created_at', [date('Y-m-d', strtotime($tanggal[0])), date('Y-m-d', strtotime($tanggal[count($tanggal) - 1]))]);
+            $labkes->whereBetween('created_at', [date('Y-m-d', strtotime($tanggal[0])), date('Y-m-d', strtotime($tanggal[count($tanggal) - 1]))]);
+        }
+        return $satelit->count('id') + $labkes->count('id');
+    }
+
+    private function __getPasienByKota()
+    {
+        $models = Kota::all();
+        $data = [];
+        foreach ($models as $row) {
+            $satelit = PasienSatelit::where('kota_id', $row->id)->count();
+            $labkes = PasienLabkes::where('kota_id', $row->id)->where('is_from_migration', false)->count();
+            $data[] = (object) [
+                'id' => $row->id,
+                'nama' => $row->nama,
+                'total' => $satelit + $labkes,
+            ];
+        }
+        return collect($data)->SortByDesc('total')->slice(0, 5);
+    }
+
+    private function __getRegistrasiByFasyankes()
+    {
+        $models = Fasyankes::all();
+        $data = [];
+        foreach ($models as $row) {
+            $satelit = RegisterSatelit::where('fasyankes_id', $row->id)->count();
+            $labkes = RegisterLabkes::where('fasyankes_id', $row->id)->where('is_from_migration', false)->count();
+            $data[] = (object) [
+                'id' => $row->id,
+                'nama' => $row->nama,
+                'total' => $satelit + $labkes,
+            ];
+        }
+        return collect($data)->SortByDesc('total')->slice(0, 5);
     }
 }

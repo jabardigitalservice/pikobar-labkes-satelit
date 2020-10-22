@@ -110,6 +110,8 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::get('/tracking', 'DashboardAdminController@tracking');
         Route::get('/chart-hasil-pemeriksaan', 'DashboardAdminController@chartHasilPemeriksaan');
         Route::get('/chart-trendline', 'DashboardAdminController@chartTrendline');
+        Route::get('/chart-hasil-pemeriksaan-by-kota', 'DashboardAdminController@chartHasilPemeriksaanByKota');
+        Route::get('/chart-register-by-fasyankes', 'DashboardAdminController@chartRegisterByFasyankes');
     });
 
     Route::group(['prefix' => 'chart'], function () {
