@@ -2,7 +2,7 @@
   <div>
     <div class="input-group mb-2 flex-right">
       <select v-model="params.perbandingan">
-        <option value="Daily">7 Hari Terakhir</option>
+        <option value="Weekly">7 Hari Terakhir</option>
         <option value="Monthly">1 Bulan Terakhir</option>
       </select>
     </div>
@@ -19,7 +19,7 @@
     data() {
       return {
         params: {
-          perbandingan: 'Daily',
+          perbandingan: 'Weekly',
         },
         chart: {
           labels: [
@@ -93,7 +93,7 @@
     },
     created() {
       setTimeout(() => {
-        this.loadData('Daily');
+        this.loadData('Weekly');
       }, 1000);
     },
     mounted() {
