@@ -58,8 +58,13 @@
       "input": "Input Analisa",
       "list-hasil-pemeriksaan": "Hasil Pemeriksaan",
       "list-hasil-inkonklusif": "Hasil Sampel Invalid"
+    },
+    "user": {
+      "index": "Pengguna"
+    },
+    "registration": {
+      "index": "Registrasi"
     }
-
   },
   "ok": "Ok",
   "cancel": "Batal",

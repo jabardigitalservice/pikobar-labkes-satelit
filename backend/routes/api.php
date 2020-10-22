@@ -82,6 +82,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/get-data', 'PemeriksaanSampleController@getData');
         Route::get('/get-dikirim', 'PemeriksaanSampleController@getDikirim');
     });
+
+    Route::group(['prefix' => 'lab-satelit'], function() {
+        Route::get('/', 'LabSatelitController@listLabsatelit');
+    });
 });
 
 Route::group(['middleware' => ['guest:api', 'cors']], function () {
@@ -202,7 +206,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
             Route::post('update/{register}', 'RegisterRujukanController@update');
 
             // Route::delete('delete/{register}', 'RegisterRujukanController@destroy');
-            Route::delete('delete/{id}/{pasien}', 'RegistrasiRujukanController@delete');
+            // Route::delete('delete/{id}/{pasien}', 'RegistrasiRujukanController@delete');
 
         });
 
@@ -302,6 +306,13 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
     });
 
     Route::get('download', 'FileDownloadController@download');
+
+    
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/', 'UserController@index')->name('api.user.index');
+        Route::post('/', 'UserController@create')->name('api.user.create');
+        Route::post('/invite', 'UserController@invite')->name('api.user.invite');
+    });
 });
 
 Route::group(['middleware' => ['auth:api', 'can:integrasi-kemenkes'], 'prefix' => 'integrasi'], function () {

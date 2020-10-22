@@ -13,7 +13,7 @@ class LabSatelitController extends Controller
         $models = LabSatelit::select('*');
         $params = $request->get('params',false);
         $search = $request->get('search',false);
-        $order  = $request->get('order','name');
+        $order  = $request->get('order','nama');
 
         if ($search != '') {
             $models = $models->where(function($q) use ($search) {
