@@ -90,6 +90,9 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 Route::group(['middleware' => ['guest:api', 'cors']], function () {
     Route::post('login', 'Auth\LoginController@login');
+    Route::post('/v1/user/register', 'V1\UserController@register')->name('api.user.register');
+    Route::get('/v1/user/register/{invite:token}', 'V1\UserController@tokenInfo')->name('api.user.tokenInfo');
+
 });
 
 Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1'], function () {
@@ -310,7 +313,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
     
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', 'UserController@index')->name('api.user.index');
-        Route::post('/', 'UserController@create')->name('api.user.create');
         Route::post('/invite', 'UserController@invite')->name('api.user.invite');
     });
 });

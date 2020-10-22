@@ -48,7 +48,7 @@ const routes = [
     { path: '/hasil-pemeriksaan/import-excel', name: 'import Hasil Pemeriksaan', component: page('hasil-pemeriksaan/import-excel.vue'), meta: { parentName: 'verifikasi.index.unverified' } },
 
     { path: '/user', name: 'user.index', component: page('user/index.vue'), meta: {parentName: 'home'}},
-    { path: '/registration/:token', name: 'user.registration', component: page('registration/index.vue'), meta: {parentName: 'registration.index'}},
+    { path: '/registration/:token', name: 'user.registration', component: page('auth/register.vue'), meta: {parentName: 'registration.index'}},
     
 ]
 

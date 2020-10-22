@@ -90,27 +90,33 @@ class UserController extends Controller
         
     }
 
-    public function create(Request $request)
+    public function tokenInfo(Invite $invite) {
+        return $invite;
+    }
+
+    public function register(Request $request)
     {
         Validator::make($request->all(), [
             'username' => 'required|unique:users,username',
             'email' => 'required|email|unique:users,email',
             'name' => 'required',
             'lab_satelit_id' => 'required',
+            'token' => 'required',
             'password' => 'required|confirmed|min:6',
         ])->validate();
 
         $invite = Invite::where('token', $request->token)->first();
-        $invite->delete();
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'username' => $request->username,
             'password' => Hash::make($request->password),
-            'lab_satelit_id' => $invite->lab_satelit_id,
+            'lab_satelit_id' => $request->lab_satelit_id,
             'role_id' => 8
         ]);
+
+        $invite->delete();
 
         return $user;
     }
