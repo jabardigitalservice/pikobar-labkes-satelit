@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Fasyankes;
-use App\Models\Kota;
+use App\Models\FasyankesTerbanyak;
+use App\Models\KotaTerbanyak;
 use App\Models\Labkes\DashboardCounter as DashboardCounterLabkes;
-use App\Models\Labkes\Pasien as PasienLabkes;
 use App\Models\Labkes\Register as RegisterLabkes;
 use App\Models\Labkes\Sampel as SampelLabkes;
-use App\Models\Pasien as PasienSatelit;
 use App\Models\Register as RegisterSatelit;
 use App\Models\Sampel as SampelSatelit;
 use Carbon\Carbon;
@@ -19,7 +17,7 @@ class DashboardAdminController extends Controller
 {
     public function tracking()
     {
-        $sampelMasukSatelit = Register::leftJoin('pasien_register', 'register.id', 'pasien_register.register_id')
+        $sampelMasukSatelit = RegisterSatelit::leftJoin('pasien_register', 'register.id', 'pasien_register.register_id')
             ->leftJoin('pasien', 'pasien.id', 'pasien_register.pasien_id')
             ->leftJoin('sampel', 'register.id', 'sampel.register_id')
             ->whereNull('sampel.deleted_at')
@@ -73,8 +71,8 @@ class DashboardAdminController extends Controller
 
     public function chartHasilPemeriksaan(Request $request)
     {
-        $tanggal = $request->get('tanggal_pemeriksaan');
-        $kota = $request->get('kota');
+        $tanggal = $request->get('tanggal_pemeriksaan', null);
+        $kota = $request->get('kota', null);
         $data['positif'] = $this->__getChartHasilPemeriksaan('positif', $tanggal, $kota);
         $data['negatif'] = $this->__getChartHasilPemeriksaan('negatif', $tanggal, $kota);
         $data['lainnya'] = $this->__getChartHasilPemeriksaan('lainnya', $tanggal, $kota);
@@ -109,7 +107,7 @@ class DashboardAdminController extends Controller
         if ($tanggal && !is_array($tanggal)) {
             $satelit->whereDate('waktu_pcr_sample_analyzed', date('Y-m-d', strtotime($tanggal)));
             $labkes->whereDate('waktu_sample_valid', date('Y-m-d', strtotime($tanggal)));
-        } else {
+        } elseif ($tanggal && is_array($tanggal)) {
             $satelit->whereBetween('waktu_pcr_sample_analyzed', [date('Y-m-d', strtotime($tanggal[0])), date('Y-m-d', strtotime($tanggal[count($tanggal) - 1]))]);
             $labkes->whereBetween('waktu_sample_valid', [date('Y-m-d', strtotime($tanggal[0])), date('Y-m-d', strtotime($tanggal[count($tanggal) - 1]))]);
         }
@@ -191,16 +189,16 @@ class DashboardAdminController extends Controller
     {
         $tipe = $request->get('tipe', 'Weekly');
         $date = $this->__getDate($tipe);
-        $kota = $this->__getPasienByKota();
+        $kota = KotaTerbanyak::all();
 
         $data['positif'] = [];
         $data['negatif'] = [];
         $data['lainnya'] = [];
         $data['labels'] = [];
         foreach ($kota as $item) {
-            $data['positif'][] = $this->__getChartHasilPemeriksaan('positif', $date, $item->id);
-            $data['negatif'][] = $this->__getChartHasilPemeriksaan('negatif', $date, $item->id);
-            $data['lainnya'][] = $this->__getChartHasilPemeriksaan('lainnya', $date, $item->id);
+            $data['positif'][] = $this->__getChartHasilPemeriksaan('positif', $date, $item->kota_id);
+            $data['negatif'][] = $this->__getChartHasilPemeriksaan('negatif', $date, $item->kota_id);
+            $data['lainnya'][] = $this->__getChartHasilPemeriksaan('lainnya', $date, $item->kota_id);
             $data['labels'][] = $item->nama;
         }
         return response()->json([
@@ -212,13 +210,13 @@ class DashboardAdminController extends Controller
     public function chartRegisterByFasyankes(Request $request)
     {
         $tipe = $request->get('tipe', 'Weekly');
-        $date = $request->get('tanggal_pemeriksaan') ? $request->get('tanggal_pemeriksaan') : $this->__getDate($tipe);
-        $fasyankes = $this->__getRegistrasiByFasyankes();
+        $date = $request->get('tanggal_pemeriksaan', null) ? $request->get('tanggal_pemeriksaan') : $this->__getDate($tipe);
+        $fasyankes = FasyankesTerbanyak::all();
 
         $data['data'] = [];
         $data['labels'] = [];
         foreach ($fasyankes as $item) {
-            $data['data'][] = $this->__getChartFasyankes($item->id, $date);
+            $data['data'][] = $this->__getChartFasyankes($item->fasyankes_id, $date);
             $data['labels'][] = $item->nama;
         }
         return response()->json([
@@ -234,42 +232,10 @@ class DashboardAdminController extends Controller
         if ($tanggal && !is_array($tanggal)) {
             $satelit->whereDate('created_at', date('Y-m-d', strtotime($tanggal)));
             $labkes->whereDate('created_at', date('Y-m-d', strtotime($tanggal)));
-        } else {
+        } elseif ($tanggal && !is_array($tanggal)) {
             $satelit->whereBetween('created_at', [date('Y-m-d', strtotime($tanggal[0])), date('Y-m-d', strtotime($tanggal[count($tanggal) - 1]))]);
             $labkes->whereBetween('created_at', [date('Y-m-d', strtotime($tanggal[0])), date('Y-m-d', strtotime($tanggal[count($tanggal) - 1]))]);
         }
         return $satelit->count('id') + $labkes->count('id');
-    }
-
-    private function __getPasienByKota()
-    {
-        $models = Kota::all();
-        $data = [];
-        foreach ($models as $row) {
-            $satelit = PasienSatelit::where('kota_id', $row->id)->count();
-            $labkes = PasienLabkes::where('kota_id', $row->id)->where('is_from_migration', false)->count();
-            $data[] = (object) [
-                'id' => $row->id,
-                'nama' => $row->nama,
-                'total' => $satelit + $labkes,
-            ];
-        }
-        return collect($data)->SortByDesc('total')->slice(0, 5);
-    }
-
-    private function __getRegistrasiByFasyankes()
-    {
-        $models = Fasyankes::all();
-        $data = [];
-        foreach ($models as $row) {
-            $satelit = RegisterSatelit::where('fasyankes_id', $row->id)->count();
-            $labkes = RegisterLabkes::where('fasyankes_id', $row->id)->where('is_from_migration', false)->count();
-            $data[] = (object) [
-                'id' => $row->id,
-                'nama' => $row->nama,
-                'total' => $satelit + $labkes,
-            ];
-        }
-        return collect($data)->SortByDesc('total')->slice(0, 5);
     }
 }
