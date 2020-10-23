@@ -232,7 +232,7 @@ class DashboardAdminController extends Controller
         if ($tanggal && !is_array($tanggal)) {
             $satelit->whereDate('created_at', date('Y-m-d', strtotime($tanggal)));
             $labkes->whereDate('created_at', date('Y-m-d', strtotime($tanggal)));
-        } else {
+        } elseif ($tanggal && !is_array($tanggal)) {
             $satelit->whereBetween('created_at', [date('Y-m-d', strtotime($tanggal[0])), date('Y-m-d', strtotime($tanggal[count($tanggal) - 1]))]);
             $labkes->whereBetween('created_at', [date('Y-m-d', strtotime($tanggal[0])), date('Y-m-d', strtotime($tanggal[count($tanggal) - 1]))]);
         }
