@@ -97,12 +97,17 @@
       }, 1000);
     },
     mounted() {
-      this.$bus.$on('refresh-chart-perbandingan', (tipe) => {
+      this.$bus.$on('refresh-chart-kota', (tipe) => {
         chartKota.destroy();
         setTimeout(() => {
           this.loadData(tipe)
         }, 1000);
       })
+    },
+    watch: {
+      "params.perbandingan": function (newVal, oldVal) {
+        this.$bus.$emit('refresh-chart-kota', this.params.perbandingan)
+      },
     }
   };
 </script>

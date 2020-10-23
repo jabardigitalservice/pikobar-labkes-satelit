@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row ml-1 mb-2">
-      <div class="row col-md-6">
+      <div class="row col-md-8">
         <select v-model="params.perbandingan">
           <option value="Daily">7 Hari Terakhir</option>
           <option value="Monthly">1 Bulan Terakhir</option>
@@ -9,10 +9,8 @@
         <date-picker placeholder="Tanggal Pemeriksaan" format="d MMMM yyyy" input-class="form-control" style="margin-left: 5px" />
         <button class="btn btn-default" style="margin-left: 5px"><i class='fa fa-undo' /></button>
       </div>
-      <div class="row col-md-6 flex-right p-0">
-        <select v-model="params.kota">
-          <option value="bandung">Kota Bandung</option>
-        </select>
+      <div class="row col-md-4 flex-right p-0">
+        <multiselect v-model="kota" :options="optionKota" track-by="nama" label="nama" placeholder="Pilih Kota" />
       </div>
     </div>
     <canvas :chart="chart" id="chartLab" />
@@ -29,9 +27,11 @@
       return {
         params: {
           perbandingan: 'Monthly',
-          kota: 'bandung',
-          tanggal_pemeriksaan: ''
+          tanggal_pemeriksaan: '',
+          kota: null,
         },
+        kota: [],
+        optionKota: [],
         chart: {
           labels: [
             "Labkes",
@@ -86,20 +86,36 @@
           data: chartData,
           options: this.chart.options
         });
-      }
+      },
+      async getKota() {
+        const resp = await this.$axios.get('/v1/list-kota-jabar');
+        this.optionKota = resp.data;
+      },
     },
     created() {
+      this.getKota();
       setTimeout(() => {
         this.loadData('Daily');
       }, 1000);
     },
     mounted() {
-      this.$bus.$on('refresh-chart-perbandingan', (tipe) => {
+      this.$bus.$on('refresh-chart-lab', (tipe) => {
         chartLab.destroy();
         setTimeout(() => {
           this.loadData(tipe)
         }, 1000);
       })
+    },
+    watch: {
+      "kota": function (newVal, oldVal) {
+        this.params.kota = null
+        if (this.kota) {
+          this.params.kota = this.kota.id
+        }
+      },
+      "params.perbandingan": function (newVal, oldVal) {
+        this.$bus.$emit('refresh-chart-lab', this.params.perbandingan)
+      },
     }
   };
 </script>

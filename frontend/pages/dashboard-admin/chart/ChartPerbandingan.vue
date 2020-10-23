@@ -1,13 +1,15 @@
 <template>
   <div>
     <div class="input-group mb-2">
-      <select class="form-control ml-1" v-model="params.perbandingan">
+      <div class="col-md-6 p-0 mr-4">
+        <multiselect v-model="kota" :options="optionKota" track-by="nama" label="nama" placeholder="Pilih Kota" />
+      </div>
+      <div class="col-md-5 p-0">
+      <select class="form-control" v-model="params.perbandingan">
         <option value="Daily">7 Hari Terakhir</option>
         <option value="Monthly">1 Bulan Terakhir</option>
       </select>
-      <select class="form-control ml-2" v-model="params.kota">
-        <option value="bandung">Kota Bandung</option>
-      </select>
+      </div>
     </div>
     <canvas :chart="chart" id="chartPerbandingan" />
   </div>
@@ -21,9 +23,11 @@
     data() {
       return {
         params: {
-          kota: 'bandung',
+          kota: null,
           perbandingan: 'Daily',
         },
+        kota: [],
+        optionKota: [],
         chart: {
           labels: [
             "Mon",
@@ -104,9 +108,14 @@
           data: chartData,
           options: tipe === 'Daily' ? this.chart.options : this.chart.options1
         });
-      }
+      },
+      async getKota() {
+        const resp = await this.$axios.get('/v1/list-kota-jabar');
+        this.optionKota = resp.data;
+      },
     },
     created() {
+      this.getKota();
       setTimeout(() => {
         this.loadData('Daily');
       }, 1000);
@@ -118,6 +127,17 @@
           this.loadData(tipe)
         }, 1000);
       })
+    },
+    watch: {
+      "kota": function (newVal, oldVal) {
+        this.params.kota = null
+        if (this.kota) {
+          this.params.kota = this.kota.id
+        }
+      },
+      "params.perbandingan": function (newVal, oldVal) {
+        this.$bus.$emit('refresh-chart-perbandingan', this.params.perbandingan)
+      },
     }
   };
 </script>
