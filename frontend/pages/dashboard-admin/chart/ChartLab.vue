@@ -3,7 +3,7 @@
     <div class="row ml-1 mb-2">
       <div class="row col-md-8">
         <select v-model="params.perbandingan">
-          <option value="Daily">7 Hari Terakhir</option>
+          <option value="Weekly">7 Hari Terakhir</option>
           <option value="Monthly">1 Bulan Terakhir</option>
         </select>
         <date-picker placeholder="Tanggal Pemeriksaan" format="d MMMM yyyy" input-class="form-control" style="margin-left: 5px" />
@@ -95,7 +95,7 @@
     created() {
       this.getKota();
       setTimeout(() => {
-        this.loadData('Daily');
+        this.loadData('Weekly');
       }, 1000);
     },
     mounted() {

@@ -2,10 +2,10 @@
   <div>
     <div class="row mb-2">
       <div style="flex: 0 0 85%" class="ml-1">
-        <date-picker placeholder="Tanggal Pemeriksaan" format="d MMMM yyyy" input-class="form-control" />
+        <date-picker placeholder="Tanggal Pemeriksaan" format="d MMMM yyyy" input-class="form-control" v-model="params.tanggal_pemeriksaan" />
       </div>
       <div style="flex: 0 0 10%">
-        <button class="btn btn-default" style="margin-left: 5px" @click="resetFilter">
+        <button class="btn btn-default" style="margin-left: 5px" @click="resetFilter" title="Reset Filter">
           <i class='fa fa-undo' />
         </button>
       </div>
@@ -15,7 +15,7 @@
         <multiselect v-model="kota" :options="optionKota" track-by="nama" label="nama" placeholder="Pilih Kota" />
       </div>
     </div>
-    <canvas :chart="chart" id="chartHasil" />
+    <canvas :chart="chart" id="chartHasilPemeriksaan" />
   </div>
 </template>
 
@@ -27,17 +27,17 @@
     data() {
       return {
         params: {
-          kota: null,
+          kota: '',
           tanggal_pemeriksaan: ''
         },
         kota: [],
         optionKota: [],
         chart: {
-          labels: ['Positif', 'Negatif', 'Inkonklusif', 'Invalid'],
+          labels: ['Positif', 'Negatif', 'Inkonklusif'],
           datasets: [{
-            data: [1, 6, 2, 3],
-            backgroundColor: ["#F2C94C", "#2F80ED", "#109858", '#EA4343'],
-            hoverBackgroundColor: ["#fadd84", "#5ea3ff", "#1efc94", "#fbd2cd"]
+            data: [1, 6, 2],
+            backgroundColor: ["#F2C94C", "#2F80ED", "#EA4343"],
+            hoverBackgroundColor: ["#fadd84", "#5ea3ff", "#fbd2cd"]
           }],
           type: "pie",
           options: {
@@ -50,12 +50,22 @@
       };
     },
     methods: {
-      async loadData(tipe) {
-        // TODO: fetch data
-        this.setChart(tipe);
+      async loadData() {
+        this.loading = true;
+        try {
+          let resp = await this.$axios.get(`v1/dashboard-admin/chart-hasil-pemeriksaan?kota=${this.params.kota}&tanggal_pemeriksaan=${this.params.tanggal_pemeriksaan}`);
+          this.chart.datasets[0].data[0] = resp.data.result.positif;
+          this.chart.datasets[0].data[1] = resp.data.result.negatif;
+          this.chart.datasets[0].data[2] = resp.data.result.lainnya;
+        } catch (e) {
+          this.chart.datasets[0].data[0] = 0;
+          this.chart.datasets[0].data[1] = 0;
+          this.chart.datasets[0].data[2] = 0;
+        }
+        this.setChart();
       },
-      setChart(tipe) {
-        var ctx = document.getElementById("chartHasil").getContext("2d");
+      setChart() {
+        var ctx = document.getElementById("chartHasilPemeriksaan").getContext("2d");
         let chartData = {
           labels: this.chart.labels,
           datasets: this.chart.datasets
@@ -71,11 +81,11 @@
         this.optionKota = resp.data;
       },
       resetFilter() {
-        this.params.kota = null;
-        this.params.tanggal_pemeriksaan = null;
-        this.kota = null;
+        this.params.kota = '';
+        this.params.tanggal_pemeriksaan = '';
+        this.kota = '';
         this.$bus.$emit('refresh-chart-hasil-pemeriksaan', this.params)
-      },
+      }
     },
     created() {
       this.getKota();
@@ -92,11 +102,15 @@
       })
     },
     watch: {
+      "params.tanggal_pemeriksaan": function (newVal, oldVal) {
+        this.$bus.$emit('refresh-chart-hasil-pemeriksaan', this.params)
+      },
       "kota": function (newVal, oldVal) {
-        this.params.kota = null
+        this.params.kota = '';
         if (this.kota) {
           this.params.kota = this.kota.id
         }
+        this.$bus.$emit('refresh-chart-hasil-pemeriksaan', this.params)
       }
     }
   };
