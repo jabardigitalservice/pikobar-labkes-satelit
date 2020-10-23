@@ -71,8 +71,8 @@ class DashboardAdminController extends Controller
 
     public function chartHasilPemeriksaan(Request $request)
     {
-        $tanggal = $request->get('tanggal_pemeriksaan');
-        $kota = $request->get('kota');
+        $tanggal = $request->get('tanggal_pemeriksaan', null);
+        $kota = $request->get('kota', null);
         $data['positif'] = $this->__getChartHasilPemeriksaan('positif', $tanggal, $kota);
         $data['negatif'] = $this->__getChartHasilPemeriksaan('negatif', $tanggal, $kota);
         $data['lainnya'] = $this->__getChartHasilPemeriksaan('lainnya', $tanggal, $kota);
@@ -210,7 +210,7 @@ class DashboardAdminController extends Controller
     public function chartRegisterByFasyankes(Request $request)
     {
         $tipe = $request->get('tipe', 'Weekly');
-        $date = $request->get('tanggal_pemeriksaan') ? $request->get('tanggal_pemeriksaan') : $this->__getDate($tipe);
+        $date = $request->get('tanggal_pemeriksaan', null) ? $request->get('tanggal_pemeriksaan') : $this->__getDate($tipe);
         $fasyankes = FasyankesTerbanyak::all();
 
         $data['data'] = [];
