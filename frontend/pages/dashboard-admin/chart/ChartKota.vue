@@ -1,52 +1,42 @@
 <template>
   <div>
     <div class="input-group mb-2 flex-right">
-      <select v-model="params.perbandingan">
+      <select v-model="params.tipe">
         <option value="Weekly">7 Hari Terakhir</option>
         <option value="Monthly">1 Bulan Terakhir</option>
       </select>
     </div>
-    <canvas :chart="chart" id="chartKota" />
+    <canvas :chart="chart" id="chartHasilPemeriksaanKota" />
   </div>
 </template>
 
 <script>
   var chartKota;
-
   export default {
     props: ['barId'],
     name: 'chartKota',
     data() {
       return {
         params: {
-          perbandingan: 'Weekly',
+          tipe: 'Weekly',
         },
         chart: {
-          labels: [
-            "Kota Bandung",
-            "Kab. Bandung",
-            "Kota Cimahi",
-          ],
+          labels: [],
           datasets: [{
             label: 'Negatif',
             backgroundColor: '#2F80ED',
-            borderColor: '',
-            data: [40, 60, 20, 60]
+            barThickness: 20,
+            data: []
           }, {
             label: 'Positif',
             backgroundColor: '#F2C94C',
-            borderColor: '',
-            data: [10, 0, 30, 20]
+            barThickness: 20,
+            data: []
           }, {
             label: 'Inkonklusif',
-            backgroundColor: '#109858',
-            borderColor: '',
-            data: [10, 10, 0, 20]
-          }, {
-            label: 'Invalid',
             backgroundColor: '#EA4343',
-            borderColor: '',
-            data: [10, 10, 0, 20]
+            barThickness: 20,
+            data: []
           }],
           type: "horizontalBar",
           options: {
@@ -59,10 +49,7 @@
                 },
               }],
               yAxes: [{
-                stacked: true,
-                barPercentage: 0.5,
-                categoryPercentage: 0.5,
-                barThickness: 20
+                stacked: true
               }]
             },
             legend: {
@@ -74,11 +61,21 @@
     },
     methods: {
       async loadData(tipe) {
-        // TODO: fetch data
+        try {
+          let resp = await this.$axios.get(`v1/dashboard-admin/chart-hasil-pemeriksaan-by-kota?tipe=${this.params.tipe}`);
+          this.chart.datasets[0].data = resp.data.result.positif
+          this.chart.datasets[1].data = resp.data.result.negatif
+          this.chart.datasets[2].data = resp.data.result.lainnya
+          this.chart.labels = resp.data.result.labels
+        } catch (e) {
+          this.chart.datasets[0].data = 0
+          this.chart.datasets[1].data = 0
+          this.chart.datasets[2].data = 0
+        }
         this.setChart(tipe);
       },
       setChart(tipe) {
-        var ctx = document.getElementById("chartKota").getContext("2d");
+        var ctx = document.getElementById("chartHasilPemeriksaanKota").getContext("2d");
         let chartData = {
           labels: this.chart.labels,
           datasets: this.chart.datasets
@@ -97,12 +94,17 @@
       }, 1000);
     },
     mounted() {
-      this.$bus.$on('refresh-chart-perbandingan', (tipe) => {
+      this.$bus.$on('refresh-chart-kota', (tipe) => {
         chartKota.destroy();
         setTimeout(() => {
           this.loadData(tipe)
         }, 1000);
       })
+    },
+    watch: {
+      "params.tipe": function (newVal, oldVal) {
+        this.$bus.$emit('refresh-chart-kota', this.params.tipe)
+      },
     }
   };
 </script>
