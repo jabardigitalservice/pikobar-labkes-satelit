@@ -201,16 +201,11 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::post('import-rujukan', 'ImportRegisterController@importRegisterRujukan');
 
         Route::group(['prefix' => 'rujukan'], function () {
-
             Route::post('store', 'RegisterRujukanController@store');
 
             Route::get('detail/{register}', 'RegisterRujukanController@show');
 
             Route::post('update/{register}', 'RegisterRujukanController@update');
-
-            // Route::delete('delete/{register}', 'RegisterRujukanController@destroy');
-            // Route::delete('delete/{id}/{pasien}', 'RegistrasiRujukanController@delete');
-
         });
 
     });
@@ -276,8 +271,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::get('list-validated', 'ValidasiController@indexValidated');
 
         Route::get('detail/{sampel}', 'ValidasiController@show');
-
-        // Route::get('get-sampel-status', 'ValidasiController@sampelStatusList');
 
         Route::post('edit-status-sampel/{sampel}', 'ValidasiController@updateToValidate');
 
