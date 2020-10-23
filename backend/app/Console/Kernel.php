@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('command:terbanyak_command')
+        $schedule->command('command:terbanyak')
                  ->everyFiveMinutes();
     }
 

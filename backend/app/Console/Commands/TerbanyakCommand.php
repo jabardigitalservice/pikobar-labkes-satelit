@@ -20,7 +20,7 @@ class TerbanyakCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'command:terbanyak_command';
+    protected $signature = 'command:terbanyak';
 
     /**
      * The console command description.
