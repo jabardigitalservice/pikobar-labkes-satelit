@@ -35,7 +35,7 @@
         chart: {
           labels: ['Positif', 'Negatif', 'Inkonklusif'],
           datasets: [{
-            data: [1, 6, 2],
+            data: [],
             backgroundColor: ["#F2C94C", "#2F80ED", "#EA4343"],
             hoverBackgroundColor: ["#fadd84", "#5ea3ff", "#fbd2cd"]
           }],

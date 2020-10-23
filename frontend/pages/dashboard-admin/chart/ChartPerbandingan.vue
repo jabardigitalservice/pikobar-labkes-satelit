@@ -44,17 +44,17 @@
             label: 'Negatif',
             backgroundColor: '#2F80ED',
             borderColor: '',
-            data: [4, 6, 2, 6]
+            data: []
           }, {
             label: 'Positif',
             backgroundColor: '#F2C94C',
             borderColor: '',
-            data: [1, 0, 3, 2]
+            data: []
           }, {
             label: 'Inkonklusif',
             backgroundColor: '#EA4343',
             borderColor: '',
-            data: [1, 1, 0, 2]
+            data: []
           }],
           type: "bar",
           options: {
