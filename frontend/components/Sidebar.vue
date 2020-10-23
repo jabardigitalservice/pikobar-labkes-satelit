@@ -15,6 +15,12 @@
             <span class="nav-label">Dashboard</span>
           </router-link>
         </li>
+        <li v-if="checkPermission('admin')">
+          <router-link to="/user" tag="a">
+            <i class="uil-user-square fa-fw"></i>
+            <span class="nav-label">User</span>
+          </router-link>
+        </li>
         <li v-if="checkPermission('satelit')">
           <router-link to="/registrasi/sampel" tag="a">
             <i class="uil-user-square fa-fw"></i>
@@ -63,6 +69,9 @@
         switch (menu) {
           case 'satelit':
             allow_role_id = [8]
+            break;
+          case 'admin':
+            allow_role_id = [1]
             break;
         }
         return allow_role_id.indexOf(this.user.role_id) > -1

@@ -58,8 +58,13 @@
       "input": "Input Analisa",
       "list-hasil-pemeriksaan": "Hasil Pemeriksaan",
       "list-hasil-inkonklusif": "Hasil Sampel Invalid"
+    },
+    "user": {
+      "index": "Pengguna"
+    },
+    "registration": {
+      "index": "Registrasi"
     }
-
   },
   "ok": "Ok",
   "cancel": "Batal",
@@ -69,6 +74,7 @@
   "token_expired_alert_text": "Mohon login lagi untuk melanjutkan.",
   "login": "Log In",
   "register": "Daftar",
+  "coordinator": "Koordinator",
   "page_not_found": "Halaman Tidak Ditemukan",
   "go_home": "Kembali ke Beranda",
   "logout": "Logout",
@@ -78,6 +84,7 @@
   "forgot_password": "Lupa Password?",
   "confirm_password": "Konfirmasi Password",
   "name": "Nama",
+  "username": "Nama Pengguna",
   "toggle_navigation": "Navigasi",
   "home": "Beranda",
   "you_are_logged_in": "Anda sudah login!",

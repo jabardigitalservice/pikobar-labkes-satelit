@@ -46,6 +46,10 @@ const routes = [
     { path: '/hasil-pemeriksaan/edit/:id', name: 'verifikasi.edit', component: page('hasil-pemeriksaan/edit.vue'), meta: { parentName: 'verifikasi.index.unverified' } },
     { path: '/hasil-pemeriksaan/export-excel', name: 'verifikasi.export-excel', component: page('hasil-pemeriksaan/export-excel.vue'), meta: { parentName: 'verifikasi.index.unverified' } },
     { path: '/hasil-pemeriksaan/import-excel', name: 'import Hasil Pemeriksaan', component: page('hasil-pemeriksaan/import-excel.vue'), meta: { parentName: 'verifikasi.index.unverified' } },
+
+    { path: '/user', name: 'user.index', component: page('user/index.vue'), meta: {parentName: 'home'}},
+    { path: '/registration/:token', name: 'user.registration', component: page('auth/register.vue'), meta: {parentName: 'registration.index'}},
+    
 ]
 
 export function createRouter() {
