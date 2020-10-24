@@ -36,11 +36,11 @@
         optionKota: [],
         chart: {
           labels: [],
-          datasets: {
+          datasets: [{
             backgroundColor: '#2F80ED',
             barThickness: 20,
             data: []
-          },
+          }],
           type: "horizontalBar",
           options: {
             responsive: true,
@@ -65,12 +65,11 @@
     methods: {
       async loadData(tipe) {
         try {
-          let resp = await this.$axios.get(`v1/dashboard-admin/chart-register-by-fasyankes?tipe=${this.params.tipe}&date=${this.params.tanggal_pemeriksaan}&kota=${this.params.kota}`);
-          console.log(resp.data.result)
-          this.chart.datasets.data = resp.data.result.data
+          let resp = await this.$axios.get(`v1/dashboard-admin/chart-register-by-fasyankes?tipe=${this.params.tipe}&tanggal_pemeriksaan=${this.params.tanggal_pemeriksaan}&kota=${this.params.kota}`);
+          this.chart.datasets[0].data = resp.data.result.data
           this.chart.labels = resp.data.result.labels
         } catch (e) {
-          this.chart.datasets.data = []
+          this.chart.datasets[0].data = []
         }
         this.setChart(tipe);
       },
