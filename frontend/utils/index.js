@@ -120,6 +120,10 @@ export function momentFormatDate(date) {
   return moment(date).lang("id").format("D MMMM YYYY");
 }
 
+export function momentFormatDateDefault(date) {
+  return moment(date).format("YYYY-MM-DD");
+}
+
 // function to convert time use moment js
 export function momentFormatTime(time) {
   return moment(time).format("HH:mm:ss");

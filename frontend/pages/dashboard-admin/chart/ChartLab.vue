@@ -21,7 +21,9 @@
 
 <script>
   var chartFasyankes;
-
+  import {
+    momentFormatDateDefault,
+  } from '~/utils';
   export default {
     props: ['barId'],
     name: 'chartFasyankes',
@@ -65,7 +67,8 @@
     methods: {
       async loadData(tipe) {
         try {
-          let resp = await this.$axios.get(`v1/dashboard-admin/chart-register-by-fasyankes?tipe=${this.params.tipe}&tanggal_pemeriksaan=${this.params.tanggal_pemeriksaan}&kota=${this.params.kota}`);
+          let tanggal_pemeriksaan = this.params.tanggal_pemeriksaan ? momentFormatDateDefault(this.params.tanggal_pemeriksaan) : this.params.tanggal_pemeriksaan;
+          let resp = await this.$axios.get(`v1/dashboard-admin/chart-register-by-fasyankes?tipe=${this.params.tipe}&tanggal_pemeriksaan=${tanggal_pemeriksaan}&kota=${this.params.kota}`);
           this.chart.datasets[0].data = resp.data.result.data
           this.chart.labels = resp.data.result.labels
         } catch (e) {
@@ -94,7 +97,7 @@
         this.params.tipe = 'Monthly';
         this.params.kota = '';
         this.params.tanggal_pemeriksaan = '';
-        this.kota = '';
+        this.kota = null;
         this.$bus.$emit('refresh-chart-fasyankes', this.params)
       }
     },
