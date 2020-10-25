@@ -21,7 +21,6 @@ class DashboardController extends Controller
         $data['negatif'] = $this->__getKesimpulanPemeriksaan('negatif');
         $data['inkonklusif'] = $this->__getKesimpulanPemeriksaan('inkonklusif');
         $data['invalid'] = $this->__getKesimpulanPemeriksaan('invalid');
-
         return response()->json([
             'result' => $data,
             'status' => 200,
