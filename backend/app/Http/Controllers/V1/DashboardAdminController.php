@@ -216,7 +216,6 @@ class DashboardAdminController extends Controller
 
         $data['data'] = [];
         $data['labels'] = [];
-        dd($fasyankes);
         foreach ($fasyankes as $item) {
             $data['data'][] = $this->__getChartFasyankes($item->fasyankes_id, $date);
             $data['labels'][] = $item->nama;
