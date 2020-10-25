@@ -590,15 +590,14 @@ class RegistersampelController extends Controller
     {
         DB::beginTransaction();
         try {
-            PasienRegister::where('register_id', $id)->where('pasien_id', $pasien)->delete();
-            $sampel = Sampel::where('register_id', $id)->delete();
-            $register = Register::where('id', $id)->delete();
-            $pasien = Pasien::where('id', $pasien)->delete();
+            $register = Register::where('id', $id)->first();
+            abort_if(Auth::user()->lab_satelit_id != $register->lab_satelit_id, 500, 'Gagal menghapus data sampel');
+            if ($register->sampel) {
+                $register->sampel()->delete();
+            }
+            $register->delete();
             DB::commit();
-            return response()->json([
-                'status' => true,
-                'message' => "Berhasil menghapus data register",
-            ]);
+            return response()->json(['status' => 200, 'message' => 'Berhasil menghapus data sampel']);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
