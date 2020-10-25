@@ -229,7 +229,7 @@ class DashboardAdminController extends Controller
 
     private function __getFasyankesByKota($kota)
     {
-        return Fasyankes::where('kota_id', $kota)->get();
+        return Fasyankes::select('id as fasyankes_id')->where('kota_id', $kota)->get();
     }
 
     private function __getChartFasyankes($fasyankes_id, $tanggal)
