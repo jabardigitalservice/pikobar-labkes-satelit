@@ -21,6 +21,9 @@
 
 <script>
   var chartHasil;
+  import {
+    momentFormatDateDefault,
+  } from '~/utils';
   export default {
     props: ['pieId'],
     name: 'chartHasil',
@@ -53,7 +56,8 @@
       async loadData() {
         this.loading = true;
         try {
-          let resp = await this.$axios.get(`v1/dashboard-admin/chart-hasil-pemeriksaan?kota=${this.params.kota}&tanggal_pemeriksaan=${this.params.tanggal_pemeriksaan}`);
+          let tanggal_pemeriksaan = this.params.tanggal_pemeriksaan ? momentFormatDateDefault(this.params.tanggal_pemeriksaan) : this.params.tanggal_pemeriksaan;
+          let resp = await this.$axios.get(`v1/dashboard-admin/chart-hasil-pemeriksaan?kota=${this.params.kota}&tanggal_pemeriksaan=${tanggal_pemeriksaan}`);
           this.chart.datasets[0].data[0] = resp.data.result.positif;
           this.chart.datasets[0].data[1] = resp.data.result.negatif;
           this.chart.datasets[0].data[2] = resp.data.result.lainnya;
@@ -83,7 +87,7 @@
       resetFilter() {
         this.params.kota = '';
         this.params.tanggal_pemeriksaan = '';
-        this.kota = '';
+        this.kota = null;
         this.$bus.$emit('refresh-chart-hasil-pemeriksaan', this.params)
       }
     },

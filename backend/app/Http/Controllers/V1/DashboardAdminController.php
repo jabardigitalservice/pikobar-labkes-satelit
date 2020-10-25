@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Fasyankes;
 use App\Models\FasyankesTerbanyak;
 use App\Models\KotaTerbanyak;
 use App\Models\Labkes\DashboardCounter as DashboardCounterLabkes;
@@ -211,7 +212,7 @@ class DashboardAdminController extends Controller
     {
         $tipe = $request->get('tipe', 'Weekly');
         $date = $request->get('tanggal_pemeriksaan', null) ? $request->get('tanggal_pemeriksaan') : $this->__getDate($tipe);
-        $fasyankes = FasyankesTerbanyak::all();
+        $fasyankes = $request->get('kota', null) ? $this->__getFasyankesByKota($request->get('kota')) : FasyankesTerbanyak::all();
 
         $data['data'] = [];
         $data['labels'] = [];
@@ -219,10 +220,19 @@ class DashboardAdminController extends Controller
             $data['data'][] = $this->__getChartFasyankes($item->fasyankes_id, $date);
             $data['labels'][] = $item->nama;
         }
+
         return response()->json([
             'result' => $data,
             'status' => 200,
         ]);
+    }
+
+    private function __getFasyankesByKota($kota)
+    {
+        if (!$kota) {
+            return [];
+        }
+        return Fasyankes::select('id as fasyankes_id', 'nama')->where('kota_id', $kota)->get();
     }
 
     private function __getChartFasyankes($fasyankes_id, $tanggal)
