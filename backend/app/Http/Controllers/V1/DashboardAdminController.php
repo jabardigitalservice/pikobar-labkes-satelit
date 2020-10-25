@@ -216,6 +216,7 @@ class DashboardAdminController extends Controller
 
         $data['data'] = [];
         $data['labels'] = [];
+        dd($fasyankes);
         foreach ($fasyankes as $item) {
             $data['data'][] = $this->__getChartFasyankes($item->fasyankes_id, $date);
             $data['labels'][] = $item->nama;
@@ -232,7 +233,7 @@ class DashboardAdminController extends Controller
         if (!$kota) {
             return [];
         }
-        return Fasyankes::select('id as fasyankes_id')->where('kota_id', $kota)->get();
+        return Fasyankes::select('id as fasyankes_id', 'nama')->where('kota_id', $kota)->get();
     }
 
     private function __getChartFasyankes($fasyankes_id, $tanggal)
