@@ -229,6 +229,9 @@ class DashboardAdminController extends Controller
 
     private function __getFasyankesByKota($kota)
     {
+        if (!$kota) {
+            return [];
+        }
         return Fasyankes::select('id as fasyankes_id')->where('kota_id', $kota)->get();
     }
 
