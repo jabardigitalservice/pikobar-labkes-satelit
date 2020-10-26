@@ -43,7 +43,7 @@ class LoginController extends Controller
         }
 
         $this->guard()->setToken($token);
-        dd($this->user());
+        
         return true;
     }
 
