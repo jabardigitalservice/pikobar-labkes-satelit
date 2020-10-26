@@ -160,6 +160,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::get('/cek-nomor-sampel', 'SampelController@cekNomorSampel');
     });
 
+    Route::get('list-negara', 'KotaController@listNegara');
     Route::get('list-provinsi', 'KotaController@listProvinsi');
     Route::get('list-kota/{provinsi}', 'KotaController@listKota');
     Route::get('list-kota-jabar', 'KotaController@listKota');
@@ -311,7 +312,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
 
     Route::get('download', 'FileDownloadController@download');
 
-    
+
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', 'UserController@index')->name('api.user.index');
         Route::delete('/{user:id}', 'UserController@delete')->name('api.user.delete');
