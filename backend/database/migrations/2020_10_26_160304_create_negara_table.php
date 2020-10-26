@@ -28,6 +28,6 @@ class CreateNegaraTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('negaras');
+        Schema::dropIfExists('negara');
     }
 }
