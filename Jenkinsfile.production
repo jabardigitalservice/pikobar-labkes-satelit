@@ -28,7 +28,7 @@ pipeline {
                    sshagent (['']){
                         // ssh block
                     sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_LABKES_SATELITE "cd /home/ubuntu/app/pikobar-labkes-satelit && $SSH_COMMAND \
-                                                                                    && sudo chmod 777 * R \
+                                                                                    && sudo chmod 777 * -R \
                                                                                     && sudo docker-compose -f docker-compose-production.yml down \
                                                                                     && sudo docker-compose -f docker-compose-production.yml build --no-cache \
                                                                                     && sudo docker-compose -f docker-compose-production.yml up -d"'
