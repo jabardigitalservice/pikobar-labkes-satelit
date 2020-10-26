@@ -18,7 +18,7 @@ class UserController extends Controller
 {
 
     public function index(Request $request) {
-        $models = User::query(); // 'pcr_sample_analyzed'
+        $models = User::query(); 
 
         $params = $request->get('params',false);
         $search = $request->get('search',false);
@@ -123,5 +123,10 @@ class UserController extends Controller
 
     public function delete(User $user) {
         return $user->delete();
+    }
+
+    public function show(User $user) {
+        $user->load('lab_satelit');
+        return response()->json(['data' => $user]);
     }
 }

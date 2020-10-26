@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper wrapper-content">
+  <div class="wrapper wrapper-content" ref="body">
     <portal to="title-name"> Pengguna </portal>
     <portal to="title-action">
       <div class="title-action">
@@ -199,6 +199,6 @@ export default {
   },
   created() {
     this.getLabSatelit();
-  },
+  }
 };
 </script>
