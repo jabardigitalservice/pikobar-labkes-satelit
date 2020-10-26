@@ -190,7 +190,7 @@ class DashboardAdminController extends Controller
     {
         $tipe = $request->get('tipe', 'Weekly');
         $date = $this->__getDate($tipe);
-        $kota = KotaTerbanyak::all();
+        $kota = KotaTerbanyak::where('tipe', $tipe)->get();
 
         $data['positif'] = [];
         $data['negatif'] = [];
