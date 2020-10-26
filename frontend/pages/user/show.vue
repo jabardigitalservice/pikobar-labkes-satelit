@@ -4,7 +4,7 @@
     <portal to="title-action">
       <div class="title-action">
         <router-link
-          :to="'/validasi/edit/' + this.data.id"
+          :to="`/user/${this.data.id}/edit`"
           class="btn btn-warning"
         >
           <i class="fa fa-edit"></i> Ubah
@@ -80,7 +80,7 @@ export default {
   computed: {},
   head() {
     return {
-      title: "Lihat Pengguna Hasil Pemeriksaan",
+      title: "Lihat Pengguna",
     };
   },
 };

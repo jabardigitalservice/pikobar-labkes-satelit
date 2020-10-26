@@ -306,8 +306,9 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
     
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', 'UserController@index')->name('api.user.index');
-        Route::delete('/{user:id}', 'UserController@delete')->name('api.user.delete');
         Route::get('/{user:id}', 'UserController@show')->name('api.user.show');
+        Route::put('/{user:id}', 'UserController@update')->name('api.user.update');
+        Route::delete('/{user:id}', 'UserController@delete')->name('api.user.delete');
         Route::post('/invite', 'UserController@invite')->name('api.user.invite');
     });
 });

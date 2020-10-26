@@ -49,6 +49,7 @@ const routes = [
 
     { path: '/user', name: 'user.index', component: page('user/index.vue'), meta: {parentName: 'home'}},
     { path: '/user/:id', name: 'user.show', component: page('user/show.vue'), meta: {parentName: 'user.index'}},
+    { path: '/user/:id/edit', name: 'user.edit', component: page('user/edit.vue'), meta: {parentName: 'user.index'}},
     { path: '/registration/:token', name: 'user.registration', component: page('auth/register.vue'), meta: {parentName: 'registration.index'}},
     
 ]
