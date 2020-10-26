@@ -2219,7 +2219,8 @@ button:focus {
 .btn-default:active:hover,
 .btn-default.active:hover,
 .btn-default.active:focus {
-  color: #1DB0E6;
+  color: #ffffff;
+  background: #1DB0E6;
   border: 1px solid #1DB0E6;
 }
 

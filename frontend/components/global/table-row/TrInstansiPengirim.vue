@@ -2,126 +2,20 @@
   <tr>
     <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
     <td>
-      <span>{{ item.name }}</span>
+      {{ item.name }}
     </td>
     <td>
-      <span>{{ item.y }}</span>
+      {{ item.y }}
     </td>
   </tr>
 </template>
-<script>
-  import Form from "vform";
-  import axios from "axios";
 
+<script>
   export default {
     props: ["item", "pagination", "rowparams", "index"],
     components: {},
     data() {
-
-      let loading = false
-
-      let form = new Form({
-        sampel_id: this.item.id
-      });
-
-      return {
-        loading,
-        form
-      };
+      return {};
     },
-    methods: {
-      showModalVerifikasi(sampelId) {},
-      verifikasiSampel() {
-
-        const swalWithBootstrapButtons = this.$swal.mixin({
-          customClass: {
-            confirmButton: 'mb-1 text-nowrap btn btn-success',
-            cancelButton: 'mb-1 text-nowrap btn btn-danger'
-          },
-          buttonsStyling: false
-        })
-
-        swalWithBootstrapButtons.fire({
-          title: 'Apakah Anda Yakin untuk Verifikasi Sampel ini?',
-          text: "Setelah sampel menjadi verifikasi, data tidak dapat dikembalikan.",
-          type: 'warning',
-          // input: 'text',
-          showCancelButton: true,
-          confirmButtonText: 'Ya, Tandai Sampel Terverifikasi',
-          cancelButtonText: 'Batalkan',
-          reverseButtons: true
-        }).then(async (result) => {
-          console.log(result)
-          if (result.value == '') {
-            swalWithBootstrapButtons.fire(
-              'Gagal',
-              'Terjadi kesalahan. Hubungi Admin!',
-              'error'
-            )
-          } else if (result.value) {
-            try {
-              this.loading = true
-              let resp = await this.form.post("/v1/verifikasi/verifikasi-single-sampel/" + this.item.id);
-              swalWithBootstrapButtons.fire(
-                'Selesai!',
-                'Sampel berhasil ditandai sebagai invalid',
-                'success'
-              )
-              this.$bus.$emit('refresh-ajaxtable', 'verifikasi')
-            } catch (err) {
-              if (err.response && err.response.data.code == 422) {
-                swalWithBootstrapButtons.fire(
-                  'Gagal',
-                  err.response.data.message,
-                  'error'
-                )
-              } else {
-                swalWithBootstrapButtons.fire(
-                  'Gagal',
-                  'Gagal menandai sampel menjadi invalid',
-                  'error'
-                )
-              }
-            }
-
-            this.loading = false
-
-          } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === this.$swal.DismissReason.cancel
-          ) {}
-        })
-
-      }
-    },
-    computed: {
-      usiaPasien() {
-        if (this.item.tanggal_lahir) {
-          let tglLahir = new Date(this.item.tanggal_lahir);
-          let today_date = new Date();
-          let today_year = today_date.getFullYear();
-          let today_month = today_date.getMonth();
-          let today_day = today_date.getDate();
-
-          var age = today_date.getFullYear() - tglLahir.getFullYear();
-          var m = today_date.getMonth() - tglLahir.getMonth();
-          if (m < 0 || (m === 0 && today_date.getDate() < tglLahir.getDate())) {
-            age--;
-          }
-          return `Usia: ${age} tahun`;
-        }
-        if (this.item.usia_tahun) {
-          return `Usia: ${this.item.usia_tahun} tahun`;
-        }
-        return 'Usia: -'
-      }
-    }
   };
 </script>
-
-<style scoped>
-  .nik {
-    display: block;
-    color: rgb(140, 143, 135);
-  }
-</style>
