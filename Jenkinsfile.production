@@ -43,8 +43,7 @@ pipeline {
                    sshagent (['']){
                         // ssh block
                        sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_LABKES_SATELITE "cd /home/ubuntu/app/pikobar-labkes-satelit  \
-                                                                                        && ./hook-frontend.sh \
-                                                                                        && chmod 777 -R frontend/dist/ "'
+                                                                                        && ./hook-frontend.sh"'
                     }
             }    
         }
