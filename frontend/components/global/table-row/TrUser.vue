@@ -13,11 +13,11 @@
         <td>{{item.lab_satelit ? item.lab_satelit.alamat : '-'}}</td>
         <td>{{item.status}}</td>
         <td>
-            <nuxt-link :to="`/user/${item.id}`" class="btn btn-primary btn-sm">
+            <nuxt-link :to="`/user/${item.id}`" class="btn btn-yellow btn-sm">
                 <i class="fa fa-eye"></i>
                 Lihat
             </nuxt-link>
-            <nuxt-link :to="`/user/${item.id}/edit`" class="btn btn-warning btn-sm">
+            <nuxt-link :to="`/user/${item.id}/edit`" class="btn btn-primary btn-sm">
                 <i class="fa fa-edit"></i>
                 Ubah
             </nuxt-link>
