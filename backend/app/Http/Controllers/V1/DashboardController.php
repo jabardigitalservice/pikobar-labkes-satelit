@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pasien;
 use App\Models\Register;
 use App\Models\Sampel;
 use Carbon\Carbon;
@@ -101,24 +102,29 @@ class DashboardController extends Controller
     public function instansi_pengirim(Request $request)
     {
         $user = Auth::user();
-        $models = Register::where('lab_satelit_id', $user->lab_satelit_id)
-            ->whereNotNull('instansi_pengirim');
-
         $page = $request->get('page', 1);
         $perpage = $request->get('perpage', 500);
+        $type = $request->get('type', 'fasyankes');
 
-        $count = count(Register::select(DB::raw('upper(instansi_pengirim_nama) as name'), DB::raw('count(*) as y'))
-                ->where('lab_satelit_id', $user->lab_satelit_id)
-                ->groupBy('name')
-                ->orderBy('y', 'desc')
-                ->whereNotNull('instansi_pengirim_nama')
-                ->get());
+        switch ($type) {
+            case 'kota':
+                $searchByTipe = 'nama_kabupaten';
+                $models = Pasien::where('lab_satelit_id', $user->lab_satelit_id)
+                    ->whereNotNull($searchByTipe);
+                break;
+            default:
+                $searchByTipe = 'instansi_pengirim_nama';
+                $models = Register::where('lab_satelit_id', $user->lab_satelit_id)
+                    ->whereNotNull($searchByTipe);
+                break;
+        }
 
-        $models = $models->select(DB::raw('upper(instansi_pengirim_nama) as name'), DB::raw('count(*) as y'));
-        $models = $models->orderBy('y', 'desc');
-        $models = $models->groupBy('name');
+        $models = $models->select(DB::raw("upper($searchByTipe) as name"), DB::raw('count(*) as y'))
+        ->orderBy('y', 'desc')
+        ->groupBy('name');
+
+        $count = count($models->get());
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
-
         return response()->json([
             'status' => 200,
             'data' => $models,
