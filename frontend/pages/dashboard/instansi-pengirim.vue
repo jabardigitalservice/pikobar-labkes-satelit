@@ -1,10 +1,12 @@
 <template>
   <Ibox title="Instansi Pengirim">
     <div class="col-md-6 row mb-1">
-      <button class="btn btn-default" :class="{active:tipe === 'fasyankes'}" @click="tipe = 'fasyankes'">Fasyankes</button>
+      <button class="btn btn-default" :class="{active:tipe === 'fasyankes'}"
+        @click="tipe = 'fasyankes'">Fasyankes</button>
       <button class="btn btn-default" :class="{active:tipe === 'kota'}" @click="tipe = 'kota'">Domisili</button>
     </div>
-    <ajax-table url="/v1/dashboard/instansi-pengirim" :disableSort="[]" :oid="'instansi_pengirim'" :config="{
+    <ajax-table :url="`/v1/dashboard/instansi-pengirim?type=${this.tipe}`" :oid="'instansi_pengirim'"
+      ref="instansi_pengirim" :config="{
           autoload: true,
           has_number: true,
           has_entry_page: false,
@@ -36,6 +38,9 @@
     },
     watch: {
       "tipe": function (newVal, oldVal) {
+        setTimeout(() => {
+          this.$bus.$emit("refresh-ajaxtable", "instansi_pengirim");
+        }, 500);
         console.log('tipe = ', this.tipe)
       },
     }
@@ -50,6 +55,7 @@
     font-weight: bold;
     border: 1px solid #1DB0E6;
   }
+
   .instansi-pengirim:active {
     color: #ffffff;
     background-color: #1DB0E6;
