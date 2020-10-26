@@ -41,7 +41,6 @@
         setTimeout(() => {
           this.$bus.$emit("refresh-ajaxtable", "instansi_pengirim");
         }, 500);
-        console.log('tipe = ', this.tipe)
       },
     }
   };
