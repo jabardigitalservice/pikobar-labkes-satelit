@@ -510,10 +510,8 @@
           );
           this.$router.push("/registrasi/sampel");
         } catch (err) {
-          console.log(err);
           if (err.response && err.response.data.code == 422) {
             this.$nextTick(() => {
-              console.log(err.response.data.error);
               this.form.errors.set(err.response.data.error);
             });
             this.$toast.error("Mohon cek kembali formulir Anda", {
