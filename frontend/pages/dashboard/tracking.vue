@@ -1,22 +1,21 @@
 <template>
   <div class="row">
     <div class="col-lg-12">
-
       <Ibox title="Tracking Progress">
         <div class="row tracking-row">
-          <div class="col-md-2 mb-3 mb-md-0">
+          <div class="col-md-4 mb-3 mb-md-0">
             <div class="text-center">
-              <h5 class="font-weight-bold text-blue">Registrasi</h5>
+              <h5 class="font-weight-bold text-blue">Sampel Masuk</h5>
               <h2 v-if="!loading" class="font-weight-bold">
                 {{ data.register | formatCurrency}}
               </h2>
               <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
-              <small v-if="!loading">Orang</small>
+              <small v-if="!loading">Pcs</small>
             </div>
           </div>
-          <div class="col-md-2 mb-3 mb-md-0">
+          <div class="col-md-4 mb-3 mb-md-0">
             <div class="text-center">
-              <h5 class="font-weight-bold text-blue">Sampel</h5>
+              <h5 class="font-weight-bold text-blue">Sampel Diperiksa</h5>
               <h2 v-if="!loading" class="font-weight-bold">
                 {{ data.sampel | formatCurrency}}
               </h2>
@@ -24,7 +23,24 @@
               <small v-if="!loading">Pcs</small>
             </div>
           </div>
-          <div class="col-md-2 mb-3 mb-md-0">
+          <div class="col-md-4 mb-3 mb-md-0">
+            <div class="text-center">
+              <h5 class="font-weight-bold text-blue">Sampel Dalam Proses</h5>
+              <h2 v-if="!loading" class="font-weight-bold">
+                {{ sampelDalamProses }}
+              </h2>
+              <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
+              <small v-if="!loading">Pcs</small>
+            </div>
+          </div>
+        </div>
+      </Ibox>
+    </div>
+
+    <div class="col-lg-12">
+      <Ibox title="Hasil Pemeriksaan">
+        <div class="row tracking-row">
+          <div class="col-md-3 mb-3 mb-md-0">
             <div class="text-center">
               <h5 class="font-weight-bold text-blue">Positif</h5>
               <h2 v-if="!loading" class="font-weight-bold">
@@ -34,7 +50,7 @@
               <small v-if="!loading">Orang</small>
             </div>
           </div>
-          <div class="col-md-2 mb-3 mb-md-0">
+          <div class="col-md-3 mb-3 mb-md-0">
             <div class="text-center">
               <h5 class="font-weight-bold text-blue">Negatif</h5>
               <h2 v-if="!loading" class="font-weight-bold">
@@ -44,7 +60,7 @@
               <small v-if="!loading">Orang</small>
             </div>
           </div>
-          <div class="col-md-2 mb-3 mb-md-0">
+          <div class="col-md-3 mb-3 mb-md-0">
             <div class="text-center">
               <h5 class="font-weight-bold text-blue">Inkonklusif</h5>
               <h2 v-if="!loading" class="font-weight-bold">
@@ -54,7 +70,7 @@
               <small v-if="!loading">Orang</small>
             </div>
           </div>
-          <div class="col-md-2 mb-3 mb-md-0">
+          <div class="col-md-3 mb-3 mb-md-0">
             <div class="text-center">
               <h5 class="font-weight-bold text-blue">Invalid</h5>
               <h2 v-if="!loading" class="font-weight-bold">
@@ -81,6 +97,14 @@
           labs: [],
         }
       };
+    },
+    computed: {
+      sampelDalamProses() {
+        if (this.data.register && this.data.sampel) {
+          return this.data.register - this.data.sampel;
+        }
+        return "-";
+      },
     },
     methods: {
       async loadData() {
