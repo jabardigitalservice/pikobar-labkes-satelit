@@ -117,7 +117,7 @@ export function getHumanAge(birthdDate, category) {
 
 // function to convert date use moment js
 export function momentFormatDate(date) {
-  return moment(date).lang("id").format("D MMMM YYYY");
+  return moment(date).locale("id").format("D MMMM YYYY");
 }
 
 export function momentFormatDateDefault(date) {
