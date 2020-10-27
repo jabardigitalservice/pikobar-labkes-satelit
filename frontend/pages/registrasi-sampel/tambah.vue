@@ -73,7 +73,7 @@
               <div class="col-md-8">
                 <input class="form-control" type="text" name="reg_nama_pasien" placeholder="Nama Pasien" required
                   v-model="form.reg_nama_pasien" :class="{ 'is-invalid': form.errors.has('reg_nama_pasien') }" />
-                <has-error :form="form" field="reg_nama_pasien" required />
+                <has-error :form="form" field="reg_nama_pasien" />
               </div>
             </div>
             <div class="form-group row">
