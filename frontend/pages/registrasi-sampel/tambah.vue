@@ -79,11 +79,10 @@
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 NIK
-                <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
                 <input class="form-control" type="text" name="reg_nik" placeholder="NIK" v-model="form.reg_nik"
-                  maxlength="16" :class="{ 'is-invalid': form.errors.has('reg_nik') }" required />
+                  maxlength="16" :class="{ 'is-invalid': form.errors.has('reg_nik') }" />
                 <has-error :form="form" field="reg_nik" />
               </div>
             </div>
