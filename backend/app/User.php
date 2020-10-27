@@ -4,6 +4,7 @@ namespace App;
 
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -46,6 +47,7 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      */
     protected $appends = [
         'photo_url',
+        'statusAccount'
     ];
 
     /**
@@ -123,5 +125,17 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     public function validator()
     {
         return $this->belongsTo('App\Models\Validator','validator_id','id');
+    }
+
+    public function getStatusAccountAttribute()
+    {
+        if($this->invited_at) {
+            if($this->register_at) {
+                return 'active';
+            }
+            return 'inactive';
+        }
+
+        return $this->last_login_at;
     }
 }

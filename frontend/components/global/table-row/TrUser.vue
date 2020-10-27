@@ -11,7 +11,7 @@
         <td>{{item.koordinator}}</td>
         <td>{{item.lab_satelit ? item.lab_satelit.nama : '-'}}</td>
         <td>{{item.lab_satelit ? item.lab_satelit.alamat : '-'}}</td>
-        <td>{{item.last_login_at | formatDateTime}}</td>
+        <td>{{item.statusAccount}}</td>
         <td>
             <nuxt-link :to="`/user/${item.id}`" class="btn btn-yellow btn-sm">
                 <i class="fa fa-eye"></i>
@@ -48,6 +48,6 @@ export default {
                 console.log(e);
             }
         }
-    }
+    },
 }
 </script>
