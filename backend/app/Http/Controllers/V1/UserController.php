@@ -8,6 +8,7 @@ use App\Models\Validator as ModelsValidator;
 use App\Notifications\InviteNotification;
 use Illuminate\Http\Request;
 use App\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -18,15 +19,15 @@ use Validator;
 class UserController extends Controller
 {
 
-    public function index(Request $request) {
-        $models = User::query(); 
+    public function index(Request $request)
+    {
+        $models = User::query();
 
-        $params = $request->get('params',false);
-        $search = $request->get('search',false);
-        $order  = $request->get('order' ,'updated_at');
+        $params = $request->get('params', false);
+        $search = $request->get('search', false);
+        $order  = $request->get('order', 'updated_at');
 
         if ($params) {
-
         }
 
         $count = $models->count();
@@ -35,7 +36,7 @@ class UserController extends Controller
         $perpage = $request->get('perpage', 20);
 
         if ($order) {
-            $order_direction = $request->get('order_direction','desc');
+            $order_direction = $request->get('order_direction', 'desc');
             if (empty($order_direction)) $order_direction = 'desc';
 
             switch ($order) {
@@ -47,12 +48,12 @@ class UserController extends Controller
 
         $models = $models->with('lab_satelit');
 
-        $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
+        $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
         return response()->json([
-            'data'=> $models,
-            'count'=> $count
-        ]);       
+            'data' => $models,
+            'count' => $count
+        ]);
     }
 
     public function invite(Request $request)
@@ -77,7 +78,13 @@ class UserController extends Controller
                 'lab_satelit_id' => $request->lab_satelit_id,
             ]);
 
-            $url = config('app.url').'/registration/'.$token;
+            User::create([
+                'email' => $request->input('email'),
+                'invited_at' => Carbon::now(),
+                'role_id' => 8
+            ]);
+
+            $url = config('app.url') . '/registration/' . $token;
 
             Notification::route('mail', $request->input('email'))->notify(new InviteNotification($url));
             DB::commit();
@@ -86,34 +93,34 @@ class UserController extends Controller
             DB::rollback();
             return $e;
         }
-        
     }
 
-    public function tokenInfo(Invite $invite) {
+    public function tokenInfo(Invite $invite)
+    {
         return $invite;
     }
 
     public function register(Request $request)
     {
+        $user = User::where(['email' => $request->email])->first();
         Validator::make($request->all(), [
             'username' => 'required|unique:users,username',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'name' => 'required',
             'koordinator' => 'required',
             'lab_satelit_id' => 'required',
             'token' => 'required',
             'password' => 'required|confirmed|min:6',
-        ])->validate();
-
+        ]);
+            
         $invite = Invite::where('token', $request->token)->first();
-
-        $user = User::create([
+        $user->update([
             'name' => $request->name,
-            'email' => $request->email,
             'username' => $request->username,
             'koordinator' => $request->koordinator,
             'password' => Hash::make($request->password),
             'lab_satelit_id' => $request->lab_satelit_id,
+            'register_at' => Carbon::now(),
             'role_id' => 8
         ]);
 
@@ -122,21 +129,24 @@ class UserController extends Controller
         return $user;
     }
 
-    public function delete(User $user) {
+    public function delete(User $user)
+    {
         return $user->delete();
     }
 
-    public function show(User $user) {
+    public function show(User $user)
+    {
         $user->load('lab_satelit');
         return response()->json(['data' => $user]);
     }
 
-    public function update(User $user, Request $request) {
+    public function update(User $user, Request $request)
+    {
         $value = $request->only('lab_satelit_id');
         Validator::make($value, [
             'lab_satelit_id' => 'required|exists:lab_satelit,id'
         ])->validate();
-        
+
         $user->update($value);
         return $user;
     }
