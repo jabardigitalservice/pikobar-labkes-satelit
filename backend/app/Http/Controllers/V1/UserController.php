@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use App\Invite;
+use App\Models\Validator as ModelsValidator;
 use App\Notifications\InviteNotification;
 use Illuminate\Http\Request;
 use App\User;
@@ -18,7 +19,7 @@ class UserController extends Controller
 {
 
     public function index(Request $request) {
-        $models = User::query(); // 'pcr_sample_analyzed'
+        $models = User::query(); 
 
         $params = $request->get('params',false);
         $search = $request->get('search',false);
@@ -123,5 +124,20 @@ class UserController extends Controller
 
     public function delete(User $user) {
         return $user->delete();
+    }
+
+    public function show(User $user) {
+        $user->load('lab_satelit');
+        return response()->json(['data' => $user]);
+    }
+
+    public function update(User $user, Request $request) {
+        $value = $request->only('lab_satelit_id');
+        Validator::make($value, [
+            'lab_satelit_id' => 'required|exists:lab_satelit,id'
+        ])->validate();
+        
+        $user->update($value);
+        return $user;
     }
 }
