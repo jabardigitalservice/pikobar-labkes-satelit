@@ -44,7 +44,7 @@
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
-                <multiselect v-model="fasyankes" :options="optionFasyankes" track-by="nama" label="nama"
+                <multiselect v-model="fasyankes" :options="optionFasyankes" track-by="nama" label="nama" required
                   placeholder="Nama Rumah Sakit/Dinkes" :class="{ 'is-invalid': form.errors.has('reg_fasyankes_id') }">
                 </multiselect>
                 <has-error :form="form" field="reg_fasyankes_id" />
@@ -73,16 +73,17 @@
               <div class="col-md-8">
                 <input class="form-control" type="text" name="reg_nama_pasien" placeholder=""
                   v-model="form.reg_nama_pasien" :class="{ 'is-invalid': form.errors.has('reg_nama_pasien') }" />
-                <has-error :form="form" field="reg_nama_pasien" />
+                <has-error :form="form" field="reg_nama_pasien" required />
               </div>
             </div>
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 NIK
+                <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
                 <input class="form-control" type="text" name="reg_nik" placeholder="" v-model="form.reg_nik"
-                  maxlength="16" :class="{ 'is-invalid': form.errors.has('reg_nik') }" />
+                  maxlength="16" :class="{ 'is-invalid': form.errors.has('reg_nik') }" required />
                 <has-error :form="form" field="reg_nik" />
               </div>
             </div>
@@ -145,10 +146,11 @@
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 No. Telp / HP
+                <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
                 <input class="form-control" type="text" name="reg_nohp" placeholder="" v-model="form.reg_nohp"
-                  :class="{ 'is-invalid': form.errors.has('reg_nohp') }" />
+                  :class="{ 'is-invalid': form.errors.has('reg_nohp') }" required />
                 <has-error :form="form" field="reg_nohp" />
               </div>
             </div>
@@ -258,7 +260,7 @@
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
-                <input class="multisteps-form__input form-control" type="text" name="reg_sumber_pasien"
+                <input class="multisteps-form__input form-control" type="text" name="reg_sumber_pasien" required
                   v-model="form.reg_sumber_pasien" :class="{ 'is-invalid': form.errors.has('reg_sumber_pasien') }" />
                 <has-error :form="form" field="reg_sumber_pasien" />
               </div>
@@ -292,7 +294,7 @@
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
-                <select class="form-control" v-model="form.reg_sampel_jenis_sampel"
+                <select class="form-control" v-model="form.reg_sampel_jenis_sampel" required
                   :class="{ 'is-invalid': form.errors.has(`reg_sampel_jenis_sampel`) }">
                   <option :value="item.id" v-for="(item, $key) in jenis_sampel" :key="$key">
                     {{ item.text }}</option>
@@ -315,7 +317,7 @@
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
-                <input class="multisteps-form__input form-control" type="text" name="reg_sampel_nomor"
+                <input class="multisteps-form__input form-control" type="text" name="reg_sampel_nomor" required
                   v-model="form.reg_sampel_nomor" :class="{ 'is-invalid': form.errors.has('reg_sampel_nomor') }" />
                 <has-error :form="form" field="reg_sampel_nomor" />
               </div>
@@ -349,7 +351,6 @@
 
 <script>
   import Form from "vform";
-  import axios from 'axios';
   import moment from 'moment';
   import {
     mapGetters
@@ -432,13 +433,13 @@
         this.isLoadingPencarian = true
         this.optionPencarian = []
         if (query != '') {
-          let resp = await axios.get('/v1/pelaporan/fetch?search=' + query);
+          let resp = await this.$axios.get('/v1/pelaporan/fetch?search=' + query);
           this.optionPencarian = resp.data.data.content
         }
         this.isLoadingPencarian = false
       },
       async changeFasyankes(tipe) {
-        let resp = await axios.get('/v1/list-fasyankes-jabar?tipe=' + tipe)
+        let resp = await this.$axios.get('/v1/list-fasyankes-jabar?tipe=' + tipe)
         this.optionFasyankes = resp.data;
       },
       initForm() {
@@ -526,13 +527,13 @@
         }
       },
       async getProvinsi() {
-        let resp = await axios.get('/v1/list-provinsi/');
+        let resp = await this.$axios.get('/v1/list-provinsi/');
         this.optionProvinsi = resp.data;
       },
       async getKota(provinsi) {
         this.isLoadingKota = true;
         if (provinsi) {
-          let resp = await axios.get('/v1/list-kota/' + provinsi);
+          let resp = await this.$axios.get('/v1/list-kota/' + provinsi);
           this.optionKota = resp.data;
           this.isLoadingKota = false;
         } else {
@@ -542,7 +543,7 @@
       async getKecamatan(kabupaten) {
         this.isLoadingKecamatan = true;
         if (kabupaten) {
-          let resp = await axios.get('/v1/list-kecamatan/' + kabupaten);
+          let resp = await this.$axios.get('/v1/list-kecamatan/' + kabupaten);
           this.optionKecamatan = resp.data;
           this.isLoadingKecamatan = false;
         } else {
@@ -552,7 +553,7 @@
       async getKelurahan(kecamatan) {
         this.isLoadingKelurahan = true;
         if (kecamatan) {
-          let resp = await axios.get('/v1/list-kelurahan/' + kecamatan);
+          let resp = await this.$axios.get('/v1/list-kelurahan/' + kecamatan);
           this.optionKelurahan = resp.data;
           this.isLoadingKelurahan = false;
         } else {

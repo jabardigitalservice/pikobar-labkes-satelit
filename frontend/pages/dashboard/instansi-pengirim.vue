@@ -1,5 +1,5 @@
 <template>
-  <Ibox title="Instansi Pengirim">
+  <Ibox title="Domisili">
     <div class="col-md-6 row mb-1">
       <button class="btn btn-default" :class="{active:tipe === 'fasyankes'}"
         @click="tipe = 'fasyankes'">Fasyankes</button>
