@@ -121,9 +121,6 @@
                 <v-button :loading="form.busy">
                   {{ $t("register") }}
                 </v-button>
-
-                <!-- GitHub Login Button -->
-                <login-with-github />
               </div>
             </div>
           </form>
@@ -167,7 +164,6 @@ export default {
       token: "",
       lab_satelit_id: "",
     }),
-    mustVerifyEmail: false,
   }),
 
   methods: {

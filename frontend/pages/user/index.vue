@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper wrapper-content">
+  <div class="wrapper wrapper-content" ref="body">
     <portal to="title-name"> Pengguna </portal>
     <portal to="title-action">
       <div class="title-action">
@@ -89,7 +89,6 @@
               >
               <div class="col-md-8 col-lg-9">
                 <input
-                  id="barcodesampel"
                   class="form-control"
                   name="email"
                   placeholder="Email"
@@ -104,6 +103,63 @@
             <div class="form-group row">
               <v-button :loading="form.busy" class="btn btn-md btn-primary btn-block">
                 <i class="fa fa-paper-plane"></i> Kirim Undangan
+              </v-button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </custom-modal>
+
+    <!-- edit modal -->
+    <custom-modal modal_id="edit-modal" title="Ubah Pengguna">
+      <div slot="body">
+        <div class="col-lg-12">
+          <form
+            id="scanbarcode row"
+            action="/api/v1/user"
+            method="put"
+            @submit.prevent="update"
+            @keydown="form.onKeydown($event)"
+          >
+            <div class="form-group row">
+              <label class="col-md-3 col-lg-3"
+                >Lab <span style="color: red">*</span></label
+              >
+              <div class="col-md-8 col-lg-9">
+                <select
+                  v-model="form.lab_satelit_id"
+                  class="form-control col-md-8 col-lg-6"
+                  name="lab_satelit_id"
+                >
+                  <option
+                    :value="item.id"
+                    :key="idx"
+                    v-for="(item, idx) in option_lab_satelit"
+                  >
+                    {{ item.nama }}
+                  </option>
+                </select>
+                <has-error :form="form" field="lab_satelit_id" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 col-lg-3">E-mail <span style="color: red">*</span></label>
+              <div class="col-md-8 col-lg-9">
+                <input
+                  class="form-control"
+                  name="email"
+                  placeholder="Email"
+                  type="text"
+                  tabindex="1"
+                  required
+                  autofocus
+                  v-model="form.email"
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <v-button :loading="form.busy" class="btn btn-md btn-primary btn-block">
+                <i class="fa fa-edit"></i> Perbarui
               </v-button>
             </div>
           </form>
@@ -161,7 +217,6 @@ export default {
     async getLabSatelit() {
       const resp = await this.$axios.get("/lab-satelit");
       this.option_lab_satelit = resp.data.data;
-      console.log(this.option_lab_satelit);
     },
     async submit() {
         try {
@@ -199,6 +254,6 @@ export default {
   },
   created() {
     this.getLabSatelit();
-  },
+  }
 };
 </script>
