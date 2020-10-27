@@ -50,6 +50,7 @@ class RegistersampelController extends Controller
             $pasien = new Pasien;
             $pasien->nama_lengkap = $request->get('reg_nama_pasien');
             $pasien->kewarganegaraan = $request->get('reg_kewarganegaraan');
+            $pasien->keterangan_warganegara = $request->get('reg_keterangan_warganegara');
             $pasien->nik = $request->get('reg_nik');
             $pasien->tempat_lahir = $request->get('reg_tempatlahir');
             if ($request->get('reg_tgllahir') != null) {
@@ -155,6 +156,7 @@ class RegistersampelController extends Controller
 
             $pasien->nama_lengkap = $request->get('reg_nama_pasien');
             $pasien->kewarganegaraan = $request->get('reg_kewarganegaraan');
+            $pasien->keterangan_warganegara = $request->get('reg_keterangan_warganegara');
             $pasien->nik = $request->get('reg_nik');
             $pasien->tempat_lahir = $request->get('reg_tempatlahir');
             if ($request->get('reg_tgllahir') != null) {
