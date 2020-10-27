@@ -238,9 +238,10 @@
               </div>
               <div class="col-md-8">
                 <select v-model="form.reg_status" class="multisteps-form__input form-control col-md-8 col-lg-6"
-                  name="reg_status" :class="{ 'is-invalid': form.errors.has('reg_status') }" placeholder="Kriteria Pasien">
+                  name="reg_status" :class="{ 'is-invalid': form.errors.has('reg_status') }">
                   <option v-for="index in pasien_status_option" v-bind:key="index.value" :value="index.value">
-                    {{index.text}}</option>
+                    {{index.text}}
+                  </option>
                 </select>
                 <has-error :form="form" field="reg_status" />
               </div>
@@ -602,7 +603,7 @@
       "country": function (newVal, oldVal) {
         this.form.reg_keterangan_warganegara = null
         if (this.country) {
-          this.form.reg_keterangan_warganegara = this.fasyankes.nama
+          this.form.reg_keterangan_warganegara = this.country.nama
         }
       },
       "provinsi": function (newVal, oldVal) {
