@@ -2,13 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Fasyankes;
 use App\Models\FasyankesTerbanyak;
 use App\Models\Kota;
 use App\Models\KotaTerbanyak;
-use App\Models\Labkes\Register as RegisterLabkes;
 use App\Models\Labkes\Sampel as SampelLabkes;
-use App\Models\Register as RegisterSatelit;
+use App\Models\LabSatelit;
 use App\Models\Sampel as SampelSatelit;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -98,35 +96,58 @@ class TerbanyakCommand extends Command
 
     public function fasyankesTerbanyak()
     {
-        $models = Fasyankes::all();
-        $data = [];
+        $models = LabSatelit::all();
+        $dataWeekly = [];
+        $dateWeekly = $this->__getDate('Weekly');
+        $dataMonthly = [];
+        $dateMonthly = $this->__getDate('Monthly');
+        $total = $this->__getLabkes($dateWeekly);
+        $dataWeekly[] = (object) [
+            'id' => 999,
+            'nama' => 'Labkes',
+            'tipe' => 'Weekly',
+            'total' => $total,
+        ];
+        $total = $this->__getLabkes($dateMonthly);
+        $dataMonthly[] = (object) [
+            'id' => 999,
+            'nama' => 'Labkes',
+            'tipe' => 'Monthly',
+            'total' => $total,
+        ];
         foreach ($models as $row) {
-            $satelit = RegisterSatelit::where('fasyankes_id', $row->id)->count();
-            $labkes = RegisterLabkes::where('fasyankes_id', $row->id)->where('is_from_migration', false)->count();
-            $data[] = (object) [
+            $total = $this->__getLabSatelit($dateWeekly, $row->id);
+            $dataWeekly[] = (object) [
                 'id' => $row->id,
                 'nama' => $row->nama,
-                'total' => $satelit + $labkes,
+                'tipe' => 'Weekly',
+                'total' => $total,
+            ];
+            $total = $this->__getLabSatelit($dateMonthly, $row->id);
+            $dataMonthly[] = (object) [
+                'id' => $row->id,
+                'nama' => $row->nama,
+                'tipe' => 'Monthly',
+                'total' => $total,
             ];
         }
-        $data = collect($data)->SortByDesc('total')->slice(0, 5);
-        return $this->generateData($data, 'fasyankes_id');
+        $dataWeekly = collect($dataWeekly)->SortByDesc('total')->slice(0, 5);
+        $dataMonthly = collect($dataMonthly)->SortByDesc('total')->slice(0, 5);
+        return $this->generateData(array_merge($dataWeekly->toArray(), $dataMonthly->toArray()), 'fasyankes_id');
     }
 
     public function generateData($data, $foreignKey)
     {
         $id = 1;
         $result = [];
-        foreach ($data as $key => $row) {
-            $result[$key] = [
+        foreach ($data as $row) {
+            $result[] = [
                 'id' => $id,
                 $foreignKey => $row->id,
                 'nama' => $row->nama,
                 'total' => $row->total,
+                'tipe' => $row->tipe,
             ];
-            if ($foreignKey == 'kota_id') {
-                $result[$key]['tipe'] = $row->tipe;
-            }
             $id++;
         }
         return $result;
@@ -166,6 +187,49 @@ class TerbanyakCommand extends Command
             $labkes->where('pasien.kota_id', $kota);
         }
         return $satelit->count('pemeriksaansampel.kesimpulan_pemeriksaan') + $labkes->count('pemeriksaansampel.kesimpulan_pemeriksaan');
+    }
+
+    private function __getLabSatelit($tanggal, $lab_satelit_id)
+    {
+        $satelit = SampelSatelit::leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
+            ->leftJoin('register', 'sampel.register_id', 'register.id')
+            ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
+            ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
+            ->leftJoin('kota', 'kota.id', 'pasien.kota_id')
+            ->whereNull('register.deleted_at')
+            ->where('sampel.sampel_status', 'pcr_sample_analyzed');
+        if ($tanggal && !is_array($tanggal)) {
+            $satelit->whereDate('waktu_pcr_sample_analyzed', date('Y-m-d', strtotime($tanggal)));
+        } elseif ($tanggal && is_array($tanggal)) {
+            $satelit->whereBetween('waktu_pcr_sample_analyzed', [date('Y-m-d', strtotime($tanggal[0])), date('Y-m-d', strtotime($tanggal[count($tanggal) - 1]))]);
+        }
+        if ($lab_satelit_id) {
+            $satelit->where('pasien.lab_satelit_id', $lab_satelit_id);
+        }
+        return $satelit->count('pemeriksaansampel.kesimpulan_pemeriksaan');
+    }
+
+    private function __getLabkes($tanggal)
+    {
+        $labkes = SampelLabkes::leftJoin('pemeriksaansampel', 'pemeriksaansampel.sampel_id', 'sampel.id')
+            ->leftJoin('register', 'register.id', 'sampel.register_id')
+            ->leftJoin('pasien_register', 'pasien_register.register_id', 'sampel.register_id')
+            ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
+            ->leftJoin('ekstraksi', 'sampel.id', 'ekstraksi.sampel_id')
+            ->where('sampel_status', 'sample_valid')
+            ->where('sampel.is_from_migration', false)
+            ->where('ekstraksi.is_from_migration', false)
+            ->where('pemeriksaansampel.is_from_migration', false)
+            ->where('register.is_from_migration', false)
+            ->where('pasien.is_from_migration', false)
+            ->where('pasien_register.is_from_migration', false)
+            ->whereNull('register.deleted_at');
+        if ($tanggal && !is_array($tanggal)) {
+            $labkes->whereDate('waktu_sample_valid', date('Y-m-d', strtotime($tanggal)));
+        } elseif ($tanggal && is_array($tanggal)) {
+            $labkes->whereBetween('waktu_sample_valid', [date('Y-m-d', strtotime($tanggal[0])), date('Y-m-d', strtotime($tanggal[count($tanggal) - 1]))]);
+        }
+        return $labkes->count('pemeriksaansampel.kesimpulan_pemeriksaan');
     }
 
     private function __getDate($date = 'Monthly')
