@@ -1,9 +1,9 @@
 <template>
-  <Ibox title="Instansi Pengirim">
+  <Ibox :title="tipe === 'fasyankes' ? 'Instansi Pengirim' : 'Domisili'">
     <div class="col-md-6 row mb-1">
       <button class="btn btn-default" :class="{active:tipe === 'fasyankes'}"
         @click="tipe = 'fasyankes'">Fasyankes</button>
-      <button class="btn btn-default" :class="{active:tipe === 'kota'}" @click="tipe = 'kota'">Domisili</button>
+      <button class="btn btn-default ml-2" :class="{active:tipe === 'kota'}" @click="tipe = 'kota'">Domisili</button>
     </div>
     <ajax-table :url="`/v1/dashboard/instansi-pengirim?type=${this.tipe}`" :oid="'instansi_pengirim'"
       ref="instansi_pengirim" :config="{
@@ -21,7 +21,7 @@
             wrapper: ['table-responsive'],
           }
         }" :rowtemplate="'tr-instansi-pengirim'" :columns="{
-          instansi_pengirim: 'INSTANSI PENGIRIM',
+          instansi_pengirim: tipe === 'fasyankes' ? 'INSTANSI PENGIRIM' : 'DOMISILI',
           y : 'TOTAL',
         }" />
   </Ibox>

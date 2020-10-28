@@ -7,7 +7,7 @@
             <div for="nama_pasien">Nama Pasien</div>
           </div>
           <div class="col-md-8">
-            <input type="text" name="nama_pasien" v-model="params.nama_pasien" id="" class="form-control"
+            <input type="text" name="nama_pasien" v-model="params.nama_pasien" class="form-control"
               placeholder="Nama Pasien">
           </div>
         </div>
@@ -44,7 +44,7 @@
             <div>Kategori</div>
           </div>
           <div class="col-md-8">
-            <input type="text" name="params.sumber_pasien" v-model="params.sumber_pasien" id="" class="form-control"
+            <input type="text" name="params.sumber_pasien" v-model="params.sumber_pasien" class="form-control"
               placeholder="Kategori">
           </div>
         </div>
