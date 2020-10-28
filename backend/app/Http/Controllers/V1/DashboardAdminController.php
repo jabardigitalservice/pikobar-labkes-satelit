@@ -215,7 +215,7 @@ class DashboardAdminController extends Controller
         $fasyankes = FasyankesTerbanyak::where('tipe', $tipe)->get();
         $data['data'] = [];
         $data['labels'] = [];
-        if (!is_array($date)) {
+        if (!$date && !is_array($date)) {
             $fasyankes = [];
             $models = LabSatelit::all();
             $total = $this->__getLabkes($date);
