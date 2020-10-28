@@ -138,17 +138,15 @@ class TerbanyakCommand extends Command
 
     public function generateData($data, $foreignKey)
     {
-        $id = 1;
         $result = [];
-        foreach ($data as $row) {
+        foreach ($data as $key => $row) {
             $result[] = [
-                'id' => $id,
+                'id' => ++$key,
                 $foreignKey => $row->id,
                 'nama' => $row->nama,
                 'total' => $row->total,
                 'tipe' => $row->tipe,
             ];
-            $id++;
         }
         return $result;
     }
