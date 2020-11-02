@@ -59,13 +59,10 @@ class UserController extends Controller
     public function invite(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:users,email'
-        ]);
-        $validator->after(function ($validator) use ($request) {
-            if (Invite::where('email', $request->input('email'))->exists()) {
-                $validator->errors()->add('email', 'There exists an invite with this email!');
-            }
-        })->validate();
+            'email' => 'required|email|unique:users,email',
+            'lab_satelit_id' => 'required|exists:lab_satelit,id',
+        ])->validate();
+
         DB::beginTransaction();
         try {
             do {
@@ -75,12 +72,12 @@ class UserController extends Controller
             Invite::create([
                 'token' => $token,
                 'email' => $request->input('email'),
-                'lab_satelit_id' => $request->lab_satelit_id,
             ]);
-
+                
             $user = User::create([
                 'email' => $request->input('email'),
-                'role_id' => 8
+                'role_id' => User::USER_LAB,
+                'lab_satelit_id' => $request->lab_satelit_id,
             ]);
 
             $user->invited_at = Carbon::now();
@@ -121,8 +118,6 @@ class UserController extends Controller
             'username' => $request->username,
             'koordinator' => $request->koordinator,
             'password' => Hash::make($request->password),
-            'lab_satelit_id' => $request->lab_satelit_id,
-            'role_id' => 8
         ]);
 
         $user->register_at = Carbon::now();

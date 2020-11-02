@@ -17,7 +17,6 @@ class CreateInvitesTable extends Migration
             $table->bigIncrements('id');
             $table->string('email')->unique();
             $table->string('token', 20)->unique();
-            $table->integer('lab_satelit_id');
             $table->timestamps();
         });
     }

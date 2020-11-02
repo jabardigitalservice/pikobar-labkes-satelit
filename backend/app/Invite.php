@@ -8,7 +8,6 @@ class Invite extends Model
 {
     protected $fillable = [
         'email',
-        'token',
-        'lab_satelit_id'
+        'token'
     ];
 }
