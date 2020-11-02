@@ -115,17 +115,17 @@ class DashboardController extends Controller
                 $searchByTipe = 'kota_id';
                 $models = Pasien::where('lab_satelit_id', $user->lab_satelit_id)
                     ->whereNotNull($searchByTipe)
-                    ->select(DB::raw("$searchByTipe as id"), DB::raw("upper(nama_kabupaten) as name"), DB::raw('count(*) as y'))
+                    ->select($searchByTipe, DB::raw("upper(nama_kabupaten) as name"), DB::raw('count(*) as y'))
                     ->orderBy('y', 'desc')
-                    ->groupBy('id');
+                    ->groupBy($searchByTipe, 'name');
                 break;
             default:
-                $searchByTipe = 'instansi_pengirim_nama';
+                $searchByTipe = 'fasyankes_id';
                 $models = Register::where('lab_satelit_id', $user->lab_satelit_id)
                     ->whereNotNull($searchByTipe)
-                    ->select(DB::raw("upper($searchByTipe) as name"), DB::raw('count(*) as y'))
+                    ->select($searchByTipe, DB::raw('instansi_pengirim_nama as name'), DB::raw('count(*) as y'))
                     ->orderBy('y', 'desc')
-                    ->groupBy('name');
+                    ->groupBy($searchByTipe, 'name');
                 break;
         }
 
