@@ -74,8 +74,8 @@ class VerifikasiController extends Controller
                     case 'nama_pasien':
                         $models->where('pasien.nama_lengkap', 'ilike', '%' . $val . '%');
                         break;
-                    case 'instansi_pengirim':
-                        $models->where('register.nama_rs', 'ilike', '%' . $val . '%');
+                    case "fasyankes_id":
+                        $models = $models->where('register.fasyankes_id', $val);
                         break;
                     case 'start_date':
                         $models->whereDate('waktu_pcr_sample_analyzed', '>=', date('Y-m-d', strtotime($val)));
