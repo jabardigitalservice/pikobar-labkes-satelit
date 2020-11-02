@@ -45,7 +45,8 @@ class LoginController extends Controller
 
         $this->guard()->setToken($token);
         
-        $user->update(['last_login_at' => Carbon::now()]);
+        $user->last_login_at = Carbon::now();
+        $user->save();
         
         return true;
     }

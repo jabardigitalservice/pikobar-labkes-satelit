@@ -78,11 +78,13 @@ class UserController extends Controller
                 'lab_satelit_id' => $request->lab_satelit_id,
             ]);
 
-            User::create([
+            $user = User::create([
                 'email' => $request->input('email'),
-                'invited_at' => Carbon::now(),
                 'role_id' => 8
             ]);
+
+            $user->invited_at = Carbon::now();
+            $user->save();
 
             $url = config('app.url') . '/registration/' . $token;
 
@@ -120,9 +122,11 @@ class UserController extends Controller
             'koordinator' => $request->koordinator,
             'password' => Hash::make($request->password),
             'lab_satelit_id' => $request->lab_satelit_id,
-            'register_at' => Carbon::now(),
             'role_id' => 8
         ]);
+
+        $user->register_at = Carbon::now();
+        $user->save();
 
         $invite->delete();
 
