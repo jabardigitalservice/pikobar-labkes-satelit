@@ -129,7 +129,7 @@
           status: null,
           nomor_sampel: null,
         },
-        kota: {},
+        kota: [],
         optionKota: []
       }
     },
