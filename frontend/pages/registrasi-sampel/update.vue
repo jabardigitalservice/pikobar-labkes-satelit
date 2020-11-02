@@ -460,6 +460,7 @@
       async getCountry() {
         let resp = await this.$axios.get('/v1/list-negara/');
         this.optionCountry = resp.data;
+        this.country = this.country ? this.optionCountry.find(el => el.nama === this.country) : null;
       },
       async getProvinsi() {
         let resp = await axios.get('/v1/list-provinsi/');
