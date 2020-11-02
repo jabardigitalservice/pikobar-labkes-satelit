@@ -22,16 +22,8 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $models = User::query();
-
-        $params = $request->get('params', false);
-        $search = $request->get('search', false);
         $order  = $request->get('order', 'updated_at');
-
-        if ($params) {
-        }
-
         $count = $models->count();
-
         $page = $request->get('page', 1);
         $perpage = $request->get('perpage', 20);
 
@@ -47,7 +39,6 @@ class UserController extends Controller
         }
 
         $models = $models->with('lab_satelit');
-
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
         return response()->json([
@@ -80,6 +71,7 @@ class UserController extends Controller
                 'lab_satelit_id' => $request->lab_satelit_id,
             ]);
 
+            $user->status = User::STATUS["INACTIVE"];
             $user->invited_at = Carbon::now();
             $user->save();
 
@@ -119,7 +111,8 @@ class UserController extends Controller
             'koordinator' => $request->koordinator,
             'password' => Hash::make($request->password),
         ]);
-
+        
+        $user->status = User::STATUS["ACTIVE"];
         $user->register_at = Carbon::now();
         $user->save();
 

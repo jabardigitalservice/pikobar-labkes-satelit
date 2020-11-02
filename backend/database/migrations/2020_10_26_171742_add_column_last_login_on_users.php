@@ -14,9 +14,10 @@ class AddColumnLastLoginOnUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dateTime('last_login_at')->nullable()->default(null);
+            $table->timestamp('last_login_at')->nullable()->default(null);
             $table->dateTime('invited_at')->nullable()->default(null);
             $table->dateTime('register_at')->nullable()->default(null);
+            $table->smallInteger('status')->nullable();
             $table->string('name')->nullable()->change();
             $table->string('username')->nullable()->change();
         });
@@ -33,6 +34,7 @@ class AddColumnLastLoginOnUsers extends Migration
             $table->dropColumn('last_login_at');
             $table->dropColumn('invited_at');
             $table->dropColumn('register_at');
+            $table->dropColumn('status');
             $table->string('name')->change();
             $table->string('username')->change();
         });

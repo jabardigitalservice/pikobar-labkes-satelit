@@ -14,13 +14,17 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     use Notifiable;
     const USER_LAB = 8;
     const SUPERADMIN = 1;
+    const STATUS = [
+        'INACTIVE' => 1,
+        'ACTIVE' => 2
+    ];
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username', 'role_id', 'koordinator', 'lab_satelit_id',
+        'name', 'email', 'password', 'username', 'role_id', 'koordinator', 'lab_satelit_id'
     ];
 
     /**
@@ -48,7 +52,7 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      */
     protected $appends = [
         'photo_url',
-        'statusAccount'
+        'status_name'
     ];
 
     /**
@@ -128,15 +132,8 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         return $this->belongsTo('App\Models\Validator','validator_id','id');
     }
 
-    public function getStatusAccountAttribute()
+    public function getStatusNameAttribute(): string
     {
-        if($this->invited_at) {
-            if($this->register_at) {
-                return 'active';
-            }
-            return 'inactive';
-        }
-
-        return $this->last_login_at;
+        return array_search($this->status, self::STATUS);
     }
 }
