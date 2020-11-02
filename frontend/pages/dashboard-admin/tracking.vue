@@ -37,7 +37,7 @@
             <h2 v-if="!loading" class="font-weight-bold text-center">
               {{ data.rata_rata_waktu_pemeriksaan | formatCurrency}}</h2>
             <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
-            <small v-if="!loading">Jam</small>
+            <small v-if="!loading">Hari</small>
           </div>
         </div>
       </div>
