@@ -70,18 +70,18 @@ class TerbanyakCommand extends Command
     {
         $models = Kota::all();
         $dataWeekly = [];
-        $dateWeekly = $this->__getDate('Weekly');
+        $dateWeekly = $this->getDate('Weekly');
         $dataMonthly = [];
-        $dateMonthly = $this->__getDate('Monthly');
+        $dateMonthly = $this->getDate('Monthly');
         foreach ($models as $row) {
-            $total = $this->__getChartHasilPemeriksaan($dateWeekly, $row->id);
+            $total = $this->getChartHasilPemeriksaan($dateWeekly, $row->id);
             $dataWeekly[] = (object) [
                 'id' => $row->id,
                 'nama' => $row->nama,
                 'tipe' => 'Weekly',
                 'total' => $total,
             ];
-            $total = $this->__getChartHasilPemeriksaan($dateMonthly, $row->id);
+            $total = $this->getChartHasilPemeriksaan($dateMonthly, $row->id);
             $dataMonthly[] = (object) [
                 'id' => $row->id,
                 'nama' => $row->nama,
@@ -98,17 +98,17 @@ class TerbanyakCommand extends Command
     {
         $models = LabSatelit::all();
         $dataWeekly = [];
-        $dateWeekly = $this->__getDate('Weekly');
+        $dateWeekly = $this->getDate('Weekly');
         $dataMonthly = [];
-        $dateMonthly = $this->__getDate('Monthly');
-        $total = $this->__getLabkes($dateWeekly);
+        $dateMonthly = $this->getDate('Monthly');
+        $total = $this->getLabkes($dateWeekly);
         $dataWeekly[] = (object) [
             'id' => 999,
             'nama' => 'Labkes',
             'tipe' => 'Weekly',
             'total' => $total,
         ];
-        $total = $this->__getLabkes($dateMonthly);
+        $total = $this->getLabkes($dateMonthly);
         $dataMonthly[] = (object) [
             'id' => 999,
             'nama' => 'Labkes',
@@ -116,14 +116,14 @@ class TerbanyakCommand extends Command
             'total' => $total,
         ];
         foreach ($models as $row) {
-            $total = $this->__getLabSatelit($dateWeekly, $row->id);
+            $total = $this->getLabSatelit($dateWeekly, $row->id);
             $dataWeekly[] = (object) [
                 'id' => $row->id,
                 'nama' => $row->nama,
                 'tipe' => 'Weekly',
                 'total' => $total,
             ];
-            $total = $this->__getLabSatelit($dateMonthly, $row->id);
+            $total = $this->getLabSatelit($dateMonthly, $row->id);
             $dataMonthly[] = (object) [
                 'id' => $row->id,
                 'nama' => $row->nama,
@@ -151,7 +151,7 @@ class TerbanyakCommand extends Command
         return $result;
     }
 
-    private function __getChartHasilPemeriksaan($tanggal, $kota)
+    private function getChartHasilPemeriksaan($tanggal, $kota)
     {
         $satelit = SampelSatelit::leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
             ->leftJoin('register', 'sampel.register_id', 'register.id')
@@ -187,7 +187,7 @@ class TerbanyakCommand extends Command
         return $satelit->count('pemeriksaansampel.kesimpulan_pemeriksaan') + $labkes->count('pemeriksaansampel.kesimpulan_pemeriksaan');
     }
 
-    private function __getLabSatelit($tanggal, $lab_satelit_id)
+    private function getLabSatelit($tanggal, $lab_satelit_id)
     {
         $satelit = SampelSatelit::leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
             ->leftJoin('register', 'sampel.register_id', 'register.id')
@@ -207,7 +207,7 @@ class TerbanyakCommand extends Command
         return $satelit->count('pemeriksaansampel.kesimpulan_pemeriksaan');
     }
 
-    private function __getLabkes($tanggal)
+    private function getLabkes($tanggal)
     {
         $labkes = SampelLabkes::leftJoin('pemeriksaansampel', 'pemeriksaansampel.sampel_id', 'sampel.id')
             ->leftJoin('register', 'register.id', 'sampel.register_id')
@@ -230,7 +230,7 @@ class TerbanyakCommand extends Command
         return $labkes->count('pemeriksaansampel.kesimpulan_pemeriksaan');
     }
 
-    private function __getDate($date = 'Monthly')
+    private function getDate($date = 'Monthly')
     {
         $now = Carbon::now();
         switch ($date) {
