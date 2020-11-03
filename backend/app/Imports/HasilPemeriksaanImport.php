@@ -9,8 +9,9 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class HasilPemeriksaanImport implements ToCollection, WithHeadingRow, WithChunkReading
+class HasilPemeriksaanImport implements ToCollection, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     public $data;
     public $errors;
@@ -90,6 +91,11 @@ class HasilPemeriksaanImport implements ToCollection, WithHeadingRow, WithChunkR
     }
 
     public function chunkSize(): int
+    {
+        return 1000;
+    }
+
+    public function batchSize(): int
     {
         return 1000;
     }

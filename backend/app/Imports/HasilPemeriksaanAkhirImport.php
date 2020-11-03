@@ -23,8 +23,9 @@ use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow, WithChunkReading
+class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     use RegisterTrait;
 
@@ -247,6 +248,11 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow, WithC
     }
 
     public function chunkSize(): int
+    {
+        return 1000;
+    }
+
+    public function batchSize(): int
     {
         return 1000;
     }

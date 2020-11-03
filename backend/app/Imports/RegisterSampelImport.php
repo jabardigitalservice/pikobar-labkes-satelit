@@ -22,8 +22,9 @@ use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class RegisterSampelImport implements ToCollection, WithHeadingRow, WithChunkReading
+class RegisterSampelImport implements ToCollection, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     use RegisterTrait;
 
@@ -224,6 +225,11 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow, WithChunkRea
     }
 
     public function chunkSize(): int
+    {
+        return 1000;
+    }
+
+    public function batchSize(): int
     {
         return 1000;
     }
