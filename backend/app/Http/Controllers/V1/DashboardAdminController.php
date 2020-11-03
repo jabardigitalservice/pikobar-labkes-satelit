@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Fasyankes;
 use App\Models\FasyankesTerbanyak;
 use App\Models\KotaTerbanyak;
 use App\Models\Labkes\DashboardCounter as DashboardCounterLabkes;
@@ -24,7 +23,7 @@ class DashboardAdminController extends Controller
             ->whereNull('sampel.deleted_at')
             ->count();
         $sampelDiperiksaSatelit = $this->__getKesimpulanPemeriksaan();
-        $data['total_masuk_sampel'] = DashboardCounterLabkes::where('nama', 'admin_sampel_total_sampel')->first()->total + $sampelMasukSatelit;
+        $data['total_masuk_sampel'] = DashboardCounterLabkes::where('nama', 'tracking_progress_sampel')->first()->total + $sampelMasukSatelit;
         $data['total_sampel_diperiksa'] = DashboardCounterLabkes::where('nama', 'pcr_hasil_pemeriksaan')->first()->total + $sampelDiperiksaSatelit;
         $data['rata_rata_waktu_pemeriksaan'] = $this->__getRataRataWaktuPemeriksaan();
         $data['total_sample_positif'] = DashboardCounterLabkes::where('nama', 'pasien_positif')->first()->total + $this->__getKesimpulanPemeriksaan('positif');
@@ -126,8 +125,10 @@ class DashboardAdminController extends Controller
                 $labkes->where('pemeriksaansampel.kesimpulan_pemeriksaan', 'negatif');
                 break;
             default:
-                $satelit->whereNotIn('pemeriksaansampel.kesimpulan_pemeriksaan', ['negatif', 'positif', null, '']);
-                $labkes->whereNotIn('pemeriksaansampel.kesimpulan_pemeriksaan', ['negatif', 'positif', null, '']);
+                $satelit->whereNotNull('pemeriksaansampel.kesimpulan_pemeriksaan');
+                $satelit->whereNotIn('pemeriksaansampel.kesimpulan_pemeriksaan', ['negatif', 'positif']);
+                $labkes->whereNotNull('pemeriksaansampel.kesimpulan_pemeriksaan');
+                $labkes->whereNotIn('pemeriksaansampel.kesimpulan_pemeriksaan', ['negatif', 'positif']);
                 break;
         }
         return $satelit->count('pemeriksaansampel.kesimpulan_pemeriksaan') + $labkes->count('pemeriksaansampel.kesimpulan_pemeriksaan');
@@ -190,7 +191,7 @@ class DashboardAdminController extends Controller
     {
         $tipe = $request->get('tipe', 'Weekly');
         $date = $this->__getDate($tipe);
-        $kota = KotaTerbanyak::where('tipe', $tipe)->get();
+        $kota = KotaTerbanyak::where('tipe', $tipe)->orderBy('total', 'desc')->get();
 
         $data['positif'] = [];
         $data['negatif'] = [];
@@ -212,29 +213,14 @@ class DashboardAdminController extends Controller
     {
         $tipe = $request->get('tipe', 'Weekly');
         $date = $request->get('tanggal_pemeriksaan', null) ? $request->get('tanggal_pemeriksaan') : $this->__getDate($tipe);
-        $fasyankes = FasyankesTerbanyak::where('tipe', $tipe)->get();
+        $fasyankes = FasyankesTerbanyak::where('tipe', $tipe)->orderBy('total', 'desc')->get();
+        $kota = $request->get('kota', null);
         $data['data'] = [];
         $data['labels'] = [];
-        if (!$date && !is_array($date)) {
-            $fasyankes = [];
-            $models = LabSatelit::all();
-            $total = $this->__getLabkes($date);
-            $fasyankes[] = (object) [
-                'id' => 999,
-                'nama' => 'Labkes',
-                'tipe' => 'Weekly',
-                'total' => $total,
-            ];
-            foreach ($models as $row) {
-                $total = $this->__getLabSatelit($date, $row->id);
-                $fasyankes[] = (object) [
-                    'id' => $row->id,
-                    'nama' => $row->nama,
-                    'tipe' => 'Weekly',
-                    'total' => $total,
-                ];
-            }
-            $fasyankes = collect($fasyankes)->SortByDesc('total')->slice(0, 5);
+        if ($date && !is_array($date)) {
+            $fasyankes = $this->__getFasyankes($date, $kota);
+        } else if($kota){
+            $fasyankes = $this->__getFasyankes($date, $kota);
         }
         foreach ($fasyankes as $item) {
             $data['data'][] = $item->total;
@@ -247,15 +233,30 @@ class DashboardAdminController extends Controller
         ]);
     }
 
-    private function __getFasyankesByKota($kota)
+    private function __getFasyankes($date, $kota)
     {
-        if (!$kota) {
-            return [];
+        $fasyankes = [];
+        $models = LabSatelit::all();
+        $total = $this->__getLabkes($date, $kota);
+        $fasyankes[] = (object) [
+            'id' => 999,
+            'nama' => 'Labkes',
+            'tipe' => 'Weekly',
+            'total' => $total,
+        ];
+        foreach ($models as $row) {
+            $total = $this->__getLabSatelit($date, $row->id, $kota);
+            $fasyankes[] = (object) [
+                'id' => $row->id,
+                'nama' => $row->nama,
+                'tipe' => 'Weekly',
+                'total' => $total,
+            ];
         }
-        return Fasyankes::select('id as fasyankes_id', 'nama')->where('kota_id', $kota)->get();
+        return collect($fasyankes)->SortByDesc('total')->slice(0, 5);
     }
 
-    private function __getLabSatelit($tanggal, $lab_satelit_id)
+    private function __getLabSatelit($tanggal, $lab_satelit_id, $kota)
     {
         $satelit = SampelSatelit::leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
             ->leftJoin('register', 'sampel.register_id', 'register.id')
@@ -272,10 +273,13 @@ class DashboardAdminController extends Controller
         if ($lab_satelit_id) {
             $satelit->where('pasien.lab_satelit_id', $lab_satelit_id);
         }
+        if ($kota) {
+            $satelit->where('pasien.kota_id', $kota);
+        }
         return $satelit->count('pemeriksaansampel.kesimpulan_pemeriksaan');
     }
 
-    private function __getLabkes($tanggal)
+    private function __getLabkes($tanggal, $kota)
     {
         $labkes = SampelLabkes::leftJoin('pemeriksaansampel', 'pemeriksaansampel.sampel_id', 'sampel.id')
             ->leftJoin('register', 'register.id', 'sampel.register_id')
@@ -290,6 +294,9 @@ class DashboardAdminController extends Controller
             ->where('pasien.is_from_migration', false)
             ->where('pasien_register.is_from_migration', false)
             ->whereNull('register.deleted_at');
+        if ($kota) {
+            $labkes->where('pasien.kota_id', $kota);
+        }
         if ($tanggal && !is_array($tanggal)) {
             $labkes->whereDate('waktu_sample_valid', date('Y-m-d', strtotime($tanggal)));
         } elseif ($tanggal && is_array($tanggal)) {
