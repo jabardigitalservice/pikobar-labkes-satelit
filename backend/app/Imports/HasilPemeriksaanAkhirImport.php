@@ -15,15 +15,17 @@ use App\Models\Provinsi;
 use App\Models\Register;
 use App\Models\Sampel;
 use App\Traits\RegisterTrait;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
+class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow, WithChunkReading, ShouldQueue
 {
     use RegisterTrait;
 
@@ -245,4 +247,8 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
         return Fasyankes::find($fasyankes);
     }
 
+    public function chunkSize(): int
+    {
+        return 1000;
+    }
 }

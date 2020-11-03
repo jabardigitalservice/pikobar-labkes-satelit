@@ -3,13 +3,15 @@
 namespace App\Imports;
 
 use App\Models\Sampel;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class HasilPemeriksaanImport implements ToCollection, WithHeadingRow
+class HasilPemeriksaanImport implements ToCollection, WithHeadingRow, WithChunkReading, ShouldQueue
 {
     public $data;
     public $errors;
@@ -86,5 +88,10 @@ class HasilPemeriksaanImport implements ToCollection, WithHeadingRow
     public function hasError($key)
     {
         return isset($this->errors[$key]) && count($this->errors[$key]) > 0;
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
     }
 }
