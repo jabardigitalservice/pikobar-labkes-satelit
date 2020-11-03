@@ -3,7 +3,6 @@
 namespace App\Imports;
 
 use App\Models\Sampel;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -11,7 +10,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class HasilPemeriksaanImport implements ToCollection, WithHeadingRow, WithChunkReading, ShouldQueue
+class HasilPemeriksaanImport implements ToCollection, WithHeadingRow, WithChunkReading
 {
     public $data;
     public $errors;

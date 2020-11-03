@@ -14,7 +14,6 @@ use App\Models\Provinsi;
 use App\Models\Register;
 use App\Models\Sampel;
 use App\Traits\RegisterTrait;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +23,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class RegisterSampelImport implements ToCollection, WithHeadingRow, WithChunkReading, ShouldQueue
+class RegisterSampelImport implements ToCollection, WithHeadingRow, WithChunkReading
 {
     use RegisterTrait;
 
