@@ -21,9 +21,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
+class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     use RegisterTrait;
 
@@ -245,4 +247,13 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow
         return Fasyankes::find($fasyankes);
     }
 
+    public function chunkSize(): int
+    {
+        return 1000;
+    }
+
+    public function batchSize(): int
+    {
+        return 1000;
+    }
 }
