@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pasien;
 use App\Models\Register;
 use App\Models\Sampel;
 use Carbon\Carbon;
@@ -15,7 +16,7 @@ class DashboardController extends Controller
     public function tracking()
     {
         $data['register'] = $this->__getRegistrasi();
-        $data['sampel'] = $this->__getRegistrasi();
+        $data['sampel'] = $this->__getKesimpulanPemeriksaan();
         $data['positif'] = $this->__getKesimpulanPemeriksaan('positif');
         $data['negatif'] = $this->__getKesimpulanPemeriksaan('negatif');
         $data['inkonklusif'] = $this->__getKesimpulanPemeriksaan('inkonklusif');
@@ -27,7 +28,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    private function __getKesimpulanPemeriksaan($hasilPemeriksaan, $isChart = null, $date = null)
+    private function __getKesimpulanPemeriksaan($hasilPemeriksaan = null, $isChart = null, $date = null)
     {
         $user = Auth::user();
         $models = Sampel::leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
@@ -39,8 +40,12 @@ class DashboardController extends Controller
             ->where('sampel.sampel_status', 'pcr_sample_analyzed')
             ->where('register.lab_satelit_id', $user->lab_satelit_id)
             ->where('sampel.lab_satelit_id', $user->lab_satelit_id)
-            ->where('pasien.lab_satelit_id', $user->lab_satelit_id)
-            ->where('pemeriksaansampel.kesimpulan_pemeriksaan', $hasilPemeriksaan);
+            ->where('pasien.lab_satelit_id', $user->lab_satelit_id);
+
+        if ($hasilPemeriksaan) {
+            $models = $models->where('pemeriksaansampel.kesimpulan_pemeriksaan', $hasilPemeriksaan);
+        }
+
         if ($isChart) {
             switch ($isChart) {
                 case 'Daily':
@@ -101,24 +106,31 @@ class DashboardController extends Controller
     public function instansi_pengirim(Request $request)
     {
         $user = Auth::user();
-        $models = Register::where('lab_satelit_id', $user->lab_satelit_id)
-            ->whereNotNull('instansi_pengirim');
-
         $page = $request->get('page', 1);
-        $perpage = $request->get('perpage', 500);
+        $perpage = $request->get('perpage', 20);
+        $type = $request->get('type', 'fasyankes');
 
-        $count = count(Register::select(DB::raw('upper(instansi_pengirim_nama) as name'), DB::raw('count(*) as y'))
-                ->where('lab_satelit_id', $user->lab_satelit_id)
-                ->groupBy('name')
-                ->orderBy('y', 'desc')
-                ->whereNotNull('instansi_pengirim_nama')
-                ->get());
+        switch ($type) {
+            case 'kota':
+                $searchByTipe = 'kota_id';
+                $models = Pasien::where('lab_satelit_id', $user->lab_satelit_id)
+                    ->whereNotNull($searchByTipe)
+                    ->select($searchByTipe, DB::raw("upper(nama_kabupaten) as name"), DB::raw('count(*) as y'))
+                    ->orderBy('y', 'desc')
+                    ->groupBy($searchByTipe, 'name');
+                break;
+            default:
+                $searchByTipe = 'fasyankes_id';
+                $models = Register::where('lab_satelit_id', $user->lab_satelit_id)
+                    ->whereNotNull($searchByTipe)
+                    ->select($searchByTipe, DB::raw('instansi_pengirim_nama as name'), DB::raw('count(*) as y'))
+                    ->orderBy('y', 'desc')
+                    ->groupBy($searchByTipe, 'name');
+                break;
+        }
 
-        $models = $models->select(DB::raw('upper(instansi_pengirim_nama) as name'), DB::raw('count(*) as y'));
-        $models = $models->orderBy('y', 'desc');
-        $models = $models->groupBy('name');
+        $count = count($models->get());
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
-
         return response()->json([
             'status' => 200,
             'data' => $models,

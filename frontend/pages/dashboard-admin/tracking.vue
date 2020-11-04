@@ -37,7 +37,7 @@
             <h2 v-if="!loading" class="font-weight-bold text-center">
               {{ data.rata_rata_waktu_pemeriksaan | formatCurrency}}</h2>
             <img v-if="loading" src="~/assets/css/plugins/blueimp/img/loading.gif" width="36" height="36" />
-            <small v-if="!loading">Jam</small>
+            <small v-if="!loading">Hari</small>
           </div>
         </div>
       </div>
@@ -94,10 +94,14 @@
       async loadData() {
         this.loading = true;
         try {
-          let resp = await axios.get("/dinkes/dashboard");
-          this.data = resp.data.data;
+          let resp = await axios.get("v1/dashboard-admin/tracking");
+          this.data = resp.data.result;
         } catch (e) {
-          console.log(e);
+          this.total_masuk_sampel = "-";
+          this.total_sampel_diperiksa = "-";
+          this.rata_rata_waktu_pemeriksaan = "-";
+          this.total_sample_positif = "-";
+          this.total_sample_negatif = "-";
         }
         this.loading = false;
       }

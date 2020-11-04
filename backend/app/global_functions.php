@@ -40,3 +40,20 @@ function generateNomorRegister()
     }
     return $kode_registrasi . $date . str_pad($nextnum, 4, "0", STR_PAD_LEFT);
 }
+
+function getCodeDagri($code)
+{
+    if (!$code) {
+        return $code;
+    }
+    $code = (string)$code;
+    $code = str_split($code);
+    $codeDagri = '';
+    foreach ($code as $key => $value) {
+        $codeDagri .= $value;
+        if ($key % 2 == 1 && $key < 6 && $key < count($code) - 1) {
+            $codeDagri .= '.';
+        }
+    }
+    return $codeDagri;
+}

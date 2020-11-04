@@ -113,6 +113,14 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::get('counter-tervalidasi', 'DashboardValidasiController@getCountValidated');
     });
 
+    Route::group(['prefix' => 'dashboard-admin'], function () {
+        Route::get('/tracking', 'DashboardAdminController@tracking');
+        Route::get('/chart-hasil-pemeriksaan', 'DashboardAdminController@chartHasilPemeriksaan');
+        Route::get('/chart-trendline', 'DashboardAdminController@chartTrendline');
+        Route::get('/chart-hasil-pemeriksaan-by-kota', 'DashboardAdminController@chartHasilPemeriksaanByKota');
+        Route::get('/chart-register-by-fasyankes', 'DashboardAdminController@chartRegisterByFasyankes');
+    });
+
     Route::group(['prefix' => 'chart'], function () {
         Route::get('/regis-mandiri', 'DashboardController@chartMandiri');
         Route::get('/regis-rujukan', 'DashboardController@chartRujukan');
@@ -152,6 +160,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::get('/cek-nomor-sampel', 'SampelController@cekNomorSampel');
     });
 
+    Route::get('list-negara', 'KotaController@listNegara');
     Route::get('list-provinsi', 'KotaController@listProvinsi');
     Route::get('list-kota/{provinsi}', 'KotaController@listKota');
     Route::get('list-kota-jabar', 'KotaController@listKota');
@@ -303,7 +312,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
 
     Route::get('download', 'FileDownloadController@download');
 
-    
+
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', 'UserController@index')->name('api.user.index');
         Route::get('/{user:id}', 'UserController@show')->name('api.user.show');
