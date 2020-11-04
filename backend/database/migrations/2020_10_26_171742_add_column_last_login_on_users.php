@@ -17,7 +17,7 @@ class AddColumnLastLoginOnUsers extends Migration
             $table->timestamp('last_login_at')->nullable()->default(null);
             $table->dateTime('invited_at')->nullable()->default(null);
             $table->dateTime('register_at')->nullable()->default(null);
-            $table->smallInteger('status')->nullable();
+            $table->string('status')->nullable();
             $table->string('name')->nullable()->change();
             $table->string('username')->nullable()->change();
         });

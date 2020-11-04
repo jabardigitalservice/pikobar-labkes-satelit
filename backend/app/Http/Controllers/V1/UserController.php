@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Enums\RoleEnum;
+use App\Enums\UserStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Invite;
-use App\Models\Validator as ModelsValidator;
 use App\Notifications\InviteNotification;
 use Illuminate\Http\Request;
 use App\User;
@@ -39,7 +40,7 @@ class UserController extends Controller
         }
 
         $models = $models->with('lab_satelit');
-        $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
+        $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get()->append('status_name');
 
         return response()->json([
             'data' => $models,
@@ -67,11 +68,11 @@ class UserController extends Controller
                 
             $user = User::create([
                 'email' => $request->input('email'),
-                'role_id' => User::USER_LAB,
+                'role_id' => RoleEnum::LABORATORIUM()->getIndex(),
                 'lab_satelit_id' => $request->lab_satelit_id,
             ]);
 
-            $user->status = User::STATUS["INACTIVE"];
+            $user->status = UserStatusEnum::INACTIVE();
             $user->invited_at = Carbon::now();
             $user->save();
 
@@ -112,7 +113,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
         
-        $user->status = User::STATUS["ACTIVE"];
+        $user->status = UserStatusEnum::ACTIVE();
         $user->register_at = Carbon::now();
         $user->save();
 

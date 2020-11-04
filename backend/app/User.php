@@ -2,9 +2,10 @@
 
 namespace App;
 
+use App\Enums\UserStatusEnum;
+use App\Enums\RoleEnum;
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
-use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -12,19 +13,14 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
 {
     use Notifiable;
-    const USER_LAB = 8;
-    const SUPERADMIN = 1;
-    const STATUS = [
-        'INACTIVE' => 1,
-        'ACTIVE' => 2
-    ];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username', 'role_id', 'koordinator', 'lab_satelit_id'
+        'name', 'email', 'password', 'username', 'role_id', 'koordinator', 'lab_satelit_id',
     ];
 
     /**
@@ -43,6 +39,8 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'status' => UserStatusEnum::class.'nullable',
+        'role_id' => RoleEnum::class.'nullable,integer',
     ];
 
     /**
@@ -52,7 +50,6 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      */
     protected $appends = [
         'photo_url',
-        'status_name'
     ];
 
     /**
@@ -132,8 +129,8 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         return $this->belongsTo('App\Models\Validator','validator_id','id');
     }
 
-    public function getStatusNameAttribute(): string
+    public function getStatusNameAttribute(): ?string
     {
-        return array_search($this->status, self::STATUS);
+        return is_object($this->status)? $this->status->getValue() : null;
     }
 }
