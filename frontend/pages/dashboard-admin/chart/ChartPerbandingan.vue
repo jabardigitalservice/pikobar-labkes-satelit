@@ -1,29 +1,35 @@
 <template>
   <div>
     <div class="input-group mb-2">
-      <select class="form-control ml-1" v-model="params.perbandingan">
-        <option value="Daily">7 Hari Terakhir</option>
+      <div class="col-md-6 p-0 mr-4">
+        <multiselect v-model="kota" :options="optionKota" track-by="nama" label="nama" placeholder="Pilih Kota" />
+      </div>
+      <div class="col-md-5 p-0">
+      <select class="form-control" v-model="params.tipe">
+        <option value="Weekly">7 Hari Terakhir</option>
         <option value="Monthly">1 Bulan Terakhir</option>
       </select>
-      <select class="form-control ml-2" v-model="params.kota">
-        <option value="bandung">Kota Bandung</option>
-      </select>
+      </div>
     </div>
-    <canvas :chart="chart" id="chartPerbandingan" />
+    <canvas :chart="chart" id="chartPerbandinganData" />
   </div>
 </template>
 
 <script>
   var chartPerbandingan;
+  import axios from 'axios'
+
   export default {
     props: ['barId'],
     name: 'chartPerbandingan',
     data() {
       return {
         params: {
-          kota: 'bandung',
-          perbandingan: 'Daily',
+          kota: '',
+          tipe: 'Weekly',
         },
+        kota: [],
+        optionKota: [],
         chart: {
           labels: [
             "Mon",
@@ -38,17 +44,17 @@
             label: 'Negatif',
             backgroundColor: '#2F80ED',
             borderColor: '',
-            data: [4, 6, 2, 6]
+            data: []
           }, {
             label: 'Positif',
             backgroundColor: '#F2C94C',
             borderColor: '',
-            data: [1, 0, 3, 2]
+            data: []
           }, {
-            label: 'Invalid',
+            label: 'Inkonklusif',
             backgroundColor: '#EA4343',
             borderColor: '',
-            data: [1, 1, 0, 2]
+            data: []
           }],
           type: "bar",
           options: {
@@ -89,11 +95,21 @@
     },
     methods: {
       async loadData(tipe) {
-        // TODO: fetch data
+        try {
+          let resp = await axios.get(`v1/dashboard-admin/chart-trendline?kota=${this.params.kota}&tipe=${this.params.tipe}`);
+          this.chart.datasets[0].data = resp.data.result.positif
+          this.chart.datasets[1].data = resp.data.result.negatif
+          this.chart.datasets[2].data = resp.data.result.lainnya
+          this.chart.labels = resp.data.result.labels
+        } catch (e) {
+          this.chart.datasets[0].data = 0
+          this.chart.datasets[1].data = 0
+          this.chart.datasets[2].data = 0
+        }
         this.setChart(tipe);
       },
       setChart(tipe) {
-        var ctx = document.getElementById("chartPerbandingan").getContext("2d");
+        var ctx = document.getElementById("chartPerbandinganData").getContext("2d");
         let chartData = {
           labels: this.chart.labels,
           datasets: this.chart.datasets
@@ -102,13 +118,18 @@
         chartPerbandingan = new Chart(ctx, {
           type: this.chart.type,
           data: chartData,
-          options: tipe === 'Daily' ? this.chart.options : this.chart.options1
+          options: tipe === 'Weekly' ? this.chart.options : this.chart.options1
         });
-      }
+      },
+      async getKota() {
+        const resp = await this.$axios.get('/v1/list-kota-jabar');
+        this.optionKota = resp.data;
+      },
     },
     created() {
+      this.getKota();
       setTimeout(() => {
-        this.loadData('Daily');
+        this.loadData('Weekly');
       }, 1000);
     },
     mounted() {
@@ -118,6 +139,18 @@
           this.loadData(tipe)
         }, 1000);
       })
+    },
+    watch: {
+      "kota": function (newVal, oldVal) {
+        this.params.kota = '';
+        if (this.kota) {
+          this.params.kota = this.kota.id
+        }
+        this.$bus.$emit('refresh-chart-perbandingan', this.params)
+      },
+      "params.tipe": function (newVal, oldVal) {
+        this.$bus.$emit('refresh-chart-perbandingan', this.params)
+      },
     }
   };
 </script>

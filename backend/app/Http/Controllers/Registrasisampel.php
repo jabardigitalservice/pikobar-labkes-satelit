@@ -59,8 +59,8 @@ class Registrasisampel extends Controller
                     case "kota":
                         $models = $models->where('pasien.kota_id', $val);
                         break;
-                    case "instansi_pengirim_nama":
-                        $models = $models->where('register.instansi_pengirim_nama', 'ilike', '%' . $val . '%');
+                    case "fasyankes_id":
+                        $models = $models->where('register.fasyankes_id', $val);
                         break;
                     case "sumber_pasien":
                         $models = $models->where('register.sumber_pasien', 'ilike', '%' . $val . '%');

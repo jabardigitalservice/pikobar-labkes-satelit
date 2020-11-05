@@ -6,30 +6,7 @@
     <tracking v-if="checkPermission('satelit')" />
     <pasien-diperiksa v-if="checkPermission('satelit')" />
     <charts v-if="checkPermission('satelit')" />
-    <div v-if="checkPermission('satelit')" class="row">
-      <div class="col-md-12">
-        <Ibox title="Instansi Pengirim">
-          <ajax-table url="/v1/dashboard/instansi-pengirim" :disableSort="[]" :oid="'instansi_pengirim'" :config="{
-            autoload: true,
-            has_number: true,
-            has_entry_page: false,
-            has_pagination: true,
-            has_action: false,
-            has_search_input: false,
-            custom_header: '',
-            default_sort: '',
-            custom_empty_page: true,
-            class: {
-              table: [],
-              wrapper: ['table-responsive'],
-            }
-          }" :rowtemplate="'tr-instansi-pengirim'" :columns="{
-            instansi_pengirim: 'INSTANSI PENGIRIM',
-            y : 'TOTAL',
-          }" />
-        </Ibox>
-      </div>
-    </div>
+    <instansi-pengirim v-if="checkPermission('satelit')" />
 
     <!-- Dashboard superadmin -->
     <tracking-admin v-if="checkPermission('superadmin')" />
@@ -45,6 +22,7 @@
   import Tracking from './dashboard/tracking'
   import PasienDiperiksa from './dashboard/pasien-diperiksa'
   import Charts from './dashboard/charts'
+  import InstansiPengirim from './dashboard/instansi-pengirim'
   import TrackingAdmin from './dashboard-admin/tracking'
   import ChartAdmin from './dashboard-admin/chart/charts'
 
@@ -54,6 +32,7 @@
       PasienDiperiksa,
       Tracking,
       Charts,
+      InstansiPengirim,
       TrackingAdmin,
       ChartAdmin
     },

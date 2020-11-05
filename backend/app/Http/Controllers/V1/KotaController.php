@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use App\Models\Kota;
+use App\Models\Negara;
 use App\Models\Provinsi;
 
 class KotaController extends Controller
@@ -35,5 +36,10 @@ class KotaController extends Controller
     {
         return response()->json(Kelurahan::select('id', 'nama')->orderBy('nama')->whereKecamatanId($kecamatan)->get());
 
+    }
+
+    public function listNegara()
+    {
+        return response()->json(Negara::orderBy('nama')->get());
     }
 }

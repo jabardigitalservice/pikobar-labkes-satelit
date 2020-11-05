@@ -57,8 +57,8 @@ class PCRController extends Controller
                     case "end_date":
                         $models = $models->whereDate('sampel.waktu_sample_taken', '<=', date('Y-m-d', strtotime($val)));
                         break;
-                    case 'instansi_pengirim':
-                        $models = $models->where('register.nama_rs', 'ilike', '%' . $val . '%');
+                    case "fasyankes_id":
+                        $models = $models->where('register.fasyankes_id', $val);
                         break;
                     default:
                         break;

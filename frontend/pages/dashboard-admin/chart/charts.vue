@@ -53,13 +53,5 @@
         },
       };
     },
-    watch: {
-      "params.hasil": function (newVal, oldVal) {
-        this.$bus.$emit('refresh-chart-hasil-pemeriksaan', this.params.hasil)
-      },
-      "params.sampelmasuk": function (newVal, oldVal) {
-        this.$bus.$emit('refresh-chart-perbandingan', this.params.perbandingan)
-      },
-    }
   }
 </script>

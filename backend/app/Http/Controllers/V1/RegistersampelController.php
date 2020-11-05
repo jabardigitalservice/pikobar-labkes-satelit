@@ -50,6 +50,7 @@ class RegistersampelController extends Controller
             $pasien = new Pasien;
             $pasien->nama_lengkap = $request->get('reg_nama_pasien');
             $pasien->kewarganegaraan = $request->get('reg_kewarganegaraan');
+            $pasien->keterangan_warganegara = $request->get('reg_keterangan_warganegara');
             $pasien->nik = $request->get('reg_nik');
             $pasien->tempat_lahir = $request->get('reg_tempatlahir');
             if ($request->get('reg_tgllahir') != null) {
@@ -155,6 +156,7 @@ class RegistersampelController extends Controller
 
             $pasien->nama_lengkap = $request->get('reg_nama_pasien');
             $pasien->kewarganegaraan = $request->get('reg_kewarganegaraan');
+            $pasien->keterangan_warganegara = $request->get('reg_keterangan_warganegara');
             $pasien->nik = $request->get('reg_nik');
             $pasien->tempat_lahir = $request->get('reg_tempatlahir');
             if ($request->get('reg_tgllahir') != null) {
@@ -300,6 +302,7 @@ class RegistersampelController extends Controller
             'reg_register' => $register->lab_satelit_id,
             'reg_pasien' => $pasien->lab_satelit_id,
             'reg_sampel_id' => $sampel->id,
+            'reg_keterangan_warganegara' => $pasien->keterangan_warganegara,
         ]);
     }
 
@@ -590,15 +593,14 @@ class RegistersampelController extends Controller
     {
         DB::beginTransaction();
         try {
-            PasienRegister::where('register_id', $id)->where('pasien_id', $pasien)->delete();
-            $sampel = Sampel::where('register_id', $id)->delete();
-            $register = Register::where('id', $id)->delete();
-            $pasien = Pasien::where('id', $pasien)->delete();
+            $register = Register::where('id', $id)->first();
+            abort_if(Auth::user()->lab_satelit_id != $register->lab_satelit_id, 500, 'Gagal menghapus data sampel');
+            if ($register->sampel) {
+                $register->sampel()->delete();
+            }
+            $register->delete();
             DB::commit();
-            return response()->json([
-                'status' => true,
-                'message' => "Berhasil menghapus data register",
-            ]);
+            return response()->json(['status' => 200, 'message' => 'Berhasil menghapus data sampel']);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
