@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 use Validator;
 
 class UserInvitationController extends Controller
@@ -26,12 +26,8 @@ class UserInvitationController extends Controller
 
         DB::beginTransaction();
         try {
-            do {
-                $token = Str::random(20);
-            } while (Invite::where('token', $token)->first());
-
-            Invite::create([
-                'token' => $token,
+            $invite = Invite::create([
+                'uuid' => Uuid::uuid4(),
                 'email' => $request->input('email'),
             ]);
                 
@@ -44,9 +40,8 @@ class UserInvitationController extends Controller
             $user->status = UserStatusEnum::INACTIVE();
             $user->invited_at = Carbon::now();
             $user->save();
-
-            $url = config('app.url') . '/registration/' . $token;
-
+            $url = config('app.url') . '/registration/' . $invite->uuid;
+            
             $user->notify(new InviteNotification($url));
             DB::commit();
             return response()->json(["message" => "Undangan terkirim", 'status' => 200], 200);

@@ -66,7 +66,7 @@ class UserController extends Controller
             'password' => 'required|confirmed|min:6',
         ]);
             
-        $invite = Invite::where('token', $request->token)->first();
+        $invite = Invite::where('uuid', $request->token)->first();
         $user->update([
             'name' => $request->name,
             'username' => $request->username,
