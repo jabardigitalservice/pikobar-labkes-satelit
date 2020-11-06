@@ -27,7 +27,7 @@ class UserInvitationController extends Controller
         DB::beginTransaction();
         try {
             $invite = Invite::create([
-                'uuid' => Uuid::uuid4(),
+                'token' => Uuid::uuid4(),
                 'email' => $request->input('email'),
             ]);
                 
@@ -40,8 +40,8 @@ class UserInvitationController extends Controller
             $user->status = UserStatusEnum::INACTIVE();
             $user->invited_at = Carbon::now();
             $user->save();
-            $url = config('app.url') . '/registration/' . $invite->uuid;
-            
+            $url = config('app.url') . '/registration/' . $invite->token;
+
             $user->notify(new InviteNotification($url));
             DB::commit();
             return response()->json(["message" => "Undangan terkirim", 'status' => 200], 200);

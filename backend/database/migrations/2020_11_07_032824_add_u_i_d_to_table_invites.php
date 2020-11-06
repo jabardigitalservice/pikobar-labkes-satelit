@@ -17,7 +17,9 @@ class AddUIDToTableInvites extends Migration
         Invite::whereNotNull('id')->delete();
         Schema::table('invites', function (Blueprint $table) {
             $table->dropColumn('token');
-            $table->uuid('uuid');
+        });
+        Schema::table('invites', function (Blueprint $table) {
+            $table->uuid('token');
         });
     }
 
@@ -30,7 +32,9 @@ class AddUIDToTableInvites extends Migration
     {
         Invite::whereNotNull('id')->delete();
         Schema::table('invites', function (Blueprint $table) {
-            $table->dropColumn('uuid');
+            $table->dropColumn('token');
+        });
+        Schema::table('invites', function (Blueprint $table) {
             $table->string('token', 20)->unique();
         });
     }
