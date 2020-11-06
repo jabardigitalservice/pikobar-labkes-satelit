@@ -40,7 +40,7 @@ class UserController extends Controller
         }
 
         $models = $models->with('lab_satelit');
-        $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get()->append('status_name');
+        $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
         return response()->json([
             'data' => $models,

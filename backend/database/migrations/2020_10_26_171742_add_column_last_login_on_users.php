@@ -20,6 +20,9 @@ class AddColumnLastLoginOnUsers extends Migration
             $table->string('status')->nullable();
             $table->string('name')->nullable()->change();
             $table->string('username')->nullable()->change();
+            $table->index('status');
+            $table->index('last_login_at');
+            $table->index('name');
         });
     }
 
@@ -31,6 +34,9 @@ class AddColumnLastLoginOnUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->dropIndex('users_status_index');
+            $table->dropIndex('users_last_login_at_index');
+            $table->dropIndex('users_name_index');
             $table->dropColumn('last_login_at');
             $table->dropColumn('invited_at');
             $table->dropColumn('register_at');

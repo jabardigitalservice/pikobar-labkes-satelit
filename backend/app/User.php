@@ -39,8 +39,8 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'status' => UserStatusEnum::class.'nullable',
-        'role_id' => RoleEnum::class.'nullable,integer',
+        'status' => UserStatusEnum::class.'|nullable',
+        'role_id' => RoleEnum::class.'|nullable,integer',
     ];
 
     /**
@@ -127,10 +127,5 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     public function validator()
     {
         return $this->belongsTo('App\Models\Validator','validator_id','id');
-    }
-
-    public function getStatusNameAttribute(): ?string
-    {
-        return is_object($this->status)? $this->status->getValue() : null;
     }
 }

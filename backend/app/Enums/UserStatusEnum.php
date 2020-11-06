@@ -13,10 +13,11 @@ class UserStatusEnum extends Enum
 {
     public static function INACTIVE(): UserStatusEnum
     {
-        return new class() extends UserStatusEnum {
+        return new class () extends UserStatusEnum
+        {
             public function getValue(): string
             {
-                return __('label.inactive');
+                return 'inactive';
             }
             public function getIndex(): int
             {
@@ -24,14 +25,15 @@ class UserStatusEnum extends Enum
             }
         };
     }
-    
+
 
     public static function ACTIVE(): UserStatusEnum
     {
-        return new class() extends UserStatusEnum {
+        return new class () extends UserStatusEnum
+        {
             public function getValue(): string
             {
-                return __('label.active');
+                return 'active';
             }
             public function getIndex(): int
             {
