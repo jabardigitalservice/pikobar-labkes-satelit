@@ -64,7 +64,7 @@ class UserController extends Controller
             'lab_satelit_id' => 'required',
             'token' => 'required',
             'password' => 'required|confirmed|min:6',
-        ]);
+        ])->validate();
             
         $invite = Invite::where('token', $request->token)->first();
         $user->update([

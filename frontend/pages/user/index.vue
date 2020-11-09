@@ -13,7 +13,7 @@
         </button>
       </div>
     </portal>
-    
+
     <div class="row">
       <div class="col-lg-12">
         <Ibox title="Pengguna">
@@ -66,11 +66,13 @@
               <label class="col-md-3 col-lg-3"
                 >Lab <span style="color: red">*</span></label
               >
-              <div class="col-md-8 col-lg-9">
+              <div class="col-md-8 col-lg-9" >
                 <select
                   v-model="form.lab_satelit_id"
                   class="form-control col-md-8 col-lg-6"
                   name="lab_satelit_id"
+                  required
+                  :class="{ 'is-invalid': form.errors.has(`lab_satelit_id`) }"
                 >
                   <option
                     :value="item.id"
@@ -97,11 +99,16 @@
                   required
                   autofocus
                   v-model="form.email"
+                  :class="{ 'is-invalid': form.errors.has(`email`) }"
                 />
+                <has-error :form="form" field="email" />
               </div>
             </div>
             <div class="form-group row">
-              <v-button :loading="form.busy" class="btn btn-md btn-primary btn-block">
+              <v-button
+                :loading="form.busy"
+                class="btn btn-md btn-primary btn-block"
+              >
                 <i class="fa fa-paper-plane"></i> Kirim Undangan
               </v-button>
             </div>
@@ -110,62 +117,6 @@
       </div>
     </custom-modal>
 
-    <!-- edit modal -->
-    <custom-modal modal_id="edit-modal" title="Ubah Pengguna">
-      <div slot="body">
-        <div class="col-lg-12">
-          <form
-            id="scanbarcode row"
-            action="/api/v1/user"
-            method="put"
-            @submit.prevent="update"
-            @keydown="form.onKeydown($event)"
-          >
-            <div class="form-group row">
-              <label class="col-md-3 col-lg-3"
-                >Lab <span style="color: red">*</span></label
-              >
-              <div class="col-md-8 col-lg-9">
-                <select
-                  v-model="form.lab_satelit_id"
-                  class="form-control col-md-8 col-lg-6"
-                  name="lab_satelit_id"
-                >
-                  <option
-                    :value="item.id"
-                    :key="idx"
-                    v-for="(item, idx) in option_lab_satelit"
-                  >
-                    {{ item.nama }}
-                  </option>
-                </select>
-                <has-error :form="form" field="lab_satelit_id" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-4 col-lg-3">E-mail <span style="color: red">*</span></label>
-              <div class="col-md-8 col-lg-9">
-                <input
-                  class="form-control"
-                  name="email"
-                  placeholder="Email"
-                  type="text"
-                  tabindex="1"
-                  required
-                  autofocus
-                  v-model="form.email"
-                />
-              </div>
-            </div>
-            <div class="form-group row">
-              <v-button :loading="form.busy" class="btn btn-md btn-primary btn-block">
-                <i class="fa fa-edit"></i> Perbarui
-              </v-button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </custom-modal>
   </div>
 </template>
 
@@ -219,34 +170,90 @@ export default {
       this.option_lab_satelit = resp.data.data;
     },
     async submit() {
-        try {
-          const response = (await this.form.post("/v1/user/invite")).data;
-          if (response.status == 200) {
-            this.$toast.success(response.message, {
-              icon: 'paper-plane',
-              iconPack: 'fontawesome',
-              text: 'Undangan terkirim',
-              duration: 5000
-            })
-            JQuery('#addRegistrasiRujukan').modal('hide');
-          }
-
-          if (response.status == 400) {
-            this.$toast.error(response.message, {
-              icon: 'times',
-              iconPack: 'fontawesome',
-              duration: 5000
-            })
-          }
-        } catch (e) {
-          this.$toast.error('Terjadi kesalahan server', {
-            icon: 'times',
-            iconPack: 'fontawesome',
-            duration: 5000
-          })
-          console.log(e)
+      try {
+        this.loading = true;
+        const response = await this.form.post("/v1/user/invite");
+        this.$toast.success(response.message, {
+          icon: "paper-plane",
+          iconPack: "fontawesome",
+          text: "Undangan terkirim",
+          duration: 5000,
+        });
+        JQuery("#addRegistrasiRujukan").modal("hide");
+        this.$bus.$emit("refresh-ajaxtable", "master-user");
+      } catch (err) {
+        if (err.response && err.response.data.code == 422) {
+          this.$nextTick(() => {
+            this.form.errors.set(err.response.data.error);
+          });
+          this.$toast.error("Mohon cek kembali formulir Anda", {
+            icon: "times",
+            iconPack: "fontawesome",
+            duration: 5000,
+          });
+        } else {
+          this.$swal.fire(
+            "Terjadi kesalahan",
+            "Silakan hubungi Admin",
+            "error"
+          );
         }
-      },
+      }
+      // await this
+      //   .post("/v1/user/invite", this.form)
+      //   .then((response) => {
+      //     this.$toast.success(response.message, {
+      //       icon: "paper-plane",
+      //       iconPack: "fontawesome",
+      //       text: "Undangan terkirim",
+      //       duration: 5000,
+      //     });
+      // JQuery("#addRegistrasiRujukan").modal("hide");
+      //     this.$bus.$emit("refresh-ajaxtable", "master-user");
+      //   })
+      //   .catch((err) => {
+      //     if (err.response && err.response.data.code == 422) {
+      //       this.$nextTick(() => {
+      //         this.form.errors.set(err.response.data.error);
+      //       });
+      //       this.$toast.error("Mohon cek kembali formulir Anda", {
+      //         icon: "times",
+      //         iconPack: "fontawesome",
+      //         duration: 5000,
+      //       });
+      //     } else {
+      //       this.$swal.fire(
+      //         "Terjadi kesalahan",
+      //         "Silakan hubungi Admin",
+      //         "error"
+      //       );
+      //     }
+      // this.$swal.fire(
+      //   "Terjadi Kesalahan",
+      //   "Gagal menghapus data, silakan coba kembali",
+      //   "error"
+      // );
+      // console.log("error Hapus pengguna : ", error.response);
+      // });
+      // if (response.status == 200) {
+      //   t;
+      // }
+
+      //   // if (response.status == 400) {
+      //     this.$toast.error(response.message, {
+      //       icon: 'times',
+      //       iconPack: 'fontawesome',
+      //       duration: 5000
+      //     })
+      //   // }
+      // } catch (e) {
+      //   this.$toast.error('Terjadi kesalahan server', {
+      //     icon: 'times',
+      //     iconPack: 'fontawesome',
+      //     duration: 5000
+      //   })
+      // }
+    },
 
     previewFile(file) {
       this.form.register_file = file;
@@ -254,6 +261,6 @@ export default {
   },
   created() {
     this.getLabSatelit();
-  }
+  },
 };
 </script>
