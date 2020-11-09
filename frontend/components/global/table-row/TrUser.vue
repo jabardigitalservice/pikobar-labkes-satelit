@@ -11,7 +11,7 @@
         <td>{{item.koordinator}}</td>
         <td>{{item.lab_satelit ? item.lab_satelit.nama : '-'}}</td>
         <td>{{item.lab_satelit ? item.lab_satelit.alamat : '-'}}</td>
-        <td>{{item.status}}</td>
+        <td>{{item.last_login_at || item.status}}</td>
         <td>
             <nuxt-link :to="`/user/${item.id}`" class="btn btn-yellow btn-sm">
                 <i class="fa fa-eye"></i>
@@ -45,9 +45,8 @@ export default {
                 this.$bus.$emit('refresh-ajaxtable', 'user');
             }catch(e){
                 this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
-                console.log(e);
             }
         }
-    }
+    },
 }
 </script>

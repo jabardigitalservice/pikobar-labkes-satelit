@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\VerifyEmailException;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -43,6 +44,9 @@ class LoginController extends Controller
         }
 
         $this->guard()->setToken($token);
+        
+        $user->last_login_at = Carbon::now();
+        $user->save();
         
         return true;
     }
