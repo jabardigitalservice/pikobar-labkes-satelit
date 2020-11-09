@@ -150,6 +150,7 @@ import Form from "vform";
 
 export default {
   layout: "login",
+  middleware: 'guest',
   head() {
     return { title: this.$t("register") };
   },
@@ -199,6 +200,8 @@ export default {
       this.loading = false;
     },
     async getTokenInfo() {
+      console.log(this.$route.params.token);
+      console.log('asd');
       await this.$axios
         .get("/v1/user/register/" + this.$route.params.token)
         .then((response) => {

@@ -22,6 +22,7 @@
         "sentry/sentry-laravel": "^1.7",
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.3",
+        "spatie/laravel-enum": "^1.6",
         "tymon/jwt-auth": "^1.0.0-rc.5"
     },
     "require-dev": {

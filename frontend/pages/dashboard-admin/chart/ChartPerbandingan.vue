@@ -97,8 +97,8 @@
       async loadData(tipe) {
         try {
           let resp = await axios.get(`v1/dashboard-admin/chart-trendline?kota=${this.params.kota}&tipe=${this.params.tipe}`);
-          this.chart.datasets[0].data = resp.data.result.positif
-          this.chart.datasets[1].data = resp.data.result.negatif
+          this.chart.datasets[0].data = resp.data.result.negatif
+          this.chart.datasets[1].data = resp.data.result.positif
           this.chart.datasets[2].data = resp.data.result.lainnya
           this.chart.labels = resp.data.result.labels
         } catch (e) {

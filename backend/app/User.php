@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Enums\UserStatusEnum;
+use App\Enums\RoleEnum;
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -18,7 +20,7 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username', 'role_id', 'koordinator', 'lab_satelit_id'
+        'name', 'email', 'password', 'username', 'role_id', 'koordinator', 'lab_satelit_id',
     ];
 
     /**
@@ -37,6 +39,8 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'status' => UserStatusEnum::class.'|nullable',
+        'role_id' => RoleEnum::class.'|nullable,integer',
     ];
 
     /**

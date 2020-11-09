@@ -11,7 +11,7 @@
     <td>{{item.koordinator}}</td>
     <td>{{item.lab_satelit ? item.lab_satelit.nama : '-'}}</td>
     <td>{{item.lab_satelit ? item.lab_satelit.alamat : '-'}}</td>
-    <td>{{item.status}}</td>
+    <td>{{item.last_login_at || item.status}}</td>
     <td>
       <nuxt-link :to="`/user/${item.id}`" class="mb-1 btn btn-yellow btn-sm" title="Klik untuk melihat detail">
         <i class="fa fa-eye" />
@@ -35,7 +35,7 @@
     methods: {
       async deleteData(id) {
         try {
-          let resp = await axios.delete('/v1/users/lab' + id);
+          let resp = await axios.delete('/v1/user/' + id);
           this.$toast.success('Berhasil menghapus data', {
             icon: 'check',
             iconPack: 'fontawesome',
@@ -44,9 +44,8 @@
           this.$bus.$emit('refresh-ajaxtable', 'user');
         } catch (e) {
           this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
-          console.log(e);
         }
       }
-    }
+    },
   }
 </script>

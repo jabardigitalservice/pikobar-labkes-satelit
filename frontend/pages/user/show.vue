@@ -36,6 +36,10 @@
                 <th>Koordinator</th>
                 <td>{{ data.koordinator }}</td>
               </tr>
+              <tr>
+                <th>Status</th>
+                <td>{{ data.last_login_at || data.status }}</td>
+              </tr>
             </tbody>
           </table>
         </Ibox>
