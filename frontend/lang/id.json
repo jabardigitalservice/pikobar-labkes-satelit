@@ -61,7 +61,13 @@
     },
     "user": {
       "index": "Pengguna",
-      "show": "Lihat"
+      "show": "Detail",
+      "edit": "Edit Data"
+    },
+    "dinkes": {
+      "index": "Dinkes",
+      "show": "Detail",
+      "edit": "Edit Data"
     },
     "registration": {
       "index": "Registrasi"
@@ -265,6 +271,5 @@
     "header_index": "Riwayat Login",
     "header_list": "Daftar Riwayat Login"
   },
-  "create": "Tambah",
-  "username": "Username"
+  "create": "Tambah"
 }
