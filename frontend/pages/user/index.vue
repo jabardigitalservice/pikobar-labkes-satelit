@@ -199,64 +199,6 @@ export default {
           );
         }
       }
-      // await this
-      //   .post("/v1/user/invite", this.form)
-      //   .then((response) => {
-      //     this.$toast.success(response.message, {
-      //       icon: "paper-plane",
-      //       iconPack: "fontawesome",
-      //       text: "Undangan terkirim",
-      //       duration: 5000,
-      //     });
-      // JQuery("#addRegistrasiRujukan").modal("hide");
-      //     this.$bus.$emit("refresh-ajaxtable", "master-user");
-      //   })
-      //   .catch((err) => {
-      //     if (err.response && err.response.data.code == 422) {
-      //       this.$nextTick(() => {
-      //         this.form.errors.set(err.response.data.error);
-      //       });
-      //       this.$toast.error("Mohon cek kembali formulir Anda", {
-      //         icon: "times",
-      //         iconPack: "fontawesome",
-      //         duration: 5000,
-      //       });
-      //     } else {
-      //       this.$swal.fire(
-      //         "Terjadi kesalahan",
-      //         "Silakan hubungi Admin",
-      //         "error"
-      //       );
-      //     }
-      // this.$swal.fire(
-      //   "Terjadi Kesalahan",
-      //   "Gagal menghapus data, silakan coba kembali",
-      //   "error"
-      // );
-      // console.log("error Hapus pengguna : ", error.response);
-      // });
-      // if (response.status == 200) {
-      //   t;
-      // }
-
-      //   // if (response.status == 400) {
-      //     this.$toast.error(response.message, {
-      //       icon: 'times',
-      //       iconPack: 'fontawesome',
-      //       duration: 5000
-      //     })
-      //   // }
-      // } catch (e) {
-      //   this.$toast.error('Terjadi kesalahan server', {
-      //     icon: 'times',
-      //     iconPack: 'fontawesome',
-      //     duration: 5000
-      //   })
-      // }
-    },
-
-    previewFile(file) {
-      this.form.register_file = file;
     },
   },
   created() {
