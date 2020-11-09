@@ -19,7 +19,7 @@
         <Ibox title="Pengguna">
           <ajax-table
             url="/v1/user"
-            :oid="`user`"
+            :oid="`master-user`"
             :params="params"
             :config="{
               autoload: true,

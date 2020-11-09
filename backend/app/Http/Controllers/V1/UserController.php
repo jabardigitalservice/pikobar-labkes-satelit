@@ -2,19 +2,13 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Enums\RoleEnum;
 use App\Enums\UserStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Invite;
-use App\Notifications\InviteNotification;
 use Illuminate\Http\Request;
 use App\User;
 use Carbon\Carbon;
-use Exception;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Str;
 use Validator;
 
 class UserController extends Controller
@@ -41,7 +35,7 @@ class UserController extends Controller
 
         $models = $models->with('lab_satelit');
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
-
+        $models->append('has_data');
         return response()->json([
             'data' => $models,
             'count' => $count
@@ -61,7 +55,6 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,'.$user->id,
             'name' => 'required',
             'koordinator' => 'required',
-            'lab_satelit_id' => 'required',
             'token' => 'required',
             'password' => 'required|confirmed|min:6',
         ])->validate();
@@ -103,5 +96,14 @@ class UserController extends Controller
 
         $user->update($value);
         return $user;
+    }
+    public function statusToggle(User $user)
+    {
+        if ($user->register_at || $user->last_login_at) {
+            $user->status = $user->status == UserStatusEnum::INACTIVE() ? UserStatusEnum::ACTIVE() : UserStatusEnum::INACTIVE();
+            return $user->save();
+        } else {
+            return response()->json(['error' => __('message.not_register_yet')], 400);
+        }
     }
 }

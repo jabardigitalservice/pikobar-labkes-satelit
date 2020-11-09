@@ -319,6 +319,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::put('/{user:id}', 'UserController@update')->name('api.user.update');
         Route::delete('/{user:id}', 'UserController@delete')->name('api.user.delete');
         Route::post('/invite', 'UserInvitationController')->name('api.user.invite');
+        Route::put('/status-toggle/{user:id}', 'UserController@statusToggle')->name('api.user.statusToggle');
     });
 });
 

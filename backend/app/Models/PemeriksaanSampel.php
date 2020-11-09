@@ -49,4 +49,9 @@ class PemeriksaanSampel extends Model
     {
         return $this->parseHasilDeteksi($this->getAttribute('hasil_deteksi'));
     }
+
+    public function user()
+    {
+        return $this->belongsTo('App\Model\User', 'user_id', 'id');
+    }
 }
