@@ -11,31 +11,31 @@
         </li>
         <li>
           <router-link to="/" tag="a">
-            <i class="fa fa-home fa-fw"></i>
+            <i class="fa fa-home fa-fw" />
             <span class="nav-label">Dashboard</span>
           </router-link>
         </li>
         <li v-if="checkPermission('admin')">
           <router-link to="/user" tag="a">
-            <i class="uil-user-square fa-fw"></i>
+            <i class="uil-user-square fa-fw" />
             <span class="nav-label">User</span>
           </router-link>
         </li>
         <li v-if="checkPermission('satelit')">
           <router-link to="/registrasi/sampel" tag="a">
-            <i class="uil-user-square fa-fw"></i>
+            <i class="uil-user-square fa-fw" />
             <span class="nav-label">Registrasi Sampel</span>
           </router-link>
         </li>
         <li v-if="checkPermission('satelit')">
           <router-link to="/input-hasil/list-input-hasil" tag="a">
-            <i class="uil-atom fa-fw"></i>
+            <i class="uil-atom fa-fw" />
             <span class="nav-label">Input Hasil</span>
           </router-link>
         </li>
         <li v-if="checkPermission('satelit')">
           <router-link to="/hasil-pemeriksaan/list-hasil-pemeriksaan" tag="a">
-            <i class="uil-eye fa-fw"></i>
+            <i class="uil-eye fa-fw" />
             <span class="nav-label">Hasil Pemeriksaan</span>
           </router-link>
         </li>
