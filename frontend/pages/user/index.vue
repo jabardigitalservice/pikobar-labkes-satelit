@@ -173,13 +173,15 @@ export default {
       try {
         this.loading = true;
         const response = await this.form.post("/v1/user/invite");
-        this.$toast.success(response.message, {
+        this.$toast.success(response.data.message, {
           icon: "paper-plane",
           iconPack: "fontawesome",
           text: "Undangan terkirim",
           duration: 5000,
         });
-        JQuery("#addRegistrasiRujukan").modal("hide");
+        JQuery("#invite-modal").modal("hide");
+        this.form.email = null;
+        this.form.lab_satelit_id = null;
         this.$bus.$emit("refresh-ajaxtable", "master-user");
       } catch (err) {
         if (err.response && err.response.data.code == 422) {
