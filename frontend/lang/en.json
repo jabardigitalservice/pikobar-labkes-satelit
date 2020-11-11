@@ -47,7 +47,8 @@
     "actions": "AKSI",
     "previous": "Sebelumnya",
     "next": "Selanjutnya",
-    "to": "Sampai"
+    "to": "Sampai",
+    "save": "Simpan"
   },
   "common": {
     "data_saved_successfully": "Data berhasil disimpan",
@@ -65,6 +66,7 @@
     "back": "Kembali",
     "success": "Sukses",
     "error": "Error",
-    "no": "Tidak"
+    "no": "Tidak",
+    "save": "Simpan"
   }
 }

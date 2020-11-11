@@ -128,4 +128,21 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     {
         return $this->belongsTo('App\Models\Validator','validator_id','id');
     }
+
+    public function registerLogs()
+    {
+        return $this->hasMany('App\Models\RegisterLog', 'user_id');
+    }
+
+    public function pemeriksaanSampels()
+    {
+        return $this->hasMany('App\Models\PemeriksaanSampel', 'user_id');
+    }
+
+
+    //check if has any relationship, return true
+    public function getHasDataAttribute()
+    {
+        return $this->registerLogs()->exists() || $this->pemeriksaanSampels()->exists();
+    }
 }
