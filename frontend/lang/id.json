@@ -180,7 +180,8 @@
     "back": "Kembali",
     "success": "Sukses",
     "error": "Error",
-    "no": "Tidak"
+    "no": "Tidak",
+    "save": "Simpan"
   },
   "generic": {
     "loading": "Loading",

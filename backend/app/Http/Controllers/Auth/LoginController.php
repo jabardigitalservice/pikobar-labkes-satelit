@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserStatusEnum;
 use App\Exceptions\VerifyEmailException;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -32,7 +33,9 @@ class LoginController extends Controller
      */
     protected function attemptLogin(Request $request)
     {
-        $token = $this->guard()->attempt($this->credentials($request));
+        $credentials = $this->credentials($request);
+        $credentials['status'] = UserStatusEnum::ACTIVE();
+        $token = $this->guard()->attempt($credentials);
 
         if (! $token) {
             return false;

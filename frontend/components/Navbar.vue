@@ -16,11 +16,15 @@
         </a>
         <ul class="dropdown-menu animated fadeInRight m-t-xs">
           <li>
-            <router-link :to="{name: 'settings.profile'}" class="dropdown-item">Profile</router-link>
+            <router-link :to="{name: 'settings.profile'}" class="dropdown-item">
+              <i class="fa fa-user fa-fw mr-1" />Profile
+            </router-link>
           </li>
           <li class="dropdown-divider"></li>
           <li>
-            <a class="dropdown-item" href="#" @click.prevent="logout()">Logout</a>
+            <a class="dropdown-item text-red" href="#" @click.prevent="logout()">
+              <i class="fa fa-home fa-fw mr-1" />Logout
+            </a>
           </li>
         </ul>
       </li>
