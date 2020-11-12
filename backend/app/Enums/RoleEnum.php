@@ -5,7 +5,7 @@ namespace App\Enums;
 use Spatie\Enum\Enum;
 
 /**
- * 
+ *
  * @method static self SUPERADMIN()
  * @method static self LABORATORIUM()
  * @method static self DINKES()
@@ -51,6 +51,20 @@ class RoleEnum extends Enum
             public function getIndex(): int
             {
                 return 2;
+            }
+        };
+    }
+
+    public static function PERUJUK(): RoleEnum
+    {
+        return new class() extends RoleEnum {
+            public function getValue(): string
+            {
+                return 'perujuk';
+            }
+            public function getIndex(): int
+            {
+                return 9;
             }
         };
     }

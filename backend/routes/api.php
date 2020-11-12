@@ -333,6 +333,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
     Route::group(['prefix' => 'register-perujuk'], function () {
         Route::get('/', 'RegisterPerujukController@index');
         Route::post('/store', 'RegisterPerujukController@store');
+        Route::get('/detail/{id}', 'RegisterPerujukController@show');
         Route::post('/bulk', 'RegisterPerujukController@bulk');
     });
 });

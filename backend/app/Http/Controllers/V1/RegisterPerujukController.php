@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRegisterPerujukRequest;
 use App\Models\Fasyankes;
@@ -24,8 +25,14 @@ class RegisterPerujukController extends Controller
 {
     public function index(Request $request)
     {
-        $models = RegisterPerujuk::query();
-
+        $models = RegisterPerujuk::query()
+            ->with(['kota', 'fasyankes', 'perujuk']);
+        if ($request->user()->role_id == RoleEnum::PERUJUK()->getIndex()) {
+            $models = $models->where('perujuk_id', $request->user()->perujuk_id);
+        }
+        if ($request->user()->role_id == RoleEnum::LABORATORIUM()->getIndex()) {
+            $models = $models->where('lab_satelit_id', $request->user()->lab_satelit_id);
+        }
         $params = $request->get('params', false);
         $search = $request->get('search', false);
         $order = $request->get('order', 'created_at');
@@ -52,7 +59,6 @@ class RegisterPerujukController extends Controller
                 if ($val == '') {
                     continue;
                 }
-
                 switch ($key) {
                     case "nomor_sampel":
                         $models = $models->where('nomor_sampel', 'ilike', '%' . $val . '%');
@@ -282,7 +288,17 @@ class RegisterPerujukController extends Controller
         return response()->json(['status' => 200, 'message' => 'success']);
     }
 
-    private function getNamaRS($fasyankes_id)
+    public function show($id)
+    {
+        try {
+            $models = RegisterPerujuk::with(['fasyankes', 'kota', 'perujuk'])->findOrFail($id);
+            return response()->json(['status' => 200, 'message' => 'success', 'result' => $models]);
+        } catch (\Throwable $th) {
+            return response()->json(['status' => 500, 'message' => 'error', 'result' => []]);
+        }
+    }
+
+    private function __getNamaRS($fasyankes_id)
     {
         if (!$fasyankes_id) {
             return $fasyankes_id;
@@ -291,7 +307,7 @@ class RegisterPerujukController extends Controller
         return optional(Fasyankes::find($fasyankes_id))->nama;
     }
 
-    private function getNamaWilayah($wilayah, $id)
+    private function __getNamaWilayah($wilayah, $id)
     {
         if (!$id) {
             return $id;
