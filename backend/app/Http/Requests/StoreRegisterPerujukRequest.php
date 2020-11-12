@@ -16,7 +16,7 @@ class StoreRegisterPerujukRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->perujuk_id ? true : false;
     }
 
     /**
@@ -47,7 +47,8 @@ class StoreRegisterPerujukRequest extends FormRequest
                 'required',
                 new RequiredKeteranganWarganegara($this->kewarganegaraan)
             ],
-            'nik' => 'nullable|digits:16'
+            'nik' => 'nullable|digits:16',
+            'no_hp' => 'required'
         ];
     }
 }

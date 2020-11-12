@@ -24,4 +24,10 @@ class RegisterPerujuk extends Model
     {
         return $this->belongsTo(Fasyankes::class);
     }
+
+    public function updateState($newstate)
+    {
+        $this->status = $newstate;
+        $this->save();
+    }
 }

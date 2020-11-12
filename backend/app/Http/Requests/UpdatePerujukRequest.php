@@ -22,10 +22,10 @@ class UpdatePerujukRequest extends FormRequest
      *
      * @return array
      */
-    public function rules(Request $request)
+    public function rules()
     {
         return [
-            'nama' => 'required|unique:perujuk,id,' . $request->get('id'),
+            'nama' => 'required|unique:perujuk,nama,' . $this->id,
         ];
     }
 }

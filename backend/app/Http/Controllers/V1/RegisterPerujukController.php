@@ -4,8 +4,18 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRegisterPerujukRequest;
+use App\Models\Fasyankes;
 use App\Models\JenisSampel;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
+use App\Models\Kota;
+use App\Models\Pasien;
+use App\Models\PasienRegister;
+use App\Models\PengambilanSampel;
+use App\Models\Provinsi;
+use App\Models\Register;
 use App\Models\RegisterPerujuk;
+use App\Models\Sampel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -122,10 +132,8 @@ class RegisterPerujukController extends Controller
     public function store(StoreRegisterPerujukRequest $request)
     {
         DB::beginTransaction();
-
         try {
             $user = $request->user();
-
             $data = new RegisterPerujuk();
             $data->nomor_register = generateNomorRegister();
             $data->register_uuid = (string)Str::uuid();
@@ -139,7 +147,7 @@ class RegisterPerujukController extends Controller
                 $data->tanggal_swab = date('Y-m-d', strtotime($request->get('tanggal_swab')));
             }
             $data->nomor_sampel = $request->get('nomor_sampel');
-            $data->jenis_sampel = $request->jenis_sampel;
+            $data->jenis_sampel = $request->get('jenis_sampel');
             if ($request->get('jenis_sampel') != 999999) {
                 $jenis_sampel = JenisSampel::where('id', $request->get('jenis_sampel'))->first();
                 $data->nama_jenis_sampel = optional($jenis_sampel)->nama;
@@ -174,6 +182,134 @@ class RegisterPerujukController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['status' => 500, 'message' => 'error']);
+        }
+    }
+
+    public function bulk(Request $request)
+    {
+        $register_perujuk = $request->get('id');
+        $registerPerujuk = RegisterPerujuk::where_in('id', $register_perujuk)->get();
+        foreach ($registerPerujuk as $row) {
+            DB::beginTransaction();
+            try {
+                $user = $request->user();
+                $register = new Register;
+                $register->nomor_register = $row->get('nomor_register');
+                $register->register_uuid = $row->get('register_uuid');
+                $register->creator_user_id = $user->id;
+                $register->lab_satelit_id = $row->get('lab_satelit_id');
+                $register->fasyankes_id = $row->get('fasyankes_id');
+                $register->fasyankes_pengirim = $row->get('fasyankes_pengirim');
+                $register->instansi_pengirim = $row->get('fasyankes_pengirim');
+                $namaRS = $this->getNamaRS($row->get('fasyankes_id'));
+                $register->nama_rs = $namaRS;
+                $register->instansi_pengirim_nama = $namaRS;
+                $register->sumber_pasien = $row->get('sumber_pasien');
+                $register->status = $row->get('kriteria');
+                $register->swab_ke = $row->get('swab_ke');
+                if ($row->get('tanggal_swab') != '') {
+                    $register->tanggal_swab = date('Y-m-d', strtotime($row->get('tanggal_swab')));
+                }
+                $register->save();
+
+                $pasien = new Pasien;
+                $pasien->nama_lengkap = $row->get('nama_pasien');
+                $pasien->kewarganegaraan = $row->get('kewarganegaraan');
+                $pasien->keterangan_warganegara = $row->get('keterangan_warganegara');
+                $pasien->nik = $row->get('nik');
+                $pasien->tempat_lahir = $row->get('tempat_lahir');
+                if ($row->get('tanggal_lahir') != null) {
+                    $pasien->tanggal_lahir = date('Y-m-d', strtotime($row->get('tanggal_lahir')));
+                }
+                $pasien->no_hp = $row->get('nohp');
+                $pasien->kode_provinsi = $row->get('provinsi_id');
+                $pasien->kota_id = $row->get('kota_id');
+                $pasien->kode_kabupaten = $row->get('kota_id');
+                $pasien->kode_kecamatan = $row->get('kecamatan_id');
+                $pasien->kode_kelurahan = $row->get('kelurahan_id');
+                $nama_provinsi = $this->getNamaWilayah('provinsi', $row->get('provinsi_id'));
+                $nama_kota = $this->getNamaWilayah('kota', $row->get('kota_id'));
+                $nama_kecamatan = $this->getNamaWilayah('kecamatan', $row->get('kecamatan_id'));
+                $nama_kelurahan = $this->getNamaWilayah('kelurahan', $row->get('kelurahan_id'));
+                $pasien->nama_provinsi = $nama_provinsi;
+                $pasien->kecamatan = $nama_kecamatan;
+                $pasien->kelurahan = $nama_kelurahan;
+                $pasien->nama_kabupaten = $nama_kota;
+                $pasien->nama_kecamatan = $nama_kecamatan;
+                $pasien->nama_kelurahan = $nama_kelurahan;
+                $pasien->alamat_lengkap = $row->get('alamat');
+                $pasien->sumber_pasien = $row->get('sumber_pasien');
+                $pasien->no_rt = $row->get('no_rt');
+                $pasien->no_rw = $row->get('no_rw');
+                $pasien->jenis_kelamin = $row->get('jk');
+                $pasien->keterangan_lain = $row->get('keterangan');
+                $pasien->usia_tahun = $row->get('usia_tahun');
+                $pasien->usia_bulan = $row->get('usia_bulan');
+                $pasien->lab_satelit_id = $user->lab_satelit_id;
+                $pasien->save();
+
+                PasienRegister::create([
+                    'pasien_id' => $pasien->id,
+                    'register_id' => $register->id,
+                ]);
+
+                $pengambilan_sampel = PengambilanSampel::create([
+                    'sampel_diambil' => false,
+                    'sampel_diterima' => false,
+                    'diterima_dari_faskes' => false,
+                    'sampel_rdt' => false,
+                    'catatan' => $row->get('keterangan'),
+                ]);
+
+                $sampel = new Sampel();
+                $sampel->nomor_sampel = $row->sampel_nomor;
+                $sampel->jenis_sampel_id = $row->jenis_sampel;
+                $sampel->jenis_sampel_nama = $row->nama_jenis_sampel;
+                $sampel->register_id = $register->id;
+                $sampel->lab_satelit_id = $user->lab_satelit_id;
+                $sampel->pengambilan_sampel_id = $pengambilan_sampel->id;
+                $sampel->creator_user_id = $user->id;
+                $sampel->sampel_status = 'sample_taken';
+                $sampel->waktu_sample_taken = date('Y-m-d H:i:s');
+                $sampel->save();
+
+                RegisterPerujuk::find($row->id)->updateState('diterima');
+                DB::commit();
+            } catch (\Throwable $th) {
+                DB::rollBack();
+            }
+        }
+        return response()->json(['status' => 200, 'message' => 'success']);
+    }
+
+    private function getNamaRS($fasyankes_id)
+    {
+        if (!$fasyankes_id) {
+            return $fasyankes_id;
+        }
+
+        return optional(Fasyankes::find($fasyankes_id))->nama;
+    }
+
+    private function getNamaWilayah($wilayah, $id)
+    {
+        if (!$id) {
+            return $id;
+        }
+
+        switch ($wilayah) {
+            case 'provinsi':
+                return optional(Provinsi::find($id))->nama;
+                break;
+            case 'kota':
+                return optional(Kota::find($id))->nama;
+                break;
+            case 'kecamatan':
+                return optional(Kecamatan::find($id))->nama;
+                break;
+            case 'Kelurahan':
+                return optional(Kelurahan::find($id))->nama;
+                break;
         }
     }
 }

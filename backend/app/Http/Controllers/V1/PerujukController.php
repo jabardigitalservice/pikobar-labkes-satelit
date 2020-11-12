@@ -99,7 +99,7 @@ class PerujukController extends Controller
     public function show($id)
     {
         try {
-            $models = Perujuk::find($id);
+            $models = Perujuk::findOrFail($id);
             return response()->json(['status' => 200, 'message' => 'success', 'result' => $models]);
         } catch (\Throwable $th) {
             return response()->json(['status' => 500, 'message' => 'error', 'result' => []]);
