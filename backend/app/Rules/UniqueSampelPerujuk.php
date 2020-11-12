@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use App\Models\RegisterPerujuk;
+use App\Models\Sampel;
 use Illuminate\Contracts\Validation\Rule;
 
 class UniqueSampelPerujuk implements Rule

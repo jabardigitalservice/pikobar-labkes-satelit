@@ -36,7 +36,6 @@ class LoginController extends Controller
         $credentials = $this->credentials($request);
         $credentials['status'] = UserStatusEnum::ACTIVE();
         $token = $this->guard()->attempt($credentials);
-
         if (! $token) {
             return false;
         }
@@ -47,10 +46,10 @@ class LoginController extends Controller
         }
 
         $this->guard()->setToken($token);
-        
+
         $user->last_login_at = Carbon::now();
         $user->save();
-        
+
         return true;
     }
 
@@ -105,7 +104,7 @@ class LoginController extends Controller
     {
         $this->guard()->logout();
     }
-    
+
     public function username()
     {
         return 'username';

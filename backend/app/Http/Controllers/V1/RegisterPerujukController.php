@@ -194,8 +194,9 @@ class RegisterPerujukController extends Controller
     public function bulk(Request $request)
     {
         $register_perujuk = $request->get('id');
-        $registerPerujuk = RegisterPerujuk::where_in('id', $register_perujuk)->get();
+        $registerPerujuk = RegisterPerujuk::whereIn('id', $register_perujuk)->get();
         foreach ($registerPerujuk as $row) {
+            $row = collect($row);
             DB::beginTransaction();
             try {
                 $user = $request->user();
@@ -268,9 +269,9 @@ class RegisterPerujukController extends Controller
                 ]);
 
                 $sampel = new Sampel();
-                $sampel->nomor_sampel = $row->sampel_nomor;
-                $sampel->jenis_sampel_id = $row->jenis_sampel;
-                $sampel->jenis_sampel_nama = $row->nama_jenis_sampel;
+                $sampel->nomor_sampel = $row->get('nomor_sampel');
+                $sampel->jenis_sampel_id = $row->get('jenis_sampel');
+                $sampel->jenis_sampel_nama = $row->get('nama_jenis_sampel');
                 $sampel->register_id = $register->id;
                 $sampel->lab_satelit_id = $user->lab_satelit_id;
                 $sampel->pengambilan_sampel_id = $pengambilan_sampel->id;
@@ -279,7 +280,7 @@ class RegisterPerujukController extends Controller
                 $sampel->waktu_sample_taken = date('Y-m-d H:i:s');
                 $sampel->save();
 
-                RegisterPerujuk::find($row->id)->updateState('diterima');
+                RegisterPerujuk::find($row->get('id'))->updateState('diterima');
                 DB::commit();
             } catch (\Throwable $th) {
                 DB::rollBack();
@@ -298,16 +299,15 @@ class RegisterPerujukController extends Controller
         }
     }
 
-    private function __getNamaRS($fasyankes_id)
+    private function getNamaRS($fasyankes_id)
     {
         if (!$fasyankes_id) {
             return $fasyankes_id;
         }
-
         return optional(Fasyankes::find($fasyankes_id))->nama;
     }
 
-    private function __getNamaWilayah($wilayah, $id)
+    private function getNamaWilayah($wilayah, $id)
     {
         if (!$id) {
             return $id;

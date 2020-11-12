@@ -7,6 +7,7 @@ use App\Http\Requests\StoreInputHasil;
 use App\Imports\HasilPemeriksaanImport;
 use App\Models\LabPCR;
 use App\Models\PemeriksaanSampel;
+use App\Models\RegisterPerujuk;
 use App\Models\Sampel;
 use App\Traits\PemeriksaanTrait;
 use Illuminate\Http\Request;
@@ -287,6 +288,9 @@ class PCRController extends Controller
             $sampel->save();
         }
 
+        if ($sampel->perujuk_id) {
+            RegisterPerujuk::find($sampel->perujuk_id)->updateState('hasil_pemeriksaan');
+        }
         return response()->json(['status' => 201, 'message' => 'Hasil analisa berhasil disimpan']);
     }
 
@@ -319,7 +323,9 @@ class PCRController extends Controller
             $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s');
             $sampel->save();
         }
-
+        if ($sampel->perujuk_id) {
+            RegisterPerujuk::find($sampel->perujuk_id)->updateState('hasil_pemeriksaan');
+        }
         return response()->json(['status' => 201, 'message' => 'Hasil analisa berhasil disimpan']);
     }
 

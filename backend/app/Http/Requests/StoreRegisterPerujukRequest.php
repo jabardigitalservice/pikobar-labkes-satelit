@@ -44,11 +44,12 @@ class StoreRegisterPerujukRequest extends FormRequest
             'nama_pasien' => 'required',
             'kewarganegaraan' => 'required',
             'keterangan_warganegara' => [
-                'required',
+                'nullable',
                 new RequiredKeteranganWarganegara($this->kewarganegaraan)
             ],
             'nik' => 'nullable|digits:16',
-            'no_hp' => 'required'
+            'no_hp' => 'required',
+            'lab_satelit_id' => 'required',
         ];
     }
 }

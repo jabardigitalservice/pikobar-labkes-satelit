@@ -36,7 +36,7 @@ class CreateRegisterPerujuk extends Migration
             $table->integer('fasyankes_id');
             $table->string('fasyankes_pengirim');
             $table->string('nama_pasien');
-            $table->enum('kewarganeraan', ['WNI', 'WNA'])->default('WNI');
+            $table->enum('kewarganegaraan', ['WNI', 'WNA'])->default('WNI');
             $table->string('keterangan_warganegara')->nullable();
             $table->string('nik', 16)->nullable();
             $table->string('no_hp')->nullable();
