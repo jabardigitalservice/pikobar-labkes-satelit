@@ -6,9 +6,9 @@ use Spatie\Enum\Enum;
 
 class JenisSampelEnum extends Enum
 {
-    public static function LAINNYA(): RoleEnum
+    public static function LAINNYA(): JenisSampelEnum
     {
-        return new class() extends RoleEnum {
+        return new class() extends JenisSampelEnum {
             public function getValue(): string
             {
                 return 'lainnya';
