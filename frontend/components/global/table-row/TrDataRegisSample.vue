@@ -78,7 +78,7 @@
                 Nomor Sampel
               </div>
               <div class="col-md-7 flex-left">
-                ${item.nomor_sampel}
+                ${item.nomor_sampel || '-'}
               </div>
             </div>
             <div class="form-group row col-md-10">
@@ -86,9 +86,9 @@
                 Pasien
               </div>
               <div class="col-md-7">
-                <div class=" flex-left" style="text-transform: capitalize">${item.nama_lengkap}</div>
-                <div class=" flex-left">${item.nik}</div>
-                <div class=" flex-left">${usia}</div>
+                <div class="flex-left" style="text-transform: capitalize">${item.nama_lengkap || '-'}</div>
+                <div class="flex-left">${item.nik || ''}</div>
+                <div class="flex-left">${usia}</div>
               </div>
             </div>
             <div class="form-group row col-md-10">
@@ -96,7 +96,7 @@
                 Domisili
               </div>
               <div class="col-md-7 flex-left">
-                ${item.nama_kota}
+                ${item.nama_kota || '-'}
               </div>
             </div>
             <div class="form-group row col-md-10">
@@ -104,7 +104,7 @@
                 Instansi
               </div>
               <div class="col-md-7 flex-left">
-                ${item.nama_rs}
+                ${item.nama_rs || '-'}
               </div>
             </div>
             <div class="form-group row col-md-10">
@@ -112,7 +112,7 @@
                 Kategori
               </div>
               <div class="col-md-7 flex-left">
-                ${item.sumber_pasien}
+                ${item.sumber_pasien || '-'}
               </div>
             </div>
             <div class="form-group row col-md-10">

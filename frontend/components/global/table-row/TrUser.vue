@@ -46,8 +46,7 @@
       },
     },
     methods: {
-      async deleteData(item, status) {
-        console.log(status)
+      async deleteData(item) {
         const content = `
         <div class="row flex-content-center">
           ${this.$t("alert_confirm_delete_text")}
