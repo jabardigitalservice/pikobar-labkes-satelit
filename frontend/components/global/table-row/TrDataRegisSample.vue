@@ -39,9 +39,9 @@
         class="mb-1 btn btn-primary btn-sm" title="Klik untuk edit data">
         <i class="fa fa-edit" />
       </nuxt-link>
-      <a href="#" class="mb-1 btn btn-danger btn-sm" @click="deleteData(item.register_id, item.pasien_id)">
-        <i class="fa fa-trash" title="Klik untuk hapus data" />
-      </a>
+      <button class="mb-1 btn btn-danger btn-sm" @click="deleteData(item, usiaPasien)" title="Klik untuk hapus data">
+        <i class="fa fa-trash" />
+      </button>
     </td>
   </tr>
 </template>
@@ -52,9 +52,10 @@
   } from '~/assets/js/constant/enum';
   import {
     getHumanAge,
-    getAlertDelete,
+    getAlertPopUp,
     momentFormatDate,
-    momentFormatTime
+    momentFormatTime,
+    getKeteranganData
   } from '~/utils';
   export default {
     props: ["item", "pagination", "rowparams", "index", "config"],
@@ -66,16 +67,98 @@
       };
     },
     methods: {
-      async deleteData(id, pasien) {
+      async deleteData(item, usia) {
+        const content = `
+          <div class="row flex-content-center">
+            ${this.$t("alert_confirm_delete_text")}
+          </div>
+          <div class="row col-lg-12 flex-content-center mt-4" style="font-size: 12px">
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Nomor Sampel
+              </div>
+              <div class="col-md-7 flex-left">
+                ${item.nomor_sampel || '-'}
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Pasien
+              </div>
+              <div class="col-md-7">
+                <div class="flex-left" style="text-transform: capitalize">${item.nama_lengkap || '-'}</div>
+                <div class="flex-left">${item.nik || ''}</div>
+                <div class="flex-left">${usia}</div>
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Domisili
+              </div>
+              <div class="col-md-7 flex-left">
+                ${item.nama_kota || '-'}
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Instansi
+              </div>
+              <div class="col-md-7 flex-left">
+                ${item.nama_rs || '-'}
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Kategori
+              </div>
+              <div class="col-md-7 flex-left">
+                ${item.sumber_pasien || '-'}
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Kriteria
+              </div>
+              <div class="col-md-7 flex-left">
+                ${item.status ? pasienStatus.find(x => x.value == item.status).text : '-'}
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Tanggal Input
+              </div>
+              <div class="col-md-7">
+                <div class=" flex-left">
+                  ${momentFormatDate(item.waktu_sample_taken)}, ${momentFormatTime(item.waktu_sample_taken)}
+                </div>
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Keterangan
+              </div>
+              <div class="col-md-7 flex-left">
+                ${getKeteranganData(item.nik, item.nama_lengkap)}
+              </div>
+            </div>
+          </div>
+        `;
         let swal = this.$swal;
         let toast = this.$toast;
         let bus = this.$bus;
+        const swalCustom = swal.mixin({
+          customClass: {
+            confirmButton: 'btn btn-danger btn-md ml-2',
+            cancelButton: 'btn btn-clear btn-md'
+          },
+          buttonsStyling: false
+        });
         const {
           value: isConfirm
-        } = await swal.fire(getAlertDelete());
+        } = await swalCustom.fire(getAlertPopUp('delete', content));
         if (isConfirm) {
           try {
-            await this.$axios.delete(`v1/register/sampel/${id}/${pasien}`);
+            await this.$axios.delete(`v1/register/sampel/${item.register_id}/${item.pasien_id}`);
             toast.success('Berhasil menghapus data', {
               icon: 'check',
               iconPack: 'fontawesome',

@@ -9,7 +9,7 @@
           data-toggle="modal"
           data-target="#invite-modal"
         >
-          <i class="fa fa-paper-plane" /> Undang
+          <i class="fa fa-envelope-o" /> Undang
         </button>
       </div>
     </portal>
@@ -109,7 +109,7 @@
                 :loading="form.busy"
                 class="btn btn-md btn-primary btn-block"
               >
-                <i class="fa fa-paper-plane"></i> Kirim Undangan
+                <i class="fa fa-envelope-o mr-1" /> Kirim Undangan
               </v-button>
             </div>
           </form>
