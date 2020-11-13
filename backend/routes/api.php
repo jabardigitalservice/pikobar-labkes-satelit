@@ -321,6 +321,21 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::post('/invite', 'UserInvitationController')->name('api.user.invite');
         Route::put('/status-toggle/{user:id}', 'UserController@statusToggle')->name('api.user.statusToggle');
     });
+
+    Route::group(['prefix' => 'perujuk'], function () {
+        Route::get('/', 'PerujukController@index');
+        Route::post('/store', 'PerujukController@store');
+        Route::get('/detail/{id}', 'PerujukController@show');
+        Route::post('/update/{id}', 'PerujukController@update');
+        Route::delete('/delete/{id}', 'PerujukController@delete');
+    });
+
+    Route::group(['prefix' => 'register-perujuk'], function () {
+        Route::get('/', 'RegisterPerujukController@index');
+        Route::post('/store', 'RegisterPerujukController@store');
+        Route::get('/detail/{id}', 'RegisterPerujukController@show');
+        Route::post('/bulk', 'RegisterPerujukController@bulk');
+    });
 });
 
 Route::group(['middleware' => ['auth:api', 'can:integrasi-kemenkes'], 'prefix' => 'integrasi'], function () {
