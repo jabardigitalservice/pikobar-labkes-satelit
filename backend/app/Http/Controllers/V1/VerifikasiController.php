@@ -215,7 +215,7 @@ class VerifikasiController extends Controller
                 parseDate($model->tanggal_swab),
                 $model->kesimpulan_pemeriksaan,
                 parseDate($model->waktu_pcr_sample_analyzed),
-                $this->__getKeterangan($model),
+                $model->catatan_pemeriksaan,
             ];
         };
         $column_format = [
