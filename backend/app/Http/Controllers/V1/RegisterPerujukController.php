@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Enums\JenisSampelEnum;
 use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRegisterPerujukRequest;
@@ -155,7 +156,7 @@ class RegisterPerujukController extends Controller
             }
             $data->nomor_sampel = $request->get('nomor_sampel');
             $data->jenis_sampel = $request->get('jenis_sampel');
-            if ($request->get('jenis_sampel') != 999999) {
+            if ($request->get('jenis_sampel') != JenisSampelEnum::LAINNYA()->getIndex()) {
                 $jenis_sampel = JenisSampel::where('id', $request->get('jenis_sampel'))->first();
                 $data->nama_jenis_sampel = optional($jenis_sampel)->nama;
             } else {

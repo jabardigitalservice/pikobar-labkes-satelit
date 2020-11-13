@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Enums\JenisSampelEnum;
 use Illuminate\Contracts\Validation\Rule;
 
 class RequiredNamaJenisSampel implements Rule
@@ -27,7 +28,7 @@ class RequiredNamaJenisSampel implements Rule
      */
     public function passes($attribute, $value)
     {
-        if ($this->jenis_sampel == 999999 && !$value) {
+        if ($this->jenis_sampel == JenisSampelEnum::LAINNYA()->getIndex() && !$value) {
             return false;
         }
         return true;
