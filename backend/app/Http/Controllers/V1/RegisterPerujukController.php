@@ -206,7 +206,6 @@ class RegisterPerujukController extends Controller
                 $register->register_uuid = $row->get('register_uuid');
                 $register->creator_user_id = $user->id;
                 $register->lab_satelit_id = $row->get('lab_satelit_id');
-                $register->kode_kasus = $row->get('kode_kasus');
                 $register->fasyankes_id = $row->get('fasyankes_id');
                 $register->fasyankes_pengirim = $row->get('fasyankes_pengirim');
                 $register->instansi_pengirim = $row->get('fasyankes_pengirim');
@@ -275,7 +274,6 @@ class RegisterPerujukController extends Controller
                 $sampel->nomor_sampel = $row->get('nomor_sampel');
                 $sampel->jenis_sampel_id = $row->get('jenis_sampel');
                 $sampel->jenis_sampel_nama = $row->get('nama_jenis_sampel');
-                $sampel->kode_kasus = $row->get('kode_kasus');
                 $sampel->register_id = $register->id;
                 $sampel->lab_satelit_id = $user->lab_satelit_id;
                 $sampel->pengambilan_sampel_id = $pengambilan_sampel->id;
