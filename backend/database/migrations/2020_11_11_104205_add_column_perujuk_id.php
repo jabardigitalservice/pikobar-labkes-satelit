@@ -31,6 +31,7 @@ class AddColumnPerujukId extends Migration
                 ->onUpdate('CASCADE')
                 ->onDelete('SET NULL')
                 ->nullable();
+            $table->string('kode_kasus')->nullable();
         });
 
         Schema::table('register', function (Blueprint $table) {
@@ -41,6 +42,7 @@ class AddColumnPerujukId extends Migration
                 ->onUpdate('CASCADE')
                 ->onDelete('SET NULL')
                 ->nullable();
+            $table->string('kode_kasus')->nullable();
         });
         Schema::table('pasien', function (Blueprint $table) {
             $table->unsignedInteger('perujuk_id')
@@ -50,6 +52,7 @@ class AddColumnPerujukId extends Migration
                 ->onUpdate('CASCADE')
                 ->onDelete('SET NULL')
                 ->nullable();
+            $table->string('kode_kasus')->nullable();
         });
     }
 
@@ -68,15 +71,18 @@ class AddColumnPerujukId extends Migration
         Schema::table('sampel', function (Blueprint $table) {
             $table->dropForeign('sampel_perujuk_id_foreign');
             $table->dropColumn('perujuk_id');
+            $table->dropColumn('kode_kasus');
         });
 
         Schema::table('register', function (Blueprint $table) {
             $table->dropForeign('register_perujuk_id_foreign');
             $table->dropColumn('perujuk_id');
+            $table->dropColumn('kode_kasus');
         });
         Schema::table('pasien', function (Blueprint $table) {
             $table->dropForeign('pasien_perujuk_id_foreign');
             $table->dropColumn('perujuk_id');
+            $table->dropColumn('kode_kasus');
         });
     }
 }

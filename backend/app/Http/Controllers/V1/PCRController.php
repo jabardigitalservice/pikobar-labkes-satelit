@@ -289,7 +289,7 @@ class PCRController extends Controller
         }
 
         if ($sampel->perujuk_id) {
-            RegisterPerujuk::find($sampel->perujuk_id)->updateState('hasil_pemeriksaan');
+            RegisterPerujuk::find($sampel->perujuk_id)->updateState('pemeriksaan_selesai');
         }
         return response()->json(['status' => 201, 'message' => 'Hasil analisa berhasil disimpan']);
     }
@@ -324,7 +324,7 @@ class PCRController extends Controller
             $sampel->save();
         }
         if ($sampel->perujuk_id) {
-            RegisterPerujuk::find($sampel->perujuk_id)->updateState('hasil_pemeriksaan');
+            RegisterPerujuk::find($sampel->perujuk_id)->updateState('pemeriksaan_selesai');
         }
         return response()->json(['status' => 201, 'message' => 'Hasil analisa berhasil disimpan']);
     }

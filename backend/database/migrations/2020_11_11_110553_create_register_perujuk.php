@@ -54,7 +54,8 @@ class CreateRegisterPerujuk extends Migration
             $table->text('keterangan')->nullable();
             $table->integer('usia_tahun')->nullable();
             $table->integer('usia_bulan')->nullable();
-            $table->enum('status', ['dikirim', 'diterima', 'hasil_pemeriksaan'])->default('dikirim');
+            $table->enum('status', ['dikirim', 'diterima', 'pemeriksaan_selesai'])->default('dikirim');
+            $table->string('kode_kasus')->nullable();
             $table->index(['nomor_sampel']);
             $table->timestamps();
         });
