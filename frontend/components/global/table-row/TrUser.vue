@@ -9,8 +9,8 @@
     </td>
     <td>{{ item.email }}</td>
     <td>{{ item.koordinator }}</td>
-    <td>{{ item.lab_satelit ? item.lab_satelit.nama : "-" }}</td>
-    <td>{{ item.lab_satelit ? item.lab_satelit.alamat : "-" }}</td>
+    <td>{{ item.lab || "-" }}</td>
+    <td>{{ item.alamat_lab || "-" }}</td>
     <td>{{ item.last_login_at || item.status }}</td>
     <td>
       <nuxt-link :to="`/user/${item.id}`" class="btn btn-yellow btn-sm">

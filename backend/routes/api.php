@@ -20,7 +20,7 @@ Route::get('/', function () {
     ];
 });
 
-Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => ['auth:api', 'verified']], function () {
     Route::post('logout', 'Auth\LoginController@logout');
 
     Route::get('/user', function (Request $request) {
@@ -320,6 +320,11 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::delete('/{user:id}', 'UserController@delete')->name('api.user.delete');
         Route::post('/invite', 'UserInvitationController')->name('api.user.invite');
         Route::put('/status-toggle/{user:id}', 'UserController@statusToggle')->name('api.user.statusToggle');
+    });
+
+    Route::group(['prefix' => 'users', 'namespace' => 'User'], function() {
+        Route::get('/dinkes', 'ListDinkesController')->name('api.users.dinkes');
+        Route::get('/lab', 'ListLabController')->name('api.users.lab');
     });
 });
 
