@@ -5,6 +5,7 @@ namespace App\Rules;
 use App\Models\RegisterPerujuk;
 use App\Models\Sampel;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\Lang;
 
 class UniqueSampelPerujuk implements Rule
 {
@@ -60,6 +61,6 @@ class UniqueSampelPerujuk implements Rule
      */
     public function message()
     {
-        return ':attribute sudah digunakan';
+        return Lang::get('validation.unique');
     }
 }
