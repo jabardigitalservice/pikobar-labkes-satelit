@@ -5,7 +5,9 @@ namespace App\Http\Controllers\V1;
 use App\Enums\JenisSampelEnum;
 use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImportRegisterPerujukRequest;
 use App\Http\Requests\StoreRegisterPerujukRequest;
+use App\Imports\RegisterPerujukImport;
 use App\Models\Fasyankes;
 use App\Models\JenisSampel;
 use App\Models\Kecamatan;
@@ -20,7 +22,9 @@ use App\Models\RegisterPerujuk;
 use App\Models\Sampel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RegisterPerujukController extends Controller
 {
@@ -65,14 +69,16 @@ class RegisterPerujukController extends Controller
                         $models = $models->where('nomor_sampel', 'ilike', '%' . $val . '%');
                         break;
                     case "nama_pasien":
-                        $models = $models->where('nama_pasien', 'ilike', '%' . $val . '%');
+                        $models = $models->where('nama_pasien', 'ilike', '%' . $val . '%')
+                            ->orWhere('nik', 'ilike', '%' . $val . '%');
                         break;
-                    case "kota":
-                        $models = $models->whereHas('kota', function ($query) use ($val) {
-                            $query->where('nama', 'ilike', '%' . $val . '%');
-                        });
                     case "fasyankes":
                         $models = $models->whereHas('fasyankes', function ($query) use ($val) {
+                            $query->where('nama', 'ilike', '%' . $val . '%');
+                        });
+                        break;
+                    case "perujuk":
+                        $models = $models->whereHas('perujuk', function ($query) use ($val) {
                             $query->where('nama', 'ilike', '%' . $val . '%');
                         });
                         break;
@@ -280,7 +286,7 @@ class RegisterPerujukController extends Controller
                 $sampel->pengambilan_sampel_id = $pengambilan_sampel->id;
                 $sampel->creator_user_id = $user->id;
                 $sampel->sampel_status = 'sample_taken';
-                $sampel->waktu_sample_taken = date('Y-m-d H:i:s');
+                $sampel->waktu_sample_taken = $row->get('created_at');
                 $sampel->save();
 
                 RegisterPerujuk::find($row->get('id'))->updateState('diterima');
@@ -330,5 +336,16 @@ class RegisterPerujukController extends Controller
                 return optional(Kelurahan::find($id))->nama;
                 break;
         }
+    }
+
+    public function import(ImportRegisterPerujukRequest $request)
+    {
+        Excel::import(new RegisterPerujukImport, $request->file('register_file'));
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Sukses import data.',
+            'data' => null,
+        ]);
     }
 }
