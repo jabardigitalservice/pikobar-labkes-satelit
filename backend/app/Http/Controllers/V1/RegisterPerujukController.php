@@ -243,7 +243,7 @@ class RegisterPerujukController extends Controller
             $data->alamat = $request->get('alamat');
             $data->no_rt = $request->get('no_rt');
             $data->no_rw = $request->get('no_rw');
-            $data->jenis_kelamin = $request->get('jk');
+            $data->jenis_kelamin = $request->get('jenis_kelamin');
             $data->keterangan = $request->get('keterangan');
             $data->usia_tahun = $request->get('usia_tahun');
             $data->usia_bulan = $request->get('usia_bulan');
@@ -313,7 +313,7 @@ class RegisterPerujukController extends Controller
                 $pasien->sumber_pasien = $row->get('sumber_pasien');
                 $pasien->no_rt = $row->get('no_rt');
                 $pasien->no_rw = $row->get('no_rw');
-                $pasien->jenis_kelamin = $row->get('jk');
+                $pasien->jenis_kelamin = $row->get('jenis_kelamin');
                 $pasien->keterangan_lain = $row->get('keterangan');
                 $pasien->usia_tahun = $row->get('usia_tahun');
                 $pasien->usia_bulan = $row->get('usia_bulan');
