@@ -43,7 +43,7 @@ class InviteNotification extends Notification
         return (new MailMessage)
             ->subject("Undangan berpartisipasi - Pikobar")
             ->greeting('Halo!')
-            ->line('Anda di undang untuk menjadi salah satu admin pada aplikasi ' . config('app.name'))
+            ->line('Anda diundang untuk menjadi salah satu admin pada aplikasi ' . config('app.name'))
             ->action('Klik Untuk Daftar',$this->notification_url)
             ->line('Terimakasih atas partisipasi anda!');
     }

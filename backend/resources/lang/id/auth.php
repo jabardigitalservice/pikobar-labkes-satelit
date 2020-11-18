@@ -15,6 +15,6 @@ return [
 
     'failed' => 'Mohon periksa username/password anda',
     'inactive' => 'Akun tidak aktif',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'throttle' => 'Terlalu banyak upaya login. Silakan coba lagi dalam :seconds seconds.',
 
 ];

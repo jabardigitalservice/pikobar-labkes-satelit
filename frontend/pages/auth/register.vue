@@ -1,5 +1,5 @@
 <template>
-  <div class="loginColumns animated fadeInDown">
+  <div class="loginColumns animated fadeInDown" >
     <div class="row">
       <div class="col-md-12 text-center mb-3">
         <div class="title-welcome">Undangan Berpartisipasi</div>
@@ -156,7 +156,6 @@ export default {
     if (store.getters["auth/check"]) {
       swal.fire('Harus Logout terlebih dahulu');
       return redirect('/home')
-      
     }
   },
   head() {
@@ -215,6 +214,11 @@ export default {
           if (response.status == 200) {
             this.form.email = data.email;
             this.form.lab_satelit_id = data.lab_satelit_id;
+          }
+        })
+        .catch((err) => {
+          if (err.response.status == 404){
+            this.$router.push({ name: "home" });
           }
         });
     },
