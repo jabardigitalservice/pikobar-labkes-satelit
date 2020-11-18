@@ -40,7 +40,6 @@ const routes = [
     { path: '/pcr/input/:id', name: 'pcr.input', component: page('pcr/input.vue'), meta: { parentName: 'pcr.list-pcr' } },
     { path: '/pcr/import-excel-hasil', name: 'pcr.import input hasil', component: page('pcr/import-excel-hasil.vue'), meta: { parentName: 'pcr.list-pcr' } },
 
-    // Hasil Pemeriksaan
     { path: '/hasil-pemeriksaan/list-hasil-pemeriksaan', name: 'verifikasi.index.unverified', component: page('hasil-pemeriksaan/index.vue'), meta: { parentName: 'home' } },
     { path: '/hasil-pemeriksaan/detail/:id', name: 'verifikasi.detail', component: page('hasil-pemeriksaan/detail.vue'), meta: { parentName: 'verifikasi.index.unverified' } },
     { path: '/hasil-pemeriksaan/edit/:id', name: 'verifikasi.edit', component: page('hasil-pemeriksaan/edit.vue'), meta: { parentName: 'verifikasi.index.unverified' } },
@@ -51,6 +50,12 @@ const routes = [
     { path: '/user/:id', name: 'user.show', component: page('user/show.vue'), meta: {parentName: 'user.index'}},
     { path: '/user/:id/edit', name: 'user.edit', component: page('user/edit.vue'), meta: {parentName: 'user.index'}},
     { path: '/registration/:token', name: 'user.registration', component: page('auth/register.vue'), meta: {parentName: 'registration.index'}},
+    
+    { path: '/registrasi/perujuk', name: 'registrasi.sampel', component: page('registrasi-perujuk/index.vue'), meta: { parentName: 'home' } },
+    { path: '/registrasi/perujuk/tambah', name: 'registrasi.index.tambah', component: page('registrasi-perujuk/tambah.vue'), meta: { parentName: 'registrasi.sampel' } },
+    { path: '/registrasi/perujuk/detail/:id', name: 'registrasi.index.detail', component: page('registrasi-perujuk/detail.vue'), meta: { parentName: 'registrasi.sampel' } },
+    
+    // { path: '/hasil-pemeriksaan/list-hasil-pemeriksaan-perujuk', name: 'verifikasi.index.unverified', component: page('hasil-pemeriksaan-perujuk/index.vue'), meta: { parentName: 'home' } },
     
 ]
 
