@@ -12,7 +12,7 @@
       <div v-if="item.nik" class="text-muted">{{ item.nik }}</div>
       <div class="text-muted">{{ usiaPasien || null }}</div>
     </td>
-    <td>{{item.kota}}</td>
+    <td>{{item.kota ? item.kota.nama : null}}</td>
     <td>{{item.sumber_pasien}}</td>
     <td>{{item.status}}</td>
     <td>

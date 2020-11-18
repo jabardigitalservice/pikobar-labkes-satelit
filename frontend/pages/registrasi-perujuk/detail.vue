@@ -118,7 +118,7 @@
               Kota / Kabupaten
             </div>
             <div class="col-md-7 flex-text-center">
-              {{data.result.kota || null}}
+              {{data.result.kota ? data.result.kota.nama : null}}
             </div>
           </div>
           <div class="form-group row">
@@ -126,7 +126,7 @@
               Kecamatan
             </div>
             <div class="col-md-7 flex-text-center">
-              {{data.result.kecamatan || null}}
+              {{dataKecamatan}}
             </div>
           </div>
           <div class="form-group row">
@@ -134,7 +134,7 @@
               Kelurahan/Desa
             </div>
             <div class="col-md-7 flex-text-center">
-              {{data.result.kelurahan || null}}
+              {{dataKelurahan}}
             </div>
           </div>
           <div class="form-group row">
@@ -202,7 +202,8 @@
   } from 'vuex'
   import axios from 'axios'
   import {
-    getHumanAge, humanize
+    getHumanAge,
+    humanize
   } from '~/utils';
   import {
     pasienStatus
@@ -224,6 +225,8 @@
       return {
         pasienStatus,
         humanize,
+        dataKecamatan: '',
+        dataKelurahan: '',
       }
     },
     computed: {
@@ -264,11 +267,34 @@
             );
           })
       },
+      async getKecamatanKelurahan() {
+        if (this.data.result.kota_id && this.data.result.kecamatan_id) {
+          // get kecamatan
+          const listKec = await this.$axios.get(`/v1/list-kecamatan/${this.data.result.kota_id}`);
+          const findKecamatan = listKec && listKec.data ? listKec.data.find((el) => el.id === this.data.result
+            .kecamatan_id) : null;
+          if (findKecamatan) {
+            this.dataKecamatan = findKecamatan.nama;
+          }
+          // get kelurahan
+          if (this.data.result.kelurahan_id) {
+            const listKel = await this.$axios.get(`/v1/list-kelurahan/${this.data.result.kecamatan_id}`);
+            const findKelurahan = listKel && listKel.data ? listKel.data.find((el) => el.id === this.data.result
+              .kelurahan_id) : null;
+            if (findKelurahan) {
+              this.dataKelurahan = findKelurahan.nama;
+            }
+          }
+        }
+      }
     },
     head() {
       return {
         title: this.$t('home')
       }
     },
+    created() {
+      this.getKecamatanKelurahan();
+    }
   }
 </script>

@@ -53,7 +53,8 @@
           </Ibox>
 
           <Ibox title="Identitas Pasien">
-            <div class="form-group row">
+            <!-- TODO: waiting for confirmation -->
+            <!-- <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Pencarian
               </div>
@@ -64,7 +65,7 @@
                   :show-no-results="false" :hide-selected="true">
                 </multiselect>
               </div>
-            </div>
+            </div> -->
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Kode Kasus
@@ -92,8 +93,8 @@
                 NIK
               </div>
               <div class="col-md-8">
-                <input class="form-control" type="text" name="nik" placeholder="NIK" v-model="form.nik"
-                  maxlength="16" :class="{ 'is-invalid': form.errors.has('nik') }" />
+                <input class="form-control" type="text" name="nik" placeholder="NIK" v-model="form.nik" maxlength="16"
+                  :class="{ 'is-invalid': form.errors.has('nik') }" />
                 <has-error :form="form" field="nik" />
               </div>
             </div>
@@ -159,8 +160,8 @@
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
-                <input class="form-control" type="text" name="no_hp" placeholder="Nomor Telepon / HP" v-model="form.no_hp"
-                  :class="{ 'is-invalid': form.errors.has('no_hp') }" required />
+                <input class="form-control" type="text" name="no_hp" placeholder="Nomor Telepon / HP"
+                  v-model="form.no_hp" :class="{ 'is-invalid': form.errors.has('no_hp') }" required />
                 <has-error :form="form" field="no_hp" />
               </div>
             </div>
@@ -249,8 +250,9 @@
                   <option value="WNA">WNA</option>
                 </select>
                 <has-error :form="form" field="kewarganegaraan" />
-                <multiselect v-if="form.kewarganegaraan === 'WNA'" v-model="country" :options="optionCountry" track-by="nama" label="nama"
-                  placeholder="Pilih Negara" class="mt-3" :class="{ 'is-invalid': form.errors.has('keterangan_warganegara') }">
+                <multiselect v-if="form.kewarganegaraan === 'WNA'" v-model="country" :options="optionCountry"
+                  track-by="nama" label="nama" placeholder="Pilih Negara" class="mt-3"
+                  :class="{ 'is-invalid': form.errors.has('keterangan_warganegara') }">
                 </multiselect>
                 <has-error :form="form" field="keterangan_warganegara" />
               </div>
@@ -260,13 +262,13 @@
                 Kriteria Pasien
               </div>
               <div class="col-md-8">
-                <select v-model="form.status" class="multisteps-form__input form-control col-md-8 col-lg-6"
-                  name="status" :class="{ 'is-invalid': form.errors.has('status') }">
+                <select v-model="form.kriteria" class="multisteps-form__input form-control col-md-8 col-lg-6"
+                  name="kriteria" :class="{ 'is-invalid': form.errors.has('kriteria') }">
                   <option v-for="index in pasien_status_option" v-bind:key="index.value" :value="index.value">
                     {{index.text}}
                   </option>
                 </select>
-                <has-error :form="form" field="status" />
+                <has-error :form="form" field="kriteria" />
               </div>
             </div>
             <div class="form-group row">
@@ -275,8 +277,9 @@
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
-                <input class="multisteps-form__input form-control" type="text" name="sumber_pasien" required placeholder="Kategori"
-                  v-model="form.sumber_pasien" :class="{ 'is-invalid': form.errors.has('sumber_pasien') }" />
+                <input class="multisteps-form__input form-control" type="text" name="sumber_pasien" required
+                  placeholder="Kategori" v-model="form.sumber_pasien"
+                  :class="{ 'is-invalid': form.errors.has('sumber_pasien') }" />
                 <has-error :form="form" field="sumber_pasien" />
               </div>
             </div>
@@ -285,11 +288,26 @@
           <Ibox title="Identitas Sampel">
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
+                Lab
+                <span style="color:red">*</span>
+              </div>
+              <div class="col-md-8">
+                <select v-model="form.lab_satelit_id" class="form-control col-md-8 col-lg-6" name="lab_satelit_id"
+                  required :class="{ 'is-invalid': form.errors.has(`lab_satelit_id`) }">
+                  <option :value="item.id" :key="idx" v-for="(item, idx) in option_lab_satelit">
+                    {{ item.nama }}
+                  </option>
+                </select>
+                <has-error :form="form" field="lab_satelit_id" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-4 flex-text-center">
                 Swab Ke
               </div>
               <div class="col-md-8">
-                <input class="multisteps-form__input form-control" type="number" name="swab_ke"
-                  v-model="form.swab_ke" :class="{ 'is-invalid': form.errors.has('swab_ke') }" />
+                <input class="multisteps-form__input form-control" type="number" name="swab_ke" v-model="form.swab_ke"
+                  :class="{ 'is-invalid': form.errors.has('swab_ke') }" />
                 <has-error :form="form" field="swab_ke" />
               </div>
             </div>
@@ -309,12 +327,12 @@
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
-                <select class="form-control" v-model="form.nama_jenis_sampel" required
-                  :class="{ 'is-invalid': form.errors.has(`nama_jenis_sampel`) }">
+                <select class="form-control" v-model="form.jenis_sampel" required
+                  :class="{ 'is-invalid': form.errors.has(`jenis_sampel`) }">
                   <option :value="item.id" v-for="(item, $key) in jenis_sampel" :key="$key">
                     {{ item.text }}</option>
                 </select>
-                <has-error :form="form" :field="`nama_jenis_sampel`" />
+                <has-error :form="form" :field="`jenis_sampel`" />
               </div>
             </div>
             <div class="form-group row">
@@ -396,9 +414,9 @@
           jenis_kelamin: null,
           usia_tahun: null,
           usia_bulan: null,
-          nama_jenis_sampel: null,
+          jenis_sampel: null,
           nomor_sampel: null,
-          status: null,
+          kriteria: null,
           swab_ke: null,
           tanggal_swab: null,
           sumber_pasien: null,
@@ -410,7 +428,8 @@
           nama_kecamatan: null,
           kelurahan_id: null,
           nama_kelurahan: null,
-          keterangan: null
+          keterangan: null,
+          lab_satelit_id: null
         }),
         optionFasyankes: [],
         optionCountry: [],
@@ -432,9 +451,14 @@
         isLoadingKecamatan: false,
         isLoadingKelurahan: false,
         pasien_status_option: pasienStatus,
+      option_lab_satelit: null,
       };
     },
     methods: {
+    async getLabSatelit() {
+      const resp = await this.$axios.get("/lab-satelit");
+      this.option_lab_satelit = resp.data.data;
+    },
       async asyncFind(query) {
         this.isLoadingPencarian = true
         this.optionPencarian = []
@@ -466,9 +490,9 @@
           jenis_kelamin: null,
           usia_tahun: null,
           usia_bulan: null,
-          nama_jenis_sampel: null,
+          jenis_sampel: null,
           nomor_sampel: null,
-          status: null,
+          kriteria: null,
           swab_ke: null,
           tanggal_swab: null,
           sumber_pasien: null,
@@ -480,7 +504,8 @@
           nama_kecamatan: null,
           kelurahan_id: null,
           nama_kelurahan: null,
-          keterangan: null
+          keterangan: null,
+          lab_satelit_id: null
         })
         this.pencarian = null
       },
@@ -493,7 +518,7 @@
           this.form.kewarganegaraan = pelaporan.nationality;
           this.form.jenis_kelamin = pelaporan.gender;
           this.form.tanggal_lahir = pelaporan.birth_date;
-          this.form.status = pelaporan.status_code;
+          this.form.kriteria = pelaporan.status_code;
           this.form.alamat = pelaporan.address_detail;
           this.form.provinsi_id = pelaporan.address_province_code;
           this.form.nama_provinsi = pelaporan.address_province_name;
@@ -568,31 +593,30 @@
       },
       async submit() {
         // Submit the form.
-        console.log(this.form)
-        // try {
-        //   const response = await this.form.post("/v1/register/sampel");
-        //   this.$toast.success(response.data.message, {
-        //     icon: 'check',
-        //     iconPack: 'fontawesome',
-        //     duration: 5000
-        //   })
-        //   this.initForm();
-        //   this.$router.push("/registrasi/sampel");
-        // } catch (err) {
-        //   if (err.response && err.response.data.code == 422) {
-        //     this.$nextTick(() => {
-        //       this.form.errors.set(err.response.data.error)
-        //     })
-        //     this.$toast.error('Mohon cek kembali formulir Anda', {
-        //       icon: 'times',
-        //       iconPack: 'fontawesome',
-        //       duration: 5000
-        //     })
-        //   } else {
-        //     this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
-        //   }
-        //   return;
-        // }
+        try {
+          const response = await this.form.post("/v1/register-perujuk/store");
+          this.$toast.success(response.data.message, {
+            icon: 'check',
+            iconPack: 'fontawesome',
+            duration: 5000
+          })
+          this.initForm();
+          this.$router.push("/registrasi/perujuk");
+        } catch (err) {
+          if (err.response && err.response.data.code == 422) {
+            this.$nextTick(() => {
+              this.form.errors.set(err.response.data.error)
+            })
+            this.$toast.error('Mohon cek kembali formulir Anda', {
+              icon: 'times',
+              iconPack: 'fontawesome',
+              duration: 5000
+            })
+          } else {
+            this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
+          }
+          return;
+        }
       }
     },
     head() {
@@ -603,6 +627,7 @@
     created() {
       this.getCountry();
       this.getProvinsi();
+      this.getLabSatelit();
     },
     watch: {
       "form.nik": function (newVal, oldVal) {
