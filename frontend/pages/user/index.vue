@@ -46,6 +46,7 @@
               lab: 'LAB',
               alamat_lab: 'ALAMAT LAB',
               status: 'STATUS',
+              last_login_at: 'TERAKHIR LOGIN',
             }"
           />
         </Ibox>
