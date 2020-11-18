@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\JenisSampelEnum;
 use App\Rules\RequiredKeteranganWarganegara;
 use App\Rules\RequiredNamaJenisSampel;
 use App\Rules\UniqueSampelPerujuk;
@@ -37,7 +38,7 @@ class UpdateRegisterPerujukRequest extends FormRequest
             ],
             'jenis_sampel' => 'required',
             'nama_jenis_sampel' => [
-                new RequiredNamaJenisSampel($this->jenis_sampel),
+                'required_if:jenis_sampel,==,'. JenisSampelEnum::LAINNYA()->getIndex(),
             ],
             'fasyankes_id' => 'required',
             'fasyankes_pengirim' => 'required',
@@ -45,7 +46,7 @@ class UpdateRegisterPerujukRequest extends FormRequest
             'kewarganegaraan' => 'required',
             'keterangan_warganegara' => [
                 'nullable',
-                new RequiredKeteranganWarganegara($this->kewarganegaraan)
+                'required_if:kewarganegaraan,==,WNA'
             ],
             'nik' => 'nullable|digits:16',
             'no_hp' => 'required',
