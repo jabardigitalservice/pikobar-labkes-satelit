@@ -40,6 +40,7 @@
                   type="text"
                   name="koordinator"
                   class="form-control"
+                  required
                 />
                 <has-error :form="form" field="koordinator" />
               </div>
@@ -57,6 +58,7 @@
                   type="text"
                   name="name"
                   class="form-control"
+                  required
                 />
                 <has-error :form="form" field="name" />
               </div>
@@ -74,6 +76,7 @@
                   type="text"
                   name="username"
                   class="form-control"
+                  required
                 />
                 <has-error :form="form" field="username" />
               </div>
@@ -91,6 +94,7 @@
                   type="password"
                   name="password"
                   class="form-control"
+                  required
                 />
                 <has-error :form="form" field="password" />
               </div>
@@ -111,6 +115,7 @@
                   type="password"
                   name="password_confirmation"
                   class="form-control"
+                  required
                 />
                 <has-error :form="form" field="password_confirmation" />
               </div>
