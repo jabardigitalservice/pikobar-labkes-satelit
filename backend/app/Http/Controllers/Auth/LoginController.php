@@ -34,7 +34,6 @@ class LoginController extends Controller
     protected function attemptLogin(Request $request)
     {
         $credentials = $this->credentials($request);
-        $credentials['status'] = UserStatusEnum::ACTIVE();
         $token = $this->guard()->attempt($credentials);
         if (! $token) {
             return false;
@@ -42,6 +41,10 @@ class LoginController extends Controller
 
         $user = $this->guard()->user();
         if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
+            return false;
+        } 
+
+        if ($user->status != UserStatusEnum::ACTIVE()) {
             return false;
         }
 
@@ -89,9 +92,17 @@ class LoginController extends Controller
             throw VerifyEmailException::forUser($user);
         }
 
-        throw ValidationException::withMessages([
-            $this->username() => [trans('auth.failed')],
-        ]);
+        if(!$user) {
+            throw ValidationException::withMessages([
+                $this->username() => [trans('auth.failed')],
+            ]);
+        }
+
+        if ($user->status != UserStatusEnum::ACTIVE()) {
+            throw ValidationException::withMessages([
+                $this->username() => [trans('auth.inactive')],
+            ]);
+        }
     }
 
     /**

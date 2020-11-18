@@ -13,8 +13,8 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records.',
-    'inactive' => 'Account inactive',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'failed' => 'Mohon periksa username/password anda',
+    'inactive' => 'Akun tidak aktif',
+    'throttle' => 'Terlalu banyak upaya login. Silakan coba lagi dalam :seconds seconds.',
 
 ];

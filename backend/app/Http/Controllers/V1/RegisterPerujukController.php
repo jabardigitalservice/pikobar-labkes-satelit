@@ -5,7 +5,10 @@ namespace App\Http\Controllers\V1;
 use App\Enums\JenisSampelEnum;
 use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImportRegisterPerujukRequest;
 use App\Http\Requests\StoreRegisterPerujukRequest;
+use App\Http\Requests\UpdateRegisterPerujukRequest;
+use App\Imports\RegisterPerujukImport;
 use App\Models\Fasyankes;
 use App\Models\JenisSampel;
 use App\Models\Kecamatan;
@@ -20,7 +23,9 @@ use App\Models\RegisterPerujuk;
 use App\Models\Sampel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RegisterPerujukController extends Controller
 {
@@ -65,14 +70,16 @@ class RegisterPerujukController extends Controller
                         $models = $models->where('nomor_sampel', 'ilike', '%' . $val . '%');
                         break;
                     case "nama_pasien":
-                        $models = $models->where('nama_pasien', 'ilike', '%' . $val . '%');
+                        $models = $models->where('nama_pasien', 'ilike', '%' . $val . '%')
+                            ->orWhere('nik', 'ilike', '%' . $val . '%');
                         break;
-                    case "kota":
-                        $models = $models->whereHas('kota', function ($query) use ($val) {
-                            $query->where('nama', 'ilike', '%' . $val . '%');
-                        });
                     case "fasyankes":
                         $models = $models->whereHas('fasyankes', function ($query) use ($val) {
+                            $query->where('nama', 'ilike', '%' . $val . '%');
+                        });
+                        break;
+                    case "perujuk":
+                        $models = $models->whereHas('perujuk', function ($query) use ($val) {
                             $query->where('nama', 'ilike', '%' . $val . '%');
                         });
                         break;
@@ -193,6 +200,62 @@ class RegisterPerujukController extends Controller
         }
     }
 
+    public function update(UpdateRegisterPerujukRequest $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $user = $request->user();
+            $data = RegisterPerujuk::findOrFail($id);
+            abort_if($data->status != 'dikirim', 500, 'data tersebut sudah masuk ketahap berikutnya');
+            $data->creator_user_id = $user->id;
+            $data->lab_satelit_id = $request->get('lab_satelit_id');
+            $data->kode_kasus = $request->get('kode_kasus');
+            $data->perujuk_id = $user->perujuk_id;
+            $data->sumber_pasien = $request->get('sumber_pasien');
+            $data->kriteria = $request->get('kriteria');
+            $data->swab_ke = $request->get('swab_ke');
+            if ($request->get('tanggal_swab')) {
+                $data->tanggal_swab = date('Y-m-d', strtotime($request->get('tanggal_swab')));
+            }
+            $data->nomor_sampel = $request->get('nomor_sampel');
+            $data->jenis_sampel = $request->get('jenis_sampel');
+            if ($request->get('jenis_sampel') != JenisSampelEnum::LAINNYA()->getIndex()) {
+                $jenis_sampel = JenisSampel::where('id', $request->get('jenis_sampel'))->first();
+                $data->nama_jenis_sampel = optional($jenis_sampel)->nama;
+            } else {
+                $data->nama_jenis_sampel = $request->get('nama_jenis_sampel');
+            }
+            $data->fasyankes_id = $request->get('fasyankes_id');
+            $data->fasyankes_pengirim = $request->get('fasyankes_pengirim');
+            $data->nama_pasien = $request->get('nama_pasien');
+            $data->kewarganegaraan = $request->get('kewarganegaraan');
+            $data->keterangan_warganegara = $request->get('keterangan_warganegara');
+            $data->nik = $request->get('nik');
+            $data->tempat_lahir = $request->get('tempat_lahir');
+            if ($request->get('tanggal_lahir')) {
+                $data->tanggal_lahir = date('Y-m-d', strtotime($request->get('tanggal_lahir')));
+            }
+            $data->no_hp = $request->get('no_hp');
+            $data->provinsi_id = $request->get('provinsi_id');
+            $data->kota_id = $request->get('kota_id');
+            $data->kecamatan_id = $request->get('kecamatan_id');
+            $data->kelurahan_id = $request->get('kelurahan_id');
+            $data->alamat = $request->get('alamat');
+            $data->no_rt = $request->get('no_rt');
+            $data->no_rw = $request->get('no_rw');
+            $data->jenis_kelamin = $request->get('jenis_kelamin');
+            $data->keterangan = $request->get('keterangan');
+            $data->usia_tahun = $request->get('usia_tahun');
+            $data->usia_bulan = $request->get('usia_bulan');
+            $data->save();
+            DB::commit();
+            return response()->json(['status' => 200, 'message' => 'success', 'result' => $data]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 500, 'message' => 'error']);
+        }
+    }
+
     public function bulk(Request $request)
     {
         $register_perujuk = $request->get('id');
@@ -250,7 +313,7 @@ class RegisterPerujukController extends Controller
                 $pasien->sumber_pasien = $row->get('sumber_pasien');
                 $pasien->no_rt = $row->get('no_rt');
                 $pasien->no_rw = $row->get('no_rw');
-                $pasien->jenis_kelamin = $row->get('jk');
+                $pasien->jenis_kelamin = $row->get('jenis_kelamin');
                 $pasien->keterangan_lain = $row->get('keterangan');
                 $pasien->usia_tahun = $row->get('usia_tahun');
                 $pasien->usia_bulan = $row->get('usia_bulan');
@@ -280,7 +343,7 @@ class RegisterPerujukController extends Controller
                 $sampel->pengambilan_sampel_id = $pengambilan_sampel->id;
                 $sampel->creator_user_id = $user->id;
                 $sampel->sampel_status = 'sample_taken';
-                $sampel->waktu_sample_taken = date('Y-m-d H:i:s');
+                $sampel->waktu_sample_taken = $row->get('created_at');
                 $sampel->save();
 
                 RegisterPerujuk::find($row->get('id'))->updateState('diterima');
@@ -296,6 +359,18 @@ class RegisterPerujukController extends Controller
     {
         try {
             $models = RegisterPerujuk::with(['fasyankes', 'kota', 'perujuk'])->findOrFail($id);
+            return response()->json(['status' => 200, 'message' => 'success', 'result' => $models]);
+        } catch (\Throwable $th) {
+            return response()->json(['status' => 500, 'message' => 'error', 'result' => []]);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $models = RegisterPerujuk::findOrFail($id);
+            abort_if($models->status != 'dikirim', 500, 'data tersebut sudah masuk ketahap berikutnya');
+            $models->delete();
             return response()->json(['status' => 200, 'message' => 'success', 'result' => $models]);
         } catch (\Throwable $th) {
             return response()->json(['status' => 500, 'message' => 'error', 'result' => []]);
@@ -330,5 +405,16 @@ class RegisterPerujukController extends Controller
                 return optional(Kelurahan::find($id))->nama;
                 break;
         }
+    }
+
+    public function import(ImportRegisterPerujukRequest $request)
+    {
+        Excel::import(new RegisterPerujukImport, $request->file('register_file'));
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Sukses import data.',
+            'data' => null,
+        ]);
     }
 }

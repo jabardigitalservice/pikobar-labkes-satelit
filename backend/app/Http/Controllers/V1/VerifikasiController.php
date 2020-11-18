@@ -82,7 +82,8 @@ class VerifikasiController extends Controller
                         $models->where('pasien.kota_id', $val);
                         break;
                     case 'nama_pasien':
-                        $models->where('pasien.nama_lengkap', 'ilike', '%' . $val . '%');
+                        $models->where('pasien.nama_lengkap', 'ilike', '%' . $val . '%')
+                            ->orWhere('pasien.nik', 'ilike', '%' . $val . '%');
                         break;
                     case "fasyankes_id":
                         $models = $models->where('register.fasyankes_id', $val);

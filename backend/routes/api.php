@@ -335,6 +335,9 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::post('/store', 'RegisterPerujukController@store');
         Route::get('/detail/{id}', 'RegisterPerujukController@show');
         Route::post('/bulk', 'RegisterPerujukController@bulk');
+        Route::post('/import', 'RegisterPerujukController@import');
+        Route::post('/update/{id}', 'RegisterPerujukController@update');
+        Route::delete('/delete/{id}', 'RegisterPerujukController@delete');
     });
 });
 
