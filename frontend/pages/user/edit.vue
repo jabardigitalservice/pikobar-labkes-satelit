@@ -52,7 +52,7 @@
               }}</label>
               <div class="col-md-7">
                 <label class="form-control" readonly>
-                  {{ this.form.coordinator }}
+                  {{ this.form.koordinator }}
                 </label>
               </div>
             </div>
