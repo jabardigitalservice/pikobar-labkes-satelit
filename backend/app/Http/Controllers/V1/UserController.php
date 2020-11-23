@@ -78,6 +78,8 @@ class UserController extends Controller
 
     public function delete(User $user)
     {
+        $email = $user->email;
+        $invite = Invite::where('email', $email)->delete();
         return $user->delete();
     }
 
