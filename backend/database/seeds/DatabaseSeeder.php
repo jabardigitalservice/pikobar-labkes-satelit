@@ -24,5 +24,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ValidatorSeeder::class);
         $this->call(TerbanyakSeeder::class);
         $this->call(NegaraSeeder::class);
+        $this->call(LabSatelitSeeder::class);
     }
 }

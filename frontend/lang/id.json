@@ -112,6 +112,7 @@
   "resend_verification_link": "Kirim ulang Link Verifikasi ?",
   "failed_to_verify_email": "Gagal untuk verifikasi email.",
   "verify_email_address": "Email verifikasi telah berhasil dikirim.",
+  "checking": "Checking",
   "aktivitas": {
     "label": "Aktivitas",
     "list_of": "Daftar Aktivitas",

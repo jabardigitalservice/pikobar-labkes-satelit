@@ -1,6 +1,11 @@
 <template>
-  <div class="loginColumns animated fadeInDown" >
-    <div class="row">
+  <div class="loginColumns animated fadeInDown">
+    <div class="row" v-if="!status">
+      <div class="col-md-12 text-center mb-3">
+        {{ $t("checking") }}
+      </div>
+    </div>
+    <div class="row" v-if="status">
       <div class="col-md-12 text-center mb-3">
         <div class="title-welcome">Undangan Berpartisipasi</div>
         <div class="title-welcome">Sistem Informasi Lab Jejaring</div>
@@ -167,6 +172,7 @@ export default {
     return { title: this.$t("register") };
   },
   data: () => ({
+    status: false,
     form: new Form({
       username: "",
       name: "",
@@ -219,11 +225,13 @@ export default {
           if (response.status == 200) {
             this.form.email = data.email;
             this.form.lab_satelit_id = data.lab_satelit_id;
+            this.status = true
           }
         })
         .catch((err) => {
           if (err.response.status == 404){
             this.$router.push({ name: "home" });
+            this.status = false
           }
         });
     },
