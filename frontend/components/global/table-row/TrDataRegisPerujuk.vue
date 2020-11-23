@@ -29,7 +29,7 @@
         class="mb-1 btn btn-yellow btn-sm" title="Klik untuk melihat detail">
         <i class="fa fa-eye" />
       </nuxt-link>
-      <nuxt-link :to="`/registrasi/sampel/update/${item.register_id}/${item.pasien_id}`"
+      <nuxt-link :to="`/registrasi/perujuk/update/${item.id}`"
         class="mb-1 btn btn-primary btn-sm" title="Klik untuk edit data">
         <i class="fa fa-edit" />
       </nuxt-link>
@@ -138,13 +138,13 @@
         } = await swalCustom.fire(getAlertPopUp('delete', content));
         if (isConfirm) {
           try {
-            await this.$axios.delete(`v1/register/sampel/${item.register_id}/${item.pasien_id}`);
+            await this.$axios.delete(`v1/register-perujuk/delete/${item.id}`);
             toast.success('Berhasil menghapus data', {
               icon: 'check',
               iconPack: 'fontawesome',
               duration: 5000
             })
-            await bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
+            await bus.$emit('refresh-ajaxtable', 'registrasi-perujuk');
           } catch (e) {
             swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
           }

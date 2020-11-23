@@ -55,18 +55,6 @@
           <Ibox title="Identitas Pasien">
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
-                Pencarian
-              </div>
-              <div class="col-md-8">
-                <multiselect v-model="pencarian" :options="optionPencarian" track-by="name" label="name"
-                  placeholder="Cari berdasarkan NIK/Nama/No Telp" @search-change="asyncFind"
-                  :loading="isLoadingPencarian" :searchable="true" :internal-search="false" :clear-on-select="false"
-                  :show-no-results="false" :hide-selected="true">
-                </multiselect>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-md-4 flex-text-center">
                 Kode Kasus
                 <span style="color:red">*</span>
               </div>
@@ -92,8 +80,8 @@
                 NIK
               </div>
               <div class="col-md-8">
-                <input class="form-control" type="text" name="nik" placeholder="NIK" v-model="form.nik"
-                  maxlength="16" :class="{ 'is-invalid': form.errors.has('nik') }" />
+                <input class="form-control" type="text" name="nik" placeholder="NIK" v-model="form.nik" maxlength="16"
+                  :class="{ 'is-invalid': form.errors.has('nik') }" />
                 <has-error :form="form" field="nik" />
               </div>
             </div>
@@ -159,8 +147,8 @@
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
-                <input class="form-control" type="text" name="no_hp" placeholder="Nomor Telepon / HP" v-model="form.no_hp"
-                  :class="{ 'is-invalid': form.errors.has('no_hp') }" required />
+                <input class="form-control" type="text" name="no_hp" placeholder="Nomor Telepon / HP"
+                  v-model="form.no_hp" :class="{ 'is-invalid': form.errors.has('no_hp') }" required />
                 <has-error :form="form" field="no_hp" />
               </div>
             </div>
@@ -249,8 +237,9 @@
                   <option value="WNA">WNA</option>
                 </select>
                 <has-error :form="form" field="kewarganegaraan" />
-                <multiselect v-if="form.kewarganegaraan === 'WNA'" v-model="country" :options="optionCountry" track-by="nama" label="nama"
-                  placeholder="Pilih Negara" class="mt-3" :class="{ 'is-invalid': form.errors.has('keterangan_warganegara') }">
+                <multiselect v-if="form.kewarganegaraan === 'WNA'" v-model="country" :options="optionCountry"
+                  track-by="nama" label="nama" placeholder="Pilih Negara" class="mt-3"
+                  :class="{ 'is-invalid': form.errors.has('keterangan_warganegara') }">
                 </multiselect>
                 <has-error :form="form" field="keterangan_warganegara" />
               </div>
@@ -260,13 +249,13 @@
                 Kriteria Pasien
               </div>
               <div class="col-md-8">
-                <select v-model="form.status" class="multisteps-form__input form-control col-md-8 col-lg-6"
-                  name="status" :class="{ 'is-invalid': form.errors.has('status') }">
+                <select v-model="form.kriteria" class="multisteps-form__input form-control col-md-8 col-lg-6"
+                  name="kriteria" :class="{ 'is-invalid': form.errors.has('kriteria') }">
                   <option v-for="index in pasien_status_option" v-bind:key="index.value" :value="index.value">
                     {{index.text}}
                   </option>
                 </select>
-                <has-error :form="form" field="status" />
+                <has-error :form="form" field="kriteria" />
               </div>
             </div>
             <div class="form-group row">
@@ -275,8 +264,9 @@
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
-                <input class="multisteps-form__input form-control" type="text" name="sumber_pasien" required placeholder="Kategori"
-                  v-model="form.sumber_pasien" :class="{ 'is-invalid': form.errors.has('sumber_pasien') }" />
+                <input class="multisteps-form__input form-control" type="text" name="sumber_pasien" required
+                  placeholder="Kategori" v-model="form.sumber_pasien"
+                  :class="{ 'is-invalid': form.errors.has('sumber_pasien') }" />
                 <has-error :form="form" field="sumber_pasien" />
               </div>
             </div>
@@ -285,11 +275,26 @@
           <Ibox title="Identitas Sampel">
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
+                Lab
+                <span style="color:red">*</span>
+              </div>
+              <div class="col-md-8">
+                <select v-model="form.lab_satelit_id" class="form-control col-md-8 col-lg-6" name="lab_satelit_id"
+                  required :class="{ 'is-invalid': form.errors.has(`lab_satelit_id`) }">
+                  <option :value="item.id" :key="idx" v-for="(item, idx) in option_lab_satelit">
+                    {{ item.nama }}
+                  </option>
+                </select>
+                <has-error :form="form" field="lab_satelit_id" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-4 flex-text-center">
                 Swab Ke
               </div>
               <div class="col-md-8">
-                <input class="multisteps-form__input form-control" type="number" name="swab_ke"
-                  v-model="form.swab_ke" :class="{ 'is-invalid': form.errors.has('swab_ke') }" />
+                <input class="multisteps-form__input form-control" type="number" name="swab_ke" v-model="form.swab_ke"
+                  :class="{ 'is-invalid': form.errors.has('swab_ke') }" />
                 <has-error :form="form" field="swab_ke" />
               </div>
             </div>
@@ -309,12 +314,12 @@
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
-                <select class="form-control" v-model="form.nama_jenis_sampel" required
-                  :class="{ 'is-invalid': form.errors.has(`nama_jenis_sampel`) }">
+                <select class="form-control" v-model="form.jenis_sampel" required
+                  :class="{ 'is-invalid': form.errors.has(`jenis_sampel`) }">
                   <option :value="item.id" v-for="(item, $key) in jenis_sampel" :key="$key">
                     {{ item.text }}</option>
                 </select>
-                <has-error :form="form" :field="`nama_jenis_sampel`" />
+                <has-error :form="form" :field="`jenis_sampel`" />
               </div>
             </div>
             <div class="form-group row">
@@ -374,67 +379,69 @@
       if (!store.getters["options/jenis_sampel"].length) {
         await store.dispatch("options/fetchJenisSampel");
       }
-      let resp = await axios.get(
-        "/v1/register/sampel/" +
-        route.params.register_id +
-        "/" +
-        route.params.pasien_id
-      );
-      let data = resp.data;
-      let fasyankes = await axios.get('/v1/list-fasyankes-jabar?tipe=' + data.reg_fasyankes_pengirim)
+      let resp = await axios.get(`/v1/register-perujuk/detail/${route.params.id}`);
+      let data = resp.data.result;
+      let fasyankes = await axios.get('/v1/list-fasyankes-jabar?tipe=' + data.fasyankes_pengirim)
       let provinsi = await axios.get('/v1/list-provinsi/');
-      provinsi = provinsi.data;
-      let kota = data.reg_kode_provinsi ? await axios.get('/v1/list-kota/' + data.reg_kode_provinsi) : [];
-      if (data.reg_kode_provinsi) {
+      provinsi = provinsi.data
+      const dataProvinsi = provinsi ? provinsi.find((el) => el.id === data.provinsi_id) : null;
+      let kota = data.provinsi_id ? await axios.get('/v1/list-kota/' + data.provinsi_id) : [];
+      if (data.provinsi_id) {
         kota = kota.data
       }
-      let kecamatan = data.reg_kode_kota ? await axios.get('/v1/list-kecamatan/' + data.reg_kode_kota) : [];
-      if (data.reg_kode_kota) { 
+      let kecamatan = data.kota_id ? await axios.get('/v1/list-kecamatan/' + data.kota_id) : [];
+      if (data.kota_id) { 
         kecamatan = kecamatan.data
       }
-      let kelurahan = data.reg_kode_kecamatan ? await axios.get('/v1/list-kelurahan/' + data.reg_kode_kecamatan) : [];
-      if (data.reg_kode_kecamatan) { 
+      const dataKecamatan = kecamatan ? kecamatan.find((el) => el.id === data.kecamatan_id) : null;
+      let kelurahan = data.kecamatan_id ? await axios.get('/v1/list-kelurahan/' + data.kecamatan_id) : [];
+      if (data.kecamatan_id) {
         kelurahan = kelurahan.data
       }
+      const dataKelurahan = kelurahan ? kelurahan.find((el) => el.id === data.kelurahan_id) : null;
       return {
         form: new Form({
-          reg_fasyankes_id: data.reg_fasyankes_id,
-          reg_fasyankes_pengirim: data.reg_fasyankes_pengirim,
-          reg_nama_rs: data.reg_nama_rs,
-          reg_kewarganegaraan: data.reg_kewarganegaraan,
-          reg_keterangan_warganegara: data.reg_keterangan_warganegara,
-          reg_nama_pasien: data.reg_nama_pasien,
-          reg_nik: data.reg_nik,
-          reg_tempatlahir: data.reg_tempatlahir,
-          reg_tgllahir: data.reg_tgllahir,
-          reg_nohp: data.reg_nohp,
-          reg_alamat: data.reg_alamat,
-          reg_rt: data.reg_rt,
-          reg_rw: data.reg_rw,
-          reg_jk: data.reg_jk,
-          reg_usia_tahun: data.reg_usia_tahun,
-          reg_usia_bulan: data.reg_usia_bulan,
-          reg_sampel_namadiluarjenis: data.reg_sampel_namadiluarjenis,
-          reg_sampel_jenis_sampel: data.reg_sampel_jenis_sampel,
-          reg_sampel_nomor: data.reg_sampel_nomor,
-          reg_status: data.reg_status,
-          reg_swab_ke: data.reg_swab_ke,
-          reg_tanggal_swab: data.reg_tanggal_swab,
-          reg_sumber_pasien: data.reg_sumber_pasien,
-          reg_pelaporan_id: data.reg_pelaporan_id,
-          reg_pelaporan_id_case: data.reg_pelaporan_id_case,
-          reg_kode_provinsi: data.reg_kode_provinsi,
-          reg_nama_provinsi: data.reg_nama_provinsi,
-          reg_kode_kota: data.reg_kode_kota,
-          reg_nama_kota: data.reg_nama_kota,
-          reg_kode_kecamatan: data.reg_kode_kecamatan,
-          reg_nama_kecamatan: data.reg_nama_kecamatan,
-          reg_kode_kelurahan: data.reg_kode_kelurahan,
-          reg_nama_kelurahan: data.reg_nama_kelurahan,
-          reg_keterangan: data.reg_keterangan,
-          reg_register: data.reg_register,
-          reg_pasien: data.reg_pasien,
-          reg_sampel_id: data.reg_sampel_id,
+          kode_kasus: data.kode_kasus,
+          fasyankes_id: data.fasyankes ? data.fasyankes.id : data.fasyankes_id,
+          fasyankes_pengirim: data.fasyankes ? data.fasyankes.tipe : data.fasyankes_pengirim,
+          nama_rs: data.nama_rs,
+          kewarganegaraan: data.kewarganegaraan,
+          keterangan_warganegara: data.keterangan_warganegara,
+          nama_pasien: data.nama_pasien,
+          nik: data.nik,
+          tempat_lahir: data.tempat_lahir,
+          tanggal_lahir: data.tanggal_lahir,
+          no_hp: data.no_hp,
+          alamat: data.alamat,
+          no_rt: data.no_rt,
+          no_rw: data.no_rw,
+          jenis_kelamin: data.jenis_kelamin,
+          usia_tahun: data.usia_tahun,
+          usia_bulan: data.usia_bulan,
+          sampel_namadiluarjenis: data.sampel_namadiluarjenis,
+          jenis_sampel: data.jenis_sampel,
+          sampel_nomor: data.sampel_nomor,
+          status: data.status,
+          swab_ke: data.swab_ke,
+          tanggal_swab: data.tanggal_swab,
+          sumber_pasien: data.sumber_pasien,
+          pelaporan_id: data.pelaporan_id,
+          pelaporan_id_case: data.pelaporan_id_case,
+          provinsi_id: data.provinsi_id,
+          nama_provinsi: dataProvinsi.nama,
+          kota_id: data.kota_id,
+          nama_kota: data.nama_kota,
+          kecamatan_id: data.kecamatan_id,
+          nama_kecamatan: data.nama_kecamatan,
+          kelurahan_id: data.kelurahan_id,
+          nama_kelurahan: data.nama_kelurahan,
+          keterangan: data.keterangan,
+          register: data.register,
+          pasien: data.pasien,
+          sampel_id: data.sampel_id,
+          kriteria: data.kriteria,
+          lab_satelit_id: data.lab_satelit_id,
+          nomor_sampel: data.nomor_sampel
         }),
         optionFasyankes: fasyankes.data,
         optionCountry: [],
@@ -443,12 +450,12 @@
         optionKelurahan: kelurahan,
         optionKota: kota,
         optionPencarian: [],
-        fasyankes: {'id': data.reg_fasyankes_id, 'nama': data.reg_nama_rs},
-        country: data.reg_keterangan_warganegara || null,
-        provinsi: data.reg_kode_provinsi ? {'id': data.reg_kode_provinsi, 'nama': data.reg_nama_provinsi } : null,
-        kota: data.reg_kode_kota ? {'id': data.reg_kode_kota, 'nama': data.reg_nama_kota } : null,
-        kecamatan: data.reg_kode_kecamatan ? {'id': data.reg_kode_kecamatan, 'nama': data.reg_nama_kecamatan } : null,
-        kelurahan: data.reg_kode_kelurahan ? {'id': data.reg_kode_kelurahan, 'nama': data.reg_nama_kelurahan } : null,
+        fasyankes: {'id': data.fasyankes.id, 'nama': data.fasyankes.nama},
+        country: data.keterangan_warganegara || null,
+        provinsi: dataProvinsi ? {'id': dataProvinsi.id, 'nama': dataProvinsi.nama } : null,
+        kota: data.kota ? {'id': data.kota.id, 'nama': data.kota.nama } : null,
+        kecamatan: dataKecamatan ? {'id': dataKecamatan.id, 'nama': dataKecamatan.nama } : null,
+        kelurahan: dataKelurahan ? {'id': dataKelurahan.id, 'nama': dataKelurahan.nama } : null,
         pencarian: null,
         pelaporan: null,
         isLoadingPencarian: false,
@@ -456,9 +463,14 @@
         isLoadingKecamatan: false,
         isLoadingKelurahan: false,
         pasien_status_option: pasienStatus,
+        option_lab_satelit: null,
       };
     },
     methods: {
+      async getLabSatelit() {
+        const resp = await this.$axios.get("/lab-satelit");
+        this.option_lab_satelit = resp.data.data;
+      },
       async asyncFind(query) {
         this.isLoadingPencarian = true
         if (query != '') {
@@ -512,18 +524,13 @@
       },
       async submit() {
         try {
-          const response = await this.form.post(
-            "/v1/register/sampel/update/" +
-            this.$route.params.register_id +
-            "/" +
-            this.$route.params.pasien_id
-          );
+          const response = await this.form.post(`/v1/register-perujuk/update/${this.$route.params.id}`);
           this.$swal.fire(
             "Berhasil Ubah Data",
             "Data Pasien Register Berhasil Diubah",
             "success"
           );
-          this.$router.push("/registrasi/sampel");
+          this.$router.push("/registrasi/perujuk");
         } catch (err) {
           if (err.response && err.response.data.code == 422) {
             this.$nextTick(() => {
@@ -553,16 +560,17 @@
     created() {
       this.getCountry();
       this.getProvinsi();
+      this.getLabSatelit();
     },
     watch: {
-      "form.reg_nik": function (newVal, oldVal) {
+      "form.nik": function (newVal, oldVal) {
         if (newVal && newVal.length >= 12) {
           let dd = parseInt(newVal.substr(6, 2));
           if (dd >= 40) {
-            this.form.reg_jk = "P";
+            this.form.jenis_kelamin = "P";
             dd -= 40;
           } else {
-            this.form.reg_jk = "L";
+            this.form.jenis_kelamin = "L";
           }
           let mm = parseInt(newVal.substr(8, 2));
           let yy = parseInt(newVal.substr(10, 2));
@@ -574,7 +582,7 @@
               ("" + mm).padStart(2, "0") +
               "-" +
               ("" + dd).padStart(2, "0");
-            this.form.reg_tgllahir = str;
+            this.form.tanggal_lahir = str;
             this.nik_tgl = str;
           } else {
             let str =
@@ -584,7 +592,7 @@
               ("" + mm).padStart(2, "0") +
               "-" +
               ("" + dd).padStart(2, "0");
-            this.form.reg_tgllahir = str;
+            this.form.tanggal_lahir = str;
             this.nik_tgl = str;
           }
           this.$nextTick(() => {
@@ -592,33 +600,33 @@
           });
         }
       },
-      "form.reg_tgllahir": function (newVal, oldVal) {
-        if (this.form.reg_tgllahir == null) {
-          this.form.reg_usia_tahun = null;
-          this.form.reg_usia_bulan = null;
+      "form.tanggal_lahir": function (newVal, oldVal) {
+        if (this.form.tanggal_lahir == null) {
+          this.form.usia_tahun = null;
+          this.form.usia_bulan = null;
         } else {
-          var birthday = new Date(this.form.reg_tgllahir);
-          this.form.reg_usia_tahun = this.form.reg_usia_tahun || moment().diff(birthday, 'years');
-          this.form.reg_usia_bulan = this.form.reg_usia_bulan || moment().diff(birthday, 'months') % 12;
+          var birthday = new Date(this.form.tanggal_lahir);
+          this.form.usia_tahun = this.form.usia_tahun || moment().diff(birthday, 'years');
+          this.form.usia_bulan = this.form.usia_bulan || moment().diff(birthday, 'months') % 12;
         }
       },
-      "form.reg_fasyankes_pengirim": function (newVal, oldVal) {
+      "form.fasyankes_pengirim": function (newVal, oldVal) {
         this.fasyankes = null;
-        this.form.reg_fasyankes_id = null
-        this.form.reg_nama_rs = null
-        this.changeFasyankes(this.form.reg_fasyankes_pengirim)
+        this.form.fasyankes_id = null
+        this.form.nama_rs = null
+        this.changeFasyankes(this.form.fasyankes_pengirim)
       },
       "fasyankes": function (newVal, oldVal) {
-        this.form.reg_fasyankes_id = null
+        this.form.fasyankes_id = null
         if (this.fasyankes) {
-          this.form.reg_fasyankes_id = this.fasyankes.id
-          this.form.reg_nama_rs = this.fasyankes.nama
+          this.form.fasyankes_id = this.fasyankes.id
+          this.form.nama_rs = this.fasyankes.nama
         }
       },
       "country": function (newVal, oldVal) {
-        this.form.reg_keterangan_warganegara = null
+        this.form.keterangan_warganegara = null
         if (this.country) {
-          this.form.reg_keterangan_warganegara = this.country.nama
+          this.form.keterangan_warganegara = this.country.nama
         }
       },
       "provinsi": function (newVal, oldVal) {
@@ -628,11 +636,11 @@
         this.optionKota = [];
         this.optionKecamatan = [];
         this.optionKelurahan = [];
-        this.form.reg_kode_provinsi = null
+        this.form.provinsi_id = null
         if (this.provinsi) {
-          this.form.reg_kode_provinsi = this.provinsi.id
-          this.form.reg_nama_provinsi = this.provinsi.nama
-          this.getKota(this.form.reg_kode_provinsi);
+          this.form.provinsi_id = this.provinsi.id
+          this.form.nama_provinsi = this.provinsi.nama
+          this.getKota(this.form.provinsi_id);
         }
       },
       "kota": function (newVal, oldVal) {
@@ -640,28 +648,28 @@
         this.kelurahan = null
         this.optionKecamatan = [];
         this.optionKelurahan = [];
-        this.form.reg_kode_kota = null
+        this.form.kota_id = null
         if (this.kota) {
-          this.form.reg_kode_kota = this.kota.id
-          this.form.reg_nama_kota = this.kota.nama
-          this.getKecamatan(this.form.reg_kode_kota);
+          this.form.kota_id = this.kota.id
+          this.form.nama_kota = this.kota.nama
+          this.getKecamatan(this.form.kota_id);
         }
       },
       "kecamatan": function (newVal, oldVal) {
         this.kelurahan = null
         this.optionKelurahan = [];
-        this.form.reg_kode_kecamatan = null
+        this.form.kecamatan_id = null
         if (this.kecamatan) {
-          this.form.reg_kode_kecamatan = this.kecamatan.id
-          this.form.reg_nama_kecamatan = this.kecamatan.nama
-          this.getKelurahan(this.form.reg_kode_kecamatan);
+          this.form.kecamatan_id = this.kecamatan.id
+          this.form.nama_kecamatan = this.kecamatan.nama
+          this.getKelurahan(this.form.kecamatan_id);
         }
       },
       "kelurahan": function (newVal, oldVal) {
-        this.form.reg_kode_kelurahan = null
+        this.form.kelurahan_id = null
         if (this.kelurahan) {
-          this.form.reg_kode_kelurahan = this.kelurahan.id
-          this.form.reg_nama_kelurahan = this.kelurahan.nama
+          this.form.kelurahan_id = this.kelurahan.id
+          this.form.nama_kelurahan = this.kelurahan.nama
         }
       },
       "pencarian": function (newVal, oldVal) {

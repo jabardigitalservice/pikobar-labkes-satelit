@@ -54,6 +54,8 @@ const routes = [
     { path: '/registrasi/perujuk', name: 'registrasi.sampel', component: page('registrasi-perujuk/index.vue'), meta: { parentName: 'home' } },
     { path: '/registrasi/perujuk/tambah', name: 'registrasi.index.tambah', component: page('registrasi-perujuk/tambah.vue'), meta: { parentName: 'registrasi.sampel' } },
     { path: '/registrasi/perujuk/detail/:id', name: 'registrasi.index.detail', component: page('registrasi-perujuk/detail.vue'), meta: { parentName: 'registrasi.sampel' } },
+    { path: '/registrasi/perujuk/update/:id', name: 'registrasi.index.update', component: page('registrasi-perujuk/update.vue'), meta: { parentName: 'registrasi.sampel' } },
+    { path: '/registrasi/perujuk/import-excel', name: 'registrasi.index.import-excel', component: page('registrasi-perujuk/import-excel.vue'), meta: { parentName: 'registrasi.sampel' } },
     
     // { path: '/hasil-pemeriksaan/list-hasil-pemeriksaan-perujuk', name: 'verifikasi.index.unverified', component: page('hasil-pemeriksaan-perujuk/index.vue'), meta: { parentName: 'home' } },
     

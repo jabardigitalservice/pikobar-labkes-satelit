@@ -23,8 +23,8 @@
     <div class="row">
       <div class="col-lg-12">
         <Ibox title="Register Pasien">
-          <ajax-table url="v1/register-perujuk" :oid="'registrasi-perujuk'" :params="params" :disableSort="['keterangan']"
-            :config="{
+          <ajax-table url="v1/register-perujuk" :oid="'registrasi-perujuk'" :params="params"
+            :disableSort="['keterangan']" :config="{
               autoload: true,
               has_number: true,
               has_entry_page: true,
@@ -67,21 +67,12 @@
           <br>
           <div class="form-group">
             <label class="text-muted" style="text-align: justify">
-              Berikut adalah contoh format untuk import excel Registrasi sampel, data wilayah, dan data fasyankes yang
-              dapat diunduh
-              sebagai referensi.
+              Berikut adalah contoh format untuk import excel Registrasi perujuk yang
+              dapat diunduh sebagai referensi.
             </label>
-            <button @click="downloadFormat('formatRegistrasi')" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-sm btn-default" type="button">
+            <button @click="downloadFormat('formatRegistrasiPerujuk')" :disabled="loading"
+              :class="{'btn-loading': loading}" class="btn btn-sm btn-default" type="button">
               <i class="fa fa-file" /> Format Import
-            </button>
-            <button @click="downloadFormat('wilayah')" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-sm btn-default" type="button">
-              <i class="fa fa-file" /> Data Wilayah
-            </button>
-            <button @click="downloadFormat('fasyankes')" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-sm btn-default" type="button">
-              <i class="fa fa-file" /> Data Fasyankes
             </button>
           </div>
         </div>
