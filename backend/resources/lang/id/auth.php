@@ -13,8 +13,8 @@ return [
     |
     */
 
-    'failed' => 'Please check your username / password <br> or unregistered user. Please contact the Admin',
-    'inactive' => 'Account inactive',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'failed' => 'Mohon periksa username/password anda <br> Atau user tidak terdaftar. Silahkan hubungu admin dinkes porvinsi',
+    'inactive' => 'Akun tidak aktif',
+    'throttle' => 'Terlalu banyak upaya login. Silakan coba lagi dalam :seconds seconds.',
 
 ];

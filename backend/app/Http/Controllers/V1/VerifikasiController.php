@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Enums\RoleEnum;
 use App\Exports\AjaxTableExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreHasilPemeriksaan;
@@ -34,10 +35,19 @@ class VerifikasiController extends Controller
             ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
             ->leftJoin('kota', 'kota.id', 'pasien.kota_id')
             ->where('sampel.sampel_status', 'pcr_sample_analyzed')
-            ->whereNull('register.deleted_at')
-            ->where('register.lab_satelit_id', $user->lab_satelit_id)
-            ->where('sampel.lab_satelit_id', $user->lab_satelit_id)
-            ->where('pasien.lab_satelit_id', $user->lab_satelit_id);
+            ->whereNull('register.deleted_at');
+
+        if ($user->role_id == RoleEnum::PERUJUK()->getIndex()) {
+            $models = $models->where('register.perujuk_id', $user->perujuk_id);
+            $models = $models->where('sampel.perujuk_id', $user->perujuk_id);
+            $models = $models->where('pasien.perujuk_id', $user->perujuk_id);
+        }
+
+        if ($user->role_id == RoleEnum::LABORATORIUM()->getIndex()) {
+            $models = $models->where('register.lab_satelit_id', $user->lab_satelit_id);
+            $models = $models->where('sampel.lab_satelit_id', $user->lab_satelit_id);
+            $models = $models->where('pasien.lab_satelit_id', $user->lab_satelit_id);
+        }
 
         $params = $request->get('params', false);
         $search = $request->get('search', false);
@@ -72,7 +82,8 @@ class VerifikasiController extends Controller
                         $models->where('pasien.kota_id', $val);
                         break;
                     case 'nama_pasien':
-                        $models->where('pasien.nama_lengkap', 'ilike', '%' . $val . '%');
+                        $models->where('pasien.nama_lengkap', 'ilike', '%' . $val . '%')
+                            ->orWhere('pasien.nik', 'ilike', '%' . $val . '%');
                         break;
                     case "fasyankes_id":
                         $models = $models->where('register.fasyankes_id', $val);
@@ -205,7 +216,7 @@ class VerifikasiController extends Controller
                 parseDate($model->tanggal_swab),
                 $model->kesimpulan_pemeriksaan,
                 parseDate($model->waktu_pcr_sample_analyzed),
-                $this->__getKeterangan($model),
+                $model->catatan_pemeriksaan,
             ];
         };
         $column_format = [

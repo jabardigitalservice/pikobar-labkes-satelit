@@ -12244,6 +12244,17 @@ body.md-skin {
   justify-content: flex-end;
 }
 
+.flex-left {
+  display: flex;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.flex-content-center {
+  display: flex;
+  justify-content: center;
+}
+
 .title-welcome {
   width: 100%;
   font-family: Arial, Helvetica, sans-serif;

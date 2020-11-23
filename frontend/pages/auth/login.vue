@@ -85,7 +85,6 @@
         try {
           const response = await this.form.post('/login')
           data = response.data
-          
           // Save the token.
           this.$store.dispatch('auth/saveToken', {
             token: data.token,
@@ -102,7 +101,7 @@
         } catch (e) {
           this.$swal.fire(
             'Login gagal',
-            'Mohon cek username / password Anda',
+            e.response.data.error.username[0],
             'error'
           )
           return

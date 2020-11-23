@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserStatusEnum;
 use App\Exceptions\VerifyEmailException;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -32,8 +33,8 @@ class LoginController extends Controller
      */
     protected function attemptLogin(Request $request)
     {
-        $token = $this->guard()->attempt($this->credentials($request));
-
+        $credentials = $this->credentials($request);
+        $token = $this->guard()->attempt($credentials);
         if (! $token) {
             return false;
         }
@@ -41,13 +42,17 @@ class LoginController extends Controller
         $user = $this->guard()->user();
         if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
             return false;
+        } 
+
+        if ($user->status != UserStatusEnum::ACTIVE()) {
+            return false;
         }
 
         $this->guard()->setToken($token);
-        
+
         $user->last_login_at = Carbon::now();
         $user->save();
-        
+
         return true;
     }
 
@@ -87,9 +92,17 @@ class LoginController extends Controller
             throw VerifyEmailException::forUser($user);
         }
 
-        throw ValidationException::withMessages([
-            $this->username() => [trans('auth.failed')],
-        ]);
+        if(!$user) {
+            throw ValidationException::withMessages([
+                $this->username() => [trans('auth.failed')],
+            ]);
+        }
+
+        if ($user->status != UserStatusEnum::ACTIVE()) {
+            throw ValidationException::withMessages([
+                $this->username() => [trans('auth.inactive')],
+            ]);
+        }
     }
 
     /**
@@ -102,7 +115,7 @@ class LoginController extends Controller
     {
         $this->guard()->logout();
     }
-    
+
     public function username()
     {
         return 'username';
