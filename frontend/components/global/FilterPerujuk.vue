@@ -17,7 +17,7 @@
             <div>Tanggal Input</div>
           </div>
           <div class="col-md-8 input-group">
-            <rangedate-picker @selected="onDateSelected" ref="rangedatepicker" />
+            <date-picker placeholder="Tanggal Input" format="d MMMM yyyy" input-class="form-control" v-model="params.tanggal" />
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@
             <div>Kategori</div>
           </div>
           <div class="col-md-8">
-            <input type="text" name="params.sumber_pasien" v-model="params.sumber_pasien" class="form-control"
+            <input type="text" name="params.kategori" v-model="params.kategori" class="form-control"
               placeholder="Kategori">
           </div>
         </div>
@@ -61,10 +61,9 @@
       return {
         params: {
           nama_pasien: null,
-          sumber_pasien: null,
+          kategori: null,
           nik: null,
-          start_date: null,
-          end_date: null,
+          tanggal: null,
           nomor_sampel: null,
         },
       }
@@ -75,18 +74,12 @@
       },
       resetForm() {
         this.params.nama_pasien = null;
-        this.params.sumber_pasien = null;
+        this.params.kategori = null;
         this.params.nik = null;
-        this.params.start_date = null;
-        this.params.end_date = null;
+        this.params.tanggal = null;
         this.params.nomor_sampel = null;
-        this.$refs.rangedatepicker.$data.dateRange = {};
         this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
       },
-      onDateSelected: function (daterange) {
-        this.params.start_date = daterange.start || null;
-        this.params.end_date = daterange.end || null;
-      }
     },
     created() {
       _this = this;
