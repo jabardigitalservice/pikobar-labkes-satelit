@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'failed' => 'Mohon periksa username/password anda <br> Atau user tidak terdaftar. Silahkan hubungu admin dinkes porvinsi',
+    'failed' => 'Mohon periksa username/password anda <br> Atau user tidak terdaftar. Silakan hubungi admin dinkes provinsi',
     'inactive' => 'Akun tidak aktif',
     'throttle' => 'Terlalu banyak upaya login. Silakan coba lagi dalam :seconds seconds.',
 
