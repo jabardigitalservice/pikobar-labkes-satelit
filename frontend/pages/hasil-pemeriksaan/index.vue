@@ -45,7 +45,7 @@
               status: 'Kriteria',
               sumber_pasien: 'KATEGORI',
               kesimpulan_pemeriksaan: 'KESIMPULAN PEMERIKSAAN',
-              catatat: 'KETERANGAN',
+              catatan: 'KETERANGAN',
             }" />
         </Ibox>
       </div>
