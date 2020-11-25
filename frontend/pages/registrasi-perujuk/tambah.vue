@@ -362,7 +362,7 @@
             <button :loading="form.busy" class="btn btn-md btn-primary">
               <i class="fa fa-check" /> Simpan Data Register
             </button>
-            <nuxt-link to="/registrasi/sampel" class="btn btn-clear">
+            <nuxt-link to="/registrasi/perujuk" class="btn btn-clear">
               <i class="fa fa-close" /> Batal
             </nuxt-link>
           </div>
