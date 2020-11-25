@@ -3,8 +3,8 @@
     <portal to="title-name">Hasil Pemeriksaan</portal>
     <portal to="title-action">
       <div class="title-action">
-        <a href="#" @click.prevent="$router.back()" class="btn btn-secondary">
-          <i class="uil-arrow-left"></i>Kembali
+        <a href="#" @click.prevent="$router.back()" class="btn btn-black">
+          <i class="uil-arrow-left" />Kembali
         </a>
       </div>
     </portal>
@@ -14,14 +14,14 @@
           <Ibox title="Informasi Sampel">
 
             <div class="form-group">
-              <label>Nomor Sampel</label>
+              <label class="text-blue">Nomor Sampel</label>
               <p class="form-control">
                 <b>{{ data.nomor_sampel }}</b>
               </p>
             </div>
 
             <div class="form-group">
-              <label>Tanggal Input Hasil</label>
+              <label class="text-blue">Tanggal Input Hasil</label>
               <p class="form-control">
                 <b>
                   {{ data.waktu_pcr_sample_analyzed | formatDate}}
@@ -30,7 +30,7 @@
             </div>
 
             <div class="form-group">
-              <label>Jam Input Hasil</label>
+              <label class="text-blue">Jam Input Hasil</label>
               <p class="form-control">
                 <b>
                   {{ data.waktu_pcr_sample_analyzed | formatTime }}
@@ -39,21 +39,21 @@
             </div>
 
             <div class="form-group">
-              <label>Nama Pasien</label>
+              <label class="text-blue">Nama Pasien</label>
               <p class="form-control">
                 <b>{{ data.nama_lengkap }}</b>
               </p>
             </div>
 
             <div class="form-group">
-              <label>NIK</label>
+              <label class="text-blue">NIK</label>
               <p class="form-control">
                 <b>{{ data.nik }}</b>
               </p>
             </div>
 
             <div class="form-group">
-              <label>Tanggal Lahir</label>
+              <label class="text-blue">Tanggal Lahir</label>
               <p class="form-control">
                 <b>{{ data.tanggal_lahir | formatDate }}</b>
               </p>
@@ -85,16 +85,16 @@
                     <has-error :form="form" :field="`hasil_deteksi.${$index}.ct_value`" />
                   </td>
                   <td>
-                    <button class="btn btn-sm btn-danger" type="button" @click.prevent="removeHasilDeteksi($index)">
-                      <i class="uil-trash"></i>
+                    <button class="btn btn-sm btn-clear" type="button" @click.prevent="removeHasilDeteksi($index)">
+                      <i class="uil-trash" />
                     </button>
                   </td>
                 </tr>
                 <tr>
                   <td></td>
                   <td colspan="2">
-                    <button class="btn btn-sm btn-secondary" type="button" @click.prevent="addHasilDeteksi()">
-                      <i class="fa fa-plus"></i> Tambah Hasil CT
+                    <button class="btn btn-sm btn-primary" type="button" @click.prevent="addHasilDeteksi()">
+                      <i class="fa fa-plus" /> Tambah Hasil CT
                     </button>
                   </td>
                 </tr>
@@ -102,7 +102,7 @@
             </table>
 
             <div class="form-group">
-              <label>
+              <label class="text-blue">
                 Kesimpulan Pemeriksaan
                 <span style="color:red">*</span>
               </label>
@@ -110,26 +110,26 @@
                 <div>
                   <label class="fancy-radio custom-color-green m-0 w-100">
                     <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="positif">
-                    <span><i></i>POSITIF</span>
+                    <span><i />POSITIF</span>
                   </label>
                 </div>
                 <div>
                   <label class="fancy-radio custom-color-green m-0 w-100">
                     <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="negatif">
-                    <span><i></i>NEGATIF</span>
+                    <span><i />NEGATIF</span>
                   </label>
                 </div>
                 <div>
                   <label class="fancy-radio custom-color-green m-0 w-100">
                     <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="inkonklusif">
-                    <span><i></i>INKONKLUSIF</span>
+                    <span><i />INKONKLUSIF</span>
                   </label>
 
                 </div>
                 <div>
                   <label class="fancy-radio custom-color-green m-0 w-100">
                     <input type="radio" v-model="form.kesimpulan_pemeriksaan" value="invalid">
-                    <span><i></i>INVALID</span>
+                    <span><i />INVALID</span>
                   </label>
                 </div>
               </div>
@@ -139,7 +139,7 @@
             <input type="hidden" v-model="form.last_pemeriksaan_id">
 
             <div class="form-group">
-              <label>Catatan Pemeriksaan</label>
+              <label class="text-blue">Catatan Pemeriksaan</label>
               <textarea class="form-control" v-model="form.catatan_pemeriksaan"
                 :class="{ 'is-invalid': form.errors.has(`catatan_pemeriksaan`) }"></textarea>
               <has-error :form="form" field="catatan_pemeriksaan" />
@@ -148,9 +148,8 @@
             <div class="form-group">
               <button @click="submit()" :disabled="loading" :class="{'btn-loading': loading}"
                 class="btn btn-md btn-primary block full-width m-b" type="button">
-                <i class="fa fa-check"></i>
+                <i class="fa fa-check" />
                 Update Hasil Pemeriksaan
-                <!-- {{ form.kesimpulan_pemeriksaan != 'inkonklusif' ? 'Verifikasi' : 'Periksa Ulang'}} -->
               </button>
             </div>
           </Ibox>

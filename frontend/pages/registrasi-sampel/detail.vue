@@ -5,141 +5,198 @@
     </portal>
     <portal to="title-action">
       <div class="title-action">
-        <nuxt-link to="/registrasi/sampel" class="btn btn-primary">Kembali</nuxt-link>
+        <nuxt-link tag="a" :to="`/registrasi/sampel/update/${registerId}/${pasienId}`" class="btn btn-import-export">
+          <i class="fa fa-pencil" /> Perbarui Data
+        </nuxt-link>
+        <nuxt-link to="/registrasi/sampel" class="btn btn-black">
+          <i class="uil-arrow-left" /> Kembali
+        </nuxt-link>
       </div>
     </portal>
-    <div class="row">
-      <div class="col-lg-12">
-        <Ibox :title="`Detail Register Sampel`">
-          <template v-slot:tools>
-            <nuxt-link tag="a" :to="`/registrasi/sampel/update/${registerId}/${pasienId}`"
-              class="btn btn-xs btn-warning"><i class="fa fa-pencil"></i> Edit</nuxt-link>
-          </template>
-          <div class="container">
-            <div class="row">
-              <div class="col-md-6">
-                <h3 class="header-title mt-2 mb-2">Identitas Pengirim</h3>
-                <table class="table">
-                  <tbody>
-                    <tr>
-                      <td width="40%"><b>Instansi Pengirim</b></td>
-                      <td width="60%">{{data.instansi_pengirim}}</td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Nama Rumah Sakit/Dinkes</b></td>
-                      <td width="60%">{{data.instansi_pengirim_nama}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+
+    <div class="col-lg-12 row">
+      <div class="col-md-6">
+        <Ibox title="Identitas Pengirim">
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Instansi Pengirim
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <h3 class="header-title mt-2 mb-2">Identitas Pasien</h3>
-                <table class="table">
-                  <tbody>
-                    <tr>
-                      <td width="40%"><b>NIK</b></td>
-                      <td width="60%">{{data?data.reg_nik:null}}</td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Nama Lengkap Pasien</b></td>
-                      <td width="60%">{{data?data.reg_nama_pasien:null}}</td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Jenis Kelamin</b></td>
-                      <td width="60%">
-                        {{data?(data.reg_jk=='L'?"Laki-Laki":"Perempuan"):null=='P'?'Perempuan':'Laki-laki'}}</td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Tempat Lahir</b></td>
-                      <td width="60%">{{data?data.reg_tempatlahir:null}}</td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Tanggal Lahir</b></td>
-                      <td width="60%">{{data.reg_tgllahir | formatDate}}</td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Kategori</b></td>
-                      <td width="60%">{{data.reg_sumber_pasien?data.reg_sumber_pasien:''}}</td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Status Pasien</b></td>
-                      <td width="60%">{{data.reg_status?data.reg_status:''}}</td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Usia</b></td>
-                      <td width="60%">{{ umurPasien }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div class="col-md-6">
-                <h3 class="header-title mt-2 mb-2">Alamat Pasien</h3>
-                <table class="table">
-                  <tbody>
-                    <tr>
-                      <td width="40%"><b>Kota/Kabupaten</b></td>
-                      <td width="60%">{{data?data.nama_kota:null}}</td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Kecamatan</b></td>
-                      <td width="60%">{{data?data.reg_kecamatan:null}}</td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Kelurahan/Desa</b></td>
-                      <td width="60%">{{data?(data.reg_kelurahan):null=='P'?'Perempuan':'Laki-laki'}}</td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Rt / Rw</b></td>
-                      <td width="60%">{{data.reg_rt ? data.reg_rt : '-'}} / {{data.reg_rw ? data.reg_rw: '-'}}</td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Alamat Lengkap</b></td>
-                      <td width="60%">{{data.reg_alamat?data.reg_alamat:'-'}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-              </div>
-
-              <div class="col-md-6">
-                <h3 class="header-title mt-2 mb-2">Identitas Sampel</h3>
-                <table class="table">
-                  <tbody>
-                    <tr>
-                      <td width="40%"><b>Nomor Sampel</b></td>
-                      <td width="60%">
-                        {{ data.reg_sampel_nomor }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Swab ke</b></td>
-                      <td width="60%">
-                        {{ data.reg_swab_ke }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Tanggal Swab</b></td>
-                      <td width="60%">
-                        {{ data.reg_tanggal_swab | formatDate}}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td width="40%"><b>Keterangan</b></td>
-                      <td width="60%">{{data?data.reg_keterangan:null}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-              </div>
+            <div class="col-md-7 flex-text-center">
+              {{ instansiPengirim }}
             </div>
           </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Nama Rumah Sakit/Dinkes
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_nama_rs || null}}
+            </div>
+          </div>
+        </Ibox>
 
+        <Ibox title="Identitas Pasien">
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              NIK
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_nik || null}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Nama Lengkap Pasien
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_nama_pasien || null}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Jenis Kelamin
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data && data.reg_jk ? data.reg_jk === "L" ? "Laki-Laki" : "Perempuan" : null }}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Tempat Lahir
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_tempatlahir || null}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Tanggal Lahir
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_tgllahir | formatDate}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Kategori
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_sumber_pasien || null}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Kriteria Pasien
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_status ? pasienStatus.find(x => x.value == data.reg_status).text : null }}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Usia
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{usiaPasien}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              No HP
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_nohp}}
+            </div>
+          </div>
+        </Ibox>
+      </div>
+
+      <div class="col-md-6">
+        <Ibox title="Alamat Pasien">
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Kota / Kabupaten
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_nama_kota || null}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Kecamatan
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_nama_kecamatan || null}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Kelurahan/Desa
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_nama_kelurahan || null}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              RT / RW
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_rt ? data.reg_rt : '-'}} / {{data.reg_rw ? data.reg_rw: '-'}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Alamat Lengkap
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_alamat || null}}
+            </div>
+          </div>
+        </Ibox>
+
+        <Ibox title="Identitas Sampel">
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Nomor Sampel
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_sampel_nomor || null}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Swab ke
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_swab_ke || null}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Tanggal Swab
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_tanggal_swab | formatDate}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Keterangan
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.reg_keterangan || null}}
+            </div>
+          </div>
+        </Ibox>
+        <Ibox title="Riwayat Perubahan">
+          <div class="col-12">
+           <Timeline :data="logs" />
+          </div>
         </Ibox>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -149,6 +206,12 @@
     mapState
   } from 'vuex'
   import axios from 'axios'
+  import {
+    getHumanAge, humanize
+  } from '~/utils';
+  import {
+    pasienStatus
+  } from '~/assets/js/constant/enum';
 
   export default {
     middleware: 'auth',
@@ -162,6 +225,12 @@
         data: resp.data
       }
     },
+    data() {
+      return {
+        pasienStatus,
+        logs: null
+      }
+    },
     computed: {
       registerId() {
         return this.$route.params.register_id;
@@ -169,28 +238,23 @@
       pasienId() {
         return this.$route.params.pasien_id;
       },
-      umurPasien() {
-        if (this.data.reg_tgllahir) {
-          let tglLahir = new Date(this.data.reg_tgllahir);
-          let today_date = new Date();
-          let today_year = today_date.getFullYear();
-          let today_month = today_date.getMonth();
-          let today_day = today_date.getDate();
-
-          var age = today_date.getFullYear() - tglLahir.getFullYear();
-          var m = today_date.getMonth() - tglLahir.getMonth();
-          if (m < 0 || (m === 0 && today_date.getDate() < tglLahir.getDate())) {
-            age--;
+      usiaPasien() {
+        if (this.data && this.data.reg_usia_tahun) {
+          if (this.data && this.data.reg_usia_bulan) {
+            return `${this.data.reg_usia_tahun} tahun ${this.data.reg_usia_bulan} bulan`;
           }
-
-          return `${age} tahun`;
-        }
-
-        if (this.data.reg_usia_tahun) {
           return `${this.data.reg_usia_tahun} tahun`;
         }
-
+        if (this.data.reg_tgllahir) {
+          return getHumanAge(this.data.reg_tgllahir);
+        }
         return "";
+      },
+      instansiPengirim() {
+        if(this.data.reg_fasyankes_pengirim) {
+          return humanize(this.data.reg_fasyankes_pengirim)
+        }
+        return ""
       }
     },
     methods: {
@@ -213,6 +277,18 @@
               'error'
             );
           })
+      },
+      getLogs(id) {
+        let url = `v1/register/logs/${id}`
+        let self = this
+        axios
+          .get(url)
+          .then(function (response) {
+              self.logs = response.data.result; // Data existed
+          })
+          .catch(function (err) {
+              console.log(err);
+        });
       }
     },
     head() {
@@ -221,7 +297,7 @@
       }
     },
     created() {
-      // this.getData();
+      this.getLogs(this.$route.params.register_id)
     },
   }
 </script>

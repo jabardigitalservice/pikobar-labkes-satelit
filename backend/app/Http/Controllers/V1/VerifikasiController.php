@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Enums\RoleEnum;
 use App\Exports\AjaxTableExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreHasilPemeriksaan;
@@ -27,12 +28,26 @@ class VerifikasiController extends Controller
      */
     public function index(Request $request, $isData = false)
     {
+        $user = Auth::user();
         $models = Sampel::leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
             ->leftJoin('register', 'sampel.register_id', 'register.id')
             ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
             ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
             ->leftJoin('kota', 'kota.id', 'pasien.kota_id')
-            ->where('sampel.sampel_status', 'pcr_sample_analyzed');
+            ->where('sampel.sampel_status', 'pcr_sample_analyzed')
+            ->whereNull('register.deleted_at');
+
+        if ($user->role_id == RoleEnum::PERUJUK()->getIndex()) {
+            $models = $models->where('register.perujuk_id', $user->perujuk_id);
+            $models = $models->where('sampel.perujuk_id', $user->perujuk_id);
+            $models = $models->where('pasien.perujuk_id', $user->perujuk_id);
+        }
+
+        if ($user->role_id == RoleEnum::LABORATORIUM()->getIndex()) {
+            $models = $models->where('register.lab_satelit_id', $user->lab_satelit_id);
+            $models = $models->where('sampel.lab_satelit_id', $user->lab_satelit_id);
+            $models = $models->where('pasien.lab_satelit_id', $user->lab_satelit_id);
+        }
 
         $params = $request->get('params', false);
         $search = $request->get('search', false);
@@ -67,10 +82,11 @@ class VerifikasiController extends Controller
                         $models->where('pasien.kota_id', $val);
                         break;
                     case 'nama_pasien':
-                        $models->where('pasien.nama_lengkap', 'ilike', '%' . $val . '%');
+                        $models->where('pasien.nama_lengkap', 'ilike', '%' . $val . '%')
+                            ->orWhere('pasien.nik', 'ilike', '%' . $val . '%');
                         break;
-                    case 'instansi_pengirim':
-                        $models->where('register.instansi_pengirim_nama', 'ilike', '%' . $val . '%');
+                    case "fasyankes_id":
+                        $models = $models->where('register.fasyankes_id', $val);
                         break;
                     case 'start_date':
                         $models->whereDate('waktu_pcr_sample_analyzed', '>=', date('Y-m-d', strtotime($val)));
@@ -82,16 +98,12 @@ class VerifikasiController extends Controller
                         $models->where('register.sumber_pasien', 'ilike', '%' . $val . '%');
                         break;
                     case 'status':
-                        $models->where('status', 'ilike', '%' . $val . '%');
+                        $models->where('register.status', $val);
                         break;
                     default:
                         break;
                 }
             }
-        }
-
-        if (Auth::user()->lab_satelit_id != null) {
-            $models->where('sampel.lab_satelit_id', Auth::user()->lab_satelit_id);
         }
 
         $count = $models->count();
@@ -151,8 +163,9 @@ class VerifikasiController extends Controller
     public function export(Request $request)
     {
         $models = $this->index($request, true);
+        $no = (int)($request->get('page', 1) - 1) * $request->get('perpage', 500) + 1;
         foreach ($models as $idx => &$model) {
-            $model->no = $idx + 1;
+            $model->no = $no++;
         }
         $header = [
             'No',
@@ -169,7 +182,7 @@ class VerifikasiController extends Controller
             'Desa/Kelurahan',
             'Kecamatan',
             'Kota/Kab',
-            'Status',
+            'Kriteria',
             'Instansi Pengirim',
             'Nama Instansi',
             'Jenis Sampel',
@@ -191,19 +204,19 @@ class VerifikasiController extends Controller
                 $model->jenis_kelamin,
                 parseDate($model->tanggal_lahir),
                 $model->usia_tahun,
-                $model->alamat_lengkap,
+                $this->__getAlamat($model),
                 $model->kelurahan,
                 $model->kecamatan,
-                $model->kota_id,
-                $model->status,
-                $model->instansi_pengirim,
+                $model->nama_kota,
+                $model->status ? STATUSES[$model->status] : null,
+                $model->instansi_pengirim == 'rumah_sakit' ? 'rumah sakit' : $model->instansi_pengirim,
                 $model->instansi_pengirim_nama,
                 $model->jenis_sampel_nama,
                 $model->swab_ke,
                 parseDate($model->tanggal_swab),
                 $model->kesimpulan_pemeriksaan,
                 parseDate($model->waktu_pcr_sample_analyzed),
-                $this->__getKeterangan($model),
+                $model->catatan_pemeriksaan,
             ];
         };
         $column_format = [
@@ -220,6 +233,14 @@ class VerifikasiController extends Controller
             return 'baru';
         }
         return '';
+    }
+
+    private function __getAlamat($model)
+    {
+        $alamat = $model->alamat_lengkap;
+        $alamat .= ' RT/RW ';
+        $alamat .= $model->no_rt . '/' . $model->no_rw;
+        return $alamat;
     }
 
     /**
@@ -430,7 +451,12 @@ class VerifikasiController extends Controller
                 'catatan_pemeriksaan' => $request->input('catatan_pemeriksaan') != '' ? $request->input('catatan_pemeriksaan') : null,
                 'hasil_deteksi' => $this->parseHasilDeteksi($request->hasil_deteksi),
             ]);
-
+            $pcr = PemeriksaanSampel::with('sampel')->find($request->input('last_pemeriksaan_id'));
+            $pcr->sampel->addLog([
+                'user_id' => $request->user()->id,
+                'metadata' => $pcr,
+                'description' => "PCR Sample analyzed as [$pcr->kesimpulan_pemeriksaan]",
+            ]);
             DB::commit();
 
             return response()->json([

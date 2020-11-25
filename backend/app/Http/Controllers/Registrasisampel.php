@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Exports\RegisMandiriExport;
 use App\Models\Register;
-use App\Models\Sampel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,10 +11,16 @@ class Registrasisampel extends Controller
 {
     public function getData(Request $request)
     {
+        $user = Auth::user();
         $models = Register::leftJoin('pasien_register', 'register.id', 'pasien_register.register_id')
             ->leftJoin('pasien', 'pasien.id', 'pasien_register.pasien_id')
             ->leftJoin('sampel', 'register.id', 'sampel.register_id')
-            ->leftJoin('kota', 'kota.id', 'pasien.kota_id');
+            ->leftJoin('kota', 'kota.id', 'pasien.kota_id')
+            ->where('register.lab_satelit_id', $user->lab_satelit_id)
+            ->where('sampel.lab_satelit_id', $user->lab_satelit_id)
+            ->where('pasien.lab_satelit_id', $user->lab_satelit_id)
+            ->whereNull('sampel.deleted_at');
+
         $params = $request->get('params', false);
         $search = $request->get('search', false);
         $order = $request->get('order', 'name');
@@ -34,10 +39,6 @@ class Registrasisampel extends Controller
             });
         }
 
-        if (Auth::user()->lab_satelit_id != null) {
-            $models->where('register.lab_satelit_id', Auth::user()->lab_satelit_id);
-        }
-
         if ($params) {
             foreach (json_decode($params) as $key => $val) {
                 if ($val == '') {
@@ -49,10 +50,6 @@ class Registrasisampel extends Controller
                         $models = $models->where('pasien.nama_lengkap', 'ilike', '%' . $val . '%')
                             ->orWhere('pasien.nik', 'ilike', '%' . $val . '%');
                         break;
-                    case "nomor_sampel":
-                        $sampel = Sampel::where('nomor_sampel', $val)->pluck('register_id');
-                        $models = $models->whereIn('register.id', $sampel);
-                        break;
                     case "start_date":
                         $models = $models->whereDate('sampel.waktu_sample_taken', '>=', date('Y-m-d', strtotime($val)));
                         break;
@@ -62,14 +59,17 @@ class Registrasisampel extends Controller
                     case "kota":
                         $models = $models->where('pasien.kota_id', $val);
                         break;
-                    case "instansi_pengirim_nama":
-                        $models = $models->where('register.instansi_pengirim_nama', 'ilike', '%' . $val . '%');
+                    case "fasyankes_id":
+                        $models = $models->where('register.fasyankes_id', $val);
                         break;
                     case "sumber_pasien":
                         $models = $models->where('register.sumber_pasien', 'ilike', '%' . $val . '%');
                         break;
                     case "status":
                         $models = $models->where('register.status', 'ilike', '%' . $val . '%');
+                        break;
+                    case "nomor_sampel":
+                        $models = $models->where('sampel.nomor_sampel', 'ilike', '%' . $val . '%');
                         break;
                     default:
                         break;
@@ -88,7 +88,7 @@ class Registrasisampel extends Controller
             }
 
             switch ($order) {
-                case 'nama_lengkap':
+                case 'nama_pasien':
                     $models = $models->orderBy('pasien.nama_lengkap', $order_direction);
                     break;
                 case 'tgl_input':
@@ -98,7 +98,7 @@ class Registrasisampel extends Controller
                     $models = $models->orderBy('kota.nama', $order_direction);
                     break;
                 case 'instansi_pengirim_nama':
-                    $models = $models->orderBy('register.instansi_pengirim_nama', $order_direction);
+                    $models = $models->orderBy('register.nama_rs', $order_direction);
                     break;
                 case 'no_sampel':
                     $models = $models->orderBy('sampel.nomor_sampel', $order_direction);
@@ -113,8 +113,7 @@ class Registrasisampel extends Controller
                     break;
             }
         }
-        $models = $models->select('pasien.*', 'sampel.*', 'kota.nama as nama_kota', 'pasien_register.*', 'register.sumber_pasien',
-            'register.*');
+        $models = $models->select('nik', 'nama_lengkap', 'tanggal_lahir', 'usia_tahun', 'nomor_sampel', 'kota.nama as nama_kota', 'pasien_register.*', 'register.sumber_pasien', 'status', 'waktu_sample_taken', 'nama_rs');
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
         $result = [

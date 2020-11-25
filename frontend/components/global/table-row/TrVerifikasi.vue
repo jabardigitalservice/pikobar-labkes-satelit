@@ -6,11 +6,15 @@
       <span>{{ item.jam_input_hasil }}</span>
     </td>
 
-    <td>{{item.nomor_sampel}}</td>
+    <td>
+      <div class="badge badge-white" style="text-align:left; padding:10px">
+        {{item.nomor_sampel}}
+      </div>
+    </td>
     <td nowrap>
-      <span>{{item.nama_lengkap}}</span>
-      <span class="nik">NIK. {{item.nik}}</span>
-      <span class="usia">{{ usiaPasien }}</span>
+      <div v-if="item.nama_lengkap" style="text-transform: capitalize;"><b>{{ item.nama_lengkap }}</b></div>
+      <div v-if="item.nik" class="text-muted">{{ item.nik }}</div>
+      <div class="text-muted">{{ usiaPasien || null }}</div>
     </td>
     <td>
       <span>{{item.nama_kota}}</span>
@@ -24,25 +28,23 @@
       </div>
     </td>
     <td style="text-transform: capitalize;">
-      {{item.status ? item.status.toUpperCase() : null}}
+      {{item.status ? pasienStatus.find(x => x.value == item.status).text : null }}
     </td>
     <td style="text-transform: capitalize;">
       {{item.sumber_pasien}}
     </td>
     <td style="text-transform: capitalize;">
       {{item.kesimpulan_pemeriksaan}}
-      <span v-if="item.kesimpulan_pemeriksaan == 'positif' && item.status != 'positif'">Baru</span>
-      <span v-else-if="item.kesimpulan_pemeriksaan == 'positif' && item.status == 'positif'">Lama</span>
     </td>
     <td>{{item.catatan_pemeriksaan}}</td>
     <td width="20%">
-      <nuxt-link tag="a" class="mb-1 text-nowrap btn btn-success btn-sm"
-        :to="`/hasil-pemeriksaan/detail/${item.sampel_id}`" title="Klik untuk melihat detail">
-        <i class="uil-info-circle"></i>
+      <nuxt-link tag="a" class="mb-1 btn btn-yellow btn-sm" :to="`/hasil-pemeriksaan/detail/${item.sampel_id}`"
+        title="Klik untuk melihat detail">
+        <i class="uil-info-circle" />
       </nuxt-link>
-      <nuxt-link :to="`/hasil-pemeriksaan/edit/${item.sampel_id}`" class="mb-1 text-nowrap btn btn-warning btn-sm"
-        tag="a">
-        <i class="fa fa-edit"></i>
+      <nuxt-link :to="`/hasil-pemeriksaan/edit/${item.sampel_id}`" class="mb-1 btn btn-primary btn-sm" tag="a"
+        title="Klik untuk edit data">
+        <i class="fa fa-edit" />
       </nuxt-link>
     </td>
   </tr>
@@ -50,7 +52,9 @@
 <script>
   import Form from "vform";
   import axios from "axios";
-
+  import {
+    pasienStatus
+  } from '~/assets/js/constant/enum';
   export default {
     props: ["item", "pagination", "rowparams", "index"],
     components: {},
@@ -64,7 +68,8 @@
 
       return {
         loading,
-        form
+        form,
+        pasienStatus
       };
     },
     methods: {

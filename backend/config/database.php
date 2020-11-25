@@ -78,6 +78,21 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'labkes' => [
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST_LABKES', '127.0.0.1'),
+            'port' => env('DB_PORT_LABKES', '5432'),
+            'database' => env('DB_DATABASE_LABKES', 'forge'),
+            'username' => env('DB_USERNAME_LABKES', 'forge'),
+            'password' => env('DB_PASSWORD_LABKES', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),

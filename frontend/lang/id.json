@@ -3,6 +3,16 @@
     "path": {
       "settings": "Setting"
     },
+    "registrasi": {
+      "sampel": "Registrasi Sampel",
+      "index": {
+        "tambah": "Tambah Registrasi Baru",
+        "detail": "Detail Registrasi",
+        "update": "Edit Data Registrasi",
+        "import-excel": "Import Excel",
+        "export-excel": "Export Excel"
+      }
+    },
     "sample": {
       "index": "Penerimaan Sampel",
       "add": "Pengambilan / Penerimaan Sampel Baru"
@@ -48,17 +58,30 @@
       "input": "Input Analisa",
       "list-hasil-pemeriksaan": "Hasil Pemeriksaan",
       "list-hasil-inkonklusif": "Hasil Sampel Invalid"
+    },
+    "user": {
+      "index": "Pengguna",
+      "show": "Lihat"
+    },
+    "registration": {
+      "index": "Registrasi"
     }
-
   },
   "ok": "Ok",
   "cancel": "Batal",
+  "alert_confirm_invalid_title": "Apakah Anda Yakin Menandai Sampel Menjadi Invalid?",
+  "alert_confirm_invalid_text": "Setelah sampel menjadi invalid, data tidak dapat dikembalikan. Masukkan keterangan invalid:",
+  "alert_confirm_proses_text": "Setelah sampel menjadi diproses, data tidak dapat dikembalikan. Masukkan keterangan proses:",
+  "alert_confirm_delete_title": "Hapus Data",
+  "alert_confirm_delete_text": "Apakah kamu yakin ingin menghapus data ini?",
+  "alert_confirm_musnahkan_text": "Anda tidak dapat mengembalikan data yang telah dimusnahkan!",
   "error_alert_title": "Mohon maaf...",
   "error_alert_text": "Mohon mencoba lagi.",
   "token_expired_alert_title": "Sesi habis!",
   "token_expired_alert_text": "Mohon login lagi untuk melanjutkan.",
   "login": "Log In",
   "register": "Daftar",
+  "coordinator": "Koordinator",
   "page_not_found": "Halaman Tidak Ditemukan",
   "go_home": "Kembali ke Beranda",
   "logout": "Logout",
@@ -68,6 +91,7 @@
   "forgot_password": "Lupa Password?",
   "confirm_password": "Konfirmasi Password",
   "name": "Nama",
+  "username": "Nama Pengguna",
   "toggle_navigation": "Navigasi",
   "home": "Beranda",
   "you_are_logged_in": "Anda sudah login!",
@@ -88,6 +112,7 @@
   "resend_verification_link": "Kirim ulang Link Verifikasi ?",
   "failed_to_verify_email": "Gagal untuk verifikasi email.",
   "verify_email_address": "Email verifikasi telah berhasil dikirim.",
+  "checking": "Checking",
   "aktivitas": {
     "label": "Aktivitas",
     "list_of": "Daftar Aktivitas",
@@ -140,8 +165,8 @@
     "show": "Tampilkan",
     "nodata_show": "Tidak ada data",
     "search": "Cari",
-    "number": "No",
-    "actions": "Aksi",
+    "number": "NO",
+    "actions": "AKSI",
     "previous": "Sebelumnya",
     "next": "Selanjutnya",
     "to": "Sampai"
@@ -162,7 +187,8 @@
     "back": "Kembali",
     "success": "Sukses",
     "error": "Error",
-    "no": "Tidak"
+    "no": "Tidak",
+    "save": "Simpan"
   },
   "generic": {
     "loading": "Loading",

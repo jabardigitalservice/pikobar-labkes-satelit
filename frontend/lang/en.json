@@ -36,6 +36,7 @@
   "resend_verification_link": "Resend Verification Link ?",
   "failed_to_verify_email": "Failed to verify email.",
   "verify_email_address": "We sent you an email with an the verification link.",
+  "checking": "Sedang Memeriksa",
   "aktivitas": {
     "list_of": "Daftar Aktivitas"
   },
@@ -43,11 +44,12 @@
     "show": "Tampilkan",
     "nodata_show": "Tidak ada data",
     "search": "Cari",
-    "number": "No",
-    "actions": "Aksi",
+    "number": "NO",
+    "actions": "AKSI",
     "previous": "Sebelumnya",
     "next": "Selanjutnya",
-    "to": "Sampai"
+    "to": "Sampai",
+    "save": "Simpan"
   },
   "common": {
     "data_saved_successfully": "Data berhasil disimpan",
@@ -65,6 +67,7 @@
     "back": "Kembali",
     "success": "Sukses",
     "error": "Error",
-    "no": "Tidak"
+    "no": "Tidak",
+    "save": "Simpan"
   }
 }

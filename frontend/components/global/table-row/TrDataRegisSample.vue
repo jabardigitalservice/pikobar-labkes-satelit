@@ -1,122 +1,194 @@
 <template>
-    <tr>
-        <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
-        <td>
-            <p>
-                <b>NIK :</b>
-                {{ item.nik }}
-            </p>
-            <p>
-                <b>Nama :</b>
-                {{ item.nama_lengkap }}
-            </p>
-            <p>
-                <b>Usia :</b>
-                {{ umurPasien }}
-            </p>
-        </td>
-        <td>{{item.nama_kota}}</td>
-        <td>{{item.instansi_pengirim_nama}}</td>
-        <td>{{item.nomor_sampel}}</td>
-        <td>{{item.sumber_pasien}}</td>
-        <td>{{item.status ? item.status.toUpperCase() : null}}</td>
-        <td>{{item.waktu_sample_taken | formatDate}}</td>
-        <td>
-            <p class="badge badge-danger"
-                v-if="(item.nik==null || item.nik=='') || (item.nama_lengkap==null || item.nama_lengkap=='')">
-                data_belum_lengkap</p>
-            <p class="badge badge-primary"
-                v-if="(item.nik!=null && item.nik!='') && (item.nama_lengkap!=null && item.nama_lengkap!='')">
-                data_lengkap</p>
-        </td>
-        <td v-if="config.has_action">
-            <nuxt-link :to="`/registrasi/sampel/detail/${item.register_id}/${item.pasien_id}`"
-                class="mb-1 btn btn-success btn-sm">
-                <i class="fa fa-eye"></i>
-            </nuxt-link>
-            <nuxt-link :to="`/registrasi/sampel/update/${item.register_id}/${item.pasien_id}`"
-                class="mb-1 btn btn-primary btn-sm">
-                <i class="fa fa-edit"></i>
-            </nuxt-link>
-            <a href="#" class="mb-1 btn btn-danger btn-sm" @click="deleteData(item.register_id, item.pasien_id)">
-                <i class="fa fa-trash"></i>
-            </a>
-        </td>
-    </tr>
+  <tr>
+    <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
+    <td>
+      <div class="badge badge-white" style="text-align:left; padding:10px">
+        {{item.nomor_sampel}}
+      </div>
+    </td>
+    <td nowrap>
+      <div v-if="item.nama_lengkap" style="text-transform: capitalize;"><b>{{ item.nama_lengkap }}</b></div>
+      <div v-if="item.nik" class="text-muted">{{ item.nik }}</div>
+      <div class="text-muted">{{ usiaPasien || null }}</div>
+    </td>
+    <td>{{item.nama_kota}}</td>
+    <td>{{item.nama_rs}}</td>
+    <td>{{item.sumber_pasien}}</td>
+    <td>{{item.status ? pasienStatus.find(x => x.value == item.status).text : null }}</td>
+    <td nowrap>
+      <div><b>{{ item.waktu_sample_taken ? momentFormatDate(item.waktu_sample_taken) : null }}</b></div>
+      <div class="text-muted">
+        {{ item.waktu_sample_taken ? 'pukul ' + momentFormatTime(item.waktu_sample_taken) : null }}</div>
+    </td>
+    <td>
+      <div class="text-red"
+        v-if="(item.nik==null || item.nik=='') || (item.nama_lengkap==null || item.nama_lengkap=='')">
+        <b>Data Belum Lengkap</b>
+      </div>
+      <div class="text-yellow"
+        v-if="(item.nik!=null && item.nik!='') && (item.nama_lengkap!=null && item.nama_lengkap!='')">
+        <b>Data Lengkap</b>
+      </div>
+    </td>
+    <td v-if="config.has_action">
+      <nuxt-link :to="`/registrasi/sampel/detail/${item.register_id}/${item.pasien_id}`"
+        class="mb-1 btn btn-yellow btn-sm" title="Klik untuk melihat detail">
+        <i class="fa fa-eye" />
+      </nuxt-link>
+      <nuxt-link :to="`/registrasi/sampel/update/${item.register_id}/${item.pasien_id}`"
+        class="mb-1 btn btn-primary btn-sm" title="Klik untuk edit data">
+        <i class="fa fa-edit" />
+      </nuxt-link>
+      <button class="mb-1 btn btn-danger btn-sm" @click="deleteData(item, usiaPasien)" title="Klik untuk hapus data">
+        <i class="fa fa-trash" />
+      </button>
+    </td>
+  </tr>
 </template>
 <script>
-    import axios from "axios";
-    export default {
-        props: ["item", "pagination", "rowparams", "index", "config"],
-        data() {
-            return {};
-        },
-        methods: {
-            async deleteData(id, pasien) {
-                this.$swal
-                    .fire({
-                        title: "Apakah Anda Yakin ?",
-                        text: "untuk menghapus data",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Ya",
-                        cancelButtonText: "Tidak"
-                    })
-                    .then(result => {
-                        if (result.value) {
-                            axios
-                                .delete("v1/register/sampel/" + id + "/" + pasien)
-                                .then(response => {
-                                    this.$swal.fire(
-                                        "Berhasil Menghapus Data",
-                                        "Data Berhasil dihapus",
-                                        "success"
-                                    );
-                                    this.$bus.$emit("refresh-ajaxtable", "registrasi-sampel");
-                                })
-                                .catch(error => {
-                                    this.$swal.fire(
-                                        "Terjadi Kesalahan",
-                                        "Gagal menghapus data, silakan coba kembali",
-                                        "error"
-                                    );
-                                });
-                        }
-                    });
-            },
-            showDetail(item) {
-                const payload = {
-                    id: item.nomor_register,
-                    data: item
-                };
-                this.$store.dispatch("register/saveData", payload);
-                this.$router.push("/registrasi/mandiri/detail");
-            }
-        },
-        computed: {
-            umurPasien() {
-                if (this.item.usia_tahun) {
-                    return `${this.item.usia_tahun} tahun`;
-                }
-
-                if (this.item.tanggal_lahir) {
-                    let tglLahir = new Date(this.item.tanggal_lahir);
-                    let today_date = new Date();
-                    let today_year = today_date.getFullYear();
-                    let today_month = today_date.getMonth();
-                    let today_day = today_date.getDate();
-
-                    var age = today_date.getFullYear() - tglLahir.getFullYear();
-                    var m = today_date.getMonth() - tglLahir.getMonth();
-                    if (m < 0 || (m === 0 && today_date.getDate() < tglLahir.getDate())) {
-                        age--;
-                    }
-                    return `${age} tahun`;
-                }
-                return "-";
-            }
+  import axios from "axios";
+  import {
+    pasienStatus
+  } from '~/assets/js/constant/enum';
+  import {
+    getHumanAge,
+    getAlertPopUp,
+    momentFormatDate,
+    momentFormatTime,
+    getKeteranganData
+  } from '~/utils';
+  export default {
+    props: ["item", "pagination", "rowparams", "index", "config"],
+    data() {
+      return {
+        pasienStatus,
+        momentFormatDate,
+        momentFormatTime
+      };
+    },
+    methods: {
+      async deleteData(item, usia) {
+        const content = `
+          <div class="row flex-content-center">
+            ${this.$t("alert_confirm_delete_text")}
+          </div>
+          <div class="row col-lg-12 flex-content-center mt-4" style="font-size: 12px">
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Nomor Sampel
+              </div>
+              <div class="col-md-7 flex-left">
+                ${item.nomor_sampel || '-'}
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Pasien
+              </div>
+              <div class="col-md-7">
+                <div class="flex-left" style="text-transform: capitalize">${item.nama_lengkap || '-'}</div>
+                <div class="flex-left">${item.nik || ''}</div>
+                <div class="flex-left">${usia}</div>
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Domisili
+              </div>
+              <div class="col-md-7 flex-left">
+                ${item.nama_kota || '-'}
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Instansi
+              </div>
+              <div class="col-md-7 flex-left">
+                ${item.nama_rs || '-'}
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Kategori
+              </div>
+              <div class="col-md-7 flex-left">
+                ${item.sumber_pasien || '-'}
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Kriteria
+              </div>
+              <div class="col-md-7 flex-left">
+                ${item.status ? pasienStatus.find(x => x.value == item.status).text : '-'}
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Tanggal Input
+              </div>
+              <div class="col-md-7">
+                <div class=" flex-left">
+                  ${momentFormatDate(item.waktu_sample_taken)}, ${momentFormatTime(item.waktu_sample_taken)}
+                </div>
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Keterangan
+              </div>
+              <div class="col-md-7 flex-left">
+                ${getKeteranganData(item.nik, item.nama_lengkap)}
+              </div>
+            </div>
+          </div>
+        `;
+        let swal = this.$swal;
+        let toast = this.$toast;
+        let bus = this.$bus;
+        const swalCustom = swal.mixin({
+          customClass: {
+            confirmButton: 'btn btn-danger btn-md ml-2',
+            cancelButton: 'btn btn-clear btn-md'
+          },
+          buttonsStyling: false
+        });
+        const {
+          value: isConfirm
+        } = await swalCustom.fire(getAlertPopUp('delete', content));
+        if (isConfirm) {
+          try {
+            await this.$axios.delete(`v1/register/sampel/${item.register_id}/${item.pasien_id}`);
+            toast.success('Berhasil menghapus data', {
+              icon: 'check',
+              iconPack: 'fontawesome',
+              duration: 5000
+            })
+            await bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
+          } catch (e) {
+            swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
+          }
         }
-    };
+      },
+      showDetail(item) {
+        const payload = {
+          id: item.nomor_register,
+          data: item
+        };
+        this.$store.dispatch("register/saveData", payload);
+        this.$router.push("/registrasi/mandiri/detail");
+      }
+    },
+    computed: {
+      usiaPasien() {
+        if (this.item.usia_tahun && this.item.usia_bulan) {
+          return `${this.item.usia_tahun} tahun ${this.item.usia_bulan} bulan`;
+        }
+        if (this.item.tanggal_lahir) {
+          return getHumanAge(this.item.tanggal_lahir);
+        }
+        return "";
+      }
+    }
+  };
 </script>

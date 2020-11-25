@@ -82,16 +82,24 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/get-data', 'PemeriksaanSampleController@getData');
         Route::get('/get-dikirim', 'PemeriksaanSampleController@getDikirim');
     });
+
+    Route::group(['prefix' => 'lab-satelit'], function() {
+        Route::get('/', 'LabSatelitController@listLabsatelit');
+    });
 });
 
 Route::group(['middleware' => ['guest:api', 'cors']], function () {
     Route::post('login', 'Auth\LoginController@login');
+    Route::post('/v1/user/register', 'V1\UserController@register')->name('api.user.register');
+    Route::get('/v1/user/register/{invite:token}', 'V1\UserController@tokenInfo')->name('api.user.tokenInfo');
+
 });
 
 Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1'], function () {
 
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/tracking', 'DashboardController@tracking');
+        Route::get('/pasien-diperiksa', 'DashboardController@pasienDiperiksa');
         Route::get('/ekstraksi', 'DashboardController@ekstraksi');
         Route::get('/registrasi', 'DashboardController@registrasi');
         Route::get('/pcr', 'DashboardController@pcr');
@@ -103,6 +111,14 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::get('counter-terverifikasi', 'DashboardVerifikasiController@getCountVerified');
         Route::get('counter-belum-validasi', 'DashboardValidasiController@getCountUnvalidate');
         Route::get('counter-tervalidasi', 'DashboardValidasiController@getCountValidated');
+    });
+
+    Route::group(['prefix' => 'dashboard-admin'], function () {
+        Route::get('/tracking', 'DashboardAdminController@tracking');
+        Route::get('/chart-hasil-pemeriksaan', 'DashboardAdminController@chartHasilPemeriksaan');
+        Route::get('/chart-trendline', 'DashboardAdminController@chartTrendline');
+        Route::get('/chart-hasil-pemeriksaan-by-kota', 'DashboardAdminController@chartHasilPemeriksaanByKota');
+        Route::get('/chart-register-by-fasyankes', 'DashboardAdminController@chartRegisterByFasyankes');
     });
 
     Route::group(['prefix' => 'chart'], function () {
@@ -144,6 +160,9 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::get('/cek-nomor-sampel', 'SampelController@cekNomorSampel');
     });
 
+    Route::get('list-negara', 'KotaController@listNegara');
+    Route::get('list-provinsi', 'KotaController@listProvinsi');
+    Route::get('list-kota/{provinsi}', 'KotaController@listKota');
     Route::get('list-kota-jabar', 'KotaController@listKota');
     Route::get('list-kecamatan/{kota}', 'KotaController@listKecamatan');
     Route::get('list-kelurahan/{kec}', 'KotaController@listKelurahan');
@@ -165,6 +184,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::post('sampel/update/{regis_id}/{pasien_id}', 'RegistersampelController@storeUpdate');
         Route::get('sampel/{register_id}/{pasien_id}', 'RegistersampelController@getById');
         Route::delete('sampel/{id}/{pasien}', 'RegistersampelController@delete');
+        Route::get('logs/{register_id}', 'RegistersampelController@logs');
 
         Route::get('/', 'RegisterListController@index');
 
@@ -190,16 +210,11 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::post('import-rujukan', 'ImportRegisterController@importRegisterRujukan');
 
         Route::group(['prefix' => 'rujukan'], function () {
-
             Route::post('store', 'RegisterRujukanController@store');
 
             Route::get('detail/{register}', 'RegisterRujukanController@show');
 
             Route::post('update/{register}', 'RegisterRujukanController@update');
-
-            // Route::delete('delete/{register}', 'RegisterRujukanController@destroy');
-            Route::delete('delete/{id}/{pasien}', 'RegistrasiRujukanController@delete');
-
         });
 
     });
@@ -266,8 +281,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
 
         Route::get('detail/{sampel}', 'ValidasiController@show');
 
-        // Route::get('get-sampel-status', 'ValidasiController@sampelStatusList');
-
         Route::post('edit-status-sampel/{sampel}', 'ValidasiController@updateToValidate');
 
         Route::get('list-validator', 'ValidasiController@getValidator');
@@ -295,6 +308,36 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
     //pelaporan
     Route::group(['prefix' => 'pelaporan'], function () {
         Route::get('fetch', 'PelaporanController@fetch_data');
+    });
+
+    Route::get('download', 'FileDownloadController@download');
+
+
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/', 'UserController@index')->name('api.user.index');
+        Route::get('/{user:id}', 'UserController@show')->name('api.user.show');
+        Route::put('/{user:id}', 'UserController@update')->name('api.user.update');
+        Route::delete('/{user:id}', 'UserController@delete')->name('api.user.delete');
+        Route::post('/invite', 'UserInvitationController')->name('api.user.invite');
+        Route::put('/status-toggle/{user:id}', 'UserController@statusToggle')->name('api.user.statusToggle');
+    });
+
+    Route::group(['prefix' => 'perujuk'], function () {
+        Route::get('/', 'PerujukController@index');
+        Route::post('/store', 'PerujukController@store');
+        Route::get('/detail/{id}', 'PerujukController@show');
+        Route::post('/update/{id}', 'PerujukController@update');
+        Route::delete('/delete/{id}', 'PerujukController@delete');
+    });
+
+    Route::group(['prefix' => 'register-perujuk'], function () {
+        Route::get('/', 'RegisterPerujukController@index');
+        Route::post('/store', 'RegisterPerujukController@store');
+        Route::get('/detail/{id}', 'RegisterPerujukController@show');
+        Route::post('/bulk', 'RegisterPerujukController@bulk');
+        Route::post('/import', 'RegisterPerujukController@import');
+        Route::post('/update/{id}', 'RegisterPerujukController@update');
+        Route::delete('/delete/{id}', 'RegisterPerujukController@delete');
     });
 });
 

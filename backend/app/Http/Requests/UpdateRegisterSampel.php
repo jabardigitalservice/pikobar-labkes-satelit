@@ -26,24 +26,30 @@ class UpdateRegisterSampel extends FormRequest
     public function rules()
     {
         return [
-            'reg_instansi_pengirim' => 'required',
-            'reg_instansi_pengirim_nama' => 'required',
+            'reg_fasyankes_id' => 'required',
+            'reg_fasyankes_pengirim' => 'required',
+            'reg_nama_rs' => 'required',
             'reg_nama_pasien' => 'required',
             'reg_nik' => 'nullable|digits:16',
             'reg_sampel_jenis_sampel' => 'required',
             'reg_sampel_nomor' => 'required',
+            'reg_sumber_pasien' => 'required',
+            'reg_nohp' => 'required'
         ];
     }
 
     public function messages()
     {
         return [
-            'reg_instansi_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
-            'reg_instansi_pengirim_nama.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
+            'reg_fasyankes_id.required' => 'Nama Fasyankes tidak boleh kosong',
+            'reg_fasyankes_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
+            'reg_nama_rs.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
             'reg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
             'reg_nik.digits' => 'NIK terdiri dari :digits karakter',
             'reg_sampel_nomor.required' => 'Nomor Sampel tidak boleh kosong',
             'reg_sampel_jenis_sampel.required' => 'Jenis Sampel tidak boleh kosong',
+            'reg_sumber_pasien.required' => 'Kategori tidak boleh kosong',
+            'reg_nohp.required' => 'No HP tidak boleh kosong',
         ];
     }
 
@@ -66,6 +72,9 @@ class UpdateRegisterSampel extends FormRequest
             }
             if ($this->reg_sampel_jenis_sampel == 999999 && $this->reg_sampel_namadiluarjenis == null) {
                 $validator->errors()->add("reg_sampel_namadiluarjenis", 'Nama diluar jenis tidak boleh kosong');
+            }
+            if ($this->kewarganegaraan == 'WNA' && $this->keterangan_warganegara == null) {
+                $validator->errors()->add("reg_keterangan_warganegara", 'Keterangan warganegara tidak boleh kosong');
             }
         });
     }

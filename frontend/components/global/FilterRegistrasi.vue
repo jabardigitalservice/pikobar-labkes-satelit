@@ -1,172 +1,192 @@
 <template>
-    <Ibox title="Filter Data">
+  <Ibox title="Filter Data">
+    <div class="row">
 
+      <div class="col-md-6">
         <div class="form-group row">
-            <div class="col-md-2">
-                <label for="nama_pasien">Nama Pasien / NIK</label>
-            </div>
-            <div class="col-md-4">
-                <input type="text" name="nama_pasien" v-model="params.nama_pasien" id="" class="form-control"
-                    placeholder="Ketikkan Nama Pasien / NIK">
-            </div>
+          <div class="col-md-4 flex-text-center">
+            <div for="nama_pasien">Nama Pasien / NIK</div>
+          </div>
+          <div class="col-md-8">
+            <input type="text" name="nama_pasien" v-model="params.nama_pasien" class="form-control"
+              placeholder="Nama Pasien / NIK">
+          </div>
         </div>
-
         <div class="form-group row">
-            <div class="col-md-2">
-                <label for="nama_pasien">Tanggal Input</label>
-            </div>
-            <div class="col-md-4">
-                <date-picker placeholder="Tanggal Mulai Input" format="d MMMM yyyy" input-class="form-control"
-                    :monday-first="true" v-model="params.start_date" />
-            </div>
-            <div class="col-md-1 my-1">
-                S.d
-            </div>
-            <div class="col-md-4">
-                <date-picker placeholder="Tanggal Akhir Input" format="d MMMM yyyy" input-class="form-control"
-                    :monday-first="true" v-model="params.end_date" />
-            </div>
+          <div class="col-md-4 flex-text-center">
+            <div>Kategori</div>
+          </div>
+          <div class="col-md-8">
+            <input type="text" name="params.sumber_pasien" v-model="params.sumber_pasien" class="form-control"
+              placeholder="Kategori">
+          </div>
         </div>
-
         <div class="form-group row">
-            <div class="col-md-2">
-                <label for="">Kategori</label>
-            </div>
-            <div class="col-md-4">
-                <input type="text" name="params.sumber_pasien" v-model="params.sumber_pasien" id="" class="form-control"
-                    placeholder="Kategori">
-            </div>
+          <div class="col-md-4 flex-text-center">
+            <div>Nomor Sampel</div>
+          </div>
+          <div class="col-md-8 input-group">
+            <input type="text" class="form-control" placeholder="Nomor Sampel" v-model="params.nomor_sampel">
+          </div>
         </div>
-
         <div class="form-group row">
-            <div class="col-md-2">
-                <label for="nama_pasien">Domisili</label>
-            </div>
-            <div class="col-md-4">
-                <multiselect v-model="kota" :options="optionKota" track-by="nama" label="nama"
-                    placeholder="Pilih Domisili"></multiselect>
-            </div>
+          <div class="col-md-4 flex-text-center">
+            <div>Tanggal Input</div>
+          </div>
+          <div class="col-md-8 input-group">
+            <rangedate-picker @selected="onDateSelected" ref="rangedatepicker" />
+          </div>
         </div>
+      </div>
 
+      <div class="col-md-6">
         <div class="form-group row">
-            <div class="col-md-2">
-                <label for="nama_pasien">Nama Rumah Sakit/Dinkes</label>
-            </div>
-            <div class="col-md-4">
-                <input type="text" name="params.instansi_pengirim_nama" v-model="params.instansi_pengirim_nama" id=""
-                    class="form-control" placeholder="Nama Rumah Sakit/Dinkes">
-            </div>
+          <div class="col-md-4 flex-text-center">
+            <div>Domisili</div>
+          </div>
+          <div class="col-md-8">
+            <multiselect v-model="kota" :options="optionKota" track-by="nama" label="nama" placeholder="Pilih Domisili">
+            </multiselect>
+          </div>
         </div>
-
         <div class="form-group row">
-            <div class="col-md-2">
-                <label for="nama_pasien">Status</label>
+          <div class="col-md-4 flex-text-center">
+            <div>Instansi Pengirim</div>
+          </div>
+          <div class="col-md-8">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" value="rumah_sakit"
+                v-model="params.reg_fasyankes_pengirim">
+              <label class="form-check-label" for="fasyanrs">Rumah Sakit</label>
             </div>
-            <div class="col-md-4">
-                <select class="form-control" type="text" name="reg_kota" placeholder="" v-model="params.status">
-                    <option :value="item.id" :key="idx" v-for="(item,idx) in status">{{item.nama}}
-                    </option>
-                </select>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" value="dinkes"
+                v-model="params.reg_fasyankes_pengirim">
+              <label class="form-check-label" for="fasyandinkes">Dinkes</label>
             </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" value="puskesmas"
+                v-model="params.reg_fasyankes_pengirim">
+              <label class="form-check-label" for="fasyandinkes">Puskesmas</label>
+            </div>
+          </div>
         </div>
-
         <div class="form-group row">
-            <div class="col-md-12 text-left">
-                <button class="btn btn-primary" style="width:200px;margin-top:20px" @click="doFilter"><i
-                        class="fa fa-eye"></i> Filter</button>
-                <button class="btn btn-secondary" style="width:200px;margin-top:20px" @click="resetForm"><i
-                        class="fa fa-close"></i> Reset</button>
-
-            </div>
+          <div class="col-md-4 flex-text-center">
+            <div>Nama Fasyankes</div>
+          </div>
+          <div class="col-md-8">
+            <multiselect v-model="fasyankes" :options="optFasyankes" track-by="nama" label="nama"
+              placeholder="Nama Rumah Sakit / Dinkes / Puskesmas">
+            </multiselect>
+          </div>
         </div>
+        <div class="form-group row">
+          <div class="col-md-4 flex-text-center">
+            <div>Kriteria</div>
+          </div>
+          <div class="col-md-8">
+            <select class="form-control" type="text" name="reg_kota" placeholder="" v-model="params.status">
+              <option :value="item.value" :key="idx" v-for="(item,idx) in status">{{item.text}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    </Ibox>
+    <div class="row">
+      <div class="col-md-12 mt-2 flex-right">
+        <apply-clear-filter-button :doFilter="doFilter" :clearFilter="resetForm" />
+      </div>
+    </div>
+
+  </Ibox>
 </template>
+
 <script>
-    import axios from 'axios'
-    let _this = null;
-    export default {
-        name: 'FilterRegistrasi',
-        props: ['oid'],
-        data() {
-            return {
-                status: [{
-                    id: 'otg',
-                    nama: 'OTG'
-                }, {
-                    id: 'odp',
-                    nama: 'ODP'
-                }, {
-                    id: 'pdp',
-                    nama: 'PDP'
-                }, {
-                    id: 'positif',
-                    nama: 'Positif'
-                }, {
-                    id: 'tanpa_status',
-                    nama: 'Tanpa Status'
-                }],
-                optFasyankes: [],
-                params: {
-                    nama_pasien: null,
-                    instansi_pengirim_nama: null,
-                    sumber_pasien: null,
-                    nik: null,
-                    start_date: null,
-                    end_date: null,
-                    kota: null,
-                    status: null
-                },
-                kota: {},
-                optionKota: []
-            }
+  import {
+    pasienStatus
+  } from './../../assets/js/constant/enum';
+  let _this = null;
+  export default {
+    name: 'FilterRegistrasi',
+    props: ['oid'],
+    data() {
+      return {
+        status: pasienStatus,
+        optFasyankes: [],
+        fasyankes: [],
+        params: {
+          nama_pasien: null,
+          reg_fasyankes_pengirim: null,
+          fasyankes_id: null,
+          sumber_pasien: null,
+          nik: null,
+          start_date: null,
+          end_date: null,
+          kota: null,
+          status: null,
+          nomor_sampel: null,
         },
-        methods: {
-            doFilter() {
-                // this.$bus.$emit('refresh-ajaxtable')
-                this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
-            },
-            async getKota() {
-                const resp = await axios.get('/v1/list-kota-jabar');
-                this.optionKota = resp.data;
-            },
-            async changeFasyankes(tipe) {
-                let tp = tipe == "Dinkes" ? "dinkes" : "rumah_sakit";
-                let resp = await axios.get('/v1/list-fasyankes-jabar?tipe=' + tp)
-                this.optFasyankes = resp.data;
-                this.optFasyankes.push({
-                    id: 9999,
-                    nama: 'Fasyankes Lainnya'
-                })
-            },
-            resetForm() {
-                this.params.nama_pasien = null;
-                this.params.instansi_pengirim_nama = null;
-                this.params.sumber_pasien = null;
-                this.params.nik = null;
-                this.params.start_date = null;
-                this.params.end_date = null;
-                this.params.kota = null;
-                this.params.status = null;
-                this.kota = null;
-                this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
-            }
-        },
-        mounted() {},
-        created() {
-            _this = this;
-            this.getKota();
-        },
-        watch: {
-            "params.reg_fasyankes_pengirim": function (newVal, oldVal) {
-                this.changeFasyankes(this.params.reg_fasyankes_pengirim)
-            },
-            "kota": function (newVal, oldVal) {
-                this.params.kota = null
-                if (this.kota) {
-                    this.params.kota = this.kota.id
-                }
-            }
+        kota: [],
+        optionKota: []
+      }
+    },
+    methods: {
+      doFilter() {
+        this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
+      },
+      async getKota() {
+        const resp = await this.$axios.get('/v1/list-kota-jabar');
+        this.optionKota = resp.data;
+      },
+      async changeFasyankes(tipe) {
+        let resp = await this.$axios.get(`/v1/list-fasyankes-jabar?tipe=${tipe}`)
+        this.optFasyankes = resp.data;
+      },
+      resetForm() {
+        this.params.nama_pasien = null;
+        this.params.reg_fasyankes_pengirim = null;
+        this.params.fasyankes_id = null;
+        this.params.sumber_pasien = null;
+        this.params.nik = null;
+        this.params.start_date = null;
+        this.params.end_date = null;
+        this.params.kota = null;
+        this.params.status = null;
+        this.kota = null;
+        this.fasyankes = null;
+        this.params.nomor_sampel = null;
+        this.$refs.rangedatepicker.$data.dateRange = {};
+        this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
+      },
+      onDateSelected: function (daterange) {
+        this.params.start_date = daterange.start || null;
+        this.params.end_date = daterange.end || null;
+      }
+    },
+    created() {
+      _this = this;
+      this.getKota();
+    },
+    watch: {
+      "params.reg_fasyankes_pengirim": function (newVal, oldVal) {
+        this.fasyankes = null;
+        this.changeFasyankes(this.params.reg_fasyankes_pengirim)
+      },
+      "fasyankes": function (newVal, oldVal) {
+        this.params.fasyankes_id = null
+        if (this.fasyankes) {
+          this.params.fasyankes_id = this.fasyankes.id || null;
         }
+      },
+      "kota": function (newVal, oldVal) {
+        this.params.kota = null
+        if (this.kota) {
+          this.params.kota = this.kota.id
+        }
+      }
     }
+  }
 </script>

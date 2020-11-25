@@ -2,11 +2,12 @@
 
 namespace App;
 
+use App\Enums\UserStatusEnum;
+use App\Enums\RoleEnum;
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
@@ -19,7 +20,7 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username', 'role_id'
+        'name', 'email', 'password', 'username', 'role_id', 'koordinator', 'lab_satelit_id',
     ];
 
     /**
@@ -38,6 +39,8 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'status' => UserStatusEnum::class.'|nullable',
+        'role_id' => RoleEnum::class.'|nullable,integer',
     ];
 
     /**
@@ -124,5 +127,22 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     public function validator()
     {
         return $this->belongsTo('App\Models\Validator','validator_id','id');
+    }
+
+    public function registerLogs()
+    {
+        return $this->hasMany('App\Models\RegisterLog', 'user_id');
+    }
+
+    public function pemeriksaanSampels()
+    {
+        return $this->hasMany('App\Models\PemeriksaanSampel', 'user_id');
+    }
+
+
+    //check if has any relationship, return true
+    public function getHasDataAttribute()
+    {
+        return $this->registerLogs()->exists() || $this->pemeriksaanSampels()->exists();
     }
 }

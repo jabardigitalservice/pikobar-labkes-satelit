@@ -1,62 +1,84 @@
 <template>
   <div class="wrapper wrapper-content">
     <portal to="title-name">Hasil Pemeriksaan</portal>
+    <portal to="title-action">
+      <div class="title-action">
+        <button tag="button" class="btn btn-import-export" data-toggle="modal" data-target="#importHasil">
+          <i class="fa fa-download" /> Import
+        </button>
+        <download-export-button :parentRefs="$refs" ajaxTableRef="verifikasi" class="btn btn-primary" />
+      </div>
+    </portal>
+
     <div class="row">
       <div class="col-lg-12">
         <filter-hasil-pemeriksaan :oid="`verifikasi`" />
       </div>
     </div>
+
     <div class="row">
       <div class="col-lg-12">
         <Ibox title="Sampel Hasil Pemeriksaan">
-          <div class="row mb-4">
-            <div class="col-md-12">
-              <download-export-button :parentRefs="$refs" ajaxTableRef="verifikasi"
-                class="btn btn-primary pull-right ml-1"></download-export-button>
-              <router-link to="/hasil-pemeriksaan/import-excel" class="btn btn-primary pull-right ">
-                <i class="fa fa-file-excel-o"></i> Import Excel
-              </router-link>
-            </div>
-
-          </div>
-
           <ajax-table ref="verifikasi" url="/v1/verifikasi/list" urlexport="/v1/verifikasi/export"
             :disableSort="['parameter_lab']" :oid="'verifikasi'" :params="params1" :config="{
-                    autoload: true,
-                    has_number: true,
-                    has_entry_page: true,
-                    has_pagination: true,
-                    has_action: true,
-                    has_search_input: true,
-                    custom_header: '',
-                    default_sort: 'waktu_pcr_sample_analyzed',
-                    default_sort_dir: 'desc',
-                    custom_empty_page: true,
-                    class: {
-                        table: [],
-                        wrapper: ['table-responsive'],
-                    }
-                    }" :rowtemplate="'tr-verifikasi'" :columns="{
-                      waktu_pcr_sample_analyzed: 'Tanggal Pemeriksaan',
-                      nomor_sampel : 'Nomor Sampel',
-                      pasien_nama : 'Nama Pasien',
-                      kota_domilisi: 'Kota Domisili',
-                      instansi_pengirim: 'Nama Rumah Sakit/Dinkes',
-                      parameter_lab: 'Parameter Lab',
-                      status: 'Status',
-                      sumber_pasien: 'Kategori',
-                      kesimpulan_pemeriksaan: 'Kesimpulan Pemeriksaan',
-                      catatat: 'Keterangan',
-                    }"></ajax-table>
+              autoload: true,
+              has_number: true,
+              has_entry_page: true,
+              has_pagination: true,
+              has_action: true,
+              has_search_input: true,
+              custom_header: '',
+              default_sort: 'waktu_pcr_sample_analyzed',
+              default_sort_dir: 'desc',
+              custom_empty_page: true,
+              class: {
+                table: [],
+                wrapper: ['table-responsive'],
+              }
+            }" :rowtemplate="'tr-verifikasi'" :columns="{
+              waktu_pcr_sample_analyzed: 'TANGGAL PEMERIKSAAN',
+              nomor_sampel : 'NO SAMPEL',
+              pasien_nama : 'NAMA PASIEN',
+              kota_domilisi: 'DOMISILI',
+              instansi_pengirim: 'INSTANSI',
+              parameter_lab: 'PARAMETER LAB',
+              status: 'STATUS',
+              sumber_pasien: 'KATEGORI',
+              kesimpulan_pemeriksaan: 'KESIMPULAN PEMERIKSAAN',
+              catatat: 'KETERANGAN',
+            }" />
         </Ibox>
       </div>
     </div>
+
+    <custom-modal modal_id="importHasil" title="Import Data">
+      <div slot="body">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <label for="register_file">
+              Upload an .xlsx file
+            </label>
+            <input class="form-control" type="file" id="register_file" ref="myFile" @change="previewFile">
+          </div>
+          <div class="form-group">
+            <button @click="doImport()" :disabled="loading" :class="{'btn-loading': loading}"
+              class="btn btn-md btn-primary block m-b" type="button">
+              <i class="fa fa-check" /> Import Excel
+            </button>
+          </div>
+        </div>
+      </div>
+    </custom-modal>
+
   </div>
 </template>
 
 <script>
   import axios from "axios";
   import Form from "vform";
+  import $ from "jquery";
+  import CustomModal from "~/components/CustomModal";
+  const JQuery = $;
   var debounce = require('lodash/debounce')
 
   export default {
@@ -64,8 +86,13 @@
     meta: {
       allow_role_id: [8]
     },
+    components: {
+      CustomModal,
+    },
     data() {
       return {
+        loading: false,
+        dataError: [],
         params1: {
           fasyankes: "",
           kota_domisili: "",
@@ -80,39 +107,36 @@
       route,
       store
     }) {
+      let form = new Form({
+        register_file: null
+      });
       let listKota = await axios.get("/v1/list-kota-jabar");
       let listFasyankes = await axios.get("v1/list-fasyankes-jabar");
       let listKategori = await axios.get("v1/verifikasi/list-kategori");
-
       if (listKota.data) {
         listKota = listKota.data.map(function (kota, index) {
           let newKota = kota;
           newKota.name = kota.nama;
-
           return newKota;
         })
       }
-
       if (listFasyankes.data) {
         listFasyankes = listFasyankes.data.map(function (fasyan, index) {
           let newFasyankes = fasyan;
           newFasyankes.name = fasyan.nama;
-
           return newFasyankes;
         })
       }
-
       if (listKategori.data.data) {
         listKategori = listKategori.data.data.map(function (kategori, index) {
           let newKategori = kategori;
           newKategori.name = kategori.sumber_pasien;
           newKategori.id = kategori.sumber_pasien;
-
           return newKategori;
         })
       }
-
       return {
+        form,
         listKota,
         listFasyankes,
         listKategori
@@ -144,12 +168,10 @@
       async onExport(type) {
         try {
           this.loading = true;
-
           let form = new Form({
             ...this.params1,
             type: type
           })
-
           axios({
             url: process.env.apiUrl + "/v1/verifikasi/export-excel",
             params: form,
@@ -176,16 +198,6 @@
             window.URL.revokeObjectURL(url);
             this.isLoadingExp = false;
           });
-
-
-          // this.$toast.success(response.data.message, {
-          //   icon: "check",
-          //   iconPack: "fontawesome",
-          //   duration: 5000
-          // });
-
-          // this.$router.back()
-
         } catch (err) {
           if (err.response && err.response.data.code == 422) {
             this.$nextTick(() => {
@@ -209,6 +221,55 @@
       refreshDebounce: debounce(function () {
         this.$bus.$emit('refresh-ajaxtable', 'verifikasi')
       }, 500),
+      async doImport() {
+        let formData = new FormData();
+        formData.append('register_file', this.form.register_file);
+        this.loading = true;
+        JQuery('#importHasil').modal('hide');
+        try {
+          await axios.post(process.env.apiUrl + "/v1/register/import-hasil-pemeriksaan", formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+          this.$toast.success('Sukses import data', {
+            icon: "check",
+            iconPack: "fontawesome",
+            duration: 5000
+          });
+        } catch (err) {
+          if (err.response && err.response.data.code == 422) {
+            for (const property in err.response.data.error) {
+              this.$toast.error(err.response.data.error[property][0], {
+                icon: "times",
+                iconPack: "fontawesome",
+                duration: 5000
+              });
+            }
+          }
+          if (err.response && err.response.data.code == 403) {
+            this.$toast.error(err.response.data.error, {
+              icon: "times",
+              iconPack: "fontawesome",
+              duration: 5000
+            });
+          }
+          if (err.response && err.response.data.code == 500) {
+            this.$swal.fire(
+              "Terjadi kesalahan",
+              "Silakan hubungi Admin",
+              "error"
+            );
+          }
+        }
+        this.$bus.$emit('refresh-ajaxtable', 'verifikasi');
+        $('#register_file').val('');
+        this.form.reset();
+        this.loading = false;
+      },
+      previewFile() {
+        this.form.register_file = this.$refs.myFile.files[0]
+      }
     }
   };
 </script>
