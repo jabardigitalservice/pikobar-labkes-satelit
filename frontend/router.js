@@ -24,6 +24,7 @@ const routes = [
     },
     { path: '/registrasi/sampel', name: 'registrasi.sampel', component: page('registrasi-sampel/index.vue'), meta: { parentName: 'home' } },
     { path: '/registrasi/sampel/tambah', name: 'registrasi.index.tambah', component: page('registrasi-sampel/tambah.vue'), meta: { parentName: 'registrasi.sampel' } },
+    { path: '/registrasi/sampel/terima', name: 'registrasi.index.terima', component: page('registrasi-sampel/terima-sampel.vue'), meta: { parentName: 'registrasi.sampel' } },
     {
         path: '/registrasi/sampel/detail/:register_id/:pasien_id',
         name: 'registrasi.index.detail',

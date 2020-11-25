@@ -11,9 +11,9 @@
         <button tag="button" class="btn btn-import-export" data-toggle="modal" data-target="#importRM">
           <i class="fa fa-download" /> Import
         </button>
-        <button tag="button" class="btn btn-default" data-toggle="modal" data-target="#terimaSampel">
+        <nuxt-link tag="button" to="/registrasi/sampel/terima" class="btn btn-default">
           <i class="fa fa-download" /> Terima Sampel
-        </button>
+        </nuxt-link>
       </div>
     </portal>
 
@@ -88,39 +88,6 @@
               <i class="fa fa-file" /> Data Fasyankes
             </button>
           </div>
-        </div>
-      </div>
-    </custom-modal>
-
-    <custom-modal modal_id="terimaSampel" title="Terima Sampel">
-      <div slot="body">
-        <div class="col-lg-12">
-          <ajax-table url="v1/register-perujuk" :oid="'registrasi-perujuk'" :params="params"
-            :disableSort="['keterangan']" :config="{
-              autoload: true,
-              has_number: true,
-              has_entry_page: true,
-              has_pagination: true,
-              has_action: false,
-              has_search_input: false,
-              custom_header: '',
-              default_sort: 'tgl_input',
-              default_sort_dir:'desc',
-              custom_empty_page: true,
-              class: {
-                table: [],
-                wrapper: ['table-responsive'],
-              }
-            }" :rowtemplate="'tr-data-regis-perujuk'" :columns="{
-              no_sampel:'SAMPEL',
-              kode_kasus : 'KODE KASUS',
-              nama_pasien: 'PASIEN',
-              nama_kota: 'DOMISILI',
-              sumber_pasien:'KATEGORI',
-              status:'STATUS',
-              keterangan:'KETERANGAN'
-            }" />
-        </Ibox>
         </div>
       </div>
     </custom-modal>
