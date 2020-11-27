@@ -54,14 +54,14 @@ class DashboardAdminController extends Controller
         $satelit = SampelSatelit::selectRaw("DATE_PART('day', age(date(waktu_pcr_sample_analyzed), date(waktu_sample_taken)))::Int as days")
             ->whereNotNull('waktu_pcr_sample_analyzed')
             ->whereNotNull('waktu_sample_taken')
-            ->whereRaw("date(waktu_pcr_sample_analyzed) >= date(waktu_sample_taken)")
+            ->whereRaw("date(waktu_pcr_sample_analyzed) > date(waktu_sample_taken)")
             ->pluck('days');
 
         $labkes = SampelLabkes::selectRaw("DATE_PART('day', age(date(waktu_pcr_sample_analyzed), date(waktu_sample_taken)))::Int as days")
             ->whereNotNull('waktu_pcr_sample_analyzed')
             ->whereNotNull('waktu_sample_taken')
             ->where('is_from_migration', false)
-            ->whereRaw("date(waktu_pcr_sample_analyzed) >= date(waktu_sample_taken)")
+            ->whereRaw("date(waktu_pcr_sample_analyzed) > date(waktu_sample_taken)")
             ->pluck('days');
 
         $satelit = $satelit->count() ? $satelit->sum() / $satelit->count() : $satelit->count();
