@@ -2,7 +2,7 @@
   <tr>
     <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
     <td>
-      <input type="checkbox" name="list-sampel" v-bind:value="item.nomor_sampel" v-bind:id="'selected-sampel-'+item.id"
+      <input type="checkbox" name="list-sampel" v-bind:value="item.id" v-bind:id="'selected-sampel-'+item.id"
         v-model="selected" @click="sampelOnChangeSelect">
     </td>
     <td>

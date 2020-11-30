@@ -60,7 +60,7 @@
           <div class="badge badge-white" style="text-align:left; padding:5px; margin: 0 10px 10px 0;"
             v-for="(item,idx) in selectedNomorSampels" :key="idx">
               <span :class="{'text-black': item.valid, 'text-red': !item.valid}" style="font-size: 1.1em">
-                {{item}}
+                {{ getSampel(item) }}
               </span>
           </div>
         </div>
@@ -92,6 +92,9 @@
       return {
         loading: false,
         dataError: [],
+        form: new Form({
+          id: selectedNomorSampels
+        }),
         params: {
           nama_pasien: null,
           nomor_register: null,
@@ -100,6 +103,7 @@
           end_date: null
         },
         selectedNomorSampels,
+        listSampels: [],
       }
     },
     head() {
@@ -108,17 +112,40 @@
       }
     },
     methods: {
-      // async getCountry() {
-      //   let resp = await this.$axios.get('/v1/register-perujuk/');
-      //   this.optionCountry = resp.data;
-      //   this.country = this.country ? this.optionCountry.find(el => el.nama === this.country) : null;
-      // },
+      async getSampels() {
+        let resp = await this.$axios.get('/v1/register-perujuk/');
+        this.listSampels = resp.data.data;
+      },
       removeSample(index) {
         this.selectedNomorSampels.splice(index, 1);
       },
-      submitSampel() {
+      getSampel(id) {
+        const findSampel = id ? this.listSampels.find((el) => el.id === parseInt(id)) : null;
+        if (findSampel) {
+          return findSampel.nomor_sampel
+        } else {
+          return ''
+        }
+      },
+      async submitSampel() {
         JQuery('#terimaSampel').modal('hide');
+        try {
+          const response = await this.form.post("/v1/register-perujuk/bulk");
+          this.$toast.success(response.message, {
+            icon: 'check',
+            iconPack: 'fontawesome',
+            duration: 5000
+          })
+            this.$bus.$emit('refresh-ajaxtable', 'registrasi-perujuk');
+          } catch (e) {
+            swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
+          }
       }
+    },
+    created() {
+      this.getSampels()
+    },
+    computed: {
     }
   }
 </script>
