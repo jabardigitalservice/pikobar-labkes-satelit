@@ -12,7 +12,7 @@ export const KesimpulanPemeriksaan = [{
   nama: 'INVALID'
 }];
 
-export const oidHasChecked = ['ekstraksi-penerimaan', 'ekstraksi-dilakukan', 'pcr-penerimaan', 'validasi'];
+export const oidHasChecked = ['registrasi-perujuk'];
 
 export const metodeEkstraksi = ['Manual', 'Otomatis'];
 

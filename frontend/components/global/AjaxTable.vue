@@ -2,17 +2,22 @@
   <div v-bind:id="oid">
     <div v-if="config.has_entry_page || config.has_search_input" style="margin-bottom: 10px">
       <div class="form-inline d-flex justify-content-between">
-
-        <div class="form-group text-muted" v-if="config.has_search_input">
-          <input placeholder="Search" v-model="search_input" @keyup="doSearchDebounce" type="text"
-            class="form-control input-placeholder">
-          <span class="fa fa-search" style="position: absolute; margin-left: 10px" />
+        <div class="form-group text-muted" v-if="config.has_search_input2">
+          <input placeholder="Search" v-model="search_input" @keyup="doSearchDebounce"
+            type="text" class="form-control input-placeholder">
+            <span class="fa fa-search" style="position: absolute; margin-left: 10px" />
         </div>
-
+        <div class="text-center text-sm-left mb-2 table-search">
+          <div class="form-control checkbox-registrasi-perujuk" v-if="oidHasChecked.indexOf(oid) > -1"
+            style="margin-left: 20px">
+            <input type="checkbox" :checked="false" @click="sampelOnCheckAll" id="checkbox-selectall">
+            Select / Unselect All
+          </div>
+        </div>
       </div>
       <div class="clearfix"></div>
     </div>
-
+    
     <div v-show="!showCustomEmptyPage" style="position:relative">
       <div v-bind:class="config.class.wrapper">
         <table class="table" v-bind:class="config.class.table">
@@ -26,7 +31,15 @@
                 {{column_name}}
                 <sorter :sort-dir.sync="sortDir" :column-name="column" :sort-column.sync="sortColumn"></sorter>
               </th>
-              <th v-if="config.has_action" class="header_action">{{ $t('title.actions') }}</th>
+              <th v-if="config.has_action && !config.action_column" class="header_action">
+                {{ $t('title.actions').toUpperCase() }}</th>
+              <th v-if="config.has_action && config.action_column"
+                v-bind:style="columnsStyle ? columnsStyle[config.action_column] : {}"
+                v-on:click="sort(config.action_column)" :key="config.action_column" class="header_action">
+                {{ $t('title.actions') }}
+                <sorter :sort-dir.sync="sortDir" :column-name="config.action_column" :sort-column.sync="sortColumn">
+                </sorter>
+              </th>
             </tr>
             <tr v-if="config.has_search_header">
               <th v-bind:colspan="totalColumns" class="th_search">
@@ -48,7 +61,7 @@
           </tfoot>
         </table>
       </div>
-
+      
       <div v-if="config.has_pagination && config.pagination_type == 'jumptopage'" style="margin-top: 10px;display: none"
         v-show="pagination.count > 0">
         <div class="row">
@@ -81,19 +94,18 @@
         </div>
         <div class="clearfix"></div>
       </div>
-
       <div v-else-if="config.has_pagination && pagination.count > 0" class="row pagination-wrapper">
         <div class="col-sm-12 col-md-5" style="margin-top: 10px;">
           <div class="paging_info">
-            <select class="form-control-sm form-control w-auto input-s-sm inline" v-model="pagination.perpage"
-              v-on:change="changePage()" v-if="config.has_entry_page">
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-              <option value="500">500</option>
-              <option value="1000">1000</option>
-            </select>&nbsp;&nbsp;
+          <select class="form-control-sm form-control w-auto input-s-sm inline" v-model="pagination.perpage"
+            v-on:change="changePage()" v-if="config.has_entry_page">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>&nbsp;&nbsp;
             {{ capitalize($t('common.entry')) }}&nbsp;{{ entriFrom }}&nbsp;
             {{ $t('title.to') }}&nbsp;
             {{ entriTo }}
@@ -122,7 +134,6 @@
           </div>
         </div>
       </div>
-
       <div class="dimmed" v-if="isLoading">
         <div class="loading-indicator">
           <img src="~/assets/img/loading.gif" width="48" height="48">
@@ -232,8 +243,11 @@
 </style>
 
 <script>
-  import Sorter from './Sorter'
-  const requireContext = require.context('./table-row', false, /.*\.vue$/)
+  import Sorter from './Sorter';
+  import {
+    oidHasChecked
+  } from '~/assets/js/constant/enum';
+  const requireContext = require.context('./table-row', false, /.*\.vue$/);
 
   var modules = requireContext.keys()
     .map(file => [file.replace(/(^.\/)|(\.vue$)/g, ''), requireContext(file)])
@@ -255,16 +269,23 @@
       'disableSort'
     ],
     data() {
+      let datas = [];
+      if (this.oid === 'registrasi-perujuk') {
+        datas = this.$store.state.registrasi_perujuk.selectedSampels;
+      }
       return {
         isLoading: true,
         isLoadingExp: false,
+        checked: false,
+        dataArr: datas,
+        checkedArr: [],
         items: [],
         info: {},
         pagination: {
           page: 1,
           previous: false,
           next: false,
-          perpage: 20,
+          perpage: this.config.perpage ? this.config.perpage : 20,
           count: 0,
           total: 0
         },
@@ -274,6 +295,8 @@
         sortDir: null,
         detail: {},
         showDetail: false,
+        name_export_excel: this.oid.toUpperCase() + ' - ' + new Date() + '.xlsx',
+        oidHasChecked: oidHasChecked,
       }
     },
     methods: {
@@ -301,6 +324,9 @@
         }
       },
       changePage(page) {
+        if (this.oidHasChecked.indexOf(this.oid) > -1) {
+          document.getElementById('checkbox-selectall').checked = false;
+        }
         if (isNaN(parseInt(this.pagination.page)) || this.pagination.page < 1) {
           this.pagination.page = 1;
         }
@@ -317,6 +343,7 @@
         this.sortColumn = null;
         this.sortDir = null;
         this.pagination.page = 1;
+        document.getElementById('checkbox-selectall').checked = false;
         this.changePage();
       },
       sort(col, default_sort_dir) {
@@ -354,7 +381,7 @@
         this.$axios.get(that.url, {
           params: {
             page: page,
-            perpage: that.pagination.perpage,
+            perpage: that.config.show_all ? 99999999 : that.pagination.perpage,
             params: that.params,
             search: that.search,
             order: that.sortColumn,
@@ -412,7 +439,7 @@
           const link = document.createElement('a');
           link.href = url;
           const contentDisposition = response.headers['content-disposition'];
-          let fileName = 'hasil_pemeriksaan.xlsx';
+          let fileName = that.name_export_excel;
           if (contentDisposition) {
             const fileNameMatch = contentDisposition.match(/filename=(.+)/);
             if (fileNameMatch.length === 2)
@@ -423,15 +450,66 @@
           link.click();
           link.remove();
           window.URL.revokeObjectURL(url);
+          that.isLoadingExp = false;
+          this.$bus.$emit('download-export', 'end', this.oid);
+        }).catch((e) => {
+          this.$swal.fire(
+            "Terjadi kesalahan",
+            "Silakan hubungi Admin",
+            "error"
+          );
           this.$bus.$emit('download-export', 'end', this.oid);
         });
-        that.isLoadingExp = false;
       },
+      sampelOnCheckAll() {
+        let listSampelsArr = [];
+        if (this.oid === 'registrasi-perujuk') {
+          listSampelsArr = this.$store.state.registrasi_perujuk.selectedSampels;
+        }
+
+        var samples = document.getElementsByName("list-sampel");
+        const newDomchecked = document.getElementById('checkbox-selectall').checked;
+        this.checked = newDomchecked;
+        var i;
+        for (i = 0; i < samples.length; i++) {
+          if (samples[i].name == "list-sampel") {
+            let checkedSampel = listSampelsArr.find(element => element == samples[i].value) || null;
+            if (!checkedSampel) {
+              this.checkedArr.push(samples[i].value);
+            } else {}
+            samples[i].checked = this.checked;
+          }
+        }
+        if (this.checked) {
+          if (this.oid == 'registrasi-perujuk') {
+            this.$store.commit('registrasi_perujuk/addMultiple', this.checkedArr)
+          }
+        }
+        if (!this.checked) {
+          if (this.oid == 'registrasi-perujuk') {
+            this.$store.commit('registrasi_perujuk/removeMultiple', this.checkedArr)
+          }
+        }
+      },
+      getDOMbyId() {
+        for (const item of this.items) {
+          const sampel = document.getElementById('selected-sampel-' + item.id).value;
+          const ischeck = document.getElementById('selected-sampel-' + item.id).checked;
+
+          const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el === sampel) : null;
+          if (findinArr) {
+            document.getElementById('selected-sampel-' + item.id).checked = true;
+          } else {
+            document.getElementById('selected-sampel-' + item.id).checked = false;
+          }
+        }
+      }
     },
     computed: {
       showCustomEmptyPage: function () {
         return this.config.custom_empty_page == true && this.pagination.count == 0 && !this.isLoading && this
-          .search == '';
+          .search ==
+          '';
       },
       totalColumns: function () {
         return (this.config.has_number ? 1 : 0) + size(this.columns) + (this.config.has_action ? 1 : 0);
@@ -465,6 +543,14 @@
         }
         return arr;
       },
+      selectedSampels: {
+        set(val) {
+          this.$store.state.selectedSampels = val
+        },
+        get() {
+          return this.$store.state.selectedSampels
+        }
+      },
       entriFrom: function () {
         return (this.pagination.page - 1) * this.pagination.perpage + 1;
       },
@@ -495,12 +581,30 @@
       }
     },
     watch: {
-      'pagination.page'() {
+      'pagination.page'(newVal, oldVal) {
         if (!window.pagestate) {
           window.pagestate = []
         }
-        window.pagestate[this.oid] = this.pagination.page
-      }
+        window.pagestate[this.oid] = this.pagination.page;
+      },
+      'checkedArr': function (newVal, oldVal) {
+        for (const item of this.items) {
+          const sampel = document.getElementById('selected-sampel-' + item.id).value;
+          const ischeck = document.getElementById('selected-sampel-' + item.id).checked;
+
+          const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el === sampel) : null;
+          if (findinArr) {
+            document.getElementById('selected-sampel-' + item.id).checked = true;
+          } else {
+            document.getElementById('selected-sampel-' + item.id).checked = false;
+          }
+        }
+      },
+      "isLoading": function (newVal, oldVal) {
+        if ((this.oidHasChecked.indexOf(this.oid) > -1) && this.isLoading === false) {
+          this.getDOMbyId();
+        }
+      },
     },
     created() {
       var that = this;
