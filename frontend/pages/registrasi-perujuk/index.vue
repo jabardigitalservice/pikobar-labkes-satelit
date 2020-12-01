@@ -5,29 +5,26 @@
     </portal>
     <portal to="title-action">
       <div class="title-action">
-        <nuxt-link tag="button" to="/registrasi/sampel/tambah" class="btn btn-primary">
+        <nuxt-link tag="button" to="/registrasi/perujuk/tambah" class="btn btn-primary">
           <i class="fa fa-plus" /> Register Baru
         </nuxt-link>
-        <button tag="button" class="btn btn-import-export" data-toggle="modal" data-target="#importRM">
+        <button tag="button" class="btn btn-import-export" data-toggle="modal" data-target="#importRegPerujuk">
           <i class="fa fa-download" /> Import
         </button>
-        <nuxt-link tag="button" to="/registrasi/sampel/terima" class="btn btn-default">
-          <i class="fa fa-download" /> Terima Sampel
-        </nuxt-link>
       </div>
     </portal>
 
     <div class="row">
       <div class="col-lg-12">
-        <filter-registrasi :oid="`registrasi-sampel`" />
+        <filter-perujuk :oid="`registrasi-sampel-perujuk`" />
       </div>
     </div>
 
     <div class="row">
       <div class="col-lg-12">
         <Ibox title="Register Pasien">
-          <ajax-table url="/registrasi-sampel" :oid="'registrasi-sampel'" :params="params" :disableSort="['keterangan']"
-            :config="{
+          <ajax-table url="v1/register-perujuk" :oid="'registrasi-sampel-perujuk'" :params="params"
+            :disableSort="['keterangan']" :config="{
               autoload: true,
               has_number: true,
               has_entry_page: true,
@@ -42,21 +39,20 @@
                 table: [],
                 wrapper: ['table-responsive'],
               }
-            }" :rowtemplate="'tr-data-regis-sample'" :columns="{
+            }" :rowtemplate="'tr-data-regis-perujuk'" :columns="{
               no_sampel:'SAMPEL',
+              kode_kasus : 'KODE KASUS',
               nama_pasien: 'PASIEN',
               nama_kota: 'DOMISILI',
-              instansi_pengirim_nama: 'INSTANSI',
               sumber_pasien:'KATEGORI',
-              status:'KRITERIA',
-              tgl_input:'TANGGAL INPUT',
+              status:'STATUS',
               keterangan:'KETERANGAN'
             }" />
         </Ibox>
       </div>
     </div>
 
-    <custom-modal modal_id="importRM" title="Import Data">
+    <custom-modal modal_id="importRegPerujuk" title="Import Data">
       <div slot="body">
         <div class="col-lg-12">
           <div class="form-group">
@@ -71,21 +67,12 @@
           <br>
           <div class="form-group">
             <label class="text-muted" style="text-align: justify">
-              Berikut adalah contoh format untuk import excel Registrasi sampel, data wilayah, dan data fasyankes yang
-              dapat diunduh
-              sebagai referensi.
+              Berikut adalah contoh format untuk import excel Registrasi perujuk yang
+              dapat diunduh sebagai referensi.
             </label>
-            <button @click="downloadFormat('formatRegistrasi')" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-sm btn-default" type="button">
+            <button @click="downloadFormat('formatRegistrasiPerujuk')" :disabled="loading"
+              :class="{'btn-loading': loading}" class="btn btn-sm btn-default" type="button">
               <i class="fa fa-file" /> Format Import
-            </button>
-            <button @click="downloadFormat('wilayah')" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-sm btn-default" type="button">
-              <i class="fa fa-file" /> Data Wilayah
-            </button>
-            <button @click="downloadFormat('fasyankes')" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-sm btn-default" type="button">
-              <i class="fa fa-file" /> Data Fasyankes
             </button>
           </div>
         </div>
@@ -103,7 +90,7 @@
   export default {
     middleware: ['auth', 'checkrole'],
     meta: {
-      allow_role_id: [8]
+      allow_role_id: [9]
     },
     components: {
       CustomModal,
@@ -113,11 +100,11 @@
         loading: false,
         dataError: [],
         params: {
-          nama_pasien: null,
-          nomor_register: null,
-          nomor_sampel: null,
-          start_date: null,
-          end_date: null
+          nama_pasien: '',
+          nomor_register: '',
+          nomor_sampel: '',
+          start_date: '',
+          end_date: ''
         },
       }
     },
@@ -160,14 +147,14 @@
         let formData = new FormData();
         formData.append('register_file', this.form.register_file);
         this.loading = true;
-        JQuery('#importRM').modal('hide');
+        JQuery('#importRegPerujuk').modal('hide');
         try {
-          await this.$axios.post(`${process.env.apiUrl}/v1/register/import-sampel`, formData, {
+          await this.$axios.post(`${process.env.apiUrl}/v1/register-perujuk/import`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           });
-          this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
+          this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel-perujuk');
           this.$toast.success('Sukses import data', {
             icon: "check",
             iconPack: "fontawesome",
