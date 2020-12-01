@@ -64,7 +64,7 @@ class DashboardAdminController extends Controller
             ->whereRaw("date(waktu_pcr_sample_analyzed) > date(waktu_sample_taken)")
             ->pluck('days');
 
-        $satelit = $satelit->sum() / $satelit->count();
+        $satelit = $satelit->count() ? $satelit->sum() / $satelit->count() : $satelit->count();
         $labkes = $labkes->sum() / $labkes->count();
         return array_sum([$labkes, $satelit]) / 2;
     }

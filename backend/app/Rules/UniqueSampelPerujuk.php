@@ -48,7 +48,7 @@ class UniqueSampelPerujuk implements Rule
             $sampel = RegisterPerujuk::where('nomor_sampel', strtoupper($value))
                 ->where('lab_satelit_id', $this->lab_satelit_id)
                 ->first();
-            $result = $sampel && $sampel->id == $this->id ? true : false;
+            $result = $sampel && $sampel->id != $this->id ? false : true;
         }
 
         return $result;
