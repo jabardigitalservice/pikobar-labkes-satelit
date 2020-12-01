@@ -29,11 +29,11 @@
         class="mb-1 btn btn-yellow btn-sm" title="Klik untuk melihat detail">
         <i class="fa fa-eye" />
       </nuxt-link>
-      <nuxt-link :to="`/registrasi/perujuk/update/${item.id}`"
+      <nuxt-link v-show="item.status === 'dikirim'" :to="`/registrasi/perujuk/update/${item.id}`"
         class="mb-1 btn btn-primary btn-sm" title="Klik untuk edit data">
         <i class="fa fa-edit" />
       </nuxt-link>
-      <button class="mb-1 btn btn-danger btn-sm" @click="deleteData(item, usiaPasien)" title="Klik untuk hapus data">
+      <button v-show="item.status === 'dikirim'" class="mb-1 btn btn-danger btn-sm" @click="deleteData(item, usiaPasien)" title="Klik untuk hapus data">
         <i class="fa fa-trash" />
       </button>
     </td>
@@ -144,7 +144,7 @@
               iconPack: 'fontawesome',
               duration: 5000
             })
-            await bus.$emit('refresh-ajaxtable', 'registrasi-perujuk');
+            await bus.$emit('refresh-ajaxtable', 'registrasi-sampel-perujuk');
           } catch (e) {
             swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
           }

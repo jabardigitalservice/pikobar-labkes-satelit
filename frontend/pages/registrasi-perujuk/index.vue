@@ -16,14 +16,14 @@
 
     <div class="row">
       <div class="col-lg-12">
-        <filter-perujuk :oid="`registrasi-perujuk`" />
+        <filter-perujuk :oid="`registrasi-sampel-perujuk`" />
       </div>
     </div>
 
     <div class="row">
       <div class="col-lg-12">
         <Ibox title="Register Pasien">
-          <ajax-table url="v1/register-perujuk" :oid="'registrasi-perujuk'" :params="params"
+          <ajax-table url="v1/register-perujuk" :oid="'registrasi-sampel-perujuk'" :params="params"
             :disableSort="['keterangan']" :config="{
               autoload: true,
               has_number: true,
@@ -100,11 +100,11 @@
         loading: false,
         dataError: [],
         params: {
-          nama_pasien: null,
-          nomor_register: null,
-          nomor_sampel: null,
-          start_date: null,
-          end_date: null
+          nama_pasien: '',
+          nomor_register: '',
+          nomor_sampel: '',
+          start_date: '',
+          end_date: ''
         },
       }
     },
@@ -154,7 +154,7 @@
               'Content-Type': 'multipart/form-data'
             }
           });
-          this.$bus.$emit('refresh-ajaxtable', 'registrasi-perujuk');
+          this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel-perujuk');
           this.$toast.success('Sukses import data', {
             icon: "check",
             iconPack: "fontawesome",
