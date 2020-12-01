@@ -3,9 +3,9 @@
     <div v-if="config.has_entry_page || config.has_search_input" style="margin-bottom: 10px">
       <div class="form-inline d-flex justify-content-between">
         <div class="form-group text-muted" v-if="config.has_search_input2">
-          <input placeholder="Search" v-model="search_input" @keyup="doSearchDebounce"
-            type="text" class="form-control input-placeholder">
-            <span class="fa fa-search" style="position: absolute; margin-left: 10px" />
+          <input placeholder="Search" v-model="search_input" @keyup="doSearchDebounce" type="text"
+            class="form-control input-placeholder">
+          <span class="fa fa-search" style="position: absolute; margin-left: 10px" />
         </div>
         <div class="text-center text-sm-left mb-2 table-search">
           <div class="form-control checkbox-registrasi-perujuk" v-if="oidHasChecked.indexOf(oid) > -1"
@@ -17,7 +17,7 @@
       </div>
       <div class="clearfix"></div>
     </div>
-    
+
     <div v-show="!showCustomEmptyPage" style="position:relative">
       <div v-bind:class="config.class.wrapper">
         <table class="table" v-bind:class="config.class.table">
@@ -61,7 +61,7 @@
           </tfoot>
         </table>
       </div>
-      
+
       <div v-if="config.has_pagination && config.pagination_type == 'jumptopage'" style="margin-top: 10px;display: none"
         v-show="pagination.count > 0">
         <div class="row">
@@ -97,15 +97,15 @@
       <div v-else-if="config.has_pagination && pagination.count > 0" class="row pagination-wrapper">
         <div class="col-sm-12 col-md-5" style="margin-top: 10px;">
           <div class="paging_info">
-          <select class="form-control-sm form-control w-auto input-s-sm inline" v-model="pagination.perpage"
-            v-on:change="changePage()" v-if="config.has_entry_page">
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-            <option value="500">500</option>
-            <option value="1000">1000</option>
-          </select>&nbsp;&nbsp;
+            <select class="form-control-sm form-control w-auto input-s-sm inline" v-model="pagination.perpage"
+              v-on:change="changePage()" v-if="config.has_entry_page">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="500">500</option>
+              <option value="1000">1000</option>
+            </select>&nbsp;&nbsp;
             {{ capitalize($t('common.entry')) }}&nbsp;{{ entriFrom }}&nbsp;
             {{ $t('title.to') }}&nbsp;
             {{ entriTo }}
@@ -508,8 +508,7 @@
     computed: {
       showCustomEmptyPage: function () {
         return this.config.custom_empty_page == true && this.pagination.count == 0 && !this.isLoading && this
-          .search ==
-          '';
+          .search == '';
       },
       totalColumns: function () {
         return (this.config.has_number ? 1 : 0) + size(this.columns) + (this.config.has_action ? 1 : 0);
