@@ -16,8 +16,8 @@ class UserLab extends JsonResource
             'status' => $this->status,
             'has_data' => $this->has_data,
             'last_login_at' => $this->last_login_at,
-            'lab' => $this->lab_satelit->nama,
-            'alamat_lab' => $this->lab_satelit->alamat
+            'lab' => $this->lab_satelit ? $this->lab_satelit->nama : '-',
+            'alamat_lab' => $this->lab_satelit ? $this->lab_satelit->alamat : '-',
         ];
     }
 }

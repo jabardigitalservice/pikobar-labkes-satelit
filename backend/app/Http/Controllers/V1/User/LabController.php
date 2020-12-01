@@ -13,24 +13,25 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
-use App\Http\Resources\UserDinkes as UserDinkesResource;
+use App\Http\Resources\UserLab as UserLabResource;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 
-class DinkesController extends Controller
+class LabController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request) 
     {
-        $role_ids = [RoleEnum::DINKES()->getIndex(), RoleEnum::SUPERADMIN()->getIndex()];
+        $role_ids = [RoleEnum::LABORATORIUM()->getIndex()];
         $model = User::query()->whereIn('role_id', $role_ids);
-        $model = $model->leftJoin('lab_satelit', 'users.lab_satelit_id', 'lab_satelit.id');
+        $model = $model->join('lab_satelit', 'users.lab_satelit_id', 'lab_satelit.id');
 
         $order = $request->get('order');
         if ($order) {
             $order_direction = $request->get('order_direction', 'asc');
             switch (strtolower($order)) {
                 case 'lab':
-                    $order = 'nama';
+                case 'alamat_lab':
+                    $order = $order == 'lab' ? 'nama' : 'alamat';
                     $model = $model->orderBy('lab_satelit.' . $order, $order_direction);
                     break;
                 default:
@@ -39,12 +40,13 @@ class DinkesController extends Controller
             }
         }
 
+        $model = $model->with('lab_satelit');
         $page = $request->get('page', 1);
         $perpage = $request->get('perpage', 20);
         $count = $model->count();
-        $data = UserDinkesResource::collection($model->skip(($page - 1) * $perpage)->take($perpage)->get());
+        $data = UserLabResource::collection($model->skip(($page - 1) * $perpage)->take($perpage)->get());
 
-        return compact('data', 'count');
+        return compact('data','count');
     }
 
     public function invite(Request $request)
@@ -52,8 +54,6 @@ class DinkesController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users,email',
             'lab_satelit_id' => 'required|exists:lab_satelit,id',
-            'username' => 'required|unique:users,username',
-            'name' => 'required',
         ])->validate();
 
         DB::beginTransaction();
@@ -62,12 +62,10 @@ class DinkesController extends Controller
                 'token' => Uuid::uuid4(),
                 'email' => $request->input('email'),
             ]);
-
+                
             $user = User::create([
-                'name' => $request->input('name'),
-                'username' => $request->input('username'),
                 'email' => $request->input('email'),
-                'role_id' => RoleEnum::DINKES()->getIndex(),
+                'role_id' => RoleEnum::LABORATORIUM()->getIndex(),
                 'lab_satelit_id' => $request->lab_satelit_id,
             ]);
 
@@ -88,6 +86,9 @@ class DinkesController extends Controller
     public function register(Request $request)
     {
         Validator::make($request->all(), [
+            'username' => 'required|unique:users,username',
+            'name' => 'required',
+            'koordinator' => 'required',
             'token' => 'required',
             'password' => 'required|confirmed|min:6',
         ])->validate();
@@ -96,12 +97,15 @@ class DinkesController extends Controller
         if(!$invite) {
             return response()->json(['message' => __('auth.registration_cannot_be_completed')], 404);
         }
+        $user = User::where(['email' => $request->email])->first();
 
-        $user = User::where(['email' => $invite->email])->first();
         $user->update([
+            'name' => $request->name,
+            'username' => $request->username,
+            'koordinator' => $request->koordinator,
             'password' => Hash::make($request->password),
         ]);
-
+        
         $user->status = UserStatusEnum::ACTIVE();
         $user->register_at = Carbon::now();
         $user->save();

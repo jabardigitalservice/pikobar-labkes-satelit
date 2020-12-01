@@ -15,6 +15,5 @@ return [
 
     'failed' => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-    'registration_cannot_be_completed' => 'Registration cannot be completed',
-
+    'registration_cannot_be_completed' => 'Registrasi tidak dapat dilakukan',
 ];

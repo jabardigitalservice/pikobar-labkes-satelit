@@ -67,4 +67,7 @@ return [
     'timezone'             => 'Isian :attribute harus berupa zona waktu yang valid.',
     'unique'               => 'Isian :attribute sudah ada sebelumnya.',
     'url'                  => 'Format isian :attribute tidak valid.',
+    'attributes' => [
+        'lab_satelit_id' => 'Lab satelit',
+    ]
 ];

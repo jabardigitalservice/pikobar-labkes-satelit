@@ -314,16 +314,26 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::post('/invite', 'UserInvitationController')->name('api.user.invite');
         Route::put('/status-toggle/{user:id}', 'UserController@statusToggle')->name('api.user.statusToggle');
 
-        Route::group(['prefix' => 'dinkes', 'namespace' => 'User'], function () {
-            Route::get('/{user:id}', 'DinkesController@show')->name('api.users.dinkes.show');
-            Route::put('/{user:id}', 'DinkesController@update')->name('api.users.dinkes.update');
-            Route::post('/', 'DinkesController@store')->name('api.users.dinkes.store');
-            Route::post('/register', 'DinkesController@register')->name('api.users.dinkes.register');
+        Route::group(['namespace' => 'User'], function () {
+            Route::group(['prefix' => 'dinkes'], function() {
+                Route::put('/{user:id}', 'DinkesController@update')->name('api.users.dinkes.update');
+                Route::post('/', 'DinkesController@store')->name('api.users.dinkes.store');
+                Route::post('/register', 'DinkesController@register')->name('api.users.dinkes.register');
+                Route::post('/invite', 'DinkesController@invite')->name('api.users.dinkes.invite');
+            });
+
+            Route::group(['prefix' => 'lab'], function() {
+                Route::put('/{user:id}', 'LabController@update')->name('api.users.Lab.update');
+                Route::post('/', 'LabController@store')->name('api.users.Lab.store');
+                Route::post('/register', 'LabController@register')->name('api.users.Lab.register');
+                Route::post('/invite', 'LabController@invite')->name('api.users.lab.invite');
+            });
         });
     });
 
     Route::group(['prefix' => 'users', 'namespace' => 'User'], function () {
         Route::get('/dinkes', 'DinkesController@index')->name('api.users.dinkes');
+        Route::get('/lab', 'LabController@index')->name('api.users.lab');
     });
 });
 
