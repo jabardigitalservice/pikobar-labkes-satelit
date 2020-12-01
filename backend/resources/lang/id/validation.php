@@ -69,6 +69,7 @@ return [
     'unique'               => 'Isian :attribute sudah ada sebelumnya.',
     'url'                  => 'Format isian :attribute tidak valid.',
     'attributes' => [
+        'lab_satelit_id' => 'Lab satelit',
         'name' => 'nama',
     ]
 ];

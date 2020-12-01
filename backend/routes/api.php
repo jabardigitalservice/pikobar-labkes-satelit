@@ -20,7 +20,7 @@ Route::get('/', function () {
     ];
 });
 
-Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => ['auth:api', 'verified']], function () {
     Route::post('logout', 'Auth\LoginController@logout');
 
     Route::get('/user', function (Request $request) {
@@ -83,7 +83,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/get-dikirim', 'PemeriksaanSampleController@getDikirim');
     });
 
-    Route::group(['prefix' => 'lab-satelit'], function() {
+    Route::group(['prefix' => 'lab-satelit'], function () {
         Route::get('/', 'LabSatelitController@listLabsatelit');
     });
 });
@@ -92,7 +92,6 @@ Route::group(['middleware' => ['guest:api', 'cors']], function () {
     Route::post('login', 'Auth\LoginController@login');
     Route::post('/v1/user/register', 'V1\UserController@register')->name('api.user.register');
     Route::get('/v1/user/register/{invite:token}', 'V1\UserController@tokenInfo')->name('api.user.tokenInfo');
-
 });
 
 Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1'], function () {
@@ -216,7 +215,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
 
             Route::post('update/{register}', 'RegisterRujukanController@update');
         });
-
     });
 
     Route::group(['prefix' => 'pengambilan-sampel'], function () {
@@ -234,7 +232,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::delete('delete/{pengambilan}', 'PengambilanSampelController@destroy');
 
         Route::delete('delete/sampel/{sampel}', 'PengambilanSampelController@destroySampel');
-
     });
 
     Route::group(['prefix' => 'sampel'], function () {
@@ -248,7 +245,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::get('barcode/{barcode}', 'SampelController@showByBarcode');
 
         Route::delete('delete/{sampel}', 'SampelController@destroy');
-
     });
 
     Route::group(['prefix' => 'verifikasi'], function () {
@@ -270,7 +266,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::post('verifikasi-single-sampel/{sampel}', 'VerifikasiController@verifiedSingleSampel');
 
         Route::get('list-kategori', 'VerifikasiController@listKategori');
-
     });
 
     Route::group(['prefix' => 'validasi'], function () {
@@ -292,7 +287,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::get('export-excel', 'ValidasiExportController@exportExcel');
 
         Route::post('regenerate-pdf/{sampel}', 'ValidasiController@regeneratePdfHasil');
-
     });
 
     Route::apiResource('validator', 'ValidatorController');
@@ -302,7 +296,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::get('list', 'PelacakanSampelController@index');
 
         Route::get('detail/{sampel}', 'PelacakanSampelController@show');
-
     });
 
     //pelaporan
@@ -320,6 +313,27 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::delete('/{user:id}', 'UserController@delete')->name('api.user.delete');
         Route::post('/invite', 'UserInvitationController')->name('api.user.invite');
         Route::put('/status-toggle/{user:id}', 'UserController@statusToggle')->name('api.user.statusToggle');
+
+        Route::group(['namespace' => 'User'], function () {
+            Route::group(['prefix' => 'dinkes'], function() {
+                Route::put('/{user:id}', 'DinkesController@update')->name('api.users.dinkes.update');
+                Route::post('/', 'DinkesController@store')->name('api.users.dinkes.store');
+                Route::post('/register', 'DinkesController@register')->name('api.users.dinkes.register');
+                Route::post('/invite', 'DinkesController@invite')->name('api.users.dinkes.invite');
+            });
+
+            Route::group(['prefix' => 'lab'], function() {
+                Route::put('/{user:id}', 'LabController@update')->name('api.users.Lab.update');
+                Route::post('/', 'LabController@store')->name('api.users.Lab.store');
+                Route::post('/register', 'LabController@register')->name('api.users.Lab.register');
+                Route::post('/invite', 'LabController@invite')->name('api.users.lab.invite');
+            });
+        });
+    });
+
+    Route::group(['prefix' => 'users', 'namespace' => 'User'], function () {
+        Route::get('/dinkes', 'DinkesController@index')->name('api.users.dinkes');
+        Route::get('/lab', 'LabController@index')->name('api.users.lab');
     });
 
     Route::group(['prefix' => 'perujuk'], function () {

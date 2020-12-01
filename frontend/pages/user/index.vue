@@ -18,7 +18,7 @@
       <div class="col-lg-12">
         <Ibox title="Pengguna">
           <ajax-table
-            url="/v1/user"
+            url="/v1/users/lab"
             :oid="`master-user`"
             :params="params"
             :config="{
