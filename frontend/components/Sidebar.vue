@@ -77,7 +77,7 @@
 
     methods: {
       checkPermission(menu) {
-        var allow_role_id
+        let allow_role_id
         switch (menu) {
           case 'dashboard':
             allow_role_id = [1, 8]
