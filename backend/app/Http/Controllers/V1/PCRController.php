@@ -289,7 +289,7 @@ class PCRController extends Controller
         }
 
         if ($sampel->perujuk_id) {
-            RegisterPerujuk::find($sampel->perujuk_id)->updateState('pemeriksaan_selesai');
+            RegisterPerujuk::where('perujuk_id', $sampel->perujuk_id)->updateState('pemeriksaan_selesai');
         }
         return response()->json(['status' => 201, 'message' => 'Hasil analisa berhasil disimpan']);
     }
