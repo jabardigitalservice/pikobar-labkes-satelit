@@ -36,6 +36,7 @@
   "resend_verification_link": "Resend Verification Link ?",
   "failed_to_verify_email": "Failed to verify email.",
   "verify_email_address": "We sent you an email with an the verification link.",
+  "checking": "Sedang Memeriksa",
   "aktivitas": {
     "list_of": "Daftar Aktivitas"
   },

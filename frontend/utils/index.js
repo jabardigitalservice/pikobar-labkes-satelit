@@ -96,6 +96,21 @@ export function getAlertDelete() {
   };
   return alertMessage;
 }
+export function getAlertPopUp(type, content) {
+  let alertMessage;
+  if (type === 'delete') {
+    alertMessage = {
+      title: "Hapus Data",
+      showCancelButton: true,
+      confirmButtonText: `<i class='fa fa-trash' /> Ya, Hapus Data`,
+      cancelButtonText: `<i class="fa fa-close" /> Tidak, Jangan Hapus`,
+      icon: "warning",
+      reverseButtons: true,
+      html: content
+    };
+  }
+  return alertMessage;
+}
 
 export function humanize(str) {
   var i, frags = str.split('_');
@@ -127,4 +142,19 @@ export function momentFormatDateDefault(date) {
 // function to convert time use moment js
 export function momentFormatTime(time) {
   return moment(time).format("HH:mm:ss");
+}
+
+export function getKeteranganData(nik, nama) {
+  if ((nik == null || nik == '') || (nama == null || nama == '')) {
+    return `
+      <div class="text-red">
+        <b>Data Belum Lengkap</b>
+      </div>`;
+  }
+  if ((nik != null && nik != '') && (nama != null && nama != '')) {
+    return `
+      <div class="text-yellow">
+        <b>Data Lengkap</b>
+      </div>`;
+  }
 }

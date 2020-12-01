@@ -57,3 +57,11 @@ function getCodeDagri($code)
     }
     return $codeDagri;
 }
+
+function getConvertCodeDagri($wilayah)
+{
+    if (!$wilayah) {
+        return $wilayah;
+    }
+    return (int)str_replace('.', '', $wilayah);
+}

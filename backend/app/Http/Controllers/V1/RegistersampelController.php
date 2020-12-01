@@ -101,7 +101,7 @@ class RegistersampelController extends Controller
                 $jenis_sampel = JenisSampel::where('id', $request->reg_sampel_jenis_sampel)->first();
                 $sampel->jenis_sampel_nama = optional($jenis_sampel)->nama;
             } else {
-                $sampel->jenis_sampel_nama = $request->reg_sampel_nomor;
+                $sampel->jenis_sampel_nama = $request->reg_sampel_namadiluarjenis;
             }
             $sampel->register_id = $register->id;
             $sampel->lab_satelit_id = $user->lab_satelit_id;
@@ -197,7 +197,7 @@ class RegistersampelController extends Controller
                 $jenis_sampel = JenisSampel::where('id', $request->reg_sampel_jenis_sampel)->first();
                 $sampel->jenis_sampel_nama = optional($jenis_sampel)->nama;
             } else {
-                $sampel->jenis_sampel_nama = $request->reg_sampel_nomor;
+                $sampel->jenis_sampel_nama = $request->reg_sampel_namadiluarjenis;
             }
             $sampel->register_id = $register->id;
             $sampel->lab_satelit_id = $user->lab_satelit_id;

@@ -1,6 +1,11 @@
 <template>
   <div class="loginColumns animated fadeInDown">
-    <div class="row">
+    <div class="row" v-if="!status">
+      <div class="col-md-12 text-center mb-3">
+        {{ $t("checking") }}
+      </div>
+    </div>
+    <div class="row" v-if="status">
       <div class="col-md-12 text-center mb-3">
         <div class="title-welcome">Undangan Berpartisipasi</div>
         <div class="title-welcome">Sistem Informasi Lab Jejaring</div>
@@ -11,9 +16,9 @@
           <form @submit.prevent="register" @keydown="form.onKeydown($event)">
             <!-- Email -->
             <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{
-                $t("email")
-              }}</label>
+              <label class="col-md-3 col-form-label text-md-right"
+                >{{ $t("email") }}<span style="color: red">*</span></label
+              >
               <div class="col-md-7">
                 <label
                   :class="{ 'is-invalid': form.errors.has('email') }"
@@ -30,16 +35,17 @@
 
             <!-- Koordinator -->
             <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{
-                $t("coordinator")
-              }}</label>
+              <label class="col-md-3 col-form-label text-md-right"
+                >{{ $t("coordinator") }}<span style="color: red">*</span></label
+              >
               <div class="col-md-7">
                 <input
                   v-model="form.koordinator"
-                  :class="{ 'is-invalid': form.errors.has('koodinator') }"
+                  :class="{ 'is-invalid': form.errors.has('koordinator') }"
                   type="text"
                   name="koordinator"
                   class="form-control"
+                  required
                 />
                 <has-error :form="form" field="koordinator" />
               </div>
@@ -47,9 +53,9 @@
 
             <!-- Name -->
             <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{
-                $t("name")
-              }}</label>
+              <label class="col-md-3 col-form-label text-md-right"
+                >{{ $t("name") }}<span style="color: red">*</span></label
+              >
               <div class="col-md-7">
                 <input
                   v-model="form.name"
@@ -57,6 +63,7 @@
                   type="text"
                   name="name"
                   class="form-control"
+                  required
                 />
                 <has-error :form="form" field="name" />
               </div>
@@ -64,9 +71,9 @@
 
             <!-- Username -->
             <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{
-                $t("username")
-              }}</label>
+              <label class="col-md-3 col-form-label text-md-right"
+                >{{ $t("username") }}<span style="color: red">*</span></label
+              >
               <div class="col-md-7">
                 <input
                   v-model="form.username"
@@ -74,6 +81,7 @@
                   type="text"
                   name="username"
                   class="form-control"
+                  required
                 />
                 <has-error :form="form" field="username" />
               </div>
@@ -81,9 +89,9 @@
 
             <!-- Password -->
             <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{
-                $t("password")
-              }}</label>
+              <label class="col-md-3 col-form-label text-md-right"
+                >{{ $t("password") }}<span style="color: red">*</span></label
+              >
               <div class="col-md-7">
                 <input
                   v-model="form.password"
@@ -91,6 +99,7 @@
                   type="password"
                   name="password"
                   class="form-control"
+                  required
                 />
                 <has-error :form="form" field="password" />
               </div>
@@ -98,9 +107,10 @@
 
             <!-- Password Confirmation -->
             <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{
-                $t("confirm_password")
-              }}</label>
+              <label class="col-md-3 col-form-label text-md-right"
+                >{{ $t("confirm_password")
+                }}<span style="color: red">*</span></label
+              >
               <div class="col-md-7">
                 <input
                   v-model="form.password_confirmation"
@@ -110,6 +120,7 @@
                   type="password"
                   name="password_confirmation"
                   class="form-control"
+                  required
                 />
                 <has-error :form="form" field="password_confirmation" />
               </div>
@@ -127,34 +138,41 @@
         </card>
       </div>
       <div class="col-lg-12 text-center">
-          <div class="footer-logo-desc mt-5">Developed by</div>
-          <div>
-            <img
-              alt="image"
-              class="img-footer-logo"
-              src="~/assets/img/logo/pemprov-jabar.png"
-            />
-            <img
-              alt="image"
-              class="img-footer-logo"
-              src="~/assets/img/logo/jds.png"
-            />
-          </div>
+        <div class="footer-logo-desc mt-5">Developed by</div>
+        <div>
+          <img
+            alt="image"
+            class="img-footer-logo"
+            src="~/assets/img/logo/pemprov-jabar.png"
+          />
+          <img
+            alt="image"
+            class="img-footer-logo"
+            src="~/assets/img/logo/jds.png"
+          />
         </div>
       </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Form from "vform";
+import swal from "sweetalert2";
 
 export default {
   layout: "login",
-  middleware: 'guest',
+  middleware({ store, redirect}) {
+    if (store.getters["auth/check"]) {
+      swal.fire('Harus Logout terlebih dahulu');
+      return redirect('/home')
+    }
+  },
   head() {
     return { title: this.$t("register") };
   },
   data: () => ({
+    status: false,
     form: new Form({
       username: "",
       name: "",
@@ -200,8 +218,6 @@ export default {
       this.loading = false;
     },
     async getTokenInfo() {
-      console.log(this.$route.params.token);
-      console.log('asd');
       await this.$axios
         .get("/v1/user/register/" + this.$route.params.token)
         .then((response) => {
@@ -209,6 +225,13 @@ export default {
           if (response.status == 200) {
             this.form.email = data.email;
             this.form.lab_satelit_id = data.lab_satelit_id;
+            this.status = true
+          }
+        })
+        .catch((err) => {
+          if (err.response.status == 404){
+            this.$router.push({ name: "home" });
+            this.status = false
           }
         });
     },
