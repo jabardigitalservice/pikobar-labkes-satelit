@@ -381,7 +381,7 @@
         this.$axios.get(that.url, {
           params: {
             page: page,
-            perpage: that.config.show_all ? 99999999 : that.pagination.perpage,
+            perpage: that.pagination.perpage,
             params: that.params,
             search: that.search,
             order: that.sortColumn,
