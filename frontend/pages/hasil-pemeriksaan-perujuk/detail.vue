@@ -3,10 +3,7 @@
     <portal to="title-name">Detail Hasil Pemeriksaan</portal>
     <portal to="title-action">
       <div class="title-action">
-        <router-link :to="`/hasil-pemeriksaan/edit/${this.data.id}`" class="btn btn-import-export">
-          <i class="fa fa-pencil" /> Perbarui Data
-        </router-link>
-        <nuxt-link to="/hasil-pemeriksaan/list-hasil-pemeriksaan" class="btn btn-black">
+        <nuxt-link to="/hasil-pemeriksaan-perujuk" class="btn btn-black">
           <i class="uil-arrow-left" /> Kembali
         </nuxt-link>
       </div>
@@ -34,6 +31,14 @@
         </Ibox>
         
         <Ibox title="Identitas Sampel">
+          <div class="form-group row">
+            <div class="col-md-5 text-blue flex-text-center">
+              Kode Kasus
+            </div>
+            <div class="col-md-7 flex-text-center">
+              {{data.kode_kasus || null}}
+            </div>
+          </div>
           <div class="form-group row">
             <div class="col-md-5 text-blue flex-text-center">
               Nomor Sampel

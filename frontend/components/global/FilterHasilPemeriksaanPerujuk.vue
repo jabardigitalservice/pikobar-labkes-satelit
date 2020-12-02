@@ -67,7 +67,6 @@
         hasil_pemeriksaan: KesimpulanPemeriksaan,
         params: {
           nama_pasien: null,
-          nik: null,
           start_date: null,
           end_date: null,
           kota: null,
@@ -87,7 +86,6 @@
       },
       resetForm() {
         this.params.nama_pasien = null;
-        this.params.nik = null;
         this.params.start_date = null;
         this.params.end_date = null;
         this.params.kota = null;

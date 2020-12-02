@@ -5,9 +5,6 @@
     </portal>
     <portal to="title-action">
       <div class="title-action">
-        <!-- <nuxt-link tag="a" :to="`/registrasi/sampel/update/${registerId}`" class="btn btn-import-export">
-          <i class="fa fa-pencil" /> Perbarui Data
-        </nuxt-link> -->
         <nuxt-link to="/registrasi/perujuk" class="btn btn-black">
           <i class="uil-arrow-left" /> Kembali
         </nuxt-link>
@@ -236,7 +233,7 @@
       usiaPasien() {
         if (this.data && this.data.result.usia_tahun) {
           if (this.data && this.data.result.usia_bulan) {
-            return `${this.data.result.usia_tahun} tahun ${this.data.result.reg_usia_bulan} bulan`;
+            return `${this.data.result.usia_tahun} tahun ${this.data.result.usia_bulan} bulan`;
           }
           return `${this.data.result.usia_tahun} tahun`;
         }
