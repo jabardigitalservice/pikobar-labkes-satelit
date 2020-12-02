@@ -10,7 +10,8 @@
         "detail": "Detail Registrasi",
         "update": "Edit Data Registrasi",
         "import-excel": "Import Excel",
-        "export-excel": "Export Excel"
+        "export-excel": "Export Excel",
+        "terima": "Terima Sampel"
       }
     },
     "sample": {

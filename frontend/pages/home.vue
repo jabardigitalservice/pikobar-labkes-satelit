@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper wrapper-content">
-    <portal to="title-name">Dashboard</portal>
+    <portal v-if="checkPermission('satelit') || checkPermission('superadmin')" to="title-name">Dashboard</portal>
 
     <!-- Web Satelit -->
     <tracking v-if="checkPermission('satelit')" />
@@ -11,6 +11,9 @@
     <!-- Dashboard superadmin -->
     <tracking-admin v-if="checkPermission('superadmin')" />
     <chart-admin v-if="checkPermission('superadmin')" />
+
+    <!-- Perujuk -->
+    <registrasi-perujuk v-if="checkPermission('perujuk')" />
 
   </div>
 </template>
@@ -25,6 +28,7 @@
   import InstansiPengirim from './dashboard/instansi-pengirim'
   import TrackingAdmin from './dashboard-admin/tracking'
   import ChartAdmin from './dashboard-admin/chart/charts'
+  import RegistrasiPerujuk from './registrasi-perujuk'
 
   export default {
     middleware: "auth",
@@ -34,7 +38,8 @@
       Charts,
       InstansiPengirim,
       TrackingAdmin,
-      ChartAdmin
+      ChartAdmin,
+      RegistrasiPerujuk
     },
 
     computed: mapGetters({
@@ -62,6 +67,9 @@
             break;
           case 'superadmin':
             allow_role_id = [1]
+            break;
+          case 'perujuk':
+            allow_role_id = [9]
             break;
         }
         return allow_role_id.indexOf(this.user.role_id) > -1

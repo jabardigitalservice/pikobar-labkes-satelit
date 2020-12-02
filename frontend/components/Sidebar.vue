@@ -9,10 +9,22 @@
           <div class="logo-element">
             <img src="@/assets/img/logo-lab.png" style="width:25px" /></div>
         </li>
-        <li>
+        <li v-if="checkPermission('dashboard')">
           <router-link to="/" tag="a">
             <i class="fa fa-home fa-fw" />
             <span class="nav-label">Dashboard</span>
+          </router-link>
+        </li>
+        <li v-if="checkPermission('perujuk')">
+          <router-link to="/registrasi/perujuk" tag="a">
+            <i class="uil-user-square fa-fw" />
+            <span class="nav-label">Registrasi Sampel</span>
+          </router-link>
+        </li>
+        <li v-if="checkPermission('perujuk')">
+          <router-link to="/hasil-pemeriksaan/list-hasil-pemeriksaan-perujuk" tag="a">
+            <i class="uil-eye fa-fw" />
+            <span class="nav-label">Hasil Pemeriksaan</span>
           </router-link>
         </li>
         <li v-if="checkPermission('admin')">
@@ -74,10 +86,16 @@
 
     methods: {
       checkPermission(menu) {
-        var allow_role_id
+        let allow_role_id
         switch (menu) {
+          case 'dashboard':
+            allow_role_id = [1, 8]
+            break;
           case 'satelit':
             allow_role_id = [8]
+            break;
+          case 'perujuk':
+            allow_role_id = [9]
             break;
           case 'admin':
             allow_role_id = [1]

@@ -268,6 +268,7 @@ class RegisterPerujukController extends Controller
                 $register = new Register;
                 $register->nomor_register = $row->get('nomor_register');
                 $register->perujuk_id = $row->get('perujuk_id');
+                $register->register_perujuk_id = $row->get('id');
                 $register->register_uuid = $row->get('register_uuid');
                 $register->creator_user_id = $user->id;
                 $register->lab_satelit_id = $row->get('lab_satelit_id');
@@ -288,6 +289,7 @@ class RegisterPerujukController extends Controller
                 $pasien = new Pasien;
                 $pasien->nama_lengkap = $row->get('nama_pasien');
                 $pasien->perujuk_id = $row->get('perujuk_id');
+                $pasien->register_perujuk_id = $row->get('id');
                 $pasien->kewarganegaraan = $row->get('kewarganegaraan');
                 $pasien->keterangan_warganegara = $row->get('keterangan_warganegara');
                 $pasien->nik = $row->get('nik');
@@ -340,6 +342,7 @@ class RegisterPerujukController extends Controller
                 $sampel->nomor_sampel = $row->get('nomor_sampel');
                 $sampel->jenis_sampel_id = $row->get('jenis_sampel');
                 $sampel->perujuk_id = $row->get('perujuk_id');
+                $sampel->register_perujuk_id = $row->get('id');
                 $sampel->jenis_sampel_nama = $row->get('nama_jenis_sampel');
                 $sampel->register_id = $register->id;
                 $sampel->lab_satelit_id = $user->lab_satelit_id;
