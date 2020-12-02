@@ -17,7 +17,8 @@
         title="Klik untuk mengubah data">
         <i class="fa fa-edit" />
       </nuxt-link>
-      <button class="mb-1 btn btn-danger btn-sm" title="klik untuk menghapus data" @click="deleteData(item.id)">
+      <button v-if="!item.has_data" class="mb-1 btn btn-danger btn-sm" @click="deleteData(item, userStatus)"
+        title="Klik untuk hapus data">
         <i class="fa fa-trash" />
       </button>
       <button :class="`mb-1 btn ${userStatus ? 'btn-warning' : 'btn-success'} btn-sm`"
@@ -29,6 +30,9 @@
 </template>
 <script>
   import axios from 'axios'
+  import {
+    getAlertPopUp
+  } from '~/utils'
   export default {
     props: ['item', 'pagination', 'rowparams', 'index'],
     data() {
@@ -41,6 +45,7 @@
     },
     methods: {
       async deleteData(item) {
+        console.log(item)
         const content = `
         <div class="row flex-content-center">
           ${this.$t("alert_confirm_delete_text")}
@@ -48,10 +53,10 @@
         <div class="row col-lg-12 flex-content-center mt-4" style="font-size: 12px">
           <div class="form-group row col-md-10">
             <div class="col-md-5 text-blue flex-left">
-              Username
+              Dinkes
             </div>
             <div class="col-md-7 flex-left">
-              ${item.username || '-'}
+              ${item.dinkes || '-'}
             </div>
           </div>
           <div class="form-group row col-md-10">
@@ -68,30 +73,6 @@
             </div>
             <div class="col-md-7 flex-left">
               ${item.email || '-'}
-            </div>
-          </div>
-          <div class="form-group row col-md-10">
-            <div class="col-md-5 text-blue flex-left">
-              Koordinator
-            </div>
-            <div class="col-md-7 flex-left">
-              ${item.koordinator || '-'}
-            </div>
-          </div>
-          <div class="form-group row col-md-10">
-            <div class="col-md-5 text-blue flex-left">
-              Lab
-            </div>
-            <div class="col-md-7 flex-left">
-              ${item.lab_satelit ? item.lab_satelit.nama : '-'}
-            </div>
-          </div>
-          <div class="form-group row col-md-10">
-            <div class="col-md-5 text-blue flex-left">
-              Alamat Lab
-            </div>
-            <div class="col-md-7 flex-left">
-              ${item.lab_satelit ? item.lab_satelit.alamat : '-'}
             </div>
           </div>
           <div class="form-group row col-md-10">
@@ -125,7 +106,7 @@
               iconPack: 'fontawesome',
               duration: 5000
             })
-            await bus.$emit('refresh-ajaxtable', 'master-user');
+            await bus.$emit('refresh-ajaxtable', 'master-dinkes');
           } catch (e) {
             swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
           }
@@ -154,7 +135,7 @@
                     "",
                     "success"
                   );
-                  this.$bus.$emit("refresh-ajaxtable", "master-user");
+                  this.$bus.$emit("refresh-ajaxtable", "master-dinkes");
                 })
                 .catch((err) => {
                   this.$swal.fire(

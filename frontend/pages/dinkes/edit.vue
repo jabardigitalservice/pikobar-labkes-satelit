@@ -3,7 +3,7 @@
     <portal to="title-name">Perbarui Data Dinkes</portal>
     <portal to="title-action">
       <div class="title-action">
-        <nuxt-link to="/user" class="btn btn-black">
+        <nuxt-link to="/dinkes" class="btn btn-black">
           <i class="uil-arrow-left" /> Kembali
         </nuxt-link>
       </div>
