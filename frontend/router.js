@@ -53,6 +53,7 @@ const routes = [
     { path: '/dinkes', name: 'dinkes.index', component: page('dinkes/index.vue'), meta: {parentName: 'home'}},
     { path: '/dinkes/:id', name: 'dinkes.show', component: page('dinkes/show.vue'), meta: {parentName: 'dinkes.index'}},
     { path: '/user/:id/edit', name: 'dinkes.edit', component: page('dinkes/edit.vue'), meta: {parentName: 'dinkes.index'}},
+    { path: '/pengguna/tambah', name:'dinkes.tambah', component:page('dinkes/add.vue'), meta: {parentName: 'dinkes.index'} },
     
     { path: '/registrasi/perujuk', name: 'registrasi.sampel', component: page('registrasi-perujuk/index.vue'), meta: { parentName: 'home' } },
     { path: '/registrasi/perujuk/tambah', name: 'registrasi.index.tambah', component: page('registrasi-perujuk/tambah.vue'), meta: { parentName: 'registrasi.sampel' } },
