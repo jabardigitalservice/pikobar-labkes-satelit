@@ -35,6 +35,10 @@ class RolesTableSeeder extends Seeder
                 "id" => "9",
                 "roles_name"=> "Perujuk",
             ],
+            [
+                "id" => "2",
+                "roles_name"=> "Dinkes",
+            ],
         ];
     }
 }
