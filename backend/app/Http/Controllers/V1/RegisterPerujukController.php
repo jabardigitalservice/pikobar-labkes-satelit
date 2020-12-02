@@ -41,7 +41,7 @@ class RegisterPerujukController extends Controller
         }
         $params = $request->get('params', false);
         $search = $request->get('search', false);
-        $order = $request->get('order', 'created_at');
+        $order = $request->get('order', 'tanggal');
         $page = $request->get('page', 1);
         $perpage = $request->get('perpage', 500);
 
@@ -97,10 +97,7 @@ class RegisterPerujukController extends Controller
         }
 
         if ($order) {
-            $order_direction = $request->get('order_direction', 'asc');
-            if (empty($order_direction)) {
-                $order_direction = 'desc';
-            }
+            $order_direction = $request->get('order_direction', 'desc');
             switch ($order) {
                 case "nomor_sampel":
                     $models = $models->orderBy('nomor_sampel', $order_direction);
