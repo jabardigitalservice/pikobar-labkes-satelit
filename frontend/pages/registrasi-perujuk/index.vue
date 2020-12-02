@@ -67,12 +67,16 @@
           <br>
           <div class="form-group">
             <label class="text-muted" style="text-align: justify">
-              Berikut adalah contoh format untuk import excel Registrasi perujuk yang
+              Berikut adalah contoh format untuk import excel Registrasi perujuk dan Data Lab Satelit yang
               dapat diunduh sebagai referensi.
             </label>
             <button @click="downloadFormat('formatRegistrasiPerujuk')" :disabled="loading"
               :class="{'btn-loading': loading}" class="btn btn-sm btn-default" type="button">
               <i class="fa fa-file" /> Format Import
+            </button>
+            <button @click="downloadFormat('labSatelit')" :disabled="loading"
+              :class="{'btn-loading': loading}" class="btn btn-sm btn-default" type="button">
+              <i class="fa fa-file" /> Data Lab Satelit
             </button>
           </div>
         </div>
