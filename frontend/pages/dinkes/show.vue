@@ -4,7 +4,7 @@
     <portal to="title-action">
       <div class="title-action">
         <router-link
-          :to="`/dinkes/${this.data.id}/edit`"
+          :to="`/pengguna/${this.data.id}/edit`"
           class="btn btn-warning"
         >
           <i class="fa fa-edit"></i> Ubah
@@ -72,7 +72,7 @@ import axios from "axios";
 export default {
   middleware: "auth",
   async asyncData({ route }) {
-    let resp = await axios.get("/v1/users/dinkes" + route.params.id);
+    let resp = await axios.get("/v1/user/" + route.params.id);
     let data = resp.data.data;
 
     return { data };

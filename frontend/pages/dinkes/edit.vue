@@ -128,7 +128,7 @@ export default {
     async submit() {
       try {
         const response = await this.form.put(
-          "/v1/users/dinkes" +
+          "/v1/user/dinkes/" +
             this.form.id 
         );
         this.$toast.success('Berhasil', {

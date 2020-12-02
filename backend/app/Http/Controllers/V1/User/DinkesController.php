@@ -74,7 +74,7 @@ class DinkesController extends Controller
             $user->status = UserStatusEnum::INACTIVE();
             $user->invited_at = Carbon::now();
             $user->save();
-            $url = config('app.url') . '/registration/' . $invite->token;
+            $url = config('app.url') . '/registration-dinkes/' . $invite->token;
 
             $user->notify(new InviteNotification($url));
             DB::commit();

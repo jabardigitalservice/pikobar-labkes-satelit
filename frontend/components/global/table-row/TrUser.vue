@@ -98,7 +98,7 @@
               Alamat Lab
             </div>
             <div class="col-md-7 flex-left">
-              ${item.lab_satelit.alamat || '-'}
+              ${item.lab_satelit ? item.lab_satelit.alamat : '-'}
             </div>
           </div>
           <div class="form-group row col-md-10">

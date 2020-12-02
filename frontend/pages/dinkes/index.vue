@@ -15,7 +15,7 @@
     <div class="row">
       <div class="col-lg-12">
         <Ibox title="Dinkes">
-          <ajax-table url="/v1/users/dinkes" :oid="`master-dinkes`" :params="params" :config="{
+          <ajax-table url="/v1/users/dinkes/" :oid="`master-dinkes`" :params="params" :config="{
               autoload: true,
               has_number: true,
               has_entry_page: true,
@@ -46,38 +46,51 @@
 
           <!-- Name -->
           <div class="form-group row">
-            <label class="col-md-4 col-form-label">Admin Dinkes</label>
+            <label class="col-md-4 col-form-label">
+              Admin Dinkes<span style="color: red">*</span>
+            </label>
             <div class="col-md-8">
-              <input v-model="form.name" type="text" name="name" class="form-control">
+              <input v-model="form.name" type="text" name="name" class="form-control" required :class="{ 'is-invalid': form.errors.has(`name`) }">
+              <has-error :form="form" field="name" />
             </div>
           </div>
 
           <!-- Username -->
           <div class="form-group row">
-            <label class="col-md-4 col-form-label">Username</label>
+            <label class="col-md-4 col-form-label">
+              Username<span style="color: red">*</span>
+            </label>
             <div class="col-md-8">
-              <input v-model="form.username" type="text" name="username" class="form-control">
+              <input v-model="form.username" type="text" name="username" class="form-control" required :class="{ 'is-invalid': form.errors.has(`username`) }">
+              <has-error :form="form" field="username" />
             </div>
           </div>
 
           <!-- Lab -->
           <div class="form-group row">
-            <label class="col-md-4 col-form-label">Lab</label>
+            <label class="col-md-4 col-form-label">
+              Lab<span style="color: red">*</span>
+            </label>
             <div class="col-md-8">
-              <select v-model="form.lab_satelit_id" class="form-control" name="lab_satelit_id" required>
+              <select v-model="form.lab_satelit_id" class="form-control" name="lab_satelit_id" required
+                :class="{ 'is-invalid': form.errors.has(`lab_satelit_id`) }">
                 <option :value="item.id" :key="idx" v-for="(item, idx) in option_lab_satelit">
                   {{ item.nama }}
                 </option>
               </select>
+              <has-error :form="form" field="lab_satelit_id" />
             </div>
           </div>
 
           <!-- Email -->
           <div class="form-group row">
-            <label class="col-md-4 col-form-label">Email</label>
+            <label class="col-md-4 col-form-label">
+              Email<span style="color: red">*</span>
+            </label>
             <div class="col-md-8">
               <input class="form-control" name="email" placeholder="Email" type="text" tabindex="1" required autofocus
-                v-model="form.email" />
+                v-model="form.email" :class="{ 'is-invalid': form.errors.has(`email`) }" />
+                <has-error :form="form" field="email" />
             </div>
           </div>
         </div>
@@ -110,12 +123,12 @@
         loading: false,
         dataError: [],
         option_lab_satelit: null,
-        form: {
+        form: new Form({
           name: null,
           username: null,
           email: null,
           lab_satelit_id: null,
-        },
+        }),
         params: {
           dinkes: null,
           name: null,
@@ -136,9 +149,7 @@
       },
       async submit() {
         try {
-          console.log('test', this.form)
-          const response = await this.form.post("/v1/dinkes/invite");
-          console.log('response', response)
+          const response = await this.form.post("/v1/user/dinkes/invite");
           this.$toast.success(response.data.message, {
             icon: "paper-plane",
             iconPack: "fontawesome",
@@ -146,11 +157,12 @@
             duration: 5000,
           });
           JQuery("#invite-dinkes-modal").modal("hide");
+          this.form.name = null;
+          this.form.username = null;
           this.form.email = null;
           this.form.lab_satelit_id = null;
           this.$bus.$emit("refresh-ajaxtable", "master-dinkes");
         } catch (err) {
-          console.log('error')
           if (err.response && err.response.data.code == 422) {
             this.$nextTick(() => {
               this.form.errors.set(err.response.data.error);
