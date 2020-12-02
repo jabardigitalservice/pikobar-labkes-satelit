@@ -23,7 +23,6 @@ use App\Models\RegisterPerujuk;
 use App\Models\Sampel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -38,6 +37,7 @@ class RegisterPerujukController extends Controller
         }
         if ($request->user()->role_id == RoleEnum::LABORATORIUM()->getIndex()) {
             $models = $models->where('lab_satelit_id', $request->user()->lab_satelit_id);
+            $models = $models->where('status', 'dikirim');
         }
         $params = $request->get('params', false);
         $search = $request->get('search', false);
@@ -380,7 +380,7 @@ class RegisterPerujukController extends Controller
         }
     }
 
-    private function getNamaRS($fasyankes_id)
+    public function getNamaRS($fasyankes_id)
     {
         if (!$fasyankes_id) {
             return $fasyankes_id;
@@ -388,7 +388,7 @@ class RegisterPerujukController extends Controller
         return optional(Fasyankes::find($fasyankes_id))->nama;
     }
 
-    private function getNamaWilayah($wilayah, $id)
+    public function getNamaWilayah($wilayah, $id)
     {
         if (!$id) {
             return $id;
