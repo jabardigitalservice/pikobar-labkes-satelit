@@ -260,10 +260,11 @@
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Kriteria Pasien
+                <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
                 <select v-model="form.kriteria" class="multisteps-form__input form-control col-md-8 col-lg-6"
-                  name="kriteria" :class="{ 'is-invalid': form.errors.has('kriteria') }">
+                  name="kriteria" :class="{ 'is-invalid': form.errors.has('kriteria') }" required>
                   <option v-for="index in pasien_status_option" v-bind:key="index.value" :value="index.value">
                     {{index.text}}
                   </option>

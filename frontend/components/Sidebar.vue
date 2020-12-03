@@ -22,7 +22,7 @@
           </router-link>
         </li>
         <li v-if="checkPermission('perujuk')">
-          <router-link to="/hasil-pemeriksaan/list-hasil-pemeriksaan-perujuk" tag="a">
+          <router-link to="/hasil-pemeriksaan-perujuk" tag="a">
             <i class="uil-eye fa-fw" />
             <span class="nav-label">Hasil Pemeriksaan</span>
           </router-link>

@@ -15,6 +15,11 @@
     <td>{{item.kota ? item.kota.nama : null}}</td>
     <td>{{item.sumber_pasien}}</td>
     <td>{{item.status}}</td>
+    <td nowrap>
+      <div><b>{{ item.created_at ? momentFormatDate(item.created_at) : null }}</b></div>
+      <div class="text-muted">
+        {{ item.created_at ? 'pukul ' + momentFormatTime(item.created_at) : null }}</div>
+    </td>
     <td>
       <div class="text-red" v-if="(item.nik==null || item.nik=='') || (item.nama_pasien==null || item.nama_pasien=='')">
         <b>Data Belum Lengkap</b>

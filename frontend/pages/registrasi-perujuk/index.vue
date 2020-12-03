@@ -32,7 +32,6 @@
               has_action: true,
               has_search_input: false,
               custom_header: '',
-              default_sort: 'tgl_input',
               default_sort_dir:'desc',
               custom_empty_page: true,
               class: {
@@ -46,6 +45,7 @@
               nama_kota: 'DOMISILI',
               sumber_pasien:'KATEGORI',
               status:'STATUS',
+              tgl_input:'TANGGAL PENGAMBILAN',
               keterangan:'KETERANGAN'
             }" />
         </Ibox>
@@ -67,12 +67,16 @@
           <br>
           <div class="form-group">
             <label class="text-muted" style="text-align: justify">
-              Berikut adalah contoh format untuk import excel Registrasi perujuk yang
+              Berikut adalah contoh format untuk import excel Registrasi perujuk dan Data Lab Satelit yang
               dapat diunduh sebagai referensi.
             </label>
             <button @click="downloadFormat('formatRegistrasiPerujuk')" :disabled="loading"
               :class="{'btn-loading': loading}" class="btn btn-sm btn-default" type="button">
               <i class="fa fa-file" /> Format Import
+            </button>
+            <button @click="downloadFormat('labSatelit')" :disabled="loading"
+              :class="{'btn-loading': loading}" class="btn btn-sm btn-default" type="button">
+              <i class="fa fa-file" /> Data Lab Satelit
             </button>
           </div>
         </div>

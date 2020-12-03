@@ -1,0 +1,54 @@
+FROM alpine:3.10
+
+LABEL Maintainer="Jabar Digital Service <digital.service@jabarprov.go.id>" \
+      Description="Lightweight container with Nginx 1.16 & PHP-FPM 7.4 based on Alpine Linux (forked from trafex/alpine-nginx-php7)."
+
+ADD https://dl.bintray.com/php-alpine/key/php-alpine.rsa.pub /etc/apk/keys/php-alpine.rsa.pub
+
+# make sure you can use HTTPS
+RUN apk --update add ca-certificates
+
+RUN echo "https://dl.bintray.com/php-alpine/v3.10/php-7.4" >> /etc/apk/repositories
+
+# Install packages
+RUN apk add php php-fpm php-opcache php-openssl php-curl php-gd \
+    nginx supervisor curl
+
+# Get latest Composer
+RUN apk add composer
+RUN apk add \
+		nano \
+		php7 \
+        php7-ctype \
+        php7-curl \
+        php7-dom \
+        php7-iconv \
+        php7-intl \
+        php7-json \
+        php7-mbstring \
+        php7-pdo_pgsql \
+        php7-ssh2 \
+        php7-session \
+        php7-xmlreader \
+        php7-zip \
+        php7-zlib \
+        npm
+
+
+# https://github.com/codecasts/php-alpine/issues/21
+RUN ln -s /usr/bin/php7 /usr/bin/php
+
+# Remove default server definition
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Fixing ssh2.so not found
+RUN mv /etc/php7/conf.d/ssh2.ini /etc/php7/conf.d/ssh2.old
+
+COPY . /var/www/html
+WORKDIR /var/www/html
+
+RUN composer install
+
+RUN echo "* * * * * php /var/www/html/artisan schedule:run >> /dev/null 2>&1" > /etc/crontabs/root
+
+CMD ["crond", "-l", "2", "-f"]
