@@ -93,11 +93,17 @@
 
           // Fetch the user.
           await this.$store.dispatch('auth/fetchUser', data.user)
-
-          // Redirect home.
-          this.$router.push({
-            name: 'home'
-          })
+          if (data.user.role_id === 9) {
+            // Redirect register perujuk.
+            this.$router.push({
+              name: 'registrasi.perujuk'
+            })
+          } else {
+            // Redirect home.
+            this.$router.push({
+              name: 'home'
+            })
+          }
         } catch (e) {
           this.$swal.fire(
             'Login gagal',
@@ -135,7 +141,7 @@
     .title-footer {
       position: relative;
       bottom: 10px;
-    padding-top: 15px;
+      padding-top: 15px;
     }
   }
 </style>
