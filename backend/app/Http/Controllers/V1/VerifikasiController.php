@@ -37,18 +37,6 @@ class VerifikasiController extends Controller
             ->where('sampel.sampel_status', 'pcr_sample_analyzed')
             ->whereNull('register.deleted_at');
 
-        if ($user->role_id == RoleEnum::PERUJUK()->getIndex()) {
-            $models = $models->where('register.perujuk_id', $user->perujuk_id);
-            $models = $models->where('sampel.perujuk_id', $user->perujuk_id);
-            $models = $models->where('pasien.perujuk_id', $user->perujuk_id);
-        }
-
-        if ($user->role_id == RoleEnum::LABORATORIUM()->getIndex()) {
-            $models = $models->where('register.lab_satelit_id', $user->lab_satelit_id);
-            $models = $models->where('sampel.lab_satelit_id', $user->lab_satelit_id);
-            $models = $models->where('pasien.lab_satelit_id', $user->lab_satelit_id);
-        }
-
         $params = $request->get('params', false);
         $search = $request->get('search', false);
         $order = $request->get('order', 'waktu_pcr_sample_analyzed');
@@ -104,6 +92,17 @@ class VerifikasiController extends Controller
                         break;
                 }
             }
+        }
+        if ($user->role_id == RoleEnum::PERUJUK()->getIndex()) {
+            $models = $models->where('register.perujuk_id', $user->perujuk_id);
+            $models = $models->where('sampel.perujuk_id', $user->perujuk_id);
+            $models = $models->where('pasien.perujuk_id', $user->perujuk_id);
+        }
+
+        if ($user->role_id == RoleEnum::LABORATORIUM()->getIndex()) {
+            $models = $models->where('register.lab_satelit_id', $user->lab_satelit_id);
+            $models = $models->where('sampel.lab_satelit_id', $user->lab_satelit_id);
+            $models = $models->where('pasien.lab_satelit_id', $user->lab_satelit_id);
         }
 
         $count = $models->count();
