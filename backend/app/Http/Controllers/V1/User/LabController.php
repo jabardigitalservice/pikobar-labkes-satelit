@@ -40,7 +40,7 @@ class LabController extends Controller
             }
         }
 
-        $model = $model->select('users.*', 'lab_satelit.*', 'users.id as id');
+        $model = $model->select('users.*');
         $page = $request->get('page', 1);
         $perpage = $request->get('perpage', 20);
         $count = $model->count();
