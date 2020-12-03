@@ -428,7 +428,7 @@
           pelaporan_id: data.pelaporan_id,
           pelaporan_id_case: data.pelaporan_id_case,
           provinsi_id: data.provinsi_id,
-          nama_provinsi: dataProvinsi.nama,
+          nama_provinsi: dataProvinsi ? dataProvinsi.nama : '',
           kota_id: data.kota_id,
           nama_kota: data.nama_kota,
           kecamatan_id: data.kecamatan_id,

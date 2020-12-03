@@ -32,7 +32,6 @@
               has_action: true,
               has_search_input: false,
               custom_header: '',
-              default_sort: 'tgl_input',
               default_sort_dir:'desc',
               custom_empty_page: true,
               class: {
@@ -46,6 +45,7 @@
               nama_kota: 'DOMISILI',
               sumber_pasien:'KATEGORI',
               status:'STATUS',
+              tgl_input:'TANGGAL PENGAMBILAN',
               keterangan:'KETERANGAN'
             }" />
         </Ibox>
