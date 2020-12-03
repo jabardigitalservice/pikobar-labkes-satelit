@@ -72,7 +72,10 @@
             allow_role_id = [9]
             break;
         }
-        return allow_role_id.indexOf(this.user.role_id) > -1
+        if (this.user && this.user.role_id) {
+          return allow_role_id.indexOf(this.user.role_id) > -1
+        }
+        return ''
       },
     }
   };
