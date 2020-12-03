@@ -45,7 +45,6 @@
     },
     methods: {
       async deleteData(item) {
-        console.log(item)
         const content = `
         <div class="row flex-content-center">
           ${this.$t("alert_confirm_delete_text")}
@@ -106,7 +105,7 @@
               iconPack: 'fontawesome',
               duration: 5000
             })
-            await bus.$emit('refresh-ajaxtable', 'master-dinkes');
+            bus.$emit('refresh-ajaxtable', 'master-dinkes');
           } catch (e) {
             swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
           }
