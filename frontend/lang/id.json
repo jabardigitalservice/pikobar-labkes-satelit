@@ -62,7 +62,13 @@
     },
     "user": {
       "index": "Pengguna",
-      "show": "Lihat"
+      "show": "Detail",
+      "edit": "Edit Data"
+    },
+    "dinkes": {
+      "index": "Dinkes",
+      "show": "Detail",
+      "edit": "Edit Data"
     },
     "registration": {
       "index": "Registrasi"

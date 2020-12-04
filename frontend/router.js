@@ -49,6 +49,11 @@ const routes = [
     { path: '/user/:id', name: 'user.show', component: page('user/show.vue'), meta: {parentName: 'user.index'}},
     { path: '/user/:id/edit', name: 'user.edit', component: page('user/edit.vue'), meta: {parentName: 'user.index'}},
     { path: '/registration/:token', name: 'user.registration', component: page('auth/register.vue'), meta: {parentName: 'registration.index'}},
+
+    { path: '/dinkes', name: 'dinkes.index', component: page('dinkes/index.vue'), meta: {parentName: 'home'}},
+    { path: '/pengguna/:id', name: 'dinkes.show', component: page('dinkes/show.vue'), meta: {parentName: 'dinkes.index'}},
+    { path: '/pengguna/:id/edit', name: 'dinkes.edit', component: page('dinkes/edit.vue'), meta: {parentName: 'dinkes.index'}},
+    { path: '/registration-dinkes/:token', name: 'dinkes.registration', component: page('auth/register-dinkes.vue'), meta: {parentName: 'registration.index'}},
     
     { path: '/registrasi/perujuk', name: 'registrasi.sampel', component: page('registrasi-perujuk/index.vue'), meta: { parentName: 'home' } },
     { path: '/registrasi/perujuk/tambah', name: 'registrasi.index.tambah', component: page('registrasi-perujuk/tambah.vue'), meta: { parentName: 'registrasi.sampel' } },

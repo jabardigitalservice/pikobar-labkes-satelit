@@ -2,22 +2,19 @@
   <tr>
     <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
     <td>
-      {{ item.username }}
+      {{item.dinkes}}
     </td>
     <td>
-      {{ item.name }}
+      {{item.name}}
     </td>
-    <td>{{ item.email }}</td>
-    <td>{{ item.koordinator }}</td>
-    <td>{{ item.lab_satelit ? item.lab_satelit.nama : "-" }}</td>
-    <td>{{ item.lab_satelit ? item.lab_satelit.alamat : "-" }}</td>
-    <td>{{ item.status }}</td>
-    <td>{{ item.last_login_at }}</td>
+    <td>{{item.email}}</td>
+    <td>{{item.status}}</td>
     <td>
-      <nuxt-link :to="`/user/${item.id}`" class="mb-1 btn btn-yellow btn-sm" title="Klik untuk melihat detail">
+      <nuxt-link :to="`/pengguna/${item.id}`" class="mb-1 btn btn-yellow btn-sm" title="Klik untuk melihat detail">
         <i class="fa fa-eye" />
       </nuxt-link>
-      <nuxt-link :to="`/user/${item.id}/edit`" class="mb-1 btn btn-primary btn-sm" title="Klik untuk edit data">
+      <nuxt-link :to="`/pengguna/${item.id}/edit`" class="mb-1 btn btn-primary btn-sm"
+        title="Klik untuk mengubah data">
         <i class="fa fa-edit" />
       </nuxt-link>
       <button v-if="!item.has_data" class="mb-1 btn btn-danger btn-sm" @click="deleteData(item, userStatus)"
@@ -31,15 +28,15 @@
     </td>
   </tr>
 </template>
-
 <script>
+  import axios from 'axios'
   import {
     getAlertPopUp
   } from '~/utils'
   export default {
-    props: ["item", "pagination", "rowparams", "index"],
+    props: ['item', 'pagination', 'rowparams', 'index'],
     data() {
-      return {};
+      return {}
     },
     computed: {
       userStatus: function () {
@@ -55,10 +52,10 @@
         <div class="row col-lg-12 flex-content-center mt-4" style="font-size: 12px">
           <div class="form-group row col-md-10">
             <div class="col-md-5 text-blue flex-left">
-              Username
+              Dinkes
             </div>
             <div class="col-md-7 flex-left">
-              ${item.username || '-'}
+              ${item.dinkes || '-'}
             </div>
           </div>
           <div class="form-group row col-md-10">
@@ -75,30 +72,6 @@
             </div>
             <div class="col-md-7 flex-left">
               ${item.email || '-'}
-            </div>
-          </div>
-          <div class="form-group row col-md-10">
-            <div class="col-md-5 text-blue flex-left">
-              Koordinator
-            </div>
-            <div class="col-md-7 flex-left">
-              ${item.koordinator || '-'}
-            </div>
-          </div>
-          <div class="form-group row col-md-10">
-            <div class="col-md-5 text-blue flex-left">
-              Lab
-            </div>
-            <div class="col-md-7 flex-left">
-              ${item.lab_satelit ? item.lab_satelit.nama : '-'}
-            </div>
-          </div>
-          <div class="form-group row col-md-10">
-            <div class="col-md-5 text-blue flex-left">
-              Alamat Lab
-            </div>
-            <div class="col-md-7 flex-left">
-              ${item.lab_satelit ? item.lab_satelit.alamat : '-'}
             </div>
           </div>
           <div class="form-group row col-md-10">
@@ -132,7 +105,7 @@
               iconPack: 'fontawesome',
               duration: 5000
             })
-            await bus.$emit('refresh-ajaxtable', 'master-user');
+            bus.$emit('refresh-ajaxtable', 'master-dinkes');
           } catch (e) {
             swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
           }
@@ -161,7 +134,7 @@
                     "",
                     "success"
                   );
-                  this.$bus.$emit("refresh-ajaxtable", "master-user");
+                  this.$bus.$emit("refresh-ajaxtable", "master-dinkes");
                 })
                 .catch((err) => {
                   this.$swal.fire(
@@ -173,6 +146,6 @@
             }
           });
       },
-    },
-  };
+    }
+  }
 </script>
