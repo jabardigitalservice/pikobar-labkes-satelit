@@ -49,10 +49,6 @@
                 <td>{{ data.lab_satelit ? data.lab_satelit.nama : "-" }}</td>
               </tr>
               <tr>
-                <th>Alamat</th>
-                <td>{{ data.lab_satelit ? data.lab_satelit.alamat : "-" }}</td>
-              </tr>
-              <tr>
                 <th>Kode</th>
                 <td>
                   {{ data.lab_satelit ? data.lab_satelit.kode_lab : "-" }}
