@@ -24,10 +24,9 @@ class DinkesController extends Controller
         $role_ids = [RoleEnum::DINKES()->getIndex(), RoleEnum::SUPERADMIN()->getIndex()];
         $model = User::query()->whereIn('role_id', $role_ids);
         $model = $model->leftJoin('lab_satelit', 'users.lab_satelit_id', 'lab_satelit.id');
-
         $order = $request->get('order');
         if ($order) {
-            $order_direction = $request->get('order_direction', 'asc');
+            $order_direction = $request->get('order_direction') == 'desc' ? $request->get('order_direction') : 'asc';
             switch (strtolower($order)) {
                 case 'lab':
                     $order = 'nama';
@@ -39,6 +38,7 @@ class DinkesController extends Controller
             }
         }
 
+        $model = $model->select('users.*');
         $page = $request->get('page', 1);
         $perpage = $request->get('perpage', 20);
         $count = $model->count();
@@ -93,7 +93,7 @@ class DinkesController extends Controller
         ])->validate();
 
         $invite = Invite::where('token', $request->token)->first();
-        if(!$invite) {
+        if (!$invite) {
             return response()->json(['message' => __('auth.registration_cannot_be_completed')], 404);
         }
 

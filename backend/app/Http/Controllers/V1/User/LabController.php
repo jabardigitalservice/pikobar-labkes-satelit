@@ -27,7 +27,7 @@ class LabController extends Controller
 
         $order = $request->get('order');
         if ($order) {
-            $order_direction = $request->get('order_direction', 'asc');
+            $order_direction = $request->get('order_direction') == 'desc' ? $request->get('order_direction') : 'asc';
             switch (strtolower($order)) {
                 case 'lab':
                 case 'alamat_lab':
@@ -40,7 +40,7 @@ class LabController extends Controller
             }
         }
 
-        $model = $model->with('lab_satelit');
+        $model = $model->select('users.*');
         $page = $request->get('page', 1);
         $perpage = $request->get('perpage', 20);
         $count = $model->count();
