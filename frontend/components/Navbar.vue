@@ -8,9 +8,9 @@
     <ul class="nav navbar-top-links navbar-right">
       <li>
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-          <span class="block m-t-xs font-bold">{{user.name}}</span>
+          <span class="block m-t-xs font-bold">{{user && user.name ? user.name : ''}}</span>
           <span class="text-blue text-xs block">
-            {{user.email}}
+            {{user && user.email ? user.email : ''}}
             <b class="caret"></b>
           </span>
         </a>
