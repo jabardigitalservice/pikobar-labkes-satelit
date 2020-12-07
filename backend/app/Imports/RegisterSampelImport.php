@@ -13,6 +13,7 @@ use App\Models\PengambilanSampel;
 use App\Models\Provinsi;
 use App\Models\Register;
 use App\Models\Sampel;
+use App\Rules\UniqueSampelPerujuk;
 use App\Traits\RegisterTrait;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -39,7 +40,10 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow, WithChunkRea
                 }
                 $validator = Validator::make($row->toArray(), [
                     'tgl_masuk_sampel' => 'required|date|date_format:Y-m-d',
-                    'kode_sampel' => 'required',
+                    'kode_sampel' => [
+                        'required',
+                        new UniqueSampelPerujuk($user->lab_satelit_id)
+                    ],
                     'kategori' => 'required',
                     'nama' => 'required',
                     'nik' => 'nullable|digits:16',
