@@ -71,12 +71,20 @@
               dapat diunduh sebagai referensi.
             </label>
             <button @click="downloadFormat('formatRegistrasiPerujuk')" :disabled="loading"
-              :class="{'btn-loading': loading}" class="btn btn-sm btn-default" type="button">
+              :class="{'btn-loading': loading}" class="btn btn-sm btn-default mb-1" type="button">
               <i class="fa fa-file" /> Format Import
             </button>
             <button @click="downloadFormat('labSatelit')" :disabled="loading"
-              :class="{'btn-loading': loading}" class="btn btn-sm btn-default" type="button">
+              :class="{'btn-loading': loading}" class="btn btn-sm btn-default mb-1" type="button">
               <i class="fa fa-file" /> Data Lab Satelit
+            </button>
+            <button @click="downloadFormat('wilayah')" :disabled="loading" :class="{'btn-loading': loading}"
+              class="btn btn-sm btn-default mb-1" type="button">
+              <i class="fa fa-file" /> Data Wilayah
+            </button>
+            <button @click="downloadFormat('fasyankes')" :disabled="loading" :class="{'btn-loading': loading}"
+              class="btn btn-sm btn-default mb-1" type="button">
+              <i class="fa fa-file" /> Data Fasyankes
             </button>
           </div>
         </div>

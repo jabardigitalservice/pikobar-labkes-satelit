@@ -53,26 +53,12 @@
           </Ibox>
 
           <Ibox title="Identitas Pasien">
-            <!-- TODO: waiting for confirmation -->
-            <!-- <div class="form-group row">
-              <div class="col-md-4 flex-text-center">
-                Pencarian
-              </div>
-              <div class="col-md-8">
-                <multiselect v-model="pencarian" :options="optionPencarian" track-by="name" label="name"
-                  placeholder="Cari berdasarkan NIK/Nama/No Telp" @search-change="asyncFind"
-                  :loading="isLoadingPencarian" :searchable="true" :internal-search="false" :clear-on-select="false"
-                  :show-no-results="false" :hide-selected="true">
-                </multiselect>
-              </div>
-            </div> -->
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Kode Kasus
-                <span style="color:red">*</span>
               </div>
               <div class="col-md-8">
-                <input class="form-control" type="text" name="kode_kasus" placeholder="Kode kasus" required
+                <input class="form-control" type="text" name="kode_kasus" placeholder="Kode kasus"
                   v-model="form.kode_kasus" :class="{ 'is-invalid': form.errors.has('kode_kasus') }" />
                 <has-error :form="form" field="kode_kasus" />
               </div>
