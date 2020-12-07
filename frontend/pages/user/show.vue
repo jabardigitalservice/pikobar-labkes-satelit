@@ -21,10 +21,6 @@
           <table class="table table-hover">
             <tbody>
               <tr>
-                <th width="30%">Nama</th>
-                <td>{{ data.name }}</td>
-              </tr>
-              <tr>
                 <th>Email</th>
                 <td>{{ data.email }}</td>
               </tr>

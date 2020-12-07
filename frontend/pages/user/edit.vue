@@ -13,16 +13,6 @@
       <div class="col-lg-12">
         <Ibox title="Informasi Pengguna">
           <form @submit.prevent="submit" @keydown="form.onKeydown($event)">
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{
-                $t("name")
-              }}</label>
-              <div class="col-md-7">
-                <label class="form-control" readonly>
-                  {{ this.form.name }}
-                </label>
-              </div>
-            </div>
 
             <div class="form-group row">
               <label class="col-md-3 col-form-label text-md-right">{{

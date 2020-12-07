@@ -51,24 +51,6 @@
               </div>
             </div>
 
-            <!-- Name -->
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right"
-                >{{ $t("name") }}<span style="color: red">*</span></label
-              >
-              <div class="col-md-7">
-                <input
-                  v-model="form.name"
-                  :class="{ 'is-invalid': form.errors.has('name') }"
-                  type="text"
-                  name="name"
-                  class="form-control"
-                  required
-                />
-                <has-error :form="form" field="name" />
-              </div>
-            </div>
-
             <!-- Username -->
             <div class="form-group row">
               <label class="col-md-3 col-form-label text-md-right"
@@ -175,7 +157,6 @@ export default {
     status: false,
     form: new Form({
       username: "",
-      name: "",
       email: "",
       koordinator: "",
       password: "",
