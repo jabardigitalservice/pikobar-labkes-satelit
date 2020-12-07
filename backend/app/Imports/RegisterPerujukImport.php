@@ -115,6 +115,7 @@ class RegisterPerujukImport implements ToCollection, WithHeadingRow, WithChunkRe
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
+            throw $th;
         }
     }
 
