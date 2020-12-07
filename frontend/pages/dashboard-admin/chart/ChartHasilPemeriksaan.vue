@@ -99,8 +99,8 @@
     },
     mounted() {
       this.$bus.$on('refresh-chart-hasil-pemeriksaan', () => {
-        chartHasil.destroy();
         setTimeout(() => {
+          chartHasil.destroy();
           this.loadData()
         }, 1000);
       })
