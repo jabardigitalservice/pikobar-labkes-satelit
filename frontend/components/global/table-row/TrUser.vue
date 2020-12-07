@@ -4,9 +4,6 @@
     <td>
       {{ item.username }}
     </td>
-    <td>
-      {{ item.name }}
-    </td>
     <td>{{ item.email }}</td>
     <td>{{ item.koordinator }}</td>
     <td>{{ item.lab_satelit ? item.lab_satelit.nama : "-" }}</td>
@@ -63,14 +60,6 @@
           </div>
           <div class="form-group row col-md-10">
             <div class="col-md-5 text-blue flex-left">
-              Nama
-            </div>
-            <div class="col-md-7 flex-left">
-              ${item.name || '-'}
-            </div>
-          </div>
-          <div class="form-group row col-md-10">
-            <div class="col-md-5 text-blue flex-left">
               Email
             </div>
             <div class="col-md-7 flex-left">
@@ -98,7 +87,7 @@
               Alamat Lab
             </div>
             <div class="col-md-7 flex-left">
-              ${item.lab_satelit.alamat || '-'}
+              ${item.lab_satelit ? item.lab_satelit.alamat : '-'}
             </div>
           </div>
           <div class="form-group row col-md-10">

@@ -40,7 +40,6 @@
             :rowtemplate="'tr-user'"
             :columns="{
               username: 'USERNAME',
-              name: 'NAMA',
               email: 'EMAIL',
               koordinator: 'KOORDINATOR',
               lab: 'LAB',
@@ -145,7 +144,6 @@ export default {
       },
       params: {
         username: null,
-        name: null,
         email: null,
         status: null,
         lab: null,
