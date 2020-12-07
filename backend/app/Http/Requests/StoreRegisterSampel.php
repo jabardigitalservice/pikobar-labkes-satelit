@@ -25,6 +25,7 @@ class StoreRegisterSampel extends FormRequest
      */
     public function rules()
     {
+        $user = Auth::user();
         return [
             'reg_fasyankes_id' => 'required',
             'reg_fasyankes_pengirim' => 'required',
@@ -32,24 +33,12 @@ class StoreRegisterSampel extends FormRequest
             'reg_nama_pasien' => 'required',
             'reg_nik' => 'nullable|digits:16',
             'reg_sampel_jenis_sampel' => 'required',
-            'reg_sampel_nomor' => 'required',
+            'reg_sampel_nomor' => [
+                'required',
+                new UniqueSampelPerujuk($user->lab_satelit_id)
+            ],
             'reg_sumber_pasien' => 'required',
             'reg_nohp' => 'required'
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'reg_fasyankes_id.required' => 'Nama Fasyankes tidak boleh kosong',
-            'reg_fasyankes_pengirim.required' => 'Instansi Pengirim tidak boleh kosong',
-            'reg_nama_rs.required' => 'Nama Rumah Sakit/Dinkes tidak boleh kosong',
-            'reg_nama_pasien.required' => 'Nama Pasien tidak boleh kosong',
-            'reg_nik.digits' => 'NIK terdiri dari :digits karakter',
-            'reg_sampel_nomor.required' => 'Nomor Sampel tidak boleh kosong',
-            'reg_sampel_jenis_sampel.required' => 'Jenis Sampel tidak boleh kosong',
-            'reg_sumber_pasien.required' => 'Kategori tidak boleh kosong',
-            'reg_nohp.required' => 'No HP tidak boleh kosong',
         ];
     }
 
