@@ -294,7 +294,7 @@ class RegisterPerujukController extends Controller
                 if ($row->get('tanggal_lahir') != null) {
                     $pasien->tanggal_lahir = date('Y-m-d', strtotime($row->get('tanggal_lahir')));
                 }
-                $pasien->no_hp = $row->get('nohp');
+                $pasien->no_hp = $row->get('no_hp');
                 $pasien->kode_provinsi = $row->get('provinsi_id');
                 $pasien->kota_id = $row->get('kota_id');
                 $pasien->kode_kabupaten = $row->get('kota_id');
