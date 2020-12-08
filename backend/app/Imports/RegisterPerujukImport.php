@@ -44,7 +44,8 @@ class RegisterPerujukImport implements ToCollection, WithHeadingRow, WithChunkRe
                         new UniqueSampelPerujuk($row->get('lab_satelit_id')),
                     ],
                     'kewarganegaraan' => 'required',
-                    'kategori' => 'nullable',
+                    'kategori' => 'required',
+                    'no_hp' => 'required',
                     'nama' => 'required',
                     'nik' => 'nullable|digits:16',
                     'jenis_kelamin' => 'nullable',
@@ -97,6 +98,7 @@ class RegisterPerujukImport implements ToCollection, WithHeadingRow, WithChunkRe
                 $data->fasyankes_id = $row->get('kode_instansi');
                 $data->fasyankes_pengirim = $row->get('instansi_pengirim');
                 $data->nama_pasien = $row->get('nama');
+                $data->no_hp = $row->get('no_hp');
                 $data->kewarganegaraan = $row->get('kewarganegaraan');
                 $data->nik = $row->get('nik');
                 if ($row->get('tgl_lahir')) {
