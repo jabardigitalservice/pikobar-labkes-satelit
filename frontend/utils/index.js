@@ -108,6 +108,16 @@ export function getAlertPopUp(type, content) {
       reverseButtons: true,
       html: content
     };
+  } else if (type === 'terima') {
+    alertMessage = {
+      title: "Registrasi",
+      showCancelButton: true,
+      confirmButtonText: `<i class='fa fa-check' /> OK`,
+      cancelButtonText: `<i class="fa fa-close" /> Cancel`,
+      icon: "info",
+      reverseButtons: true,
+      html: content
+    };
   }
   return alertMessage;
 }

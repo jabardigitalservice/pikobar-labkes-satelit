@@ -473,10 +473,11 @@
         var i;
         for (i = 0; i < samples.length; i++) {
           if (samples[i].name == "list-sampel") {
-            let checkedSampel = listSampelsArr.find(element => element == samples[i].value) || null;
-            if (!checkedSampel) {
+            const checkedSampel = listSampelsArr ? listSampelsArr.find((element) => element == samples[i].value) : null;
+            const findinCheckedArr =  this.checkedArr ? this.checkedArr.find((element) => element == samples[i].value) : null;
+            if (!checkedSampel && !findinCheckedArr) {
               this.checkedArr.push(samples[i].value);
-            } else {}
+            }
             samples[i].checked = this.checked;
           }
         }

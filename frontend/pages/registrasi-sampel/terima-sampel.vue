@@ -5,8 +5,9 @@
     </portal>
     <portal to="title-action">
       <div class="title-action">
-        <button tag="button" class="btn btn-default" data-toggle="modal" data-target="#terimaSampel">
-          <i class="fa fa-check" /> Terima Sampel
+        <button v-show="!isHasAction" tag="button" class="btn btn-primary" data-toggle="modal"
+          data-target="#terimaSampel">
+          <i class="fa fa-check" /> Registrasi Pasien
         </button>
         <nuxt-link to="/registrasi/sampel" class="btn btn-black">
           <i class="uil-arrow-left" /> Kembali
@@ -14,11 +15,11 @@
       </div>
     </portal>
 
-    <!-- <div class="row">
+    <div class="row">
       <div class="col-lg-12">
-        <filter-registrasi :oid="`registrasi-sampel`" />
+        <filter-perujuk :oid="`registrasi-sampel-perujuk`" />
       </div>
-    </div> -->
+    </div>
 
     <div class="row">
       <div class="col-lg-12">
@@ -29,7 +30,7 @@
               has_number: true,
               has_entry_page: true,
               has_pagination: true,
-              has_action: false,
+              has_action: isHasAction,
               has_search_input: false,
               custom_header: '',
               default_sort: 'tgl_input',
@@ -41,13 +42,11 @@
               }
             }" :rowtemplate="'tr-data-terima-sampel'" :columns="{
 							checkbox_sampel_id: '#',
-              no_sampel:'SAMPEL',
-              kode_kasus : 'KODE KASUS',
               nama_pasien: 'PASIEN',
               nama_kota: 'DOMISILI',
               sumber_pasien:'KATEGORI',
-              status:'STATUS',
-              keterangan:'KETERANGAN'
+              tgl_input:'TANGGAL SAMPLING',
+              no_sampel:'SAMPEL',
             }" />
         </Ibox>
       </div>
@@ -57,11 +56,18 @@
       <div slot="body">
         <div class="col-lg-12">
           <p>Jumlah Sampel: {{ selectedNomorSampels.length }}</p>
-          <div class="badge badge-white" style="text-align:left; padding:5px; margin: 0 10px 10px 0;"
-            v-for="(item,idx) in selectedNomorSampels" :key="idx">
-              <span :class="{'text-black': item.valid, 'text-red': !item.valid}" style="font-size: 1.1em">
-                {{ getSampel(item) }}
+          <div class="form-group row col-md-12" v-for="(item,idx) in selectedNomorSampels" :key="idx">
+            <div class="col-md-2">
+              {{ idx + 1 }}
+            </div>
+            <div class="col-md-5 text-blue flex-left">
+              {{ getSampel('name', item) }}
+            </div>
+            <div class="col-md-5 flex-left">
+              <span class="badge badge-white" style="font-size: 1.1em; text-align:left; padding:5px; margin: 0 10px 10px 0;" :class="{'text-black': item.valid, 'text-red': !item.valid}">
+                {{ getSampel('id', item) }}
               </span>
+            </div>
           </div>
         </div>
         <button @click="submitSampel()" :disabled="loading" :class="{'btn-loading': loading}"
@@ -104,6 +110,7 @@
         },
         selectedNomorSampels,
         listSampels: [],
+        isHasAction: true,
       }
     },
     head() {
@@ -119,13 +126,16 @@
       removeSample(index) {
         this.selectedNomorSampels.splice(index, 1);
       },
-      getSampel(id) {
+      getSampel(category, id) {
         const findSampel = id ? this.listSampels.find((el) => el.id === parseInt(id)) : null;
         if (findSampel) {
-          return findSampel.nomor_sampel
-        } else {
-          return ''
+          if (category === 'id') {
+            return findSampel.nomor_sampel
+          } else if (category === 'name') {
+            return findSampel.nama_pasien
+          }
         }
+        return ''
       },
       async submitSampel() {
         JQuery('#terimaSampel').modal('hide');
@@ -136,16 +146,21 @@
             iconPack: 'fontawesome',
             duration: 5000
           })
-            this.$bus.$emit('refresh-ajaxtable', 'registrasi-perujuk');
-          } catch (e) {
-            swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
-          }
+          this.isHasAction = true;
+          this.$store.commit('registrasi_perujuk/clear');
+          this.$bus.$emit('refresh-ajaxtable', 'registrasi-perujuk');
+        } catch (e) {
+          swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
+        }
       }
     },
     created() {
       this.getSampels()
     },
-    computed: {
+    watch: {
+      'selectedNomorSampels': function (newVal, oldVal) {
+        this.selectedNomorSampels.length === 0 ? this.isHasAction = true : this.isHasAction = false
+      }
     }
   }
 </script>

@@ -93,6 +93,7 @@
   "alert_confirm_delete_title": "Hapus Data",
   "alert_confirm_delete_text": "Apakah kamu yakin ingin menghapus data ini?",
   "alert_confirm_musnahkan_text": "Anda tidak dapat mengembalikan data yang telah dimusnahkan!",
+  "alert_confirm_terima_text": "Apakah kamu yakin ingin melakukan registrasi pasien",
   "error_alert_title": "Mohon maaf...",
   "error_alert_text": "Mohon mencoba lagi.",
   "token_expired_alert_title": "Sesi habis!",
