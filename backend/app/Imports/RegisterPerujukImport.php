@@ -68,7 +68,7 @@ class RegisterPerujukImport implements ToCollection, WithHeadingRow, WithChunkRe
                         'nullable',
                         new ExistsWilayah(),
                     ],
-                    'kriteria' => 'nullable|in:Kontak Erat,Suspek,Probable,Konfirmasi,Tanpa Kriteria',
+                    'kriteria' => 'required|in:Kontak Erat,Suspek,Probable,Konfirmasi,Tanpa Kriteria',
                     'instansi_pengirim' => 'nullable',
                     'kode_instansi' => [
                         'required',
