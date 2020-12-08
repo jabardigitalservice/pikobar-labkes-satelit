@@ -14,7 +14,8 @@ export const mutations = {
     state.selectedSampels.splice(state.selectedSampels.indexOf(sampelId), 1)
   },
   clear(state) {
-    state.selectedSampels = []
+    state.selectedSampels = [],
+    state.selected = []
   },
   addMultiple(state, sampelId) {
     for (let i = 0; i < sampelId.length; i++) {
@@ -29,7 +30,4 @@ export const mutations = {
       state.selectedSampels.splice(state.selectedSampels.indexOf(sampelId[i]), 1);
     }
   },
-  clearSelected(state) {
-    state.selected = []
-  }
 }
