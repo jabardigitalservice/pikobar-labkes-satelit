@@ -53,7 +53,6 @@ class UserController extends Controller
         Validator::make($request->all(), [
             'username' => 'required|unique:users,username',
             'email' => 'required|email|unique:users,email,'.$user->id,
-            'name' => 'required',
             'koordinator' => 'required',
             'token' => 'required',
             'password' => 'required|confirmed|min:6',
@@ -61,7 +60,6 @@ class UserController extends Controller
             
         $invite = Invite::where('token', $request->token)->first();
         $user->update([
-            'name' => $request->name,
             'username' => $request->username,
             'koordinator' => $request->koordinator,
             'password' => Hash::make($request->password),

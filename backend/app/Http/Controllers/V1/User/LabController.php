@@ -87,7 +87,6 @@ class LabController extends Controller
     {
         Validator::make($request->all(), [
             'username' => 'required|unique:users,username',
-            'name' => 'required',
             'koordinator' => 'required',
             'token' => 'required',
             'password' => 'required|confirmed|min:6',
@@ -100,7 +99,6 @@ class LabController extends Controller
         $user = User::where(['email' => $request->email])->first();
 
         $user->update([
-            'name' => $request->name,
             'username' => $request->username,
             'koordinator' => $request->koordinator,
             'password' => Hash::make($request->password),
