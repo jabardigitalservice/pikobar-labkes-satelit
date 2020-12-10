@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\RoleEnum;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -40,7 +41,7 @@ class InviteNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $additionalMessage = $notifiable->role_id == 2 ? "dinkes" : "";  
+        $additionalMessage = $notifiable->role_id == RoleEnum::DINKES()->getIndex() ? "dinkes" : "";  
         return (new MailMessage)
             ->subject("Undangan berpartisipasi - Pikobar")
             ->greeting('Halo!')
