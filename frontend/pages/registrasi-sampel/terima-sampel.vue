@@ -17,7 +17,7 @@
 
     <div class="row">
       <div class="col-lg-12">
-        <filter-perujuk :oid="`registrasi-sampel-perujuk`" />
+        <filter-perujuk :oid="`registrasi-perujuk`" />
       </div>
     </div>
 

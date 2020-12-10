@@ -137,6 +137,9 @@
         form,
       };
     },
+    created() {
+      this.$store.commit('registrasi_perujuk/clear')
+    },
     methods: {
       downloadFormat(namaFile) {
         this.$axios.get(`v1/download?namaFile=${namaFile}`, {
