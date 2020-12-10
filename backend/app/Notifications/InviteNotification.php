@@ -40,11 +40,12 @@ class InviteNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $additionalMessage = $notifiable->role_id == 2 ? "dinkes" : "";  
         return (new MailMessage)
             ->subject("Undangan berpartisipasi - Pikobar")
             ->greeting('Halo!')
-            ->line('Anda diundang untuk menjadi salah satu admin pada aplikasi ' . config('app.name'))
-            ->action('Klik Untuk Daftar',$this->notification_url)
+            ->line('Anda diundang untuk menjadi salah satu admin '.$additionalMessage.' pada aplikasi ' . config('app.name'))
+            ->action('Klik Untuk Daftar', $this->notification_url)
             ->line('Terimakasih atas partisipasi anda!');
     }
 
