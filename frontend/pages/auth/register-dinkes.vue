@@ -73,7 +73,7 @@
             <!-- Username -->
             <div class="form-group row">
               <label class="col-md-3 col-form-label text-md-right"
-                >{{ $t("username") }}<span style="color: red">*</span></label
+                >Username<span style="color: red">*</span></label
               >
               <div class="col-md-7">
                 <input

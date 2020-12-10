@@ -88,7 +88,7 @@
               Role<span style="color: red">*</span>
             </label>
             <div class="col-md-8">
-              <select v-model="form.role" class="form-control" name="role" required
+              <select v-model="role" class="form-control" name="role" required
                 :class="{ 'is-invalid': form.errors.has(`role`) }">
                 <option :value="item" :key="item" v-for="item in optionsRoleDinkes">{{ humanize(item) }}
                 </option>
@@ -145,18 +145,20 @@
         dataError: [],
         option_lab_satelit: null,
         optionsRoleDinkes,
+        role: null,
         form: new Form({
           name: null,
           username: null,
           email: null,
           lab_satelit_id: null,
-          role: null,
+          role_id: null,
         }),
         params: {
           dinkes: null,
           name: null,
           email: null,
           status: null,
+          last_login_at: null,
         },
       };
     },
@@ -185,6 +187,7 @@
           this.form.username = null;
           this.form.email = null;
           this.form.lab_satelit_id = null;
+          this.form.role = null;
           this.$bus.$emit("refresh-ajaxtable", "master-dinkes");
         } catch (err) {
           if (err.response && err.response.data.code == 422) {
