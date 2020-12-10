@@ -63,13 +63,13 @@
             @keydown="form.onKeydown($event)"
           >
             <div class="form-group row">
-              <label class="col-md-3 col-lg-3"
+              <label class="col-md-3 col-form-label"
                 >Lab <span style="color: red">*</span></label
               >
-              <div class="col-md-8 col-lg-9" >
+              <div class="col-md-9" >
                 <select
                   v-model="form.lab_satelit_id"
-                  class="form-control col-md-8 col-lg-6"
+                  class="form-control"
                   name="lab_satelit_id"
                   required
                   :class="{ 'is-invalid': form.errors.has(`lab_satelit_id`) }"
@@ -86,10 +86,10 @@
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 col-lg-3"
+              <label class="col-md-3 col-form-label"
                 >E-mail <span style="color: red">*</span></label
               >
-              <div class="col-md-8 col-lg-9">
+              <div class="col-md-9">
                 <input
                   class="form-control"
                   name="email"

@@ -9,6 +9,7 @@
     </td>
     <td>{{item.email}}</td>
     <td>{{item.status}}</td>
+    <td>{{ item.last_login_at }}</td>
     <td>
       <nuxt-link :to="`/pengguna/${item.id}`" class="mb-1 btn btn-yellow btn-sm" title="Klik untuk melihat detail">
         <i class="fa fa-eye" />

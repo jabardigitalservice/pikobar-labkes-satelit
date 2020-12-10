@@ -20,7 +20,7 @@ export const optionsKitEkstraksi = ['Geneaid', 'Qiagen', 'Invitrogen', 'Roche', 
 
 export const optionsAlatEkstraksi = ['Kingfisher', 'Genolution'];
 
-export const optionsTipeDinkes = ['rumah_sakit', 'dinkes', 'puskesmas'];
+export const optionsRoleDinkes = ['admin', 'super_admin'];
 
 export const pasienStatus = [{
   'value': 1,

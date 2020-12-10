@@ -4,11 +4,8 @@
     <portal to="title-action">
       <div class="title-action">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#invite-dinkes-modal">
-          <i class="fa fa-envelope-o" /> Undang
+          <i class="uil-plus" /> Tambah Akun
         </button>
-        <!-- <nuxt-link to="/pengguna/tambah" class="btn btn-primary">
-          <i class="uil-plus"></i> Tambah Dinkes
-        </nuxt-link> -->
       </div>
     </portal>
 
@@ -35,12 +32,13 @@
               name: 'NAMA ADMIN',
               email: 'EMAIL',
               status: 'STATUS',
+              last_login_at: 'TERAKHIR LOGIN',
             }" />
         </Ibox>
       </div>
     </div>
 
-    <custom-modal modal_id="invite-dinkes-modal" title="Undang">
+    <custom-modal modal_id="invite-dinkes-modal" title="Tambah Akun Dinkes">
       <div slot="body">
         <div class="col-lg-12">
 
@@ -50,7 +48,8 @@
               Admin Dinkes<span style="color: red">*</span>
             </label>
             <div class="col-md-8">
-              <input v-model="form.name" type="text" name="name" class="form-control" required :class="{ 'is-invalid': form.errors.has(`name`) }">
+              <input v-model="form.name" type="text" name="name" class="form-control" required
+                :class="{ 'is-invalid': form.errors.has(`name`) }">
               <has-error :form="form" field="name" />
             </div>
           </div>
@@ -61,7 +60,8 @@
               Username<span style="color: red">*</span>
             </label>
             <div class="col-md-8">
-              <input v-model="form.username" type="text" name="username" class="form-control" required :class="{ 'is-invalid': form.errors.has(`username`) }">
+              <input v-model="form.username" type="text" name="username" class="form-control" required
+                :class="{ 'is-invalid': form.errors.has(`username`) }">
               <has-error :form="form" field="username" />
             </div>
           </div>
@@ -69,7 +69,7 @@
           <!-- Lab -->
           <div class="form-group row">
             <label class="col-md-4 col-form-label">
-              Lab<span style="color: red">*</span>
+              Dinkes<span style="color: red">*</span>
             </label>
             <div class="col-md-8">
               <select v-model="form.lab_satelit_id" class="form-control" name="lab_satelit_id" required
@@ -82,6 +82,21 @@
             </div>
           </div>
 
+          <!-- Role -->
+          <div class="form-group row">
+            <label class="col-md-4 col-form-label">
+              Role<span style="color: red">*</span>
+            </label>
+            <div class="col-md-8">
+              <select v-model="form.role" class="form-control" name="role" required
+                :class="{ 'is-invalid': form.errors.has(`role`) }">
+                <option :value="item" :key="item" v-for="item in optionsRoleDinkes">{{ humanize(item) }}
+                </option>
+              </select>
+              <has-error :form="form" field="role" />
+            </div>
+          </div>
+
           <!-- Email -->
           <div class="form-group row">
             <label class="col-md-4 col-form-label">
@@ -90,14 +105,14 @@
             <div class="col-md-8">
               <input class="form-control" name="email" placeholder="Email" type="text" tabindex="1" required autofocus
                 v-model="form.email" :class="{ 'is-invalid': form.errors.has(`email`) }" />
-                <has-error :form="form" field="email" />
+              <has-error :form="form" field="email" />
             </div>
           </div>
         </div>
 
         <button @click="submit()" :disabled="loading" :class="{'btn-loading': loading}"
           class="btn btn-md btn-primary block m-b pull-right" type="button">
-          <i class="fa fa-envelope-o mr-1" /> Kirim Undangan
+          <i class="uil-plus" /> Tambah Akun
         </button>
       </div>
     </custom-modal>
@@ -109,6 +124,12 @@
   import Form from "vform";
   import $ from "jquery";
   import CustomModal from "~/components/CustomModal";
+  import {
+    optionsRoleDinkes
+  } from "~/assets/js/constant/enum"
+  import {
+    humanize
+  } from "~/utils"
   const JQuery = $;
   export default {
     middleware: ["auth", "checkrole"],
@@ -123,11 +144,13 @@
         loading: false,
         dataError: [],
         option_lab_satelit: null,
+        optionsRoleDinkes,
         form: new Form({
           name: null,
           username: null,
           email: null,
           lab_satelit_id: null,
+          role: null,
         }),
         params: {
           dinkes: null,
@@ -143,6 +166,7 @@
       };
     },
     methods: {
+      humanize,
       async getLabSatelit() {
         const resp = await this.$axios.get("/lab-satelit");
         this.option_lab_satelit = resp.data.data;
