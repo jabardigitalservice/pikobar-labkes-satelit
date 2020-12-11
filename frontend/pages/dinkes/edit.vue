@@ -115,7 +115,6 @@
       let data = resp.data.data;
 
       return {
-        role: data.role_id ? data.role_id === 1 ? 'super_admin' : 'admin' : '-',
         form: new Form({
           username: data.username,
           name: data.name,
@@ -142,7 +141,6 @@
         this.option_lab_satelit = resp.data.data;
       },
       async submit() {
-        this.form.role_id = this.role ? this.role === 'super_admin' ? 1 : 2 : null
         try {
           const response = await this.form.put(
             "/v1/user/dinkes/" +
