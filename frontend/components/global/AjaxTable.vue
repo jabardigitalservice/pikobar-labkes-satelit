@@ -472,10 +472,10 @@
         this.checked = newDomchecked;
         var i;
         for (i = 0; i < samples.length; i++) {
-          if (samples[i].name == "list-sampel") {
+          if (samples[i].name === "list-sampel") {
             const checkedSampel = Array.isArray(listSampelsArr) ? listSampelsArr.find((element) => element == samples[i].value) : null;
             const findinCheckedArr =  Array.isArray(this.checkedArr) ? this.checkedArr.find((element) => element == samples[i].value) : null;
-            if (!checkedSampel && !findinCheckedArr) {
+            if (!findinCheckedArr) {
               this.checkedArr.push(samples[i].value);
             }
             samples[i].checked = this.checked;
