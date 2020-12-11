@@ -21,7 +21,7 @@
           <table class="table table-hover">
             <tbody>
               <tr>
-                <th width="30%">Nama</th>
+                <th width="30%">Akun Dinkes</th>
                 <td>{{ data.name }}</td>
               </tr>
               <tr>
@@ -36,16 +36,20 @@
                 <th>Koordinator</th>
                 <td>{{ data.koordinator }}</td>
               </tr>
+              <tr>
+                <th>Role</th>
+                <td>{{ data.role_id ? data.role_id === 1 ? 'Super Admin' : 'Admin' : '-' }}</td>
+              </tr>
             </tbody>
           </table>
         </Ibox>
       </div>
       <div class="col-lg-6">
-        <Ibox title="Informasi Lab Satelit">
+        <Ibox title="Informasi Dinkes">
           <table class="table table-hover">
             <tbody>
               <tr>
-                <th width="30%">Nama</th>
+                <th width="30%">Dinkes</th>
                 <td>{{ data.lab_satelit ? data.lab_satelit.nama : "-" }}</td>
               </tr>
               <tr>

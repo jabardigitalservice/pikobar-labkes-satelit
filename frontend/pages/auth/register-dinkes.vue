@@ -53,8 +53,9 @@
 
             <!-- Name -->
             <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right"
-                >{{ $t("name") }}<span style="color: red">*</span></label
+              <label class="col-md-3 col-form-label text-md-right">
+                Admin Dinkes
+              <span style="color: red">*</span></label
               >
               <div class="col-md-7">
                 <input
@@ -72,7 +73,7 @@
             <!-- Username -->
             <div class="form-group row">
               <label class="col-md-3 col-form-label text-md-right"
-                >{{ $t("username") }}<span style="color: red">*</span></label
+                >Username<span style="color: red">*</span></label
               >
               <div class="col-md-7">
                 <input
