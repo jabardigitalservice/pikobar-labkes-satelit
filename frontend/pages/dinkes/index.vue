@@ -174,6 +174,7 @@
         this.option_lab_satelit = resp.data.data;
       },
       async submit() {
+        this.form.role_id = this.role ? this.role === 'super_admin' ? 1 : 2 : null
         try {
           const response = await this.form.post("/v1/user/dinkes/invite");
           this.$toast.success(response.data.message, {
