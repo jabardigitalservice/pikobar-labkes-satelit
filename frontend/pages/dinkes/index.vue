@@ -169,40 +169,39 @@
         this.option_lab_satelit = resp.data.data;
       },
       async submit() {
-        console.log(this.form)
-        // try {
-        //   const response = await this.form.post("/v1/user/dinkes/invite");
-        //   this.$toast.success(response.data.message, {
-        //     icon: "paper-plane",
-        //     iconPack: "fontawesome",
-        //     text: "Undangan terkirim",
-        //     duration: 5000,
-        //   });
-        //   JQuery("#invite-dinkes-modal").modal("hide");
-        //   this.form.name = null;
-        //   this.form.username = null;
-        //   this.form.email = null;
-        //   this.form.lab_satelit_id = null;
-        //   this.form.role = null;
-        //   this.$bus.$emit("refresh-ajaxtable", "master-dinkes");
-        // } catch (err) {
-        //   if (err.response && err.response.data.code == 422) {
-        //     this.$nextTick(() => {
-        //       this.form.errors.set(err.response.data.error);
-        //     });
-        //     this.$toast.error("Mohon cek kembali formulir Anda", {
-        //       icon: "times",
-        //       iconPack: "fontawesome",
-        //       duration: 5000,
-        //     });
-        //   } else {
-        //     this.$swal.fire(
-        //       "Terjadi kesalahan",
-        //       "Silakan hubungi Admin",
-        //       "error"
-        //     );
-        //   }
-        // }
+        try {
+          const response = await this.form.post("/v1/user/dinkes/invite");
+          this.$toast.success(response.data.message, {
+            icon: "paper-plane",
+            iconPack: "fontawesome",
+            text: "Undangan terkirim",
+            duration: 5000,
+          });
+          JQuery("#invite-dinkes-modal").modal("hide");
+          this.form.name = null;
+          this.form.username = null;
+          this.form.email = null;
+          this.form.lab_satelit_id = null;
+          this.form.role = null;
+          this.$bus.$emit("refresh-ajaxtable", "master-dinkes");
+        } catch (err) {
+          if (err.response && err.response.data.code == 422) {
+            this.$nextTick(() => {
+              this.form.errors.set(err.response.data.error);
+            });
+            this.$toast.error("Mohon cek kembali formulir Anda", {
+              icon: "times",
+              iconPack: "fontawesome",
+              duration: 5000,
+            });
+          } else {
+            this.$swal.fire(
+              "Terjadi kesalahan",
+              "Silakan hubungi Admin",
+              "error"
+            );
+          }
+        }
       },
     },
     created() {
