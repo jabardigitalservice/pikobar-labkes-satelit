@@ -182,7 +182,7 @@
           this.form.username = null;
           this.form.email = null;
           this.form.lab_satelit_id = null;
-          this.form.role = null;
+          this.form.role_id = null;
           this.$bus.$emit("refresh-ajaxtable", "master-dinkes");
         } catch (err) {
           if (err.response && err.response.data.code == 422) {
