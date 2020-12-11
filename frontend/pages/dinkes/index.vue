@@ -88,12 +88,12 @@
               Role<span style="color: red">*</span>
             </label>
             <div class="col-md-8">
-              <select v-model="role" class="form-control" name="role" required
-                :class="{ 'is-invalid': form.errors.has(`role`) }">
-                <option :value="item" :key="item" v-for="item in optionsRoleDinkes">{{ humanize(item) }}
+              <select v-model="form.role_id" class="form-control" name="role_id" required
+                :class="{ 'is-invalid': form.errors.has(`role_id`) }">
+                <option :value="item.key" :key="item.key" v-for="item in optionsRoleDinkes">{{ item.value }}
                 </option>
               </select>
-              <has-error :form="form" field="role" />
+              <has-error :form="form" field="role_id" />
             </div>
           </div>
 
@@ -127,9 +127,6 @@
   import {
     optionsRoleDinkes
   } from "~/assets/js/constant/enum"
-  import {
-    humanize
-  } from "~/utils"
   const JQuery = $;
   export default {
     middleware: ["auth", "checkrole"],
@@ -145,7 +142,6 @@
         dataError: [],
         option_lab_satelit: null,
         optionsRoleDinkes,
-        role: null,
         form: new Form({
           name: null,
           username: null,
@@ -168,46 +164,45 @@
       };
     },
     methods: {
-      humanize,
       async getLabSatelit() {
         const resp = await this.$axios.get("/lab-satelit");
         this.option_lab_satelit = resp.data.data;
       },
       async submit() {
-        this.form.role_id = this.role ? this.role === 'super_admin' ? 1 : 2 : null
-        try {
-          const response = await this.form.post("/v1/user/dinkes/invite");
-          this.$toast.success(response.data.message, {
-            icon: "paper-plane",
-            iconPack: "fontawesome",
-            text: "Undangan terkirim",
-            duration: 5000,
-          });
-          JQuery("#invite-dinkes-modal").modal("hide");
-          this.form.name = null;
-          this.form.username = null;
-          this.form.email = null;
-          this.form.lab_satelit_id = null;
-          this.form.role = null;
-          this.$bus.$emit("refresh-ajaxtable", "master-dinkes");
-        } catch (err) {
-          if (err.response && err.response.data.code == 422) {
-            this.$nextTick(() => {
-              this.form.errors.set(err.response.data.error);
-            });
-            this.$toast.error("Mohon cek kembali formulir Anda", {
-              icon: "times",
-              iconPack: "fontawesome",
-              duration: 5000,
-            });
-          } else {
-            this.$swal.fire(
-              "Terjadi kesalahan",
-              "Silakan hubungi Admin",
-              "error"
-            );
-          }
-        }
+        console.log(this.form)
+        // try {
+        //   const response = await this.form.post("/v1/user/dinkes/invite");
+        //   this.$toast.success(response.data.message, {
+        //     icon: "paper-plane",
+        //     iconPack: "fontawesome",
+        //     text: "Undangan terkirim",
+        //     duration: 5000,
+        //   });
+        //   JQuery("#invite-dinkes-modal").modal("hide");
+        //   this.form.name = null;
+        //   this.form.username = null;
+        //   this.form.email = null;
+        //   this.form.lab_satelit_id = null;
+        //   this.form.role = null;
+        //   this.$bus.$emit("refresh-ajaxtable", "master-dinkes");
+        // } catch (err) {
+        //   if (err.response && err.response.data.code == 422) {
+        //     this.$nextTick(() => {
+        //       this.form.errors.set(err.response.data.error);
+        //     });
+        //     this.$toast.error("Mohon cek kembali formulir Anda", {
+        //       icon: "times",
+        //       iconPack: "fontawesome",
+        //       duration: 5000,
+        //     });
+        //   } else {
+        //     this.$swal.fire(
+        //       "Terjadi kesalahan",
+        //       "Silakan hubungi Admin",
+        //       "error"
+        //     );
+        //   }
+        // }
       },
     },
     created() {

@@ -76,12 +76,12 @@
                 Role
               </label>
               <div class="col-md-7">
-                <select v-model="role" class="form-control" name="role" required
-                  :class="{ 'is-invalid': form.errors.has(`role`) }">
-                  <option :value="item" :key="item" v-for="item in optionsRoleDinkes">{{ humanize(item) }}
+                <select v-model="form.role_id" class="form-control" name="role_id" required
+                  :class="{ 'is-invalid': form.errors.has(`role_id`) }">
+                  <option :value="item.key" :key="item.key" v-for="item in optionsRoleDinkes">{{ item.value }}
                   </option>
                 </select>
-                <has-error :form="form" field="role" />
+                <has-error :form="form" field="role_id" />
               </div>
             </div>
 
@@ -105,9 +105,6 @@
   import {
     optionsRoleDinkes
   } from "~/assets/js/constant/enum"
-  import {
-    humanize
-  } from "~/utils"
 
   export default {
     middleware: "auth",
@@ -140,7 +137,6 @@
       };
     },
     methods: {
-      humanize,
       async getLabSatelit() {
         const resp = await this.$axios.get("/lab-satelit");
         this.option_lab_satelit = resp.data.data;
