@@ -76,12 +76,12 @@
                 Role
               </label>
               <div class="col-md-7">
-                <select v-model="form.role" class="form-control" name="role" required
+                <select v-model="role" class="form-control" name="role" required
                   :class="{ 'is-invalid': form.errors.has(`role`) }">
                   <option :value="item" :key="item" v-for="item in optionsRoleDinkes">{{ humanize(item) }}
                   </option>
                 </select>
-                <has-error :form="form" field="password" />
+                <has-error :form="form" field="role" />
               </div>
             </div>
 
@@ -118,6 +118,7 @@
       let data = resp.data.data;
 
       return {
+        role: data.role_id ? data.role_id === 1 ? 'super_admin' : 'admin' : '-',
         form: new Form({
           username: data.username,
           name: data.name,
@@ -125,7 +126,7 @@
           koordinator: data.koordinator,
           lab_satelit_id: data.lab_satelit_id,
           id: data.id,
-          role: data.role_id ? data.role_id === 1 ? 'super_admin' : 'admin' : '-'
+          role_id: data.role_id
         }),
       };
       return {
@@ -145,6 +146,7 @@
         this.option_lab_satelit = resp.data.data;
       },
       async submit() {
+        this.form.role_id = this.role ? this.role === 'super_admin' ? 1 : 2 : null
         try {
           const response = await this.form.put(
             "/v1/user/dinkes/" +
@@ -155,7 +157,7 @@
             iconPack: "fontawesome",
             duration: 5000,
           });
-          this.$router.push("/user");
+          this.$router.push("/dinkes");
         } catch (err) {
           if (err.response && err.response.data.code == 422) {
             this.$nextTick(() => {
