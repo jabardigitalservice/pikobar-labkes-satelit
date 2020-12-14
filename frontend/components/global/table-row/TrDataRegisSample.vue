@@ -36,10 +36,10 @@
         <i class="fa fa-eye" />
       </nuxt-link>
       <nuxt-link :to="`/registrasi/sampel/update/${item.register_id}/${item.pasien_id}`"
-        class="mb-1 btn btn-primary btn-sm" title="Klik untuk edit data">
+        class="mb-1 btn btn-primary btn-sm" title="Klik untuk edit data" v-if="item.sampel_status == 'sampel_taken'">
         <i class="fa fa-edit" />
       </nuxt-link>
-      <button class="mb-1 btn btn-danger btn-sm" @click="deleteData(item, usiaPasien)" title="Klik untuk hapus data">
+      <button class="mb-1 btn btn-danger btn-sm" @click="deleteData(item, usiaPasien)" title="Klik untuk hapus data" v-if="item.sampel_status == 'sampel_taken'">
         <i class="fa fa-trash" />
       </button>
     </td>
