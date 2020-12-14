@@ -41,7 +41,7 @@
                 Instansi Pengirim
               </div>
               <div class="col-md-8">
-                {{ data.register.instansi_pengirim || null }}
+                {{ humanize(data.register.instansi_pengirim) || null }}
               </div>
             </div>
           </Ibox>
@@ -165,12 +165,13 @@
 <script>
   import Form from "vform";
   import axios from "axios";
-
+  import { humanize } from "~/utils"
   export default {
     middleware: "auth",
     data() {
       return {
-        loading: false
+        loading: false,
+        humanize
       };
     },
     async asyncData({
