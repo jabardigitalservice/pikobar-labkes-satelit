@@ -5,7 +5,7 @@
     </portal>
     <portal to="title-action">
       <div class="title-action">
-        <nuxt-link tag="a" :to="`/registrasi/sampel/update/${registerId}/${pasienId}`" class="btn btn-import-export">
+        <nuxt-link tag="a" :to="`/registrasi/sampel/update/${registerId}/${pasienId}`" class="btn btn-import-export" v-if="data.reg_sampel_status == 'sample_taken'">
           <i class="fa fa-pencil" /> Perbarui Data
         </nuxt-link>
         <nuxt-link to="/registrasi/sampel" class="btn btn-black">
