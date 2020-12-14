@@ -43,7 +43,6 @@
               email: 'EMAIL',
               koordinator: 'KOORDINATOR',
               lab: 'LAB',
-              alamat_lab: 'ALAMAT LAB',
               status: 'STATUS',
               last_login_at: 'TERAKHIR LOGIN',
             }"
@@ -165,7 +164,7 @@ export default {
   },
   methods: {
     async getLabSatelit() {
-      const resp = await this.$axios.get("/lab-satelit");
+      const resp = await this.$axios.get("v1/users/lab");
       this.option_lab_satelit = resp.data.data;
     },
     async submit() {
