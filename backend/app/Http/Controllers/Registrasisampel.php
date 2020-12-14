@@ -113,7 +113,7 @@ class Registrasisampel extends Controller
                     break;
             }
         }
-        $models = $models->select('nik', 'nama_lengkap', 'tanggal_lahir', 'usia_tahun', 'nomor_sampel', 'kota.nama as nama_kota', 'pasien_register.*', 'register.sumber_pasien', 'status', 'waktu_sample_taken', 'nama_rs');
+        $models = $models->select('nik', 'nama_lengkap', 'tanggal_lahir', 'usia_tahun', 'nomor_sampel', 'kota.nama as nama_kota', 'pasien_register.*', 'register.sumber_pasien', 'status', 'waktu_sample_taken', 'nama_rs', 'sampel_status');
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
         $result = [
