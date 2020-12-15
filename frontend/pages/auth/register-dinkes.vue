@@ -21,33 +21,13 @@
               >
               <div class="col-md-7">
                 <label
-                  :class="{ 'is-invalid': form.errors.has('email') }"
                   type="email"
                   name="email"
                   class="form-control"
                   readonly
                 >
-                  {{ this.form.email }}
+                  {{ this.email }}
                 </label>
-                <has-error :form="form" field="email" />
-              </div>
-            </div>
-
-            <!-- Koordinator -->
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right"
-                >{{ $t("coordinator") }}<span style="color: red">*</span></label
-              >
-              <div class="col-md-7">
-                <input
-                  v-model="form.koordinator"
-                  :class="{ 'is-invalid': form.errors.has('koordinator') }"
-                  type="text"
-                  name="koordinator"
-                  class="form-control"
-                  required
-                />
-                <has-error :form="form" field="koordinator" />
               </div>
             </div>
 
@@ -58,15 +38,32 @@
               <span style="color: red">*</span></label
               >
               <div class="col-md-7">
-                <input
-                  v-model="form.name"
-                  :class="{ 'is-invalid': form.errors.has('name') }"
-                  type="text"
-                  name="name"
+                <label
+                  type="email"
+                  name="email"
                   class="form-control"
-                  required
-                />
-                <has-error :form="form" field="name" />
+                  readonly
+                >
+                  {{ this.admin_dinkes }}
+                </label>
+              </div>
+            </div>
+
+            <!-- Dinkes -->
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label text-md-right">
+                Dinkes
+              <span style="color: red">*</span></label
+              >
+              <div class="col-md-7">
+                <label
+                  type="email"
+                  name="email"
+                  class="form-control"
+                  readonly
+                >
+                  {{ this.dinkes }}
+                </label>
               </div>
             </div>
 
@@ -76,15 +73,14 @@
                 >Username<span style="color: red">*</span></label
               >
               <div class="col-md-7">
-                <input
-                  v-model="form.username"
-                  :class="{ 'is-invalid': form.errors.has('username') }"
-                  type="text"
-                  name="username"
+                <label
+                  type="email"
+                  name="email"
                   class="form-control"
-                  required
-                />
-                <has-error :form="form" field="username" />
+                  readonly
+                >
+                  {{ this.username }}
+                </label>
               </div>
             </div>
 
@@ -174,15 +170,14 @@ export default {
   },
   data: () => ({
     status: false,
+    username: "",
+    admin_dinkes: "",
+    email: "",
+    dinkes: "",
     form: new Form({
-      username: "",
-      name: "",
-      email: "",
-      koordinator: "",
       password: "",
       password_confirmation: "",
       token: "",
-      lab_satelit_id: "",
     }),
   }),
 
@@ -224,10 +219,10 @@ export default {
         .then((response) => {
           let data = response.data;
           if (response.status == 200) {
-            this.form.username = data.username;
-            this.form.name = data.name;
-            this.form.email = data.email;
-            this.form.lab_satelit_id = data.lab_satelit_id;
+            this.username = data.username;
+            this.admin_dinkes = data.admin_dinkes;
+            this.email = data.email;
+            this.dinkes = data.dinkes;
             this.status = true
           }
         })
