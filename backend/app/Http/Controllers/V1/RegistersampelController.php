@@ -303,6 +303,7 @@ class RegistersampelController extends Controller
             'reg_pasien' => $pasien->lab_satelit_id,
             'reg_sampel_id' => $sampel->id,
             'reg_keterangan_warganegara' => $pasien->keterangan_warganegara,
+            'reg_sampel_status' => $sampel->sampel_status
         ]);
     }
 
