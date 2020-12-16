@@ -92,6 +92,13 @@ class VerifikasiController extends Controller
                     case 'status':
                         $models->where('register.status', $val);
                         break;
+                    case 'id':
+                        if ($isData) {
+                            if ($val) {
+                                $models->whereIn('sampel.id', $val);
+                            }
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -153,13 +160,6 @@ class VerifikasiController extends Controller
                     break;
                 default:
                     break;
-            }
-        }
-
-        if ($isData) {
-            $id = $request->get('id', false);
-            if ($id) {
-                $models = $models->whereIn('sampel.id', $id);
             }
         }
 
