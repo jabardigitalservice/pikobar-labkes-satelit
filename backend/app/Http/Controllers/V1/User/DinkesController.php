@@ -62,7 +62,7 @@ class DinkesController extends Controller
                 'token' => Uuid::uuid4(),
                 'email' => $request->input('email'),
             ]);
-            $role_id = $request->role_id == '1' ? RoleEnum::SUPERADMIN()->getIndex() : RoleEnum::DINKES()->getIndex();
+            $role_id = $request->role_id == RoleEnum::SUPERADMIN()->getIndex() ? RoleEnum::SUPERADMIN()->getIndex() : RoleEnum::DINKES()->getIndex();
             $user = User::create([
                 'koordinator' => $request->input('name'),
                 'username' => $request->input('username'),
