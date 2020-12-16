@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Enums\UserStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TokenInfoResource;
 use App\Invite;
 use Illuminate\Http\Request;
 use App\User;
@@ -44,7 +45,7 @@ class UserController extends Controller
 
     public function tokenInfo(Invite $invite)
     {
-        return $invite;
+        return new TokenInfoResource($invite);
     }
 
     public function register(Request $request)

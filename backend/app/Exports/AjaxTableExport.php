@@ -3,25 +3,24 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use Maatwebsite\Excel\Sheet;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class AjaxTableExport implements FromCollection, WithEvents, WithMapping, WithHeadings, WithColumnFormatting, ShouldAutoSize , WithTitle 
+class AjaxTableExport implements FromCollection, WithEvents, WithMapping, WithHeadings, WithColumnFormatting, ShouldAutoSize, WithTitle
 {
-    private $models = "";
-    private $totals = "";
-    private $header = "";
-    private $mapping = "";
-    private $column_format = "";
-    private $style = "";
+    public $models = "";
+    public $totals = "";
+    public $header = "";
+    public $mapping = "";
+    public $column_format = "";
+    public $style = "";
 
-    public function __construct($models, $header, $mapping, $column_format, $style = [],$totals)
+    public function __construct($models, $header, $mapping, $column_format, $style = [], $totals)
     {
         $this->models = $models;
         $this->header = $header;
@@ -63,9 +62,9 @@ class AjaxTableExport implements FromCollection, WithEvents, WithMapping, WithHe
 
     public function registerEvents(): array
     {
-       return [
-            AfterSheet::class    => function(AfterSheet $event) {
-                $cellRange = 'A1:W1'; // All headers
+        return [
+            AfterSheet::class => function (AfterSheet $event) {
+                $cellRange = 'A1:X1'; // All headers
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(12);
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold(true);
                 $styleArray = [
@@ -74,11 +73,11 @@ class AjaxTableExport implements FromCollection, WithEvents, WithMapping, WithHe
                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                             'color' => ['argb' => '000000'],
                         ],
-                    ]
+                    ],
                 ];
-                $event->sheet->getDelegate()->getStyle("A1:W{$this->totals}")->applyFromArray($styleArray);
+                $event->sheet->getDelegate()->getStyle("A1:X{$this->totals}")->applyFromArray($styleArray);
             },
         ];
-        
+
     }
 }
