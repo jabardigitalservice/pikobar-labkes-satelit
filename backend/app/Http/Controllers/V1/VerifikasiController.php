@@ -156,6 +156,13 @@ class VerifikasiController extends Controller
             }
         }
 
+        if ($isData) {
+            $id = $request->get('id', false);
+            if ($id) {
+                $models = $models->whereIn('sampel.id', $id);
+            }
+        }
+
         $models = $models->select('*', 'sampel.id as sampel_id', 'kota.nama as nama_kota', 'register.created_at as created_at', 'register.sumber_pasien as sumber_pasien', 'lab_satelit.nama as lab_satelit_nama');
 
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
@@ -211,7 +218,7 @@ class VerifikasiController extends Controller
                 $model->jenis_kelamin,
                 parseDate($model->tanggal_lahir),
                 $model->usia_tahun,
-                $this->__getAlamat($model),
+                $this->getAlamat($model),
                 $model->kelurahan,
                 $model->kecamatan,
                 $model->nama_kota,
@@ -233,17 +240,7 @@ class VerifikasiController extends Controller
 
     }
 
-    private function __getKeterangan($model)
-    {
-        if ($model->kesimpulan_pemeriksaan == 'positif' && $model->status == 'positif') {
-            return 'lama';
-        } elseif ($model->kesimpulan_pemeriksaan == 'positif' && $model->status != null && $model->status != 'positif') {
-            return 'baru';
-        }
-        return '';
-    }
-
-    private function __getAlamat($model)
+    public function getAlamat($model)
     {
         $alamat = $model->alamat_lengkap;
         $alamat .= ' RT/RW ';
