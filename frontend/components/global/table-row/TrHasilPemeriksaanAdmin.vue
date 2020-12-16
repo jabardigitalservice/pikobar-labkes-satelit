@@ -1,6 +1,10 @@
 <template>
   <tr>
     <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
+    <td>
+      <input type="checkbox" name="list-sampel" v-bind:value="item.sampel_id" v-bind:id="'selected-sampel-'+item.sampel_id"
+        v-model="selected" @click="sampelOnChangeSelect">
+    </td>
     <td nowrap>
       <div><b>{{item.waktu_pcr_sample_analyzed | formatDate}}</b></div>
       <div class="text-muted">{{ item.jam_input_hasil ? 'pukul ' + item.jam_input_hasil : null }}</div>
@@ -48,85 +52,29 @@
     props: ["item", "pagination", "rowparams", "index"],
     components: {},
     data() {
-
       let loading = false
-
+      let datas = this.$store.state.hasil_pemeriksaan.selectedSampels;
       let form = new Form({
         sampel_id: this.item.id
       });
-
       return {
+        checked: false,
+        selected: [],
+        dataArr: datas,
         loading,
         form,
         pasienStatus
       };
     },
-    methods: {
-      showModalVerifikasi(sampelId) {},
-      verifikasiSampel() {
-
-        const swalWithBootstrapButtons = this.$swal.mixin({
-          customClass: {
-            confirmButton: 'mb-1 text-nowrap btn btn-success',
-            cancelButton: 'mb-1 text-nowrap btn btn-danger'
-          },
-          buttonsStyling: false
-        })
-
-        swalWithBootstrapButtons.fire({
-          title: 'Apakah Anda Yakin untuk Verifikasi Sampel ini?',
-          text: "Setelah sampel menjadi verifikasi, data tidak dapat dikembalikan.",
-          type: 'warning',
-          // input: 'text',
-          showCancelButton: true,
-          confirmButtonText: 'Ya, Tandai Sampel Terverifikasi',
-          cancelButtonText: 'Batalkan',
-          reverseButtons: true
-        }).then(async (result) => {
-          console.log(result)
-          if (result.value == '') {
-            swalWithBootstrapButtons.fire(
-              'Gagal',
-              'Terjadi kesalahan. Hubungi Admin!',
-              'error'
-            )
-          } else if (result.value) {
-            try {
-              this.loading = true
-              let resp = await this.form.post("/v1/verifikasi/verifikasi-single-sampel/" + this.item.id);
-              swalWithBootstrapButtons.fire(
-                'Selesai!',
-                'Sampel berhasil ditandai sebagai invalid',
-                'success'
-              )
-              this.$bus.$emit('refresh-ajaxtable', 'verifikasi')
-            } catch (err) {
-              if (err.response && err.response.data.code == 422) {
-                swalWithBootstrapButtons.fire(
-                  'Gagal',
-                  err.response.data.message,
-                  'error'
-                )
-              } else {
-                swalWithBootstrapButtons.fire(
-                  'Gagal',
-                  'Gagal menandai sampel menjadi invalid',
-                  'error'
-                )
-              }
-            }
-
-            this.loading = false
-
-          } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === this.$swal.DismissReason.cancel
-          ) {}
-        })
-
-      }
-    },
     computed: {
+      selectedSampels: {
+        set(val) {
+          this.$store.state.selectedSampels = val
+        },
+        get() {
+          return this.$store.state.selectedSampels
+        }
+      },
       usiaPasien() {
         if (this.item.tanggal_lahir) {
           let tglLahir = new Date(this.item.tanggal_lahir);
@@ -147,7 +95,32 @@
         }
         return 'Usia: -'
       }
-    }
+    },
+    methods: {
+      sampelOnChangeSelect(e) {
+        const newDomchecked = e.target.checked;
+        const el = e ? e.currentTarget : null;
+        const nomorSampel = el ? el.getAttribute('value') : null;
+        this.checked = newDomchecked;
+        if (this.checked) {
+          this.$store.commit('hasil_pemeriksaan/add', nomorSampel)
+        }
+        if (!this.checked) {
+          this.$store.commit('hasil_pemeriksaan/remove', nomorSampel)
+        }
+      }
+    },
+    watch: {
+      'selected': function (newVal, oldVal) {
+        const sampel = document.getElementById('selected-sampel-' + this.item.sampel_id).value;
+        const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el === sampel) : null;
+        if (findinArr) {
+          document.getElementById('selected-sampel-' + this.item.sampel_id).checked = true;
+        } else {
+          document.getElementById('selected-sampel-' + this.item.sampel_id).checked = false;
+        }
+      },
+    },
   };
 </script>
 

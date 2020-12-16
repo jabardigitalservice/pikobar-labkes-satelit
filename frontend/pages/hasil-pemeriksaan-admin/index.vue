@@ -3,9 +3,6 @@
     <portal to="title-name">Hasil Pemeriksaan</portal>
     <portal to="title-action">
       <div class="title-action">
-        <!-- <button tag="button" class="btn btn-import-export" data-toggle="modal" data-target="#importHasil">
-          <i class="fa fa-download" /> Import
-        </button> -->
         <download-export-button :parentRefs="$refs" ajaxTableRef="verifikasi-admin" class="btn btn-primary" />
       </div>
     </portal>
@@ -36,6 +33,7 @@
                 wrapper: ['table-responsive'],
               }
             }" :rowtemplate="'tr-hasil-pemeriksaan-admin'" :columns="{
+							checkbox_sampel_id: '#',
               waktu_pcr_sample_analyzed: 'TANGGAL PEMERIKSAAN',
               nomor_sampel : 'NO SAMPEL',
               pasien_nama : 'NAMA PASIEN',
@@ -48,42 +46,6 @@
         </Ibox>
       </div>
     </div>
-
-    <custom-modal modal_id="importHasil" title="Import Data">
-      <div slot="body">
-        <div class="col-lg-12">
-          <div class="form-group">
-            <dropzone-import-excel :previewFile="previewFile" />
-          </div>
-          <div class="form-group">
-            <button @click="doImport()" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-md btn-primary block m-b pull-right" type="button">
-              <i class="fa fa-check" /> Import Excel
-            </button>
-          </div>
-          <br>
-          <div class="form-group">
-            <label class="text-muted" style="text-align: justify">
-              Berikut adalah contoh format untuk import excel Hasil Pemeriksaan, data wilayah, dan data fasyankes yang
-              dapat diunduh
-              sebagai referensi.
-            </label>
-            <button @click="downloadFormat('formatHasilPemeriksaan')" :disabled="loading"
-              :class="{'btn-loading': loading}" class="btn btn-sm btn-default" type="button">
-              <i class="fa fa-file" /> Format Import
-            </button>
-            <button @click="downloadFormat('wilayah')" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-sm btn-default" type="button">
-              <i class="fa fa-file" /> Data Wilayah
-            </button>
-            <button @click="downloadFormat('fasyankes')" :disabled="loading" :class="{'btn-loading': loading}"
-              class="btn btn-sm btn-default" type="button">
-              <i class="fa fa-file" /> Data Fasyankes
-            </button>
-          </div>
-        </div>
-      </div>
-    </custom-modal>
 
   </div>
 </template>
@@ -105,6 +67,7 @@
       CustomModal,
     },
     data() {
+      let selectedNomorSampels = this.$store.state.hasil_pemeriksaan.selectedSampels;
       return {
         loading: false,
         dataError: [],
@@ -115,8 +78,10 @@
           lab: "",
           tanggal_verifikasi_end: "",
           kesimpulan_pemeriksaan: "",
-          kategori: ""
-        }
+          kategori: "",
+          id: selectedNomorSampels && selectedNomorSampels.length !== 0 ? selectedNomorSampels : [],
+        },
+        selectedNomorSampels,
       };
     },
     async asyncData({
@@ -255,47 +220,14 @@
       refreshDebounce: debounce(function () {
         this.$bus.$emit('refresh-ajaxtable', 'verifikasi-admin')
       }, 500),
-      async doImport() {
-        let formData = new FormData();
-        formData.append('register_file', this.form.register_file);
-        this.loading = true;
-        JQuery('#importHasil').modal('hide');
-        try {
-          await axios.post(process.env.apiUrl + "/v1/register/import-hasil-pemeriksaan", formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          });
-          this.$bus.$emit('refresh-ajaxtable', 'verifikasi-admin');
-          this.$toast.success('Sukses import data', {
-            icon: "check",
-            iconPack: "fontawesome",
-            duration: 5000
-          });
-        } catch (err) {
-          if (err.response && err.response.data.code == 422) {
-            for (const property in err.response.data.error) {
-              this.$toast.error(err.response.data.error[property][0], {
-                icon: "times",
-                iconPack: "fontawesome",
-                duration: 5000
-              });
-            }
-          } else {
-            this.$swal.fire(
-              "Terjadi kesalahan",
-              "cek kembali file import",
-              "error"
-            );
-          }
-        }
-        this.$bus.$emit('reset-importfile');
-        $('#register_file').val('');
-        this.form.reset();
-        this.loading = false;
-      },
       previewFile(file) {
         this.form.register_file = file;
+      }
+    },
+    watch: {
+      'selectedNomorSampels': function (newVal, oldVal) {
+        console.log(this.selectedNomorSampels)
+        this.selectedNomorSampels.length === 0 ? this.isHasAction = true : this.isHasAction = false
       }
     }
   };
