@@ -94,7 +94,7 @@ class VerifikasiController extends Controller
                         break;
                     case 'id':
                         if ($isData) {
-                            if ($val) {
+                            if (is_array($val) && count($val) > 0) {
                                 $models->whereIn('sampel.id', $val);
                             }
                         }
