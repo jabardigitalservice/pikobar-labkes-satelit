@@ -226,8 +226,7 @@
     },
     watch: {
       'selectedNomorSampels': function (newVal, oldVal) {
-        console.log(this.selectedNomorSampels)
-        this.selectedNomorSampels.length === 0 ? this.isHasAction = true : this.isHasAction = false
+        this.params1.id = this.selectedNomorSampels && this.selectedNomorSampels.length !== 0 ? this.selectedNomorSampels : []
       }
     }
   };
