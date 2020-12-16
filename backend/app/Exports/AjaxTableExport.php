@@ -64,7 +64,7 @@ class AjaxTableExport implements FromCollection, WithEvents, WithMapping, WithHe
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $cellRange = 'A1:Q1'; // All headers
+                $cellRange = 'A1:X1'; // All headers
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(12);
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold(true);
                 $styleArray = [
@@ -75,7 +75,7 @@ class AjaxTableExport implements FromCollection, WithEvents, WithMapping, WithHe
                         ],
                     ],
                 ];
-                $event->sheet->getDelegate()->getStyle("A1:Q{$this->totals}")->applyFromArray($styleArray);
+                $event->sheet->getDelegate()->getStyle("A1:X{$this->totals}")->applyFromArray($styleArray);
             },
         ];
 
