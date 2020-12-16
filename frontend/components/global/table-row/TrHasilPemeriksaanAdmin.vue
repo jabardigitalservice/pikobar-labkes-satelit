@@ -29,7 +29,7 @@
       {{ item.lab_satelit_nama }}
     </td>
     <td style="text-transform: capitalize;">
-      {{item.status ? pasienStatus.find(x => x.value == item.status).text : null }}
+      {{item.sumber_pasien }}
     </td>
     <td style="text-transform: capitalize;">
       {{item.kesimpulan_pemeriksaan}}
