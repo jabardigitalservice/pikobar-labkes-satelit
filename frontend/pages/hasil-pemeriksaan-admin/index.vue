@@ -6,7 +6,7 @@
         <!-- <button tag="button" class="btn btn-import-export" data-toggle="modal" data-target="#importHasil">
           <i class="fa fa-download" /> Import
         </button> -->
-        <download-export-button :parentRefs="$refs" ajaxTableRef="verifikasi" class="btn btn-primary" />
+        <download-export-button :parentRefs="$refs" ajaxTableRef="verifikasi-admin" class="btn btn-primary" />
       </div>
     </portal>
 
@@ -19,8 +19,8 @@
     <div class="row">
       <div class="col-lg-12">
         <Ibox title="Sampel Hasil Pemeriksaan">
-          <ajax-table ref="verifikasi" url="/v1/verifikasi/list" urlexport="/v1/verifikasi/export"
-            :disableSort="['parameter_lab']" :oid="'verifikasi'" :params="params1" :config="{
+          <ajax-table ref="verifikasi-admin" url="/v1/verifikasi/list" urlexport="/v1/verifikasi/export"
+            :disableSort="['parameter_lab']" :oid="'verifikasi-admin'" :params="params1" :config="{
               autoload: true,
               has_number: true,
               has_entry_page: true,
@@ -112,6 +112,7 @@
           fasyankes: "",
           kota_domisili: "",
           tanggal_verifikasi_start: "",
+          lab: "",
           tanggal_verifikasi_end: "",
           kesimpulan_pemeriksaan: "",
           kategori: ""
@@ -164,19 +165,19 @@
     },
     watch: {
       "params1.fasyankes": function (newVal, oldVal) {
-        this.$bus.$emit("refresh-ajaxtable", "verifikasi");
+        this.$bus.$emit("refresh-ajaxtable", "verifikasi-admin");
       },
       "params1.kota_domisili": function (newVal, oldVal) {
-        this.$bus.$emit("refresh-ajaxtable", "verifikasi");
+        this.$bus.$emit("refresh-ajaxtable", "verifikasi-admin");
       },
       "params1.tanggal_verifikasi_start": function (newVal, oldVal) {
-        this.$bus.$emit("refresh-ajaxtable", "verifikasi");
+        this.$bus.$emit("refresh-ajaxtable", "verifikasi-admin");
       },
       "params1.tanggal_verifikasi_end": function (newVal, oldVal) {
-        this.$bus.$emit("refresh-ajaxtable", "verifikasi");
+        this.$bus.$emit("refresh-ajaxtable", "verifikasi-admin");
       },
       "params1.kesimpulan_pemeriksaan": function (newVal, oldVal) {
-        this.$bus.$emit("refresh-ajaxtable", "verifikasi");
+        this.$bus.$emit("refresh-ajaxtable", "verifikasi-admin");
       },
     },
     methods: {
@@ -252,7 +253,7 @@
         this.loading = false;
       },
       refreshDebounce: debounce(function () {
-        this.$bus.$emit('refresh-ajaxtable', 'verifikasi')
+        this.$bus.$emit('refresh-ajaxtable', 'verifikasi-admin')
       }, 500),
       async doImport() {
         let formData = new FormData();
@@ -265,7 +266,7 @@
               'Content-Type': 'multipart/form-data'
             }
           });
-          this.$bus.$emit('refresh-ajaxtable', 'verifikasi');
+          this.$bus.$emit('refresh-ajaxtable', 'verifikasi-admin');
           this.$toast.success('Sukses import data', {
             icon: "check",
             iconPack: "fontawesome",

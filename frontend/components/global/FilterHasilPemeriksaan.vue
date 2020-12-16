@@ -177,6 +177,7 @@
         this.params.kesimpulan_pemeriksaan = null;
         this.params.sumber_pasien = null;
         this.params.status = null;
+        this.params.lab_satelit_id = null;
         this.kota = null;
         this.$refs.rangedatepicker.dateRange.start = null;
         this.$refs.rangedatepicker.dateRange.end = null;
