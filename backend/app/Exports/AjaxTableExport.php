@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Sheet;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class AjaxTableExport implements FromCollection, WithEvents, WithMapping, WithHeadings, WithColumnFormatting, ShouldAutoSize , WithTitle 
+class AjaxTableExport implements FromCollection, WithEvents, WithMapping, WithHeadings, WithColumnFormatting, ShouldAutoSize , WithTitle
 {
     private $models = "";
     private $totals = "";
@@ -65,7 +65,7 @@ class AjaxTableExport implements FromCollection, WithEvents, WithMapping, WithHe
     {
        return [
             AfterSheet::class    => function(AfterSheet $event) {
-                $cellRange = 'A1:W1'; // All headers
+                $cellRange = 'A1:Q1'; // All headers
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(12);
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold(true);
                 $styleArray = [
@@ -76,9 +76,9 @@ class AjaxTableExport implements FromCollection, WithEvents, WithMapping, WithHe
                         ],
                     ]
                 ];
-                $event->sheet->getDelegate()->getStyle("A1:W{$this->totals}")->applyFromArray($styleArray);
+                $event->sheet->getDelegate()->getStyle("A1:Q{$this->totals}")->applyFromArray($styleArray);
             },
         ];
-        
+
     }
 }
