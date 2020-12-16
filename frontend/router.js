@@ -63,6 +63,9 @@ const routes = [
     { path: '/hasil-pemeriksaan-perujuk', name: 'hasil-pemeriksaan-perujuk.index.unverified', component: page('hasil-pemeriksaan-perujuk/index.vue'), meta: { parentName: 'home' } },
     { path: '/hasil-pemeriksaan-perujuk/detail/:id', name: 'hasil-pemeriksaan-perujuk.index.detail', component: page('hasil-pemeriksaan-perujuk/detail.vue'), meta: { parentName: 'hasil-pemeriksaan-perujuk.index.unverified' } },
     
+    { path: '/hasil-pemeriksaan-admin', name: 'hasil-pemeriksaan-admin.index.main', component: page('hasil-pemeriksaan-admin/index.vue'), meta: { parentName: 'home' } },
+    { path: '/hasil-pemeriksaan-admin/detail/:id', name: 'hasil-pemeriksaan-admin.index.detail', component: page('hasil-pemeriksaan-admin/detail.vue'), meta: { parentName: 'hasil-pemeriksaan-admin.index.main' } },
+    
 ]
 
 export function createRouter() {

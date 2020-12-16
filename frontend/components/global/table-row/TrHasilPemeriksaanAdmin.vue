@@ -16,34 +16,24 @@
       <div class="text-muted">{{ usiaPasien || null }}</div>
     </td>
     <td>
-      <span>{{item.nama_kota}}</span>
+      {{item.nama_kota}}
     </td>
     <td>
-      <span>{{ item.instansi_pengirim_nama }}</span>
+      {{ item.instansi_pengirim_nama }}
     </td>
-    <td nowrap>
-      <div v-for="item in JSON.parse(item.hasil_deteksi)" :key="item.target_gen">
-        {{ item.target_gen }} : {{ item.ct_value ? item.ct_value : '-' }}
-      </div>
+    <td>
+      {{ item.lab_satelit_nama }}
     </td>
     <td style="text-transform: capitalize;">
       {{item.status ? pasienStatus.find(x => x.value == item.status).text : null }}
     </td>
     <td style="text-transform: capitalize;">
-      {{item.sumber_pasien}}
-    </td>
-    <td style="text-transform: capitalize;">
       {{item.kesimpulan_pemeriksaan}}
     </td>
-    <td>{{item.catatan_pemeriksaan}}</td>
     <td width="20%">
-      <nuxt-link tag="a" class="mb-1 btn btn-yellow btn-sm" :to="`/hasil-pemeriksaan/detail/${item.sampel_id}`"
+      <nuxt-link tag="a" class="mb-1 btn btn-yellow btn-sm" :to="`/hasil-pemeriksaan-admin/detail/${item.sampel_id}`"
         title="Klik untuk melihat detail">
         <i class="uil-info-circle" />
-      </nuxt-link>
-      <nuxt-link :to="`/hasil-pemeriksaan/edit/${item.sampel_id}`" class="mb-1 btn btn-primary btn-sm" tag="a"
-        title="Klik untuk edit data">
-        <i class="fa fa-edit" />
       </nuxt-link>
     </td>
   </tr>

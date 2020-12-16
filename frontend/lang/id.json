@@ -55,6 +55,12 @@
         "detail": "Detail Sampel"
       }
     },
+    "hasil-pemeriksaan-admin": {
+      "index": {
+        "main": "Hasil Pemeriksaan",
+        "detail": "Detail Sampel"
+      }
+    },
     "validasi": {
       "index": {
         "unvalidate": "Menunggu Validasi",
