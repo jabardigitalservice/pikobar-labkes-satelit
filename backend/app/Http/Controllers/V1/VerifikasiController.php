@@ -34,6 +34,7 @@ class VerifikasiController extends Controller
             ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
             ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
             ->leftJoin('kota', 'kota.id', 'pasien.kota_id')
+            ->leftJoin('lab_satelit', 'lab_satelit.id', 'sampel.lab_satelit_id')
             ->where('sampel.sampel_status', 'pcr_sample_analyzed')
             ->whereNull('register.deleted_at');
 
@@ -85,8 +86,18 @@ class VerifikasiController extends Controller
                     case 'sumber_pasien':
                         $models->where('register.sumber_pasien', 'ilike', '%' . $val . '%');
                         break;
+                    case 'lab_satelit_id':
+                        $models->where('sampel.lab_satelit_id', $val);
+                        break;
                     case 'status':
                         $models->where('register.status', $val);
+                        break;
+                    case 'id':
+                        if ($isData) {
+                            if (is_array($val) && count($val) > 0) {
+                                $models->whereIn('sampel.id', $val);
+                            }
+                        }
                         break;
                     default:
                         break;
@@ -138,6 +149,9 @@ class VerifikasiController extends Controller
                 case 'sumber_pasien':
                     $models = $models->orderBy('register.sumber_pasien', $order_direction);
                     break;
+                case 'lab_satelit_id':
+                    $models = $models->orderBy('sampel.lab_satelit_id', $order_direction);
+                    break;
                 case 'kesimpulan_pemeriksaan':
                     $models = $models->orderBy($order, $order_direction);
                     break;
@@ -149,7 +163,7 @@ class VerifikasiController extends Controller
             }
         }
 
-        $models = $models->select('*', 'sampel.id as sampel_id', 'kota.nama as nama_kota', 'register.created_at as created_at', 'register.sumber_pasien as sumber_pasien');
+        $models = $models->select('*', 'sampel.id as sampel_id', 'kota.nama as nama_kota', 'register.created_at as created_at', 'register.sumber_pasien as sumber_pasien', 'lab_satelit.nama as lab_satelit_nama');
 
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
@@ -189,6 +203,7 @@ class VerifikasiController extends Controller
             'Tanggal Swab',
             'Interpretasi',
             'Tanggal Pemeriksaan',
+            'Lab Pemeriksa',
             'Keterangan',
         ];
         $mapping = function ($model) {
@@ -203,7 +218,7 @@ class VerifikasiController extends Controller
                 $model->jenis_kelamin,
                 parseDate($model->tanggal_lahir),
                 $model->usia_tahun,
-                $this->__getAlamat($model),
+                $this->getAlamat($model),
                 $model->kelurahan,
                 $model->kecamatan,
                 $model->nama_kota,
@@ -215,6 +230,7 @@ class VerifikasiController extends Controller
                 parseDate($model->tanggal_swab),
                 $model->kesimpulan_pemeriksaan,
                 parseDate($model->waktu_pcr_sample_analyzed),
+                $model->lab_satelit_nama,
                 $model->catatan_pemeriksaan,
             ];
         };
@@ -224,17 +240,7 @@ class VerifikasiController extends Controller
 
     }
 
-    private function __getKeterangan($model)
-    {
-        if ($model->kesimpulan_pemeriksaan == 'positif' && $model->status == 'positif') {
-            return 'lama';
-        } elseif ($model->kesimpulan_pemeriksaan == 'positif' && $model->status != null && $model->status != 'positif') {
-            return 'baru';
-        }
-        return '';
-    }
-
-    private function __getAlamat($model)
+    public function getAlamat($model)
     {
         $alamat = $model->alamat_lengkap;
         $alamat .= ' RT/RW ';
