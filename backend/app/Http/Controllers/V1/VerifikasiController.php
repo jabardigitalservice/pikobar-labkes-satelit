@@ -34,6 +34,7 @@ class VerifikasiController extends Controller
             ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
             ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
             ->leftJoin('kota', 'kota.id', 'pasien.kota_id')
+            ->leftJoin('lab_satelit', 'lab_satelit.id', 'sampel.lab_satelit_id')
             ->where('sampel.sampel_status', 'pcr_sample_analyzed')
             ->whereNull('register.deleted_at');
 
@@ -84,6 +85,9 @@ class VerifikasiController extends Controller
                         break;
                     case 'sumber_pasien':
                         $models->where('register.sumber_pasien', 'ilike', '%' . $val . '%');
+                        break;
+                    case 'lab_satelit_id':
+                        $models->where('sampel.lab_satelit_id', $val);
                         break;
                     case 'status':
                         $models->where('register.status', $val);
@@ -138,6 +142,9 @@ class VerifikasiController extends Controller
                 case 'sumber_pasien':
                     $models = $models->orderBy('register.sumber_pasien', $order_direction);
                     break;
+                case 'lab_satelit_id':
+                    $models = $models->orderBy('sampel.lab_satelit_id', $order_direction);
+                    break;
                 case 'kesimpulan_pemeriksaan':
                     $models = $models->orderBy($order, $order_direction);
                     break;
@@ -149,7 +156,7 @@ class VerifikasiController extends Controller
             }
         }
 
-        $models = $models->select('*', 'sampel.id as sampel_id', 'kota.nama as nama_kota', 'register.created_at as created_at', 'register.sumber_pasien as sumber_pasien');
+        $models = $models->select('*', 'sampel.id as sampel_id', 'kota.nama as nama_kota', 'register.created_at as created_at', 'register.sumber_pasien as sumber_pasien', 'lab_satelit.nama as lab_satelit_nama');
 
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
@@ -189,6 +196,7 @@ class VerifikasiController extends Controller
             'Tanggal Swab',
             'Interpretasi',
             'Tanggal Pemeriksaan',
+            'Lab Pemeriksa',
             'Keterangan',
         ];
         $mapping = function ($model) {
@@ -215,6 +223,7 @@ class VerifikasiController extends Controller
                 parseDate($model->tanggal_swab),
                 $model->kesimpulan_pemeriksaan,
                 parseDate($model->waktu_pcr_sample_analyzed),
+                $model->lab_satelit_nama,
                 $model->catatan_pemeriksaan,
             ];
         };
