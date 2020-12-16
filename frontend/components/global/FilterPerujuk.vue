@@ -12,12 +12,22 @@
               placeholder="Nama Pasien / NIK">
           </div>
         </div>
+        <div class="form-group row" v-if="oid === 'registrasi-perujuk'">
+          <div class="col-md-4 flex-text-center">
+            <div for="perujuk">Perujuk Sampel</div>
+          </div>
+          <div class="col-md-8">
+            <input type="text" name="perujuk" v-model="params.perujuk" class="form-control"
+              placeholder="Perujuk Sampel">
+          </div>
+        </div>
         <div class="form-group row">
           <div class="col-md-4 flex-text-center">
             <div>Tanggal Input</div>
           </div>
           <div class="col-md-8 input-group">
-            <date-picker placeholder="Tanggal Input" format="d MMMM yyyy" input-class="form-control" v-model="params.tanggal" />
+            <date-picker placeholder="Tanggal Input" format="d MMMM yyyy" input-class="form-control"
+              v-model="params.tanggal" />
           </div>
         </div>
       </div>
@@ -65,6 +75,7 @@
           nik: null,
           tanggal: null,
           nomor_sampel: null,
+          perujuk: null,
         },
       }
     },
@@ -78,6 +89,7 @@
         this.params.nik = null;
         this.params.tanggal = null;
         this.params.nomor_sampel = null;
+        this.params.perujuk = null;
         this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
       },
     },

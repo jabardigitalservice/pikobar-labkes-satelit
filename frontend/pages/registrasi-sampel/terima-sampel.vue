@@ -47,6 +47,7 @@
               sumber_pasien:'KATEGORI',
               tgl_input:'TANGGAL SAMPLING',
               no_sampel:'SAMPEL',
+              perujuk: 'PERUJUK SAMPEL'
             }" />
         </Ibox>
       </div>

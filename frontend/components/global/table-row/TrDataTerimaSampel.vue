@@ -22,6 +22,7 @@
         {{item.nomor_sampel}}
       </div>
     </td>
+    <td>{{item.perujuk ? item.perujuk.nama : null}}</td>
     <td v-if="config.has_action">
       <button class="mb-1 btn btn-primary btn-sm" @click="terimaData(item, usiaPasien)" title="Terima Sampel">
         <i class="fa fa-check" />
@@ -98,6 +99,14 @@
                 <div class="flex-left" style="text-transform: capitalize">${item.nama_pasien || '-'}</div>
                 <div class="flex-left">${item.nik || ''}</div>
                 <div class="flex-left">${usia}</div>
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Perujuk Sampel
+              </div>
+              <div class="col-md-7 flex-left">
+                ${item.perujuk ? item.perujuk.nama : '-'}
               </div>
             </div>
             <div class="form-group row col-md-10">
@@ -192,6 +201,14 @@
                 <div class="flex-left" style="text-transform: capitalize">${item.nama_pasien || '-'}</div>
                 <div class="flex-left">${item.nik || ''}</div>
                 <div class="flex-left">${usia}</div>
+              </div>
+            </div>
+            <div class="form-group row col-md-10">
+              <div class="col-md-5 text-blue flex-left">
+                Perujuk Sampel
+              </div>
+              <div class="col-md-7 flex-left">
+                ${item.perujuk ? item.perujuk.nama : '-'}
               </div>
             </div>
             <div class="form-group row col-md-10">
