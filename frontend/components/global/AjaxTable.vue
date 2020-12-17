@@ -8,8 +8,7 @@
           <span class="fa fa-search" style="position: absolute; margin-left: 10px" />
         </div>
         <div class="text-center text-sm-left mb-2 table-search">
-          <div class="form-control checkbox-registrasi-perujuk" v-if="oidHasChecked.indexOf(oid) > -1"
-            style="margin-left: 20px">
+          <div class="form-control checkbox" v-if="oidHasChecked.indexOf(oid) > -1" style="margin-left: 20px">
             <input type="checkbox" :checked="false" @click="sampelOnCheckAll" id="checkbox-selectall">
             Select / Unselect All
           </div>
@@ -272,6 +271,8 @@
       let datas = [];
       if (this.oid === 'registrasi-perujuk') {
         datas = this.$store.state.registrasi_perujuk.selectedSampels;
+      } else if (this.oid === 'verifikasi-admin') {
+        datas = this.$store.state.hasil_pemeriksaan.selectedSampels;
       }
       return {
         isLoading: true,
@@ -465,6 +466,8 @@
         let listSampelsArr = [];
         if (this.oid === 'registrasi-perujuk') {
           listSampelsArr = this.$store.state.registrasi_perujuk.selectedSampels;
+        } else if (this.oid === 'verifikasi-admin') {
+          listSampelsArr = this.$store.state.hasil_pemeriksaan.selectedSampels;
         }
 
         var samples = document.getElementsByName("list-sampel");
@@ -473,8 +476,10 @@
         var i;
         for (i = 0; i < samples.length; i++) {
           if (samples[i].name === "list-sampel") {
-            const checkedSampel = Array.isArray(listSampelsArr) ? listSampelsArr.find((element) => element == samples[i].value) : null;
-            const findinCheckedArr =  Array.isArray(this.checkedArr) ? this.checkedArr.find((element) => element == samples[i].value) : null;
+            const checkedSampel = Array.isArray(listSampelsArr) ? listSampelsArr.find((element) => element == samples[i]
+              .value) : null;
+            const findinCheckedArr = Array.isArray(this.checkedArr) ? this.checkedArr.find((element) => element ==
+              samples[i].value) : null;
             if (!findinCheckedArr) {
               this.checkedArr.push(samples[i].value);
             }
@@ -484,24 +489,42 @@
         if (this.checked) {
           if (this.oid == 'registrasi-perujuk') {
             this.$store.commit('registrasi_perujuk/addMultiple', this.checkedArr)
+          } else if (this.oid == 'verifikasi-admin') {
+            this.$store.commit('hasil_pemeriksaan/addMultiple', this.checkedArr)
           }
         }
         if (!this.checked) {
           if (this.oid == 'registrasi-perujuk') {
             this.$store.commit('registrasi_perujuk/removeMultiple', this.checkedArr)
+          } else if (this.oid == 'verifikasi-admin') {
+            this.$store.commit('hasil_pemeriksaan/removeMultiple', this.checkedArr)
           }
         }
       },
       getDOMbyId() {
-        for (const item of this.items) {
-          const sampel = document.getElementById('selected-sampel-' + item.id).value;
-          const ischeck = document.getElementById('selected-sampel-' + item.id).checked;
+        if (this.oid == 'registrasi-perujuk') {
+          for (const item of this.items) {
+            const sampel = document.getElementById('selected-sampel-' + item.id).value;
+            const ischeck = document.getElementById('selected-sampel-' + item.id).checked;
 
-          const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el === sampel) : null;
-          if (findinArr) {
-            document.getElementById('selected-sampel-' + item.id).checked = true;
-          } else {
-            document.getElementById('selected-sampel-' + item.id).checked = false;
+            const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el === sampel) : null;
+            if (findinArr) {
+              document.getElementById('selected-sampel-' + item.id).checked = true;
+            } else {
+              document.getElementById('selected-sampel-' + item.id).checked = false;
+            }
+          }
+        } else if (this.oid == 'verifikasi-admin') {
+          for (const item of this.items) {
+            const sampel = document.getElementById('selected-sampel-' + item.sampel_id).value;
+            const ischeck = document.getElementById('selected-sampel-' + item.sampel_id).checked;
+
+            const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el === sampel) : null;
+            if (findinArr) {
+              document.getElementById('selected-sampel-' + item.sampel_id).checked = true;
+            } else {
+              document.getElementById('selected-sampel-' + item.sampel_id).checked = false;
+            }
           }
         }
       }
@@ -588,17 +611,7 @@
         window.pagestate[this.oid] = this.pagination.page;
       },
       'checkedArr': function (newVal, oldVal) {
-        for (const item of this.items) {
-          const sampel = document.getElementById('selected-sampel-' + item.id).value;
-          const ischeck = document.getElementById('selected-sampel-' + item.id).checked;
-
-          const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el === sampel) : null;
-          if (findinArr) {
-            document.getElementById('selected-sampel-' + item.id).checked = true;
-          } else {
-            document.getElementById('selected-sampel-' + item.id).checked = false;
-          }
-        }
+        this.getDOMbyId()
       },
       "isLoading": function (newVal, oldVal) {
         if ((this.oidHasChecked.indexOf(this.oid) > -1) && this.isLoading === false) {
