@@ -41,9 +41,9 @@ const routes = [
     { path: '/pcr/input/:id', name: 'pcr.input', component: page('pcr/input.vue'), meta: { parentName: 'pcr.list-pcr' } },
     { path: '/pcr/import-excel-hasil', name: 'pcr.import input hasil', component: page('pcr/import-excel-hasil.vue'), meta: { parentName: 'pcr.list-pcr' } },
 
-    { path: '/hasil-pemeriksaan/list-hasil-pemeriksaan', name: 'hasil-pemeriksaan.index.unverified', component: page('hasil-pemeriksaan/index.vue'), meta: { parentName: 'home' } },
-    { path: '/hasil-pemeriksaan/detail/:id', name: 'hasil-pemeriksaan.detail', component: page('hasil-pemeriksaan/detail.vue'), meta: { parentName: 'hasil-pemeriksaan.index.unverified' } },
-    { path: '/hasil-pemeriksaan/edit/:id', name: 'hasil-pemeriksaan.edit', component: page('hasil-pemeriksaan/edit.vue'), meta: { parentName: 'hasil-pemeriksaan.index.unverified' } },
+    { path: '/hasil-pemeriksaan', name: 'hasil-pemeriksaan.index.unverified', component: page('hasil-pemeriksaan/index.vue'), meta: { parentName: 'home' } },
+    { path: '/hasil-pemeriksaan/detail/:id', name: 'hasil-pemeriksaan.index.detail', component: page('hasil-pemeriksaan/detail.vue'), meta: { parentName: 'hasil-pemeriksaan.index.unverified' } },
+    { path: '/hasil-pemeriksaan/edit/:id', name: 'hasil-pemeriksaan.index.edit', component: page('hasil-pemeriksaan/edit.vue'), meta: { parentName: 'hasil-pemeriksaan.index.unverified' } },
 
     { path: '/user', name: 'user.index', component: page('user/index.vue'), meta: {parentName: 'home'}},
     { path: '/user/:id', name: 'user.show', component: page('user/show.vue'), meta: {parentName: 'user.index'}},
@@ -62,10 +62,7 @@ const routes = [
     
     { path: '/hasil-pemeriksaan-perujuk', name: 'hasil-pemeriksaan-perujuk.index.unverified', component: page('hasil-pemeriksaan-perujuk/index.vue'), meta: { parentName: 'home' } },
     { path: '/hasil-pemeriksaan-perujuk/detail/:id', name: 'hasil-pemeriksaan-perujuk.index.detail', component: page('hasil-pemeriksaan-perujuk/detail.vue'), meta: { parentName: 'hasil-pemeriksaan-perujuk.index.unverified' } },
-    
-    { path: '/hasil-pemeriksaan-admin', name: 'hasil-pemeriksaan-admin.index.main', component: page('hasil-pemeriksaan-admin/index.vue'), meta: { parentName: 'home' } },
-    { path: '/hasil-pemeriksaan-admin/detail/:id', name: 'hasil-pemeriksaan-admin.index.detail', component: page('hasil-pemeriksaan-admin/detail.vue'), meta: { parentName: 'hasil-pemeriksaan-admin.index.main' } },
-    
+        
 ]
 
 export function createRouter() {

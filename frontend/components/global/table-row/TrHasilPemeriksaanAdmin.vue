@@ -35,7 +35,7 @@
       {{item.kesimpulan_pemeriksaan}}
     </td>
     <td width="20%">
-      <nuxt-link tag="a" class="mb-1 btn btn-yellow btn-sm" :to="`/hasil-pemeriksaan-admin/detail/${item.sampel_id}`"
+      <nuxt-link tag="a" class="mb-1 btn btn-yellow btn-sm" :to="`/hasil-pemeriksaan/detail/${item.sampel_id}`"
         title="Klik untuk melihat detail">
         <i class="uil-info-circle" />
       </nuxt-link>

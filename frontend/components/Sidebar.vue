@@ -42,12 +42,6 @@
             </li>
           </ul>
         </li>
-        <li v-if="checkPermission('admin')">
-          <router-link to="/hasil-pemeriksaan-admin" tag="a">
-            <i class="uil-eye fa-fw" />
-            <span class="nav-label">Hasil Pemeriksaan</span>
-          </router-link>
-        </li>
         <li v-if="checkPermission('satelit')">
           <router-link to="/registrasi/sampel" tag="a">
             <i class="uil-user-square fa-fw" />
@@ -60,8 +54,8 @@
             <span class="nav-label">Input Hasil</span>
           </router-link>
         </li>
-        <li v-if="checkPermission('satelit')">
-          <router-link to="/hasil-pemeriksaan/list-hasil-pemeriksaan" tag="a">
+        <li v-if="checkPermission('dashboard')">
+          <router-link to="/hasil-pemeriksaan" tag="a">
             <i class="uil-eye fa-fw" />
             <span class="nav-label">Hasil Pemeriksaan</span>
           </router-link>

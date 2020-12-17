@@ -46,18 +46,12 @@
       "index": {
         "unverified": "Hasil Pemeriksaan",
         "detail": "Detail Sampel",
-        "edit": "Hasil Pemeriksaan"
+        "edit": "Edit Sampel"
       }
     },
     "hasil-pemeriksaan-perujuk": {
       "index": {
         "unverified": "Hasil Pemeriksaan",
-        "detail": "Detail Sampel"
-      }
-    },
-    "hasil-pemeriksaan-admin": {
-      "index": {
-        "main": "Hasil Pemeriksaan",
         "detail": "Detail Sampel"
       }
     },
