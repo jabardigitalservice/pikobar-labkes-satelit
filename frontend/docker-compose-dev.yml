@@ -1,17 +1,14 @@
 version: '3.5'
 services:
-  app:
-      
+  app:      
       build: 
         context: .
         args: 
-          API_URL: http://adi-labsatelit-be.rover.digitalservice.id/api/ # tambahkan variable disini agar terbaca
-          #API_URL: ${API_URL} # from .env file
-          #- API_URL=$API_URL
-
-      #env_file:
-      #  - .env-local
-
+          API_URL: ${API_URL} #baca api url dari .env file
+          APP_URL: ${APP_URL}
+          APP_NAME: ${APP_NAME}
+          APP_LOCALE: ${APP_LOCALE}
+          SENTRY_LARAVEL_DSN: ${SENTRY_LARAVEL_DSN}
       restart: always
       container_name: satelit-fe     
       ports:
