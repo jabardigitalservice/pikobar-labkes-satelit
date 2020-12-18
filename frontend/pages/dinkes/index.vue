@@ -32,7 +32,6 @@
               name: 'NAMA ADMIN',
               email: 'EMAIL',
               status: 'STATUS',
-              last_login_at: 'TERAKHIR LOGIN',
             }" />
         </Ibox>
       </div>
@@ -110,6 +109,12 @@
           </div>
         </div>
 
+        <div class="dimmed" v-if="isLoading">
+          <div class="loading-indicator">
+            <img src="~/assets/img/loading.gif" width="48" height="48">
+            Loading ...
+          </div>
+        </div>
         <button @click="submit()" :disabled="loading" :class="{'btn-loading': loading}"
           class="btn btn-md btn-primary block m-b pull-right" type="button">
           <i class="uil-plus" /> Tambah Akun
@@ -139,6 +144,7 @@
     data() {
       return {
         loading: false,
+        isLoading: false,
         dataError: [],
         option_lab_satelit: null,
         optionsRoleDinkes,
@@ -169,6 +175,7 @@
         this.option_lab_satelit = resp.data.data;
       },
       async submit() {
+        this.isLoading = true;
         try {
           const response = await this.form.post("/v1/user/dinkes/invite");
           this.$toast.success(response.data.message, {
@@ -178,6 +185,7 @@
             duration: 5000,
           });
           JQuery("#invite-dinkes-modal").modal("hide");
+          this.isLoading = false;
           this.form.name = null;
           this.form.username = null;
           this.form.email = null;
@@ -209,3 +217,16 @@
     }
   };
 </script>
+
+<style scoped>
+  .dimmed {
+    z-index: 10;
+    display: block;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.5);
+  }
+</style>
