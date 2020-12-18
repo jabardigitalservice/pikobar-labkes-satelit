@@ -3,7 +3,6 @@ FROM node:latest
 WORKDIR /app
 COPY . .
 
-#ARG API_URL=http://adi-labsatelit-be.rover.digitalservice.id/api/
 ARG API_URL
 ARG APP_URL
 ARG APP_NAME
