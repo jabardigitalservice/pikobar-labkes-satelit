@@ -81,6 +81,9 @@ Route::group(['middleware' => ['guest:api', 'cors']], function () {
     Route::post('login', 'Auth\LoginController@login');
     Route::post('/v1/user/register', 'V1\UserController@register')->name('api.user.register');
     Route::get('/v1/user/register/{invite:token}', 'V1\UserController@tokenInfo')->name('api.user.tokenInfo');
+    Route::post('/v1/user/dinkes/register', 'V1\User\DinkesController@register')->name('api.users.dinkes.register');
+    Route::post('/v1/user/lab/register', 'V1\User\LabController@register')->name('api.users.Lab.register');
+
 });
 
 Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1'], function () {
@@ -297,14 +300,12 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
             Route::group(['prefix' => 'dinkes'], function() {
                 Route::put('/{user:id}', 'DinkesController@update')->name('api.users.dinkes.update');
                 Route::post('/', 'DinkesController@store')->name('api.users.dinkes.store');
-                Route::post('/register', 'DinkesController@register')->name('api.users.dinkes.register');
                 Route::post('/invite', 'DinkesController@invite')->name('api.users.dinkes.invite');
             });
 
             Route::group(['prefix' => 'lab'], function() {
                 Route::put('/{user:id}', 'LabController@update')->name('api.users.Lab.update');
                 Route::post('/', 'LabController@store')->name('api.users.Lab.store');
-                Route::post('/register', 'LabController@register')->name('api.users.Lab.register');
                 Route::post('/invite', 'LabController@invite')->name('api.users.lab.invite');
             });
         });

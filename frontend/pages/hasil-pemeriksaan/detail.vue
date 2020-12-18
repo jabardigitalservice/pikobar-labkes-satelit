@@ -3,10 +3,10 @@
     <portal to="title-name">Detail Hasil Pemeriksaan</portal>
     <portal to="title-action">
       <div class="title-action">
-        <router-link :to="`/hasil-pemeriksaan/edit/${this.data.id}`" class="btn btn-import-export">
+        <router-link v-show="user && user.role_id !== 1" :to="`/hasil-pemeriksaan/edit/${this.data.id}`" class="btn btn-import-export">
           <i class="fa fa-pencil" /> Perbarui Data
         </router-link>
-        <nuxt-link to="/hasil-pemeriksaan/list-hasil-pemeriksaan" class="btn btn-black">
+        <nuxt-link to="/hasil-pemeriksaan" class="btn btn-black">
           <i class="uil-arrow-left" /> Kembali
         </nuxt-link>
       </div>
@@ -20,7 +20,7 @@
               Instansi Pengirim
             </div>
             <div class="col-md-7 flex-text-center">
-              {{ instansiPengirim }}
+              {{ instansiPengirim() }}
             </div>
           </div>
           <div class="form-group row">
@@ -108,7 +108,7 @@
               Usia Pasien
             </div>
             <div class="col-md-7 flex-text-center">
-              {{ usiaPasien }}
+              {{ usiaPasien() }}
             </div>
           </div>
           <div class="form-group row">
@@ -271,6 +271,9 @@
 </template>
 
 <script>
+  import {
+    mapGetters
+  } from "vuex";
   import axios from "axios";
   import {
     pasienStatus
@@ -316,7 +319,10 @@
         pasienStatus,
       }
     },
-    computed: {
+    computed: mapGetters({
+      user: "auth/user"
+    }),
+    methods: {
       usiaPasien() {
         if (this.data.usia_tahun) {
           if (this.data.usia_tahun && this.data.usia_bulan) {
@@ -340,7 +346,7 @@
       return {
         title: "Detail Sampel Hasil Pemeriksaan"
       };
-    }
+    },
   };
 </script>
 

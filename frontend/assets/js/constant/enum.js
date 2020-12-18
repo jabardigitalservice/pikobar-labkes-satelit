@@ -12,7 +12,7 @@ export const KesimpulanPemeriksaan = [{
   nama: 'INVALID'
 }];
 
-export const oidHasChecked = ['registrasi-perujuk'];
+export const oidHasChecked = ['registrasi-perujuk', 'verifikasi-admin'];
 
 export const metodeEkstraksi = ['Manual', 'Otomatis'];
 
@@ -46,3 +46,28 @@ export const pasienStatus = [{
 }];
 
 export const optionsPenerimaSampel = ['Adit', 'Ariza', 'Fahmy', 'Figur', 'Firman'];
+
+export const colAdminSatelit = {
+  waktu_pcr_sample_analyzed: 'TANGGAL PEMERIKSAAN',
+  nomor_sampel : 'NO SAMPEL',
+  pasien_nama : 'NAMA PASIEN',
+  kota_domilisi: 'DOMISILI',
+  instansi_pengirim: 'INSTANSI',
+  parameter_lab: 'PARAMETER LAB',
+  status: 'Kriteria',
+  sumber_pasien: 'KATEGORI',
+  kesimpulan_pemeriksaan: 'KESIMPULAN PEMERIKSAAN',
+  catatan: 'KETERANGAN',
+}
+
+export const colSuperAdmin = {
+  checkbox_sampel_id: '#',
+  waktu_pcr_sample_analyzed: 'TANGGAL PEMERIKSAAN',
+  nomor_sampel : 'NO SAMPEL',
+  pasien_nama : 'NAMA PASIEN',
+  kota_domilisi: 'DOMISILI',
+  instansi_pengirim: 'INSTANSI',
+  lab: 'LAB PEMERIKSA',
+  sumber_pasien: 'KATEGORI',
+  kesimpulan_pemeriksaan: 'KESIMPULAN PEMERIKSAAN',
+}
