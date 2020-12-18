@@ -47,17 +47,6 @@
             </div>
 
             <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{
-                $t("coordinator")
-              }}</label>
-              <div class="col-md-7">
-                <label class="form-control" readonly>
-                  {{ this.form.coordinator }}
-                </label>
-              </div>
-            </div>
-
-            <div class="form-group row">
               <label class="col-md-3 col-form-label text-md-right">
                 Dinkes
               </label>
@@ -119,7 +108,6 @@
           username: data.username,
           name: data.name,
           email: data.email,
-          koordinator: data.koordinator,
           lab_satelit_id: data.lab_satelit_id,
           id: data.id,
           role_id: data.role_id
