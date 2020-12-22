@@ -91,6 +91,8 @@ class Handler extends ExceptionHandler
                 "Does not exists any {$modelName} with the specified identificator",
                 404
             );
+
+
             return $message_error;
         }
 
