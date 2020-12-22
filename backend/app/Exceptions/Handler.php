@@ -91,8 +91,6 @@ class Handler extends ExceptionHandler
                 "Does not exists any {$modelName} with the specified identificator",
                 404
             );
-
-
             return $message_error;
         }
 
@@ -127,7 +125,8 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof HttpException)
         {
-            return $this->errorResponse($exception->getMessage(), $exception->getStatusCode());
+            $message_error = $this->errorResponse($exception->getMessage(), $exception->getStatusCode());
+            return $message_error;
         }
 
         if ($exception instanceof QueryException)
@@ -153,7 +152,8 @@ class Handler extends ExceptionHandler
             return parent::render($request, $exception);
         }
 
-        return $this->errorResponse('Unexpected Exception, Try later.', 500);
+        $message_error = $this->errorResponse('Unexpected Exception, Try later.', 500);
+        return $message_error;
     }
 
     /**
@@ -199,6 +199,7 @@ class Handler extends ExceptionHandler
 
     private function isFrontend($request)
     {
-        return $request->acceptsHtml() && collect($request->route()->middleware())->contains('web');
+        $result = $request->acceptsHtml() && collect($request->route()->middleware())->contains('web');
+        return $result;
     }
 }
