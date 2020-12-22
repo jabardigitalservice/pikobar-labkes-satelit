@@ -127,8 +127,8 @@ class Handler extends ExceptionHandler
         {
             $message = $exception->getMessage();
             $status = $exception->getStatusCode();
-            $message_error = $this->errorResponse($message, $status);
-            return $message_error;
+            $error = $this->errorResponse($message, $status);
+            return $error;
         }
 
         if ($exception instanceof QueryException)
@@ -155,8 +155,8 @@ class Handler extends ExceptionHandler
         }
         $message = 'Unexpected Exception, Try later.';
         $code = 500;
-        $message_error = $this->errorResponse($message, $code);
-        return $message_error;
+        $error = $this->errorResponse($message, $code);
+        return $error;
     }
 
     /**
