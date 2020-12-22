@@ -51,11 +51,11 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
-        if (app()->bound('sentry') && $this->shouldReport($exception) 
+        if (app()->bound('sentry') && $this->shouldReport($exception)
             && !app()->environment('local')) {
             app('sentry')->captureException($exception);
         }
-        
+
         parent::report($exception);
     }
 
@@ -80,16 +80,18 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof ValidationException)
         {
-            return $this->convertValidationExceptionToResponse($exception, $request);
+            $message_error = $this->convertValidationExceptionToResponse($exception, $request);
+            return $message_error;
         }
 
         if ($exception instanceof ModelNotFoundException)
         {
             $modelName = strtolower(class_basename($exception->getModel()));
-            return $this->errorResponse(
+            $message_error = $this->errorResponse(
                 "Does not exists any {$modelName} with the specified identificator",
                 404
             );
+            return $message_error;
         }
 
         if ($exception instanceof AuthenticationException)
