@@ -125,7 +125,9 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof HttpException)
         {
-            $message_error = $this->errorResponse($exception->getMessage(), $exception->getStatusCode());
+            $message = $exception->getMessage();
+            $status = $exception->getStatusCode();
+            $message_error = $this->errorResponse($message, $status);
             return $message_error;
         }
 
