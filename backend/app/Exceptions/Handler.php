@@ -125,9 +125,7 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof HttpException)
         {
-            $message = $exception->getMessage();
-            $status = $exception->getStatusCode();
-            $error = $this->errorResponse($message, $status);
+            $error = $this->errorResponse($exception->getMessage(), $exception->getStatusCode());
             return $error;
         }
 
@@ -153,10 +151,10 @@ class Handler extends ExceptionHandler
         {
             return parent::render($request, $exception);
         }
-        $message = 'Unexpected Exception';
+        $message = 'Unexpected Exception, Try later.';
         $code = 500;
-        $error = $this->errorResponse($message, $code);
-        return $error;
+        $message_error = $this->errorResponse($message, $code);
+        return $message_error;
     }
 
     /**
