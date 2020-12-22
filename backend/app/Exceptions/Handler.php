@@ -125,8 +125,10 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof HttpException)
         {
-            $error = $this->errorResponse($exception->getMessage(), $exception->getStatusCode());
-            return $error;
+            return $this->errorResponse(
+                $exception->getMessage(),
+                $exception->getStatusCode()
+            );
         }
 
         if ($exception instanceof QueryException)
@@ -152,7 +154,10 @@ class Handler extends ExceptionHandler
             return parent::render($request, $exception);
         }
 
-        $result = $this->errorResponse('Unexpected Exception, Try later.', 500);
+        $result = $this->errorResponse(
+            'Unexpected Exception, Try later.',
+            500
+        );
         return $result;
     }
 
