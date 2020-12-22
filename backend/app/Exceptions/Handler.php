@@ -51,11 +51,11 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
-        if (app()->bound('sentry') && $this->shouldReport($exception) 
+        if (app()->bound('sentry') && $this->shouldReport($exception)
             && !app()->environment('local')) {
             app('sentry')->captureException($exception);
         }
-        
+
         parent::report($exception);
     }
 
@@ -123,7 +123,10 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof HttpException)
         {
-            return $this->errorResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->errorResponse(
+                $exception->getMessage(),
+                $exception->getStatusCode()
+            );
         }
 
         if ($exception instanceof QueryException)
@@ -149,7 +152,10 @@ class Handler extends ExceptionHandler
             return parent::render($request, $exception);
         }
 
-        return $this->errorResponse('Unexpected Exception, Try later.', 500);
+        return $this->errorResponse(
+            'Unexpected Exception, Try later.',
+            500
+        );
     }
 
     /**
