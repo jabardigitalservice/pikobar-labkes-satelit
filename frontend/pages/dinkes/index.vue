@@ -117,7 +117,7 @@
         </div>
         <button @click="submit()" :disabled="loading" :class="{'btn-loading': loading}"
           class="btn btn-md btn-primary block m-b pull-right" type="button">
-          <i class="uil-plus" /> Tambah Akun
+          Submit
         </button>
       </div>
     </custom-modal>
