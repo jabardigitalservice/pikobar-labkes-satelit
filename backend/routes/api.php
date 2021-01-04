@@ -67,17 +67,6 @@ Route::group(['middleware' => ['auth:api', 'verified']], function () {
         Route::get('/export-excel', 'Registrasisampel@exportExcel');
     });
 
-    Route::group(['prefix' => 'registrasi-rujukan'], function () {
-        Route::post('/cek', 'RegistrasiRujukanController@cekData');
-        Route::post('/store', 'RegistrasiRujukanController@store');
-        Route::get('/export-excel', 'RegistrasiMandiri@exportExcel');
-        Route::delete('/delete/{id}/{pasien}', 'RegistrasiRujukanController@delete');
-
-        Route::post('update/{register_ids}/{pasien_id}', 'RegistrasiRujukanController@storeUpdate');
-        Route::get('update/{register_id}/{pasien_id}', 'RegistrasiRujukanController@getById');
-        Route::get('/export-excel', 'RegistrasiRujukanController@exportExcel');
-    });
-
     Route::group(['prefix' => 'pemeriksaansampel'], function () {
         Route::get('/get-data', 'PemeriksaanSampleController@getData');
         Route::get('/get-dikirim', 'PemeriksaanSampleController@getDikirim');
@@ -208,16 +197,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::post('import-mandiri', 'ImportRegisterController@importRegisterMandiri');
         Route::post('import-sampel', 'ImportRegisterController@importRegisterSampel');
         Route::post('import-hasil-pemeriksaan', 'ImportRegisterController@importHasilPemeriksaan');
-
-        Route::post('import-rujukan', 'ImportRegisterController@importRegisterRujukan');
-
-        Route::group(['prefix' => 'rujukan'], function () {
-            Route::post('store', 'RegisterRujukanController@store');
-
-            Route::get('detail/{register}', 'RegisterRujukanController@show');
-
-            Route::post('update/{register}', 'RegisterRujukanController@update');
-        });
     });
 
     Route::group(['prefix' => 'pengambilan-sampel'], function () {
