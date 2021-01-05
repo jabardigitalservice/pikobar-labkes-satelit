@@ -193,6 +193,7 @@
           this.form.role_id = null;
           this.$bus.$emit("refresh-ajaxtable", "master-dinkes");
         } catch (err) {
+          this.isLoading = false;
           if (err.response && err.response.data.code == 422) {
             this.$nextTick(() => {
               this.form.errors.set(err.response.data.error);
