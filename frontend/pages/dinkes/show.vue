@@ -33,10 +33,6 @@
                 <td>{{ data.username }}</td>
               </tr>
               <tr>
-                <th>Koordinator</th>
-                <td>{{ data.koordinator }}</td>
-              </tr>
-              <tr>
                 <th>Role</th>
                 <td>{{ data.role_id ? data.role_id === 1 ? 'Super Admin' : 'Admin' : '-' }}</td>
               </tr>

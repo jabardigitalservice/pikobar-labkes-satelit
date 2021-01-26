@@ -76,9 +76,9 @@
 
             <div class="form-group row">
               <div class="col-md-7 offset-md-3 d-flex">
-                <v-button :loading="form.busy">
-                  {{ $t("edit") }}
-                </v-button>
+                <button @click="submit()" :loading="form.busy" class="btn btn-md btn-primary" type="button">
+                  Submit
+                </button>
               </div>
             </div>
           </form>

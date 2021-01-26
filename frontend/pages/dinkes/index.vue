@@ -117,7 +117,7 @@
         </div>
         <button @click="submit()" :disabled="loading" :class="{'btn-loading': loading}"
           class="btn btn-md btn-primary block m-b pull-right" type="button">
-          <i class="uil-plus" /> Tambah Akun
+          Submit
         </button>
       </div>
     </custom-modal>
@@ -193,6 +193,7 @@
           this.form.role_id = null;
           this.$bus.$emit("refresh-ajaxtable", "master-dinkes");
         } catch (err) {
+          this.isLoading = false;
           if (err.response && err.response.data.code == 422) {
             this.$nextTick(() => {
               this.form.errors.set(err.response.data.error);
