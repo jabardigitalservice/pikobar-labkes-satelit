@@ -23,6 +23,6 @@ class DeleteSampelBulkController extends Controller
             }
             $register->delete();
         }
-        return response()->json(['status' => 200, 'message' => 'Berhasil menghapus data sampel']);
+        return response()->json(['message' => 'Berhasil menghapus data sampel']);
     }
 }

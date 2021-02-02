@@ -323,13 +323,12 @@ class RegistersampelController extends Controller
         ], 200);
     }
 
-    public function delete($id)
+    public function delete(Register $register)
     {
-        $register = Register::where('id', $id)->first();
         if ($register->sampel) {
             $register->sampel()->delete();
         }
         $register->delete();
-        return response()->json(['status' => 200, 'message' => 'Berhasil menghapus data sampel']);
+        return response()->json(['message' => 'Berhasil menghapus data sampel']);
     }
 }
