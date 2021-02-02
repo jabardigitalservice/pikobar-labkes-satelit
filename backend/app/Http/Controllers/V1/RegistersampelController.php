@@ -111,7 +111,6 @@ class RegistersampelController extends Controller
             $sampel->waktu_sample_taken = date('Y-m-d H:i:s');
             $sampel->save();
             DB::commit();
-
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
@@ -223,7 +222,6 @@ class RegistersampelController extends Controller
                     $pasienLogs[$key]["from"] = $key == 'tanggal_lahir' ? date('d-m-Y', strtotime($pasienOrigin[$key])) : $pasienOrigin[$key];
                     $pasienLogs[$key]["to"] = $key == 'tanggal_lahir' ? date('d-m-Y', strtotime($value)) : $value;
                 }
-
             }
 
             $sampelLogs = array();
@@ -314,7 +312,7 @@ class RegistersampelController extends Controller
             ->whereRaw("(info->>'pasien' <> '[]'::text or info->>'register' <> '[]'::text or info->>'sampel' <> '[]'::text)")
             ->select('info', 'register_logs.created_at', 'users.name as updated_by')->get();
 
-        foreach($model as $key => $val) {
+        foreach ($model as $key => $val) {
             $info = json_decode($val->info);
 
             if (isset($info->pasien->status)) {
@@ -363,7 +361,6 @@ class RegistersampelController extends Controller
 
         DB::beginTransaction();
         try {
-
             $register = Register::create([
                 'nomor_register' => $this->generateNomorRegister(date('Ymd'), 'mandiri'),
                 'fasyankes_id' => $request->input('fasyankes_id'),
@@ -422,12 +419,10 @@ class RegistersampelController extends Controller
             DB::commit();
 
             return new RegisterResource($register);
-
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
-
     }
 
     /**
@@ -443,7 +438,6 @@ class RegistersampelController extends Controller
 
         DB::beginTransaction();
         try {
-
             $register->gejalaPasien()->detach();
 
             $register->pemeriksaanPenunjang()->detach();
@@ -503,7 +497,6 @@ class RegistersampelController extends Controller
             DB::commit();
 
             return new RegisterResource($updatedRegister);
-
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
@@ -620,7 +613,6 @@ class RegistersampelController extends Controller
 
         DB::beginTransaction();
         try {
-
             $register->pasiens()->detach();
 
             $register->riwayatKunjungan()->delete();
@@ -643,7 +635,6 @@ class RegistersampelController extends Controller
                 'status' => true,
                 'message' => __("Berhasil menghapus data register"),
             ]);
-
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

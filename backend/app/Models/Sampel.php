@@ -24,7 +24,7 @@ class Sampel extends Model
 
         'nomor_sampel',
         'jenis_sampel_id',
-        'petugas_pengambilan_sampel', // Isinya adalah kondisi sampel, di aliaskan 'kondisi_sampel' 
+        'petugas_pengambilan_sampel', // Isinya adalah kondisi sampel, di aliaskan 'kondisi_sampel'
         'tanggal_pengambilan_sampel',
         'waktu_pengambilan_sampel',
         'sampel_status',
@@ -87,7 +87,7 @@ class Sampel extends Model
         if (empty($this->{'waktu_'.$newstate})) {
             $this->{'waktu_'.$newstate} = date('Y-m-d H:i:s');
             if ($tanggal) {
-                $this->{'waktu_'.$newstate} = date('Y-m-d H:i:s',strtotime($tanggal));
+                $this->{'waktu_'.$newstate} = date('Y-m-d H:i:s', strtotime($tanggal));
             }
         }
         $this->sampel_status = $newstate;
@@ -128,7 +128,7 @@ class Sampel extends Model
     {
         parent::boot();
         
-        static::creating(function($model) {
+        static::creating(function ($model) {
             if (empty($model->is_musnah_ekstraksi)) {
                 $model->is_musnah_ekstraksi = false;
             }
@@ -147,5 +147,4 @@ class Sampel extends Model
     {
         return $this->belongsTo(LabPCR::class, 'lab_pcr_id');
     }
-
 }

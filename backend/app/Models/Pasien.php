@@ -108,6 +108,4 @@ class Pasien extends Model
     {
         return $this->belongsTo(Kota::class);
     }
-
-
 }

@@ -2,25 +2,17 @@
 
 namespace App\Exceptions;
 
-// use Exception;
-use App\Traits\ApiResponser;
-// use Asm89\Stack\CorsService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Session\TokenMismatchException;
-use Illuminate\Validation\ValidationException;
+use Mockery\Exception\InvalidOrderException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
-    use ApiResponser;
 
     /**
      * A list of the exception types that are not reported.
@@ -28,7 +20,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+        InvalidOrderException::class,
     ];
 
     /**
@@ -44,18 +36,16 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param  \Throwable  $exception
      * @return void
      *
      * @throws \Exception
      */
     public function report(Throwable $exception)
     {
-        if (app()->bound('sentry') && $this->shouldReport($exception)
-            && !app()->environment('local')) {
+        if (app()->bound('sentry') && $this->shouldReport($exception) && !app()->environment('local')) {
             app('sentry')->captureException($exception);
         }
-
         parent::report($exception);
     }
 
@@ -63,109 +53,49 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param  \Throwable  $e
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @throws \Exception
+     * @throws \Throwable
      */
-    public function render($request, Throwable $exception)
+    public function render($request, Throwable $e)
     {
-        $response = $this->handleException($request, $exception);
-        // app(CorsService::class)->addActualRequestHeaders($response, $request);
-
-        return $response;
-    }
-
-    public function handleException($request, Throwable $exception)
-    {
-        if ($exception instanceof ValidationException) {
-            return $this->convertValidationExceptionToResponse($exception, $request);
-        } elseif ($exception instanceof ModelNotFoundException) {
-            $modelName = strtolower(class_basename($exception->getModel()));
-            return $this->errorResponse(
-                "Does not exists any {$modelName} with the specified identificator",
-                404
-            );
-        } elseif ($exception instanceof AuthenticationException) {
-            if ($this->isFrontend($request)) {
-                return redirect()->guest('login');
-            } else {
-                return $this->errorResponse('Unauthenticated', 401);
-            }
-        } elseif ($exception instanceof AuthorizationException) {
-            return $this->errorResponse($exception->getMessage(), 403);
-        } elseif ($exception instanceof NotFoundHttpException) {
-            return $this->errorResponse('The specified URL cannot be found.', 404);
-        } elseif ($exception instanceof RouteNotFoundException) {
-            return $this->errorResponse('The specified Route cannot be found.', 404);
-        } elseif ($exception instanceof MethodNotAllowedHttpException) {
-            return $this->errorResponse('The specified method for the requests is invalid', 405);
-        } elseif ($exception instanceof HttpException) {
-            return $this->errorResponse(
-                $exception->getMessage(),
-                $exception->getStatusCode()
-            );
-        } elseif ($exception instanceof QueryException) {
-            $errorCode = $exception->errorInfo[1];
-            if ($errorCode == 1451) {
-                return $this->errorResponse(
-                    'Cannot remove the resources permanently. It is related with any other resource.',
-                    409
-                );
-            }
-        } elseif ($exception instanceof TokenMismatchException) {
-            return redirect()->back()->withInput($request->input());
-        } elseif (config('app.debug')) {
-            return parent::render($request, $exception);
+        if ($messageError = $this->errorException($e)) {
+            return $messageError;
         } else {
-            return $this->errorResponse(
-                'Unexpected Exception, Try later.',
-                500
-            );
+            $request->headers->set('Accept', 'application/json');
+            return parent::render($request, $e);
         }
     }
 
-    /**
-     * Convert a validation exception into a JSON response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Validation\ValidationException  $exception
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function invalidJson($request, ValidationException $exception)
+    protected function errorException(Throwable $e)
     {
-        /**
-         * for getting error message $exception->getMessage()
-         */
-        return $this->errorResponse(
-            $exception->errors(),
-            $exception->status
-        );
-
-    }
-
-    /**
-     * Create a response object from the given validation exception.
-     *
-     * @param  \Illuminate\Validation\ValidationException  $e
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function convertValidationExceptionToResponse(ValidationException $e, $request)
-    {
-        $errors = $e->errors();
-
-        if ($this->isFrontend($request)) {
-            return $request->ajax()
-            ? response()->json($errors, 422)
-            : redirect()->back()->withInput($request->input())->withErrors($errors);
-        } else {
-            return $this->invalidJson($request, $e);
+        $error = null;
+        if ($e instanceof AuthenticationException) {
+            $error = $this->errorResponse('Unauthenticated', 401);
+        } elseif ($e instanceof ModelNotFoundException) {
+            $error = $this->errorResponse('Object Not Found', 404);
+        } elseif ($e instanceof NotFoundHttpException) {
+            $error = $this->errorResponse('Url Not Found', 404);
+        } elseif ($e instanceof HttpException) {
+            $error = $this->errorResponse($e->getMessage(), $e->getStatusCode());
+        } elseif ($e instanceof AuthorizationException) {
+            $error = $this->errorResponse($e->getMessage(), 403);
         }
+        return $error;
     }
-
-    public function isFrontend($request)
+    /**
+     * errorResponse
+     *
+     * @param  mixed $message
+     * @param  mixed $code
+     * @return void
+     */
+    protected function errorResponse($message, $code)
     {
-        return $request->acceptsHtml() && collect($request->route()->middleware())->contains('web');
+        return response()->json([
+            'error' => $message,
+            'code' => $code,
+        ], $code);
     }
 }

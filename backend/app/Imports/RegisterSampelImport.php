@@ -182,7 +182,6 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow, WithChunkRea
             DB::rollBack();
             throw $th;
         }
-
     }
 
     private function __getWilayah($tingkat, $id_wilayah)

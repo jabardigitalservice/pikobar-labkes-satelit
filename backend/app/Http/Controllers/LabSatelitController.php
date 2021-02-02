@@ -11,28 +11,26 @@ class LabSatelitController extends Controller
     {
         // $models = LabSatelit::with(['register','sample']);
         $models = LabSatelit::select('*');
-        $params = $request->get('params',false);
-        $search = $request->get('search',false);
-        $order  = $request->get('order','nama');
+        $params = $request->get('params', false);
+        $search = $request->get('search', false);
+        $order  = $request->get('order', 'nama');
 
         if ($search != '') {
-            $models = $models->where(function($q) use ($search) {
-                $q->where('nama','ilike','%'.$search.'%')
-                   ->orWhere('alamat','ilike','%'.$search.'%');
+            $models = $models->where(function ($q) use ($search) {
+                $q->where('nama', 'ilike', '%'.$search.'%')
+                   ->orWhere('alamat', 'ilike', '%'.$search.'%');
             });
         }
         $count = $models->count();
 
-        $page = $request->get('page',1);
-        $perpage = $request->get('perpage',999999);
+        $page = $request->get('page', 1);
+        $perpage = $request->get('perpage', 999999);
 
-         if ($order) {
-            $order_direction = $request->get('order_direction','asc');
-            if (empty($order_direction)) $order_direction = 'asc';
-
+        if ($order) {
+            $order_direction = $request->get('order_direction', 'asc');
             switch ($order) {
                 default:
-                    $models = $models->orderBy($order,$order_direction);
+                    $models = $models->orderBy($order, $order_direction);
                     break;
             }
         }
@@ -48,7 +46,7 @@ class LabSatelitController extends Controller
 
     public function saveLabSatelit(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'nama' => 'required|unique:lab_satelit,nama',
             'alamat' => 'max:255',
             'longitude' => 'numeric',
@@ -61,26 +59,25 @@ class LabSatelitController extends Controller
         $data->longitude = $request->get('longitude');
         $data->latitude = $request->get('latitude');
         $data->save();
-        
+
         return response()->json(['status'=>201,'message'=>'Berhasil menambahkan Lab Satelit','result'=>[]]);
     }
 
-    public function deleteLabSatelit(Request $request,$id)
+    public function deleteLabSatelit(Request $request, $id)
     {
-        try{
-            $data = LabSatelit::where('id',$id)->first();
+        try {
+            $data = LabSatelit::where('id', $id)->first();
             $data->delete();
             return response()->json(['status'=>200,'message'=>'Berhasil menghapus data Lab Satelit','result'=>[]]);
-        }catch(\Exception $ex) {
+        } catch (\Exception $ex) {
             return response()->json(['status'=>400,'message'=>'Gagal menghapus data, terjadi kesalahan server','result'=>$ex->getMessage()]);
         }
-        
     }
 
     public function updateLabSatelit(Request $request, $id)
     {
 
-        $this->validate($request,[
+        $this->validate($request, [
             'nama' => 'required|unique:lab_satelit,nama,'.$id,
             'alamat' => 'max:255',
             'longitude' => 'numeric',
@@ -88,7 +85,7 @@ class LabSatelitController extends Controller
         ]);
 
         // dd($id);
-        $data = LabSatelit::where('id',$id)->first();
+        $data = LabSatelit::where('id', $id)->first();
         $data->nama = $request->get('nama');
         $data->alamat = $request->get('alamat');
         $data->longitude = $request->get('longitude');
@@ -100,7 +97,7 @@ class LabSatelitController extends Controller
 
     public function showUpdate(Request $request, $id)
     {
-        $data = LabSatelit::where('id',$id)->first();
+        $data = LabSatelit::where('id', $id)->first();
         return response()->json(['status'=>200,'message'=>'success','result'=>$data]);
     }
 }

@@ -14,18 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::get('/', function () {
-    return [
-        'App' => 'RESTfulAPI v0.1',
-    ];
-});
+Route::get('/', 'HomeController');
 
 Route::group(['middleware' => ['auth:api', 'verified']], function () {
     Route::post('logout', 'Auth\LoginController@logout');
 
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    Route::get('/user', 'Settings\ProfileController@index');
 
     Route::post('pcr/add', 'V1\PCRController@input_hasil_pemeriksaan');
     Route::patch('settings/profile', 'Settings\ProfileController@update');
@@ -83,7 +77,6 @@ Route::group(['middleware' => ['guest:api', 'cors']], function () {
     Route::get('/v1/user/register/{invite:token}', 'V1\UserController@tokenInfo')->name('api.user.tokenInfo');
     Route::post('/v1/user/dinkes/register', 'V1\User\DinkesController@register')->name('api.users.dinkes.register');
     Route::post('/v1/user/lab/register', 'V1\User\LabController@register')->name('api.users.Lab.register');
-
 });
 
 Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1'], function () {
@@ -297,13 +290,13 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::put('/status-toggle/{user:id}', 'UserController@statusToggle')->name('api.user.statusToggle');
 
         Route::group(['namespace' => 'User'], function () {
-            Route::group(['prefix' => 'dinkes'], function() {
+            Route::group(['prefix' => 'dinkes'], function () {
                 Route::put('/{user:id}', 'DinkesController@update')->name('api.users.dinkes.update');
                 Route::post('/', 'DinkesController@store')->name('api.users.dinkes.store');
                 Route::post('/invite', 'DinkesController@invite')->name('api.users.dinkes.invite');
             });
 
-            Route::group(['prefix' => 'lab'], function() {
+            Route::group(['prefix' => 'lab'], function () {
                 Route::put('/{user:id}', 'LabController@update')->name('api.users.Lab.update');
                 Route::post('/', 'LabController@store')->name('api.users.Lab.store');
                 Route::post('/invite', 'LabController@invite')->name('api.users.lab.invite');

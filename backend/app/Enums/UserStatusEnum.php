@@ -5,7 +5,7 @@ namespace App\Enums;
 use Spatie\Enum\Enum;
 
 /**
- * 
+ *
  * @method static self INACTIVE();
  * @method static self ACTIVE();
  */

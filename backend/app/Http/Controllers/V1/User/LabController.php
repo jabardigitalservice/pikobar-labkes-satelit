@@ -19,7 +19,7 @@ use Validator;
 
 class LabController extends Controller
 {
-    public function index(Request $request) 
+    public function index(Request $request)
     {
         $role_ids = [RoleEnum::LABORATORIUM()->getIndex()];
         $model = User::query()->whereIn('role_id', $role_ids);
@@ -46,7 +46,7 @@ class LabController extends Controller
         $count = $model->count();
         $data = UserLabResource::collection($model->skip(($page - 1) * $perpage)->take($perpage)->get());
 
-        return compact('data','count');
+        return compact('data', 'count');
     }
 
     public function invite(Request $request)
@@ -93,7 +93,7 @@ class LabController extends Controller
         ])->validate();
 
         $invite = Invite::where('token', $request->token)->first();
-        if(!$invite) {
+        if (!$invite) {
             return response()->json(['message' => __('auth.registration_cannot_be_completed')], 404);
         }
         $user = User::where(['email' => $request->email])->first();

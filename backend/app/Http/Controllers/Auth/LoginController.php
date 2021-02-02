@@ -42,7 +42,7 @@ class LoginController extends Controller
         $user = $this->guard()->user();
         if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
             return false;
-        } 
+        }
 
         if ($user->status != UserStatusEnum::ACTIVE()) {
             return false;
@@ -92,7 +92,7 @@ class LoginController extends Controller
             throw VerifyEmailException::forUser($user);
         }
 
-        if(!$user) {
+        if (!$user) {
             throw ValidationException::withMessages([
                 $this->username() => [trans('auth.failed')],
             ]);

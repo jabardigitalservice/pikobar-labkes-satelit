@@ -78,6 +78,5 @@ class AjaxTableExport implements FromCollection, WithEvents, WithMapping, WithHe
                 $event->sheet->getDelegate()->getStyle("A1:X{$this->totals}")->applyFromArray($styleArray);
             },
         ];
-
     }
 }
