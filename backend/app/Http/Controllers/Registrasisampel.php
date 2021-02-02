@@ -143,5 +143,4 @@ class Registrasisampel extends Controller
 
         return (new RegisMandiriExport($payload))->download('registrasi-mandiri-' . time() . '.xlsx');
     }
-
 }

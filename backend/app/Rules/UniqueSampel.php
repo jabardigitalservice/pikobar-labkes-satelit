@@ -26,7 +26,7 @@ class UniqueSampel implements Rule
      */
     public function passes($attribute, $value)
     {
-        $cek = Sampel::where('nomor_sampel',$value['nomor'])->first();
+        $cek = Sampel::where('nomor_sampel', $value['nomor'])->first();
         return $cek == null;
     }
 

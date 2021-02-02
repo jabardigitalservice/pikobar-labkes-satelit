@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 class ProfileController extends Controller
 {
     /**
+     * index
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function index(Request $request)
+    {
+        return $request->user();
+    }
+    /**
      * Update the user's profile information.
      *
      * @param  \Illuminate\Http\Request $request

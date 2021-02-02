@@ -13,17 +13,17 @@ class OptionController extends Controller
 {
     public function getRoles(Request $request)
     {
-        $models = Role::select('id','roles_name as text')->get();
+        $models = Role::select('id', 'roles_name as text')->get();
         return response()->json($models);
     }
     public function getLabPCR(Request $request)
     {
-        $models = LabPCR::select('id','nama as text')->get();
+        $models = LabPCR::select('id', 'nama as text')->get();
         return response()->json($models);
     }
     public function getLabSatelit(Request $request)
     {
-        $models = LabSatelit::select('id','nama as text')->get();
+        $models = LabSatelit::select('id', 'nama as text')->get();
         return response()->json($models);
     }
     public function getValidator(Request $request)
@@ -33,7 +33,7 @@ class OptionController extends Controller
     }
     public function getJenisSampel(Request $request)
     {
-        $models = JenisSampel::select('id','nama as text')->get();
+        $models = JenisSampel::select('id', 'nama as text')->get();
         return response()->json($models);
     }
 }

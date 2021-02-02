@@ -219,7 +219,7 @@ class DashboardAdminController extends Controller
         $data['labels'] = [];
         if ($date && !is_array($date)) {
             $fasyankes = $this->__getFasyankes($date, $kota);
-        } else if($kota){
+        } elseif ($kota) {
             $fasyankes = $this->__getFasyankes($date, $kota);
         }
         foreach ($fasyankes as $item) {

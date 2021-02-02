@@ -68,5 +68,4 @@ class RoleEnum extends Enum
             }
         };
     }
-
 }

@@ -139,5 +139,4 @@ class Register extends Model
     {
         return $this->hasMany(RegisterLog::class, 'register_id', 'id');
     }
-
 }

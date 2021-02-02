@@ -237,7 +237,6 @@ class VerifikasiController extends Controller
         $column_format = [
         ];
         return Excel::download(new AjaxTableExport($models, $header, $mapping, $column_format, [], $models->count()), 'hasil_pemeriksaan.xlsx');
-
     }
 
     public function getAlamat($model)
@@ -319,7 +318,6 @@ class VerifikasiController extends Controller
                         break;
                     default:
                         break;
-
                 }
             }
         }
@@ -450,7 +448,6 @@ class VerifikasiController extends Controller
 
         DB::beginTransaction();
         try {
-
             PemeriksaanSampel::find($request->input('last_pemeriksaan_id'))->update([
                 'kesimpulan_pemeriksaan' => $request->input('kesimpulan_pemeriksaan'),
                 'catatan_pemeriksaan' => $request->input('catatan_pemeriksaan') != '' ? $request->input('catatan_pemeriksaan') : null,
@@ -473,7 +470,6 @@ class VerifikasiController extends Controller
             DB::rollBack();
             throw $th;
         }
-
     }
 
     /**

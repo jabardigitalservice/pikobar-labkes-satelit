@@ -36,7 +36,7 @@ class CustomKeycloakProvider extends KeycloakProvider
      */
     public function user()
     {
-        if(isset($_GET["code"])) {
+        if (isset($_GET["code"])) {
             $socialUser = [];
             try {
                 $token = $this->getAccessToken('authorization_code', [
@@ -57,7 +57,7 @@ class CustomKeycloakProvider extends KeycloakProvider
                 exit('Failed to get resource owner: ' . $e->getMessage());
             }
             return $socialUser;
-        }else{
+        } else {
             return redirect()->back();
         }
     }

@@ -11,11 +11,11 @@ trait PemeriksaanTrait
 {
     private function parseHasilDeteksi($hasilDeteksi)
     {
-        if (!$hasilDeteksi || empty($hasilDeteksi) || in_array(null,$hasilDeteksi)) {
+        if (!$hasilDeteksi || empty($hasilDeteksi) || in_array(null, $hasilDeteksi)) {
             return null;
         }
 
-        return collect($hasilDeteksi)->map(function($hasilCT){
+        return collect($hasilDeteksi)->map(function ($hasilCT) {
             $values = explode(',', $hasilCT['ct_value']);
             if ($hasilCT['ct_value'] && count($values) > 1) {
                 $hasilCT['ct_value'] = (double) implode('.', $values);
@@ -23,5 +23,4 @@ trait PemeriksaanTrait
             return $hasilCT;
         });
     }
-
 }
