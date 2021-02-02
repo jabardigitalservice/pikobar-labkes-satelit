@@ -468,6 +468,8 @@
           listSampelsArr = this.$store.state.registrasi_perujuk.selectedSampels;
         } else if (this.oid === 'verifikasi-admin') {
           listSampelsArr = this.$store.state.hasil_pemeriksaan.selectedSampels;
+        } else if (this.oid === 'registrasi-sampel') {
+          listSampelsArr = this.$store.state.registrasi_sampel.selectedSampels;
         }
 
         var samples = document.getElementsByName("list-sampel");
@@ -491,6 +493,8 @@
             this.$store.commit('registrasi_perujuk/addMultiple', this.checkedArr)
           } else if (this.oid == 'verifikasi-admin') {
             this.$store.commit('hasil_pemeriksaan/addMultiple', this.checkedArr)
+          } else if (this.oid == 'registrasi-sampel') {
+            this.$store.commit('registrasi_sampel/addMultiple', this.checkedArr)
           }
         }
         if (!this.checked) {
@@ -498,6 +502,8 @@
             this.$store.commit('registrasi_perujuk/removeMultiple', this.checkedArr)
           } else if (this.oid == 'verifikasi-admin') {
             this.$store.commit('hasil_pemeriksaan/removeMultiple', this.checkedArr)
+          } else if (this.oid == 'registrasi-sampel') {
+            this.$store.commit('registrasi_sampel/removeMultiple', this.checkedArr)
           }
         }
       },
@@ -524,6 +530,18 @@
               document.getElementById('selected-sampel-' + item.sampel_id).checked = true;
             } else {
               document.getElementById('selected-sampel-' + item.sampel_id).checked = false;
+            }
+          }
+        } else if (this.oid === 'registrasi-sampel') {
+          for (const item of this.items) {
+            if (item.sampel_status == 'sample_taken' && !item.register_perujuk_id) {
+              const sampel = document.getElementById('selected-sampel-' + item.register_id).value
+              const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el === sampel) : null
+              if (findinArr) {
+                document.getElementById('selected-sampel-' + item.register_id).checked = true
+              } else {
+                document.getElementById('selected-sampel-' + item.register_id).checked = false
+              }
             }
           }
         }
