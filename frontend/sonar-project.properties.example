@@ -1,0 +1,5 @@
+sonar.projectKey=
+sonar.sources=
+sonar.host.url=
+sonar.login=
+sonar.exclusions=
