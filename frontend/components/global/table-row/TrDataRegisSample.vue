@@ -85,11 +85,8 @@
       'selected': function () {
         const sampel = document.getElementById("selected-sampel-" + this.item.register_id).value
         const findinArr = this.dataArr.length > 0 ? this.dataArr.find((el) => el === sampel) : null
-        if (findinArr) {
-          document.getElementById("selected-sampel-" + this.item.register_id).checked = true
-        } else {
-          document.getElementById("selected-sampel-" + this.item.register_id).checked = false
-        }
+        findinArr ? document.getElementById("selected-sampel-" + this.item.register_id).checked = true
+          : document.getElementById("selected-sampel-" + this.item.register_id).checked = false
       },
     },
     methods: {
@@ -191,7 +188,7 @@
               duration: 5000
             })
             await bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
-          } catch (e) {
+          } catch (err) {
             swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
           }
         }
@@ -201,12 +198,8 @@
         const el = e ? e.currentTarget : null
         const nomorSampel = el ? el.getAttribute("value") : null
         this.checked = newDomchecked
-        if (this.checked) {
-          this.$store.commit("registrasi_sampel/add", nomorSampel)
-        }
-        if (!this.checked) {
-          this.$store.commit("registrasi_sampel/remove", nomorSampel)
-        }
+        this.checked ? this.$store.commit("registrasi_sampel/add", nomorSampel)
+          : this.$store.commit("registrasi_sampel/remove", nomorSampel)
       },
       showDetail(item) {
         const payload = {

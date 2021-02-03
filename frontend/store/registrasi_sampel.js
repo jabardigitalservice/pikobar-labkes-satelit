@@ -5,7 +5,7 @@ export const state = () => ({
 
 export const mutations = {
   add(state, sampelId) {
-    let findSampel = state.selectedSampels.find(el => el == sampelId) || null;
+    const findSampel = state.selectedSampels.find(el => el == sampelId) || null;
     if (!findSampel) {
       state.selectedSampels.push(sampelId)
     }
