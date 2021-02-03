@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteSampelBulkRequest;
 use App\Models\Register;
+use App\Models\Sampel;
 
 class DeleteSampelBulkController extends Controller
 {
@@ -16,13 +17,7 @@ class DeleteSampelBulkController extends Controller
      */
     public function __invoke(DeleteSampelBulkRequest $request)
     {
-        $register = Register::whereIn('id', $request->input('id'))->get();
-        foreach ($register as $register) {
-            if ($register->sampel) {
-                $register->sampel()->delete();
-            }
-            $register->delete();
-        }
+        Register::destroy($request->input('id'));
         return response()->json(['message' => 'Berhasil menghapus data sampel']);
     }
 }
