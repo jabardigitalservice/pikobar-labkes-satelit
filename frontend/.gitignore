@@ -11,3 +11,6 @@ yarn-error.log
 /public/_nuxt
 *.code-workspace
 /.idea
+sonar-project.properties
+.sonar/
+.scannerwork/
