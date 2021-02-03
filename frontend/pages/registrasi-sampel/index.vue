@@ -5,14 +5,8 @@
     </portal>
     <portal to="title-action">
       <div class="title-action">
-        <button
-          v-if="!isHasAction"
-          tag="button"
-          class="btn btn-danger"
-          data-toggle="modal"
-          data-target="#pilihSampel"
-          title="Proses data terpilih"
-        >
+        <button v-if="!isHasAction" tag="button" class="btn btn-danger" data-toggle="modal" data-target="#pilihSampel"
+          title="Proses data terpilih">
           Hapus Sampel Terpilih
           <span>{{ selectedNomorSampels ? `(${selectedNomorSampels.length})` : ''}}</span>
         </button>
@@ -108,24 +102,15 @@
       <div slot="body">
         <div class="col-lg-12">
           <p>Jumlah Sampel: {{ selectedNomorSampels.length }}</p>
-          <div
-            class="badge badge-white mr-2 mt-1"
-            style="padding:5px;"
-            v-for="(item,idx) in selectedNomorSampels"
-            :key="idx"
-          >
+          <div class="badge badge-white mr-2 mt-1" style="padding:5px;" v-for="(item,idx) in selectedNomorSampels"
+            :key="idx">
             <span class="flex-text-center">
-                {{ getSampel(item) }}
+              {{ getSampel(item) }}
             </span>
           </div>
         </div>
-        <button
-          @click="hapusSampel()"
-          :disabled="loading"
-          :class="{'btn-loading': loading}"
-          class="btn btn-md btn-danger block mt-2 pull-right"
-          type="button"
-        >
+        <button @click="hapusSampel()" :disabled="loading" :class="{'btn-loading': loading}"
+          class="btn btn-md btn-danger block mt-2 pull-right" type="button">
           <i class="fa fa-trash" /> Hapus
         </button>
       </div>
@@ -174,7 +159,6 @@
     },
     watch: {
       'selectedNomorSampels': function () {
-        console.log(this.selectedNomorSampels)
         this.selectedNomorSampels.length === 0 ? this.isHasAction = true : this.isHasAction = false
       }
     },
@@ -245,20 +229,24 @@
       },
       async hapusSampel() {
         JQuery('#pilihSampel').modal('hide')
-        // try {
-        //   const response = await this.form.post("v1/tes-masif/registering")
-        //   this.$toast.success(response.message, {
-        //     icon: 'check',
-        //     iconPack: 'fontawesome',
-        //     duration: 5000
-        //   })
-        //   this.isHasAction = true
-        //   this.$store.commit('pasien_tes_masif/clear')
-        //   this.$bus.$emit('refresh-ajaxtable', 'pasien-tes-masif')
-        //   location.reload()
-        // } catch (err) {
-        //   this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error")
-        // }
+        try {
+          const response = await this.$axios.delete('v1/register/sampel-bulk', {
+            data: {
+              id: this.selectedNomorSampels
+            }
+          })
+          this.$toast.success(response.message, {
+            icon: 'check',
+            iconPack: 'fontawesome',
+            duration: 5000
+          })
+          this.isHasAction = true
+          this.$store.commit('registrasi_sampel/clear')
+          this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel')
+          location.reload()
+        } catch (err) {
+          this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error")
+        }
       },
       getSampel(item) {
         return document.getElementById('selected-sampel-' + item).getAttribute('nomor_sampel')
