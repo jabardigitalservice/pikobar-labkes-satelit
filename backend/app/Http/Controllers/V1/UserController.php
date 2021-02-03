@@ -25,8 +25,6 @@ class UserController extends Controller
 
         if ($order) {
             $order_direction = $request->get('order_direction', 'desc');
-            if (empty($order_direction)) $order_direction = 'desc';
-
             switch ($order) {
                 default:
                     $models = $models->orderBy('updated_at', $order_direction);
@@ -58,14 +56,14 @@ class UserController extends Controller
             'token' => 'required',
             'password' => 'required|confirmed|min:6',
         ])->validate();
-            
+
         $invite = Invite::where('token', $request->token)->first();
         $user->update([
             'username' => $request->username,
             'koordinator' => $request->koordinator,
             'password' => Hash::make($request->password),
         ]);
-        
+
         $user->status = UserStatusEnum::ACTIVE();
         $user->register_at = Carbon::now();
         $user->save();

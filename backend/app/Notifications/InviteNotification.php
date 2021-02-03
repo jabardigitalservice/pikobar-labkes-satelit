@@ -41,7 +41,7 @@ class InviteNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $additionalMessage = $notifiable->role_id == RoleEnum::DINKES()->getIndex() ? "dinkes" : "";  
+        $additionalMessage = $notifiable->role_id == RoleEnum::DINKES()->getIndex() ? "dinkes" : "";
         return (new MailMessage)
             ->subject("Undangan berpartisipasi - Pikobar")
             ->greeting('Halo!')

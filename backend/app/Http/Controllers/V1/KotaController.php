@@ -29,13 +29,11 @@ class KotaController extends Controller
     public function listKecamatan($kota)
     {
         return response()->json(Kecamatan::select('id', 'nama')->orderBy('nama')->whereKotaId($kota)->get());
-
     }
 
     public function listKelurahan($kecamatan)
     {
         return response()->json(Kelurahan::select('id', 'nama')->orderBy('nama')->whereKecamatanId($kecamatan)->get());
-
     }
 
     public function listNegara()

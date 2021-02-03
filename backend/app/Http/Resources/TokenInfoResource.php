@@ -5,7 +5,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class TokenInfoResource extends JsonResource
 {
-    public function toArray($request) {
+    public function toArray($request)
+    {
         return [
             'id' => $this->id,
             'token' => $this->token,

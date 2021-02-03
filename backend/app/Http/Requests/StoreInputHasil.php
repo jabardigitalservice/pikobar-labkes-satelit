@@ -41,9 +41,9 @@ class StoreInputHasil extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            if (count($this->hasil_deteksi) < 1) {        
+            if (count($this->hasil_deteksi) < 1) {
                 $validator->errors()->add("samples", 'Minimal 1 hasil deteksi CT Value');
             }
-        }); 
+        });
     }
 }

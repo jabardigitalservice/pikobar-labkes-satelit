@@ -14,5 +14,4 @@ class Kota extends Model
     {
         return $this->belongsTo(Provinsi::class);
     }
-
 }

@@ -38,5 +38,4 @@ class SampelController extends Controller
             'error' => '',
         ]);
     }
-    
 }

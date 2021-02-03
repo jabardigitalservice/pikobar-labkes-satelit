@@ -114,7 +114,9 @@ class PCRController extends Controller
         $file = $request->file('file');
         $filename = Str::random(20) . '.' . $file->getClientOriginalExtension();
         $path = Storage::disk('s3')->putFileAs(
-            'grafik/' . date('Y-m-d'), $request->file('file'), $filename
+            'grafik/' . date('Y-m-d'),
+            $request->file('file'),
+            $filename
         );
         $url = route('grafik.url', ['path' => date('Y-m-d') . '/' . $filename]);
         return response()->json(['status' => 200, 'message' => 'success', 'url' => $url]);
@@ -130,7 +132,8 @@ class PCRController extends Controller
         if ($exists) {
             $contents = Storage::disk('s3')->get('grafik/' . $path);
             $ret = Storage::disk('public')->put(
-                'grafik/' . $path, $contents
+                'grafik/' . $path,
+                $contents
             );
             return response()->file(storage_path('app/public/grafik/' . $path));
         } else {
@@ -567,7 +570,5 @@ class PCRController extends Controller
         }
 
         return response()->json($response);
-
     }
-
 }

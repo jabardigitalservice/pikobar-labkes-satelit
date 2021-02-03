@@ -74,6 +74,5 @@ class ImportRegisterController extends Controller
             'register_file' => 'required|file|max:2048',
             'extension' => 'required|in:csv,xlsx,xls',
         ]);
-
     }
 }
