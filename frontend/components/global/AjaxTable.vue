@@ -273,6 +273,8 @@
         datas = this.$store.state.registrasi_perujuk.selectedSampels;
       } else if (this.oid === 'verifikasi-admin') {
         datas = this.$store.state.hasil_pemeriksaan.selectedSampels;
+      } else if (this.oid === 'registrasi-sampel') {
+        datas = this.$store.state.registrasi_sampel.selectedSampels;
       }
       return {
         isLoading: true,
@@ -537,11 +539,8 @@
             if (item.sampel_status == 'sample_taken' && !item.register_perujuk_id) {
               const sampel = document.getElementById('selected-sampel-' + item.register_id).value
               const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el === sampel) : null
-              if (findinArr) {
-                document.getElementById('selected-sampel-' + item.register_id).checked = true
-              } else {
-                document.getElementById('selected-sampel-' + item.register_id).checked = false
-              }
+              findinArr ? document.getElementById('selected-sampel-' + item.register_id).checked = true
+                : document.getElementById('selected-sampel-' + item.register_id).checked = false
             }
           }
         }
