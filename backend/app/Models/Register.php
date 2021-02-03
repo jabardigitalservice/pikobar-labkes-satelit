@@ -70,7 +70,9 @@ class Register extends Model
     {
         parent::boot();
         self::deleting(function ($register) {
-            $register->sampel()->delete();
+            if ($register->sampel) {
+                $register->sampel()->delete();
+            }
         });
     }
 }

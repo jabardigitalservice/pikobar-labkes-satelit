@@ -322,9 +322,6 @@ class RegistersampelController extends Controller
 
     public function delete(Register $register)
     {
-        if ($register->sampel) {
-            $register->sampel()->delete();
-        }
         $register->delete();
         return response()->json(['message' => 'Berhasil menghapus data sampel']);
     }
