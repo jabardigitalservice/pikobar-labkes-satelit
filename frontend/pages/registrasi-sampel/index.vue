@@ -5,6 +5,11 @@
     </portal>
     <portal to="title-action">
       <div class="title-action">
+        <button v-if="!isHasAction" tag="button" class="btn btn-danger" data-toggle="modal" data-target="#pilihSampel"
+          title="Proses data terpilih">
+          Hapus Sampel Terpilih
+          <span>{{ selectedNomorSampels ? `(${selectedNomorSampels.length})` : ''}}</span>
+        </button>
         <nuxt-link tag="button" to="/registrasi/sampel/tambah" class="btn btn-primary">
           <i class="fa fa-plus" /> Register Baru
         </nuxt-link>
@@ -32,7 +37,7 @@
               has_number: true,
               has_entry_page: true,
               has_pagination: true,
-              has_action: true,
+              has_action: isHasAction,
               has_search_input: false,
               custom_header: '',
               default_sort: 'tgl_input',
@@ -43,6 +48,7 @@
                 wrapper: ['table-responsive'],
               }
             }" :rowtemplate="'tr-data-regis-sample'" :columns="{
+              checkbox_id: '#',
               no_sampel:'SAMPEL',
               nama_pasien: 'PASIEN',
               nama_kota: 'DOMISILI',
@@ -92,6 +98,24 @@
       </div>
     </custom-modal>
 
+    <custom-modal modal_id="pilihSampel" title="Hapus Semua Sampel Registrasi Terpilih">
+      <div slot="body">
+        <div class="col-lg-12">
+          <p>Jumlah Sampel: {{ selectedNomorSampels.length }}</p>
+          <div class="badge badge-white mr-2 mt-1" style="padding:5px;" v-for="(item,idx) in selectedNomorSampels"
+            :key="idx">
+            <span class="flex-text-center">
+              {{ getSampel(item) }}
+            </span>
+          </div>
+        </div>
+        <button @click="hapusSampel()" :disabled="loading" :class="{'btn-loading': loading}"
+          class="btn btn-md btn-danger block mt-2 pull-right" type="button">
+          <i class="fa fa-trash" /> Hapus
+        </button>
+      </div>
+    </custom-modal>
+
   </div>
 </template>
 
@@ -109,6 +133,10 @@
       CustomModal,
     },
     data() {
+      let selectedNomorSampels = this.$store.state.registrasi_sampel.selectedSampels
+      let form = new Form({
+        register_file: null
+      });
       return {
         loading: false,
         dataError: [],
@@ -119,6 +147,9 @@
           start_date: null,
           end_date: null
         },
+        form,
+        selectedNomorSampels,
+        isHasAction: true,
       }
     },
     head() {
@@ -126,16 +157,10 @@
         title: this.$t('home')
       }
     },
-    async asyncData({
-      route,
-      store
-    }) {
-      let form = new Form({
-        register_file: null
-      });
-      return {
-        form,
-      };
+    watch: {
+      'selectedNomorSampels': function () {
+        this.selectedNomorSampels.length === 0 ? this.isHasAction = true : this.isHasAction = false
+      }
     },
     created() {
       this.$store.commit('registrasi_perujuk/clear')
@@ -201,6 +226,30 @@
       },
       previewFile(file) {
         this.form.register_file = file;
+      },
+      async hapusSampel() {
+        JQuery('#pilihSampel').modal('hide')
+        try {
+          const response = await this.$axios.delete('v1/register/sampel-bulk', {
+            data: {
+              id: this.selectedNomorSampels
+            }
+          })
+          this.$toast.success(response.message, {
+            icon: 'check',
+            iconPack: 'fontawesome',
+            duration: 5000
+          })
+          this.isHasAction = true
+          this.$store.commit('registrasi_sampel/clear')
+          this.$bus.$emit('refresh-ajaxtable', 'registrasi-sampel')
+          location.reload()
+        } catch (err) {
+          this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error")
+        }
+      },
+      getSampel(item) {
+        return document.getElementById('selected-sampel-' + item).getAttribute('nomor_sampel')
       }
     }
   }

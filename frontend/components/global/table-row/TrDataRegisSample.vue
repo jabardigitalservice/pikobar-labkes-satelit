@@ -2,6 +2,18 @@
   <tr>
     <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
     <td>
+      <input
+        type="checkbox"
+        name="list-sampel"
+        v-if="item.sampel_status == 'sample_taken' && !item.register_perujuk_id"
+        v-bind:value="item.register_id"
+        v-bind:id="'selected-sampel-' + item.register_id"
+        v-bind:nomor_sampel="item.nomor_sampel"
+        v-model="selected"
+        @click="sampelOnChangeSelect"
+      />
+    </td>
+    <td>
       <div class="badge badge-white" style="text-align:left; padding:10px">
         {{item.nomor_sampel}}
       </div>
@@ -46,7 +58,6 @@
   </tr>
 </template>
 <script>
-  import axios from "axios";
   import {
     pasienStatus
   } from '~/assets/js/constant/enum';
@@ -60,11 +71,23 @@
   export default {
     props: ["item", "pagination", "rowparams", "index", "config"],
     data() {
+      let datas = this.$store.state.registrasi_sampel.selectedSampels
       return {
         pasienStatus,
         momentFormatDate,
-        momentFormatTime
+        momentFormatTime,
+        checked: false,
+        selected: [],
+        dataArr: datas,
       };
+    },
+    watch: {
+      'selected': function () {
+        const sampel = document.getElementById("selected-sampel-" + this.item.register_id).value
+        const findinArr = this.dataArr.length > 0 ? this.dataArr.find((el) => el === sampel) : null
+        findinArr ? document.getElementById("selected-sampel-" + this.item.register_id).checked = true
+          : document.getElementById("selected-sampel-" + this.item.register_id).checked = false
+      },
     },
     methods: {
       async deleteData(item, usia) {
@@ -165,10 +188,18 @@
               duration: 5000
             })
             await bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
-          } catch (e) {
+          } catch (err) {
             swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
           }
         }
+      },
+      sampelOnChangeSelect(e) {
+        const newDomchecked = e.target.checked
+        const el = e ? e.currentTarget : null
+        const nomorSampel = el ? el.getAttribute("value") : null
+        this.checked = newDomchecked
+        this.checked ? this.$store.commit("registrasi_sampel/add", nomorSampel)
+          : this.$store.commit("registrasi_sampel/remove", nomorSampel)
       },
       showDetail(item) {
         const payload = {
