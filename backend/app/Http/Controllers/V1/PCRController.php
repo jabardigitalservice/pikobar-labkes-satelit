@@ -143,7 +143,7 @@ class PCRController extends Controller
 
     public function detail(Request $request, $id)
     {
-        $model = Sampel::with(['pcr', 'status', 'ekstraksi', 'register'])
+        $model = Sampel::with(['pcr', 'status', 'register'])
             ->find($id);
         $model->log_pcr = $model->logs()
             ->whereIn('sampel_status', ['pcr_sample_received', 'pcr_sample_analyzed', 'extraction_sample_reextract'])
