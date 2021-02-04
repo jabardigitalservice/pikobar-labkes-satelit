@@ -37,7 +37,7 @@ class RegisterPerujukImport implements ToCollection, WithHeadingRow, WithChunkRe
                     'tgl_masuk_sampel' => 'required|date|date_format:Y-m-d',
                     'lab_satelit_id' => [
                         'required',
-                        new ExistsLabSatelit,
+                        new ExistsLabSatelit(),
                     ],
                     'kode_sampel' => [
                         'required',
@@ -72,7 +72,7 @@ class RegisterPerujukImport implements ToCollection, WithHeadingRow, WithChunkRe
                     'instansi_pengirim' => 'nullable',
                     'kode_instansi' => [
                         'required',
-                        new ExistsFasyankes,
+                        new ExistsFasyankes(),
                     ],
                     'jenis_sampel' => 'required',
                     'swab_ke' => 'nullable|integer',
@@ -111,7 +111,7 @@ class RegisterPerujukImport implements ToCollection, WithHeadingRow, WithChunkRe
                 $data->alamat = $row->get('alamat');
                 $data->jenis_kelamin = $row->get('jenis_kelamin');
                 $data->usia_tahun = $row->get('usia');
-                $data->created_at = date('Y-m-d H:i:s', strtotime($row->get('tgl_masuk_sampel').' '. date('H:i:s')));
+                $data->created_at = date('Y-m-d H:i:s', strtotime($row->get('tgl_masuk_sampel') . ' ' . date('H:i:s')));
                 $data->save();
             }
             DB::commit();

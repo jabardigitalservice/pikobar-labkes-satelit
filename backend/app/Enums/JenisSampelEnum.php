@@ -8,7 +8,7 @@ class JenisSampelEnum extends Enum
 {
     public static function LAINNYA(): JenisSampelEnum
     {
-        return new class() extends JenisSampelEnum {
+        return new class () extends JenisSampelEnum {
             public function getValue(): string
             {
                 return 'lainnya';

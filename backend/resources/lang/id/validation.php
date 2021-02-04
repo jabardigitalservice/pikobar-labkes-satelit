@@ -1,4 +1,5 @@
 <?php
+
 return [
     'accepted'             => 'Isian :attribute harus diterima.',
     'active_url'           => 'Isian :attribute bukan URL yang sah.',

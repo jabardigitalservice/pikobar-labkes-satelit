@@ -11,6 +11,7 @@ use Illuminate\Notifications\Notification;
 class InviteNotification extends Notification
 {
     use Queueable;
+
     protected $notification_url;
     /**
      * Create a new notification instance.
@@ -42,10 +43,10 @@ class InviteNotification extends Notification
     public function toMail($notifiable)
     {
         $additionalMessage = $notifiable->role_id == RoleEnum::DINKES()->getIndex() ? "dinkes" : "";
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject("Undangan berpartisipasi - Pikobar")
             ->greeting('Halo!')
-            ->line('Anda diundang untuk menjadi salah satu admin '.$additionalMessage.' pada aplikasi ' . config('app.name'))
+            ->line('Anda diundang untuk menjadi salah satu admin ' . $additionalMessage . ' pada aplikasi ' . config('app.name'))
             ->action('Klik Untuk Daftar', $this->notification_url)
             ->line('Terimakasih atas partisipasi anda!');
     }

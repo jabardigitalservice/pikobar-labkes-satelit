@@ -40,11 +40,11 @@ trait RegisterTrait
         if (count($res)) {
             $nextnum = $res[0]->val + 1;
         }
-        
+
         if (!count($res)) {
             $nextnum = 1;
         }
-        
+
         return $kodeRegistrasi . $date . str_pad($nextnum, 4, "0", STR_PAD_LEFT);
     }
 }

@@ -26,7 +26,7 @@ class RegistersampelController extends Controller
         try {
             $user = Auth::user();
 
-            $register = new Register;
+            $register = new Register();
             $register->nomor_register = generateNomorRegister();
             $register->register_uuid = (string)Str::uuid();
             $register->creator_user_id = $user->id;
@@ -44,7 +44,7 @@ class RegistersampelController extends Controller
             }
             $register->save();
 
-            $pasien = new Pasien;
+            $pasien = new Pasien();
             $pasien->nama_lengkap = $request->get('reg_nama_pasien');
             $pasien->kewarganegaraan = $request->get('reg_kewarganegaraan');
             $pasien->keterangan_warganegara = $request->get('reg_keterangan_warganegara');

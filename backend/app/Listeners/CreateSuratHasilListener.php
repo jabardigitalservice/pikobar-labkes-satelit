@@ -68,12 +68,12 @@ class CreateSuratHasilListener
                 // $newFile = $sampel->validFile()->create($dataFile);
                 if ($newFile = File::create($dataFile)) {
                     $sampel->update([
-                        'valid_file_id'=> $newFile->id
+                        'valid_file_id' => $newFile->id
                     ]);
                 }
             }
 
-            
+
             DB::commit();
 
             return;
@@ -162,8 +162,8 @@ class CreateSuratHasilListener
     public function failed(SampelValidatedEvent $event, $exception)
     {
         $event->sampel->update([
-            'sampel_status'=> 'sample_verified',
-            'valid_file_id'=> null
+            'sampel_status' => 'sample_verified',
+            'valid_file_id' => null
         ]);
     }
 

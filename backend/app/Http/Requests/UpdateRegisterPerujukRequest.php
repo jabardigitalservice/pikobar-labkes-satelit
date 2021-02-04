@@ -38,7 +38,7 @@ class UpdateRegisterPerujukRequest extends FormRequest
             ],
             'jenis_sampel' => 'required',
             'nama_jenis_sampel' => [
-                'required_if:jenis_sampel,==,'. JenisSampelEnum::LAINNYA()->getIndex(),
+                'required_if:jenis_sampel,==,' . JenisSampelEnum::LAINNYA()->getIndex(),
             ],
             'fasyankes_id' => 'required',
             'fasyankes_pengirim' => 'required',

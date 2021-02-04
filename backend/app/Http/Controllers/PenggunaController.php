@@ -19,8 +19,8 @@ class PenggunaController extends Controller
 
         if ($search != '') {
             $models = $models->where(function ($q) use ($search) {
-                $q->where('name', 'ilike', '%'.$search.'%')
-                   ->orWhere('email', 'ilike', '%'.$search.'%');
+                $q->where('name', 'ilike', '%' . $search . '%')
+                   ->orWhere('email', 'ilike', '%' . $search . '%');
             });
         }
         $count = $models->count();
@@ -36,7 +36,7 @@ class PenggunaController extends Controller
                     break;
             }
         }
-        $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
+        $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
         $result = [
             'data' => $models,
@@ -56,7 +56,7 @@ class PenggunaController extends Controller
             'password' => 'required|min:6|confirmed',
         ]);
 
-        $user = new User;
+        $user = new User();
         $user->username = $request->get('username');
         $user->password = bcrypt($request->get('password'));
         $user->email = $request->get('email');
@@ -66,7 +66,7 @@ class PenggunaController extends Controller
         $user->validator_id = $request->get('validator_id');
         $user->save();
 
-        return response()->json(['status'=>201,'message'=>'Berhasil menambahkan pengguna','result'=>[]]);
+        return response()->json(['status' => 201,'message' => 'Berhasil menambahkan pengguna','result' => []]);
     }
 
     public function deletePengguna(Request $request, $id)
@@ -74,9 +74,9 @@ class PenggunaController extends Controller
         try {
             $user = User::where('id', $id)->first();
             $user->delete();
-            return response()->json(['status'=>200,'message'=>'Berhasil menghapus data pengguna','result'=>[]]);
+            return response()->json(['status' => 200,'message' => 'Berhasil menghapus data pengguna','result' => []]);
         } catch (\Exception $ex) {
-            return response()->json(['status'=>400,'message'=>'Gagal menghapus data, terjadi kesalahan server','result'=>$ex->getMessage()]);
+            return response()->json(['status' => 400,'message' => 'Gagal menghapus data, terjadi kesalahan server','result' => $ex->getMessage()]);
         }
     }
 
@@ -112,12 +112,12 @@ class PenggunaController extends Controller
         }
         $user->save();
 
-        return response()->json(['status'=>200,'message'=>'Berhasil mengubah data pengguna','result'=>[]]);
+        return response()->json(['status' => 200,'message' => 'Berhasil mengubah data pengguna','result' => []]);
     }
 
     public function showUpdate(Request $request, $id)
     {
         $user = User::where('id', $id)->first();
-        return response()->json(['status'=>200,'message'=>'success','result'=>$user]);
+        return response()->json(['status' => 200,'message' => 'success','result' => $user]);
     }
 }

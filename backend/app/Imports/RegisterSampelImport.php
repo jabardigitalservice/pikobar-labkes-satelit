@@ -88,7 +88,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow, WithChunkRea
                 $fasyankesId = optional($fasyankes)->id;
                 $fasyankesNama = optional($fasyankes)->nama;
                 $fasyankesTipe = optional($fasyankes)->tipe;
-                $register = new Register;
+                $register = new Register();
                 $register->nomor_register = generateNomorRegister();
                 $register->register_uuid = (string)Str::uuid();
                 $register->creator_user_id = $user->id;
@@ -105,7 +105,7 @@ class RegisterSampelImport implements ToCollection, WithHeadingRow, WithChunkRea
                     $register->tanggal_swab = date('Y-m-d', strtotime($row->get('tanggal_swab')));
                 }
                 $register->save();
-                $pasien = new Pasien;
+                $pasien = new Pasien();
                 $pasien->nama_lengkap = $row->get('nama');
                 $pasien->kewarganegaraan = $row->get('kewarganegaraan');
                 $pasien->nik = $this->__parseNIK($row->get('nik'));

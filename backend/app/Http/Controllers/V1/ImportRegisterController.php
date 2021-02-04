@@ -20,7 +20,7 @@ class ImportRegisterController extends Controller
     {
         $this->importValidator($request)->validate();
 
-        Excel::import(new RegisterMandiriImport, $request->file('register_file'));
+        Excel::import(new RegisterMandiriImport(), $request->file('register_file'));
 
         return response()->json([
             'status' => 200,
@@ -37,7 +37,7 @@ class ImportRegisterController extends Controller
     {
         $this->__importValidator($request)->validate();
 
-        Excel::import(new RegisterSampelImport, $request->file('register_file'));
+        Excel::import(new RegisterSampelImport(), $request->file('register_file'));
 
         return response()->json([
             'status' => 200,
@@ -50,7 +50,7 @@ class ImportRegisterController extends Controller
     {
         $this->__importValidator($request)->validate();
 
-        Excel::import(new HasilPemeriksaanAkhirImport, $request->file('register_file'));
+        Excel::import(new HasilPemeriksaanAkhirImport(), $request->file('register_file'));
 
         return response()->json([
             'status' => 200,

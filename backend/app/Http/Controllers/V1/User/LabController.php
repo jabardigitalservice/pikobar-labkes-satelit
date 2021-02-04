@@ -62,7 +62,7 @@ class LabController extends Controller
                 'token' => Uuid::uuid4(),
                 'email' => $request->input('email'),
             ]);
-                
+
             $user = User::create([
                 'email' => $request->input('email'),
                 'role_id' => RoleEnum::LABORATORIUM()->getIndex(),
@@ -103,7 +103,7 @@ class LabController extends Controller
             'koordinator' => $request->koordinator,
             'password' => Hash::make($request->password),
         ]);
-        
+
         $user->status = UserStatusEnum::ACTIVE();
         $user->register_at = Carbon::now();
         $user->save();

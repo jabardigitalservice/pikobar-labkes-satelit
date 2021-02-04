@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Register extends Model
 {
     use SoftDeletes;
+
     protected $table = 'register';
 
     protected $fillable = [

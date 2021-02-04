@@ -51,7 +51,7 @@ class UserController extends Controller
         $user = User::where(['email' => $request->email])->first();
         Validator::make($request->all(), [
             'username' => 'required|unique:users,username',
-            'email' => 'required|email|unique:users,email,'.$user->id,
+            'email' => 'required|email|unique:users,email,' . $user->id,
             'koordinator' => 'required',
             'token' => 'required',
             'password' => 'required|confirmed|min:6',

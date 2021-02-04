@@ -22,14 +22,14 @@ class SampelController extends Controller
         if ($request->sampel_status && $sampel->sampel_status != $request->sampel_status) {
             return response()->json([
                 'valid' => false,
-                'error' => 'Status sampel sudah pada tahap '.($sampel->status ? $sampel->status->deskripsi : $sampel->sampel_status),
+                'error' => 'Status sampel sudah pada tahap ' . ($sampel->status ? $sampel->status->deskripsi : $sampel->sampel_status),
             ]);
         }
         if (!empty($user->lab_pcr_id)) {
             if ($sampel->lab_pcr_id != $user->lab_pcr_id) {
                 return response()->json([
                     'valid' => false,
-                    'error' => 'Sampel ini tidak diarahkan ke Lab Anda, namun ke Lab PCR di ' . $sampel->lab_pcr_nama. '.<br>Silakan hubungi Admin Ekstraksi (Labkesda Jabar)',
+                    'error' => 'Sampel ini tidak diarahkan ke Lab Anda, namun ke Lab PCR di ' . $sampel->lab_pcr_nama . '.<br>Silakan hubungi Admin Ekstraksi (Labkesda Jabar)',
                 ]);
             }
         }

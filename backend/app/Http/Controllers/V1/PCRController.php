@@ -200,7 +200,7 @@ class PCRController extends Controller
 
         $pcr = $sampel->pcr;
         if (!$pcr) {
-            $pcr = new PemeriksaanSampel;
+            $pcr = new PemeriksaanSampel();
             $pcr->sampel_id = $sampel->id;
             $pcr->user_id = $user->id;
         }
@@ -240,7 +240,7 @@ class PCRController extends Controller
 
         $pcr = $sampel->pcr;
         if (!$pcr) {
-            $pcr = new PemeriksaanSampel;
+            $pcr = new PemeriksaanSampel();
             $pcr->sampel_id = $sampel->id;
             $pcr->user_id = $user->id;
         }
@@ -262,7 +262,7 @@ class PCRController extends Controller
         $sampel = Sampel::with(['pcr'])->find($id);
         $pcr = $sampel->pcr;
         if (!$pcr) {
-            $pcr = new PemeriksaanSampel;
+            $pcr = new PemeriksaanSampel();
             $pcr->sampel_id = $sampel->id;
             $pcr->user_id = $user->id;
         }
@@ -304,7 +304,7 @@ class PCRController extends Controller
 
         $pcr = $sampel->pcr;
         if (!$pcr) {
-            $pcr = new PemeriksaanSampel;
+            $pcr = new PemeriksaanSampel();
             $pcr->sampel_id = $sampel->id;
             $pcr->user_id = $user->id;
         }
@@ -360,7 +360,7 @@ class PCRController extends Controller
         foreach ($samples as $nomor_sampel => $sampel) {
             $pcr = $sampel->pcr;
             if (!$pcr) {
-                $pcr = new PemeriksaanSampel;
+                $pcr = new PemeriksaanSampel();
                 $pcr->sampel_id = $sampel->id;
                 $pcr->user_id = $user->id;
             }
@@ -402,7 +402,7 @@ class PCRController extends Controller
         }
         $pcr = $sampel->pcr;
         if (!$pcr) {
-            $pcr = new PemeriksaanSampel;
+            $pcr = new PemeriksaanSampel();
             $pcr->sampel_id = $sampel->id;
             $pcr->user_id = $user->id;
         }
@@ -421,7 +421,7 @@ class PCRController extends Controller
     {
         $this->__importValidator($request)->validate();
 
-        $importer = new HasilPemeriksaanImport;
+        $importer = new HasilPemeriksaanImport();
         Excel::import($importer, $request->file('register_file'));
 
         return response()->json([
@@ -460,7 +460,7 @@ class PCRController extends Controller
             if ($sampel) {
                 $pcr = $sampel->pcr;
                 if (!$pcr) {
-                    $pcr = new PemeriksaanSampel;
+                    $pcr = new PemeriksaanSampel();
                     $pcr->sampel_id = $sampel->id;
                     $pcr->user_id = $user->id;
                 }
@@ -523,7 +523,7 @@ class PCRController extends Controller
         if ($sampel != '') {
             $pcr = $sampel->pcr;
             if (!$pcr) {
-                $pcr = new PemeriksaanSampel;
+                $pcr = new PemeriksaanSampel();
                 $pcr->sampel_id = $sampel->id;
                 $pcr->user_id = $user->id;
             }

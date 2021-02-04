@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pasien extends Model
 {
     protected $table = 'pasien';
-    
+
     protected $fillable = [
         'nama_lengkap',
         'nik',
@@ -38,7 +38,7 @@ class Pasien extends Model
     ];
 
     protected $casts = [
-        'tanggal_lahir'=> 'date:Y-m-d',
+        'tanggal_lahir' => 'date:Y-m-d',
     ];
 
     public function registers()

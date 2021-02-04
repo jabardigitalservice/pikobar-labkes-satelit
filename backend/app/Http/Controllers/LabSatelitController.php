@@ -17,8 +17,8 @@ class LabSatelitController extends Controller
 
         if ($search != '') {
             $models = $models->where(function ($q) use ($search) {
-                $q->where('nama', 'ilike', '%'.$search.'%')
-                   ->orWhere('alamat', 'ilike', '%'.$search.'%');
+                $q->where('nama', 'ilike', '%' . $search . '%')
+                   ->orWhere('alamat', 'ilike', '%' . $search . '%');
             });
         }
         $count = $models->count();
@@ -34,7 +34,7 @@ class LabSatelitController extends Controller
                     break;
             }
         }
-        $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
+        $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
         $result = [
             'data' => $models,
@@ -53,14 +53,14 @@ class LabSatelitController extends Controller
             'latitude' => 'numeric',
         ]);
 
-        $data = new LabSatelit;
+        $data = new LabSatelit();
         $data->nama = $request->get('nama');
         $data->alamat = $request->get('alamat');
         $data->longitude = $request->get('longitude');
         $data->latitude = $request->get('latitude');
         $data->save();
 
-        return response()->json(['status'=>201,'message'=>'Berhasil menambahkan Lab Satelit','result'=>[]]);
+        return response()->json(['status' => 201,'message' => 'Berhasil menambahkan Lab Satelit','result' => []]);
     }
 
     public function deleteLabSatelit(Request $request, $id)
@@ -68,9 +68,9 @@ class LabSatelitController extends Controller
         try {
             $data = LabSatelit::where('id', $id)->first();
             $data->delete();
-            return response()->json(['status'=>200,'message'=>'Berhasil menghapus data Lab Satelit','result'=>[]]);
+            return response()->json(['status' => 200,'message' => 'Berhasil menghapus data Lab Satelit','result' => []]);
         } catch (\Exception $ex) {
-            return response()->json(['status'=>400,'message'=>'Gagal menghapus data, terjadi kesalahan server','result'=>$ex->getMessage()]);
+            return response()->json(['status' => 400,'message' => 'Gagal menghapus data, terjadi kesalahan server','result' => $ex->getMessage()]);
         }
     }
 
@@ -78,7 +78,7 @@ class LabSatelitController extends Controller
     {
 
         $this->validate($request, [
-            'nama' => 'required|unique:lab_satelit,nama,'.$id,
+            'nama' => 'required|unique:lab_satelit,nama,' . $id,
             'alamat' => 'max:255',
             'longitude' => 'numeric',
             'latitude' => 'numeric',
@@ -92,12 +92,12 @@ class LabSatelitController extends Controller
         $data->latitude = $request->get('latitude');
         $data->save();
 
-        return response()->json(['status'=>200,'message'=>'Berhasil mengubah data LabSatelit','result'=>[]]);
+        return response()->json(['status' => 200,'message' => 'Berhasil mengubah data LabSatelit','result' => []]);
     }
 
     public function showUpdate(Request $request, $id)
     {
         $data = LabSatelit::where('id', $id)->first();
-        return response()->json(['status'=>200,'message'=>'success','result'=>$data]);
+        return response()->json(['status' => 200,'message' => 'success','result' => $data]);
     }
 }

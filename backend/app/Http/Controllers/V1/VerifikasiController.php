@@ -20,6 +20,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class VerifikasiController extends Controller
 {
     use PemeriksaanTrait;
+
     /**
      * Display a listing of the resource.
      *

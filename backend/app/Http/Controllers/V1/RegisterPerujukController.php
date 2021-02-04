@@ -262,7 +262,7 @@ class RegisterPerujukController extends Controller
             DB::beginTransaction();
             try {
                 $user = $request->user();
-                $register = new Register;
+                $register = new Register();
                 $register->nomor_register = $row->get('nomor_register');
                 $register->perujuk_id = $row->get('perujuk_id');
                 $register->register_perujuk_id = $row->get('id');
@@ -283,7 +283,7 @@ class RegisterPerujukController extends Controller
                 }
                 $register->save();
 
-                $pasien = new Pasien;
+                $pasien = new Pasien();
                 $pasien->nama_lengkap = $row->get('nama_pasien');
                 $pasien->perujuk_id = $row->get('perujuk_id');
                 $pasien->register_perujuk_id = $row->get('id');
@@ -412,7 +412,7 @@ class RegisterPerujukController extends Controller
 
     public function import(ImportRegisterPerujukRequest $request)
     {
-        Excel::import(new RegisterPerujukImport, $request->file('register_file'));
+        Excel::import(new RegisterPerujukImport(), $request->file('register_file'));
 
         return response()->json([
             'status' => 200,

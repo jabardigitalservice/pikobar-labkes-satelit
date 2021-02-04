@@ -39,8 +39,8 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'status' => UserStatusEnum::class.'|nullable',
-        'role_id' => RoleEnum::class.'|nullable,integer',
+        'status' => UserStatusEnum::class . '|nullable',
+        'role_id' => RoleEnum::class . '|nullable,integer',
     ];
 
     /**
@@ -59,7 +59,7 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      */
     public function getPhotoUrlAttribute()
     {
-        return 'https://www.gravatar.com/avatar/'.md5(strtolower($this->email)).'.jpg?s=200&d=mm';
+        return 'https://www.gravatar.com/avatar/' . md5(strtolower($this->email)) . '.jpg?s=200&d=mm';
     }
 
     /**
@@ -90,7 +90,7 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      */
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new VerifyEmail);
+        $this->notify(new VerifyEmail());
     }
 
     /**

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Sampel extends Model
 {
     use SoftDeletes;
+
     protected $table = 'sampel';
 
     protected $appends = [
@@ -84,10 +85,10 @@ class Sampel extends Model
             'sampel_status_before' => $this->sampel_status,
         ]);
         $log = SampelLog::create($arr);
-        if (empty($this->{'waktu_'.$newstate})) {
-            $this->{'waktu_'.$newstate} = date('Y-m-d H:i:s');
+        if (empty($this->{'waktu_' . $newstate})) {
+            $this->{'waktu_' . $newstate} = date('Y-m-d H:i:s');
             if ($tanggal) {
-                $this->{'waktu_'.$newstate} = date('Y-m-d H:i:s', strtotime($tanggal));
+                $this->{'waktu_' . $newstate} = date('Y-m-d H:i:s', strtotime($tanggal));
             }
         }
         $this->sampel_status = $newstate;
@@ -127,7 +128,7 @@ class Sampel extends Model
     public static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($model) {
             if (empty($model->is_musnah_ekstraksi)) {
                 $model->is_musnah_ekstraksi = false;

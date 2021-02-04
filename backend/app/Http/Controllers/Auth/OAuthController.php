@@ -54,9 +54,9 @@ class OAuthController extends Controller
     public function handleProviderCallback($provider)
     {
         $user = Socialite::driver($provider)->stateless()->user();
-        
+
         if (!method_exists($user, 'getEmail')) {
-            throw new EmailInvalidException;
+            throw new EmailInvalidException();
         }
 
         $user = $this->findOrCreateUser($provider, $user);
@@ -93,7 +93,7 @@ class OAuthController extends Controller
         }
 
         if (User::where('email', $user->getEmail())->exists()) {
-            throw new EmailTakenException;
+            throw new EmailTakenException();
         }
 
         return $this->createUser($provider, $user);
