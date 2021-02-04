@@ -256,8 +256,11 @@
         }
       },
       getSampel(id) {
-        const findSampel = id ? this.listSampels.find((el) => el.register_id === parseInt(id)) : null
-        return findSampel ? findSampel.nomor_sampel : ''
+        const findSampel = this.listSampels.find((el) => el.register_id === parseInt(id))
+        if (findSampel) {
+          return findSampel.nomor_sampel
+        }
+        return ''
       }
     }
   }
