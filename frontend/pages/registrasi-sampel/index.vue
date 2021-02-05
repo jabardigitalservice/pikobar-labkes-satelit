@@ -150,6 +150,7 @@
         form,
         selectedNomorSampels,
         isHasAction: true,
+        listSampels: [],
       }
     },
     head() {
@@ -163,9 +164,15 @@
       }
     },
     created() {
+      this.getRegisterSampel()
       this.$store.commit('registrasi_perujuk/clear')
     },
     methods: {
+      async getRegisterSampel() {
+        let resp = await this.$axios.get('/registrasi-sampel')
+        const { data } = resp && resp.data ? resp.data : []
+        this.listSampels = data
+      },
       downloadFormat(namaFile) {
         this.$axios.get(`v1/download?namaFile=${namaFile}`, {
             responseType: 'blob'
@@ -248,8 +255,12 @@
           this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error")
         }
       },
-      getSampel(item) {
-        return document.getElementById('selected-sampel-' + item).getAttribute('nomor_sampel')
+      getSampel(id) {
+        const findSampel = this.listSampels.find((el) => el.register_id === parseInt(id))
+        if (findSampel) {
+          return findSampel.nomor_sampel
+        }
+        return ''
       }
     }
   }
