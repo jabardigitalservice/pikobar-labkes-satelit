@@ -1,7 +1,9 @@
-FROM node:latest
+FROM node:10-alpine
 
 WORKDIR /app
-COPY . .
+COPY package.json /app/
+COPY package-lock.json /app/
+RUN npm install
 
 ARG API_URL
 ARG APP_URL
@@ -20,13 +22,9 @@ ENV APP_NAME $APP_NAME
 ENV APP_LOCALE $APP_LOCALE
 ENV SENTRY_LARAVEL_DSN $SENTRY_LARAVEL_DSN
 
-#Test variable terpanggil
-RUN echo ${API_URL}
-
-RUN npm install
+COPY . /app/
 RUN npm run build
 
 EXPOSE 3000
 
-# start command
 CMD [ "npm", "run", "start" ]
