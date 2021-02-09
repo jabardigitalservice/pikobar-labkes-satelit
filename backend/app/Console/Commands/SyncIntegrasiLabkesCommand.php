@@ -56,12 +56,12 @@ class SyncIntegrasiLabkesCommand extends Command
      */
     public function handle()
     {
-        // if ($this->checkDataToday()) {
-        //     return;
-        // }
+        if ($this->checkDataToday()) {
+            return;
+        }
         $start_time = Carbon::now();
         $records = Sampel::sampel('sample_valid')
-                        // ->whereDate('waktu_sample_valid', $this->tanggal)
+                        ->whereDate('waktu_sample_valid', $this->tanggal)
                         ->limit(1)
                         ->skip(2)
                         ->selectCostum()
