@@ -67,12 +67,7 @@ class SyncIntegrasiLabkesCommand extends Command
             foreach ($chunk->toArray() as $record) {
                 DB::beginTransaction();
                 try {
-                    $register = $this->insertTabelRegister($record);
-                    $pasien = $this->insertTabelPasien($record);
-                    $pengambilanSampel = $this->insertTabelPengambilanSampel($record);
-                    $sampel = $this->insertTabelSampel($record, $register, $pengambilanSampel);
-                    $this->insertTabelPasienRegister($register, $pasien);
-                    $this->insertTabelPemeriksaanSampel($record, $sampel);
+                    $this->executeInsert($record);
                     DB::commit();
                 } catch (\Throwable $th) {
                     DB::rollback();
@@ -82,9 +77,17 @@ class SyncIntegrasiLabkesCommand extends Command
             }
         }
         $end_time = Carbon::now();
-        $totalDuration = $start_time->diff($end_time)->format('%H:%I:%S') . " Menit";
-        Log::alert("Sinkronisasi Data Manlab Ke Satelit pada tanggal $this->tanggal Berhasil dilakukan \n
-        Detail: \n jumlah data: $records->count() \n Durasi : $totalDuration");
+        $this->sendMessage($start_time, $end_time, $records->count());
+    }
+
+    private function executeInsert($record)
+    {
+        $register = $this->insertTabelRegister($record);
+        $pasien = $this->insertTabelPasien($record);
+        $pengambilanSampel = $this->insertTabelPengambilanSampel($record);
+        $sampel = $this->insertTabelSampel($record, $register, $pengambilanSampel);
+        $this->insertTabelPasienRegister($register, $pasien);
+        $this->insertTabelPemeriksaanSampel($record, $sampel);
     }
 
     private function insertTabelRegister($record)
@@ -143,5 +146,12 @@ class SyncIntegrasiLabkesCommand extends Command
         return AppSampel::whereDate('created_at', $this->tanggal)
                     ->where('lab_satelit_id', self::LABKES_LAB_ID)
                     ->exists();
+    }
+
+    private function sendMessage($start_time, $end_time, $records)
+    {
+        $totalDuration = $start_time->diff($end_time)->format('%H:%I:%S') . " Menit";
+        Log::alert("Sinkronisasi Data Manlab Ke Satelit pada tanggal $this->tanggal Berhasil dilakukan.
+        \n Detail: \n jumlah data: $records->count() \n Durasi : $totalDuration");
     }
 }
