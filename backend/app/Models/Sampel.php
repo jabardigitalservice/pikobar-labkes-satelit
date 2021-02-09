@@ -18,7 +18,6 @@ class Sampel extends Model
 
     protected $fillable = [
         'nomor_register',
-        'fasyankes_id',
         'nomor_rekam_medis',
         'nama_dokter',
         'no_telp',
@@ -33,7 +32,9 @@ class Sampel extends Model
         'waktu_sample_verified',
         'waktu_sample_valid',
         'valid_file_id',
-        'counter_print_hasil'
+        'counter_print_hasil',
+        'lab_satelit_id',
+        'waktu_pcr_sample_analyzed'
     ];
 
     protected $dates = [
