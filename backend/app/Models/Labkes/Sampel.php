@@ -98,7 +98,6 @@ class Sampel extends Model
             "sampel.jenis_sampel_id",
             "sampel.jenis_sampel_nama",
             "sampel.waktu_sample_taken",
-            "sampel.waktu_sample_taken as created_at",
             "sampel.waktu_sample_valid as waktu_pcr_sample_analyzed",
             "sampel.waktu_sample_valid as tanggal_input_hasil",
             "pemeriksaansampel.kesimpulan_pemeriksaan",

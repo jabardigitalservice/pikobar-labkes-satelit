@@ -56,12 +56,14 @@ class SyncIntegrasiLabkesCommand extends Command
      */
     public function handle()
     {
-        if ($this->checkDataToday()) {
-            return;
-        }
+        // if ($this->checkDataToday()) {
+        //     return;
+        // }
         $start_time = Carbon::now();
         $records = Sampel::sampel('sample_valid')
-                        ->whereDate('waktu_sample_valid', $this->tanggal)
+                        // ->whereDate('waktu_sample_valid', $this->tanggal)
+                        ->limit(1)
+                        ->skip(2)
                         ->selectCostum()
                         ->get();
         $totalData = $records->count();
@@ -118,6 +120,7 @@ class SyncIntegrasiLabkesCommand extends Command
     {
         $record['register_id'] = $register->id;
         $record['pengambilan_sampel_id'] = $pengambilanSampel->id;
+        $record['created_at'] = $record['waktu_sample_taken'];
         $record['lab_satelit_id'] = self::LABKES_LAB_ID;
         $record['sampel_status'] = self::STATUS_SAMPEL;
         $record['creator_user_id'] = self::CREATOR_USER_ID;
