@@ -57,6 +57,7 @@ class Sampel extends Model
                 ->register()
                 ->pasienRegister()
                 ->pasien()
+                ->selectCostum()
                 ->wilayah();
     }
 
