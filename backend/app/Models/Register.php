@@ -13,26 +13,30 @@ class Register extends Model
 
     protected $fillable = [
         'nomor_register',
+        'register_uuid',
+        'creator_user_id',
+        'lab_satelit_id',
         'fasyankes_id',
+        'fasyankes_pengirim',
+        'nama_rs',
+        'instansi_pengirim',
+        'instansi_pengirim_nama',
+        'sumber_pasien',
+        'status',
+        'swab_ke',
+        'tanggal_swab',
+        //other
         'nomor_rekam_medis',
         'nama_dokter',
         'no_telp',
-        'register_uuid',
-        'creator_user_id',
-        'sumber_pasien',
         'jenis_registrasi',
         'tanggal_kunjungan',
         'kunjungan_ke',
         'rs_kunjungan',
         'dinkes_pengirim',
         'other_dinas_pengirim',
-        'nama_rs',
         'other_nama_rs',
-        'fasyankes_pengirim',
         'hasil_rdt',
-        'status',
-        'swab_ke',
-        'tanggal_swab',
     ];
 
     protected $hidden = ['fasyankes_id'];

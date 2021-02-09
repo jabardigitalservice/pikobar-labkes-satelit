@@ -17,30 +17,35 @@ class Sampel extends Model
     ];
 
     protected $fillable = [
-        'nomor_register',
-        'nomor_rekam_medis',
-        'nama_dokter',
-        'no_telp',
-
         'nomor_sampel',
         'jenis_sampel_id',
+        'jenis_sampel_nama',
+        'register_id',
+        'lab_satelit_id',
+        'pengambilan_sampel_id',
+        'creator_user_id',
+        'sampel_status',
+        'created_at',
+        'waktu_sample_taken',
+        'waktu_pcr_sample_analyzed',
+        //other
+        'nomor_register',
+        'nama_dokter',
+        'nomor_rekam_medis',
+        'no_telp',
         'petugas_pengambilan_sampel', // Isinya adalah kondisi sampel, di aliaskan 'kondisi_sampel'
         'tanggal_pengambilan_sampel',
         'waktu_pengambilan_sampel',
-        'sampel_status',
         'validator_id',
         'waktu_sample_verified',
         'waktu_sample_valid',
         'valid_file_id',
         'counter_print_hasil',
-        'lab_satelit_id',
-        'waktu_pcr_sample_analyzed'
     ];
 
     protected $dates = [
-        'tanggal_pengambilan_sampel',
-        'waktu_sample_verified',
-        'waktu_sample_valid'
+        'waktu_sample_taken',
+        'waktu_pcr_sample_analyzed',
     ];
 
     protected $casts = [

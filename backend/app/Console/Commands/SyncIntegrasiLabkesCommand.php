@@ -56,40 +56,42 @@ class SyncIntegrasiLabkesCommand extends Command
      */
     public function handle()
     {
+        if ($this->checkDataToday()) {
+            return;
+        }
+        $start_time = Carbon::now();
         $records = Sampel::sampel('sample_valid')
                         ->whereDate('waktu_sample_valid', $this->tanggal)
                         ->selectCostum()
                         ->get();
-        if ($this->checkDataToday()) {
-            return;
-        }
-        foreach ($records as $record) {
-            DB::beginTransaction();
-            try {
-                $record = $record->toArray();
-                $register = $this->insertTabelRegister($record);
-                $pasien = $this->insertTabelPasien($record);
-                $pengambilanSampel = $this->insertTabelPengambilanSampel($record);
-                $sampel = $this->insertTabelSampel($record, $register, $pengambilanSampel);
-                $this->insertTabelPasienRegister($register, $pasien);
-                $this->insertTabelPemeriksaanSampel($record, $sampel);
-                DB::commit();
-                Log::alert("Sinkronisasi Data Manlab Ke Satelit Berhasil dilakukan pada Tanggal $this->tanggal");
-            } catch (\Throwable $th) {
-                DB::rollback();
-                throw $th;
+        $totalData = $records->count();
+        foreach ($records->chunk(1000) as $chunk) {
+            foreach ($chunk->toArray() as $record) {
+                DB::beginTransaction();
+                try {
+                    $register = $this->insertTabelRegister($record);
+                    $pasien = $this->insertTabelPasien($record);
+                    $pengambilanSampel = $this->insertTabelPengambilanSampel($record);
+                    $sampel = $this->insertTabelSampel($record, $register, $pengambilanSampel);
+                    $this->insertTabelPasienRegister($register, $pasien);
+                    $this->insertTabelPemeriksaanSampel($record, $sampel);
+                    DB::commit();
+                } catch (\Throwable $th) {
+                    DB::rollback();
+                    Log::alert($th);
+                    throw $th;
+                }
             }
         }
+        $end_time = Carbon::now();
+        $totalDuration = $start_time->diff($end_time)->format('%H:%I:%S') . " Menit";
+        Log::alert("Sinkronisasi Data Manlab Ke Satelit pada tanggal $this->tanggal Berhasil dilakukan \n
+        Detail: \n jumlah data: $totalData \n Durasi : $totalDuration");
     }
 
     private function insertTabelRegister($record)
     {
         $record['register_uuid'] = Str::uuid();
-        $record['instansi_pengirim'] = $record['fasyankes_pengirim'];
-        $record['instansi_pengirim_nama'] = $record['nama_rs'];
-        $record['swab_ke'] = $record['kunjungan_ke'];
-        $record['tanggal_swab'] = $record['tanggal_kunjungan'];
-        $record['tanggal_swab'] = $record['tanggal_kunjungan'];
         $record['creator_user_id'] = self::CREATOR_USER_ID;
         $record['lab_satelit_id'] = self::LABKES_LAB_ID;
         return Register::create($record);
@@ -97,16 +99,6 @@ class SyncIntegrasiLabkesCommand extends Command
 
     private function insertTabelPasien($record)
     {
-        $record['kode_provinsi'] = $record['provinsi_id'];
-        $record['nama_provinsi'] = $record['provinsi_nama'];
-        $record['kode_kabupaten'] = $record['kota_id'];
-        $record['nama_kabupaten'] = $record['kota_nama'];
-        $record['kecamatan'] = $record['kecamatan_nama'];
-        $record['kode_kecamatan'] = $record['kecamatan_id'];
-        $record['nama_kecamatan'] = $record['kecamatan_nama'];
-        $record['kelurahan'] = $record['kelurahan_nama'];
-        $record['kode_kelurahan'] = $record['kelurahan_id'];
-        $record['nama_kelurahan'] = $record['kelurahan_nama'];
         $record['lab_satelit_id'] = self::LABKES_LAB_ID;
         return Pasien::create($record);
     }
@@ -126,8 +118,6 @@ class SyncIntegrasiLabkesCommand extends Command
     {
         $record['register_id'] = $register->id;
         $record['pengambilan_sampel_id'] = $pengambilanSampel->id;
-        $record['waktu_pcr_sample_analyzed'] = $record['waktu_sample_valid'];
-        $record['created_at'] = $record['waktu_sample_taken'];
         $record['lab_satelit_id'] = self::LABKES_LAB_ID;
         $record['sampel_status'] = self::STATUS_SAMPEL;
         $record['creator_user_id'] = self::CREATOR_USER_ID;
@@ -138,7 +128,6 @@ class SyncIntegrasiLabkesCommand extends Command
     {
         $record['sampel_id'] = $sampel->id;
         $record['user_id'] = self::CREATOR_USER_ID;
-        $record['tanggal_input_hasil'] = $record['waktu_sample_valid'];
         return PemeriksaanSampel::create($record);
     }
 

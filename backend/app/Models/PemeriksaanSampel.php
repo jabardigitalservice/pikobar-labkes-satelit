@@ -12,6 +12,12 @@ class PemeriksaanSampel extends Model
     protected $table = 'pemeriksaansampel';
 
     protected $fillable = [
+        'sampel_id',
+        'user_id',
+        'tanggal_input_hasil',
+        'catatan_pemeriksaan',
+        'kesimpulan_pemeriksaan',
+        //other
         'tanggal_penerimaan_sampel',
         'jam_penerimaan_sampel',
         'lab_penerima_sampel',
@@ -26,8 +32,6 @@ class PemeriksaanSampel extends Model
         'target_gen',
         'hasil_deteksi',
         'grafik',
-        'kesimpulan_pemeriksaan',
-        'catatan_pemeriksaan'
     ];
 
     protected $casts = [
