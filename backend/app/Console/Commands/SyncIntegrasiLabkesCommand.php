@@ -31,6 +31,9 @@ class SyncIntegrasiLabkesCommand extends Command
      */
     protected $description = 'Sinkronisasi Data Aplikasi Labkes Setiap Jam 18:00';
 
+    private $tanggal;
+
+
     /**
      * Create a new command instance.
      *
@@ -39,6 +42,7 @@ class SyncIntegrasiLabkesCommand extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->tanggal = Carbon::now()->format('Y-m-d');
     }
 
     const CREATOR_USER_ID = 1;
@@ -52,15 +56,11 @@ class SyncIntegrasiLabkesCommand extends Command
      */
     public function handle()
     {
-        $tanggal = Carbon::now()->format('Y-m-d');
         $records = Sampel::sampel('sample_valid')
-                        ->whereDate('waktu_sample_valid', $tanggal)
+                        ->whereDate('waktu_sample_valid', $this->tanggal)
                         ->selectCostum()
                         ->get();
-        $sampels = AppSampel::whereDate('created_at', $tanggal)
-                        ->where('lab_satelit_id', self::LABKES_LAB_ID)
-                        ->exists();
-        if ($sampels) {
+        if ($this->checkDataToday()) {
             return;
         }
         foreach ($records as $record) {
@@ -74,7 +74,7 @@ class SyncIntegrasiLabkesCommand extends Command
                 $this->insertTabelPasienRegister($register, $pasien);
                 $this->insertTabelPemeriksaanSampel($record, $sampel);
                 DB::commit();
-                Log::alert("Sinkronisasi Data Manlab Ke Satelit Berhasil dilakukan pada Tanggal $tanggal");
+                Log::alert("Sinkronisasi Data Manlab Ke Satelit Berhasil dilakukan pada Tanggal $this->tanggal");
             } catch (\Throwable $th) {
                 DB::rollback();
                 throw $th;
@@ -148,5 +148,12 @@ class SyncIntegrasiLabkesCommand extends Command
             'pasien_id' => $pasien->id,
             'register_id' => $register->id,
         ]);
+    }
+
+    private function checkDataToday()
+    {
+        return AppSampel::whereDate('created_at', $this->tanggal)
+                    ->where('lab_satelit_id', self::LABKES_LAB_ID)
+                    ->exists();
     }
 }
