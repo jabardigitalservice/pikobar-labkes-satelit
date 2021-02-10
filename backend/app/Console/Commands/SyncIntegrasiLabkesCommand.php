@@ -63,18 +63,18 @@ class SyncIntegrasiLabkesCommand extends Command
         $records = Sampel::sampel('sample_valid')
                         ->whereDate('waktu_sample_valid', $this->tanggal)
                         ->get();
-        foreach ($records->chunk(1000) as $chunk) {
-            foreach ($chunk->toArray() as $record) {
-                DB::beginTransaction();
-                try {
-                    $this->executeInsert($record);
-                    DB::commit();
-                } catch (\Throwable $th) {
-                    DB::rollback();
-                    Log::alert($th);
-                    throw $th;
+        DB::beginTransaction();
+        try {
+            foreach ($records->chunk(1000) as $chunk) {
+                foreach ($chunk->toArray() as $record) {
+                        $this->executeInsert($record);
                 }
             }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            Log::alert($th);
+            throw $th;
         }
         $end_time = Carbon::now();
         $this->sendMessage($start_time, $end_time, $records->count());
