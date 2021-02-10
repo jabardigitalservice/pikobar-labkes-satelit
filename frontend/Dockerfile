@@ -22,6 +22,7 @@ ENV SENTRY_LARAVEL_DSN $SENTRY_LARAVEL_DSN
 
 #Test variable terpanggil
 RUN echo ${API_URL}
+
 RUN npm install
 RUN npm run build
 
