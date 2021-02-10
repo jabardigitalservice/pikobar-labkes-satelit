@@ -10,31 +10,34 @@ class Pasien extends Model
 
     protected $fillable = [
         'nama_lengkap',
+        'kewarganegaraan',
         'nik',
-        // 'nama_depan',
-        // 'nama_belakang',
-        // 'no_ktp',
-        // 'no_sim',
-        // 'no_kk',
         'tanggal_lahir',
         'tempat_lahir',
-        'kewarganegaraan',
-        'no_hp',
-        'no_telp',
-        'pekerjaan',
-        'jenis_kelamin',
+        'kode_provinsi',
+        'nama_provinsi',
+        'kode_kabupaten',
+        'nama_kabupaten',
+        'kode_kecamatan',
+        'nama_kecamatan',
+        'kode_kelurahan',
+        'nama_kelurahan',
         'kota_id',
         'kecamatan',
         'kelurahan',
+        'alamat_lengkap',
+        'sumber_pasien',
+        'jenis_kelamin',
+        'usia_tahun',
+        'lab_satelit_id',
+        //other
+        'no_hp',
+        'no_telp',
+        'pekerjaan',
         'no_rw',
         'no_rt',
-        'alamat_lengkap',
         'keterangan_lain',
         'suhu',
-        'sumber_pasien'
-    ];
-
-    protected $dates = [
     ];
 
     protected $casts = [

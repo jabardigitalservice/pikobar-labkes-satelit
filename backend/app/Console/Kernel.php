@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\TerbanyakCommand::class,
+        Commands\SyncIntegrasiLabkesCommand::class,
     ];
 
     /**
@@ -26,6 +27,8 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('command:terbanyak')
             ->everyFifteenMinutes();
+        $schedule->command('command:sync-integrasi-labkes')
+            ->dailyAt('18:00');
     }
 
     /**
