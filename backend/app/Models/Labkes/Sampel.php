@@ -57,11 +57,11 @@ class Sampel extends Model
                 ->register()
                 ->pasienRegister()
                 ->pasien()
-                ->selectCostum()
+                ->selectCustom()
                 ->wilayah();
     }
 
-    public function scopeSelectCostum($query)
+    public function scopeSelectCustom($query)
     {
         return $query->select(
             "register.nomor_register", "register.register_uuid", "register.fasyankes_id",
