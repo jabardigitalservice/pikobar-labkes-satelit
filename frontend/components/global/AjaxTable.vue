@@ -329,6 +329,7 @@
       changePage(page) {
         if (this.oidHasChecked.indexOf(this.oid) > -1) {
           document.getElementById('checkbox-selectall').checked = false;
+          this.doRefresh
         }
         if (isNaN(parseInt(this.pagination.page)) || this.pagination.page < 1) {
           this.pagination.page = 1;
@@ -465,7 +466,8 @@
         });
       },
       sampelOnCheckAll() {
-        let listSampelsArr = [];
+        let listSampelsArr = []
+        this.checkedArr = []
         if (this.oid === 'registrasi-perujuk') {
           listSampelsArr = this.$store.state.registrasi_perujuk.selectedSampels;
         } else if (this.oid === 'verifikasi-admin') {
@@ -473,22 +475,24 @@
         } else if (this.oid === 'registrasi-sampel') {
           listSampelsArr = this.$store.state.registrasi_sampel.selectedSampels;
         }
-
-        var samples = document.getElementsByName("list-sampel");
+        this.checkedArr.concat(listSampelsArr)
+        let samples = Array.prototype.slice.call(document.getElementsByName("list-sampel"))
         const newDomchecked = document.getElementById('checkbox-selectall').checked;
         this.checked = newDomchecked;
-        var i;
+        if (!samples.length) {
+          return
+        }
+        let i;
         for (i = 0; i < samples.length; i++) {
-          if (samples[i].name === "list-sampel") {
-            const checkedSampel = Array.isArray(listSampelsArr) ? listSampelsArr.find((element) => element == samples[i]
-              .value) : null;
-            const findinCheckedArr = Array.isArray(this.checkedArr) ? this.checkedArr.find((element) => element ==
-              samples[i].value) : null;
-            if (!findinCheckedArr) {
-              this.checkedArr.push(samples[i].value);
-            }
-            samples[i].checked = this.checked;
+          const findinCheckedArr = Array.isArray(this.checkedArr) ? this.checkedArr.find((element) => element.name ===
+            samples[i].getAttribute("value")) : null
+          if (findinCheckedArr === undefined) {
+            this.checkedArr.push({
+              id: samples[i].getAttribute("id"),
+              name: samples[i].getAttribute("value"),
+            })
           }
+          samples[i].checked = this.checked
         }
         if (this.checked) {
           if (this.oid == 'registrasi-perujuk') {
@@ -512,35 +516,34 @@
       getDOMbyId() {
         if (this.oid == 'registrasi-perujuk') {
           for (const item of this.items) {
-            const sampel = document.getElementById('selected-sampel-' + item.id).value;
-            const ischeck = document.getElementById('selected-sampel-' + item.id).checked;
-
-            const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el === sampel) : null;
+            const sampel = document.getElementById(item.id).getAttribute("value")
+            const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el.name === sampel) : null
             if (findinArr) {
-              document.getElementById('selected-sampel-' + item.id).checked = true;
+              document.getElementById(item.id).checked = true;
             } else {
-              document.getElementById('selected-sampel-' + item.id).checked = false;
+              document.getElementById(item.id).checked = false;
             }
           }
         } else if (this.oid == 'verifikasi-admin') {
           for (const item of this.items) {
-            const sampel = document.getElementById('selected-sampel-' + item.sampel_id).value;
-            const ischeck = document.getElementById('selected-sampel-' + item.sampel_id).checked;
-
-            const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el === sampel) : null;
+            const sampel = document.getElementById(item.sampel_id).getAttribute("value")
+            const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el.name === sampel) : null
             if (findinArr) {
-              document.getElementById('selected-sampel-' + item.sampel_id).checked = true;
+              document.getElementById(item.sampel_id).checked = true;
             } else {
-              document.getElementById('selected-sampel-' + item.sampel_id).checked = false;
+              document.getElementById(item.sampel_id).checked = false;
             }
           }
         } else if (this.oid === 'registrasi-sampel') {
           for (const item of this.items) {
             if (item.sampel_status == 'sample_taken' && !item.register_perujuk_id) {
-              const sampel = document.getElementById('selected-sampel-' + item.register_id).value
-              const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el === sampel) : null
-              findinArr ? document.getElementById('selected-sampel-' + item.register_id).checked = true
-                : document.getElementById('selected-sampel-' + item.register_id).checked = false
+              const sampel = document.getElementById(item.register_id).getAttribute("value")
+              const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el.name === sampel) : null
+              if (findinArr) {
+                document.getElementById(item.register_id).checked = true;
+              } else {
+                document.getElementById(item.register_id).checked = false;
+              }
             }
           }
         }

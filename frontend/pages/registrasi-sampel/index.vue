@@ -105,7 +105,7 @@
           <div class="badge badge-white mr-2 mt-1" style="padding:5px;" v-for="(item,idx) in selectedNomorSampels"
             :key="idx">
             <span class="flex-text-center">
-              {{ getSampel(item) }}
+              {{ item.name || '' }}
             </span>
           </div>
         </div>
@@ -236,10 +236,14 @@
       },
       async hapusSampel() {
         JQuery('#pilihSampel').modal('hide')
+        const idArray = []
+        for (let i = 0; i < this.selectedNomorSampels.length; i++) {
+          idArray.push(this.selectedNomorSampels[i].id)
+        }
         try {
           const response = await this.$axios.delete('v1/register/sampel-bulk', {
             data: {
-              id: this.selectedNomorSampels
+              id: idArray
             }
           })
           this.$toast.success(response.message, {
@@ -254,13 +258,6 @@
         } catch (err) {
           this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error")
         }
-      },
-      getSampel(id) {
-        const findSampel = this.listSampels.find((el) => el.register_id === parseInt(id))
-        if (findSampel) {
-          return findSampel.nomor_sampel
-        }
-        return ''
       }
     }
   }

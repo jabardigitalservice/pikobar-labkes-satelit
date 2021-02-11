@@ -4,30 +4,30 @@ export const state = () => ({
 })
 
 export const mutations = {
-  add(state, sampelId) {
-    let findsampel = state.selectedSampels.find(el => el == sampelId) || null;
-    if (!findsampel) {
-      state.selectedSampels.push(sampelId)
+  add(state, sampel) {
+    const findSampel = state.selectedSampels.find(el => el.id == sampel.id) || state.selectedSampels.find(el => el.name == sampel.name) || null;
+    if (!findSampel) {
+      state.selectedSampels.push(sampel)
     }
   },
-  remove(state, sampelId) {
-    state.selectedSampels.splice(state.selectedSampels.indexOf(sampelId), 1)
+  remove(state, sampel) {
+    state.selectedSampels.splice(state.selectedSampels.indexOf(sampel), 1)
   },
   clear(state) {
-    state.selectedSampels = [],
+    state.selectedSampels = []
     state.selected = []
   },
-  addMultiple(state, sampelId) {
-    for (let i = 0; i < sampelId.length; i++) {
-      const findSample = state.selectedSampels.find(el => el === sampelId[i]);
+  addMultiple(state, sampel) {
+    for (let i = 0; i < sampel.length; i++) {
+      const findSample = state.selectedSampels.find(el => el.id === sampel[i].id) || state.selectedSampels.find(el => el.name === sampel[i].name) || null;
       if (!findSample) {
-        state.selectedSampels.push(sampelId[i])
+        state.selectedSampels.push(sampel[i])
       }
     }
   },
-  removeMultiple(state, sampelId) {
-    for (let i = 0; i < sampelId.length; i++) {
-      state.selectedSampels.splice(state.selectedSampels.indexOf(sampelId[i]), 1);
+  removeMultiple(state, sampel) {
+    for (let i = 0; i < sampel.length; i++) {
+      state.selectedSampels.splice(state.selectedSampels.indexOf(sampel[i]), 1);
     }
   },
 }
