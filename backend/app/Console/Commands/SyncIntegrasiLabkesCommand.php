@@ -143,7 +143,7 @@ class SyncIntegrasiLabkesCommand extends Command
 
     private function checkDataToday()
     {
-        return AppSampel::whereDate('created_at', $this->tanggal)
+        return AppSampel::whereDate('waktu_pcr_sample_analyzed', $this->tanggal)
                     ->where('lab_satelit_id', self::LABKES_LAB_ID)
                     ->exists();
     }
