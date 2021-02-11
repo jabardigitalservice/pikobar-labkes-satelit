@@ -62,7 +62,9 @@ class SyncIntegrasiLabkesCommand extends Command
         $start_time = Carbon::now();
         $records = Sampel::sampel('sample_valid')
                         ->whereDate('waktu_sample_valid', $this->tanggal)
+                        ->limit(1)
                         ->get();
+
         DB::beginTransaction();
         try {
             foreach ($records->chunk(1000) as $chunk) {
@@ -152,6 +154,6 @@ class SyncIntegrasiLabkesCommand extends Command
     {
         $totalDuration = $start_time->diff($end_time)->format('%H:%I:%S') . " Menit";
         Log::alert("Sinkronisasi Data Manlab Ke Satelit pada tanggal $this->tanggal Berhasil dilakukan.
-        \n Detail: \n jumlah data: $records->count() \n Durasi : $totalDuration");
+        \n Detail: \n jumlah data: $records \n Durasi : $totalDuration");
     }
 }
