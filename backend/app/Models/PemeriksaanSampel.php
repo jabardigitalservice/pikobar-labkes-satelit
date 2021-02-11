@@ -17,6 +17,7 @@ class PemeriksaanSampel extends Model
         'tanggal_input_hasil',
         'catatan_pemeriksaan',
         'kesimpulan_pemeriksaan',
+        'hasil_deteksi',
         //other
         'tanggal_penerimaan_sampel',
         'jam_penerimaan_sampel',
@@ -30,7 +31,6 @@ class PemeriksaanSampel extends Model
         'metode_pemeriksaan',
         'nama_kit_pemeriksaan',
         'target_gen',
-        'hasil_deteksi',
         'grafik',
     ];
 
@@ -52,6 +52,11 @@ class PemeriksaanSampel extends Model
     public function getHasilDeteksiParsedAttribute()
     {
         return $this->parseHasilDeteksi($this->getAttribute('hasil_deteksi'));
+    }
+
+    public function setHasilDeteksiAttribute($value)
+    {
+        return $this->attributes['hasil_deteksi'] = $value;
     }
 
     public function user()
