@@ -329,7 +329,6 @@
       changePage(page) {
         if (this.oidHasChecked.indexOf(this.oid) > -1) {
           document.getElementById('checkbox-selectall').checked = false;
-          this.doRefresh
         }
         if (isNaN(parseInt(this.pagination.page)) || this.pagination.page < 1) {
           this.pagination.page = 1;
