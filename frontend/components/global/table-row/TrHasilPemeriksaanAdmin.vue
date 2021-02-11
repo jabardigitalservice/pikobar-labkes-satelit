@@ -2,8 +2,14 @@
   <tr>
     <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
     <td>
-      <input type="checkbox" name="list-sampel" v-bind:value="item.sampel_id" v-bind:id="'selected-sampel-'+item.sampel_id"
-        v-model="selected" @click="sampelOnChangeSelect">
+      <input
+        type="checkbox"
+        name="list-sampel"
+        v-bind:id="item.sampel_id"
+        v-bind:value="item.nomor_sampel"
+        v-model="selected"
+        @click="sampelOnChangeSelect"
+      >
     </td>
     <td nowrap>
       <div><b>{{item.waktu_pcr_sample_analyzed | formatDate}}</b></div>
@@ -44,7 +50,6 @@
 </template>
 <script>
   import Form from "vform";
-  import axios from "axios";
   import {
     pasienStatus
   } from '~/assets/js/constant/enum';
@@ -98,30 +103,24 @@
     },
     methods: {
       sampelOnChangeSelect(e) {
-        const newDomchecked = e.target.checked;
-        const el = e ? e.currentTarget : null;
-        const nomorSampel = el ? el.getAttribute('value') : null;
+        const newDomchecked = e.target.checked
+        const el = e ? e.currentTarget : null
+        const regId = el ? el.getAttribute("id") : null
+        const noSampel = el ? el.getAttribute("value") : null
         this.checked = newDomchecked;
-        if (this.checked) {
-          this.$store.commit('hasil_pemeriksaan/add', nomorSampel)
-        }
-        if (!this.checked) {
-          this.$store.commit('hasil_pemeriksaan/remove', nomorSampel)
-        }
+        this.checked ? this.$store.commit("hasil_pemeriksaan/add", {id: regId, name: noSampel})
+          : this.$store.commit("hasil_pemeriksaan/remove", {id: regId, name: noSampel})
       }
     },
     watch: {
-      'selected': function (newVal, oldVal) {
-        const sampel = document.getElementById('selected-sampel-' + this.item.sampel_id).value;
-        const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el === sampel) : null;
-        if (findinArr) {
-          document.getElementById('selected-sampel-' + this.item.sampel_id).checked = true;
-        } else {
-          document.getElementById('selected-sampel-' + this.item.sampel_id).checked = false;
-        }
-      },
-    },
-  };
+      'selected': function () {
+        const sampel = document.getElementById(this.item.sampel_id).value
+        const findinArr = this.dataArr.length > 0 ? this.dataArr.find((el) => el.name === sampel) : null
+        findinArr ? document.getElementById(this.item.sampel_id).checked = true
+          : document.getElementById(this.item.sampel_id).checked = false
+      }
+    }
+  }
 </script>
 
 <style scoped>

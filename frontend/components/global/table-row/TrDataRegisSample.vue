@@ -6,9 +6,8 @@
         type="checkbox"
         name="list-sampel"
         v-if="item.sampel_status == 'sample_taken' && !item.register_perujuk_id"
-        v-bind:value="item.register_id"
-        v-bind:id="'selected-sampel-' + item.register_id"
-        v-bind:nomor_sampel="item.nomor_sampel"
+        v-bind:id="item.register_id"
+        v-bind:value="item.nomor_sampel"
         v-model="selected"
         @click="sampelOnChangeSelect"
       />
@@ -71,7 +70,7 @@
   export default {
     props: ["item", "pagination", "rowparams", "index", "config"],
     data() {
-      let datas = this.$store.state.registrasi_sampel.selectedSampels
+      const datas = this.$store.state.registrasi_sampel.selectedSampels
       return {
         pasienStatus,
         momentFormatDate,
@@ -83,10 +82,10 @@
     },
     watch: {
       'selected': function () {
-        const sampel = document.getElementById("selected-sampel-" + this.item.register_id).value
-        const findinArr = this.dataArr.length > 0 ? this.dataArr.find((el) => el === sampel) : null
-        findinArr ? document.getElementById("selected-sampel-" + this.item.register_id).checked = true
-          : document.getElementById("selected-sampel-" + this.item.register_id).checked = false
+        const sampel = document.getElementById(this.item.register_id).value
+        const findinArr = this.dataArr.length > 0 ? this.dataArr.find((el) => el.name === sampel) : null
+        findinArr ? document.getElementById(this.item.register_id).checked = true
+          : document.getElementById(this.item.register_id).checked = false
       },
     },
     methods: {
@@ -181,7 +180,11 @@
         } = await swalCustom.fire(getAlertPopUp('delete', content));
         if (isConfirm) {
           try {
-            await this.$axios.delete(`v1/register/sampel/${item.register_id}/${item.pasien_id}`);
+            await this.$axios.delete('v1/register/sampel-bulk', {
+              data: {
+                id: [item.register_id]
+              }
+            })
             toast.success('Berhasil menghapus data', {
               icon: 'check',
               iconPack: 'fontawesome',
@@ -196,10 +199,11 @@
       sampelOnChangeSelect(e) {
         const newDomchecked = e.target.checked
         const el = e ? e.currentTarget : null
-        const nomorSampel = el ? el.getAttribute("value") : null
+        const regId = el ? el.getAttribute("id") : null
+        const noSampel = el ? el.getAttribute("value") : null
         this.checked = newDomchecked
-        this.checked ? this.$store.commit("registrasi_sampel/add", nomorSampel)
-          : this.$store.commit("registrasi_sampel/remove", nomorSampel)
+        this.checked ? this.$store.commit("registrasi_sampel/add", {id: regId, name: noSampel})
+          : this.$store.commit("registrasi_sampel/remove", {id: regId, name: noSampel})
       },
       showDetail(item) {
         const payload = {

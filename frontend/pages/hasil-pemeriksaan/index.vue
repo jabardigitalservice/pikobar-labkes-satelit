@@ -123,7 +123,7 @@
           tanggal_verifikasi_end: "",
           kesimpulan_pemeriksaan: "",
           kategori: "",
-          id: selectedNomorSampels && selectedNomorSampels.length !== 0 ? selectedNomorSampels : [],
+          id: [],
         },
         selectedNomorSampels,
         colAdminSatelit,
@@ -300,8 +300,12 @@
       }
     },
     watch: {
-      'selectedNomorSampels': function (newVal, oldVal) {
-        this.params1.id = this.selectedNomorSampels && this.selectedNomorSampels.length !== 0 ? this.selectedNomorSampels : []
+      'selectedNomorSampels': function () {
+        const idArray = []
+        for (let i = 0; i < this.selectedNomorSampels.length; i++) {
+          idArray.push(this.selectedNomorSampels[i].id)
+        }
+        this.params1.id = idArray
       },
       "params1.fasyankes": function (newVal, oldVal) {
         this.refreshTable()

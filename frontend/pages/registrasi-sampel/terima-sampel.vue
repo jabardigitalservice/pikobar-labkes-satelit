@@ -61,12 +61,9 @@
             <div class="col-md-2">
               {{ idx + 1 }}
             </div>
-            <div class="col-md-5 text-blue flex-left">
-              {{ getSampel('name', item) }}
-            </div>
             <div class="col-md-5 flex-left">
               <span class="badge badge-white" style="font-size: 1.1em; text-align:left; padding:5px; margin: 0 10px 10px 0;" :class="{'text-black': item.valid, 'text-red': !item.valid}">
-                {{ getSampel('id', item) }}
+              {{ item.name || '' }}
               </span>
             </div>
           </div>
@@ -82,7 +79,6 @@
 </template>
 
 <script>
-  import Form from "vform";
   import $ from "jquery";
   import CustomModal from "~/components/CustomModal";
   const JQuery = $;
@@ -99,9 +95,6 @@
       return {
         loading: false,
         dataError: [],
-        form: new Form({
-          id: selectedNomorSampels
-        }),
         params: {
           nama_pasien: null,
           nomor_register: null,
@@ -120,28 +113,16 @@
       }
     },
     methods: {
-      async getSampels() {
-        let resp = await this.$axios.get('/v1/register-perujuk/');
-        this.listSampels = resp.data.data;
-      },
-      removeSample(index) {
-        this.selectedNomorSampels.splice(index, 1);
-      },
-      getSampel(category, id) {
-        const findSampel = id ? this.listSampels.find((el) => el.id === parseInt(id)) : null;
-        if (findSampel) {
-          if (category === 'id') {
-            return findSampel.nomor_sampel
-          } else if (category === 'name') {
-            return findSampel.nama_pasien
-          }
-        }
-        return ''
-      },
       async submitSampel() {
-        JQuery('#terimaSampel').modal('hide');
+        JQuery('#terimaSampel').modal('hide')
+        const idArray = []
+        for (let i = 0; i < this.selectedNomorSampels.length; i++) {
+          idArray.push(this.selectedNomorSampels[i].id)
+        }
         try {
-          const response = await this.form.post("/v1/register-perujuk/bulk");
+          const response = await this.$axios.post('/v1/register-perujuk/bulk', {
+            id: idArray
+          })
           this.$toast.success(response.message, {
             icon: 'check',
             iconPack: 'fontawesome',
@@ -151,12 +132,9 @@
           this.$store.commit('registrasi_perujuk/clear');
           this.$bus.$emit('refresh-ajaxtable', 'registrasi-perujuk');
         } catch (e) {
-          swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
+          this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
         }
       }
-    },
-    created() {
-      this.getSampels()
     },
     watch: {
       'selectedNomorSampels': function (newVal, oldVal) {
