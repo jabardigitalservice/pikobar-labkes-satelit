@@ -22,7 +22,7 @@ class SyncIntegrasiLabkesCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'command:sync-integrasi-labkes';
+    protected $signature = 'command:sync_integrasi_labkes';
 
     /**
      * The console command description.
