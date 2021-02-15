@@ -57,6 +57,7 @@ class SyncIntegrasiLabkesCommand extends Command
     public function handle()
     {
         if ($this->checkDataToday()) {
+            Log::alert('test');
             return;
         }
         $start_time = Carbon::now();
