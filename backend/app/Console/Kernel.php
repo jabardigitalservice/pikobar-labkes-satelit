@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('command:terbanyak')
             ->everyFifteenMinutes();
-        $schedule->command('command:sync_integrasi_labkes')
+        $schedule->command('command:sync-integrasi-labkes')
             ->dailyAt('18:00');
     }
 
