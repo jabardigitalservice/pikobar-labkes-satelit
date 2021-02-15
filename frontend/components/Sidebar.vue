@@ -54,7 +54,7 @@
             <span class="nav-label">Input Hasil</span>
           </router-link>
         </li>
-        <li v-if="checkPermission('dashboard')">
+        <li v-if="checkPermission('dashboard') || checkPermission('dinkes')">
           <router-link to="/hasil-pemeriksaan" tag="a">
             <i class="uil-eye fa-fw" />
             <span class="nav-label">Hasil Pemeriksaan</span>
@@ -100,8 +100,11 @@
           case 'admin':
             allow_role_id = [1]
             break;
+          case 'dinkes':
+            allow_role_id = [2]
+            break;
         }
-        return allow_role_id.indexOf(this.user.role_id) > -1
+        return Array.isArray(allow_role_id) ? allow_role_id.includes(this.user.role_id) : []
       },
       async logout() {
         // Log out the user.
