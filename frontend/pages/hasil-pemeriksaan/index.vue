@@ -3,18 +3,18 @@
     <portal to="title-name">Hasil Pemeriksaan</portal>
     <portal to="title-action">
       <div class="title-action">
-        <button v-show="user && user.role_id !== 1" tag="button" class="btn btn-import-export" data-toggle="modal"
+        <button v-if="user && user.role_id !== 1 && user.role_id !== 2" tag="button" class="btn btn-import-export" data-toggle="modal"
           data-target="#importHasil">
           <i class="fa fa-download" /> Import
         </button>
         <download-export-button :parentRefs="$refs"
-          :ajaxTableRef="user && user.role_id === 1 ? 'verifikasi-admin' : 'verifikasi'" class="btn btn-primary" />
+          :ajaxTableRef="user && user.role_id === 1 || user.role_id === 2 ? 'verifikasi-admin' : 'verifikasi'" class="btn btn-primary" />
       </div>
     </portal>
 
     <div class="row">
       <div class="col-lg-12">
-        <filter-hasil-pemeriksaan :oid="user && user.role_id === 1 ? 'verifikasi-admin' : 'verifikasi'" />
+        <filter-hasil-pemeriksaan :oid="user && user.role_id === 1 || user.role_id === 2 ? 'verifikasi-admin' : 'verifikasi'" />
       </div>
     </div>
 
@@ -23,10 +23,10 @@
         <Ibox title="Sampel Hasil Pemeriksaan">
           <ajax-table url="/v1/verifikasi/list" urlexport="/v1/verifikasi/export" :params="params1"
             :disableSort="['parameter_lab']"
-            :rowtemplate="user && user.role_id === 1 ? 'tr-hasil-pemeriksaan-admin' : 'tr-verifikasi'"
-            :ref="user && user.role_id === 1 ? 'verifikasi-admin' : 'verifikasi'"
-            :oid="user && user.role_id === 1 ? 'verifikasi-admin' : 'verifikasi'"
-            :columns="user && user.role_id === 1 ? colSuperAdmin : colAdminSatelit" :config="{
+            :rowtemplate="user && user.role_id === 1 || user.role_id === 2 ? 'tr-hasil-pemeriksaan-admin' : 'tr-verifikasi'"
+            :ref="user && user.role_id === 1 || user.role_id === 2 ? 'verifikasi-admin' : 'verifikasi'"
+            :oid="user && user.role_id === 1 || user.role_id === 2 ? 'verifikasi-admin' : 'verifikasi'"
+            :columns="user && user.role_id === 1 || user.role_id === 2 ? colSuperAdmin : colAdminSatelit" :config="{
               autoload: true,
               has_number: true,
               has_entry_page: true,
@@ -103,7 +103,7 @@
   export default {
     middleware: ['auth', 'checkrole'],
     meta: {
-      allow_role_id: [1, 8]
+      allow_role_id: [1, 2, 8]
     },
     components: {
       CustomModal,
@@ -292,7 +292,7 @@
         this.form.register_file = file;
       },
       refreshTable() {
-        if (this.user && this.user.role_id === 1) {
+        if (this.user && this.user.role_id === 1 || this.user.role_id === 2) {
           this.$bus.$emit("refresh-ajaxtable", "verifikasi-admin")
         } else {
           this.$bus.$emit("refresh-ajaxtable", "verifikasi")

@@ -101,6 +101,11 @@
             this.$router.push({
               name: 'registrasi.perujuk'
             })
+          } else if (data.user.role_id === 2) {
+            // Redirect Hasil Pemeriksaan.
+            this.$router.push({
+              name: 'hasil-pemeriksaan.index.unverified'
+            })
           } else {
             // Redirect home.
             this.$router.push({
