@@ -9,6 +9,7 @@ use App\Http\Requests\StoreHasilPemeriksaan;
 use App\Models\PemeriksaanSampel;
 use App\Models\Register;
 use App\Models\Sampel;
+use App\Models\SampelLog;
 use App\Models\StatusSampel;
 use App\Traits\PemeriksaanTrait;
 use Illuminate\Http\Request;
@@ -394,9 +395,10 @@ class VerifikasiController extends Controller
      * @param  \App\Models\Sampel  $sampel
      * @return \Illuminate\Http\Response
      */
-    public function show(Sampel $sampel)
+    public function show($id)
     {
-        $sampel = $sampel->with('logs')
+
+        $sampel = Sampel::where('sampel.id', $id)
             ->leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
             ->leftJoin('register', 'sampel.register_id', 'register.id')
             ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
@@ -414,6 +416,7 @@ class VerifikasiController extends Controller
             'register.sumber_pasien'
         );
         $result = $sampel->first();
+        $result->logs = SampelLog::where('sampel_id', $result->id)->orderBy('created_at', 'desc')->get();
         $result->sampel = Auth::user()->lab_satelit_id;
         return response()->json([
             'data' => $result,
