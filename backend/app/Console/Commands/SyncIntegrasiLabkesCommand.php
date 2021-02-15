@@ -57,6 +57,7 @@ class SyncIntegrasiLabkesCommand extends Command
     public function handle()
     {
         if ($this->checkDataToday()) {
+            Log::alert("Sinkronisasi Data Manlab Ke Satelit pada tanggal $this->tanggal sudah dilakukan");
             return;
         }
         $start_time = Carbon::now();
