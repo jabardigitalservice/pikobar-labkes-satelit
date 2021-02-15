@@ -9,7 +9,6 @@ use App\Http\Requests\StoreHasilPemeriksaan;
 use App\Models\PemeriksaanSampel;
 use App\Models\Register;
 use App\Models\Sampel;
-use App\Models\SampelLog;
 use App\Models\StatusSampel;
 use App\Traits\PemeriksaanTrait;
 use Illuminate\Http\Request;
@@ -395,25 +394,28 @@ class VerifikasiController extends Controller
      * @param  \App\Models\Sampel  $sampel
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Sampel $sampel)
     {
-        $sampel = Sampel::leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
+        $sampel = $sampel->with('logs')
+            ->leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
             ->leftJoin('register', 'sampel.register_id', 'register.id')
             ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
             ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
             ->leftJoin('kota', 'kota.id', 'pasien.kota_id');
-        $sampel->where('sampel.id', $id);
-        if (Auth::user()->lab_satelit_id != null) {
+        if (Auth::user()->lab_satelit_id == RoleEnum::LABORATORIUM()->getIndex()) {
             $sampel->where('sampel.lab_satelit_id', Auth::user()->lab_satelit_id);
         }
-        $sampel->select('*', 'sampel.id as id', 'kota.nama as nama_kota', 'register.created_at as created_at', 'pemeriksaansampel.id as pemeriksaan_id', 'register.sumber_pasien as sumber_pasien');
+        $sampel->select(
+            '*',
+            'sampel.id as id',
+            'kota.nama as nama_kota',
+            'register.created_at',
+            'pemeriksaansampel.id as pemeriksaan_id',
+            'register.sumber_pasien'
+        );
         $result = $sampel->first();
-        $log = SampelLog::where('sampel_id', $result->id)->orderBy('created_at', 'desc')->get();
-        $result->logs = $log;
         $result->sampel = Auth::user()->lab_satelit_id;
         return response()->json([
-            'status' => 200,
-            'message' => 'success',
             'data' => $result,
         ]);
     }
