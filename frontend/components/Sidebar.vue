@@ -104,7 +104,7 @@
             allow_role_id = [2]
             break;
         }
-        return allow_role_id ? allow_role_id.indexOf(this.user.role_id) > -1 : []
+        return Array.isArray(allow_role_id) ? allow_role_id.includes(this.user.role_id) : []
       },
       async logout() {
         // Log out the user.
