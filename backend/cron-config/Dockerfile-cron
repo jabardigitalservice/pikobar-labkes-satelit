@@ -51,4 +51,4 @@ RUN composer install
 
 RUN echo "* * * * * php /var/www/html/artisan schedule:run >> /dev/null 2>&1" > /etc/crontabs/root
 
-CMD ["crond", "-l", "2", "-f"]
+CMD ["crond", "-l", "8", "-f"]
