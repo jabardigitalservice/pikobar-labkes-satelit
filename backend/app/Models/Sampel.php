@@ -75,7 +75,7 @@ class Sampel extends Model
 
     public function logs()
     {
-        return $this->hasMany(SampelLog::class);
+        return $this->hasMany(SampelLog::class)->orderBy('created_at', 'desc');
     }
 
     public function getJenisSampelAttribute()
