@@ -25,7 +25,7 @@ class DinkesController extends Controller
         $order_direction = $request->input('order_direction', 'asc');
         $perpage         = $request->input('perpage', 20);
 
-        $model = User::byRoleId(RoleEnum::DINKES()->getIndex())
+        $model = User::userDinkes()
                         ->leftJoin('lab_satelit', 'users.lab_satelit_id', 'lab_satelit.id');
 
         $model->orderBy('users.nama', $order_direction);

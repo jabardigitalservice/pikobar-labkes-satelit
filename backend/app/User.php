@@ -145,9 +145,9 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         return $this->registerLogs()->exists() || $this->pemeriksaanSampels()->exists();
     }
 
-    public function scopeByRoleId($query, $user)
+    public function scopeUserDinkes($query)
     {
-        return $query->where('role_id', $user);
+        return $query->where('role_id', RoleEnum::DINKES()->getIndex());
     }
 
     public function kota()
