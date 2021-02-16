@@ -149,4 +149,9 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     {
         return $query->where('role_id', $user);
     }
+
+    public function kota()
+    {
+        return $this->belongsTo(Kota::class);
+    }
 }

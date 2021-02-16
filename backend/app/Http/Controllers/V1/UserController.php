@@ -82,7 +82,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        $user->load('lab_satelit');
+        $user->load(['lab_satelit', 'kota']);
         return response()->json(['data' => $user]);
     }
 
