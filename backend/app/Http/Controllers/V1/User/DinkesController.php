@@ -27,11 +27,9 @@ class DinkesController extends Controller
 
         $model = User::byRoleId(RoleEnum::DINKES()->getIndex())
                         ->leftJoin('lab_satelit', 'users.lab_satelit_id', 'lab_satelit.id');
-        switch ($order) {
-            case 'nama':
-                $model->orderBy('users.nama', $order_direction);
-                break;
-        }
+
+        $model->orderBy('users.nama', $order_direction);
+
         return UserDinkesResource::collection($model->paginate($perpage));
     }
 
