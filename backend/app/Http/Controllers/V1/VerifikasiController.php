@@ -118,7 +118,7 @@ class VerifikasiController extends Controller
         }
 
         if ($user->role_id == RoleEnum::DINKES()->getIndex()) {
-            $models = $models->where(function($query) use ($user) {
+            $models = $models->where(function ($query) use ($user) {
                 if ($user->kota_id) {
                     $query->where('pasien.kota_id', $user->kota_id);
                 }
