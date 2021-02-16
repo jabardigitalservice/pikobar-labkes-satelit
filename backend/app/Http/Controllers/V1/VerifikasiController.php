@@ -117,6 +117,14 @@ class VerifikasiController extends Controller
             $models = $models->where('pasien.lab_satelit_id', $user->lab_satelit_id);
         }
 
+        if ($user->role_id == RoleEnum::DINKES()->getIndex()) {
+            $models = $models->where(function($query) use ($user) {
+                if ($user->kota_id) {
+                    $query->where('pasien.kota_id', $user->kota_id);
+                }
+            });
+        }
+
         $count = $models->count();
 
         $page = $request->get('page', 1);
