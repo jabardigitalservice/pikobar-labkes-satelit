@@ -150,6 +150,11 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         return $query->where('role_id', RoleEnum::DINKES()->getIndex());
     }
 
+    public function scopeUserLab($query)
+    {
+        return $query->where('role_id', RoleEnum::LABORATORIUM()->getIndex());
+    }
+
     public function kota()
     {
         return $this->belongsTo(Kota::class);
