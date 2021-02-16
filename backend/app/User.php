@@ -20,7 +20,16 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username', 'role_id', 'koordinator', 'lab_satelit_id',
+        'name',
+        'email',
+        'password',
+        'username',
+        'role_id',
+        'koordinator',
+        'lab_satelit_id',
+        'kota_id',
+        'status',
+        'invited_at',
     ];
 
     /**
@@ -114,19 +123,9 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         return $this->belongsTo('App\Role', 'role_id', 'id');
     }
 
-    public function lab_pcr()
-    {
-        return $this->belongsTo('App\Models\LabPCR', 'lab_pcr_id', 'id');
-    }
-
     public function lab_satelit()
     {
         return $this->belongsTo('App\Models\LabSatelit', 'lab_satelit_id', 'id');
-    }
-
-    public function validator()
-    {
-        return $this->belongsTo('App\Models\Validator', 'validator_id', 'id');
     }
 
     public function registerLogs()
@@ -144,5 +143,20 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     public function getHasDataAttribute()
     {
         return $this->registerLogs()->exists() || $this->pemeriksaanSampels()->exists();
+    }
+
+    public function scopeUserDinkes($query)
+    {
+        return $query->where('role_id', RoleEnum::DINKES()->getIndex());
+    }
+
+    public function scopeUserLab($query)
+    {
+        return $query->where('role_id', RoleEnum::LABORATORIUM()->getIndex());
+    }
+
+    public function kota()
+    {
+        return $this->belongsTo(Kota::class);
     }
 }

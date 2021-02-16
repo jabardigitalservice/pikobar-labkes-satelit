@@ -42,11 +42,12 @@ class InviteNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $additionalMessage = $notifiable->role_id == RoleEnum::DINKES()->getIndex() ? "dinkes" : "";
+        $additionalMessage = $this->messageRole($notifiable);
+        $appName = config('app.name');
         return (new MailMessage())
             ->subject("Undangan berpartisipasi - Pikobar")
             ->greeting('Halo!')
-            ->line('Anda diundang untuk menjadi salah satu admin ' . $additionalMessage . ' pada aplikasi ' . config('app.name'))
+            ->line("Anda diundang untuk menjadi salah satu admin $additionalMessage pada aplikasi $appName")
             ->action('Klik Untuk Daftar', $this->notification_url)
             ->line('Terimakasih atas partisipasi anda!');
     }
@@ -62,5 +63,17 @@ class InviteNotification extends Notification
         return [
             //
         ];
+    }
+
+    private function messageRole($notifiable)
+    {
+        $additionalMessage = "";
+        if ($notifiable->role_id == RoleEnum::DINKES()->getIndex()) {
+            $additionalMessage = RoleEnum::DINKES()->getValue();
+        }
+        if ($notifiable->role_id == RoleEnum::LABORATORIUM()->getIndex()) {
+            $additionalMessage = RoleEnum::LABORATORIUM()->getValue();
+        }
+        return $additionalMessage;
     }
 }
