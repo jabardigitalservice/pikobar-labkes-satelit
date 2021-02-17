@@ -4,6 +4,7 @@ namespace App;
 
 use App\Enums\UserStatusEnum;
 use App\Enums\RoleEnum;
+use App\Models\Kota;
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;

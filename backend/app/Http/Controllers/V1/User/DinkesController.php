@@ -21,7 +21,7 @@ class DinkesController extends Controller
 {
     public function index(Request $request)
     {
-        $order           = $request->input('order', 'nama');
+        $order           = $request->input('order', 'name');
         $order_direction = $request->input('order_direction', 'asc');
         $perpage         = $request->input('perpage', 20);
 
