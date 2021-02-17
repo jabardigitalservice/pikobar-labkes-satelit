@@ -43,7 +43,7 @@ class DinkesController extends Controller
     {
         $invite = Invite::where('token', $request->token)->first();
         $invite->user()->update([
-            'password' => $request->password,
+            'password' => $request->input('password'),
             'status' => UserStatusEnum::ACTIVE(),
             'register_at' => Carbon::now()
         ]);
