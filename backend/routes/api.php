@@ -113,19 +113,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::get('/pcr', 'DashboardController@chartPcr');
     });
 
-    Route::group(['prefix' => 'ekstraksi'], function () {
-        Route::get('/get-data', 'EkstraksiController@getData');
-        Route::get('/detail/{id}', 'EkstraksiController@detail');
-        Route::post('/edit/{id}', 'EkstraksiController@edit');
-        Route::post('/set-invalid/{id}', 'EkstraksiController@setInvalid');
-        Route::post('/set-proses/{id}', 'EkstraksiController@setProses');
-        Route::post('/terima', 'EkstraksiController@terima');
-        Route::post('/kirim', 'EkstraksiController@kirim');
-        Route::post('/kirim-ulang', 'EkstraksiController@kirimUlang');
-        Route::post('/musnahkan/{id}', 'EkstraksiController@musnahkan');
-        Route::post('/set-kurang/{id}', 'EkstraksiController@setKurang');
-        Route::post('/set-swab-ulang/{id}', 'EkstraksiController@setSwabUlang');
-    });
     Route::group(['prefix' => 'pcr'], function () {
         Route::get('/get-data', 'PCRController@getData');
         Route::get('/detail/{id}', 'PCRController@detail');
@@ -192,36 +179,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::post('import-hasil-pemeriksaan', 'ImportRegisterController@importHasilPemeriksaan');
     });
 
-    Route::group(['prefix' => 'pengambilan-sampel'], function () {
-
-        Route::get('list-dikirim', 'PengambilanListController@listDikirim');
-
-        Route::get('list-sampel-register', 'PengambilanListController@listSampelRegister');
-
-        Route::post('store', 'PengambilanSampelController@store');
-
-        Route::post('update/{pengambilan}', 'PengambilanSampelController@update');
-
-        Route::get('detail/{pengambilan}', 'PengambilanSampelController@show');
-
-        Route::delete('delete/{pengambilan}', 'PengambilanSampelController@destroy');
-
-        Route::delete('delete/sampel/{sampel}', 'PengambilanSampelController@destroySampel');
-    });
-
-    Route::group(['prefix' => 'sampel'], function () {
-
-        Route::post('store', 'SampelController@store');
-
-        Route::post('update/{sampel}', 'SampelController@update');
-
-        Route::get('detail/{sampel}', 'SampelController@show');
-
-        Route::get('barcode/{barcode}', 'SampelController@showByBarcode');
-
-        Route::delete('delete/{sampel}', 'SampelController@destroy');
-    });
-
     Route::group(['prefix' => 'verifikasi'], function () {
 
         Route::get('list', 'VerifikasiController@index');
@@ -243,35 +200,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::get('list-kategori', 'VerifikasiController@listKategori');
     });
 
-    Route::group(['prefix' => 'validasi'], function () {
-
-        Route::get('list', 'ValidasiController@index');
-
-        Route::get('list-validated', 'ValidasiController@indexValidated');
-
-        Route::get('detail/{sampel}', 'ValidasiController@show');
-
-        Route::post('edit-status-sampel/{sampel}', 'ValidasiController@updateToValidate');
-
-        Route::get('list-validator', 'ValidasiController@getValidator');
-
-        Route::get('export-pdf/{sampel}', 'ValidasiExportController@exportPDF');
-
-        Route::post('bulk-validasi', 'ValidasiController@bulkValidate');
-
-        Route::get('export-excel', 'ValidasiExportController@exportExcel');
-
-        Route::post('regenerate-pdf/{sampel}', 'ValidasiController@regeneratePdfHasil');
-    });
-
     Route::apiResource('validator', 'ValidatorController');
-
-    Route::group(['prefix' => 'pelacakan-sampel'], function () {
-
-        Route::get('list', 'PelacakanSampelController@index');
-
-        Route::get('detail/{sampel}', 'PelacakanSampelController@show');
-    });
 
     //pelaporan
     Route::group(['prefix' => 'pelaporan'], function () {
@@ -304,9 +233,8 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         });
     });
 
-    Route::group(['prefix' => 'users', 'namespace' => 'User'], function () {
-        Route::get('/dinkes', 'DinkesController@index')->name('api.users.dinkes');
-        Route::get('/lab', 'LabController@index')->name('api.users.lab');
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('/{role}', 'ListUserController');
     });
 
     Route::group(['prefix' => 'perujuk'], function () {

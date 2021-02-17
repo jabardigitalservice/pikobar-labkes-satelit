@@ -9,6 +9,7 @@ use Spatie\Enum\Enum;
  * @method static self SUPERADMIN()
  * @method static self LABORATORIUM()
  * @method static self DINKES()
+ * @method static self PERUJUK()
  */
 
 class RoleEnum extends Enum
