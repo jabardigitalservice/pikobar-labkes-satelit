@@ -10,7 +10,7 @@ class UserDinkes extends JsonResource
     {
         return [
             'id' => $this->id,
-            'dinkes' => $this->lab_satelit ? $this->lab_satelit->nama : '-',
+            'dinkes' => optional($this->kota)->nama ?? optional($this->lab_satelit)->nama,
             'name' => $this->name,
             'email' => $this->email,
             'status' => $this->status,

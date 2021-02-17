@@ -28,6 +28,7 @@ class DinkesInviteRequest extends FormRequest
             'kota_id' => 'required|exists:kota,id',
             'username' => 'required|unique:users,username',
             'name' => 'required',
+            'role_id' => 'required'
         ];
     }
 }

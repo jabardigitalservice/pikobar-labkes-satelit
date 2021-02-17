@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\V1\User;
 
-use App\Enums\RoleEnum;
 use App\Enums\UserStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DinkesInviteRequest;
+use App\Http\Requests\DinkesRegisterRequest;
 use App\Invite;
 use App\Notifications\InviteNotification;
 use App\User;
@@ -25,8 +25,7 @@ class DinkesController extends Controller
         $order_direction = $request->input('order_direction', 'asc');
         $perpage         = $request->input('perpage', 20);
 
-        $model = User::userDinkes()
-                        ->leftJoin('lab_satelit', 'users.lab_satelit_id', 'lab_satelit.id');
+        $model = User::userDinkes();
 
         $model->orderBy('users.name', $order_direction);
 
@@ -56,7 +55,7 @@ class DinkesController extends Controller
         }
     }
 
-    public function register(DinkesInviteRequest $request)
+    public function register(DinkesRegisterRequest $request)
     {
         $invite = Invite::where('token', $request->token)->first();
         $invite->user()->update([
