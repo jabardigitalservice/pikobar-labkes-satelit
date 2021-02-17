@@ -71,13 +71,13 @@
               Dinkes<span style="color: red">*</span>
             </label>
             <div class="col-md-8">
-              <select v-model="form.lab_satelit_id" class="form-control" name="lab_satelit_id" required
-                :class="{ 'is-invalid': form.errors.has(`lab_satelit_id`) }">
-                <option :value="item.id" :key="idx" v-for="(item, idx) in option_lab_satelit">
+              <select v-model="form.kota_id " class="form-control" name="kota_id " required
+                :class="{ 'is-invalid': form.errors.has(`kota_id `) }">
+                <option :value="item.id" :key="idx" v-for="(item, idx) in optionKota">
                   {{ item.nama }}
                 </option>
               </select>
-              <has-error :form="form" field="lab_satelit_id" />
+              <has-error :form="form" field="kota_id " />
             </div>
           </div>
 
@@ -89,7 +89,8 @@
             <div class="col-md-8">
               <select v-model="form.role_id" class="form-control" name="role_id" required
                 :class="{ 'is-invalid': form.errors.has(`role_id`) }">
-                <option :value="item.key" :key="item.key" v-for="item in optionsRoleDinkes">{{ item.value }}
+                <option :value="roleAdmin.key">
+                  {{ roleAdmin.value }}
                 </option>
               </select>
               <has-error :form="form" field="role_id" />
@@ -130,7 +131,7 @@
   import $ from "jquery";
   import CustomModal from "~/components/CustomModal";
   import {
-    optionsRoleDinkes
+    optionRoles
   } from "~/assets/js/constant/enum"
   const JQuery = $;
   export default {
@@ -146,14 +147,14 @@
         loading: false,
         isLoading: false,
         dataError: [],
-        option_lab_satelit: null,
-        optionsRoleDinkes,
+        optionKota: [],
+        roleAdmin: optionRoles[1],
         form: new Form({
           name: null,
           username: null,
           email: null,
-          lab_satelit_id: null,
-          role_id: null,
+          kota_id : null,
+          role_id: optionRoles[1].key,
         }),
         params: {
           dinkes: null,
@@ -170,9 +171,10 @@
       };
     },
     methods: {
-      async getLabSatelit() {
-        const resp = await this.$axios.get("/lab-satelit");
-        this.option_lab_satelit = resp.data.data;
+      async getListDinkes() {
+        const resp = await this.$axios.get("/v1/list-kota-jabar")
+        const { data } = resp || []
+        this.optionKota = data
       },
       async submit() {
         this.isLoading = true;
@@ -189,8 +191,8 @@
           this.form.name = null;
           this.form.username = null;
           this.form.email = null;
-          this.form.lab_satelit_id = null;
-          this.form.role_id = null;
+          this.form.kota_id  = null;
+          this.form.role_id = 8;
           this.$bus.$emit("refresh-ajaxtable", "master-dinkes");
         } catch (err) {
           this.isLoading = false;
@@ -214,7 +216,7 @@
       },
     },
     created() {
-      this.getLabSatelit();
+      this.getListDinkes();
     }
   };
 </script>

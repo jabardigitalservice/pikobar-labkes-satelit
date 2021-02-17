@@ -51,8 +51,8 @@
                 Dinkes
               </label>
               <div class="col-md-7">
-                <select v-model="form.lab_satelit_id" class="form-control" name="lab_satelit_id">
-                  <option :value="item.id" :key="idx" v-for="(item, idx) in option_lab_satelit">
+                <select v-model="form.kota_id" class="form-control" name="kota_id">
+                  <option :value="item.id" :key="idx" v-for="(item, idx) in optionKota">
                     {{ item.nama }}
                   </option>
                 </select>
@@ -65,12 +65,9 @@
                 Role
               </label>
               <div class="col-md-7">
-                <select v-model="form.role_id" class="form-control" name="role_id" required
-                  :class="{ 'is-invalid': form.errors.has(`role_id`) }">
-                  <option :value="item.key" :key="item.key" v-for="item in optionsRoleDinkes">{{ item.value }}
-                  </option>
-                </select>
-                <has-error :form="form" field="role_id" />
+                <label class="form-control" readonly>
+                  {{ this.roleAdmin.value }}
+                </label>
               </div>
             </div>
 
@@ -92,7 +89,7 @@
   import Form from "vform";
   import axios from "axios";
   import {
-    optionsRoleDinkes
+    optionRoles
   } from "~/assets/js/constant/enum"
 
   export default {
@@ -108,25 +105,21 @@
           username: data.username,
           name: data.name,
           email: data.email,
-          lab_satelit_id: data.lab_satelit_id,
+          kota_id: data.kota_id,
           id: data.id,
-          role_id: data.role_id
+          role_id: optionRoles[1].key
         }),
-      };
-      return {
-        data
-      };
-    },
-    data: () => {
-      return {
-        option_lab_satelit: null,
-        optionsRoleDinkes,
-      };
+        optionKota: null,
+        roleAdmin: optionRoles[1]
+      }
     },
     methods: {
-      async getLabSatelit() {
-        const resp = await this.$axios.get("/lab-satelit");
-        this.option_lab_satelit = resp.data.data;
+      async getListDinkes() {
+        const resp = await this.$axios.get("/v1/list-kota-jabar")
+        const {
+          data
+        } = resp || []
+        this.optionKota = data
       },
       async submit() {
         try {
@@ -162,7 +155,7 @@
       },
     },
     created() {
-      this.getLabSatelit();
+      this.getListDinkes();
     },
     head() {
       return {

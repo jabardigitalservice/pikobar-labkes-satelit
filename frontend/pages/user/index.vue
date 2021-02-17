@@ -164,8 +164,9 @@ export default {
   },
   methods: {
     async getLabSatelit() {
-      const resp = await this.$axios.get("v1/users/lab");
-      this.option_lab_satelit = resp.data.data;
+      const resp = await this.$axios.get("/lab-satelit")
+      const { data } = resp.data || []
+      this.option_lab_satelit = data
     },
     async submit() {
       try {

@@ -20,13 +20,24 @@ export const optionsKitEkstraksi = ['Geneaid', 'Qiagen', 'Invitrogen', 'Roche', 
 
 export const optionsAlatEkstraksi = ['Kingfisher', 'Genolution'];
 
-export const optionsRoleDinkes = [{
-  key: 1,
-  value: 'Super Admin'
-}, {
-  key: 2,
-  value: 'Admin'
-}];
+export const optionRoles = [
+  {
+    key: 1,
+    value: 'Super Admin'
+  },
+  {
+    key: 2,
+    value: 'Admin Dinkes'
+  },
+  {
+    key: 8,
+    value: 'Admin Satelit'
+  },
+  {
+    key: 9,
+    value: 'Admin Perujuk'
+  }
+];
 
 export const pasienStatus = [{
   'value': 1,
@@ -49,8 +60,8 @@ export const optionsPenerimaSampel = ['Adit', 'Ariza', 'Fahmy', 'Figur', 'Firman
 
 export const colAdminSatelit = {
   waktu_pcr_sample_analyzed: 'TANGGAL PEMERIKSAAN',
-  nomor_sampel : 'NO SAMPEL',
-  pasien_nama : 'NAMA PASIEN',
+  nomor_sampel: 'NO SAMPEL',
+  pasien_nama: 'NAMA PASIEN',
   kota_domilisi: 'DOMISILI',
   instansi_pengirim: 'INSTANSI',
   parameter_lab: 'PARAMETER LAB',
@@ -63,8 +74,8 @@ export const colAdminSatelit = {
 export const colSuperAdmin = {
   checkbox_sampel_id: '#',
   waktu_pcr_sample_analyzed: 'TANGGAL PEMERIKSAAN',
-  nomor_sampel : 'NO SAMPEL',
-  pasien_nama : 'NAMA PASIEN',
+  nomor_sampel: 'NO SAMPEL',
+  pasien_nama: 'NAMA PASIEN',
   kota_domilisi: 'DOMISILI',
   instansi_pengirim: 'INSTANSI',
   lab: 'LAB PEMERIKSA',
