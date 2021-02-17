@@ -28,7 +28,7 @@ class DinkesController extends Controller
         $model = User::userDinkes()
                         ->leftJoin('lab_satelit', 'users.lab_satelit_id', 'lab_satelit.id');
 
-        $model->orderBy('users.nama', $order_direction);
+        $model->orderBy('users.name', $order_direction);
 
         return UserDinkesResource::collection($model->paginate($perpage));
     }
