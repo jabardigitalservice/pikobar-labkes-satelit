@@ -9,6 +9,7 @@ use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
@@ -146,18 +147,38 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         return $this->registerLogs()->exists() || $this->pemeriksaanSampels()->exists();
     }
 
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
+    }
+
     public function scopeUserDinkes($query)
     {
-        return $query->where('role_id', RoleEnum::DINKES()->getIndex());
+        return $query->where('users.role_id', RoleEnum::DINKES()->getIndex());
     }
 
     public function scopeUserLab($query)
     {
-        return $query->where('role_id', RoleEnum::LABORATORIUM()->getIndex());
+        return $query->where('users.role_id', RoleEnum::LABORATORIUM()->getIndex());
     }
 
     public function kota()
     {
         return $this->belongsTo(Kota::class);
+    }
+
+    public function invite()
+    {
+        return $this->hasOne(Invite::class, 'email', 'email');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        self::deleting(function ($user) {
+            if ($user->invite) {
+                $user->invite()->delete();
+            }
+        });
     }
 }

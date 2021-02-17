@@ -14,25 +14,9 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
-use App\Http\Resources\UserDinkes as UserDinkesResource;
-use Illuminate\Support\Facades\Hash;
 
 class DinkesController extends Controller
 {
-    public function index(Request $request)
-    {
-        $order           = $request->input('order', 'name');
-        $order_direction = $request->input('order_direction', 'asc');
-        $perpage         = $request->input('perpage', 20);
-
-        $model = User::userDinkes();
-
-        $model->orderBy('users.name', $order_direction);
-
-        return UserDinkesResource::collection($model->paginate($perpage));
-    }
-
-
     public function invite(DinkesInviteRequest $request)
     {
         DB::beginTransaction();
@@ -59,7 +43,7 @@ class DinkesController extends Controller
     {
         $invite = Invite::where('token', $request->token)->first();
         $invite->user()->update([
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
             'status' => UserStatusEnum::ACTIVE(),
             'register_at' => Carbon::now()
         ]);

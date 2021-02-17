@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\RoleEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DinkesInviteRequest extends FormRequest
+class LabRegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,14 +24,10 @@ class DinkesInviteRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email|unique:users,email',
-            'kota_id' => 'required|exists:kota,id',
             'username' => 'required|unique:users,username',
-            'name' => 'required',
-            'role_id' => [
-                "required",
-                "in:" . RoleEnum::DINKES()->getIndex()
-            ]
+            'koordinator' => 'required',
+            'token' => 'required|exists:invites,token',
+            'password' => 'required|confirmed|min:6',
         ];
     }
 }
