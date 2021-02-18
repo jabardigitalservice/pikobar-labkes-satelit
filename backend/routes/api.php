@@ -230,19 +230,16 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
                 Route::post('/', 'LabController@store')->name('api.users.Lab.store');
                 Route::post('/invite', 'LabController@invite')->name('api.users.lab.invite');
             });
+
+            Route::group(['prefix' => 'perujuk'], function () {
+                Route::put('/{user:id}', 'PerujukController@update')->name('api.users.perujuk.update');
+                Route::post('/', 'PerujukController@store')->name('api.users.perujuk.store');
+            });
         });
     });
 
     Route::group(['prefix' => 'users'], function () {
         Route::get('/{role}', 'ListUserController');
-    });
-
-    Route::group(['prefix' => 'perujuk'], function () {
-        Route::get('/', 'PerujukController@index');
-        Route::post('/store', 'PerujukController@store');
-        Route::get('/detail/{id}', 'PerujukController@show');
-        Route::post('/update/{id}', 'PerujukController@update');
-        Route::delete('/delete/{id}', 'PerujukController@delete');
     });
 
     Route::group(['prefix' => 'register-perujuk'], function () {

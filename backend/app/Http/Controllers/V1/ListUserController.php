@@ -23,7 +23,8 @@ class ListUserController extends Controller
 
         $model = User::select('users.*')
                         ->leftJoin('lab_satelit', 'users.lab_satelit_id', 'lab_satelit.id')
-                        ->leftJoin('kota', 'users.kota_id', 'kota.id');
+                        ->leftJoin('kota', 'users.kota_id', 'kota.id')
+                        ->leftJoin('fasyankes', 'users.perujuk_id', 'fasyankes.id');
         $model = $this->roleUser($role, $model);
         $model = $this->orderBy($order, $order_direction, $model);
         return UserResource::collection($model->paginate($perpage));
@@ -34,6 +35,9 @@ class ListUserController extends Controller
         switch ($role) {
             case 'dinkes':
                 $model->userDinkes();
+                break;
+            case 'perujuk':
+                $model->userPerujuk();
                 break;
             default:
                 $model->UserLab();
