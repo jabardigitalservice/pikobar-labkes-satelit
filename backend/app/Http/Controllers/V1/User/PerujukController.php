@@ -8,18 +8,26 @@ use App\Http\Requests\PerujukRegisterRequest;
 use App\Notifications\RegisterPerujukNotification;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PerujukController extends Controller
 {
     public function store(PerujukRegisterRequest $request)
     {
-        $user = User::create($request->validated() + [
-            'status' => UserStatusEnum::ACTIVE(),
-            'register_at' => now(),
-        ]);
-        $password = $request->input('password');
-        $user->notify(new RegisterPerujukNotification($password));
-        return response()->json(["message" => "Registrasi Berhasil"]);
+        DB::beginTransaction();
+        try {
+            $user = User::create($request->validated() + [
+                'status' => UserStatusEnum::ACTIVE(),
+                'register_at' => now(),
+            ]);
+            $password = $request->input('password');
+            $user->notify(new RegisterPerujukNotification($password));
+            DB::commit();
+            return response()->json(["message" => "Registrasi Berhasil"]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
+        }
     }
 
     public function update(User $user, Request $request)
