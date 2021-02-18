@@ -3,18 +3,18 @@
     <portal to="title-name">Hasil Pemeriksaan</portal>
     <portal to="title-action">
       <div class="title-action">
-        <button v-if="user && user.role_id !== 1 && user.role_id !== 2" tag="button" class="btn btn-import-export" data-toggle="modal"
+        <button v-if="isRoleOneOf('exclude', [1, 2])" tag="button" class="btn btn-import-export" data-toggle="modal"
           data-target="#importHasil">
           <i class="fa fa-download" /> Import
         </button>
         <download-export-button :parentRefs="$refs"
-          :ajaxTableRef="user && isRoleOneOf([1, 2]) ? 'verifikasi-admin' : 'verifikasi'" class="btn btn-primary" />
+          :ajaxTableRef="isRoleOneOf('include', [1, 2]) ? 'verifikasi-admin' : 'verifikasi'" class="btn btn-primary" />
       </div>
     </portal>
 
     <div class="row">
       <div class="col-lg-12">
-        <filter-hasil-pemeriksaan :oid="user && isRoleOneOf([1, 2]) ? 'verifikasi-admin' : 'verifikasi'" />
+        <filter-hasil-pemeriksaan :oid="isRoleOneOf('include', [1, 2]) ? 'verifikasi-admin' : 'verifikasi'" />
       </div>
     </div>
 
@@ -23,10 +23,10 @@
         <Ibox title="Sampel Hasil Pemeriksaan">
           <ajax-table url="/v1/verifikasi/list" urlexport="/v1/verifikasi/export" :params="params1"
             :disableSort="['parameter_lab']"
-            :rowtemplate="user && isRoleOneOf([1, 2]) ? 'tr-hasil-pemeriksaan-admin' : 'tr-verifikasi'"
-            :ref="user && isRoleOneOf([1, 2]) ? 'verifikasi-admin' : 'verifikasi'"
-            :oid="user && isRoleOneOf([1, 2]) ? 'verifikasi-admin' : 'verifikasi'"
-            :columns="user && isRoleOneOf([1, 2]) ? colSuperAdmin : colAdminSatelit" :config="{
+            :rowtemplate="isRoleOneOf('include', [1, 2]) ? 'tr-hasil-pemeriksaan-admin' : 'tr-verifikasi'"
+            :ref="isRoleOneOf('include', [1, 2]) ? 'verifikasi-admin' : 'verifikasi'"
+            :oid="isRoleOneOf('include', [1, 2]) ? 'verifikasi-admin' : 'verifikasi'"
+            :columns="isRoleOneOf('include', [1, 2]) ? colSuperAdmin : colAdminSatelit" :config="{
               autoload: true,
               has_number: true,
               has_entry_page: true,
@@ -292,15 +292,16 @@
         this.form.register_file = file;
       },
       refreshTable() {
-        if (this.user && this.user.role_id === 1 || this.user.role_id === 2) {
-          this.$bus.$emit("refresh-ajaxtable", "verifikasi-admin")
-        } else {
-          this.$bus.$emit("refresh-ajaxtable", "verifikasi")
-        }
+        this.isRoleOneOf('include', [1, 2]) ? this.$bus.$emit("refresh-ajaxtable", "verifikasi-admin")
+          : this.$bus.$emit("refresh-ajaxtable", "verifikasi")
       },
-      isRoleOneOf(roles){
-        if (roles && roles.length > 0) {
-          return roles.includes(this.user.role_id)
+      isRoleOneOf(roles, users){
+        if (this.user && users && users.length > 0) {
+          if (roles === 'include') {
+            return users.includes(this.user.role_id)
+          } else if (roles === 'exclude') {
+            return !users.includes(this.user.role_id)
+          }
         }
         return
       }

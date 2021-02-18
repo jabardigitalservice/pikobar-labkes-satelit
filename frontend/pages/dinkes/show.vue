@@ -3,10 +3,7 @@
     <portal to="title-name">Lihat Pengguna</portal>
     <portal to="title-action">
       <div class="title-action">
-        <router-link
-          :to="`/pengguna/${this.data.id}/edit`"
-          class="btn btn-warning"
-        >
+        <router-link :to="`/pengguna/${id}/edit`" class="btn btn-warning">
           <i class="fa fa-edit"></i> Ubah
         </router-link>
         <nuxt-link to="/dinkes" class="btn btn-black">
@@ -16,43 +13,29 @@
     </portal>
 
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-lg-10">
         <Ibox title="Informasi Pengguna">
           <table class="table table-hover">
             <tbody>
               <tr>
-                <th width="30%">Akun Dinkes</th>
-                <td>{{ data.name }}</td>
+                <th width="30%">Nama Akun Dinkes</th>
+                <td>{{ name }}</td>
               </tr>
               <tr>
                 <th>Email</th>
-                <td>{{ data.email }}</td>
+                <td>{{ email }}</td>
               </tr>
               <tr>
                 <th>Username</th>
-                <td>{{ data.username }}</td>
+                <td>{{ username }}</td>
+              </tr>
+              <tr>
+                <th>Dinkes</th>
+                <td>{{ kota && kota.nama ? kota.nama : ''  }}</td>
               </tr>
               <tr>
                 <th>Role</th>
-                <td>{{ data.role_id ? data.role_id === 1 ? 'Super Admin' : 'Admin' : '-' }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </Ibox>
-      </div>
-      <div class="col-lg-6">
-        <Ibox title="Informasi Dinkes">
-          <table class="table table-hover">
-            <tbody>
-              <tr>
-                <th width="30%">Dinkes</th>
-                <td>{{ data.lab_satelit ? data.lab_satelit.nama : "-" }}</td>
-              </tr>
-              <tr>
-                <th>Kode</th>
-                <td>
-                  {{ data.lab_satelit ? data.lab_satelit.kode_lab : "-" }}
-                </td>
+                <td>{{ getRole('Admin Dinkes', 'value') }}</td>
               </tr>
             </tbody>
           </table>
@@ -63,27 +46,44 @@
 </template>
 
 <script>
-import axios from "axios";
+  import axios from 'axios'
+  import {
+    getRole
+  } from "~/utils"
 
-export default {
-  middleware: "auth",
-  async asyncData({ route }) {
-    let resp = await axios.get("/v1/user/" + route.params.id);
-    let data = resp.data.data;
-
-    return { data };
-  },
-  computed: {},
-  head() {
-    return {
-      title: "Lihat Pengguna",
-    };
-  },
-};
+  export default {
+    middleware: "auth",
+    async asyncData({ route }) {
+      const resp = await axios.get(`/v1/user/${route.params.id}`)
+      const {
+        id,
+        name,
+        email,
+        username,
+        kota,
+        role_id
+      } = resp.data.data || {}
+  
+      return {
+        id,
+        name,
+        email,
+        username,
+        kota,
+        role_id,
+        getRole
+      }
+    },
+    head() {
+      return {
+        title: "Lihat Pengguna",
+      };
+    }
+  }
 </script>
 
 <style scoped>
-.table-sub-head {
-  padding-top: 25px;
-}
+  .table-sub-head {
+    padding-top: 25px;
+  }
 </style>
