@@ -178,7 +178,6 @@ export function getKeteranganData(nik, nama) {
 export function getRole(role, key) {
   if (role) {
     const findRole = Array.isArray(optionRoles) ? optionRoles.find(el => el.value === role) : {}
-    console.log(findRole)
     if (findRole && key && key === 'id') {
       return findRole.id
     } else if (findRole && key && key === 'value') {
