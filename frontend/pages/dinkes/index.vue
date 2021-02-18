@@ -89,7 +89,7 @@
             <div class="col-md-8">
               <select v-model="form.role_id" class="form-control" name="role_id" required
                 :class="{ 'is-invalid': form.errors.has(`role_id`) }">
-                <option :value="roleAdmin.key">
+                <option :value="roleAdmin.id">
                   {{ roleAdmin.value }}
                 </option>
               </select>
@@ -131,8 +131,8 @@
   import $ from "jquery";
   import CustomModal from "~/components/CustomModal";
   import {
-    optionRoles
-  } from "~/assets/js/constant/enum"
+    getRole
+  } from "~/utils"
   const JQuery = $;
   export default {
     middleware: ["auth", "checkrole"],
@@ -148,13 +148,13 @@
         isLoading: false,
         dataError: [],
         optionKota: [],
-        roleAdmin: optionRoles[1],
+        roleAdmin: getRole('Admin Dinkes'),
         form: new Form({
           name: null,
           username: null,
           email: null,
           kota_id : null,
-          role_id: optionRoles[1].key,
+          role_id: getRole('Admin Dinkes', 'id'),
         }),
         params: {
           dinkes: null,
@@ -216,7 +216,7 @@
       },
     },
     created() {
-      this.getListDinkes();
+      this.getListDinkes()
     }
   };
 </script>

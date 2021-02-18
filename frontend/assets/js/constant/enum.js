@@ -22,19 +22,19 @@ export const optionsAlatEkstraksi = ['Kingfisher', 'Genolution'];
 
 export const optionRoles = [
   {
-    key: 1,
+    id: 1,
     value: 'Super Admin'
   },
   {
-    key: 2,
+    id: 2,
     value: 'Admin Dinkes'
   },
   {
-    key: 8,
+    id: 8,
     value: 'Admin Satelit'
   },
   {
-    key: 9,
+    id: 9,
     value: 'Admin Perujuk'
   }
 ];

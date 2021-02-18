@@ -35,7 +35,7 @@
               </tr>
               <tr>
                 <th>Role</th>
-                <td>{{ getRoles() }}</td>
+                <td>{{ getRole('Admin Dinkes', 'value') }}</td>
               </tr>
             </tbody>
           </table>
@@ -48,8 +48,8 @@
 <script>
   import axios from 'axios'
   import {
-    optionRoles
-  } from "~/assets/js/constant/enum"
+    getRole
+  } from "~/utils"
 
   export default {
     middleware: "auth",
@@ -71,24 +71,15 @@
         username,
         kota,
         role_id,
-        optionRoles
+        getRole
       }
     },
     head() {
       return {
         title: "Lihat Pengguna",
       };
-    },
-    methods: {
-      getRoles() {
-        const findRole = Array.isArray(this.optionRoles) ? this.optionRoles.find(el => el.key === this.role_id) : {}
-        if (findRole) {
-          return findRole.value
-        }
-        return
-      }
     }
-  };
+  }
 </script>
 
 <style scoped>

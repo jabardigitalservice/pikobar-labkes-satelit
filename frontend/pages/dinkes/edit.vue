@@ -89,8 +89,8 @@
   import Form from "vform";
   import axios from "axios";
   import {
-    optionRoles
-  } from "~/assets/js/constant/enum"
+    getRole
+  } from "~/utils"
 
   export default {
     middleware: "auth",
@@ -107,10 +107,10 @@
           email: data.email,
           kota_id: data.kota_id,
           id: data.id,
-          role_id: optionRoles[1].key
+          role_id: getRole('Admin Dinkes', 'id')
         }),
         optionKota: null,
-        roleAdmin: optionRoles[1]
+        roleAdmin: getRole('Admin Dinkes')
       }
     },
     methods: {
