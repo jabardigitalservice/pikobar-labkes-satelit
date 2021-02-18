@@ -32,6 +32,7 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         'kota_id',
         'status',
         'invited_at',
+        'perujuk_id',
     ];
 
     /**
@@ -130,6 +131,11 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         return $this->belongsTo('App\Models\LabSatelit', 'lab_satelit_id', 'id');
     }
 
+    public function perujuk()
+    {
+        return $this->belongsTo('App\Models\Fasyankes', 'perujuk_id', 'id');
+    }
+
     public function registerLogs()
     {
         return $this->hasMany('App\Models\RegisterLog', 'user_id');
@@ -162,9 +168,14 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         return $query->where('users.role_id', RoleEnum::LABORATORIUM()->getIndex());
     }
 
-    public function kota()
+    public function scopeUserPerujuk($query)
     {
-        return $this->belongsTo(Kota::class);
+        return $query->where('users.role_id', RoleEnum::PERUJUK()->getIndex());
+    }
+
+    public function dinkes()
+    {
+        return $this->belongsTo(Kota::class, 'kota_id', 'id');
     }
 
     public function invite()

@@ -23,9 +23,10 @@ class UserResource extends JsonResource
             'status' => $this->status,
             'has_data' => $this->has_data,
             'last_login_at' => $this->last_login_at,
-            'lab' => optional($this->lab_satelit)->nama ?? '-',
-            'alamat_lab' => optional($this->lab_satelit)->alamat ?? '-',
-            'dinkes' => optional($this->kota)->nama ?? optional($this->lab_satelit)->nama,
+            'role_id' => $this->role_id,
+            'lab' => $this->lab_satelit,
+            'dinkes' => $this->dinkes,
+            'perujuk' => $this->perujuk,
         ];
     }
 }
