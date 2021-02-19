@@ -52,21 +52,22 @@ class RegisterPerujukBulkController extends Controller
 
     private function getNamaWilayah($wilayah, $id)
     {
+        $namaWilayah = null;
         switch ($wilayah) {
             case 'provinsi':
-                return optional(Provinsi::find($id))->nama;
+                $namaWilayah = optional(Provinsi::find($id))->nama;
                 break;
             case 'kota':
-                return optional(Kota::find($id))->nama;
+                $namaWilayah = optional(Kota::find($id))->nama;
                 break;
             case 'kecamatan':
-                return optional(Kecamatan::find($id))->nama;
+                $namaWilayah = optional(Kecamatan::find($id))->nama;
                 break;
             case 'Kelurahan':
-                return optional(Kelurahan::find($id))->nama;
+                $namaWilayah = optional(Kelurahan::find($id))->nama;
                 break;
         }
-        return null;
+        return $namaWilayah;
     }
 
     private function insertRegister($row, $user)
