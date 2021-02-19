@@ -2,7 +2,7 @@
   <tr>
     <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
     <td>
-      {{item.dinkes}}
+      {{item.dinkes && item.dinkes.nama ? item.dinkes.nama : ''}}
     </td>
     <td>
       {{item.name}}
@@ -29,7 +29,6 @@
   </tr>
 </template>
 <script>
-  import axios from 'axios'
   import {
     getAlertPopUp
   } from '~/utils'

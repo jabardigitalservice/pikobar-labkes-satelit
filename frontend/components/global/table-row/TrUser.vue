@@ -6,7 +6,9 @@
     </td>
     <td>{{ item.email }}</td>
     <td>{{ item.koordinator }}</td>
-    <td>{{ item.lab || '-' }}</td>
+    <td>
+      {{item.lab && item.lab.nama ? item.lab.nama : ''}}
+    </td>
     <td>{{ item.status }}</td>
     <td>{{ item.last_login_at }}</td>
     <td>
