@@ -103,7 +103,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::post('/input-invalid/{id}', 'PCRController@inputInvalid');
         Route::post('/upload-grafik', 'PCRController@uploadGrafik');
         Route::post('/musnahkan/{id}', 'PCRController@musnahkan');
-        Route::post('/import-hasil-pemeriksaan', 'PCRController@importHasilPemeriksaan');
+        Route::post('/import-hasil-pemeriksaan', 'ImportRegisterController@importInputPemeriksaan');
         Route::post('/import-data-hasil-pemeriksaan', 'PCRController@importDataHasilPemeriksaan');
     });
     Route::group(['prefix' => 'sampel'], function () {
@@ -131,7 +131,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::delete('sampel/{id}/{pasien}', 'RegistersampelController@delete');
         Route::get('logs/{register_id}', 'RegistersampelController@logs');
 
-        Route::post('import-mandiri', 'ImportRegisterController@importRegisterMandiri');
         Route::post('import-sampel', 'ImportRegisterController@importRegisterSampel');
         Route::post('import-hasil-pemeriksaan', 'ImportRegisterController@importHasilPemeriksaan');
     });

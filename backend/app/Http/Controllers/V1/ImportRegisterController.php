@@ -27,4 +27,17 @@ class ImportRegisterController extends Controller
         Excel::import(new RegisterPerujukImport(), $request->file('register_file'));
         return response()->json(['message' => 'Sukses import data.']);
     }
+
+    public function importInputPemeriksaan(ImportValidationRequest $request)
+    {
+        $importer = new HasilPemeriksaanImport();
+        Excel::import($importer, $request->file('register_file'));
+        return response()->json([
+            'status' => 200,
+            'message' => 'Sukses membaca file import excel',
+            'data' => $importer->data,
+            'errors' => $importer->errors,
+            'errors_count' => $importer->errors_count,
+        ]);
+    }
 }

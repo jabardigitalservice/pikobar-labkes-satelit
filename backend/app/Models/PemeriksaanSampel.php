@@ -56,7 +56,7 @@ class PemeriksaanSampel extends Model
 
     public function setHasilDeteksiAttribute($value)
     {
-        return $this->attributes['hasil_deteksi'] = $value;
+        return $this->attributes['hasil_deteksi'] = is_array($value) ? json_encode($value) : $value;
     }
 
     public function user()
