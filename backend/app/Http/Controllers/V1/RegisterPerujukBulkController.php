@@ -22,11 +22,13 @@ class RegisterPerujukBulkController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $register_perujuk = $request->get('id');
-        $registerPerujuk = RegisterPerujuk::whereIn('id', $register_perujuk)->get();
-        foreach ($registerPerujuk->toArray() as $row) {
-            DB::beginTransaction();
-            try {
+        $id = $request->get('id');
+        $registerPerujuk = RegisterPerujuk::whereIn('id', $id)
+                                            ->where('status', 'dikirim')
+                                            ->get();
+        DB::beginTransaction();
+        try {
+            foreach ($registerPerujuk->toArray() as $row) {
                 $user = $request->user();
                 $register = $this->insertRegister($row, $user);
                 $pasien = $this->insertPasien($row, $user);
@@ -34,12 +36,12 @@ class RegisterPerujukBulkController extends Controller
                 $this->insertSampel($row, $user, $register, $pengambilan_sampel);
                 PasienRegister::create(['pasien_id' => $pasien->id, 'register_id' => $register->id]);
                 RegisterPerujuk::find($row['id'])->updateState('diterima');
-                return response()->json(['message' => 'success']);
-                DB::commit();
-            } catch (\Throwable $th) {
-                DB::rollBack();
-                throw $th;
             }
+            return response()->json(['message' => 'success']);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
         }
     }
 
