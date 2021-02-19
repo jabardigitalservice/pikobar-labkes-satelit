@@ -3,12 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Enums\JenisSampelEnum;
-use App\Rules\RequiredKeteranganWarganegara;
-use App\Rules\RequiredNamaJenisSampel;
 use App\Rules\UniqueSampelPerujuk;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRegisterPerujukRequest extends FormRequest
+class RegisterPerujukRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,7 +15,7 @@ class StoreRegisterPerujukRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->perujuk_id ? true : false;
+        return true;
     }
 
     /**

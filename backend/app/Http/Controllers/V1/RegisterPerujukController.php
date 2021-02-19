@@ -5,7 +5,7 @@ namespace App\Http\Controllers\V1;
 use App\Enums\JenisSampelEnum;
 use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreRegisterPerujukRequest;
+use App\Http\Requests\RegisterPerujukRequest;
 use App\Models\JenisSampel;
 use App\Models\RegisterPerujuk;
 use Illuminate\Http\Request;
@@ -127,33 +127,25 @@ class RegisterPerujukController extends Controller
         return response()->json($result);
     }
 
-    public function store(StoreRegisterPerujukRequest $request)
+    public function store(RegisterPerujukRequest $request)
     {
-        $jenis_sampel = $request->input('nama_jenis_sampel');
-        if ($request->get('jenis_sampel') != JenisSampelEnum::LAINNYA()->getIndex()) {
-            $jenis_sampel = JenisSampel::find($request->input('jenis_sampel'))->nama;
-        }
         RegisterPerujuk::create($request->all() + [
             'nomor_register' => generateNomorRegister(),
             'register_uuid' => Str::uuid(),
             'creator_user_id' => $request->user()->id,
             'perujuk_id' => $request->user()->perujuk_id,
-            'nama_jenis_sampel' => $jenis_sampel,
+            'nama_jenis_sampel' => $this->getJenisSampel($request),
         ]);
         return response()->json(['message' => 'success']);
     }
 
-    public function update(StoreRegisterPerujukRequest $request, RegisterPerujuk $register_perujuk)
+    public function update(RegisterPerujukRequest $request, RegisterPerujuk $register_perujuk)
     {
         abort_if($register_perujuk->status != 'dikirim', 500, 'data tersebut sudah masuk ketahap berikutnya');
-        $jenis_sampel = $request->input('nama_jenis_sampel');
-        if ($request->get('jenis_sampel') != JenisSampelEnum::LAINNYA()->getIndex()) {
-            $jenis_sampel = JenisSampel::find($request->input('jenis_sampel'))->nama;
-        }
         $register_perujuk->update($request->all() + [
             'creator_user_id' => $request->user()->id,
             'perujuk_id' => $request->user()->perujuk_id,
-            'nama_jenis_sampel' => $jenis_sampel,
+            'nama_jenis_sampel' => $this->getJenisSampel($request),
         ]);
         return response()->json(['message' => 'success']);
     }
@@ -169,5 +161,14 @@ class RegisterPerujukController extends Controller
         abort_if($register_perujuk->status != 'dikirim', 500, 'data tersebut sudah masuk ketahap berikutnya');
         $register_perujuk->delete();
         return response()->json(['message' => 'success']);
+    }
+
+    private function getJenisSampel(Request $request)
+    {
+        $jenis_sampel = $request->input('nama_jenis_sampel');
+        if ($request->input('jenis_sampel') != JenisSampelEnum::LAINNYA()->getIndex()) {
+            $jenis_sampel = JenisSampel::find($request->input('jenis_sampel'))->nama;
+        }
+        return $jenis_sampel;
     }
 }
