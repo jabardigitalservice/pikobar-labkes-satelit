@@ -29,14 +29,18 @@ class Pasien extends Model
         'sumber_pasien',
         'jenis_kelamin',
         'usia_tahun',
+        'usia_bulan',
         'lab_satelit_id',
-        //other
+        'perujuk_id',
+        'register_perujuk_id',
         'no_hp',
-        'no_telp',
-        'pekerjaan',
         'no_rw',
         'no_rt',
         'keterangan_lain',
+        'kode_kasus',
+        //other
+        'no_telp',
+        'pekerjaan',
         'suhu',
     ];
 

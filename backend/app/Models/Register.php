@@ -25,6 +25,8 @@ class Register extends Model
         'status',
         'swab_ke',
         'tanggal_swab',
+        'perujuk_id',
+        'register_perujuk_id',
         //other
         'nomor_rekam_medis',
         'nama_dokter',

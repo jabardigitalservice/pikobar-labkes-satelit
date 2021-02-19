@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\JenisSampelEnum;
 use App\Rules\RequiredKeteranganWarganegara;
 use App\Rules\RequiredNamaJenisSampel;
 use App\Rules\UniqueSampelPerujuk;
@@ -33,23 +34,18 @@ class StoreRegisterPerujukRequest extends FormRequest
             'tanggal_swab' => 'nullable|date',
             'nomor_sampel' => [
                 'required',
-                new UniqueSampelPerujuk($this->lab_satelit_id),
+                new UniqueSampelPerujuk($this->lab_satelit_id, optional($this->register_perujuk)->id),
             ],
-            'jenis_sampel' => 'required',
-            'nama_jenis_sampel' => [
-                new RequiredNamaJenisSampel($this->jenis_sampel),
-            ],
+            'jenis_sampel' => 'required|exists:jenis_sampel,id',
+            'nama_jenis_sampel' => 'required_if:jenis_sampel,'. JenisSampelEnum::LAINNYA()->getIndex(),
             'fasyankes_id' => 'required',
             'fasyankes_pengirim' => 'required',
             'nama_pasien' => 'required',
             'kewarganegaraan' => 'required',
-            'keterangan_warganegara' => [
-                'nullable',
-                new RequiredKeteranganWarganegara($this->kewarganegaraan)
-            ],
+            'keterangan_warganegara' => 'nullable|required_if:kewarnegaraan,WNA',
             'nik' => 'nullable|digits:16',
             'no_hp' => 'required',
-            'lab_satelit_id' => 'required',
+            'lab_satelit_id' => 'required|exists:lab_satelit,id',
         ];
     }
 }

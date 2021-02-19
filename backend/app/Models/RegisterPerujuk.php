@@ -8,7 +8,41 @@ class RegisterPerujuk extends Model
 {
     protected $table = 'register_perujuk';
 
-    protected $guarded = ['id', 'updated_at'];
+    protected $fillable = [
+        'nomor_register',
+        'register_uuid',
+        'creator_user_id',
+        'lab_satelit_id',
+        'kode_kasus',
+        'perujuk_id',
+        'sumber_pasien',
+        'kriteria',
+        'swab_ke',
+        'tanggal_swab',
+        'nomor_sampel',
+        'jenis_sampel',
+        'nama_jenis_sampel',
+        'fasyankes_id',
+        'fasyankes_pengirim',
+        'nama_pasien',
+        'kewarganegaraan',
+        'keterangan_warganegara',
+        'nik',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'no_hp',
+        'provinsi_id',
+        'kota_id',
+        'kecamatan_id',
+        'kelurahan_id',
+        'alamat',
+        'no_rt',
+        'no_rw',
+        'jenis_kelamin',
+        'keterangan',
+        'usia_tahun',
+        'usia_bulan',
+    ];
 
     public function perujuk()
     {
