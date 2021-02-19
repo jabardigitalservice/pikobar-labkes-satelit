@@ -66,6 +66,4 @@ class RegisterPerujukNotification extends Notification
             //
         ];
     }
-
-
 }

@@ -35,7 +35,7 @@ class RegisterPerujukRequest extends FormRequest
                 new UniqueSampelPerujuk($this->lab_satelit_id, optional($this->register_perujuk)->id),
             ],
             'jenis_sampel' => 'required|exists:jenis_sampel,id',
-            'nama_jenis_sampel' => 'required_if:jenis_sampel,'. JenisSampelEnum::LAINNYA()->getIndex(),
+            'nama_jenis_sampel' => 'required_if:jenis_sampel,' . JenisSampelEnum::LAINNYA()->getIndex(),
             'fasyankes_id' => 'required',
             'fasyankes_pengirim' => 'required',
             'nama_pasien' => 'required',
