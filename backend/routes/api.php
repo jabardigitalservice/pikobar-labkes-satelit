@@ -24,16 +24,6 @@ Route::group(['middleware' => ['auth:api', 'verified']], function () {
     Route::patch('settings/profile', 'Settings\ProfileController@update');
     Route::patch('settings/password', 'Settings\PasswordController@update');
 
-    Route::group(["prefix" => "sample"], function () {
-        Route::get('/get-data', 'SampleController@getData');
-        Route::post('/add', 'SampleController@add');
-        Route::get('/get/{id}', 'SampleController@getById');
-        Route::get('/edit/{id}', 'SampleController@getUpdate');
-        Route::get('/delete/{id}', 'SampleController@delete');
-        Route::post('/update/{id}', 'SampleController@storeUpdate');
-        Route::get('/get-sample/{nomor}', 'SampleController@getSamples');
-    });
-
     Route::get('/pengguna', 'PenggunaController@listPengguna');
     Route::post('/pengguna', 'PenggunaController@savePengguna');
     Route::post('/pengguna/{id}', 'PenggunaController@updatePengguna');
@@ -49,11 +39,6 @@ Route::group(['middleware' => ['auth:api', 'verified']], function () {
     Route::get('lab-satelit-option', 'OptionController@getLabSatelit');
     Route::get('jenis-sampel-option', 'OptionController@getJenisSampel');
     Route::get('validator-option', 'OptionController@getValidator');
-
-    Route::group(['prefix' => 'registrasi-mandiri'], function () {
-        Route::get('/', 'RegistrasiMandiri@getData');
-        Route::get('/export-excel', 'RegistrasiMandiri@exportExcel');
-    });
 
     Route::group(['prefix' => 'registrasi-sampel'], function () {
         Route::get('/', 'Registrasisampel@getData');
@@ -89,11 +74,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::get('/notifications', 'DashboardController@notifications');
         Route::get('/positif-negatif', 'DashboardController@positifNegatif');
         Route::get('/instansi-pengirim', 'DashboardController@instansi_pengirim');
-
-        Route::get('counter-belum-verifikasi', 'DashboardVerifikasiController@getCountUnverify');
-        Route::get('counter-terverifikasi', 'DashboardVerifikasiController@getCountVerified');
-        Route::get('counter-belum-validasi', 'DashboardValidasiController@getCountUnvalidate');
-        Route::get('counter-tervalidasi', 'DashboardValidasiController@getCountValidated');
     });
 
     Route::group(['prefix' => 'dashboard-admin'], function () {
@@ -123,11 +103,8 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::post('/input-invalid/{id}', 'PCRController@inputInvalid');
         Route::post('/upload-grafik', 'PCRController@uploadGrafik');
         Route::post('/musnahkan/{id}', 'PCRController@musnahkan');
-        Route::post('/import-hasil-pemeriksaan', 'PCRController@importHasilPemeriksaan');
+        Route::post('/import-hasil-pemeriksaan', 'ImportRegisterController@importInputPemeriksaan');
         Route::post('/import-data-hasil-pemeriksaan', 'PCRController@importDataHasilPemeriksaan');
-    });
-    Route::group(['prefix' => 'sampel'], function () {
-        Route::get('/cek-nomor-sampel', 'SampelController@cekNomorSampel');
     });
 
     Route::get('list-negara', 'KotaController@listNegara');
@@ -142,12 +119,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
     Route::get('list-fasyankes-jabar', 'FasyankesController@listByProvinsi');
     Route::get('fasyankes/detail/{fasyankes}', 'FasyankesController@show');
 
-    Route::get('list-gejala', 'GejalaController@getListMasterGejala');
-    Route::get('gejala/detail/{gejala}', 'GejalaController@show');
-
-    Route::get('list-penyakit-penyerta', 'PenyakitPenyertaController@getListMaster');
-    Route::get('penyakit-penyerta/detail/{penyakitPenyerta}', 'PenyakitPenyertaController@show');
-
     Route::group(['prefix' => 'register'], function () {
 
         Route::post('sampel', 'RegistersampelController@storesampel');
@@ -157,24 +128,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::delete('sampel/{id}/{pasien}', 'RegistersampelController@delete');
         Route::get('logs/{register_id}', 'RegistersampelController@logs');
 
-        Route::get('/', 'RegisterListController@index');
-
-        Route::post('store', 'RegisterController@store');
-        Route::post('mandiri', 'RegisterController@storeMandiri');
-        Route::post('mandiri/update/{regis_id}/{pasien_id}', 'RegisterController@storeUpdate');
-        Route::get('mandiri/{register_id}/{pasien_id}', 'RegisterController@getById');
-        Route::get('delete-sampel/{id}', 'RegisterController@deleteSample');
-
-        Route::get('detail/{register}', 'RegisterController@show');
-
-        Route::post('update/{register}', 'RegisterController@update');
-
-        Route::delete('delete/{register}', 'RegisterController@destroy');
-
-        Route::get('noreg', 'RegisterController@generateNomorRegister');
-        Route::get('get-noreg', 'RegisterController@requestNomor');
-
-        Route::post('import-mandiri', 'ImportRegisterController@importRegisterMandiri');
         Route::post('import-sampel', 'ImportRegisterController@importRegisterSampel');
         Route::post('import-hasil-pemeriksaan', 'ImportRegisterController@importHasilPemeriksaan');
     });
@@ -193,14 +146,10 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
 
         Route::post('edit-status-sampel/{sampel}', 'VerifikasiController@updateToVerified');
 
-        Route::get('export-excel', 'VerifikasiExportController@exportExcel');
-
         Route::post('verifikasi-single-sampel/{sampel}', 'VerifikasiController@verifiedSingleSampel');
 
         Route::get('list-kategori', 'VerifikasiController@listKategori');
     });
-
-    Route::apiResource('validator', 'ValidatorController');
 
     //pelaporan
     Route::group(['prefix' => 'pelaporan'], function () {
@@ -242,14 +191,10 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::get('/{role}', 'ListUserController');
     });
 
+    Route::apiResource('register-perujuk', 'RegisterPerujukController');
     Route::group(['prefix' => 'register-perujuk'], function () {
-        Route::get('/', 'RegisterPerujukController@index');
-        Route::post('/store', 'RegisterPerujukController@store');
-        Route::get('/detail/{id}', 'RegisterPerujukController@show');
-        Route::post('/bulk', 'RegisterPerujukController@bulk');
-        Route::post('/import', 'RegisterPerujukController@import');
-        Route::post('/update/{id}', 'RegisterPerujukController@update');
-        Route::delete('/delete/{id}', 'RegisterPerujukController@delete');
+        Route::post('/bulk', 'RegisterPerujukBulkController');
+        Route::post('/import', 'ImportRegisterController@importRegisterPerujuk');
     });
 });
 

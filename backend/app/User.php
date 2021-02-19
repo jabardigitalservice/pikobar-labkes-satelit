@@ -192,4 +192,9 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
             }
         });
     }
+
+    public function hasRole($roleIndex): bool
+    {
+        return $this->role_id == $roleIndex;
+    }
 }

@@ -28,6 +28,8 @@ class Sampel extends Model
         'created_at',
         'waktu_sample_taken',
         'waktu_pcr_sample_analyzed',
+        'perujuk_id',
+        'register_perujuk_id',
         //other
         'nomor_register',
         'nama_dokter',
