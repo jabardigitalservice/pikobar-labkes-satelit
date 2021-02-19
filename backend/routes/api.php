@@ -106,9 +106,6 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::post('/import-hasil-pemeriksaan', 'ImportRegisterController@importInputPemeriksaan');
         Route::post('/import-data-hasil-pemeriksaan', 'PCRController@importDataHasilPemeriksaan');
     });
-    Route::group(['prefix' => 'sampel'], function () {
-        Route::get('/cek-nomor-sampel', 'SampelController@cekNomorSampel');
-    });
 
     Route::get('list-negara', 'KotaController@listNegara');
     Route::get('list-provinsi', 'KotaController@listProvinsi');
