@@ -31,7 +31,7 @@
               </tr>
               <tr>
                 <th>Dinkes</th>
-                <td>{{ kota && kota.nama ? kota.nama : ''  }}</td>
+                <td>{{ dinkes && dinkes.nama ? dinkes.nama : ''  }}</td>
               </tr>
               <tr>
                 <th>Role</th>
@@ -60,7 +60,7 @@
         name,
         email,
         username,
-        kota,
+        dinkes,
         role_id
       } = resp.data.data || {}
   
@@ -69,7 +69,7 @@
         name,
         email,
         username,
-        kota,
+        dinkes,
         role_id,
         getRole
       }
