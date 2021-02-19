@@ -16,7 +16,7 @@ class PerujukController extends Controller
     {
         DB::beginTransaction();
         try {
-            $user = User::create($request->all() + [
+            $user = User::create($request->validated() + [
                 'status' => UserStatusEnum::ACTIVE(),
                 'register_at' => now(),
             ]);

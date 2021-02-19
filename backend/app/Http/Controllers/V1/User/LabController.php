@@ -25,7 +25,7 @@ class LabController extends Controller
                 'token' => Uuid::uuid4(),
                 'email' => $request->input('email'),
             ]);
-            $user = User::create($request->all() + [
+            $user = User::create($request->validated() + [
                 'role_id' => RoleEnum::LABORATORIUM()->getIndex(),
                 'status' => UserStatusEnum::INACTIVE(),
                 'invited_at' => now(),
@@ -44,7 +44,7 @@ class LabController extends Controller
     public function register(LabRegisterRequest $request)
     {
         $invite = Invite::where('token', $request->token)->first();
-        $invite->user()->update($request->all() + [
+        $invite->user()->update($request->validated() + [
             'status' => UserStatusEnum::ACTIVE(),
             'register_at' => now(),
         ]);
