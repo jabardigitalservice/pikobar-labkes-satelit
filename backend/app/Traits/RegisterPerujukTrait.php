@@ -48,70 +48,68 @@ trait RegisterPerujukTrait
 
     private function filterRegisterPerujuk($models, $key, $val)
     {
-        switch ($key) {
-            case "nomor_sampel":
-                $models->where('nomor_sampel', 'ilike', '%' . $val . '%');
-                break;
-            case "nama_pasien":
-                $models->where(function ($query) use ($val) {
-                    $query->where('nama_pasien', 'ilike', '%' . $val . '%')
+        $models->when($key == 'nomor_sampel', function ($query) use ($val) {
+            $query->where('nomor_sampel', 'ilike', '%' . $val . '%');
+        });
+        $models->when($key == 'nama_pasien', function ($query) use ($val) {
+            $query->where(function ($query) use ($val) {
+                $query->where('nama_pasien', 'ilike', '%' . $val . '%')
                         ->orWhere('nik', 'ilike', '%' . $val . '%');
-                });
-                break;
-            case "fasyankes":
-                $models->whereHas('fasyankes', function ($query) use ($val) {
-                    $query->where('nama', 'ilike', '%' . $val . '%');
-                });
-                break;
-            case "perujuk":
-                $models->whereHas('perujuk', function ($query) use ($val) {
-                    $query->where('nama', 'ilike', '%' . $val . '%');
-                });
-                break;
-            case "kategori":
-                $models->where('sumber_pasien', 'ilike', '%' . $val . '%');
-                break;
-            case "kriteria":
-                $models->where('status', $val);
-                break;
-            case "tanggal":
-                $models->whereDate('created_at', date('Y-m-d', strtotime($val)));
-                break;
-        }
+               });
+        });
+        $models->when($key == 'fasyankes', function ($query) use ($val) {
+            $query->whereHas('fasyankes', function ($query) use ($val) {
+                $query->where('nama', 'ilike', '%' . $val . '%');
+            });
+        });
+        $models->when($key == 'perujuk', function ($query) use ($val) {
+            $query->whereHas('perujuk', function ($query) use ($val) {
+                $query->where('nama', 'ilike', '%' . $val . '%');
+            });
+        });
+        $models->when($key == 'kategori', function ($query) use ($val) {
+            $query->where('sumber_pasien', 'ilike', '%' . $val . '%');
+        });
+        $models->when($key == 'kriteria', function ($query) use ($val) {
+            $query->where('status', $val);
+        });
+
+        $models->when($key == 'tanggal', function ($query) use ($val) {
+            $query->whereDate('created_at', date('Y-m-d', strtotime($val)));
+        });
         return $models;
     }
 
     private function orderRegisterPerujuk($models, $order, $order_direction)
     {
-        switch ($order) {
-            case "nomor_sampel":
-                $models->orderBy('nomor_sampel', $order_direction);
-                break;
-            case "nama_pasien":
-                $models->orderBy('nama_pasien', $order_direction);
-                break;
-            case "kota":
-                $models->whereHas('kota', function ($query) use ($order_direction) {
-                    $query->orderBy('nama', $order_direction);
-                });
-            case "fasyankes":
-                $models->whereHas('fasyankes', function ($query) use ($order_direction) {
-                    $query->orderBy('nama', $order_direction);
-                });
-                break;
-            case "kategori":
-                $models->orderBy('sumber_pasien', $order_direction);
-                break;
-            case "kriteria":
-                $models->orderBy('status', $order_direction);
-                break;
-            case "tanggal":
-                $models->orderBy('created_at', $order_direction);
-                break;
-            case 'kota':
-                $models->orderBy('kota', $order_direction);
-                break;
-        }
+        $models->when($order == 'nomor_sampel', function ($query) use ($order_direction) {
+            $query->orderBy('nomor_sampel', $order_direction);
+        });
+        $models->when($order == 'nama_pasien', function ($query) use ($order_direction) {
+            $query->orderBy('nama_pasien', $order_direction);
+        });
+        $models->when($order == 'kota', function ($query) use ($order_direction) {
+            $query->whereHas('kota', function ($query) use ($order_direction) {
+                $query->orderBy('nama', $order_direction);
+            });
+        });
+        $models->when($order == 'fasyankes', function ($query) use ($order_direction) {
+            $query->whereHas('fasyankes', function ($query) use ($order_direction) {
+                $query->orderBy('nama', $order_direction);
+            });
+        });
+        $models->when($order == 'kategori', function ($query) use ($order_direction) {
+            $query->orderBy('sumber_pasien', $order_direction);
+        });
+        $models->when($order == 'kriteria', function ($query) use ($order_direction) {
+            $query->orderBy('status', $order_direction);
+        });
+        $models->when($order == 'tanggal', function ($query) use ($order_direction) {
+            $query->orderBy('created_at', $order_direction);
+        });
+        $models->when($order == 'kota', function ($query) use ($order_direction) {
+            $query->orderBy('kota', $order_direction);
+        });
         return $models;
     }
 
