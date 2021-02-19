@@ -25,7 +25,7 @@ class DinkesController extends Controller
                 'token' => Uuid::uuid4(),
                 'email' => $request->input('email'),
             ]);
-            $user = User::create($request->validated() + [
+            $user = User::create($request->all() + [
                 'status' => UserStatusEnum::INACTIVE(),
                 'invited_at' => Carbon::now(),
             ]);
