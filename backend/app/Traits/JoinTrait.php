@@ -9,14 +9,21 @@ use Illuminate\Support\Facades\DB;
  */
 trait JoinTrait
 {
+    protected static $dbname;
+
+    protected static function bootJoinTrait()
+    {
+        static::$dbname = config('database.connections.labkes.database');
+    }
+
     public function scopeJoinKota($query)
     {
         return $query->leftJoin(
             DB::raw(
-                "dblink('dbname=labkes', 'select * from kota') AS kota(id int, provinsi_id int, nama varchar)"
+                "dblink('dbname=" . static::$dbname . "', 'select * from kota') AS kota(id int, provinsi_id int, nama varchar)"
             ),
-                'kota.id',
-                'pasien.kota_id'
+            'kota.id',
+            'pasien.kota_id'
         );
     }
 
@@ -24,10 +31,10 @@ trait JoinTrait
     {
         return $query->leftJoin(
             DB::raw(
-                "dblink('dbname=labkes', 'select * from provinsi') AS provinsi(id int, nama varchar)"
+                "dblink('dbname=" . static::$dbname . "', 'select * from provinsi') AS provinsi(id int, nama varchar)"
             ),
-                'provinsi.id',
-                'pasien.kode_provinsi'
+            'provinsi.id',
+            'pasien.kode_provinsi'
         );
     }
 
@@ -35,10 +42,10 @@ trait JoinTrait
     {
         return $query->leftJoin(
             DB::raw(
-                "dblink('dbname=labkes', 'select * from kecamatan') AS kecamatan(id int, nama varchar, kota_id int)"
+                "dblink('dbname=" . static::$dbname . "', 'select * from kecamatan') AS kecamatan(id int, nama varchar, kota_id int)"
             ),
-                'kecamatan.id',
-                'pasien.kode_kecamatan'
+            'kecamatan.id',
+            'pasien.kode_kecamatan'
         );
     }
 
@@ -46,10 +53,10 @@ trait JoinTrait
     {
         return $query->leftJoin(
             DB::raw(
-                "dblink('dbname=labkes', 'select * from kelurahan') AS kelurahan(id int, nama varchar, kecamatan_id int)"
+                "dblink('dbname=" . static::$dbname . "', 'select * from kelurahan') AS kelurahan(id int, nama varchar, kecamatan_id int)"
             ),
-                'kelurahan.id',
-                'pasien.kode_kelurahan'
+            'kelurahan.id',
+            'pasien.kode_kelurahan'
         );
     }
 
@@ -57,10 +64,10 @@ trait JoinTrait
     {
         return $query->leftJoin(
             DB::raw(
-                "dblink('dbname=labkes', 'select * from fasyankes') AS fasyankes(id int, kota_id int, tipe varchar, nama varchar)"
+                "dblink('dbname=" . static::$dbname . "', 'select * from fasyankes') AS fasyankes(id int, kota_id int, tipe varchar, nama varchar)"
             ),
-                'fasyankes.id',
-                'register.fasyankes_id'
+            'fasyankes.id',
+            'register.fasyankes_id'
         );
     }
 

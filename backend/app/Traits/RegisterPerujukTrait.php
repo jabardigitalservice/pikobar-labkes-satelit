@@ -55,7 +55,7 @@ trait RegisterPerujukTrait
             return $query->where(function ($query) use ($val) {
                 $query->where('nama_pasien', 'ilike', '%' . $val . '%')
                         ->orWhere('nik', 'ilike', '%' . $val . '%');
-               });
+            });
         });
         $models->when($key == 'fasyankes', function ($query) use ($val) {
             return $query->whereHas('fasyankes', function ($query) use ($val) {

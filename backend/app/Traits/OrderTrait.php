@@ -14,7 +14,8 @@ trait OrderTrait
         return $query->orderPasien($order, $order_direction)
                         ->orderKota($order, $order_direction)
                         ->orderSampel($order, $order_direction)
-                        ->orderRegister($order, $order_direction);                        ;
+                        ->orderRegister($order, $order_direction);
+        ;
     }
 
     public function scopeOrderPasien($query, $order, $order_direction)
