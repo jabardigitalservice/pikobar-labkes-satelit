@@ -54,7 +54,7 @@ class DinkesController extends Controller
     public function update(User $user, Request $request)
     {
         $request->validate([
-            'kota_id' => 'required|exists:kota,id'
+            'kota_id' => 'required|exists:labkes.kota,id'
         ]);
         $user->update($request->only('kota_id'));
         return $user;

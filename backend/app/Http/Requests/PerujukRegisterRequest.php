@@ -25,10 +25,10 @@ class PerujukRegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'perujuk_id' => 'required|exists:fasyankes,id',
+            'perujuk_id' => 'required|exists:labkes.fasyankes,id',
             'email' => 'required|email|unique:users,email',
             'username' => 'required|unique:users,username',
-            'name' => 'required',
+            'name' => 'nullable',
             'password' => 'required|confirmed|min:6',
             'role_id' => [
                 "required",

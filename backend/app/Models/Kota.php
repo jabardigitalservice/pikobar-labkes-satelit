@@ -8,6 +8,8 @@ class Kota extends Model
 {
     protected $table = 'kota';
 
+    protected $connection = 'labkes';
+
     public $timestamps = false;
 
     public function provinsi()

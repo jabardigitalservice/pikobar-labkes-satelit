@@ -8,6 +8,8 @@ class Kelurahan extends Model
 {
     protected $table = 'kelurahan';
 
+    protected $connection = 'labkes';
+
     public $timestamps = false;
 
     public function kecamatan()

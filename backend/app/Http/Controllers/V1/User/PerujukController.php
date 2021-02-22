@@ -33,7 +33,7 @@ class PerujukController extends Controller
     public function update(User $user, Request $request)
     {
         $request->validate([
-            'perujuk_id' => 'required|exists:fasyankes,id'
+            'perujuk_id' => 'required|exists:labkes.fasyankes,id'
         ]);
         $user->update($request->only('perujuk_id'));
         return $user;
