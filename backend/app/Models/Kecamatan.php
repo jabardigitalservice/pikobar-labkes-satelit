@@ -8,6 +8,8 @@ class Kecamatan extends Model
 {
     protected $table = 'kecamatan';
 
+    protected $connection = 'labkes';
+
     public $timestamps = false;
 
     public function kota()

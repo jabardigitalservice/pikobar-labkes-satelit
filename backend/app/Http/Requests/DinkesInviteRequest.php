@@ -26,7 +26,7 @@ class DinkesInviteRequest extends FormRequest
     {
         return [
             'email' => 'required|email|unique:users,email',
-            'kota_id' => 'required|exists:kota,id',
+            'kota_id' => 'required|exists:labkes.kota,id',
             'username' => 'required|unique:users,username',
             'name' => 'required',
             'role_id' => [

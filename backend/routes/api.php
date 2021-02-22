@@ -197,7 +197,3 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
         Route::post('/import', 'ImportRegisterController@importRegisterPerujuk');
     });
 });
-
-Route::group(['middleware' => ['auth:api', 'can:integrasi-kemenkes'], 'prefix' => 'integrasi'], function () {
-    Route::get('list', 'Integrasi\IntegrasiController@index');
-});

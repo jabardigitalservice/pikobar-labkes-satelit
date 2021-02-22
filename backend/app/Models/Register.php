@@ -2,12 +2,20 @@
 
 namespace App\Models;
 
+use App\Traits\FilterTrait;
+use App\Traits\JoinTrait;
+use App\Traits\OrderTrait;
+use App\Traits\SearchTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Register extends Model
 {
     use SoftDeletes;
+    use JoinTrait;
+    use SearchTrait;
+    use FilterTrait;
+    use OrderTrait;
 
     protected $table = 'register';
 
@@ -81,5 +89,31 @@ class Register extends Model
                 $register->sampel()->delete();
             }
         });
+    }
+
+    public function scopeSelectCustom($query)
+    {
+        return $query->select(
+            'nik',
+            'nama_lengkap',
+            'tanggal_lahir',
+            'usia_tahun',
+            'nomor_sampel',
+            'kota.nama as nama_kota',
+            'pasien_register.*',
+            'register.sumber_pasien',
+            'status',
+            'waktu_sample_taken',
+            'nama_rs',
+            'sampel_status',
+            'sampel.register_perujuk_id'
+        );
+    }
+
+    public function scopeWhereLabSatelit($query, $labSatelitId)
+    {
+        return $query->where('register.lab_satelit_id', $labSatelitId)
+                        ->where('sampel.lab_satelit_id', $labSatelitId)
+                        ->where('pasien.lab_satelit_id', $labSatelitId);
     }
 }
