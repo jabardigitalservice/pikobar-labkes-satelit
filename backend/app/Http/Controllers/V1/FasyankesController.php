@@ -10,7 +10,7 @@ class FasyankesController extends Controller
 {
     public function listByProvinsi(Request $request)
     {
-        $listFaskes = Fasyankes::where('tipe', $request->get('tipe'))->get();
+        $listFaskes = Fasyankes::with('kota')->where('tipe', $request->get('tipe'))->get();
         return response()->json($listFaskes);
     }
 
