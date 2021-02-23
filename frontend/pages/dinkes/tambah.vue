@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper wrapper-content">
     <portal to="title-name">
-      Registrasi Admin Perujuk
+      Registrasi Admin Dinkes
     </portal>
     <portal to="title-action">
       <div class="title-action">
@@ -12,7 +12,7 @@
       </div>
     </portal>
 
-    <Ibox title="Registrasi Akun Perujuk">
+    <Ibox title="Registrasi Akun Dinkes">
       <div class="row">
         <div class="col-lg-12">
           <div class="form-group row">
