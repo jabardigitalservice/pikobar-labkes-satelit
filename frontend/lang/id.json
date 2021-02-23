@@ -79,6 +79,7 @@
     "dinkes": {
       "index": "Dinkes",
       "show": "Detail",
+      "add": "Tambah Data",
       "edit": "Edit Data"
     },
     "registration": {
