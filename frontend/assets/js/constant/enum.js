@@ -82,3 +82,9 @@ export const colSuperAdmin = {
   sumber_pasien: 'KATEGORI',
   kesimpulan_pemeriksaan: 'KESIMPULAN PEMERIKSAAN',
 }
+
+export const optionInstansiPengirim = [
+  'dinkes',
+  'puskesmas',
+  'rumah_sakit'
+];
