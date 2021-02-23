@@ -15,7 +15,6 @@ trait JoinTrait
     {
         static::$dbconnect = 'dbname=' . config('database.connections.labkes.database');
         static::$dbconnect .= ' user=' . config('database.connections.labkes.username');
-        static::$dbconnect .= ' password=' . config('database.connections.labkes.password');
         return static::$dbconnect;
     }
 
