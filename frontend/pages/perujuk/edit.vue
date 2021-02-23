@@ -88,7 +88,7 @@
         </div>
 
         <div class="col-md-12 mt-2 flex-right">
-          <button @click="submit()" :disabled="loading" :class="{'btn-loading': loading}"
+          <button @click="submit()" :disabled="isDisabledSubmit" :class="{'btn-loading': loading}"
             class="btn btn-md btn-primary block" type="button">
             Submit
           </button>
@@ -127,6 +127,7 @@
       } = resp.data.data || {}
   
       return {
+        id,
         email,
         username,
         perujuk,
@@ -143,6 +144,7 @@
         humanize,
         loading: false,
         isLoading: false,
+        isDisabledSubmit: true
       }
     },
     methods: {
@@ -204,6 +206,13 @@
           } = this.fasyankes
           this.form.perujuk_id = id || null
           this.domisili = kota && kota.nama ? kota.nama : null
+        }
+      },
+      "form.perujuk_id"(newVal) {
+        if (newVal !== this.id) {
+          this.isDisabledSubmit = false
+        } else {
+          this.isDisabledSubmit = true
         }
       }
     }
