@@ -27,6 +27,7 @@ class UserResource extends JsonResource
             'lab' => $this->lab_satelit,
             'dinkes' => $this->dinkes,
             'perujuk' => $this->perujuk,
+            'kota_perujuk' => optional($this->perujuk)->kota,
         ];
     }
 }
