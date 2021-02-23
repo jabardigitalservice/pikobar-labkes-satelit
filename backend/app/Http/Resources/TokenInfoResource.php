@@ -15,7 +15,7 @@ class TokenInfoResource extends JsonResource
             'username' => $this->user->username,
             'name' => $this->user->name,
             'admin_dinkes' => $this->user->koordinator,
-            'dinkes' => optional($this->user->lab_satelit)->nama ?? optional($this->user->kota)->nama,
+            'dinkes' => optional($this->user->lab_satelit)->nama ?? optional($this->user->dinkes)->nama,
             'user' => $this->user
         ];
     }

@@ -6,7 +6,6 @@ use App\Enums\UserStatusEnum;
 use App\Enums\RoleEnum;
 use App\Models\Kota;
 use App\Models\RegisterPerujuk;
-use App\Models\Sampel;
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
