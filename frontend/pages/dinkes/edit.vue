@@ -15,7 +15,7 @@
           <form @submit.prevent="submit" @keydown="form.onKeydown($event)">
             <div class="form-group row">
               <label class="col-md-3 col-form-label text-md-right">
-                Akun Dinkes
+                Nama Admin
               </label>
               <div class="col-md-7">
                 <label class="form-control" readonly>
@@ -123,16 +123,13 @@
       },
       async submit() {
         try {
-          const response = await this.form.put(
-            "/v1/user/dinkes/" +
-            this.form.id
-          );
+          await this.form.put(`/v1/user/dinkes/${this.form.id}`)
           this.$toast.success('Berhasil', {
             icon: "check",
             iconPack: "fontawesome",
             duration: 5000,
           });
-          this.$router.push("/dinkes");
+          this.$router.push("/dinkes")
         } catch (err) {
           if (err.response && err.response.data.code == 422) {
             this.$nextTick(() => {
