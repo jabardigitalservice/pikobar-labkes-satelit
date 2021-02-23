@@ -5,6 +5,7 @@ namespace App;
 use App\Enums\UserStatusEnum;
 use App\Enums\RoleEnum;
 use App\Models\Kota;
+use App\Models\Sampel;
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -151,6 +152,11 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     public function getHasDataAttribute()
     {
         return $this->registerLogs()->exists() || $this->pemeriksaanSampels()->exists();
+    }
+
+    public function getHasDataPerujukAttribute()
+    {
+        return Sampel::where('perujuk_id', $this->perujuk_id)->exists();
     }
 
     public function setPasswordAttribute($value)

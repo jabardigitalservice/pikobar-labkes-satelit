@@ -22,6 +22,7 @@ class UserResource extends JsonResource
             'koordinator' => $this->koordinator,
             'status' => $this->status,
             'has_data' => $this->has_data,
+            'has_data_perujuk' => $this->has_data_perujuk,
             'last_login_at' => $this->last_login_at,
             'role_id' => $this->role_id,
             'lab' => $this->lab_satelit,
