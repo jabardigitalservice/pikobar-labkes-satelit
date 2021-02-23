@@ -1,17 +1,18 @@
 <template>
   <div class="wrapper wrapper-content" ref="body">
-    <portal to="title-name"> Dinkes </portal>
+    <portal to="title-name">Perujuk</portal>
     <portal to="title-action">
       <div class="title-action">
-        <nuxt-link tag="button" to="/dinkes/tambah" class="btn btn-primary">
-          <em class="fa fa-plus" /> Tambah Akun Dinkes
+        <nuxt-link tag="button" to="/perujuk/tambah" class="btn btn-primary">
+          <em class="fa fa-plus" /> Tambah Akun Perujuk
         </nuxt-link>
       </div>
     </portal>
+
     <div class="row">
       <div class="col-lg-12">
-        <Ibox title="Dinkes">
-          <ajax-table url="/v1/users/dinkes/" :oid="`master-dinkes`" :params="params" :config="{
+        <Ibox title="Perujuk">
+          <ajax-table url="/v1/users/perujuk/" :oid="`master-perujuk`" :params="params" :config="{
               autoload: true,
               has_number: true,
               has_entry_page: true,
@@ -26,15 +27,16 @@
                 table: [],
                 wrapper: ['table-responsive'],
               },
-            }" :rowtemplate="'tr-dinkes'" :columns="{
-              dinkes: 'DINKES',
-              name: 'NAMA ADMIN',
+            }" :rowtemplate="'tr-perujuk'" :columns="{
+              name: 'FASYANKES PERUJUK',
               email: 'EMAIL',
+              domisili: 'DOMISILI',
               status: 'STATUS',
             }" />
         </Ibox>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -44,22 +46,20 @@
     meta: {
       allow_role_id: [1],
     },
+    head() {
+      return {
+        title: this.$t("home"),
+      }
+    },
     data() {
       return {
-        loading: false,
-        isLoading: false,
         params: {
-          dinkes: null,
+          perujuk: null,
           name: null,
           email: null,
           status: null,
           last_login_at: null,
         },
-      };
-    },
-    head() {
-      return {
-        title: this.$t("home"),
       }
     }
   }

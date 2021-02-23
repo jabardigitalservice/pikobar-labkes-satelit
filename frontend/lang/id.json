@@ -79,7 +79,14 @@
     "dinkes": {
       "index": "Dinkes",
       "show": "Detail",
+      "add": "Tambah Data",
       "edit": "Edit Data"
+    },
+    "perujuk": {
+      "index": "Perujuk",
+      "show": "Detail",
+      "edit": "Edit Data",
+      "add": "Tambah Data"
     },
     "registration": {
       "index": "Registrasi"

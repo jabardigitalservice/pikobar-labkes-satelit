@@ -40,6 +40,9 @@
             <li>
               <nuxt-link to="/dinkes">Dinkes</nuxt-link>
             </li>
+            <li>
+              <nuxt-link to="/perujuk">Perujuk</nuxt-link>
+            </li>
           </ul>
         </li>
         <li v-if="checkPermission('satelit')">
