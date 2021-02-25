@@ -59,6 +59,14 @@ class PemeriksaanSampel extends Model
         return $this->attributes['hasil_deteksi'] = is_array($value) ? json_encode($value) : $value;
     }
 
+    public function setKesimpulanPemeriksaanAttribute($value)
+    {
+        if (in_array($value, ['swab_ulang', 'sampel kurang'])) {
+            $value = 'invalid';
+        }
+        return $this->attributes['kesimpulan_pemeriksaan'] = $value;
+    }
+
     public function user()
     {
         return $this->belongsTo('App\Model\User', 'user_id', 'id');
