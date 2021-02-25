@@ -56,6 +56,7 @@ class ListUserController extends Controller
                 $model->orderBy('lab_satelit.alamat', $order_direction);
                 break;
             case 'dinkes':
+            case 'domisili':
                 $model->orderBy('kota.nama', $order_direction);
                 break;
         }
