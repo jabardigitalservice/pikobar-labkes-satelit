@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ExcelExtensionRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ImportValidationRequest extends FormRequest
@@ -24,7 +25,12 @@ class ImportValidationRequest extends FormRequest
     public function rules()
     {
         return [
-            'register_file' => 'required|max:2048|mimes:csv,xlsx,xls'
+            'register_file' => [
+                'required',
+                'file',
+                'max:2048',
+                new ExcelExtensionRule($this->register_file->getClientOriginalExtension())
+            ]
         ];
     }
 }
