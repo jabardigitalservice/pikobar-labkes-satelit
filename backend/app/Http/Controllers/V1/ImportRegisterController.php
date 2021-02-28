@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportValidationRequest;
 use App\Imports\HasilPemeriksaanAkhirImport;
+use App\Imports\HasilPemeriksaanImport;
 use App\Imports\RegisterSampelImport;
 use Maatwebsite\Excel\Facades\Excel;
 
