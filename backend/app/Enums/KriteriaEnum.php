@@ -4,15 +4,6 @@ namespace App\Enums;
 
 use Spatie\Enum\Enum;
 
-/**
- *
- * @method static self kontak_erat()
- * @method static self suspek()
- * @method static self probable()
- * @method static self konfirmasi()
- * @method static self tanpa_kriteria()
- */
-
 class KriteriaEnum extends Enum
 {
     public static function kontak_erat(): KriteriaEnum
