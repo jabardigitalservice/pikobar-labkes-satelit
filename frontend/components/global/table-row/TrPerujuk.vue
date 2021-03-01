@@ -11,7 +11,10 @@
       {{ item.kota_perujuk && item.kota_perujuk.nama ? item.kota_perujuk.nama : '' }}
     </td>
     <td>
-      {{item.last_login_at ? item.last_login_at : 'inactive'}}
+      {{item.last_login_at ? 'active' : 'inactive'}}
+    </td>
+    <td>
+      {{item.last_login_at || '-'}}
     </td>
     <td>
       <nuxt-link :to="`/perujuk/${item.id}`" class="mb-1 btn btn-yellow btn-sm" title="Klik untuk melihat detail">
