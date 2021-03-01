@@ -5,8 +5,11 @@ namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportValidationRequest;
 use App\Imports\HasilPemeriksaanAkhirImport;
+use App\Imports\HasilPemeriksaanImport;
+use App\Imports\RegisterPerujukImport;
 use App\Imports\RegisterSampelImport;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class ImportRegisterController extends Controller
 {
@@ -24,8 +27,24 @@ class ImportRegisterController extends Controller
 
     public function importRegisterPerujuk(ImportValidationRequest $request)
     {
-        Excel::import(new RegisterPerujukImport(), $request->file('register_file'));
-        return response()->json(['message' => 'Sukses import data.']);
+        $import = new RegisterPerujukImport();
+        return $this->importExcel($import, $request->file('register_file'));
+    }
+
+    public function importExcel($import, $file)
+    {
+        try {
+            $import->import($file);
+            return response()->json(['message' => 'Sukses import data.']);
+        } catch (ValidationException $e) {
+            $errors = [];
+            foreach ($e->failures() as $key => $failure) {
+                $errors[$key]['row'] = $failure->row();
+                $errors[$key]['attribute'] = $failure->attribute();
+                $errors[$key]['errors'] = $failure->errors();
+            }
+            return response()->json(['errors' => $errors], 422);
+        }
     }
 
     public function importInputPemeriksaan(ImportValidationRequest $request)

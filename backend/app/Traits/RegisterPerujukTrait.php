@@ -49,33 +49,33 @@ trait RegisterPerujukTrait
     private function filterRegisterPerujuk($models, $key, $val)
     {
         $models->when($key == 'nomor_sampel', function ($query) use ($val) {
-            return $query->where('nomor_sampel', 'ilike', '%' . $val . '%');
+            $query->where('nomor_sampel', 'ilike', '%' . $val . '%');
         });
         $models->when($key == 'nama_pasien', function ($query) use ($val) {
-            return $query->where(function ($query) use ($val) {
+            $query->where(function ($query) use ($val) {
                 $query->where('nama_pasien', 'ilike', '%' . $val . '%')
                         ->orWhere('nik', 'ilike', '%' . $val . '%');
             });
         });
         $models->when($key == 'fasyankes', function ($query) use ($val) {
-            return $query->whereHas('fasyankes', function ($query) use ($val) {
+            $query->whereHas('fasyankes', function ($query) use ($val) {
                 $query->where('nama', 'ilike', '%' . $val . '%');
             });
         });
         $models->when($key == 'perujuk', function ($query) use ($val) {
-            return $query->whereHas('perujuk', function ($query) use ($val) {
+            $query->whereHas('perujuk', function ($query) use ($val) {
                 $query->where('nama', 'ilike', '%' . $val . '%');
             });
         });
         $models->when($key == 'kategori', function ($query) use ($val) {
-            return $query->where('sumber_pasien', 'ilike', '%' . $val . '%');
+            $query->where('sumber_pasien', 'ilike', '%' . $val . '%');
         });
         $models->when($key == 'kriteria', function ($query) use ($val) {
-            return $query->where('status', $val);
+            $query->where('status', $val);
         });
 
         $models->when($key == 'tanggal', function ($query) use ($val) {
-            return $query->whereDate('created_at', date('Y-m-d', strtotime($val)));
+            $query->whereDate('created_at', date('Y-m-d', strtotime($val)));
         });
         return $models;
     }
@@ -83,32 +83,32 @@ trait RegisterPerujukTrait
     private function orderRegisterPerujuk($models, $order, $order_direction)
     {
         $models->when($order == 'nomor_sampel', function ($query) use ($order_direction) {
-            return $query->orderBy('nomor_sampel', $order_direction);
+            $query->orderBy('nomor_sampel', $order_direction);
         });
         $models->when($order == 'nama_pasien', function ($query) use ($order_direction) {
-            return $query->orderBy('nama_pasien', $order_direction);
+            $query->orderBy('nama_pasien', $order_direction);
         });
         $models->when($order == 'kota', function ($query) use ($order_direction) {
-            return $query->whereHas('kota', function ($query) use ($order_direction) {
+            $query->whereHas('kota', function ($query) use ($order_direction) {
                 $query->orderBy('nama', $order_direction);
             });
         });
         $models->when($order == 'fasyankes', function ($query) use ($order_direction) {
-            return $query->whereHas('fasyankes', function ($query) use ($order_direction) {
+            $query->whereHas('fasyankes', function ($query) use ($order_direction) {
                 $query->orderBy('nama', $order_direction);
             });
         });
         $models->when($order == 'kategori', function ($query) use ($order_direction) {
-            return $query->orderBy('sumber_pasien', $order_direction);
+            $query->orderBy('sumber_pasien', $order_direction);
         });
         $models->when($order == 'kriteria', function ($query) use ($order_direction) {
-            return $query->orderBy('status', $order_direction);
+            $query->orderBy('status', $order_direction);
         });
         $models->when($order == 'tanggal', function ($query) use ($order_direction) {
-            return $query->orderBy('created_at', $order_direction);
+            $query->orderBy('created_at', $order_direction);
         });
         $models->when($order == 'kota', function ($query) use ($order_direction) {
-            return $query->orderBy('kota', $order_direction);
+            $query->orderBy('kota', $order_direction);
         });
         return $models;
     }

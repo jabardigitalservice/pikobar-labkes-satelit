@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\KriteriaEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class RegisterPerujuk extends Model
@@ -42,6 +43,7 @@ class RegisterPerujuk extends Model
         'keterangan',
         'usia_tahun',
         'usia_bulan',
+        'created_at'
     ];
 
     public function perujuk()
@@ -63,5 +65,10 @@ class RegisterPerujuk extends Model
     {
         $this->status = $newstate;
         $this->save();
+    }
+
+    public function setKriteriaAttibute($value)
+    {
+        $this->attributes['kriteria'] = KriteriaEnum::make($value)->getIndex();
     }
 }
