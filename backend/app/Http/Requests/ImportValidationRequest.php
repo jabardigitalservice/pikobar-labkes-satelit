@@ -29,7 +29,7 @@ class ImportValidationRequest extends FormRequest
                 'required',
                 'file',
                 'max:2048',
-                new ExcelExtensionRule($this->register_file->getClientOriginalExtension())
+                new ExcelExtensionRule(optional($this->register_file)->getClientOriginalExtension())
             ]
         ];
     }
