@@ -20,7 +20,7 @@
               has_action: true,
               has_search_input: false,
               custom_header: '',
-              default_sort: 'name',
+              default_sort: '',
               default_sort_dir: 'asc',
               custom_empty_page: true,
               class: {
@@ -32,7 +32,10 @@
               email: 'EMAIL',
               domisili: 'DOMISILI',
               status: 'STATUS',
-            }" />
+              last_login_at: 'TERAKHIR LOGIN',
+            }"
+            :disableSort="['name', 'domisili', 'status', 'last_login_at']"
+          />
         </Ibox>
       </div>
     </div>

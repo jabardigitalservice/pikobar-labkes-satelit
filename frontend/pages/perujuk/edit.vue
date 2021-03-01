@@ -144,7 +144,8 @@
         humanize,
         loading: false,
         isLoading: false,
-        isDisabledSubmit: true
+        isDisabledSubmit: true,
+        userid: route.params.id
       }
     },
     methods: {
@@ -157,10 +158,7 @@
       },
       async submit() {
         try {
-          await this.form.put(
-            "/v1/user/perujuk/" +
-            this.form.perujuk_id
-          )
+          await this.form.put(`/v1/user/perujuk/${this.userid}`)
           this.$toast.success('Berhasil', {
             icon: "check",
             iconPack: "fontawesome",

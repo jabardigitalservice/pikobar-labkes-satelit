@@ -46,7 +46,7 @@
               Domisili
             </label>
             <div class="col-md-8">
-              <input v-model="domisili" type="text" name="domisili" class="form-control" />
+              <input v-model="domisili" type="text" name="domisili" class="form-control" disabled />
             </div>
           </div>
 
