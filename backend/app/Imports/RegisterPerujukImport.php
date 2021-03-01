@@ -10,19 +10,21 @@ use App\Rules\UniqueSampelPerujuk;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\OnEachRow;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Row;
 use Spatie\Enum\Laravel\Rules\EnumValueRule;
 
-class RegisterPerujukImport implements WithHeadingRow, WithChunkReading, WithBatchInserts, ToModel, WithValidation
+class RegisterPerujukImport implements WithHeadingRow, WithChunkReading, WithBatchInserts, OnEachRow, WithValidation
 {
     use Importable;
 
-    public function model(array $row)
+    public function onRow(Row $row)
     {
+        $row = $row->toArray();
         return RegisterPerujuk::create($row + $this->mappingRegisterPerujuk($row));
     }
 
