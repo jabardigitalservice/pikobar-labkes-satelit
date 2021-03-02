@@ -8,5 +8,7 @@ class Negara extends Model
 {
     protected $table = 'negara';
 
+    protected $connection = 'labkes';
+
     protected $guarded = [];
 }
