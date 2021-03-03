@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Ramsey\Uuid\Uuid;
 
 class DinkesController extends Controller
@@ -43,7 +44,7 @@ class DinkesController extends Controller
     {
         $invite = Invite::where('token', $request->token)->first();
         $invite->user()->update([
-            'password' => $request->input('password'),
+            'password' => Hash::make($request->input('password')),
             'status' => UserStatusEnum::ACTIVE(),
             'register_at' => Carbon::now()
         ]);

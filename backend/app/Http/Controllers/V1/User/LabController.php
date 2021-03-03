@@ -13,6 +13,7 @@ use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Ramsey\Uuid\Uuid;
 
 class LabController extends Controller
@@ -44,8 +45,9 @@ class LabController extends Controller
     public function register(LabRegisterRequest $request)
     {
         $invite = Invite::where('token', $request->token)->first();
-        $user = $request->except(['token', 'password_confirmation']);
+        $user = $request->except(['token', 'password_confirmation', 'password']);
         $invite->user()->update($user + [
+            'password' => Hash::make($request->input('password')),
             'status' => UserStatusEnum::ACTIVE(),
             'register_at' => now(),
         ]);
