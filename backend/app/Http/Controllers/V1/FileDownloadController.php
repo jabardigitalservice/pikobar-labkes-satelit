@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Http\Request;
 
 class FileDownloadController extends Controller
 {
