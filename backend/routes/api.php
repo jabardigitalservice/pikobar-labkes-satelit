@@ -57,10 +57,9 @@ Route::group(['middleware' => ['auth:api', 'verified']], function () {
 
 Route::group(['middleware' => ['guest:api']], function () {
     Route::post('login', 'Auth\LoginController@login');
-    Route::post('/v1/user/register', 'V1\UserController@register')->name('api.user.register');
+    Route::post('/v1/user/register', 'V1\User\LabController@register')->name('api.user.register');
     Route::get('/v1/user/register/{invite:token}', 'V1\UserController@tokenInfo')->name('api.user.tokenInfo');
     Route::post('/v1/user/dinkes/register', 'V1\User\DinkesController@register')->name('api.users.dinkes.register');
-    Route::post('/v1/user/lab/register', 'V1\User\LabController@register')->name('api.users.Lab.register');
 });
 
 Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1'], function () {

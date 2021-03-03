@@ -44,7 +44,8 @@ class LabController extends Controller
     public function register(LabRegisterRequest $request)
     {
         $invite = Invite::where('token', $request->token)->first();
-        $invite->user()->update($request->validated() + [
+        $user = $request->except(['token', 'password_confirmation']);
+        $invite->user()->update($user + [
             'status' => UserStatusEnum::ACTIVE(),
             'register_at' => now(),
         ]);
