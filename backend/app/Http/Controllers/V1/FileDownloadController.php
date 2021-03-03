@@ -11,8 +11,8 @@ class FileDownloadController extends Controller
     public function download(Request $request)
     {
         $namaFile = $request->input('namaFile', '');
-        $fullNameFile = $this->getFullNameFile($namaFile);
-        $storagePath = $this->getStoragePathFile($namaFile, $fullNameFile);
+        $fullNameFile = "$namaFile.xlsx";
+        $storagePath = $this->getStoragePathFile($namaFile);
         abort_if(Storage::disk('s3')->missing($storagePath), 422, 'File not exists!');
         return Storage::disk('s3')->download($storagePath, $fullNameFile, [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -20,16 +20,11 @@ class FileDownloadController extends Controller
         ]);
     }
 
-    private function getFullNameFile($namaFile)
+    private function getStoragePathFile($namaFile)
     {
-        return $namaFile . '.xlsx';
-    }
-
-    private function getStoragePathFile($namaFile, $fullNameFile)
-    {
-        $storagePath = "template/satelit/" . $fullNameFile;
+        $storagePath = "template/satelit/$namaFile.xlsx";
         if (in_array($namaFile, ['fasyankes', 'labSatelit', 'wilayah'])) {
-            $storagePath = "template/data_master/" . $fullNameFile;
+            $storagePath = "template/data_master/$namaFile.xlsx";
         }
         return $storagePath;
     }
