@@ -33,10 +33,13 @@ class ImportRegisterController extends Controller
 
     public function importExcel($import, $file)
     {
+        DB::beginTransaction();
         try {
             $import->import($file);
+            DB::commit();
             return response()->json(['message' => 'Sukses import data.']);
         } catch (ValidationException $e) {
+            DB::rollback();
             $errors = [];
             foreach ($e->failures() as $key => $failure) {
                 $errors[$key]['row'] = $failure->row();
