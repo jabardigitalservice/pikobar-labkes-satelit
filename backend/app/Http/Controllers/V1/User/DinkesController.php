@@ -43,7 +43,7 @@ class DinkesController extends Controller
     {
         $invite = Invite::where('token', $request->token)->first();
         $user = $invite->user;
-        $user->fill([
+        $user->fill($request->validated() + [
             'status' => UserStatusEnum::ACTIVE(),
             'register_at' => Carbon::now()
         ]);
