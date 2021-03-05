@@ -121,7 +121,7 @@ class OAuthTest extends TestCase
 
         if ($user) {
             $mock->shouldReceive('user')
-                ->andReturn((new SocialiteUser)->setRaw($user)->map($user));
+                ->andReturn((new SocialiteUser())->setRaw($user)->map($user));
         } else {
             $mock->shouldReceive('redirect')
                 ->andReturn(redirect('https://url-to-provider'));

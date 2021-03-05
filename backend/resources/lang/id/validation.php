@@ -1,4 +1,5 @@
 <?php
+
 return [
     'accepted'             => 'Isian :attribute harus diterima.',
     'active_url'           => 'Isian :attribute bukan URL yang sah.',
@@ -68,7 +69,10 @@ return [
     'timezone'             => 'Isian :attribute harus berupa zona waktu yang valid.',
     'unique'               => 'Isian :attribute sudah ada sebelumnya.',
     'url'                  => 'Format isian :attribute tidak valid.',
+    'excel_extension' => 'Format :attribute harus berupa file bertipe: csv, xls, xlsx.',
+
     'attributes' => [
+        'lab_satelit_id' => 'Lab satelit',
         'name' => 'nama',
     ]
 ];

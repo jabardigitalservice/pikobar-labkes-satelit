@@ -2,13 +2,17 @@
   <div v-bind:id="oid">
     <div v-if="config.has_entry_page || config.has_search_input" style="margin-bottom: 10px">
       <div class="form-inline d-flex justify-content-between">
-
-        <div class="form-group text-muted" v-if="config.has_search_input">
+        <div class="form-group text-muted" v-if="config.has_search_input2">
           <input placeholder="Search" v-model="search_input" @keyup="doSearchDebounce" type="text"
             class="form-control input-placeholder">
           <span class="fa fa-search" style="position: absolute; margin-left: 10px" />
         </div>
-
+        <div class="text-center text-sm-left mb-2 table-search">
+          <div class="form-control checkbox" v-if="oidHasChecked.indexOf(oid) > -1" style="margin-left: 20px">
+            <input type="checkbox" :checked="false" @click="sampelOnCheckAll" id="checkbox-selectall">
+            Select / Unselect All
+          </div>
+        </div>
       </div>
       <div class="clearfix"></div>
     </div>
@@ -26,7 +30,15 @@
                 {{column_name}}
                 <sorter :sort-dir.sync="sortDir" :column-name="column" :sort-column.sync="sortColumn"></sorter>
               </th>
-              <th v-if="config.has_action" class="header_action">{{ $t('title.actions') }}</th>
+              <th v-if="config.has_action && !config.action_column" class="header_action">
+                {{ $t('title.actions').toUpperCase() }}</th>
+              <th v-if="config.has_action && config.action_column"
+                v-bind:style="columnsStyle ? columnsStyle[config.action_column] : {}"
+                v-on:click="sort(config.action_column)" :key="config.action_column" class="header_action">
+                {{ $t('title.actions') }}
+                <sorter :sort-dir.sync="sortDir" :column-name="config.action_column" :sort-column.sync="sortColumn">
+                </sorter>
+              </th>
             </tr>
             <tr v-if="config.has_search_header">
               <th v-bind:colspan="totalColumns" class="th_search">
@@ -81,7 +93,6 @@
         </div>
         <div class="clearfix"></div>
       </div>
-
       <div v-else-if="config.has_pagination && pagination.count > 0" class="row pagination-wrapper">
         <div class="col-sm-12 col-md-5" style="margin-top: 10px;">
           <div class="paging_info">
@@ -122,7 +133,6 @@
           </div>
         </div>
       </div>
-
       <div class="dimmed" v-if="isLoading">
         <div class="loading-indicator">
           <img src="~/assets/img/loading.gif" width="48" height="48">
@@ -232,8 +242,11 @@
 </style>
 
 <script>
-  import Sorter from './Sorter'
-  const requireContext = require.context('./table-row', false, /.*\.vue$/)
+  import Sorter from './Sorter';
+  import {
+    oidHasChecked
+  } from '~/assets/js/constant/enum';
+  const requireContext = require.context('./table-row', false, /.*\.vue$/);
 
   var modules = requireContext.keys()
     .map(file => [file.replace(/(^.\/)|(\.vue$)/g, ''), requireContext(file)])
@@ -255,16 +268,27 @@
       'disableSort'
     ],
     data() {
+      let datas = [];
+      if (this.oid === 'registrasi-perujuk') {
+        datas = this.$store.state.registrasi_perujuk.selectedSampels;
+      } else if (this.oid === 'verifikasi-admin') {
+        datas = this.$store.state.hasil_pemeriksaan.selectedSampels;
+      } else if (this.oid === 'registrasi-sampel') {
+        datas = this.$store.state.registrasi_sampel.selectedSampels;
+      }
       return {
         isLoading: true,
         isLoadingExp: false,
+        checked: false,
+        dataArr: datas,
+        checkedArr: [],
         items: [],
         info: {},
         pagination: {
           page: 1,
           previous: false,
           next: false,
-          perpage: 20,
+          perpage: this.config.perpage ? this.config.perpage : 20,
           count: 0,
           total: 0
         },
@@ -274,6 +298,8 @@
         sortDir: null,
         detail: {},
         showDetail: false,
+        name_export_excel: this.oid.toUpperCase() + ' - ' + new Date() + '.xlsx',
+        oidHasChecked: oidHasChecked,
       }
     },
     methods: {
@@ -301,6 +327,9 @@
         }
       },
       changePage(page) {
+        if (this.oidHasChecked.indexOf(this.oid) > -1) {
+          document.getElementById('checkbox-selectall').checked = false;
+        }
         if (isNaN(parseInt(this.pagination.page)) || this.pagination.page < 1) {
           this.pagination.page = 1;
         }
@@ -317,6 +346,7 @@
         this.sortColumn = null;
         this.sortDir = null;
         this.pagination.page = 1;
+        document.getElementById('checkbox-selectall').checked = false;
         this.changePage();
       },
       sort(col, default_sort_dir) {
@@ -361,10 +391,14 @@
             order_direction: that.sortDir,
           },
         }).then((response) => {
-          var data = response.data;
-          that.items = data.data;
-          that.info = data.info;
-          that.pagination.count = data.count;
+          const { data } = response || {}
+          let {
+            data: dataArray,
+            meta,
+            count
+          } = data || {}
+          that.items = dataArray || []
+          that.pagination.count = meta && meta.total ? meta.total : count || 0
           that.pagination.total = Math.ceil(that.pagination.count / that.pagination.perpage);
           if (that.pagination.count > 0 && that.pagination.page > Math.floor((that.pagination.count - 1) / that
               .pagination.perpage) + 1) {
@@ -412,7 +446,7 @@
           const link = document.createElement('a');
           link.href = url;
           const contentDisposition = response.headers['content-disposition'];
-          let fileName = 'hasil_pemeriksaan.xlsx';
+          let fileName = that.name_export_excel;
           if (contentDisposition) {
             const fileNameMatch = contentDisposition.match(/filename=(.+)/);
             if (fileNameMatch.length === 2)
@@ -423,10 +457,100 @@
           link.click();
           link.remove();
           window.URL.revokeObjectURL(url);
+          that.isLoadingExp = false;
+          this.$bus.$emit('download-export', 'end', this.oid);
+        }).catch((e) => {
+          this.$swal.fire(
+            "Terjadi kesalahan",
+            "Silakan hubungi Admin",
+            "error"
+          );
           this.$bus.$emit('download-export', 'end', this.oid);
         });
-        that.isLoadingExp = false;
       },
+      sampelOnCheckAll() {
+        let listSampelsArr = []
+        this.checkedArr = []
+        if (this.oid === 'registrasi-perujuk') {
+          listSampelsArr = this.$store.state.registrasi_perujuk.selectedSampels;
+        } else if (this.oid === 'verifikasi-admin') {
+          listSampelsArr = this.$store.state.hasil_pemeriksaan.selectedSampels;
+        } else if (this.oid === 'registrasi-sampel') {
+          listSampelsArr = this.$store.state.registrasi_sampel.selectedSampels;
+        }
+        this.checkedArr.concat(listSampelsArr)
+        let samples = Array.prototype.slice.call(document.getElementsByName("list-sampel"))
+        const newDomchecked = document.getElementById('checkbox-selectall').checked;
+        this.checked = newDomchecked;
+        if (!samples.length) {
+          return
+        }
+        let i;
+        for (i = 0; i < samples.length; i++) {
+          const findinCheckedArr = Array.isArray(this.checkedArr) ? this.checkedArr.find((element) => element.name ===
+            samples[i].getAttribute("value")) : null
+          if (findinCheckedArr === undefined) {
+            this.checkedArr.push({
+              id: samples[i].getAttribute("id"),
+              name: samples[i].getAttribute("value"),
+            })
+          }
+          samples[i].checked = this.checked
+        }
+        if (this.checked) {
+          if (this.oid == 'registrasi-perujuk') {
+            this.$store.commit('registrasi_perujuk/addMultiple', this.checkedArr)
+          } else if (this.oid == 'verifikasi-admin') {
+            this.$store.commit('hasil_pemeriksaan/addMultiple', this.checkedArr)
+          } else if (this.oid == 'registrasi-sampel') {
+            this.$store.commit('registrasi_sampel/addMultiple', this.checkedArr)
+          }
+        }
+        if (!this.checked) {
+          if (this.oid == 'registrasi-perujuk') {
+            this.$store.commit('registrasi_perujuk/removeMultiple', this.checkedArr)
+          } else if (this.oid == 'verifikasi-admin') {
+            this.$store.commit('hasil_pemeriksaan/removeMultiple', this.checkedArr)
+          } else if (this.oid == 'registrasi-sampel') {
+            this.$store.commit('registrasi_sampel/removeMultiple', this.checkedArr)
+          }
+        }
+      },
+      getDOMbyId() {
+        if (this.oid == 'registrasi-perujuk') {
+          for (const item of this.items) {
+            const sampel = document.getElementById(item.id).getAttribute("value")
+            const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el.name === sampel) : null
+            if (findinArr) {
+              document.getElementById(item.id).checked = true;
+            } else {
+              document.getElementById(item.id).checked = false;
+            }
+          }
+        } else if (this.oid == 'verifikasi-admin') {
+          for (const item of this.items) {
+            const sampel = document.getElementById(item.sampel_id).getAttribute("value")
+            const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el.name === sampel) : null
+            if (findinArr) {
+              document.getElementById(item.sampel_id).checked = true;
+            } else {
+              document.getElementById(item.sampel_id).checked = false;
+            }
+          }
+        } else if (this.oid === 'registrasi-sampel') {
+          for (const item of this.items) {
+            if (item.sampel_status == 'sample_taken' && !item.register_perujuk_id) {
+              const sampel = document.getElementById(item.register_id).getAttribute("value")
+              const findinArr = this.dataArr.length > 0 ? this.dataArr.find(el => el.name === sampel) : null
+              if (findinArr) {
+                document.getElementById(item.register_id).checked = true;
+              } else {
+                document.getElementById(item.register_id).checked = false;
+              }
+            }
+          }
+        }
+      }
     },
     computed: {
       showCustomEmptyPage: function () {
@@ -465,6 +589,14 @@
         }
         return arr;
       },
+      selectedSampels: {
+        set(val) {
+          this.$store.state.selectedSampels = val
+        },
+        get() {
+          return this.$store.state.selectedSampels
+        }
+      },
       entriFrom: function () {
         return (this.pagination.page - 1) * this.pagination.perpage + 1;
       },
@@ -495,12 +627,20 @@
       }
     },
     watch: {
-      'pagination.page'() {
+      'pagination.page'(newVal, oldVal) {
         if (!window.pagestate) {
           window.pagestate = []
         }
-        window.pagestate[this.oid] = this.pagination.page
-      }
+        window.pagestate[this.oid] = this.pagination.page;
+      },
+      'checkedArr': function (newVal, oldVal) {
+        this.getDOMbyId()
+      },
+      "isLoading": function (newVal, oldVal) {
+        if ((this.oidHasChecked.indexOf(this.oid) > -1) && this.isLoading === false) {
+          this.getDOMbyId();
+        }
+      },
     },
     created() {
       var that = this;

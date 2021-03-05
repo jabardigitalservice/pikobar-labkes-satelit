@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Register trait
- * 
+ *
  */
 trait RegisterTrait
 {
@@ -14,22 +14,22 @@ trait RegisterTrait
      * Generate nomor register
      * @param string $date
      * @param string $jenisRegistrasi
-     * 
+     *
      * @return string
      */
     public function generateNomorRegister($date = null, $jenisRegistrasi = null)
     {
-        if(!$date) {
+        if (!$date) {
             $date = date('Ymd');
         }
 
         if (empty($jenisRegistrasi)) {
             $kodeRegistrasi = 'L';
-        } 
+        }
 
         if ($jenisRegistrasi === 'mandiri') {
             $kodeRegistrasi = 'L';
-        } 
+        }
 
         if ($jenisRegistrasi === 'rujukan') {
             $kodeRegistrasi = 'R';
@@ -39,13 +39,12 @@ trait RegisterTrait
 
         if (count($res)) {
             $nextnum = $res[0]->val + 1;
-        } 
-        
+        }
+
         if (!count($res)) {
             $nextnum = 1;
         }
-        
-        return $kodeRegistrasi . $date . str_pad($nextnum,4,"0",STR_PAD_LEFT);
-    }
 
+        return $kodeRegistrasi . $date . str_pad($nextnum, 4, "0", STR_PAD_LEFT);
+    }
 }

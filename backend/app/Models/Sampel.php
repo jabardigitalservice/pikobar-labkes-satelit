@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Sampel extends Model
 {
     use SoftDeletes;
+
     protected $table = 'sampel';
 
     protected $appends = [
@@ -16,29 +17,37 @@ class Sampel extends Model
     ];
 
     protected $fillable = [
-        'nomor_register',
-        'fasyankes_id',
-        'nomor_rekam_medis',
-        'nama_dokter',
-        'no_telp',
-
         'nomor_sampel',
         'jenis_sampel_id',
-        'petugas_pengambilan_sampel', // Isinya adalah kondisi sampel, di aliaskan 'kondisi_sampel' 
+        'jenis_sampel_nama',
+        'register_id',
+        'lab_satelit_id',
+        'pengambilan_sampel_id',
+        'creator_user_id',
+        'sampel_status',
+        'created_at',
+        'waktu_sample_taken',
+        'waktu_pcr_sample_analyzed',
+        'perujuk_id',
+        'register_perujuk_id',
+        //other
+        'nomor_register',
+        'nama_dokter',
+        'nomor_rekam_medis',
+        'no_telp',
+        'petugas_pengambilan_sampel', // Isinya adalah kondisi sampel, di aliaskan 'kondisi_sampel'
         'tanggal_pengambilan_sampel',
         'waktu_pengambilan_sampel',
-        'sampel_status',
         'validator_id',
         'waktu_sample_verified',
         'waktu_sample_valid',
         'valid_file_id',
-        'counter_print_hasil'
+        'counter_print_hasil',
     ];
 
     protected $dates = [
-        'tanggal_pengambilan_sampel',
-        'waktu_sample_verified',
-        'waktu_sample_valid'
+        'waktu_sample_taken',
+        'waktu_pcr_sample_analyzed',
     ];
 
     protected $casts = [
@@ -68,7 +77,7 @@ class Sampel extends Model
 
     public function logs()
     {
-        return $this->hasMany(SampelLog::class);
+        return $this->hasMany(SampelLog::class)->orderBy('created_at', 'desc');
     }
 
     public function getJenisSampelAttribute()
@@ -84,10 +93,10 @@ class Sampel extends Model
             'sampel_status_before' => $this->sampel_status,
         ]);
         $log = SampelLog::create($arr);
-        if (empty($this->{'waktu_'.$newstate})) {
-            $this->{'waktu_'.$newstate} = date('Y-m-d H:i:s');
+        if (empty($this->{'waktu_' . $newstate})) {
+            $this->{'waktu_' . $newstate} = date('Y-m-d H:i:s');
             if ($tanggal) {
-                $this->{'waktu_'.$newstate} = date('Y-m-d H:i:s',strtotime($tanggal));
+                $this->{'waktu_' . $newstate} = date('Y-m-d H:i:s', strtotime($tanggal));
             }
         }
         $this->sampel_status = $newstate;
@@ -127,8 +136,8 @@ class Sampel extends Model
     public static function boot()
     {
         parent::boot();
-        
-        static::creating(function($model) {
+
+        static::creating(function ($model) {
             if (empty($model->is_musnah_ekstraksi)) {
                 $model->is_musnah_ekstraksi = false;
             }
@@ -147,5 +156,4 @@ class Sampel extends Model
     {
         return $this->belongsTo(LabPCR::class, 'lab_pcr_id');
     }
-
 }

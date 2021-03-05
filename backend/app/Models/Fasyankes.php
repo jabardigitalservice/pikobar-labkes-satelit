@@ -8,6 +8,8 @@ class Fasyankes extends Model
 {
     protected $table = 'fasyankes';
 
+    protected $connection = 'labkes';
+
     protected $fillable = [
         'nama',
         'tipe', // Rumah sakit | Dinkes

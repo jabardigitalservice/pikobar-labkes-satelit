@@ -7,38 +7,45 @@ use Illuminate\Database\Eloquent\Model;
 class Pasien extends Model
 {
     protected $table = 'pasien';
-    
+
     protected $fillable = [
         'nama_lengkap',
+        'kewarganegaraan',
         'nik',
-        // 'nama_depan',
-        // 'nama_belakang',
-        // 'no_ktp',
-        // 'no_sim',
-        // 'no_kk',
         'tanggal_lahir',
         'tempat_lahir',
-        'kewarganegaraan',
-        'no_hp',
-        'no_telp',
-        'pekerjaan',
-        'jenis_kelamin',
+        'kode_provinsi',
+        'nama_provinsi',
+        'kode_kabupaten',
+        'nama_kabupaten',
+        'kode_kecamatan',
+        'nama_kecamatan',
+        'kode_kelurahan',
+        'nama_kelurahan',
         'kota_id',
         'kecamatan',
         'kelurahan',
+        'alamat_lengkap',
+        'sumber_pasien',
+        'jenis_kelamin',
+        'usia_tahun',
+        'usia_bulan',
+        'lab_satelit_id',
+        'perujuk_id',
+        'register_perujuk_id',
+        'no_hp',
         'no_rw',
         'no_rt',
-        'alamat_lengkap',
         'keterangan_lain',
+        'kode_kasus',
+        //other
+        'no_telp',
+        'pekerjaan',
         'suhu',
-        'sumber_pasien'
-    ];
-
-    protected $dates = [
     ];
 
     protected $casts = [
-        'tanggal_lahir'=> 'date:Y-m-d',
+        'tanggal_lahir' => 'date:Y-m-d',
     ];
 
     public function registers()
@@ -108,6 +115,4 @@ class Pasien extends Model
     {
         return $this->belongsTo(Kota::class);
     }
-
-
 }

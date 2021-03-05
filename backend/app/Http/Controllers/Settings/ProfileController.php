@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 class ProfileController extends Controller
 {
     /**
+     * index
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function index(Request $request)
+    {
+        return $request->user();
+    }
+    /**
      * Update the user's profile information.
      *
      * @param  \Illuminate\Http\Request $request
@@ -19,7 +29,7 @@ class ProfileController extends Controller
 
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$user->id,
+            'email' => 'required|email|unique:users,email,' . $user->id,
         ]);
 
         return tap($user)->update($request->only('name', 'email'));

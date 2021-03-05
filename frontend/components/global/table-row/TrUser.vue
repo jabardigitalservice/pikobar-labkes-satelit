@@ -4,13 +4,11 @@
     <td>
       {{ item.username }}
     </td>
-    <td>
-      {{ item.name }}
-    </td>
     <td>{{ item.email }}</td>
     <td>{{ item.koordinator }}</td>
-    <td>{{ item.lab_satelit ? item.lab_satelit.nama : "-" }}</td>
-    <td>{{ item.lab_satelit ? item.lab_satelit.alamat : "-" }}</td>
+    <td>
+      {{item.lab && item.lab.nama ? item.lab.nama : ''}}
+    </td>
     <td>{{ item.status }}</td>
     <td>{{ item.last_login_at }}</td>
     <td>
@@ -63,14 +61,6 @@
           </div>
           <div class="form-group row col-md-10">
             <div class="col-md-5 text-blue flex-left">
-              Nama
-            </div>
-            <div class="col-md-7 flex-left">
-              ${item.name || '-'}
-            </div>
-          </div>
-          <div class="form-group row col-md-10">
-            <div class="col-md-5 text-blue flex-left">
               Email
             </div>
             <div class="col-md-7 flex-left">
@@ -90,15 +80,7 @@
               Lab
             </div>
             <div class="col-md-7 flex-left">
-              ${item.lab_satelit ? item.lab_satelit.nama : '-'}
-            </div>
-          </div>
-          <div class="form-group row col-md-10">
-            <div class="col-md-5 text-blue flex-left">
-              Alamat Lab
-            </div>
-            <div class="col-md-7 flex-left">
-              ${item.lab_satelit.alamat || '-'}
+              ${item.lab || '-'}
             </div>
           </div>
           <div class="form-group row col-md-10">

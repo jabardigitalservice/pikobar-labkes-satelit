@@ -83,7 +83,7 @@
             </select>
           </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row" v-show="oid === 'verifikasi'">
           <div class="col-md-4 flex-text-center">
             <div>Kriteria</div>
           </div>
@@ -92,6 +92,18 @@
               <option :value="item.value" :key="idx" v-for="(item,idx) in status">{{item.text}}
               </option>
             </select>
+          </div>
+        </div>
+        <div class="form-group row" v-show="oid === 'verifikasi-admin'">
+          <div class="col-md-4 flex-text-center">
+            <div>Lab Pemeriksa</div>
+          </div>
+          <div class="col-md-8">
+              <select v-model="params.lab_satelit_id" class="form-control" name="lab_satelit_id">
+                <option :value="item.id" :key="idx" v-for="(item, idx) in option_lab_satelit">
+                  {{ item.nama }}
+                </option>
+              </select>
           </div>
         </div>
       </div>
@@ -121,6 +133,7 @@
         status: pasienStatus,
         optFasyankes: [],
         fasyankes: [],
+        option_lab_satelit: null,
         params: {
           nama_pasien: null,
           reg_fasyankes_pengirim: null,
@@ -130,7 +143,8 @@
           kota: null,
           kesimpulan_pemeriksaan: null,
           sumber_pasien: null,
-          status: null
+          status: null,
+          lab_satelit_id: null,
         },
         kota: [],
         optionKota: []
@@ -139,6 +153,10 @@
     methods: {
       doFilter() {
         this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
+      },
+      async getLabSatelit() {
+        const resp = await this.$axios.get("/lab-satelit");
+        this.option_lab_satelit = resp.data.data;
       },
       async getKota() {
         const resp = await this.$axios.get('/v1/list-kota-jabar');
@@ -159,6 +177,7 @@
         this.params.kesimpulan_pemeriksaan = null;
         this.params.sumber_pasien = null;
         this.params.status = null;
+        this.params.lab_satelit_id = null;
         this.kota = null;
         this.$refs.rangedatepicker.dateRange.start = null;
         this.$refs.rangedatepicker.dateRange.end = null;
@@ -171,6 +190,7 @@
     },
     created() {
       _this = this;
+      this.getLabSatelit();
       this.getKota();
     },
     watch: {

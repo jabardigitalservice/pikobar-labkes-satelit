@@ -34,7 +34,7 @@
       Charts,
       InstansiPengirim,
       TrackingAdmin,
-      ChartAdmin
+      ChartAdmin,
     },
 
     computed: mapGetters({
@@ -63,8 +63,14 @@
           case 'superadmin':
             allow_role_id = [1]
             break;
+          case 'perujuk':
+            allow_role_id = [9]
+            break;
         }
-        return allow_role_id.indexOf(this.user.role_id) > -1
+        if (this.user && this.user.role_id) {
+          return allow_role_id.indexOf(this.user.role_id) > -1
+        }
+        return ''
       },
     }
   };

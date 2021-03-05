@@ -2,6 +2,17 @@
   <tr>
     <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
     <td>
+      <input
+        type="checkbox"
+        name="list-sampel"
+        v-if="item.sampel_status == 'sample_taken' && !item.register_perujuk_id"
+        v-bind:id="item.register_id"
+        v-bind:value="item.nomor_sampel"
+        v-model="selected"
+        @click="sampelOnChangeSelect"
+      />
+    </td>
+    <td>
       <div class="badge badge-white" style="text-align:left; padding:10px">
         {{item.nomor_sampel}}
       </div>
@@ -36,17 +47,16 @@
         <i class="fa fa-eye" />
       </nuxt-link>
       <nuxt-link :to="`/registrasi/sampel/update/${item.register_id}/${item.pasien_id}`"
-        class="mb-1 btn btn-primary btn-sm" title="Klik untuk edit data">
+        class="mb-1 btn btn-primary btn-sm" title="Klik untuk edit data" v-if="item.sampel_status == 'sample_taken' && !item.register_perujuk_id">
         <i class="fa fa-edit" />
       </nuxt-link>
-      <button class="mb-1 btn btn-danger btn-sm" @click="deleteData(item, usiaPasien)" title="Klik untuk hapus data">
+      <button class="mb-1 btn btn-danger btn-sm" @click="deleteData(item, usiaPasien)" title="Klik untuk hapus data" v-if="item.sampel_status == 'sample_taken' && !item.register_perujuk_id">
         <i class="fa fa-trash" />
       </button>
     </td>
   </tr>
 </template>
 <script>
-  import axios from "axios";
   import {
     pasienStatus
   } from '~/assets/js/constant/enum';
@@ -60,11 +70,23 @@
   export default {
     props: ["item", "pagination", "rowparams", "index", "config"],
     data() {
+      const datas = this.$store.state.registrasi_sampel.selectedSampels
       return {
         pasienStatus,
         momentFormatDate,
-        momentFormatTime
+        momentFormatTime,
+        checked: false,
+        selected: [],
+        dataArr: datas,
       };
+    },
+    watch: {
+      'selected': function () {
+        const sampel = document.getElementById(this.item.register_id).value
+        const findinArr = this.dataArr.length > 0 ? this.dataArr.find((el) => el.name === sampel) : null
+        findinArr ? document.getElementById(this.item.register_id).checked = true
+          : document.getElementById(this.item.register_id).checked = false
+      },
     },
     methods: {
       async deleteData(item, usia) {
@@ -158,17 +180,30 @@
         } = await swalCustom.fire(getAlertPopUp('delete', content));
         if (isConfirm) {
           try {
-            await this.$axios.delete(`v1/register/sampel/${item.register_id}/${item.pasien_id}`);
+            await this.$axios.delete('v1/register/sampel-bulk', {
+              data: {
+                id: [item.register_id]
+              }
+            })
             toast.success('Berhasil menghapus data', {
               icon: 'check',
               iconPack: 'fontawesome',
               duration: 5000
             })
             await bus.$emit('refresh-ajaxtable', 'registrasi-sampel');
-          } catch (e) {
+          } catch (err) {
             swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
           }
         }
+      },
+      sampelOnChangeSelect(e) {
+        const newDomchecked = e.target.checked
+        const el = e ? e.currentTarget : null
+        const regId = el ? el.getAttribute("id") : null
+        const noSampel = el ? el.getAttribute("value") : null
+        this.checked = newDomchecked
+        this.checked ? this.$store.commit("registrasi_sampel/add", {id: regId, name: noSampel})
+          : this.$store.commit("registrasi_sampel/remove", {id: regId, name: noSampel})
       },
       showDetail(item) {
         const payload = {

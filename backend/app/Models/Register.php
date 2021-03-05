@@ -2,36 +2,51 @@
 
 namespace App\Models;
 
+use App\Traits\FilterTrait;
+use App\Traits\JoinTrait;
+use App\Traits\OrderTrait;
+use App\Traits\SearchTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Register extends Model
 {
     use SoftDeletes;
+    use JoinTrait;
+    use SearchTrait;
+    use FilterTrait;
+    use OrderTrait;
+
     protected $table = 'register';
 
     protected $fillable = [
         'nomor_register',
+        'register_uuid',
+        'creator_user_id',
+        'lab_satelit_id',
         'fasyankes_id',
+        'fasyankes_pengirim',
+        'nama_rs',
+        'instansi_pengirim',
+        'instansi_pengirim_nama',
+        'sumber_pasien',
+        'status',
+        'swab_ke',
+        'tanggal_swab',
+        'perujuk_id',
+        'register_perujuk_id',
+        //other
         'nomor_rekam_medis',
         'nama_dokter',
         'no_telp',
-        'register_uuid',
-        'creator_user_id',
-        'sumber_pasien',
         'jenis_registrasi',
         'tanggal_kunjungan',
         'kunjungan_ke',
         'rs_kunjungan',
         'dinkes_pengirim',
         'other_dinas_pengirim',
-        'nama_rs',
         'other_nama_rs',
-        'fasyankes_pengirim',
         'hasil_rdt',
-        'status',
-        'swab_ke',
-        'tanggal_swab',
     ];
 
     protected $hidden = ['fasyankes_id'];
@@ -51,80 +66,6 @@ class Register extends Model
             ->using(PasienRegister::class);
     }
 
-    public function riwayatKunjungan()
-    {
-        return $this->hasOne(RiwayatKunjungan::class);
-    }
-
-    public function gejalaPasien()
-    {
-        return $this->belongsToMany(Pasien::class, 'gejala_pasien', 'register_id', 'pasien_id')
-            ->using(GejalaPasien::class)
-            ->withPivot([
-                'pasien_rdt',
-                'hasil_rdt_positif',
-                'tanggal_rdt',
-                'keterangan_rdt',
-                'tanggal_onset_gejala',
-                'daftar_gejala',
-                'gejala_lain',
-            ]);
-    }
-
-    public function pemeriksaanPenunjang()
-    {
-        return $this->belongsToMany(Pasien::class, 'pemeriksaan_penunjang', 'register_id', 'pasien_id')
-            ->using(PemeriksaanPenunjang::class)
-            ->withPivot([
-                'xray_paru',
-                'penjelasan_xray',
-                'leukosit',
-                'limfosit',
-                'trombosit',
-                'ventilator',
-                'status_kesehatan', // pulang, dirawat, meninggal
-                'keterangan_lab'
-            ]);
-    }
-
-    public function riwayatKontak()
-    {
-        return $this->belongsToMany(Pasien::class, 'riwayat_kontak', 'register_id', 'pasien_id')
-            ->using(RiwayatKontak::class)
-            ->withPivot(
-                'nama_lengkap',
-                'alamat',
-                'hubungan',
-                'tanggal_awal',
-                'tanggal_akhir',
-                'positif_covid19',
-                'keluarga_sakit_sejenis'
-            );
-    }
-
-    public function riwayatLawatan()
-    {
-        return $this->belongsToMany(Pasien::class, 'riwayat_lawatan', 'register_id', 'pasien_id')
-            ->using(RiwayatLawatan::class)
-            ->withPivot(
-                'tanggal_lawatan',
-                'nama_kota',
-                'nama_negara'
-            );
-    }
-
-    public function riwayatPenyakitPenyerta()
-    {
-        return $this->hasOne(RiwayatPenyakitPenyerta::class);
-
-        // Many to Many
-        // return $this->belongsToMany(Pasien::class, 'riwayat_penyakit_penyerta', 'register_id', 'pasien_id')
-        //     ->using(RiwayatPenyakitPenyerta::class)
-        //     ->withPivot(
-        //         'daftar_penyakit'
-        //     );
-    }
-
     public function pengambilanSampel()
     {
         return $this->belongsToMany(PengambilanSampel::class, 'pengambilan_sampel_registrasi', 'register_id', 'pengambilan_sampel_id');
@@ -140,4 +81,39 @@ class Register extends Model
         return $this->hasMany(RegisterLog::class, 'register_id', 'id');
     }
 
+    public static function boot()
+    {
+        parent::boot();
+        self::deleting(function ($register) {
+            if ($register->sampel) {
+                $register->sampel()->delete();
+            }
+        });
+    }
+
+    public function scopeSelectCustom($query)
+    {
+        return $query->select(
+            'nik',
+            'nama_lengkap',
+            'tanggal_lahir',
+            'usia_tahun',
+            'nomor_sampel',
+            'kota.nama as nama_kota',
+            'pasien_register.*',
+            'register.sumber_pasien',
+            'status',
+            'waktu_sample_taken',
+            'nama_rs',
+            'sampel_status',
+            'sampel.register_perujuk_id'
+        );
+    }
+
+    public function scopeWhereLabSatelit($query, $labSatelitId)
+    {
+        return $query->where('register.lab_satelit_id', $labSatelitId)
+                        ->where('sampel.lab_satelit_id', $labSatelitId)
+                        ->where('pasien.lab_satelit_id', $labSatelitId);
+    }
 }

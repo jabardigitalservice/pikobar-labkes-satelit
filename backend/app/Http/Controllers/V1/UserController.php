@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Enums\UserStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TokenInfoResource;
 use App\Invite;
 use Illuminate\Http\Request;
 use App\User;
@@ -24,8 +25,6 @@ class UserController extends Controller
 
         if ($order) {
             $order_direction = $request->get('order_direction', 'desc');
-            if (empty($order_direction)) $order_direction = 'desc';
-
             switch ($order) {
                 default:
                     $models = $models->orderBy('updated_at', $order_direction);
@@ -44,7 +43,7 @@ class UserController extends Controller
 
     public function tokenInfo(Invite $invite)
     {
-        return $invite;
+        return new TokenInfoResource($invite);
     }
 
     public function register(Request $request)
@@ -52,21 +51,19 @@ class UserController extends Controller
         $user = User::where(['email' => $request->email])->first();
         Validator::make($request->all(), [
             'username' => 'required|unique:users,username',
-            'email' => 'required|email|unique:users,email,'.$user->id,
-            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $user->id,
             'koordinator' => 'required',
             'token' => 'required',
             'password' => 'required|confirmed|min:6',
         ])->validate();
-            
+
         $invite = Invite::where('token', $request->token)->first();
         $user->update([
-            'name' => $request->name,
             'username' => $request->username,
             'koordinator' => $request->koordinator,
             'password' => Hash::make($request->password),
         ]);
-        
+
         $user->status = UserStatusEnum::ACTIVE();
         $user->register_at = Carbon::now();
         $user->save();
@@ -78,14 +75,12 @@ class UserController extends Controller
 
     public function delete(User $user)
     {
-        $email = $user->email;
-        $invite = Invite::where('email', $email)->delete();
         return $user->delete();
     }
 
     public function show(User $user)
     {
-        $user->load('lab_satelit');
+        $user->load(['lab_satelit', 'dinkes', 'perujuk.kota']);
         return response()->json(['data' => $user]);
     }
 

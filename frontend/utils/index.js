@@ -6,6 +6,9 @@
  * @return {String|undefined}
  */
 import moment from 'moment';
+import {
+  optionRoles
+} from "~/assets/js/constant/enum"
 
 export function cookieFromRequest(req, key) {
   if (!req.headers.cookie) {
@@ -108,6 +111,16 @@ export function getAlertPopUp(type, content) {
       reverseButtons: true,
       html: content
     };
+  } else if (type === 'terima') {
+    alertMessage = {
+      title: "Registrasi",
+      showCancelButton: true,
+      confirmButtonText: `<i class='fa fa-check' /> OK`,
+      cancelButtonText: `<i class="fa fa-close" /> Cancel`,
+      icon: "info",
+      reverseButtons: true,
+      html: content
+    };
   }
   return alertMessage;
 }
@@ -157,4 +170,20 @@ export function getKeteranganData(nik, nama) {
         <b>Data Lengkap</b>
       </div>`;
   }
+}
+
+// function to find role
+// role = value string, leave empty to get all roles
+// key = 'id' to get role id, 'value' to get role value, or leave empty to get all data
+export function getRole(role, key) {
+  if (role) {
+    const findRole = Array.isArray(optionRoles) ? optionRoles.find(el => el.value === role) : {}
+    if (findRole && key && key === 'id') {
+      return findRole.id
+    } else if (findRole && key && key === 'value') {
+      return findRole.value
+    }
+    return findRole
+  }
+  return optionRoles
 }

@@ -64,7 +64,7 @@ class DashboardAdminController extends Controller
             ->whereRaw("date(waktu_pcr_sample_analyzed) > date(waktu_sample_taken)")
             ->pluck('days');
 
-        $satelit = $satelit->sum() / $satelit->count();
+        $satelit = $satelit->count() ? $satelit->sum() / $satelit->count() : $satelit->count();
         $labkes = $labkes->sum() / $labkes->count();
         return array_sum([$labkes, $satelit]) / 2;
     }
@@ -219,7 +219,7 @@ class DashboardAdminController extends Controller
         $data['labels'] = [];
         if ($date && !is_array($date)) {
             $fasyankes = $this->__getFasyankes($date, $kota);
-        } else if($kota){
+        } elseif ($kota) {
             $fasyankes = $this->__getFasyankes($date, $kota);
         }
         foreach ($fasyankes as $item) {

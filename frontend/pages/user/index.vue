@@ -18,7 +18,7 @@
       <div class="col-lg-12">
         <Ibox title="Pengguna">
           <ajax-table
-            url="/v1/user"
+            url="/v1/users/lab"
             :oid="`master-user`"
             :params="params"
             :config="{
@@ -40,11 +40,9 @@
             :rowtemplate="'tr-user'"
             :columns="{
               username: 'USERNAME',
-              name: 'NAMA',
               email: 'EMAIL',
               koordinator: 'KOORDINATOR',
               lab: 'LAB',
-              alamat_lab: 'ALAMAT LAB',
               status: 'STATUS',
               last_login_at: 'TERAKHIR LOGIN',
             }"
@@ -64,13 +62,13 @@
             @keydown="form.onKeydown($event)"
           >
             <div class="form-group row">
-              <label class="col-md-3 col-lg-3"
+              <label class="col-md-3 col-form-label"
                 >Lab <span style="color: red">*</span></label
               >
-              <div class="col-md-8 col-lg-9" >
+              <div class="col-md-9" >
                 <select
                   v-model="form.lab_satelit_id"
-                  class="form-control col-md-8 col-lg-6"
+                  class="form-control"
                   name="lab_satelit_id"
                   required
                   :class="{ 'is-invalid': form.errors.has(`lab_satelit_id`) }"
@@ -87,10 +85,10 @@
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 col-lg-3"
+              <label class="col-md-3 col-form-label"
                 >E-mail <span style="color: red">*</span></label
               >
-              <div class="col-md-8 col-lg-9">
+              <div class="col-md-9">
                 <input
                   class="form-control"
                   name="email"
@@ -145,7 +143,6 @@ export default {
       },
       params: {
         username: null,
-        name: null,
         email: null,
         status: null,
         lab: null,
@@ -167,8 +164,9 @@ export default {
   },
   methods: {
     async getLabSatelit() {
-      const resp = await this.$axios.get("/lab-satelit");
-      this.option_lab_satelit = resp.data.data;
+      const resp = await this.$axios.get("/lab-satelit")
+      const { data } = resp.data || []
+      this.option_lab_satelit = data
     },
     async submit() {
       try {

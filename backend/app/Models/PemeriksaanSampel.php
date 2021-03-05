@@ -12,6 +12,13 @@ class PemeriksaanSampel extends Model
     protected $table = 'pemeriksaansampel';
 
     protected $fillable = [
+        'sampel_id',
+        'user_id',
+        'tanggal_input_hasil',
+        'catatan_pemeriksaan',
+        'kesimpulan_pemeriksaan',
+        'hasil_deteksi',
+        //other
         'tanggal_penerimaan_sampel',
         'jam_penerimaan_sampel',
         'lab_penerima_sampel',
@@ -24,10 +31,7 @@ class PemeriksaanSampel extends Model
         'metode_pemeriksaan',
         'nama_kit_pemeriksaan',
         'target_gen',
-        'hasil_deteksi',
         'grafik',
-        'kesimpulan_pemeriksaan',
-        'catatan_pemeriksaan'
     ];
 
     protected $casts = [
@@ -48,6 +52,19 @@ class PemeriksaanSampel extends Model
     public function getHasilDeteksiParsedAttribute()
     {
         return $this->parseHasilDeteksi($this->getAttribute('hasil_deteksi'));
+    }
+
+    public function setHasilDeteksiAttribute($value)
+    {
+        return $this->attributes['hasil_deteksi'] = is_array($value) ? json_encode($value) : $value;
+    }
+
+    public function setKesimpulanPemeriksaanAttribute($value)
+    {
+        if (in_array($value, ['swab_ulang', 'sampel kurang'])) {
+            $value = 'invalid';
+        }
+        return $this->attributes['kesimpulan_pemeriksaan'] = $value;
     }
 
     public function user()

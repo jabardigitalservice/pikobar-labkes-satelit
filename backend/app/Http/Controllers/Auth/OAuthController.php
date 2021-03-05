@@ -34,8 +34,7 @@ class OAuthController extends Controller
      */
     public function redirectToProvider($provider)
     {
-        if ($provider == 'keycloak')
-        {
+        if ($provider == 'keycloak') {
             return [
                 'url' => Socialite::driver($provider)->getTargetUrl(),
             ];
@@ -55,10 +54,9 @@ class OAuthController extends Controller
     public function handleProviderCallback($provider)
     {
         $user = Socialite::driver($provider)->stateless()->user();
-        
-        if (!method_exists($user, 'getEmail'))
-        {
-            throw new EmailInvalidException;
+
+        if (!method_exists($user, 'getEmail')) {
+            throw new EmailInvalidException();
         }
 
         $user = $this->findOrCreateUser($provider, $user);
@@ -85,8 +83,7 @@ class OAuthController extends Controller
             ->where('provider_user_id', $user->getId())
             ->first();
 
-        if ($oauthProvider)
-        {
+        if ($oauthProvider) {
             $oauthProvider->update([
                 'access_token' => $user->token,
                 'refresh_token' => $user->refreshToken,
@@ -95,9 +92,8 @@ class OAuthController extends Controller
             return $oauthProvider->user;
         }
 
-        if (User::where('email', $user->getEmail())->exists())
-        {
-            throw new EmailTakenException;
+        if (User::where('email', $user->getEmail())->exists()) {
+            throw new EmailTakenException();
         }
 
         return $this->createUser($provider, $user);

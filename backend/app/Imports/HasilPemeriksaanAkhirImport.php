@@ -92,7 +92,7 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow, WithC
                 $fasyankesId = optional($fasyankes)->id;
                 $fasyankesNama = optional($fasyankes)->nama;
                 $fasyankesTipe = optional($fasyankes)->tipe;
-                $register = new Register;
+                $register = new Register();
                 $register->nomor_register = generateNomorRegister();
                 $register->register_uuid = (string)Str::uuid();
                 $register->creator_user_id = $user->id;
@@ -109,7 +109,7 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow, WithC
                     $register->tanggal_swab = date('Y-m-d', strtotime($row->get('tanggal_swab')));
                 }
                 $register->save();
-                $pasien = new Pasien;
+                $pasien = new Pasien();
                 $pasien->nama_lengkap = $row->get('nama');
                 $pasien->kewarganegaraan = $row->get('kewarganegaraan');
                 $pasien->nik = $this->__parseNIK($row->get('nik'));
@@ -182,7 +182,7 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow, WithC
                 $sampel->waktu_pcr_sample_analyzed = date('Y-m-d H:i:s', strtotime($row->get('tanggal_pemeriksaan') . ' ' . date('H:i:s')));
                 $sampel->save();
 
-                $pcr = new PemeriksaanSampel;
+                $pcr = new PemeriksaanSampel();
                 $pcr->sampel_id = $sampel->id;
                 $pcr->user_id = $user->id;
                 $pcr->tanggal_input_hasil = date('Y-m-d', strtotime($row->get('tanggal_pemeriksaan')));
@@ -201,7 +201,6 @@ class HasilPemeriksaanAkhirImport implements ToCollection, WithHeadingRow, WithC
             DB::rollBack();
             throw $th;
         }
-
     }
 
     private function __getWilayah($tingkat, $id_wilayah)

@@ -3,24 +3,30 @@
     <portal to="title-name">Hasil Pemeriksaan</portal>
     <portal to="title-action">
       <div class="title-action">
-        <button tag="button" class="btn btn-import-export" data-toggle="modal" data-target="#importHasil">
+        <button v-if="isRoleOneOf('exclude', [1, 2])" tag="button" class="btn btn-import-export" data-toggle="modal"
+          data-target="#importHasil">
           <i class="fa fa-download" /> Import
         </button>
-        <download-export-button :parentRefs="$refs" ajaxTableRef="verifikasi" class="btn btn-primary" />
+        <download-export-button :parentRefs="$refs"
+          :ajaxTableRef="isRoleOneOf('include', [1, 2]) ? 'verifikasi-admin' : 'verifikasi'" class="btn btn-primary" />
       </div>
     </portal>
 
     <div class="row">
       <div class="col-lg-12">
-        <filter-hasil-pemeriksaan :oid="`verifikasi`" />
+        <filter-hasil-pemeriksaan :oid="isRoleOneOf('include', [1, 2]) ? 'verifikasi-admin' : 'verifikasi'" />
       </div>
     </div>
 
     <div class="row">
       <div class="col-lg-12">
         <Ibox title="Sampel Hasil Pemeriksaan">
-          <ajax-table ref="verifikasi" url="/v1/verifikasi/list" urlexport="/v1/verifikasi/export"
-            :disableSort="['parameter_lab']" :oid="'verifikasi'" :params="params1" :config="{
+          <ajax-table url="/v1/verifikasi/list" urlexport="/v1/verifikasi/export" :params="params1"
+            :disableSort="['parameter_lab']"
+            :rowtemplate="isRoleOneOf('include', [1, 2]) ? 'tr-hasil-pemeriksaan-admin' : 'tr-verifikasi'"
+            :ref="isRoleOneOf('include', [1, 2]) ? 'verifikasi-admin' : 'verifikasi'"
+            :oid="isRoleOneOf('include', [1, 2]) ? 'verifikasi-admin' : 'verifikasi'"
+            :columns="isRoleOneOf('include', [1, 2]) ? colSuperAdmin : colAdminSatelit" :config="{
               autoload: true,
               has_number: true,
               has_entry_page: true,
@@ -35,17 +41,6 @@
                 table: [],
                 wrapper: ['table-responsive'],
               }
-            }" :rowtemplate="'tr-verifikasi'" :columns="{
-              waktu_pcr_sample_analyzed: 'TANGGAL PEMERIKSAAN',
-              nomor_sampel : 'NO SAMPEL',
-              pasien_nama : 'NAMA PASIEN',
-              kota_domilisi: 'DOMISILI',
-              instansi_pengirim: 'INSTANSI',
-              parameter_lab: 'PARAMETER LAB',
-              status: 'Kriteria',
-              sumber_pasien: 'KATEGORI',
-              kesimpulan_pemeriksaan: 'KESIMPULAN PEMERIKSAAN',
-              catatat: 'KETERANGAN',
             }" />
         </Ibox>
       </div>
@@ -91,22 +86,33 @@
 </template>
 
 <script>
+  import {
+    mapGetters
+  } from "vuex";
   import axios from "axios";
   import Form from "vform";
   import $ from "jquery";
   import CustomModal from "~/components/CustomModal";
+  import {
+    colAdminSatelit,
+    colSuperAdmin,
+  } from '~/assets/js/constant/enum';
   const JQuery = $;
   var debounce = require('lodash/debounce')
 
   export default {
     middleware: ['auth', 'checkrole'],
     meta: {
-      allow_role_id: [8]
+      allow_role_id: [1, 2, 8]
     },
     components: {
       CustomModal,
     },
+    computed: mapGetters({
+      user: "auth/user"
+    }),
     data() {
+      let selectedNomorSampels = this.$store.state.hasil_pemeriksaan.selectedSampels;
       return {
         loading: false,
         dataError: [],
@@ -116,8 +122,12 @@
           tanggal_verifikasi_start: "",
           tanggal_verifikasi_end: "",
           kesimpulan_pemeriksaan: "",
-          kategori: ""
-        }
+          kategori: "",
+          id: [],
+        },
+        selectedNomorSampels,
+        colAdminSatelit,
+        colSuperAdmin,
       };
     },
     async asyncData({
@@ -163,23 +173,6 @@
       return {
         title: "Sampel Hasil Pemeriksaan"
       };
-    },
-    watch: {
-      "params1.fasyankes": function (newVal, oldVal) {
-        this.$bus.$emit("refresh-ajaxtable", "verifikasi");
-      },
-      "params1.kota_domisili": function (newVal, oldVal) {
-        this.$bus.$emit("refresh-ajaxtable", "verifikasi");
-      },
-      "params1.tanggal_verifikasi_start": function (newVal, oldVal) {
-        this.$bus.$emit("refresh-ajaxtable", "verifikasi");
-      },
-      "params1.tanggal_verifikasi_end": function (newVal, oldVal) {
-        this.$bus.$emit("refresh-ajaxtable", "verifikasi");
-      },
-      "params1.kesimpulan_pemeriksaan": function (newVal, oldVal) {
-        this.$bus.$emit("refresh-ajaxtable", "verifikasi");
-      },
     },
     methods: {
       downloadFormat(namaFile) {
@@ -254,7 +247,7 @@
         this.loading = false;
       },
       refreshDebounce: debounce(function () {
-        this.$bus.$emit('refresh-ajaxtable', 'verifikasi')
+        this.refreshTable()
       }, 500),
       async doImport() {
         let formData = new FormData();
@@ -267,7 +260,7 @@
               'Content-Type': 'multipart/form-data'
             }
           });
-          this.$bus.$emit('refresh-ajaxtable', 'verifikasi');
+          this.refreshTable()
           this.$toast.success('Sukses import data', {
             icon: "check",
             iconPack: "fontawesome",
@@ -297,7 +290,45 @@
       },
       previewFile(file) {
         this.form.register_file = file;
+      },
+      refreshTable() {
+        this.isRoleOneOf('include', [1, 2]) ? this.$bus.$emit("refresh-ajaxtable", "verifikasi-admin")
+          : this.$bus.$emit("refresh-ajaxtable", "verifikasi")
+      },
+      isRoleOneOf(roles, users){
+        if (this.user && users && users.length > 0) {
+          if (roles === 'include') {
+            return users.includes(this.user.role_id)
+          } else if (roles === 'exclude') {
+            return !users.includes(this.user.role_id)
+          }
+        }
+        return
       }
-    }
+    },
+    watch: {
+      'selectedNomorSampels': function () {
+        const idArray = []
+        for (let i = 0; i < this.selectedNomorSampels.length; i++) {
+          idArray.push(this.selectedNomorSampels[i].id)
+        }
+        this.params1.id = idArray
+      },
+      "params1.fasyankes": function (newVal, oldVal) {
+        this.refreshTable()
+      },
+      "params1.kota_domisili": function (newVal, oldVal) {
+        this.refreshTable()
+      },
+      "params1.tanggal_verifikasi_start": function (newVal, oldVal) {
+        this.refreshTable()
+      },
+      "params1.tanggal_verifikasi_end": function (newVal, oldVal) {
+        this.refreshTable()
+      },
+      "params1.kesimpulan_pemeriksaan": function (newVal, oldVal) {
+        this.refreshTable()
+      },
+    },
   };
 </script>

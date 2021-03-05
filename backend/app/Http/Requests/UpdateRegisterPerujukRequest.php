@@ -34,11 +34,11 @@ class UpdateRegisterPerujukRequest extends FormRequest
             'tanggal_swab' => 'nullable|date',
             'nomor_sampel' => [
                 'required',
-                new UniqueSampelPerujuk($this->lab_satelit_id, $this->id),
+                new UniqueSampelPerujuk($this->lab_satelit_id, $this->register_perujuk->id),
             ],
             'jenis_sampel' => 'required',
             'nama_jenis_sampel' => [
-                'required_if:jenis_sampel,==,'. JenisSampelEnum::LAINNYA()->getIndex(),
+                'required_if:jenis_sampel,' . JenisSampelEnum::LAINNYA()->getIndex(),
             ],
             'fasyankes_id' => 'required',
             'fasyankes_pengirim' => 'required',
@@ -46,7 +46,7 @@ class UpdateRegisterPerujukRequest extends FormRequest
             'kewarganegaraan' => 'required',
             'keterangan_warganegara' => [
                 'nullable',
-                'required_if:kewarganegaraan,==,WNA'
+                'required_if:kewarganegaraan,WNA'
             ],
             'nik' => 'nullable|digits:16',
             'no_hp' => 'required',

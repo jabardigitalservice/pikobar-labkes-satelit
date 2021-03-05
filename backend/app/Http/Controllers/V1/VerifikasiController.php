@@ -20,6 +20,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class VerifikasiController extends Controller
 {
     use PemeriksaanTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -34,20 +35,9 @@ class VerifikasiController extends Controller
             ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
             ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
             ->leftJoin('kota', 'kota.id', 'pasien.kota_id')
+            ->leftJoin('lab_satelit', 'lab_satelit.id', 'sampel.lab_satelit_id')
             ->where('sampel.sampel_status', 'pcr_sample_analyzed')
             ->whereNull('register.deleted_at');
-
-        if ($user->role_id == RoleEnum::PERUJUK()->getIndex()) {
-            $models = $models->where('register.perujuk_id', $user->perujuk_id);
-            $models = $models->where('sampel.perujuk_id', $user->perujuk_id);
-            $models = $models->where('pasien.perujuk_id', $user->perujuk_id);
-        }
-
-        if ($user->role_id == RoleEnum::LABORATORIUM()->getIndex()) {
-            $models = $models->where('register.lab_satelit_id', $user->lab_satelit_id);
-            $models = $models->where('sampel.lab_satelit_id', $user->lab_satelit_id);
-            $models = $models->where('pasien.lab_satelit_id', $user->lab_satelit_id);
-        }
 
         $params = $request->get('params', false);
         $search = $request->get('search', false);
@@ -97,13 +87,42 @@ class VerifikasiController extends Controller
                     case 'sumber_pasien':
                         $models->where('register.sumber_pasien', 'ilike', '%' . $val . '%');
                         break;
+                    case 'lab_satelit_id':
+                        $models->where('sampel.lab_satelit_id', $val);
+                        break;
                     case 'status':
                         $models->where('register.status', $val);
+                        break;
+                    case 'id':
+                        if ($isData) {
+                            if (is_array($val) && count($val) > 0) {
+                                $models->whereIn('sampel.id', $val);
+                            }
+                        }
                         break;
                     default:
                         break;
                 }
             }
+        }
+        if ($user->role_id == RoleEnum::PERUJUK()->getIndex()) {
+            $models = $models->where('register.perujuk_id', $user->perujuk_id);
+            $models = $models->where('sampel.perujuk_id', $user->perujuk_id);
+            $models = $models->where('pasien.perujuk_id', $user->perujuk_id);
+        }
+
+        if ($user->role_id == RoleEnum::LABORATORIUM()->getIndex()) {
+            $models = $models->where('register.lab_satelit_id', $user->lab_satelit_id);
+            $models = $models->where('sampel.lab_satelit_id', $user->lab_satelit_id);
+            $models = $models->where('pasien.lab_satelit_id', $user->lab_satelit_id);
+        }
+
+        if ($user->role_id == RoleEnum::DINKES()->getIndex()) {
+            $models = $models->where(function ($query) use ($user) {
+                if ($user->kota_id) {
+                    $query->where('pasien.kota_id', $user->kota_id);
+                }
+            });
         }
 
         $count = $models->count();
@@ -139,6 +158,9 @@ class VerifikasiController extends Controller
                 case 'sumber_pasien':
                     $models = $models->orderBy('register.sumber_pasien', $order_direction);
                     break;
+                case 'lab_satelit_id':
+                    $models = $models->orderBy('sampel.lab_satelit_id', $order_direction);
+                    break;
                 case 'kesimpulan_pemeriksaan':
                     $models = $models->orderBy($order, $order_direction);
                     break;
@@ -150,7 +172,7 @@ class VerifikasiController extends Controller
             }
         }
 
-        $models = $models->select('*', 'sampel.id as sampel_id', 'kota.nama as nama_kota', 'register.created_at as created_at', 'register.sumber_pasien as sumber_pasien');
+        $models = $models->select('*', 'sampel.id as sampel_id', 'kota.nama as nama_kota', 'register.created_at as created_at', 'register.sumber_pasien as sumber_pasien', 'lab_satelit.nama as lab_satelit_nama');
 
         $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
@@ -190,6 +212,7 @@ class VerifikasiController extends Controller
             'Tanggal Swab',
             'Interpretasi',
             'Tanggal Pemeriksaan',
+            'Lab Pemeriksa',
             'Keterangan',
         ];
         $mapping = function ($model) {
@@ -204,7 +227,7 @@ class VerifikasiController extends Controller
                 $model->jenis_kelamin,
                 parseDate($model->tanggal_lahir),
                 $model->usia_tahun,
-                $this->__getAlamat($model),
+                $this->getAlamat($model),
                 $model->kelurahan,
                 $model->kecamatan,
                 $model->nama_kota,
@@ -216,26 +239,16 @@ class VerifikasiController extends Controller
                 parseDate($model->tanggal_swab),
                 $model->kesimpulan_pemeriksaan,
                 parseDate($model->waktu_pcr_sample_analyzed),
+                $model->lab_satelit_nama,
                 $model->catatan_pemeriksaan,
             ];
         };
         $column_format = [
         ];
         return Excel::download(new AjaxTableExport($models, $header, $mapping, $column_format, [], $models->count()), 'hasil_pemeriksaan.xlsx');
-
     }
 
-    private function __getKeterangan($model)
-    {
-        if ($model->kesimpulan_pemeriksaan == 'positif' && $model->status == 'positif') {
-            return 'lama';
-        } elseif ($model->kesimpulan_pemeriksaan == 'positif' && $model->status != null && $model->status != 'positif') {
-            return 'baru';
-        }
-        return '';
-    }
-
-    private function __getAlamat($model)
+    public function getAlamat($model)
     {
         $alamat = $model->alamat_lengkap;
         $alamat .= ' RT/RW ';
@@ -314,7 +327,6 @@ class VerifikasiController extends Controller
                         break;
                     default:
                         break;
-
                 }
             }
         }
@@ -393,23 +405,28 @@ class VerifikasiController extends Controller
      */
     public function show($id)
     {
-        $sampel = Sampel::leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
+
+        $sampel = Sampel::where('sampel.id', $id)
+            ->leftJoin('pemeriksaansampel', 'sampel.id', 'pemeriksaansampel.sampel_id')
             ->leftJoin('register', 'sampel.register_id', 'register.id')
             ->leftJoin('pasien_register', 'pasien_register.register_id', 'register.id')
             ->leftJoin('pasien', 'pasien_register.pasien_id', 'pasien.id')
             ->leftJoin('kota', 'kota.id', 'pasien.kota_id');
-        $sampel->where('sampel.id', $id);
-        if (Auth::user()->lab_satelit_id != null) {
+        if (Auth::user()->lab_satelit_id == RoleEnum::LABORATORIUM()->getIndex()) {
             $sampel->where('sampel.lab_satelit_id', Auth::user()->lab_satelit_id);
         }
-        $sampel->select('*', 'sampel.id as id', 'kota.nama as nama_kota', 'register.created_at as created_at', 'pemeriksaansampel.id as pemeriksaan_id', 'register.sumber_pasien as sumber_pasien');
+        $sampel->select(
+            '*',
+            'sampel.id as id',
+            'kota.nama as nama_kota',
+            'register.created_at',
+            'pemeriksaansampel.id as pemeriksaan_id',
+            'register.sumber_pasien'
+        );
         $result = $sampel->first();
-        $log = SampelLog::where('sampel_id', $result->id)->orderBy('created_at', 'desc')->get();
-        $result->logs = $log;
+        $result->logs = SampelLog::where('sampel_id', $result->id)->orderBy('created_at', 'desc')->get();
         $result->sampel = Auth::user()->lab_satelit_id;
         return response()->json([
-            'status' => 200,
-            'message' => 'success',
             'data' => $result,
         ]);
     }
@@ -445,7 +462,6 @@ class VerifikasiController extends Controller
 
         DB::beginTransaction();
         try {
-
             PemeriksaanSampel::find($request->input('last_pemeriksaan_id'))->update([
                 'kesimpulan_pemeriksaan' => $request->input('kesimpulan_pemeriksaan'),
                 'catatan_pemeriksaan' => $request->input('catatan_pemeriksaan') != '' ? $request->input('catatan_pemeriksaan') : null,
@@ -468,7 +484,6 @@ class VerifikasiController extends Controller
             DB::rollBack();
             throw $th;
         }
-
     }
 
     /**

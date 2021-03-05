@@ -8,11 +8,12 @@ class Provinsi extends Model
 {
     protected $table = 'provinsi';
 
+    protected $connection = 'labkes';
+
     public $timestamps = false;
 
     public function kota()
     {
         return $this->hasMany(Kota::class);
     }
-    
 }

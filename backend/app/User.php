@@ -4,10 +4,13 @@ namespace App;
 
 use App\Enums\UserStatusEnum;
 use App\Enums\RoleEnum;
+use App\Models\Kota;
+use App\Models\RegisterPerujuk;
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
@@ -20,7 +23,17 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username', 'role_id', 'koordinator', 'lab_satelit_id',
+        'name',
+        'email',
+        'password',
+        'username',
+        'role_id',
+        'koordinator',
+        'lab_satelit_id',
+        'kota_id',
+        'status',
+        'invited_at',
+        'perujuk_id',
     ];
 
     /**
@@ -39,8 +52,8 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'status' => UserStatusEnum::class.'|nullable',
-        'role_id' => RoleEnum::class.'|nullable,integer',
+        'status' => UserStatusEnum::class . '|nullable',
+        'role_id' => RoleEnum::class . '|nullable,integer',
     ];
 
     /**
@@ -59,7 +72,7 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      */
     public function getPhotoUrlAttribute()
     {
-        return 'https://www.gravatar.com/avatar/'.md5(strtolower($this->email)).'.jpg?s=200&d=mm';
+        return 'https://www.gravatar.com/avatar/' . md5(strtolower($this->email)) . '.jpg?s=200&d=mm';
     }
 
     /**
@@ -90,7 +103,7 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      */
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new VerifyEmail);
+        $this->notify(new VerifyEmail());
     }
 
     /**
@@ -111,22 +124,17 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
 
     public function roles()
     {
-        return $this->belongsTo('App\Role','role_id','id');
-    }
-
-    public function lab_pcr()
-    {
-        return $this->belongsTo('App\Models\LabPCR','lab_pcr_id','id');
+        return $this->belongsTo('App\Role', 'role_id', 'id');
     }
 
     public function lab_satelit()
     {
-        return $this->belongsTo('App\Models\LabSatelit','lab_satelit_id','id');
+        return $this->belongsTo('App\Models\LabSatelit', 'lab_satelit_id', 'id');
     }
 
-    public function validator()
+    public function perujuk()
     {
-        return $this->belongsTo('App\Models\Validator','validator_id','id');
+        return $this->belongsTo('App\Models\Fasyankes', 'perujuk_id', 'id');
     }
 
     public function registerLogs()
@@ -144,5 +152,55 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     public function getHasDataAttribute()
     {
         return $this->registerLogs()->exists() || $this->pemeriksaanSampels()->exists();
+    }
+
+    public function getHasDataPerujukAttribute()
+    {
+        return RegisterPerujuk::where('perujuk_id', $this->perujuk_id)->exists();
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function scopeUserDinkes($query)
+    {
+        return $query->where('users.role_id', RoleEnum::DINKES()->getIndex());
+    }
+
+    public function scopeUserLab($query)
+    {
+        return $query->where('users.role_id', RoleEnum::LABORATORIUM()->getIndex());
+    }
+
+    public function scopeUserPerujuk($query)
+    {
+        return $query->where('users.role_id', RoleEnum::PERUJUK()->getIndex());
+    }
+
+    public function dinkes()
+    {
+        return $this->belongsTo(Kota::class, 'kota_id', 'id');
+    }
+
+    public function invite()
+    {
+        return $this->hasOne(Invite::class, 'email', 'email');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        self::deleting(function ($user) {
+            if ($user->invite) {
+                $user->invite()->delete();
+            }
+        });
+    }
+
+    public function hasRole($roleIndex): bool
+    {
+        return $this->role_id == $roleIndex;
     }
 }

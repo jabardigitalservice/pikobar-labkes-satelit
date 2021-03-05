@@ -53,7 +53,6 @@ class CreateSuratHasilListener
 
         DB::beginTransaction();
         try {
-
             if (!Storage::exists($storagePath)) {
                 Storage::makeDirectory($storagePath);
             }
@@ -69,22 +68,19 @@ class CreateSuratHasilListener
                 // $newFile = $sampel->validFile()->create($dataFile);
                 if ($newFile = File::create($dataFile)) {
                     $sampel->update([
-                        'valid_file_id'=> $newFile->id
+                        'valid_file_id' => $newFile->id
                     ]);
                 }
             }
 
-            
+
             DB::commit();
 
             return;
-
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
-
-        
     }
 
     public function createPDF(Sampel $sampel)
@@ -129,20 +125,20 @@ class CreateSuratHasilListener
     {
         if (!$sampel->getAttribute('waktu_sample_valid')) {
             $tanggal = now();
-            return $tanggal->day . ' ' . 
-                $this->getNamaBulan($tanggal->month) . ' ' . 
+            return $tanggal->day . ' ' .
+                $this->getNamaBulan($tanggal->month) . ' ' .
                 $tanggal->year;
         }
 
-        return $sampel->waktu_sample_valid->day . ' ' . 
-                $this->getNamaBulan($sampel->waktu_sample_valid->month) . ' ' . 
+        return $sampel->waktu_sample_valid->day . ' ' .
+                $this->getNamaBulan($sampel->waktu_sample_valid->month) . ' ' .
                 $sampel->waktu_sample_valid->year;
     }
 
     private function getTanggalLahir(Pasien $pasien)
     {
-        return $pasien->tanggal_lahir->day . ' ' . 
-                $this->getNamaBulan($pasien->tanggal_lahir->month) . ' ' . 
+        return $pasien->tanggal_lahir->day . ' ' .
+                $this->getNamaBulan($pasien->tanggal_lahir->month) . ' ' .
                 $pasien->tanggal_lahir->year;
     }
 
@@ -153,7 +149,7 @@ class CreateSuratHasilListener
             'Agustus', 'September', 'Oktober', 'November', 'Desember'
         ];
 
-        return $arrayNamaBulan[ $bulanKe - 1]; 
+        return $arrayNamaBulan[ $bulanKe - 1];
     }
 
     /**
@@ -166,10 +162,9 @@ class CreateSuratHasilListener
     public function failed(SampelValidatedEvent $event, $exception)
     {
         $event->sampel->update([
-            'sampel_status'=> 'sample_verified',
-            'valid_file_id'=> null
+            'sampel_status' => 'sample_verified',
+            'valid_file_id' => null
         ]);
-        
     }
 
     private function getHasilDeteksiTerkecil(PemeriksaanSampel $hasil)
@@ -192,8 +187,8 @@ class CreateSuratHasilListener
             return '-';
         }
 
-        return $ekstraksi->tanggal_mulai_ekstraksi->day . ' ' . 
-                $this->getNamaBulan($ekstraksi->tanggal_mulai_ekstraksi->month) . ' ' . 
+        return $ekstraksi->tanggal_mulai_ekstraksi->day . ' ' .
+                $this->getNamaBulan($ekstraksi->tanggal_mulai_ekstraksi->month) . ' ' .
                 $ekstraksi->tanggal_mulai_ekstraksi->year;
     }
 }

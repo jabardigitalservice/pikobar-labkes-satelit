@@ -5,12 +5,19 @@
     },
     "registrasi": {
       "sampel": "Registrasi Sampel",
+      "perujuk": "Registrasi Sampel",
       "index": {
         "tambah": "Tambah Registrasi Baru",
         "detail": "Detail Registrasi",
         "update": "Edit Data Registrasi",
         "import-excel": "Import Excel",
-        "export-excel": "Export Excel"
+        "export-excel": "Export Excel",
+        "terima": "Terima Sampel"
+      },
+      "index2": {
+        "tambah": "Tambah Registrasi Baru",
+        "detail": "Detail Registrasi",
+        "update": "Edit Data Registrasi"
       }
     },
     "sample": {
@@ -35,13 +42,18 @@
       "password": "Password",
       "profile": "Profil"
     },
-    "verifikasi": {
+    "hasil-pemeriksaan": {
       "index": {
         "unverified": "Hasil Pemeriksaan",
-        "verified": "Terverifikasi"
-      },
-      "detail": "Detail Sampel",
-      "edit": "Hasil Pemeriksaan"
+        "detail": "Detail Sampel",
+        "edit": "Edit Sampel"
+      }
+    },
+    "hasil-pemeriksaan-perujuk": {
+      "index": {
+        "unverified": "Hasil Pemeriksaan",
+        "detail": "Detail Sampel"
+      }
     },
     "validasi": {
       "index": {
@@ -61,7 +73,20 @@
     },
     "user": {
       "index": "Pengguna",
-      "show": "Lihat"
+      "show": "Detail",
+      "edit": "Edit Data"
+    },
+    "dinkes": {
+      "index": "Dinkes",
+      "show": "Detail",
+      "add": "Tambah Data",
+      "edit": "Edit Data"
+    },
+    "perujuk": {
+      "index": "Perujuk",
+      "show": "Detail",
+      "edit": "Edit Data",
+      "add": "Tambah Data"
     },
     "registration": {
       "index": "Registrasi"
@@ -75,6 +100,7 @@
   "alert_confirm_delete_title": "Hapus Data",
   "alert_confirm_delete_text": "Apakah kamu yakin ingin menghapus data ini?",
   "alert_confirm_musnahkan_text": "Anda tidak dapat mengembalikan data yang telah dimusnahkan!",
+  "alert_confirm_terima_text": "Apakah kamu yakin ingin melakukan registrasi pasien",
   "error_alert_title": "Mohon maaf...",
   "error_alert_text": "Mohon mencoba lagi.",
   "token_expired_alert_title": "Sesi habis!",
@@ -91,7 +117,7 @@
   "forgot_password": "Lupa Password?",
   "confirm_password": "Konfirmasi Password",
   "name": "Nama",
-  "username": "Nama Pengguna",
+  "username": "Username",
   "toggle_navigation": "Navigasi",
   "home": "Beranda",
   "you_are_logged_in": "Anda sudah login!",
@@ -273,6 +299,5 @@
     "header_index": "Riwayat Login",
     "header_list": "Daftar Riwayat Login"
   },
-  "create": "Tambah",
-  "username": "Username"
+  "create": "Tambah"
 }

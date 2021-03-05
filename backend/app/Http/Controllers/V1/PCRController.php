@@ -109,38 +109,9 @@ class PCRController extends Controller
         return response()->json($result);
     }
 
-    public function uploadGrafik(Request $request)
-    {
-        $file = $request->file('file');
-        $filename = Str::random(20) . '.' . $file->getClientOriginalExtension();
-        $path = Storage::disk('s3')->putFileAs(
-            'grafik/' . date('Y-m-d'), $request->file('file'), $filename
-        );
-        $url = route('grafik.url', ['path' => date('Y-m-d') . '/' . $filename]);
-        return response()->json(['status' => 200, 'message' => 'success', 'url' => $url]);
-    }
-
-    public function getGrafik($path)
-    {
-        $exists = Storage::disk('public')->exists('grafik/' . $path);
-        if ($exists) {
-            return response()->file(storage_path('app/public/grafik/' . $path));
-        }
-        $exists = Storage::disk('s3')->exists('grafik/' . $path);
-        if ($exists) {
-            $contents = Storage::disk('s3')->get('grafik/' . $path);
-            $ret = Storage::disk('public')->put(
-                'grafik/' . $path, $contents
-            );
-            return response()->file(storage_path('app/public/grafik/' . $path));
-        } else {
-            abort(404);
-        }
-    }
-
     public function detail(Request $request, $id)
     {
-        $model = Sampel::with(['pcr', 'status', 'ekstraksi', 'register'])
+        $model = Sampel::with(['pcr', 'status', 'register'])
             ->find($id);
         $model->log_pcr = $model->logs()
             ->whereIn('sampel_status', ['pcr_sample_received', 'pcr_sample_analyzed', 'extraction_sample_reextract'])
@@ -197,7 +168,7 @@ class PCRController extends Controller
 
         $pcr = $sampel->pcr;
         if (!$pcr) {
-            $pcr = new PemeriksaanSampel;
+            $pcr = new PemeriksaanSampel();
             $pcr->sampel_id = $sampel->id;
             $pcr->user_id = $user->id;
         }
@@ -237,7 +208,7 @@ class PCRController extends Controller
 
         $pcr = $sampel->pcr;
         if (!$pcr) {
-            $pcr = new PemeriksaanSampel;
+            $pcr = new PemeriksaanSampel();
             $pcr->sampel_id = $sampel->id;
             $pcr->user_id = $user->id;
         }
@@ -259,7 +230,7 @@ class PCRController extends Controller
         $sampel = Sampel::with(['pcr'])->find($id);
         $pcr = $sampel->pcr;
         if (!$pcr) {
-            $pcr = new PemeriksaanSampel;
+            $pcr = new PemeriksaanSampel();
             $pcr->sampel_id = $sampel->id;
             $pcr->user_id = $user->id;
         }
@@ -288,8 +259,8 @@ class PCRController extends Controller
             $sampel->save();
         }
 
-        if ($sampel->perujuk_id) {
-            RegisterPerujuk::find($sampel->perujuk_id)->updateState('pemeriksaan_selesai');
+        if ($sampel->register_perujuk_id) {
+            RegisterPerujuk::find($sampel->register_perujuk_id)->updateState('pemeriksaan_selesai');
         }
         return response()->json(['status' => 201, 'message' => 'Hasil analisa berhasil disimpan']);
     }
@@ -301,7 +272,7 @@ class PCRController extends Controller
 
         $pcr = $sampel->pcr;
         if (!$pcr) {
-            $pcr = new PemeriksaanSampel;
+            $pcr = new PemeriksaanSampel();
             $pcr->sampel_id = $sampel->id;
             $pcr->user_id = $user->id;
         }
@@ -357,7 +328,7 @@ class PCRController extends Controller
         foreach ($samples as $nomor_sampel => $sampel) {
             $pcr = $sampel->pcr;
             if (!$pcr) {
-                $pcr = new PemeriksaanSampel;
+                $pcr = new PemeriksaanSampel();
                 $pcr->sampel_id = $sampel->id;
                 $pcr->user_id = $user->id;
             }
@@ -399,7 +370,7 @@ class PCRController extends Controller
         }
         $pcr = $sampel->pcr;
         if (!$pcr) {
-            $pcr = new PemeriksaanSampel;
+            $pcr = new PemeriksaanSampel();
             $pcr->sampel_id = $sampel->id;
             $pcr->user_id = $user->id;
         }
@@ -414,39 +385,6 @@ class PCRController extends Controller
         return response()->json(['success' => true, 'code' => 201, 'message' => 'Sampel berhasil ditandai telah dimusnahkan']);
     }
 
-    public function importHasilPemeriksaan(Request $request)
-    {
-        $this->__importValidator($request)->validate();
-
-        $importer = new HasilPemeriksaanImport;
-        Excel::import($importer, $request->file('register_file'));
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Sukses membaca file import excel',
-            'data' => $importer->data,
-            'errors' => $importer->errors,
-            'errors_count' => $importer->errors_count,
-        ]);
-    }
-
-    private function __importValidator(Request $request)
-    {
-        $extension = '';
-
-        if ($request->hasFile('register_file')) {
-            $extension = strtolower($request->file('register_file')->getClientOriginalExtension());
-        }
-
-        return Validator::make([
-            'register_file' => $request->file('register_file'),
-            'extension' => $extension,
-        ], [
-            'register_file' => 'required|file|max:2048',
-            'extension' => 'required|in:csv,xlsx,xls',
-        ]);
-    }
-
     public function importDataHasilPemeriksaan(Request $request)
     {
 
@@ -457,7 +395,7 @@ class PCRController extends Controller
             if ($sampel) {
                 $pcr = $sampel->pcr;
                 if (!$pcr) {
-                    $pcr = new PemeriksaanSampel;
+                    $pcr = new PemeriksaanSampel();
                     $pcr->sampel_id = $sampel->id;
                     $pcr->user_id = $user->id;
                 }
@@ -520,7 +458,7 @@ class PCRController extends Controller
         if ($sampel != '') {
             $pcr = $sampel->pcr;
             if (!$pcr) {
-                $pcr = new PemeriksaanSampel;
+                $pcr = new PemeriksaanSampel();
                 $pcr->sampel_id = $sampel->id;
                 $pcr->user_id = $user->id;
             }
@@ -567,7 +505,5 @@ class PCRController extends Controller
         }
 
         return response()->json($response);
-
     }
-
 }

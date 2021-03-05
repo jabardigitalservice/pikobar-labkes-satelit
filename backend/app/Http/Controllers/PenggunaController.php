@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Validation\Rule;
+
 class PenggunaController extends Controller
 {
 
@@ -12,32 +13,30 @@ class PenggunaController extends Controller
     public function listPengguna(Request $request)
     {
         $models = User::with(['roles','lab_pcr','validator','lab_satelit']);
-        $params = $request->get('params',false);
-        $search = $request->get('search',false);
-        $order  = $request->get('order','name');
+        $params = $request->get('params', false);
+        $search = $request->get('search', false);
+        $order  = $request->get('order', 'name');
 
         if ($search != '') {
-            $models = $models->where(function($q) use ($search) {
-                $q->where('name','ilike','%'.$search.'%')
-                   ->orWhere('email','ilike','%'.$search.'%');
+            $models = $models->where(function ($q) use ($search) {
+                $q->where('name', 'ilike', '%' . $search . '%')
+                   ->orWhere('email', 'ilike', '%' . $search . '%');
             });
         }
         $count = $models->count();
 
-        $page = $request->get('page',1);
-        $perpage = $request->get('perpage',999999);
+        $page = $request->get('page', 1);
+        $perpage = $request->get('perpage', 999999);
 
-         if ($order) {
-            $order_direction = $request->get('order_direction','asc');
-            if (empty($order_direction)) $order_direction = 'asc';
-
+        if ($order) {
+            $order_direction = $request->get('order_direction', 'asc');
             switch ($order) {
                 default:
-                    $models = $models->orderBy($order,$order_direction);
+                    $models = $models->orderBy($order, $order_direction);
                     break;
             }
         }
-        $models = $models->skip(($page-1) * $perpage)->take($perpage)->get();
+        $models = $models->skip(($page - 1) * $perpage)->take($perpage)->get();
 
         $result = [
             'data' => $models,
@@ -49,7 +48,7 @@ class PenggunaController extends Controller
 
     public function savePengguna(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'name' => 'required|max:255',
             'username' => 'required|max:80|unique:users',
             'email' => 'required|email|max:255|unique:users',
@@ -57,7 +56,7 @@ class PenggunaController extends Controller
             'password' => 'required|min:6|confirmed',
         ]);
 
-        $user = new User;
+        $user = new User();
         $user->username = $request->get('username');
         $user->password = bcrypt($request->get('password'));
         $user->email = $request->get('email');
@@ -66,31 +65,30 @@ class PenggunaController extends Controller
         $user->lab_pcr_id = $request->get('lab_pcr_id');
         $user->validator_id = $request->get('validator_id');
         $user->save();
-        
-        return response()->json(['status'=>201,'message'=>'Berhasil menambahkan pengguna','result'=>[]]);
+
+        return response()->json(['status' => 201,'message' => 'Berhasil menambahkan pengguna','result' => []]);
     }
 
-    public function deletePengguna(Request $request,$id)
+    public function deletePengguna(Request $request, $id)
     {
-        try{
-            $user = User::where('id',$id)->first();
+        try {
+            $user = User::where('id', $id)->first();
             $user->delete();
-            return response()->json(['status'=>200,'message'=>'Berhasil menghapus data pengguna','result'=>[]]);
-        }catch(\Exception $ex) {
-            return response()->json(['status'=>400,'message'=>'Gagal menghapus data, terjadi kesalahan server','result'=>$ex->getMessage()]);
+            return response()->json(['status' => 200,'message' => 'Berhasil menghapus data pengguna','result' => []]);
+        } catch (\Exception $ex) {
+            return response()->json(['status' => 400,'message' => 'Gagal menghapus data, terjadi kesalahan server','result' => $ex->getMessage()]);
         }
-        
     }
 
     public function updatePengguna(Request $request, $id)
     {
 
-        $this->validate($request,[
+        $this->validate($request, [
             'name' => 'required|max:255',
             'username' => [
                 'required',
                 'max:80',
-                Rule::unique('users')->ignore($id,'id')
+                Rule::unique('users')->ignore($id, 'id')
             ],
             'email' => [
                 'required',
@@ -102,7 +100,7 @@ class PenggunaController extends Controller
         ]);
 
         // dd($id);
-        $user = User::where('id',$id)->first();
+        $user = User::where('id', $id)->first();
         $user->name = $request->get('name');
         $user->username = $request->get('username');
         $user->email =  $request->get('email');
@@ -114,12 +112,12 @@ class PenggunaController extends Controller
         }
         $user->save();
 
-        return response()->json(['status'=>200,'message'=>'Berhasil mengubah data pengguna','result'=>[]]);
+        return response()->json(['status' => 200,'message' => 'Berhasil mengubah data pengguna','result' => []]);
     }
 
     public function showUpdate(Request $request, $id)
     {
-        $user = User::where('id',$id)->first();
-        return response()->json(['status'=>200,'message'=>'success','result'=>$user]);
+        $user = User::where('id', $id)->first();
+        return response()->json(['status' => 200,'message' => 'success','result' => $user]);
     }
 }

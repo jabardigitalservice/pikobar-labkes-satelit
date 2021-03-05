@@ -30,16 +30,18 @@
 
           <form class="m-t" @submit.prevent="login" @keydown="form.onKeydown($event)">
             <div class="form-group">
-              <input v-model="form.username" :class="{ 'is-invalid': form.errors.has('username') }" type="text"
-                name="username" class="form-control input-placeholder" placeholder="Username">
+              <input v-model="form.username" :class="{ 'is-invalid': form.errors.has('username') }"
+                type="text" name="username" class="form-control input-placeholder"
+                placeholder="Username">
               <span class="fa fa-user errspan"></span>
               <has-error :form="form" field="username" />
             </div>
 
             <div class="form-group">
-              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" type="password"
+              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" :type="showPassword ? 'password' : 'text'"
                 name="password" class="form-control input-placeholder" placeholder="Password">
               <span class="fa fa-lock errspan"></span>
+              <span class="prefix-icon-password" :class="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'" @click="showPassword = !showPassword" />
               <has-error :form="form" field="password" />
             </div>
 
@@ -74,7 +76,8 @@
         username: '',
         password: ''
       }),
-      remember: false
+      remember: false,
+      showPassword: true,
     }),
 
     methods: {
@@ -93,11 +96,22 @@
 
           // Fetch the user.
           await this.$store.dispatch('auth/fetchUser', data.user)
-
-          // Redirect home.
-          this.$router.push({
-            name: 'home'
-          })
+          if (data.user.role_id === 9) {
+            // Redirect register perujuk.
+            this.$router.push({
+              name: 'registrasi.perujuk'
+            })
+          } else if (data.user.role_id === 2) {
+            // Redirect Hasil Pemeriksaan.
+            this.$router.push({
+              name: 'hasil-pemeriksaan.index.unverified'
+            })
+          } else {
+            // Redirect home.
+            this.$router.push({
+              name: 'home'
+            })
+          }
         } catch (e) {
           this.$swal.fire(
             'Login gagal',
@@ -135,7 +149,7 @@
     .title-footer {
       position: relative;
       bottom: 10px;
-    padding-top: 15px;
+      padding-top: 15px;
     }
   }
 </style>

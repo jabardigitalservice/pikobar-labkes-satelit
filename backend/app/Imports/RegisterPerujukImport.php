@@ -3,119 +3,89 @@
 namespace App\Imports;
 
 use App\Enums\JenisSampelEnum;
+use App\Enums\KriteriaEnum;
 use App\Models\JenisSampel;
 use App\Models\RegisterPerujuk;
-use App\Rules\ExistsFasyankes;
-use App\Rules\ExistsLabSatelit;
-use App\Rules\ExistsWilayah;
 use App\Rules\UniqueSampelPerujuk;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\OnEachRow;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Row;
+use Spatie\Enum\Laravel\Rules\EnumValueRule;
 
-class RegisterPerujukImport implements ToCollection, WithHeadingRow, WithChunkReading, WithBatchInserts
+class RegisterPerujukImport implements WithHeadingRow, WithChunkReading, WithBatchInserts, OnEachRow, WithValidation
 {
-    /**
-     * @param Collection $collection
-     */
-    public function collection(Collection $rows)
-    {
-        DB::beginTransaction();
-        try {
-            $user = Auth::user();
-            foreach ($rows as $row) {
-                if (!$row->get('no')) {
-                    continue;
-                }
-                Validator::make($row->toArray(), [
-                    'tgl_masuk_sampel' => 'required|date|date_format:Y-m-d',
-                    'lab_satelit_id' => [
-                        'required',
-                        new ExistsLabSatelit,
-                    ],
-                    'kode_sampel' => [
-                        'required',
-                        new UniqueSampelPerujuk($row->get('lab_satelit_id')),
-                    ],
-                    'kewarganegaraan' => 'required',
-                    'kategori' => 'nullable',
-                    'nama' => 'required',
-                    'nik' => 'nullable|digits:16',
-                    'jenis_kelamin' => 'nullable',
-                    'tgl_lahir' => 'nullable|date|date_format:Y-m-d',
-                    'usia' => 'nullable|integer',
-                    'alamat' => 'nullable',
-                    'kode_kelurahan' => [
-                        'nullable',
-                        new ExistsWilayah(),
-                    ],
-                    'kode_kecamatan' => [
-                        'nullable',
-                        new ExistsWilayah(),
-                    ],
-                    'kode_kotakab' => [
-                        'nullable',
-                        new ExistsWilayah(),
-                    ],
-                    'kode_provinsi' => [
-                        'nullable',
-                        new ExistsWilayah(),
-                    ],
-                    'kriteria' => 'nullable|in:Kontak Erat,Suspek,Probable,Konfirmasi,Tanpa Kriteria',
-                    'instansi_pengirim' => 'nullable',
-                    'kode_instansi' => [
-                        'required',
-                        new ExistsFasyankes,
-                    ],
-                    'jenis_sampel' => 'required',
-                    'swab_ke' => 'nullable|integer',
-                    'tanggal_swab' => 'nullable|date|date_format:Y-m-d',
-                ])->validate();
+    use Importable;
 
-                $data = new RegisterPerujuk();
-                $data->nomor_register = generateNomorRegister();
-                $data->register_uuid = (string)Str::uuid();
-                $data->creator_user_id = $user->id;
-                $data->lab_satelit_id = $row->get('lab_satelit_id');
-                $data->perujuk_id = $user->perujuk_id;
-                $data->sumber_pasien = $row->get('kategori');
-                $data->kriteria = $row->get('kriteria') ? array_search($row->get('kriteria'), STATUSES) : null;
-                $data->swab_ke = $row->get('swab_ke');
-                if ($row->get('tanggal_swab')) {
-                    $data->tanggal_swab = date('Y-m-d', strtotime($row->get('tanggal_swab')));
-                }
-                $data->nomor_sampel = $row->get('kode_sampel');
-                $data->nama_jenis_sampel = $row->get('jenis_sampel');
-                $jenis_sampel = JenisSampel::where('nama', 'ilike', '%' . $row->get('jenis_sampel') . '%')->first();
-                $data->jenis_sampel = $jenis_sampel ? $jenis_sampel->id : JenisSampelEnum::LAINNYA()->getIndex();
-                $data->fasyankes_id = $row->get('kode_instansi');
-                $data->fasyankes_pengirim = $row->get('instansi_pengirim');
-                $data->nama_pasien = $row->get('nama');
-                $data->kewarganegaraan = $row->get('kewarganegaraan');
-                $data->nik = $row->get('nik');
-                if ($row->get('tgl_lahir')) {
-                    $data->tanggal_lahir = date('Y-m-d', strtotime($row->get('tgl_lahir')));
-                }
-                $data->provinsi_id = $row->get('kode_provinsi');
-                $data->kota_id = $row->get('kode_kotakab');
-                $data->kecamatan_id = $row->get('kode_kecamatan');
-                $data->kelurahan_id = $row->get('kode_kelurahan');
-                $data->alamat = $row->get('alamat');
-                $data->jenis_kelamin = $row->get('jenis_kelamin');
-                $data->usia_tahun = $row->get('usia');
-                $data->created_at = date('Y-m-d H:i:s', strtotime($row->get('tgl_masuk_sampel').' '. date('H:i:s')));
-                $data->save();
-            }
-            DB::commit();
-        } catch (\Throwable $th) {
-            DB::rollBack();
-        }
+    public function onRow(Row $row)
+    {
+        $row = $row->toArray();
+        return RegisterPerujuk::create($row + $this->mappingRegisterPerujuk($row));
+    }
+
+    public function getJenisSampelId($jenis_sampel)
+    {
+        $jenis_sampel = JenisSampel::where('nama', 'ilike', '%' . $jenis_sampel . '%')->first();
+        $jenis_sampel_id = optional($jenis_sampel)->id ?? JenisSampelEnum::LAINNYA()->getIndex();
+        return $jenis_sampel_id;
+    }
+
+    public function mappingRegisterPerujuk($row): array
+    {
+        return [
+            'nomor_sampel' => $row['kode_sampel'],
+            'nomor_register' => generateNomorRegister(),
+            'register_uuid' => Str::uuid(),
+            'creator_user_id' => Auth::user()->id,
+            'perujuk_id' => Auth::user()->perujuk_id,
+            'sumber_pasien' => $row['kategori'],
+            'kriteria' => $row['kriteria'],
+            'nama_jenis_sampel' => $row['jenis_sampel'],
+            'jenis_sampel' => $this->getJenisSampelId($row['jenis_sampel']),
+            'fasyankes_id' => $row['kode_instansi'],
+            'fasyankes_pengirim' => $row['instansi_pengirim'],
+            'nama_pasien' => $row['nama'],
+            'tanggal_lahir' => $row['tgl_lahir'],
+            'usia_tahun' => $row['usia'],
+            'provinsi_id' => $row['kode_provinsi'],
+            'kota_id' => $row['kode_kotakab'],
+            'kecamatan_id' => $row['kode_kecamatan'],
+            'kelurahan_id' => $row['kode_kelurahan'],
+            'created_at' => $row['tgl_masuk_sampel']
+        ];
+    }
+
+    public function rules(): array
+    {
+        return [
+            '*.tgl_masuk_sampel' => 'required|date|date_format:Y-m-d',
+            '*.lab_satelit_id' => 'required|exists:lab_satelit,id',
+            '*.kode_sampel' => ['required', new UniqueSampelPerujuk($this->lab_satelit_id),],
+            '*.kewarganegaraan' => 'required',
+            '*.kategori' => 'required',
+            '*.no_hp' => 'required',
+            '*.nama' => 'required',
+            '*.nik' => 'nullable|digits:16',
+            '*.jenis_kelamin' => 'nullable',
+            '*.tgl_lahir' => 'nullable|date|date_format:Y-m-d',
+            '*.usia' => 'nullable|integer',
+            '*.alamat' => 'nullable',
+            '*.kode_kelurahan' => 'nullable|exists:labkes.kelurahan,id',
+            '*.kode_kecamatan' => 'nullable|exists:labkes.kecamatan,id',
+            '*.kode_kotakab' => 'nullable|exists:labkes.kota,id',
+            '*.kode_provinsi' => 'nullable|exists:labkes.provinsi,id',
+            '*.kriteria' => ['required', new EnumValueRule(KriteriaEnum::class)],
+            '*.instansi_pengirim' => 'nullable',
+            '*.kode_instansi' => 'required|exists:labkes.fasyankes,id',
+            '*.jenis_sampel' => 'required',
+            '*.swab_ke' => 'nullable|integer',
+            '*.tanggal_swab' => 'nullable|date|date_format:Y-m-d',
+        ];
     }
 
     public function chunkSize(): int

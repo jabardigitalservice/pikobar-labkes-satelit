@@ -2,10 +2,9 @@
   <tr>
     <td v-text="(pagination.page - 1) * pagination.perpage + 1 + index"></td>
     <td nowrap>
-      <span>{{item.waktu_pcr_sample_analyzed | formatDate}}</span>
-      <span>{{ item.jam_input_hasil }}</span>
+      <div><b>{{item.waktu_pcr_sample_analyzed | formatDate}}</b></div>
+      <div class="text-muted">{{ item.jam_input_hasil ? 'pukul ' + item.jam_input_hasil : null }}</div>
     </td>
-
     <td>
       <div class="badge badge-white" style="text-align:left; padding:10px">
         {{item.nomor_sampel}}

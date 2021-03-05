@@ -3,102 +3,63 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImportValidationRequest;
 use App\Imports\HasilPemeriksaanAkhirImport;
-use App\Imports\RegisterMandiriImport;
-use App\Imports\RegisterRujukanImport;
+use App\Imports\HasilPemeriksaanImport;
+use App\Imports\RegisterPerujukImport;
 use App\Imports\RegisterSampelImport;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class ImportRegisterController extends Controller
 {
-    /**
-     * Import Register Mandiri
-     *
-     */
-    public function importRegisterMandiri(Request $request)
+    public function importRegisterSampel(ImportValidationRequest $request)
     {
-        $this->importValidator($request)->validate();
-
-        Excel::import(new RegisterMandiriImport, $request->file('register_file'));
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Sukses import data.',
-            'data' => null,
-        ]);
+        Excel::import(new RegisterSampelImport(), $request->file('register_file'));
+        return response()->json(['message' => 'Sukses import data.']);
     }
 
-    /**
-     * Import Register Mandiri
-     *
-     */
-    public function importRegisterSampel(Request $request)
+    public function importHasilPemeriksaan(ImportValidationRequest $request)
     {
-        $this->__importValidator($request)->validate();
-
-        Excel::import(new RegisterSampelImport, $request->file('register_file'));
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Sukses import data.',
-            'data' => null,
-        ]);
+        Excel::import(new HasilPemeriksaanAkhirImport(), $request->file('register_file'));
+        return response()->json(['message' => 'Sukses import data.']);
     }
 
-    public function importHasilPemeriksaan(Request $request)
+    public function importRegisterPerujuk(ImportValidationRequest $request)
     {
-        $this->__importValidator($request)->validate();
-
-        Excel::import(new HasilPemeriksaanAkhirImport, $request->file('register_file'));
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Sukses import data.',
-            'data' => null,
-        ]);
+        $import = new RegisterPerujukImport();
+        return $this->importExcel($import, $request->file('register_file'));
     }
 
-    /**
-     * Import Register Rujukan
-     */
-    public function importRegisterRujukan(Request $request)
+    public function importExcel($import, $file)
     {
-        $this->importValidator($request)->validate();
-
-        Excel::import(new RegisterRujukanImport, $request->file('register_file'));
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Sukses import data.',
-            'data' => null,
-        ]);
-    }
-
-    private function __importValidator(Request $request)
-    {
-        $extension = '';
-
-        if ($request->hasFile('register_file')) {
-            $extension = strtolower($request->file('register_file')->getClientOriginalExtension());
+        DB::beginTransaction();
+        try {
+            $import->import($file);
+            DB::commit();
+            return response()->json(['message' => 'Sukses import data.']);
+        } catch (ValidationException $e) {
+            DB::rollback();
+            $errors = [];
+            foreach ($e->failures() as $key => $failure) {
+                $errors[$key]['row'] = $failure->row();
+                $errors[$key]['attribute'] = $failure->attribute();
+                $errors[$key]['errors'] = $failure->errors();
+            }
+            return response()->json(['errors' => $errors], 422);
         }
+    }
 
-        return Validator::make([
-            'register_file' => $request->file('register_file'),
-            'extension' => $extension,
-        ], [
-            'register_file' => 'required|file|max:2048',
-            'extension' => 'required|in:csv,xlsx,xls',
+    public function importInputPemeriksaan(ImportValidationRequest $request)
+    {
+        $importer = new HasilPemeriksaanImport();
+        Excel::import($importer, $request->file('register_file'));
+        return response()->json([
+            'status' => 200,
+            'message' => 'Sukses membaca file import excel',
+            'data' => $importer->data,
+            'errors' => $importer->errors,
+            'errors_count' => $importer->errors_count,
         ]);
-
-        // OLD
-        // $request->validate([
-        //     'register_file'=> 'required|file|max:2048',
-        //     'extension'=> 'required|in:csv,xlsx,xls'
-        // ],[
-        //     'register_file'=> $request->file('register_file'),
-        //     'extension'=> strtolower($request->file('register_file')->getClientOriginalExtension())
-        // ]);
     }
 }

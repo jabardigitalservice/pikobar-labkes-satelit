@@ -9,13 +9,15 @@ use Spatie\Enum\Enum;
  * @method static self SUPERADMIN()
  * @method static self LABORATORIUM()
  * @method static self DINKES()
+ * @method static self PERUJUK()
  */
 
 class RoleEnum extends Enum
 {
     public static function SUPERADMIN(): RoleEnum
     {
-        return new class() extends RoleEnum {
+        return new class () extends RoleEnum
+        {
             public function getValue(): string
             {
                 return 'superadmin';
@@ -29,7 +31,8 @@ class RoleEnum extends Enum
 
     public static function LABORATORIUM(): RoleEnum
     {
-        return new class() extends RoleEnum {
+        return new class () extends RoleEnum
+        {
             public function getValue(): string
             {
                 return 'laboratorium';
@@ -43,7 +46,8 @@ class RoleEnum extends Enum
 
     public static function DINKES(): RoleEnum
     {
-        return new class() extends RoleEnum {
+        return new class () extends RoleEnum
+        {
             public function getValue(): string
             {
                 return 'dinkes';
@@ -57,7 +61,8 @@ class RoleEnum extends Enum
 
     public static function PERUJUK(): RoleEnum
     {
-        return new class() extends RoleEnum {
+        return new class () extends RoleEnum
+        {
             public function getValue(): string
             {
                 return 'perujuk';
@@ -68,5 +73,4 @@ class RoleEnum extends Enum
             }
         };
     }
-
 }

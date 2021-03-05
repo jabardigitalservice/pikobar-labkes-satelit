@@ -52,7 +52,7 @@ class RegisterController extends Controller
             'username' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
-            'role_id'=> 'required|exists:roles,id'
+            'role_id' => 'required|exists:roles,id'
         ]);
     }
 
@@ -69,7 +69,7 @@ class RegisterController extends Controller
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'role_id'=> $data['role_id'],
+            'role_id' => $data['role_id'],
         ]);
     }
 }

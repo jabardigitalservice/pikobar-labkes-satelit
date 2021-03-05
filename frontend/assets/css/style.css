@@ -12311,3 +12311,13 @@ body.md-skin {
   width: 100%;
   text-align: center;
 }
+
+.prefix-icon-password {
+  float: right;
+  margin-right: 10px;
+  margin-top: -25px;
+  position: relative;
+  z-index: 2;
+  color: grey;
+  cursor: pointer;
+}
