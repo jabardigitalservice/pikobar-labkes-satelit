@@ -391,10 +391,14 @@
             order_direction: that.sortDir,
           },
         }).then((response) => {
-          var data = response.data;
-          that.items = data.data;
-          that.info = data.info;
-          that.pagination.count = data.count;
+          const { data } = response || {}
+          let {
+            data: dataArray,
+            meta,
+            count
+          } = data || {}
+          that.items = dataArray || []
+          that.pagination.count = meta && meta.total ? meta.total : count || 0
           that.pagination.total = Math.ceil(that.pagination.count / that.pagination.perpage);
           if (that.pagination.count > 0 && that.pagination.page > Math.floor((that.pagination.count - 1) / that
               .pagination.perpage) + 1) {
