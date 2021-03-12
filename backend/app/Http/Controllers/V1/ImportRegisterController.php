@@ -15,8 +15,8 @@ class ImportRegisterController extends Controller
 {
     public function importRegisterSampel(ImportValidationRequest $request)
     {
-        Excel::import(new RegisterSampelImport(), $request->file('register_file'));
-        return response()->json(['message' => 'Sukses import data.']);
+        $import = new RegisterSampelImport();
+        return $this->importExcel($import, $request->file('register_file'));
     }
 
     public function importHasilPemeriksaan(ImportValidationRequest $request)

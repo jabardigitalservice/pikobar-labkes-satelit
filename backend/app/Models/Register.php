@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\KriteriaEnum;
 use App\Traits\FilterTrait;
 use App\Traits\JoinTrait;
 use App\Traits\OrderTrait;
@@ -74,6 +75,11 @@ class Register extends Model
     public function sampel()
     {
         return $this->hasOne(Sampel::class);
+    }
+
+    public function setKriteriaAttribute($value)
+    {
+        $this->attributes['status'] = $value ? KriteriaEnum::make($value)->getIndex() : null;
     }
 
     public function logs()
