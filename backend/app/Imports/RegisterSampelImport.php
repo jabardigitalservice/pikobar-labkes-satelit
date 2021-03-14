@@ -117,29 +117,29 @@ class RegisterSampelImport implements OnEachRow, WithHeadingRow, WithChunkReadin
     {
         $user = Auth::user();
         return [
-            '*.tgl_masuk_sampel' => 'required|date|date_format:Y-m-d',
-            '*.kode_sampel' =>  [
+            'tgl_masuk_sampel' => 'required|date|date_format:Y-m-d',
+            'kode_sampel' =>  [
                 'required',
-                new UniqueSampelPerujuk($user->lab_satelit_id)
+                new UniqueSampelPerujuk($user->lab_satelit_id),
             ],
-            '*.kategori' => 'required',
-            '*.nama' => 'required',
-            '*.nik' => 'nullable|digits:16',
-            '*.tgl_lahir' => 'nullable|date|date_format:Y-m-d',
-            '*.kriteria' => [
+            'kategori' => 'required',
+            'nama' => 'required',
+            'nik' => 'nullable|digits:16',
+            'tgl_lahir' => 'nullable|date|date_format:Y-m-d',
+            'kriteria' => [
                 'nullable',
                 new EnumValueRule(KriteriaEnum::class)
             ],
-            '*.kode_instansi' => 'required|numeric|exists:labkes.fasyankes,id',
-            '*.jenis_sampel' => 'required',
-            '*.swab_ke' => 'nullable|numeric',
-            '*.tanggal_swab' => 'nullable|date|date_format:Y-m-d',
-            '*.kode_provinsi' => 'required|integer|exists:labkes.provinsi,id',
-            '*.kode_kotakab' => 'required|integer|exists:labkes.kota,id',
-            '*.kode_kecamatan' => 'nullable|integer|exists:labkes.kecamatan,id',
-            '*.kode_kelurahan' => 'nullable|integer|exists:labkes.kelurahan,id',
-            '*.kewarganegaraan' => 'nullable',
-            '*.jenis_kelamin' => 'nullable'
+            'kode_instansi' => 'required|numeric|exists:labkes.fasyankes,id',
+            'jenis_sampel' => 'required',
+            'swab_ke' => 'nullable|numeric',
+            'tanggal_swab' => 'nullable|date|date_format:Y-m-d',
+            'kode_provinsi' => 'required|integer|exists:labkes.provinsi,id',
+            'kode_kotakab' => 'required|integer|exists:labkes.kota,id',
+            'kode_kecamatan' => 'nullable|integer|exists:labkes.kecamatan,id',
+            'kode_kelurahan' => 'nullable|integer|exists:labkes.kelurahan,id',
+            'kewarganegaraan' => 'nullable',
+            'jenis_kelamin' => 'nullable'
         ];
     }
 
