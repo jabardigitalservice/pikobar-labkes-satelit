@@ -11,14 +11,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\OnEachRow;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Row;
 use Spatie\Enum\Laravel\Rules\EnumValueRule;
 
-class RegisterPerujukImport implements WithHeadingRow, WithChunkReading, WithBatchInserts, OnEachRow, WithValidation
+class RegisterPerujukImport implements WithHeadingRow, WithChunkReading, OnEachRow, WithValidation
 {
     use Importable;
 
@@ -63,37 +62,32 @@ class RegisterPerujukImport implements WithHeadingRow, WithChunkReading, WithBat
     public function rules(): array
     {
         return [
-            '*.tgl_masuk_sampel' => 'required|date|date_format:Y-m-d',
-            '*.lab_satelit_id' => 'required|exists:lab_satelit,id',
-            '*.kode_sampel' => ['required', new UniqueSampelPerujuk($this->lab_satelit_id),],
-            '*.kewarganegaraan' => 'required',
-            '*.kategori' => 'required',
-            '*.no_hp' => 'required',
-            '*.nama' => 'required',
-            '*.nik' => 'nullable|digits:16',
-            '*.jenis_kelamin' => 'nullable',
-            '*.tgl_lahir' => 'nullable|date|date_format:Y-m-d',
-            '*.usia' => 'nullable|integer',
-            '*.alamat' => 'nullable',
-            '*.kode_kelurahan' => 'nullable|exists:labkes.kelurahan,id',
-            '*.kode_kecamatan' => 'nullable|exists:labkes.kecamatan,id',
-            '*.kode_kotakab' => 'nullable|exists:labkes.kota,id',
-            '*.kode_provinsi' => 'nullable|exists:labkes.provinsi,id',
-            '*.kriteria' => ['required', new EnumValueRule(KriteriaEnum::class)],
-            '*.instansi_pengirim' => 'nullable',
-            '*.kode_instansi' => 'required|exists:labkes.fasyankes,id',
-            '*.jenis_sampel' => 'required',
-            '*.swab_ke' => 'nullable|integer',
-            '*.tanggal_swab' => 'nullable|date|date_format:Y-m-d',
+            'tgl_masuk_sampel' => 'required|date|date_format:Y-m-d',
+            'lab_satelit_id' => 'required|exists:lab_satelit,id',
+            'kode_sampel' => ['required', new UniqueSampelPerujuk($this->lab_satelit_id)],
+            'kewarganegaraan' => 'required',
+            'kategori' => 'required',
+            'no_hp' => 'required',
+            'nama' => 'required',
+            'nik' => 'nullable|digits:16',
+            'jenis_kelamin' => 'nullable',
+            'tgl_lahir' => 'nullable|date|date_format:Y-m-d',
+            'usia' => 'nullable|integer',
+            'alamat' => 'nullable',
+            'kode_kelurahan' => 'nullable|exists:labkes.kelurahan,id',
+            'kode_kecamatan' => 'nullable|exists:labkes.kecamatan,id',
+            'kode_kotakab' => 'required|exists:labkes.kota,id',
+            'kode_provinsi' => 'required|exists:labkes.provinsi,id',
+            'kriteria' => ['required', new EnumValueRule(KriteriaEnum::class)],
+            'instansi_pengirim' => 'nullable',
+            'kode_instansi' => 'required|exists:labkes.fasyankes,id',
+            'jenis_sampel' => 'required',
+            'swab_ke' => 'nullable|integer',
+            'tanggal_swab' => 'nullable|date|date_format:Y-m-d',
         ];
     }
 
     public function chunkSize(): int
-    {
-        return 1000;
-    }
-
-    public function batchSize(): int
     {
         return 1000;
     }
