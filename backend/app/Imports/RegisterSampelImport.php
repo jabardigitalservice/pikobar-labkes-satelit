@@ -64,10 +64,10 @@ class RegisterSampelImport implements OnEachRow, WithHeadingRow, WithChunkReadin
 
     private function createPasien($row)
     {
-        $provinsi = $this->getWilayah('provinsi', $row->get('kode_provinsi'));
-        $kota = $this->getWilayah('kota', $row->get('kode_kotakab'));
-        $kecamatan = $this->getWilayah('kecamatan', $row->get('kode_kecamatan'));
-        $kelurahan = $this->getWilayah('kelurahan', $row->get('kode_kelurahan'));
+        $provinsi = $this->getWilayah('provinsi', $row['kode_provinsi']);
+        $kota = $this->getWilayah('kota', $row['kode_kotakab']);
+        $kecamatan = $this->getWilayah('kecamatan', $row['kode_kecamatan']);
+        $kelurahan = $this->getWilayah('kelurahan', $row['kode_kelurahan']);
         $row['nama_lengkap'] = $row['nama'];
         $row['tanggal_lahir'] = $row['tgl_lahir'];
         $row['kode_provinsi'] = $provinsi->id;
@@ -101,7 +101,7 @@ class RegisterSampelImport implements OnEachRow, WithHeadingRow, WithChunkReadin
 
     private function createSampel($row, $register, $pengambilan_sampel)
     {
-        $jenis_sampel = JenisSampel::where('nama', $row->get('jenis_sampel'))->first();
+        $jenis_sampel = JenisSampel::where('nama', $row['jenis_sampel'])->first();
         $row['nomor_sampel'] = $row['kode_sampel'];
         $row['jenis_sampel_nama'] = $row['jenis_sampel'];
         $row['jenis_sampel_id'] = optional($jenis_sampel)->id ?? JenisSampelEnum::LAINNYA()->getIndex();

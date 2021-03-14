@@ -8,6 +8,7 @@ use App\Imports\HasilPemeriksaanAkhirImport;
 use App\Imports\HasilPemeriksaanImport;
 use App\Imports\RegisterPerujukImport;
 use App\Imports\RegisterSampelImport;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
 
