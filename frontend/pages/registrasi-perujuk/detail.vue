@@ -213,7 +213,7 @@
       store
     }) {
       let error = false;
-      let resp = await axios.get("/v1/register-perujuk/detail/" + route.params.id);
+      let resp = await axios.get("/v1/register-perujuk/" + route.params.id);
       return {
         data: resp.data
       }

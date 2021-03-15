@@ -21,21 +21,7 @@
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8" :class="{ 'is-invalid': form.errors.has('fasyankes_pengirim') }">
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="fasyankes_pengirim" value="rumah_sakit"
-                    v-model="form.fasyankes_pengirim" required>
-                  <label class="form-check-label" for="fasyanrs">Rumah Sakit</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="fasyankes_pengirim" value="dinkes"
-                    v-model="form.fasyankes_pengirim" required>
-                  <label class="form-check-label" for="fasyandinkes">Dinkes</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="fasyankes_pengirim" value="puskesmas"
-                    v-model="form.fasyankes_pengirim" required>
-                  <label class="form-check-label" for="fasyandinkes">Puskesmas</label>
-                </div>
+                <input-option-instansi-pengirim :form="form" field="fasyankes_pengirim" />
               </div>
             </div>
             <div class="form-group row">
@@ -581,7 +567,7 @@
       async submit() {
         // Submit the form.
         try {
-          const response = await this.form.post("/v1/register-perujuk/store");
+          const response = await this.form.post("/v1/register-perujuk");
           this.$toast.success(response.data.message, {
             icon: 'check',
             iconPack: 'fontawesome',

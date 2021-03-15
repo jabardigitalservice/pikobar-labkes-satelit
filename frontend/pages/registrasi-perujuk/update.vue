@@ -21,21 +21,7 @@
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8" :class="{ 'is-invalid': form.errors.has('fasyankes_pengirim') }">
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="fasyankes_pengirim" value="rumah_sakit"
-                    v-model="form.fasyankes_pengirim" required>
-                  <label class="form-check-label" for="fasyanrs">Rumah Sakit</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="fasyankes_pengirim" value="dinkes"
-                    v-model="form.fasyankes_pengirim" required>
-                  <label class="form-check-label" for="fasyandinkes">Dinkes</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="fasyankes_pengirim" value="puskesmas"
-                    v-model="form.fasyankes_pengirim" required>
-                  <label class="form-check-label" for="fasyandinkes">Puskesmas</label>
-                </div>
+                <input-option-instansi-pengirim :form="form" field="fasyankes_pengirim" />
               </div>
             </div>
             <div class="form-group row">
@@ -378,7 +364,7 @@
       if (!store.getters["options/jenis_sampel"].length) {
         await store.dispatch("options/fetchJenisSampel");
       }
-      let resp = await axios.get(`/v1/register-perujuk/detail/${route.params.id}`);
+      let resp = await axios.get(`/v1/register-perujuk/${route.params.id}`);
       let data = resp.data.result;
       let fasyankes = await axios.get('/v1/list-fasyankes-jabar?tipe=' + data.fasyankes_pengirim)
       let provinsi = await axios.get('/v1/list-provinsi/');
@@ -523,7 +509,7 @@
       },
       async submit() {
         try {
-          const response = await this.form.post(`/v1/register-perujuk/update/${this.$route.params.id}`);
+          const response = await this.form.put(`/v1/register-perujuk/${this.$route.params.id}`);
           this.$swal.fire(
             "Berhasil Ubah Data",
             "Data Pasien Register Berhasil Diubah",

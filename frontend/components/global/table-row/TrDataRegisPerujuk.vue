@@ -45,7 +45,6 @@
   </tr>
 </template>
 <script>
-  import axios from "axios";
   import {
     getHumanAge,
     getAlertPopUp,
@@ -99,7 +98,7 @@
                 Domisili
               </div>
               <div class="col-md-7 flex-left">
-                ${item.kota || '-'}
+                ${item.kota && item.kota.nama ? item.kota.nama : '-'}
               </div>
             </div>
             <div class="form-group row col-md-10">
@@ -143,7 +142,7 @@
         } = await swalCustom.fire(getAlertPopUp('delete', content));
         if (isConfirm) {
           try {
-            await this.$axios.delete(`v1/register-perujuk/delete/${item.id}`);
+            await this.$axios.delete(`v1/register-perujuk/${item.id}`);
             toast.success('Berhasil menghapus data', {
               icon: 'check',
               iconPack: 'fontawesome',
