@@ -98,9 +98,6 @@
   import Form from "vform"
   import axios from "axios"
   import {
-    optionInstansiPengirim
-  } from '~/assets/js/constant/enum'
-  import {
     getRole,
     humanize
   } from "~/utils"
@@ -131,7 +128,6 @@
         form: new Form({
           perujuk_id: id || null,
         }),
-        optionInstansiPengirim,
         optFasyankes: [],
         fasyankes: perujuk || null,
         params: {

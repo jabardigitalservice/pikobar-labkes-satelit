@@ -139,9 +139,6 @@
 <script>
   import Form from "vform"
   import {
-    optionInstansiPengirim
-  } from '~/assets/js/constant/enum'
-  import {
     getRole,
     humanize
   } from "~/utils"
@@ -160,7 +157,6 @@
           password: null,
           password_confirmation: null
         }),
-        optionInstansiPengirim,
         optFasyankes: [],
         fasyankes: {},
         params: {
