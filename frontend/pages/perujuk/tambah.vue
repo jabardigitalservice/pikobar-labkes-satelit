@@ -20,11 +20,7 @@
               Instansi Pengirim<span style="color: red">*</span>
             </label>
             <div class="col-md-8">
-              <div class="form-check form-check-inline" v-for="item in optionInstansiPengirim" :key="item">
-                <input class="form-check-input" type="radio" name="perujuk_id" :id="item" :value="item"
-                  v-model="fasyankes_pengirim" :class="{ 'is-invalid': form.errors.has(`fasyankes_pengirim`) }">
-                <label class="form-check-label" for="fasyanrs">{{ humanize(item) }}</label>
-              </div>
+              <input-option-instansi-pengirim :form="params" field="fasyankes_pengirim" />
             </div>
           </div>
 
@@ -35,7 +31,7 @@
             <div class="col-md-8">
               <multiselect v-model="fasyankes" :options="optFasyankes" track-by="nama" label="nama"
                 :class="{ 'is-invalid': form.errors.has(`perujuk_id`) }" placeholder="Nama Dinkes/Puskesmas/Rumah Sakit"
-                :disabled="!fasyankes_pengirim">
+                :disabled="!params.fasyankes_pengirim">
               </multiselect>
               <has-error :form="form" field="perujuk_id" />
             </div>
@@ -167,7 +163,9 @@
         optionInstansiPengirim,
         optFasyankes: [],
         fasyankes: {},
-        fasyankes_pengirim: null,
+        params: {
+          fasyankes_pengirim: null
+        },
         domisili: null,
         showPassword: true,
         showRePassword: true,
@@ -181,7 +179,7 @@
     methods: {
       initForm() {
         this.isLoading = false
-        this.fasyankes_pengirim = null
+        this.params.fasyankes_pengirim = null
         this.fasyankes = null
         this.domisili = null
         this.form.username = null
@@ -238,10 +236,10 @@
       },
     },
     watch: {
-      "fasyankes_pengirim"() {
+      "params.fasyankes_pengirim"() {
         this.fasyankes = null
         this.domisili = null
-        this.changeFasyankes(this.fasyankes_pengirim)
+        this.changeFasyankes(this.params.fasyankes_pengirim)
       },
       "fasyankes"() {
         this.form.perujuk_id = null
