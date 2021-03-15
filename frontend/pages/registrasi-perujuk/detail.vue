@@ -193,10 +193,6 @@
 </template>
 
 <script>
-  import {
-    mapActions,
-    mapState
-  } from 'vuex'
   import axios from 'axios'
   import {
     getHumanAge,
@@ -209,13 +205,12 @@
   export default {
     middleware: 'auth',
     async asyncData({
-      route,
-      store
+      route
     }) {
-      let error = false;
-      let resp = await axios.get("/v1/register-perujuk/" + route.params.id);
+      const resp = await axios.get(`/v1/register-perujuk/${route.params.id}`)
+      const { data } = resp || {}
       return {
-        data: resp.data
+        data
       }
     },
     data() {
