@@ -54,21 +54,7 @@
             <div>Instansi Pengirim</div>
           </div>
           <div class="col-md-8">
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" value="rumah_sakit"
-                v-model="params.reg_fasyankes_pengirim">
-              <label class="form-check-label" for="fasyanrs">Rumah Sakit</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" value="dinkes"
-                v-model="params.reg_fasyankes_pengirim">
-              <label class="form-check-label" for="fasyandinkes">Dinkes</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" value="puskesmas"
-                v-model="params.reg_fasyankes_pengirim">
-              <label class="form-check-label" for="fasyandinkes">Puskesmas</label>
-            </div>
+            <input-option-instansi-pengirim :form="params" field="reg_fasyankes_pengirim" />
           </div>
         </div>
         <div class="form-group row">
@@ -105,6 +91,7 @@
 </template>
 
 <script>
+  import JQuery from "jquery"
   import {
     pasienStatus
   } from './../../assets/js/constant/enum';
@@ -159,6 +146,7 @@
         this.fasyankes = null;
         this.params.nomor_sampel = null;
         this.$refs.rangedatepicker.$data.dateRange = {};
+        JQuery(':radio').prop('checked', false)
         this.$bus.$emit('refresh-ajaxtable2', this.oid, this.params);
       },
       onDateSelected: function (daterange) {

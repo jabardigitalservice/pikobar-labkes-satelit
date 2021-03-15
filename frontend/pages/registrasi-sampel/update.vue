@@ -21,21 +21,7 @@
                 <span style="color:red">*</span>
               </div>
               <div class="col-md-8" :class="{ 'is-invalid': form.errors.has('reg_fasyankes_pengirim') }">
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" value="rumah_sakit"
-                    v-model="form.reg_fasyankes_pengirim" required>
-                  <label class="form-check-label" for="fasyanrs">Rumah Sakit</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" value="dinkes"
-                    v-model="form.reg_fasyankes_pengirim" required>
-                  <label class="form-check-label" for="fasyandinkes">Dinkes</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="reg_fasyankes_pengirim" value="puskesmas"
-                    v-model="form.reg_fasyankes_pengirim" required>
-                  <label class="form-check-label" for="fasyandinkes">Puskesmas</label>
-                </div>
+                <input-option-instansi-pengirim :form="form" field="reg_fasyankes_pengirim" />
               </div>
             </div>
             <div class="form-group row">
