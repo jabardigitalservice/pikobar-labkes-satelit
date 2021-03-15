@@ -83,8 +83,22 @@ export const colSuperAdmin = {
   kesimpulan_pemeriksaan: 'KESIMPULAN PEMERIKSAAN',
 }
 
-export const optionInstansiPengirim = [
-  'dinkes',
-  'puskesmas',
-  'rumah_sakit'
-];
+export const optionInstansiPengirim = [{
+  key: 'puskesmas',
+  value: 'Puskesmas'
+}, {
+  key: 'rumah_sakit',
+  value: 'Rumah Sakit'
+}, {
+  key: 'dinkes',
+  value: 'Dinkes Provinsi'
+}, {
+  key: 'dinkes_kota',
+  value: 'Dinkes Kabupaten / Kota'
+}, {
+  key: 'klinik',
+  value: 'Klinik'
+}, {
+  key: 'lab',
+  value: 'Laboratorium'
+}]
