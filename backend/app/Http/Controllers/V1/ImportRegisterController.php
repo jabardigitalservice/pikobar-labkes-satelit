@@ -8,6 +8,7 @@ use App\Imports\HasilPemeriksaanAkhirImport;
 use App\Imports\HasilPemeriksaanImport;
 use App\Imports\RegisterPerujukImport;
 use App\Imports\RegisterSampelImport;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
 
@@ -15,8 +16,8 @@ class ImportRegisterController extends Controller
 {
     public function importRegisterSampel(ImportValidationRequest $request)
     {
-        Excel::import(new RegisterSampelImport(), $request->file('register_file'));
-        return response()->json(['message' => 'Sukses import data.']);
+        $import = new RegisterSampelImport();
+        return $this->importExcel($import, $request->file('register_file'));
     }
 
     public function importHasilPemeriksaan(ImportValidationRequest $request)

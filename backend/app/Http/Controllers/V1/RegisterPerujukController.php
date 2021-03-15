@@ -18,7 +18,7 @@ class RegisterPerujukController extends Controller
     public function index(Request $request)
     {
         $this->getRequestRegisterPerujuk($request);
-        $models = RegisterPerujuk::with(['kota', 'fasyankes', 'perujuk']);
+        $models = RegisterPerujuk::with(['kota', 'fasyankes']);
         if ($this->user->hasRole(RoleEnum::PERUJUK()->getIndex())) {
             $models->where('perujuk_id', $this->user->perujuk_id);
         }
@@ -72,7 +72,7 @@ class RegisterPerujukController extends Controller
         return response()->json(['result' => $register_perujuk]);
     }
 
-    public function delete(RegisterPerujuk $register_perujuk)
+    public function destroy(RegisterPerujuk $register_perujuk)
     {
         abort_if($register_perujuk->status != 'dikirim', 500, 'data tersebut sudah masuk ketahap berikutnya');
         $register_perujuk->delete();

@@ -1,4 +1,8 @@
 version: "2"
 exclude_patterns:
-- "*"
-- "!**/*.php"
+- "frontend"
+- "backend/public"
+- "backend/database"
+- "backend/app/Imports"
+- "backend/app/Exports"
+- "backend/app/Console"

@@ -62,11 +62,6 @@ trait RegisterPerujukTrait
                 $query->where('nama', 'ilike', '%' . $val . '%');
             });
         });
-        $models->when($key == 'perujuk', function ($query) use ($val) {
-            $query->whereHas('perujuk', function ($query) use ($val) {
-                $query->where('nama', 'ilike', '%' . $val . '%');
-            });
-        });
         $models->when($key == 'kategori', function ($query) use ($val) {
             $query->where('sumber_pasien', 'ilike', '%' . $val . '%');
         });

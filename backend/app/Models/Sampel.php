@@ -156,4 +156,9 @@ class Sampel extends Model
     {
         return $this->belongsTo(LabPCR::class, 'lab_pcr_id');
     }
+
+    public function setNomorSampelAttribute($value)
+    {
+        $this->attributes['nomor_sampel'] = strtoupper($value);
+    }
 }

@@ -48,7 +48,7 @@ class RegisterPerujuk extends Model
 
     public function perujuk()
     {
-        return $this->belongsTo(Perujuk::class);
+        return $this->belongsTo(Fasyankes::class);
     }
 
     public function kota()
