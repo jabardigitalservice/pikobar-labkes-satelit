@@ -72,7 +72,7 @@ class RegisterPerujukController extends Controller
         return response()->json(['result' => $register_perujuk]);
     }
 
-    public function delete(RegisterPerujuk $register_perujuk)
+    public function destroy(RegisterPerujuk $register_perujuk)
     {
         abort_if($register_perujuk->status != 'dikirim', 500, 'data tersebut sudah masuk ketahap berikutnya');
         $register_perujuk->delete();
