@@ -131,10 +131,10 @@
         optFasyankes: [],
         fasyankes: perujuk || null,
         params: {
-          fasyankes_pengirim: perujuk && perujuk.tipe ? perujuk.tipe : null
+          fasyankes_pengirim: perujuk?.tipe ? perujuk.tipe : null
         },
         roleAdmin: getRole('Admin Perujuk'),
-        domisili: perujuk && perujuk.kota && perujuk.kota.nama ? perujuk.kota.nama : '',
+        domisili: perujuk?.kota?.nama ? perujuk.kota.nama : '',
         humanize,
         loading: false,
         isLoading: false,
@@ -197,7 +197,7 @@
             kota
           } = this.fasyankes
           this.form.perujuk_id = id || null
-          this.domisili = kota && kota.nama ? kota.nama : null
+          this.domisili = kota?.nama ? kota.nama : null
         }
       },
       "form.perujuk_id"(newVal) {
