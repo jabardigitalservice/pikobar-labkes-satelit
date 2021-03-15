@@ -18,7 +18,7 @@ class RegisterPerujukController extends Controller
     public function index(Request $request)
     {
         $this->getRequestRegisterPerujuk($request);
-        $models = RegisterPerujuk::with(['kota', 'fasyankes', 'perujuk']);
+        $models = RegisterPerujuk::with(['kota', 'fasyankes']);
         if ($this->user->hasRole(RoleEnum::PERUJUK()->getIndex())) {
             $models->where('perujuk_id', $this->user->perujuk_id);
         }

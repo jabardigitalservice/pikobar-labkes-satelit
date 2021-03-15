@@ -46,11 +46,6 @@ class RegisterPerujuk extends Model
         'created_at'
     ];
 
-    public function perujuk()
-    {
-        return $this->belongsTo(Perujuk::class);
-    }
-
     public function kota()
     {
         return $this->belongsTo(Kota::class);
