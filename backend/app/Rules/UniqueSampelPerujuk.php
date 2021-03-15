@@ -44,22 +44,20 @@ class UniqueSampelPerujuk implements Rule
 
     private function doestntExistSampel($nomor_sampel)
     {
-        return Sampel::where('nomor_sampel', strtoupper($nomor_sampel))
-                ->where('lab_satelit_id', $this->lab_satelit_id)
-                ->where(function ($query) {
-                    if ($this->id && $this->roleLab == Auth::user()->role_id) {
-                        $query->where('id', '!=', $this->id);
-                    }
-                })
-                ->doesntExist();
+        return $this->doestntExist(Sampel::query(), $nomor_sampel, $this->rolePerujuk);
     }
 
     private function doestntExistRegistrasiPerujuk($nomor_sampel)
     {
-        return RegisterPerujuk::where('nomor_sampel', strtoupper($nomor_sampel))
+        return $this->doestntExist(RegisterPerujuk::query(), $nomor_sampel, $this->rolePerujuk);
+    }
+
+    private function doestntExist($model, $nomor_sampel, $role)
+    {
+        return $model->where('nomor_sampel', strtoupper($nomor_sampel))
                 ->where('lab_satelit_id', $this->lab_satelit_id)
-                ->where(function ($query) {
-                    if ($this->id && $this->rolePerujuk == Auth::user()->role_id) {
+                ->where(function ($query) use ($role) {
+                    if ($this->id && $role == Auth::user()->role_id) {
                         $query->where('id', '!=', $this->id);
                     }
                 })
