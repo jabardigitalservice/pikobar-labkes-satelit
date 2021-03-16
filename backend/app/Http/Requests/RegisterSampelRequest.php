@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Enum\Laravel\Rules\EnumIndexRule;
 use Spatie\Enum\Laravel\Rules\EnumValueRule;
 
-class StoreRegisterSampel extends FormRequest
+class RegisterSampelRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

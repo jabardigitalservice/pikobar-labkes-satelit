@@ -14,6 +14,9 @@ class RegisterSampelDetailResource extends JsonResource
      */
     public function toArray($request)
     {
+        $register = parent::toArray($request);
+        $pasien = $register->pasiens;
+        $sampel = $register->sampel;
         return [
             'reg_fasyankes_id' => $register->fasyankes_id,
             'reg_fasyankes_pengirim' => $register->fasyankes_pengirim,
