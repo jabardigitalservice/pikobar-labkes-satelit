@@ -50,12 +50,6 @@ class Register extends Model
         'hasil_rdt',
     ];
 
-    protected $hidden = ['fasyankes_id'];
-
-    protected $dates = [
-        'tanggal_kunjungan'
-    ];
-
     public function fasyankes()
     {
         return $this->belongsTo(Fasyankes::class);
@@ -116,7 +110,7 @@ class Register extends Model
         );
     }
 
-    public function scopeWhereLabSatelit($query, $labSatelitId)
+    public function scopeLabSatelit($query, $labSatelitId)
     {
         return $query->where('register.lab_satelit_id', $labSatelitId)
                         ->where('sampel.lab_satelit_id', $labSatelitId)

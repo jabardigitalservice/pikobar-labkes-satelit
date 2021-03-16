@@ -44,7 +44,7 @@ class UniqueSampelPerujuk implements Rule
 
     private function doestntExistSampel($nomor_sampel)
     {
-        return $this->doestntExist(Sampel::query(), $nomor_sampel, $this->rolePerujuk);
+        return $this->doestntExist(Sampel::query(), $nomor_sampel, $this->roleLab);
     }
 
     private function doestntExistRegistrasiPerujuk($nomor_sampel)

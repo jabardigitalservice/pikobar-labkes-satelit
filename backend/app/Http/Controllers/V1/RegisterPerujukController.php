@@ -2,67 +2,64 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterPerujukRequest;
 use App\Http\Resources\RegisterPerujukResource;
 use App\Models\RegisterPerujuk;
+use App\Traits\PaginateTrait;
 use App\Traits\RegisterPerujukTrait;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
 class RegisterPerujukController extends Controller
 {
     use RegisterPerujukTrait;
+    use PaginateTrait;
 
     public function index(Request $request)
     {
-        $this->getRequestRegisterPerujuk($request);
-        $models = RegisterPerujuk::with(['kota', 'fasyankes']);
-        if ($this->user->hasRole(RoleEnum::PERUJUK()->getIndex())) {
-            $models->where('perujuk_id', $this->user->perujuk_id);
+        $params          = $request->get('params', false);
+        $search          = $request->get('search', false);
+        $order           = $request->get('order', 'tanggal');
+        $perpage         = $request->get('perpage', 20);
+        $order_direction = $request->get('order_direction', 'desc');
+        $user            = $request->user();
+
+        $models          = RegisterPerujuk::rolePerujuk($user);
+
+        if ($search != '') {
+            $models->search($search);
         }
-        if ($this->user->hasRole(RoleEnum::LABORATORIUM()->getIndex())) {
-            $models->where('lab_satelit_id', $this->user->lab_satelit_id);
-            $models->where('status', 'dikirim');
+
+        if ($params) {
+            $models->filter($params);
         }
-        if ($this->search != '') {
-            $models = $this->searchRegisterPerujuk($models, $this->search);
-        }
-        if ($this->params) {
-            foreach (json_decode($this->params) as $key => $val) {
-                if ($val == '') {
-                    continue;
-                }
-                $models = $this->filterRegisterPerujuk($models, $key, $val);
-            }
-        }
-        if ($this->order) {
-            $models = $this->orderRegisterPerujuk($models, $this->order, $this->order_direction);
-        }
-        return RegisterPerujukResource::collection($models->paginate($this->perpage));
+        $models->order($order, $this->getValidOrderDirection($order_direction));
+        return RegisterPerujukResource::collection($models->paginate($this->getValidPerpage($perpage)));
     }
 
     public function store(RegisterPerujukRequest $request)
     {
-        RegisterPerujuk::create($request->all() + [
+        RegisterPerujuk::create($request->validated() + [
             'nomor_register' => generateNomorRegister(),
             'register_uuid' => Str::uuid(),
             'creator_user_id' => $request->user()->id,
             'perujuk_id' => $request->user()->perujuk_id,
             'nama_jenis_sampel' => $this->getJenisSampel($request),
         ]);
-        return response()->json(['message' => 'success']);
+        return response()->json(['message' => 'success'], Response::HTTP_CREATED);
     }
 
     public function update(RegisterPerujukRequest $request, RegisterPerujuk $register_perujuk)
     {
         abort_if($register_perujuk->status != 'dikirim', 500, 'data tersebut sudah masuk ketahap berikutnya');
-        $register_perujuk->update($request->all() + [
+        $register_perujuk->fill($request->validated() + [
             'creator_user_id' => $request->user()->id,
             'perujuk_id' => $request->user()->perujuk_id,
             'nama_jenis_sampel' => $this->getJenisSampel($request),
         ]);
+        $register_perujuk->save();
         return response()->json(['message' => 'success']);
     }
 
