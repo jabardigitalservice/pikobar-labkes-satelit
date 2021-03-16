@@ -22,8 +22,8 @@
               </div>
               <div class="col-md-8">
                 <input-option-instansi-pengirim :form="form" field="reg_fasyankes_pengirim"
-                 :class="{ 'is-invalid': form.errors.has('reg_fasyankes_pengirim') }" />
-                <has-error :form="form" field="reg_fasyankes_pengirim" />
+                 :class="{ 'is-invalid': form.errors.has('reg_fasyankes_id') }" />
+                <has-error :form="form" field="reg_fasyankes_id" />
               </div>
             </div>
             <div class="form-group row">
@@ -177,9 +177,9 @@
               </div>
               <div class="col-md-8">
                 <multiselect v-model="provinsi" :options="optionProvinsi" track-by="nama" label="nama"
-                  placeholder="Pilih Provinsi" :class="{ 'is-invalid': form.errors.has('reg_provinsi') }">
+                  placeholder="Pilih Provinsi" :class="{ 'is-invalid': form.errors.has('reg_kode_provinsi') }">
                 </multiselect>
-                <has-error :form="form" field="reg_provinsi" />
+                <has-error :form="form" field="reg_kode_provinsi" />
               </div>
             </div>
             <div class="form-group row">
@@ -576,15 +576,11 @@
           this.initForm();
           this.$router.push("/registrasi/sampel");
         } catch (err) {
-          if (err.response && err.response.data.code == 422) {
+          if (err.response && err.response.status === 422) {
             this.$nextTick(() => {
               this.form.errors.set(err.response.data.error)
             })
-            this.$toast.error('Mohon cek kembali formulir Anda', {
-              icon: 'times',
-              iconPack: 'fontawesome',
-              duration: 5000
-            })
+            this.$swal.fire("Terjadi kesalahan", "Mohon cek kembali formulir Anda", "error")
           } else {
             this.$swal.fire("Terjadi kesalahan", "Silakan hubungi Admin", "error");
           }
