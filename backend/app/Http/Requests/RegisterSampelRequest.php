@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\JenisKelaminEnum;
 use App\Enums\JenisSampelEnum;
 use App\Enums\KewarganegaraanEnum;
 use App\Enums\KriteriaEnum;
-use App\Models\Sampel;
 use App\Rules\UniqueSampelPerujuk;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -62,7 +62,7 @@ class RegisterSampelRequest extends FormRequest
             'reg_kode_kelurahan' => 'nullable|numeric|exists:labkes.kelurahan,id',
             'reg_rt' => 'nullable',
             'reg_rw' => 'nullable',
-            'reg_jk' => ['nullable', new EnumValueRule(JenisSampelEnum::class)],
+            'reg_jk' => ['nullable', new EnumValueRule(JenisKelaminEnum::class)],
             'reg_keterangan' => 'nullable',
             'reg_usia_tahun' => 'nullable|integer',
             'reg_usia_bulan' => 'nullable|integer',
