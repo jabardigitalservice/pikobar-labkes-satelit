@@ -34,7 +34,7 @@ class RegisterPerujukRequest extends FormRequest
             'sumber_pasien' => 'required',
             'kriteria' => ['required', new EnumIndexRule(KriteriaEnum::class)],
             'swab_ke' => 'nullable|integer',
-            'tanggal_swab' => 'nullable|date|date_format:Y-m-d',
+            'tanggal_swab' => 'nullable',
             'nomor_sampel' => [
                 'required',
                 new UniqueSampelPerujuk($this->lab_satelit_id, optional($this->register_perujuk)->id),
@@ -58,7 +58,7 @@ class RegisterPerujukRequest extends FormRequest
             'kode_kasus' => 'nullable',
             'no_rt' => 'nullable|max:3',
             'no_rw' => 'nullable|max:3',
-            'tanggal_lahir' => 'nullable|date|date_format:Y-m-d',
+            'tanggal_lahir' => 'nullable',
             'tempat_lahir' => 'nullable',
             'usia_bulan' => 'nullable',
             'usia_tahun' => 'nullable',
