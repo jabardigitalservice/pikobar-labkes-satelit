@@ -36,7 +36,7 @@ class RegisterSampelDetailResource extends JsonResource
             'reg_sampel_namadiluarjenis' => $sampel->jenis_sampel_nama,
             'reg_sampel_jenis_sampel' => $sampel->jenis_sampel_id,
             'reg_sampel_nomor' => $sampel->nomor_sampel,
-            'reg_status' => $register['status'],
+            'reg_status' => (int) $register['status'],
             'reg_swab_ke' => $register['swab_ke'],
             'reg_tanggal_swab' => $register['tanggal_swab'],
             'reg_sumber_pasien' => $register['sumber_pasien'],
