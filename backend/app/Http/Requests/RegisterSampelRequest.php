@@ -33,13 +33,13 @@ class RegisterSampelRequest extends FormRequest
     {
         $user = Auth::user();
         $sampel = null;
-        if (optional($this->registrasi->id)) {
-            $sampel = Sampel::where('register_id', $this->registrasi->id)->first();
+        if (isset($this->register->sampel)) {
+            $sampel = $this->register->sampel;
         }
         return [
             'reg_fasyankes_id' => 'required|exists:labkes.fasyankes,id',
             'reg_nama_pasien' => 'required',
-            'reg_nik' => 'nullable|digits:16',
+            'reg_nik' => 'required|digits:16',
             'reg_sampel_nomor' => [
                 'required',
                 new UniqueSampelPerujuk($user->lab_satelit_id, optional($sampel)->id)
@@ -68,6 +68,7 @@ class RegisterSampelRequest extends FormRequest
             'reg_usia_bulan' => 'nullable|integer',
             'reg_pelaporan_id' => 'nullable',
             'reg_pelaporan_id_case' => 'nullable',
+            'reg_alamat' => 'required'
         ];
     }
 }
