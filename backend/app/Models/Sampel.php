@@ -65,6 +65,11 @@ class Sampel extends Model
         return $this->belongsTo(StatusSampel::class, 'sampel_status');
     }
 
+    public function pengambilanSampel()
+    {
+        return $this->belongsTo(PengambilanSampel::class, 'pengambilan_sampel_id');
+    }
+
     public function ekstraksi()
     {
         return $this->hasOne(Ekstraksi::class, 'sampel_id');

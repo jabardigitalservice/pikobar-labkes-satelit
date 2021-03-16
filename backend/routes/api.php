@@ -120,11 +120,11 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'V1', 'prefix' => 'v1']
 
     Route::group(['prefix' => 'register'], function () {
 
-        Route::post('sampel', 'RegistersampelController@storesampel');
+        Route::post('sampel', 'RegistersampelController@store');
         Route::delete('sampel-bulk/', 'DeleteSampelBulkController');
-        Route::post('sampel/update/{regis_id}/{pasien_id}', 'RegistersampelController@storeUpdate');
-        Route::get('sampel/{register_id}/{pasien_id}', 'RegistersampelController@getById');
-        Route::delete('sampel/{id}/{pasien}', 'RegistersampelController@delete');
+        Route::post('sampel/update/{register}/{pasien}', 'RegistersampelController@update');
+        Route::get('sampel/{register}/{pasien}', 'RegistersampelController@show');
+        Route::delete('sampel/{register}/{pasien}', 'RegistersampelController@destroy');
         Route::get('logs/{register_id}', 'RegistersampelController@logs');
 
         Route::post('import-sampel', 'ImportRegisterController@importRegisterSampel');

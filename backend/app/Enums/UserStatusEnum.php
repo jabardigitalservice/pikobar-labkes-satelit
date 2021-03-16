@@ -4,11 +4,7 @@ namespace App\Enums;
 
 use Spatie\Enum\Enum;
 
-/**
- *
- * @method static self INACTIVE();
- * @method static self ACTIVE();
- */
+
 class UserStatusEnum extends Enum
 {
     public static function INACTIVE(): UserStatusEnum
