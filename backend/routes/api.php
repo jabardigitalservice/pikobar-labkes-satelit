@@ -41,7 +41,7 @@ Route::group(['middleware' => ['auth:api', 'verified']], function () {
     Route::get('validator-option', 'OptionController@getValidator');
 
     Route::group(['prefix' => 'registrasi-sampel'], function () {
-        Route::get('/', 'Registrasisampel@getData');
+        Route::get('/', 'Registrasisampel@index');
         Route::get('/export-excel', 'Registrasisampel@exportExcel');
     });
 
