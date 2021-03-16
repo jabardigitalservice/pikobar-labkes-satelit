@@ -15,7 +15,7 @@
         <div class="col-lg-12">
           <div class="form-group row">
             <label class="col-md-4 col-form-label">
-              Instansi Pengirim<span style="color: red">*</span>
+              Instansi Pengirim<span class="text-danger">*</span>
             </label>
             <div class="col-md-8">
               <input-option-instansi-pengirim :form="params" field="fasyankes_pengirim" />
@@ -24,7 +24,7 @@
 
           <div class="form-group row">
             <label class="col-md-4 col-form-label">
-              Fasyankes Perujuk<span style="color: red">*</span>
+              Fasyankes Perujuk<span class="text-danger">*</span>
             </label>
             <div class="col-md-8">
               <multiselect v-model="fasyankes" :options="optFasyankes" track-by="nama" label="nama"
@@ -46,7 +46,7 @@
 
           <div class="form-group row">
             <label class="col-md-4 col-form-label">
-              Email<span style="color: red">*</span>
+              Email<span class="text-danger">*</span>
             </label>
             <div class="col-md-8">
               <input class="form-control" name="email" type="email" v-model="email" readonly />
@@ -55,7 +55,7 @@
 
           <div class="form-group row">
             <label class="col-md-4 col-form-label">
-              Username<span style="color: red">*</span>
+              Username<span class="text-danger">*</span>
             </label>
             <div class="col-md-8">
               <input v-model="username" type="text" name="username" class="form-control" readonly>
@@ -64,7 +64,7 @@
 
           <div class="form-group row">
             <label class="col-md-4 col-form-label">
-              Role<span style="color: red">*</span>
+              Role<span class="text-danger">*</span>
             </label>
             <div class="col-md-8">
               <select v-model="role_id" class="form-control" name="role_id" readonly>
@@ -160,15 +160,15 @@
           })
           this.$router.push("/perujuk")
         } catch (err) {
-          if (err.response && err.response.data.code == 422) {
+          if (err.response && err.response.status === 422) {
             this.$nextTick(() => {
               this.form.errors.set(err.response.data.error)
             })
-            this.$toast.error("Mohon cek kembali formulir Anda", {
-              icon: "times",
-              iconPack: "fontawesome",
-              duration: 5000,
-            })
+            this.$swal.fire(
+              "Terjadi kesalahan",
+              "Mohon cek kembali formulir Anda",
+              "error"
+            )
           } else {
             this.$swal.fire(
               "Terjadi kesalahan",
