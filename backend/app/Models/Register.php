@@ -50,8 +50,6 @@ class Register extends Model
         'hasil_rdt',
     ];
 
-    protected $hidden = ['fasyankes_id'];
-
     public function fasyankes()
     {
         return $this->belongsTo(Fasyankes::class);

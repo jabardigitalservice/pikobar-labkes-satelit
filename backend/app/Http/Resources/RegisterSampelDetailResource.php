@@ -15,12 +15,12 @@ class RegisterSampelDetailResource extends JsonResource
     public function toArray($request)
     {
         $register = parent::toArray($request);
-        $pasien = $register->pasiens;
-        $sampel = $register->sampel;
+        $pasien = $this->pasiens()->first();
+        $sampel = $this->sampel;
         return [
-            'reg_fasyankes_id' => $register->fasyankes_id,
-            'reg_fasyankes_pengirim' => $register->fasyankes_pengirim,
-            'reg_nama_rs' => $register->nama_rs,
+            'reg_fasyankes_id' => $register['fasyankes_id'],
+            'reg_fasyankes_pengirim' => $register['fasyankes_pengirim'],
+            'reg_nama_rs' => $register['nama_rs'],
             'reg_kewarganegaraan' => $pasien->kewarganegaraan,
             'reg_nama_pasien' => $pasien->nama_lengkap,
             'reg_nik' => $pasien->nik,
@@ -36,10 +36,10 @@ class RegisterSampelDetailResource extends JsonResource
             'reg_sampel_namadiluarjenis' => $sampel->jenis_sampel_nama,
             'reg_sampel_jenis_sampel' => $sampel->jenis_sampel_id,
             'reg_sampel_nomor' => $sampel->nomor_sampel,
-            'reg_status' => $register->status,
-            'reg_swab_ke' => $register->swab_ke,
-            'reg_tanggal_swab' => $register->tanggal_swab,
-            'reg_sumber_pasien' => $register->sumber_pasien,
+            'reg_status' => $register['status'],
+            'reg_swab_ke' => $register['swab_ke'],
+            'reg_tanggal_swab' => $register['tanggal_swab'],
+            'reg_sumber_pasien' => $register['sumber_pasien'],
             'reg_pelaporan_id' => $pasien->pelaporan_id,
             'reg_pelaporan_id_case' => $pasien->pelaporan_id_case,
             'reg_kode_provinsi' => $pasien->kode_provinsi,
@@ -50,8 +50,8 @@ class RegisterSampelDetailResource extends JsonResource
             'reg_nama_kecamatan' => $pasien->nama_kecamatan,
             'reg_kode_kelurahan' => $pasien->kode_kelurahan,
             'reg_nama_kelurahan' => $pasien->nama_kelurahan,
-            'reg_keterangan' => optional($sampel)->pengambilan_sampel->catatan,
-            'reg_register' => $register->lab_satelit_id,
+            'reg_keterangan' => optional($sampel->pengambilan_sampel)->catatan,
+            'reg_register' => $register['lab_satelit_id'],
             'reg_pasien' => $pasien->lab_satelit_id,
             'reg_sampel_id' => $sampel->id,
             'reg_keterangan_warganegara' => $pasien->keterangan_warganegara,
