@@ -18,19 +18,21 @@
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Instansi Pengirim
-                <span style="color:red">*</span>
+                <span class="text-danger">*</span>
               </div>
-              <div class="col-md-8" :class="{ 'is-invalid': form.errors.has('fasyankes_pengirim') }">
-                <input-option-instansi-pengirim :form="form" field="fasyankes_pengirim" />
+              <div class="col-md-8">
+                <input-option-instansi-pengirim :form="form" field="fasyankes_pengirim"
+                  :class="{ 'is-invalid': form.errors.has('fasyankes_pengirim') }" />
+                <has-error :form="form" field="fasyankes_pengirim" />
               </div>
             </div>
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Nama Fasyankes
-                <span style="color:red">*</span>
+                <span class="text-danger">*</span>
               </div>
               <div class="col-md-8">
-                <multiselect v-model="fasyankes" :options="optionFasyankes" track-by="nama" label="nama" required
+                <multiselect v-model="fasyankes" :options="optionFasyankes" track-by="nama" label="nama"
                   placeholder="Nama Rumah Sakit/Dinkes" :class="{ 'is-invalid': form.errors.has('fasyankes_id') }">
                 </multiselect>
                 <has-error :form="form" field="fasyankes_id" />
@@ -52,10 +54,10 @@
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Nama Pasien
-                <span style="color:red">*</span>
+                <span class="text-danger">*</span>
               </div>
               <div class="col-md-8">
-                <input class="form-control" type="text" name="nama_pasien" placeholder="Nama Pasien" required
+                <input class="form-control" type="text" name="nama_pasien" placeholder="Nama Pasien"
                   v-model="form.nama_pasien" :class="{ 'is-invalid': form.errors.has('nama_pasien') }" />
                 <has-error :form="form" field="nama_pasien" />
               </div>
@@ -63,6 +65,7 @@
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 NIK
+                <span class="text-danger">*</span>
               </div>
               <div class="col-md-8">
                 <input class="form-control" type="text" name="nik" placeholder="NIK" v-model="form.nik" maxlength="16"
@@ -129,17 +132,18 @@
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 No. Telp / HP
-                <span style="color:red">*</span>
+                <span class="text-danger">*</span>
               </div>
               <div class="col-md-8">
                 <input class="form-control" type="text" name="no_hp" placeholder="Nomor Telepon / HP"
-                  v-model="form.no_hp" :class="{ 'is-invalid': form.errors.has('no_hp') }" required />
+                  v-model="form.no_hp" :class="{ 'is-invalid': form.errors.has('no_hp') }" />
                 <has-error :form="form" field="no_hp" />
               </div>
             </div>
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Alamat
+                <span class="text-danger">*</span>
               </div>
               <div class="col-md-8">
                 <textarea class="multisteps-form__input form-control" type="text" name="alamat" placeholder="Alamat"
@@ -167,17 +171,19 @@
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Provinsi
+                <span class="text-danger">*</span>
               </div>
               <div class="col-md-8">
                 <multiselect v-model="provinsi" :options="optionProvinsi" track-by="nama" label="nama"
-                  placeholder="Pilih Provinsi" :class="{ 'is-invalid': form.errors.has('provinsi') }">
+                  placeholder="Pilih Provinsi" :class="{ 'is-invalid': form.errors.has('provinsi_id') }">
                 </multiselect>
-                <has-error :form="form" field="provinsi" />
+                <has-error :form="form" field="provinsi_id" />
               </div>
             </div>
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Kota / Kabupaten
+                <span class="text-danger">*</span>
               </div>
               <div class="col-md-8">
                 <multiselect v-model="kota" :options="optionKota" track-by="nama" label="nama"
@@ -232,6 +238,7 @@
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Kriteria Pasien
+                <span class="text-danger">*</span>
               </div>
               <div class="col-md-8">
                 <select v-model="form.kriteria" class="multisteps-form__input form-control col-md-8 col-lg-6"
@@ -246,10 +253,10 @@
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Kategori
-                <span style="color:red">*</span>
+                <span class="text-danger">*</span>
               </div>
               <div class="col-md-8">
-                <input class="multisteps-form__input form-control" type="text" name="sumber_pasien" required
+                <input class="multisteps-form__input form-control" type="text" name="sumber_pasien"
                   placeholder="Kategori" v-model="form.sumber_pasien"
                   :class="{ 'is-invalid': form.errors.has('sumber_pasien') }" />
                 <has-error :form="form" field="sumber_pasien" />
@@ -261,11 +268,11 @@
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Lab
-                <span style="color:red">*</span>
+                <span class="text-danger">*</span>
               </div>
               <div class="col-md-8">
                 <select v-model="form.lab_satelit_id" class="form-control col-md-8 col-lg-6" name="lab_satelit_id"
-                  required :class="{ 'is-invalid': form.errors.has(`lab_satelit_id`) }">
+                  :class="{ 'is-invalid': form.errors.has(`lab_satelit_id`) }">
                   <option :value="item.id" :key="idx" v-for="(item, idx) in option_lab_satelit">
                     {{ item.nama }}
                   </option>
@@ -296,10 +303,10 @@
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Jenis Sampel
-                <span style="color:red">*</span>
+                <span class="text-danger">*</span>
               </div>
               <div class="col-md-8">
-                <select class="form-control" v-model="form.jenis_sampel" required
+                <select class="form-control" v-model="form.jenis_sampel"
                   :class="{ 'is-invalid': form.errors.has(`jenis_sampel`) }">
                   <option :value="item.id" v-for="(item, $key) in jenis_sampel" :key="$key">
                     {{ item.text }}</option>
@@ -310,10 +317,10 @@
             <div class="form-group row">
               <div class="col-md-4 flex-text-center">
                 Nomor sampel
-                <span style="color:red">*</span>
+                <span class="text-danger">*</span>
               </div>
               <div class="col-md-8">
-                <input class="multisteps-form__input form-control" type="text" name="nomor_sampel" required
+                <input class="multisteps-form__input form-control" type="text" name="nomor_sampel"
                   v-model="form.nomor_sampel" :class="{ 'is-invalid': form.errors.has('nomor_sampel') }" />
                 <has-error :form="form" field="nomor_sampel" />
               </div>
@@ -517,15 +524,11 @@
           );
           this.$router.push("/registrasi/perujuk");
         } catch (err) {
-          if (err.response && err.response.data.code == 422) {
+          if (err.response?.status && err.response.status === 422) {
             this.$nextTick(() => {
-              this.form.errors.set(err.response.data.error);
-            });
-            this.$toast.error("Mohon cek kembali formulir Anda", {
-              icon: "times",
-              iconPack: "fontawesome",
-              duration: 5000
-            });
+              this.form.errors.set(err.response.data.error)
+            })
+            this.$swal.fire("Terjadi kesalahan", "Mohon cek kembali formulir Anda", "error")
           } else {
             this.$swal.fire(
               "Terjadi kesalahan",
